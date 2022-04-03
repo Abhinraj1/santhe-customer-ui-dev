@@ -70,6 +70,7 @@ void main() async {
   await Hive.openBox<CacheRefresh>('cacheRefreshDB');
   await Hive.openBox<FAQ>('faqDB');
   await Hive.openBox<String>('contentDB');
+  await Hive.openBox<UserList>('userListDB');
 
   final bool showHome =
       Boxes.getUserPrefs().get('showHome', defaultValue: false) ?? false;

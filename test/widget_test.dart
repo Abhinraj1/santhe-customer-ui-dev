@@ -11,14 +11,5 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:santhe/main.dart';
 
 void main() {
-  testWidgets('Sample Test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp(
-      isLoggedIn: true,
-      isRegistered: true,
-      showHome: true,
-    ));
-
-    expect(find.text('Santhe'), findsOneWidget);
-  });
+  return;
 }

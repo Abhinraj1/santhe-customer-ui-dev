@@ -19,8 +19,12 @@ import '../../../models/santhe_list_item_model.dart';
 class AddCustomItemCard extends StatefulWidget {
   final int currentUserListDBKey;
   final String searchQuery;
+  final VoidCallback clearSearchQuery;
   const AddCustomItemCard(
-      {required this.currentUserListDBKey, required this.searchQuery, Key? key})
+      {required this.currentUserListDBKey,
+      required this.searchQuery,
+      required this.clearSearchQuery,
+      Key? key})
       : super(key: key);
 
   @override
@@ -61,6 +65,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
   Widget build(BuildContext context) {
     final int currentUserListDBKey = widget.currentUserListDBKey;
     final String searchQuery = widget.searchQuery;
+
     final imageController = Get.find<CustomImageController>();
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
@@ -1028,6 +1033,13 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                               ?.save();
                                                           print(
                                                               'URL: ${imageController.addItemCustomImageUrl.value}');
+                                                          //clear search field
+
+                                                          if (mounted) {
+                                                            widget
+                                                                .clearSearchQuery();
+                                                          }
+
                                                           Navigator.pop(
                                                               context);
                                                         } else {

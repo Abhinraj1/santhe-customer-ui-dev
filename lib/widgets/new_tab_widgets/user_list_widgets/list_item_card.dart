@@ -107,7 +107,14 @@ class ListItemCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(listItem.itemName),
+                        Text(
+                          listItem.itemName,
+                          style: GoogleFonts.mulish(
+                            color: kTextGrey,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp,
+                          ),
+                        ),
                         listItem.brandType.isEmpty
                             ? Text(
                                 listItem.notes.isEmpty
@@ -117,17 +124,17 @@ class ListItemCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.mulish(
                                   color: Colors.orange,
-                                  fontSize: 16.sp,
+                                  fontSize: 15.sp,
                                 ),
                               )
                             : Text(
-                                '''${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}, ${listItem.notes.isEmpty ? '${listItem.brandType}' : '${listItem.brandType},\n${listItem.notes}'}''',
+                                '''${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}, ${listItem.notes.isEmpty ? '${listItem.brandType.trimRight()}' : '${listItem.brandType.trimRight()},\n${listItem.notes}'}''',
                                 textAlign: TextAlign.start,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.mulish(
                                   color: Colors.orange,
-                                  fontSize: 14.sp,
+                                  fontSize: 15.sp,
                                 ),
                               ),
                       ],

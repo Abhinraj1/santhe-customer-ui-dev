@@ -244,12 +244,15 @@ class _NewTabPageState extends State<NewTabPage> {
                                         contentPadding:
                                             const EdgeInsets.symmetric(
                                                 horizontal: 0.0),
-                                        title: Text(
-                                          'Create a new list',
-                                          style: GoogleFonts.mulish(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey.shade600,
+                                        title: Align(
+                                          alignment: Alignment(-1.35.sp, 0),
+                                          child: Text(
+                                            'Create a new list',
+                                            style: GoogleFonts.mulish(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey.shade600,
+                                            ),
                                           ),
                                         ),
                                         leading: Radio<NewListType>(
@@ -309,12 +312,16 @@ class _NewTabPageState extends State<NewTabPage> {
                                               minVerticalPadding: 0.0,
                                               contentPadding:
                                                   const EdgeInsets.all(0.0),
-                                              title: Text(
-                                                'Start from an old list',
-                                                style: GoogleFonts.mulish(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.grey.shade600,
+                                              title: Align(
+                                                alignment:
+                                                    Alignment(-1.35.sp, 0),
+                                                child: Text(
+                                                  'Start from an old list',
+                                                  style: GoogleFonts.mulish(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.grey.shade600,
+                                                  ),
                                                 ),
                                               ),
                                               leading: Radio<NewListType>(
@@ -756,7 +763,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                     color: kTextGrey),
                               ),
                               SizedBox(
-                                height: screenWidth * 40,
+                                height: screenWidth * 45,
                                 width: screenWidth * 50,
                                 child: SvgPicture.asset(
                                   'assets/new_tab_arrow.svg',

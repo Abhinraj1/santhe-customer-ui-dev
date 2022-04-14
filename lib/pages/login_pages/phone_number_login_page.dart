@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:santhe/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import '../../controllers/api_service_controller.dart';
@@ -20,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String userPhone = '';
   bool isLoading = false;
+  bool isPhoneNumberWrong = false;
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -129,25 +131,37 @@ class _LoginPageState extends State<LoginPage> {
                                 final RegExp phoneRegExp =
                                     RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
                                 if (value == null || value.isEmpty) {
+                                  setState(() {
+                                    isPhoneNumberWrong = true;
+                                  });
                                   return 'Please enter your phone number here';
                                 } else if (value.length != 10) {
+                                  setState(() {
+                                    isPhoneNumberWrong = true;
+                                  });
                                   return 'Please enter a proper 10 digit number';
                                 } else if (!phoneRegExp.hasMatch(value)) {
+                                  setState(() {
+                                    isPhoneNumberWrong = true;
+                                  });
                                   return 'Please enter a valid phone number';
                                 } else {
+                                  setState(() {
+                                    isPhoneNumberWrong = false;
+                                  });
                                   return null;
                                 }
                               },
                               decoration: InputDecoration(
                                 errorText: ' ',
                                 errorStyle: GoogleFonts.mulish(
-                                  color: Colors.orange,
                                   fontWeight: FontWeight.w500,
+                                  color: kErrorTextRedColor,
                                   fontSize: 13.sp,
                                 ),
                                 errorBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: kErrorTextRedColor,
                                 )),
                                 focusedErrorBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -174,7 +188,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               style: GoogleFonts.mulish(
-                                  color: Colors.orange,
+                                  color: isPhoneNumberWrong
+                                      ? kErrorTextRedColor
+                                      : Colors.orange,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 18.sp),
                               keyboardType: TextInputType.phone,

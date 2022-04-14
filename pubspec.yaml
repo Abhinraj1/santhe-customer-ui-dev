@@ -47,7 +47,7 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_screenutil: ^5.3.1
   pinput: ^2.0.2
-  flutter_native_splash: ^2.0.5
+  flutter_native_splash: ^2.1.5
   google_maps_flutter: ^2.1.2
   map_picker: ^0.0.3
   geolocator: ^8.2.0
@@ -90,11 +90,11 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter_native_splash:
   color: '#FF9800'
-  image: assets/splash.png
-  banner: assets/banner.png
   android: true
   ios: true
   web: false
+  android_12:
+    image: assets/1.png
 
 flutter:
 

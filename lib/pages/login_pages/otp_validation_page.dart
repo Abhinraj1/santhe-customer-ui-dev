@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+import 'package:santhe/constants.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:get/get.dart';
@@ -151,11 +153,8 @@ class _OtpPageState extends State<OtpPage> {
                             border: Border.all(color: borderColor),
                           ),
                         ),
-                        errorPinTheme: defaultPinTheme.copyWith(
-                          decoration: BoxDecoration(
-                            color: errorColor,
-                            borderRadius: BorderRadius.circular(7),
-                          ),
+                        errorPinTheme: defaultPinTheme.copyBorderWith(
+                          border: Border.all(color: Colors.redAccent),
                         ),
                       ),
                     ),
@@ -164,11 +163,17 @@ class _OtpPageState extends State<OtpPage> {
                       child: isLoading
                           ? const CircularProgressIndicator.adaptive()
                           : Text(
-                              'Enter OTP to verify',
+                              showError
+                                  ? 'OTP is Incorrect'
+                                  : 'Enter OTP to verify',
                               style: GoogleFonts.mulish(
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: showError
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
                                   fontSize: 18.sp,
-                                  color: Colors.orange),
+                                  color: showError
+                                      ? kErrorTextRedColor
+                                      : Colors.orange),
                             ),
                     ),
                     Padding(
@@ -237,34 +242,16 @@ class _OtpPageState extends State<OtpPage> {
                                   Get.off(() => const HomePage(),
                                       transition: Transition.fadeIn);
                                 }
+                                setState(() {
+                                  showError = false;
+                                });
                               } else {
                                 controller.text = '';
-                                Get.snackbar(
-                                  '',
-                                  '',
-                                  titleText: const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Text('Invalid OTP!'),
-                                  ),
-                                  messageText: const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                        'Please enter the correct OTP verify.'),
-                                  ),
-                                  margin: const EdgeInsets.all(10.0),
-                                  padding: const EdgeInsets.all(8.0),
-                                  backgroundColor: Colors.white,
-                                  shouldIconPulse: true,
-                                  icon: const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(
-                                      CupertinoIcons
-                                          .exclamationmark_triangle_fill,
-                                      color: Colors.orange,
-                                      size: 45,
-                                    ),
-                                  ),
-                                );
+                                errorMsg('Invalid OTP!',
+                                    'Please enter the correct OTP verify.');
+                                setState(() {
+                                  showError = true;
+                                });
                               }
 
                               if (mounted) {

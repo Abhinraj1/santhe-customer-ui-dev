@@ -231,7 +231,7 @@ class SearchedItemCard extends StatelessWidget {
                                                 style: GoogleFonts.mulish(
                                                     color: Colors.orange,
                                                     fontWeight: FontWeight.w700,
-                                                    fontSize: 16.0),
+                                                  fontSize: 15.sp,),
                                                 onSaved: (value) {
                                                   _qtyController.text = value!;
                                                 },
@@ -509,7 +509,7 @@ class SearchedItemCard extends StatelessWidget {
                                                                           String url = await FirebaseHelper().addCustomItemImage(
                                                                               '${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}',
                                                                               true,
-                                                                              false);
+                                                                              false, false);
                                                                           url.isNotEmpty
                                                                               ? imageController.editItemCustomImageItemId.value = item.itemId.toString()
                                                                               : null;
@@ -559,7 +559,7 @@ class SearchedItemCard extends StatelessWidget {
                                                                           String url = await FirebaseHelper().addCustomItemImage(
                                                                               '${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}',
                                                                               false,
-                                                                              false);
+                                                                              false, false);
                                                                           url.isNotEmpty
                                                                               ? imageController.editItemCustomImageItemId.value = item.itemId.toString()
                                                                               : null;
@@ -690,7 +690,7 @@ class SearchedItemCard extends StatelessWidget {
                                     style: GoogleFonts.mulish(
                                         color: Colors.grey.shade500,
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 16.0),
+                                      fontSize: 15.sp,),
                                     onSaved: (value) {
                                       _brandController.text = value!;
                                     },
@@ -712,7 +712,7 @@ class SearchedItemCard extends StatelessWidget {
                                       hintText: item.dBrandType,
                                       hintStyle: GoogleFonts.mulish(
                                           fontWeight: FontWeight.w300,
-                                          fontStyle: FontStyle.italic,
+                                          fontStyle: FontStyle.italic,          fontSize: 15.sp,
                                           color: Colors.grey.shade500),
                                     ),
                                   ),
@@ -747,7 +747,7 @@ class SearchedItemCard extends StatelessWidget {
                                     style: GoogleFonts.mulish(
                                         color: Colors.grey.shade500,
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 16.0),
+                                      fontSize: 15.sp,),
                                     onSaved: (value) {
                                       _notesController.text = value!;
                                     },
@@ -769,7 +769,7 @@ class SearchedItemCard extends StatelessWidget {
                                       hintText: item.dItemNotes,
                                       hintStyle: GoogleFonts.mulish(
                                           fontWeight: FontWeight.w300,
-                                          fontStyle: FontStyle.italic,
+                                          fontStyle: FontStyle.italic,          fontSize: 15.sp,
                                           color: Colors.grey.shade500),
                                     ),
                                   ),
@@ -1227,8 +1227,7 @@ class SearchedItemCard extends StatelessWidget {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
-                                                                  fontSize:
-                                                                      16.0),
+                                                            fontSize: 15.sp,),
                                                           onSaved: (value) {
                                                             _qtyController
                                                                 .text = value!;
@@ -1550,7 +1549,7 @@ class SearchedItemCard extends StatelessWidget {
                                                                                 GestureDetector(
                                                                                   onTap: () async {
                                                                                     Navigator.pop(context);
-                                                                                    String url = await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}', true, false);
+                                                                                    String url = await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}', true, false, false);
                                                                                     url.isNotEmpty ? imageController.editItemCustomImageItemId.value = item.itemId.toString() : null;
                                                                                   },
                                                                                   child: const CircleAvatar(
@@ -1582,7 +1581,7 @@ class SearchedItemCard extends StatelessWidget {
                                                                                 GestureDetector(
                                                                                   onTap: () async {
                                                                                     Navigator.pop(context);
-                                                                                    String url = await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}', false, false);
+                                                                                    String url = await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}', false, false, false);
                                                                                     url.isNotEmpty ? imageController.editItemCustomImageItemId.value = item.itemId.toString() : null;
                                                                                   },
                                                                                   child: const CircleAvatar(
@@ -1717,7 +1716,7 @@ class SearchedItemCard extends StatelessWidget {
                                               style: GoogleFonts.mulish(
                                                   color: Colors.grey.shade500,
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize: 16.0),
+                                                fontSize: 15.sp,),
                                               onSaved: (value) {
                                                 _brandController.text = value!;
                                               },
@@ -1743,7 +1742,7 @@ class SearchedItemCard extends StatelessWidget {
                                                 ),
                                                 hintText: item.dBrandType,
                                                 hintStyle: GoogleFonts.mulish(
-                                                    fontWeight: FontWeight.w300,
+                                                    fontWeight: FontWeight.w300,          fontSize: 15.sp,
                                                     fontStyle: FontStyle.italic,
                                                     color:
                                                         Colors.grey.shade500),
@@ -1783,7 +1782,7 @@ class SearchedItemCard extends StatelessWidget {
                                               style: GoogleFonts.mulish(
                                                   color: Colors.grey.shade500,
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize: 16.0),
+                                                fontSize: 15.sp,),
                                               onSaved: (value) {
                                                 _notesController.text = value!;
                                               },
@@ -1810,7 +1809,7 @@ class SearchedItemCard extends StatelessWidget {
                                                 hintText: item.dItemNotes,
                                                 hintStyle: GoogleFonts.mulish(
                                                     fontWeight: FontWeight.w300,
-                                                    fontStyle: FontStyle.italic,
+                                                    fontStyle: FontStyle.italic,          fontSize: 15.sp,
                                                     color:
                                                         Colors.grey.shade500),
                                               ),

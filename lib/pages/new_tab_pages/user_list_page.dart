@@ -50,6 +50,7 @@ class _UserListPageState extends State<UserListPage> {
   void clearSearchQuery() {
     searchQueryController.clear();
     searchQuery = '';
+    WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
   }
 
   // print('---+---+---+ ${userList.items.length}');
@@ -1055,62 +1056,106 @@ class _UserListPageState extends State<UserListPage> {
                   Visibility(
                     visible: searchQuery.length > 2,
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.97),
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(16),
-                            bottomRight: Radius.circular(16),
-                          ),
-                          border:
-                              Border.all(color: Colors.grey.shade300, width: 2),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(16),
                         ),
-                        child: searchQuery.length > 2
-                            ? Obx(() => apiController
-                                    .searchedItemsResult.isEmpty
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 21.0, left: 12.0, bottom: 16.0),
-                                    child: Text(
-                                      'No results found...',
-                                      style: GoogleFonts.mulish(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 8.0),
-                                    physics: const BouncingScrollPhysics(
-                                        parent:
-                                            AlwaysScrollableScrollPhysics()),
-                                    itemCount: apiController
-                                        .searchedItemsResult.length,
-                                    itemBuilder: (context, index) {
-                                      ScreenUtil.init(
-                                          BoxConstraints(
-                                              maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              maxHeight: MediaQuery.of(context)
-                                                  .size
-                                                  .height),
-                                          designSize: const Size(390, 844),
-                                          context: context,
-                                          minTextAdapt: true,
-                                          orientation: Orientation.portrait);
-                                      if (index ==
-                                          apiController
-                                                  .searchedItemsResult.length -
-                                              1) {
-                                        return Column(
-                                          children: [
-                                            SearchedItemCard(
+                        child: Obx(
+                          () => Container(
+                            height: apiController.searchedItemsResult.isEmpty
+                                ? 150
+                                : null,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.97),
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(16),
+                                bottomRight: Radius.circular(16),
+                              ),
+                              border: Border.all(
+                                  color: Colors.grey.shade300, width: 2),
+                            ),
+                            child: searchQuery.length > 2
+                                ? Obx(() => apiController
+                                        .searchedItemsResult.isEmpty
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 21.0, left: 12.0),
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20.0),
+                                                child: Text(
+                                                  'No results found...',
+                                                  style: GoogleFonts.mulish(
+                                                      fontStyle:
+                                                          FontStyle.italic),
+                                                ),
+                                              ),
+                                              AddCustomItemCard(
+                                                currentUserListDBKey:
+                                                    currentUserListDBKey,
+                                                searchQuery: searchQuery,
+                                                clearSearchQuery:
+                                                    clearSearchQuery,
+                                              ),
+                                            ]),
+                                      )
+                                    : ListView.builder(
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 8.0),
+                                        physics: const BouncingScrollPhysics(
+                                            parent:
+                                                AlwaysScrollableScrollPhysics()),
+                                        itemCount: apiController
+                                            .searchedItemsResult.length,
+                                        itemBuilder: (context, index) {
+                                          ScreenUtil.init(
+                                              BoxConstraints(
+                                                  maxWidth:
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width,
+                                                  maxHeight:
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .height),
+                                              designSize: const Size(390, 844),
+                                              context: context,
+                                              minTextAdapt: true,
+                                              orientation:
+                                                  Orientation.portrait);
+                                          if (index ==
+                                              apiController.searchedItemsResult
+                                                      .length -
+                                                  1) {
+                                            return Column(
+                                              children: [
+                                                SearchedItemCard(
+                                                  searchQuery: searchQuery,
+                                                  currentUserListDBKey:
+                                                      currentUserListDBKey,
+                                                  item: apiController
+                                                          .searchedItemsResult[
+                                                      index],
+                                                  clearSearchQuery:
+                                                      clearSearchQuery,
+                                                ),
+                                                AddCustomItemCard(
+                                                  currentUserListDBKey:
+                                                      currentUserListDBKey,
+                                                  searchQuery: searchQuery,
+                                                  clearSearchQuery:
+                                                      clearSearchQuery,
+                                                ),
+                                              ],
+                                            );
+                                          } else {
+                                            return SearchedItemCard(
                                               searchQuery: searchQuery,
                                               currentUserListDBKey:
                                                   currentUserListDBKey,
@@ -1118,31 +1163,13 @@ class _UserListPageState extends State<UserListPage> {
                                                   .searchedItemsResult[index],
                                               clearSearchQuery:
                                                   clearSearchQuery,
-                                            ),
-                                            AddCustomItemCard(
-                                              currentUserListDBKey:
-                                                  currentUserListDBKey,
-                                              searchQuery: searchQuery,
-                                              clearSearchQuery:
-                                                  clearSearchQuery,
-                                            ),
-                                          ],
-                                        );
-                                      } else {
-                                        return SearchedItemCard(
-                                          searchQuery: searchQuery,
-                                          currentUserListDBKey:
-                                              currentUserListDBKey,
-                                          item: apiController
-                                              .searchedItemsResult[index],
-                                          clearSearchQuery: clearSearchQuery,
-                                        );
-                                      }
-                                    },
-                                  ))
-                            : null,
-                      ),
-                    ),
+                                            );
+                                          }
+                                        },
+                                      ))
+                                : null,
+                          ),
+                        )),
                   )
                 ]),
               ),

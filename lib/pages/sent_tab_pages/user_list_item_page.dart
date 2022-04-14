@@ -37,38 +37,40 @@ class UserListItemDetailsPage extends StatelessWidget {
                   color: Colors.black54),
             ),
           ),
-          GroupedListView(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.only(
-              left: 23.sp,
-              right: 23.sp,
-              bottom: 10,
+          Expanded(
+            child: GroupedListView(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.only(
+                left: 23.sp,
+                right: 23.sp,
+                bottom: 10,
+              ),
+              elements: userList.items,
+              groupBy: (ListItem element) => element.catName,
+              indexedItemBuilder:
+                  (BuildContext context, dynamic element, int index) {
+                return SentListItemCard(
+                  listItem: element,
+                );
+              },
+              groupSeparatorBuilder: (String value) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      value,
+                      style: GoogleFonts.mulish(
+                          color: kTextGrey, fontWeight: FontWeight.w700),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                    )
+                  ],
+                );
+              },
             ),
-            elements: userList.items,
-            groupBy: (ListItem element) => element.catName,
-            indexedItemBuilder:
-                (BuildContext context, dynamic element, int index) {
-              return SentListItemCard(
-                listItem: element,
-              );
-            },
-            groupSeparatorBuilder: (String value) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    value,
-                    style: GoogleFonts.mulish(
-                        color: kTextGrey, fontWeight: FontWeight.w700),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                    thickness: 1,
-                  )
-                ],
-              );
-            },
           ),
         ],
       ),

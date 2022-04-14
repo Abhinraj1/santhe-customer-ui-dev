@@ -106,6 +106,7 @@ class _NewTabPageState extends State<NewTabPage> {
           ? FloatingActionButton(
               elevation: 0.0,
               onPressed: () async {
+                _type = NewListType.startFromNew;
                 if (custId == 404) {
                   print('login to continue');
                   Get.snackbar('Login to Continue',
@@ -267,38 +268,42 @@ class _NewTabPageState extends State<NewTabPage> {
                                       ),
                                       SizedBox(
                                         width: 314.sp,
-                                        child: TextField(
-                                          autofocus: true,
-                                          maxLength: 30,
-                                          onChanged: (value) {
-                                            listName = value;
-                                          },
-                                          decoration: InputDecoration(
-                                            hintText: 'Enter list Name',
-                                            hintStyle: GoogleFonts.mulish(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w400,
-                                                fontStyle: FontStyle.italic,
-                                                color: Colors.grey),
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  kTextFieldCircularBorderRadius),
-                                              borderSide: const BorderSide(
-                                                  width: 1.0,
-                                                  color: kTextFieldGrey),
+                                        child: IgnorePointer(
+                                          ignoring: _type ==
+                                              NewListType.importFromOld,
+                                          child: TextField(
+                                            autofocus: true,
+                                            maxLength: 30,
+                                            onChanged: (value) {
+                                              listName = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              hintText: 'Enter list Name',
+                                              hintStyle: GoogleFonts.mulish(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.italic,
+                                                  color: Colors.grey),
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    kTextFieldCircularBorderRadius),
+                                                borderSide: const BorderSide(
+                                                    width: 1.0,
+                                                    color: kTextFieldGrey),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    kTextFieldCircularBorderRadius),
+                                                borderSide: const BorderSide(
+                                                    width: 1.0,
+                                                    color: kTextFieldGrey),
+                                              ),
                                             ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  kTextFieldCircularBorderRadius),
-                                              borderSide: const BorderSide(
-                                                  width: 1.0,
-                                                  color: kTextFieldGrey),
+                                            style: GoogleFonts.mulish(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.grey.shade600,
                                             ),
-                                          ),
-                                          style: GoogleFonts.mulish(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey.shade600,
                                           ),
                                         ),
                                       ),
@@ -330,6 +335,8 @@ class _NewTabPageState extends State<NewTabPage> {
                                                 groupValue: _type,
                                                 onChanged:
                                                     (NewListType? value) {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
                                                   setState(() {
                                                     _type = value;
                                                   });
@@ -400,7 +407,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                       color: Colors.white,
                                                     ),
                                                     buttonElevation: 0,
-                                                    itemHeight: 40,
+                                                    itemHeight: 26.sp,
                                                     itemPadding:
                                                         const EdgeInsets.only(
                                                             left: 14,

@@ -27,13 +27,14 @@ class ListItemAdapter extends TypeAdapter<ListItem> {
       catName: fields[1] as String,
       catId: fields[8] as int,
       possibleUnits: (fields[9] as List).cast<String>(),
+      status: fields[10] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ListItem obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.brandType)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class ListItemAdapter extends TypeAdapter<ListItem> {
       ..writeByte(8)
       ..write(obj.catId)
       ..writeByte(9)
-      ..write(obj.possibleUnits);
+      ..write(obj.possibleUnits)
+      ..writeByte(10)
+      ..write(obj.status);
   }
 
   @override

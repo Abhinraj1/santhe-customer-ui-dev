@@ -56,8 +56,9 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
   bool isProcessing = false;
-  final imageController =
-      Get.find<CustomImageController>().addItemCustomImageUrl.value = '';
+  final imageController = Get.find<CustomImageController>()
+      .addItemCustomImageUrl
+      .value = 'https://i.imgur.com/XcM6VIv.png';
 
   String removeDecimalZeroFormat(double n) {
     return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
@@ -1020,6 +1021,8 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                       imageController
                                                                           .addItemCustomImageUrl
                                                                           .value,
+                                                                  status:
+                                                                      'inactive',
                                                                   //todo make it work
                                                                   itemName:
                                                                       _customItemNameController

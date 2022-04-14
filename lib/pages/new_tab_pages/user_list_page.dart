@@ -75,9 +75,26 @@ class _UserListPageState extends State<UserListPage> {
     super.initState();
   }
 
+  void syncListtoDB() async {
+    UserList currentUserList = box.values
+        .singleWhere((element) => element.listId == widget.userList.listId);
+
+    //todo send list to firebase (currentUserList)
+    int custId = Boxes.getUserCredentialsDB()
+            .get('currentUserCredentials')
+            ?.phoneNumber ??
+        404;
+    if (custId == 404) {
+      Get.off(() => const LoginPage());
+    }
+    int response =
+        await apiController.updateUserList(custId, currentUserList, 'new');
+  }
+
   @override
   void dispose() {
     searchQueryController.dispose();
+    syncListtoDB();
     super.dispose();
   }
 
@@ -905,7 +922,8 @@ class _UserListPageState extends State<UserListPage> {
                                                                   int response =
                                                                       await apiController.updateUserList(
                                                                           custId,
-                                                                          currentUserList);
+                                                                          currentUserList,
+                                                                          'sent');
 
                                                                   if (response ==
                                                                       1) {
@@ -1075,7 +1093,8 @@ class _UserListPageState extends State<UserListPage> {
                               border: Border.all(
                                   color: Colors.grey.shade300, width: 2),
                             ),
-                            child: searchQuery.length > 2
+                            child: searchQuery.length > 2 &&
+                                    !apiController.searchingFlag
                                 ? Obx(() => apiController
                                         .searchedItemsResult.isEmpty
                                     ? Padding(
@@ -1167,7 +1186,11 @@ class _UserListPageState extends State<UserListPage> {
                                           }
                                         },
                                       ))
-                                : null,
+                                : searchQuery.length > 2 &&
+                                        apiController.searchingFlag
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : null,
                           ),
                         )),
                   )

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:group_button/group_button.dart';
 import 'package:santhe/models/santhe_item_model.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../../controllers/api_service_controller.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
 import '../../../controllers/boxes_controller.dart';
@@ -43,12 +44,15 @@ class _ListItemCardState extends State<ListItemCard> {
       return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
 
+    String url = widget.listItem.itemImageId;
+
     final TextEditingController _qtyController = TextEditingController(
         text: '${removeDecimalZeroFormat(listItem.quantity)}');
     final TextEditingController _brandController =
         TextEditingController(text: listItem.brandType);
     final TextEditingController _notesController =
         TextEditingController(text: listItem.notes);
+    bool goAhead = true;
 
     final int unitIndex = listItem.possibleUnits
         .indexWhere((element) => element == listItem.unit);
@@ -88,21 +92,20 @@ class _ListItemCardState extends State<ListItemCard> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
-                      imageUrl: int.parse(listItem.itemId.replaceAll(
-                                  'projects/santhe-425a8/databases/(default)/documents/item/',
-                                  '')) <
-                              4000
-                          ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
-                          : listItem.itemImageId,
+                      imageUrl: listItem.status == 'inactive'
+                          ? listItem.itemImageId
+                          : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}',
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) {
                         print(error);
-                        return Container(
-                          color: Colors.orange,
-                          width: screenWidth * 50,
-                          height: screenWidth * 50,
+                        return CachedNetworkImage(
+                          imageUrl:
+                              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}',
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 50,
                         );
                       },
                     ),
@@ -154,6 +157,9 @@ class _ListItemCardState extends State<ListItemCard> {
               children: [
                 IconButton(
                     onPressed: () {
+                      print(
+                          '(((((((((:${listItem.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}');
+                      // imageController.listItemEditItemImageUrl.value = url;
                       showDialog(
                           context: context,
                           barrierColor:
@@ -209,6 +215,13 @@ class _ListItemCardState extends State<ListItemCard> {
                                             splashRadius: 0.1,
                                             splashColor: Colors.transparent,
                                             onPressed: () {
+                                              Future.delayed(
+                                                  Duration(milliseconds: 300),
+                                                  () {
+                                                imageController
+                                                    .listItemEditItemImageUrl
+                                                    .value = '';
+                                              });
                                               Navigator.pop(context);
                                             },
                                           ),
@@ -477,13 +490,10 @@ class _ListItemCardState extends State<ListItemCard> {
                                                         onTap: () {
                                                           Get.to(
                                                               () => ImageViewerPage(
-                                                                  itemImageUrl: listItem
-                                                                      .itemImageId
-                                                                      .replaceFirst(
-                                                                          'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
-                                                                          ''),
+                                                                  itemImageUrl:
+                                                                      url,
                                                                   showCustomImage:
-                                                                      false),
+                                                                      true),
                                                               transition:
                                                                   Transition
                                                                       .fadeIn,
@@ -491,6 +501,8 @@ class _ListItemCardState extends State<ListItemCard> {
                                                           // showOverlay(context);
                                                         },
                                                         child: Obx(() =>
+                                                            //popup image main
+                                                            //todo get this to update
                                                             CachedNetworkImage(
                                                               imageUrl: imageController
                                                                           .listItemEditItemImageUrl
@@ -503,15 +515,10 @@ class _ListItemCardState extends State<ListItemCard> {
                                                                               'projects/santhe-425a8/databases/(default)/documents/item/',
                                                                               '')
                                                                   ? imageController
-                                                                      .editItemCustomImageUrl
+                                                                      .listItemEditItemImageUrl
                                                                       .value
-                                                                  : int.parse(listItem.itemId.replaceAll(
-                                                                              'projects/santhe-425a8/databases/(default)/documents/item/',
-                                                                              '')) <
-                                                                          4000
-                                                                      ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
-                                                                      : listItem
-                                                                          .itemImageId,
+                                                                  : listItem
+                                                                      .itemImageId,
                                                               width:
                                                                   screenWidth *
                                                                       25,
@@ -523,9 +530,11 @@ class _ListItemCardState extends State<ListItemCard> {
                                                                   (context, url,
                                                                       error) {
                                                                 print(error);
-                                                                return Container(
-                                                                  color: Colors
-                                                                      .orange,
+                                                                return CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}',
+                                                                  fit: BoxFit
+                                                                      .cover,
                                                                   width:
                                                                       screenWidth *
                                                                           25,
@@ -623,9 +632,14 @@ class _ListItemCardState extends State<ListItemCard> {
                                                                               children: [
                                                                                 GestureDetector(
                                                                                   onTap: () async {
+                                                                                    goAhead = false;
                                                                                     Navigator.pop(context);
-                                                                                    String url = await FirebaseHelper().addCustomItemImage(DateTime.now().toUtc().toString().replaceAll(' ', 'T'), true, true, true).toString();
+                                                                                    url = await FirebaseHelper().addCustomItemImage(DateTime.now().toUtc().toString().replaceAll(' ', 'T'), true, true, true);
                                                                                     url.isNotEmpty ? imageController.listItemEditItemImageId.value = listItem.itemId : print('no url!');
+                                                                                    imageController.listItemEditItemImageUrl.value = url;
+                                                                                    print('uhh: ${imageController.listItemEditItemImageUrl.value}');
+                                                                                    print('yeaa boii: $url');
+                                                                                    goAhead = true;
                                                                                   },
                                                                                   child: const CircleAvatar(
                                                                                     radius: 45,
@@ -656,9 +670,14 @@ class _ListItemCardState extends State<ListItemCard> {
                                                                                 GestureDetector(
                                                                                   onTap: () async {
                                                                                     //todo same as above
+                                                                                    goAhead = false;
                                                                                     Navigator.pop(context);
-                                                                                    String url = await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}', false, true, true).toString();
+                                                                                    url = await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}', false, true, true);
                                                                                     url.isNotEmpty ? imageController.listItemEditItemImageId.value = listItem.itemId : print('no url!');
+                                                                                    imageController.listItemEditItemImageUrl.value = url;
+                                                                                    print('uhh: ${imageController.listItemEditItemImageUrl.value}');
+                                                                                    print('yeaa boii: $url');
+                                                                                    goAhead = true;
                                                                                   },
                                                                                   child: const CircleAvatar(
                                                                                     radius: 45,
@@ -791,8 +810,8 @@ class _ListItemCardState extends State<ListItemCard> {
                                               textAlignVertical:
                                                   TextAlignVertical.center,
                                               style: GoogleFonts.mulish(
-                                                  color: Colors.grey.shade500,
-                                                  fontWeight: FontWeight.w400,
+                                                color: Colors.grey.shade500,
+                                                fontWeight: FontWeight.w400,
                                                 fontSize: 15.sp,
                                               ),
                                               onSaved: (value) {
@@ -824,7 +843,6 @@ class _ListItemCardState extends State<ListItemCard> {
                                                     fontWeight: FontWeight.w300,
                                                     fontStyle: FontStyle.italic,
                                                     fontSize: 15.sp,
-
                                                     color:
                                                         Colors.grey.shade500),
                                               ),
@@ -861,9 +879,10 @@ class _ListItemCardState extends State<ListItemCard> {
                                               maxLines: 3,
                                               maxLength: 90,
                                               style: GoogleFonts.mulish(
-                                                  color: Colors.grey.shade500,
-                                                  fontWeight: FontWeight.w400,
-                                                fontSize: 15.sp,),
+                                                color: Colors.grey.shade500,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 15.sp,
+                                              ),
                                               onSaved: (value) {
                                                 _notesController.text = value!;
                                               },
@@ -920,7 +939,8 @@ class _ListItemCardState extends State<ListItemCard> {
                                                         '---------------${_notesController.text}---------------');
 
                                                     if (_formKey.currentState!
-                                                        .validate()) {
+                                                            .validate() &&
+                                                        goAhead) {
                                                       //--------------------------Creating List Item from Item and new data gathered from user------------------------
                                                       //TODO add parameter validation
 
@@ -942,12 +962,11 @@ class _ListItemCardState extends State<ListItemCard> {
                                                             listItem.catName,
                                                         itemId:
                                                             '${listItem.itemId}',
-                                                        itemImageId:
-                                                            currentListItem
-                                                                .itemImageId,
+                                                        itemImageId: url,
                                                         itemName:
                                                             currentListItem
                                                                 .itemName,
+                                                        status: 'inactive',
                                                         quantity: double.parse(
                                                             _qtyController
                                                                 .text),
@@ -962,17 +981,16 @@ class _ListItemCardState extends State<ListItemCard> {
                                                       //make changes persistent
                                                       currentUserList.save();
 
-                                                      Get.back();
+                                                      Navigator.pop(context);
+                                                    } else if (!_formKey
+                                                        .currentState!
+                                                        .validate()) {
+                                                      errorMsg('Enter Quantity',
+                                                          'Please enter some quantity before adding to list...');
                                                     } else {
-                                                      Get.snackbar(
-                                                        'Enter Quantity',
-                                                        'Please enter some quantity before adding to list...',
-                                                        snackPosition:
-                                                            SnackPosition.TOP,
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                        colorText: Colors.grey,
-                                                      );
+                                                      errorMsg(
+                                                          'Uploading Image..',
+                                                          'Please wait till the image finishes uploading!');
                                                     }
                                                   },
                                                   child: AutoSizeText(

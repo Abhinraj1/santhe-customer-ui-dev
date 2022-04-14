@@ -548,7 +548,7 @@ class APIs extends GetxController {
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList) async {
+  Future updateUserList(int custId, UserList userList, String status) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
     List items = [];
@@ -598,7 +598,7 @@ class APIs extends GetxController {
           "timestampValue":
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
-        "custListStatus": {"stringValue": "sent"},
+        "custListStatus": {"stringValue": status},
         "custId": {
           "referenceValue":
               "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
@@ -930,6 +930,67 @@ class APIs extends GetxController {
     } else {
       print('Request failed with status: ${response.statusCode}.');
       return 0;
+    }
+  }
+
+  Future<List<UserList>> getNewCustList(int custId) async {
+    List<UserList> userLists = [];
+    const String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    var body = {
+      "structuredQuery": {
+        "from": [
+          {"collectionId": "customerList"}
+        ],
+        "orderBy": {
+          "field": {"fieldPath": "custListSentTime"}
+        },
+        "where": {
+          "compositeFilter": {
+            "filters": [
+              {
+                "fieldFilter": {
+                  "field": {"fieldPath": "custListStatus"},
+                  "op": "EQUAL",
+                  "value": {"stringValue": "new"}
+                }
+              },
+              {
+                "fieldFilter": {
+                  "field": {"fieldPath": "custId"},
+                  "op": "EQUAL",
+                  "value": {
+                    "referenceValue":
+                        "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+                  }
+                }
+              }
+            ],
+            "op": "AND"
+          }
+        }
+      }
+    };
+
+    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      if (data[0]['document'] != null &&
+          data[0]['document']['fields'] != null) {
+        for (int i = 0; i < data.length; i++) {
+          userLists.add(UserList.fromJson(data[i]['document']['fields']));
+          print('${userLists[i].listId}, ${userLists[i].processStatus}');
+        }
+        userLists
+            .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
+      } else {
+        return userLists;
+      }
+
+      return userLists;
+    } else {
+      throw 'Error retrieving user lists!';
     }
   }
 

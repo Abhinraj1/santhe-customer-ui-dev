@@ -835,6 +835,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                               itemId: '${item.itemId}',
                                               itemImageId: item.itemImageId,
                                               itemName: item.itemName,
+                                              status: item.status,
                                               quantity: double.parse(
                                                   _qtyController.text),
                                               notes: _notesController.text,
@@ -913,6 +914,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                                         .value,
 
                                                     itemName: item.itemName,
+                                                    status: 'inactive',
                                                     quantity: double.parse(
                                                         _qtyController.text),
                                                     notes:

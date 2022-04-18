@@ -106,6 +106,7 @@ class _NewTabPageState extends State<NewTabPage> {
           ? FloatingActionButton(
               elevation: 0.0,
               onPressed: () async {
+                _type = NewListType.startFromNew;
                 if (custId == 404) {
                   print('login to continue');
                   Get.snackbar('Login to Continue',
@@ -244,12 +245,15 @@ class _NewTabPageState extends State<NewTabPage> {
                                         contentPadding:
                                             const EdgeInsets.symmetric(
                                                 horizontal: 0.0),
-                                        title: Text(
-                                          'Create a new list',
-                                          style: GoogleFonts.mulish(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey.shade600,
+                                        title: Align(
+                                          alignment: Alignment(-1.35.sp, 0),
+                                          child: Text(
+                                            'Create a new list',
+                                            style: GoogleFonts.mulish(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey.shade600,
+                                            ),
                                           ),
                                         ),
                                         leading: Radio<NewListType>(
@@ -264,38 +268,42 @@ class _NewTabPageState extends State<NewTabPage> {
                                       ),
                                       SizedBox(
                                         width: 314.sp,
-                                        child: TextField(
-                                          autofocus: true,
-                                          maxLength: 30,
-                                          onChanged: (value) {
-                                            listName = value;
-                                          },
-                                          decoration: InputDecoration(
-                                            hintText: 'Enter list Name',
-                                            hintStyle: GoogleFonts.mulish(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w400,
-                                                fontStyle: FontStyle.italic,
-                                                color: Colors.grey),
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  kTextFieldCircularBorderRadius),
-                                              borderSide: const BorderSide(
-                                                  width: 1.0,
-                                                  color: kTextFieldGrey),
+                                        child: IgnorePointer(
+                                          ignoring: _type ==
+                                              NewListType.importFromOld,
+                                          child: TextField(
+                                            autofocus: true,
+                                            maxLength: 30,
+                                            onChanged: (value) {
+                                              listName = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              hintText: 'Enter list Name',
+                                              hintStyle: GoogleFonts.mulish(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.italic,
+                                                  color: Colors.grey),
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    kTextFieldCircularBorderRadius),
+                                                borderSide: const BorderSide(
+                                                    width: 1.0,
+                                                    color: kTextFieldGrey),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    kTextFieldCircularBorderRadius),
+                                                borderSide: const BorderSide(
+                                                    width: 1.0,
+                                                    color: kTextFieldGrey),
+                                              ),
                                             ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  kTextFieldCircularBorderRadius),
-                                              borderSide: const BorderSide(
-                                                  width: 1.0,
-                                                  color: kTextFieldGrey),
+                                            style: GoogleFonts.mulish(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.grey.shade600,
                                             ),
-                                          ),
-                                          style: GoogleFonts.mulish(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey.shade600,
                                           ),
                                         ),
                                       ),
@@ -309,12 +317,16 @@ class _NewTabPageState extends State<NewTabPage> {
                                               minVerticalPadding: 0.0,
                                               contentPadding:
                                                   const EdgeInsets.all(0.0),
-                                              title: Text(
-                                                'Start from an old list',
-                                                style: GoogleFonts.mulish(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.grey.shade600,
+                                              title: Align(
+                                                alignment:
+                                                    Alignment(-1.35.sp, 0),
+                                                child: Text(
+                                                  'Start from an old list',
+                                                  style: GoogleFonts.mulish(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.grey.shade600,
+                                                  ),
                                                 ),
                                               ),
                                               leading: Radio<NewListType>(
@@ -323,6 +335,8 @@ class _NewTabPageState extends State<NewTabPage> {
                                                 groupValue: _type,
                                                 onChanged:
                                                     (NewListType? value) {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
                                                   setState(() {
                                                     _type = value;
                                                   });
@@ -332,81 +346,91 @@ class _NewTabPageState extends State<NewTabPage> {
                                             SizedBox(
                                               width: 314.sp,
                                               height: 65.sp,
-                                              child:
-                                                  DropdownButtonHideUnderline(
-                                                child: DropdownButton2(
-                                                  isExpanded: true,
-                                                  hint: Text(
-                                                    'Select',
-                                                    style: GoogleFonts.mulish(
-                                                        fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        color: Colors.grey),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  items: _addDividersAfterItems(
-                                                      top5UserList),
-                                                  customItemsHeight: 4,
-                                                  value: selectedValue,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedValue =
-                                                          value as String;
-                                                      print(selectedValue);
-                                                    });
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_up,
-                                                  ),
-                                                  iconSize: 14,
-                                                  iconEnabledColor: Colors.grey,
-                                                  iconDisabledColor:
-                                                      Colors.grey.shade100,
-                                                  buttonHeight: 50,
-                                                  style: GoogleFonts.mulish(
-                                                      color: Colors.grey,
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                  buttonWidth: 160,
-                                                  buttonPadding:
-                                                      const EdgeInsets.only(
-                                                          left: 14, right: 14),
-                                                  buttonDecoration:
-                                                      BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            kTextFieldCircularBorderRadius),
-                                                    border: Border.all(
-                                                      color: kTextFieldGrey,
+                                              child: IgnorePointer(
+                                                ignoring: _type ==
+                                                    NewListType.startFromNew,
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    isExpanded: true,
+                                                    hint: Text(
+                                                      'Select',
+                                                      style: GoogleFonts.mulish(
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          color: Colors.grey),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                    color: Colors.white,
+                                                    items:
+                                                        _addDividersAfterItems(
+                                                            top5UserList),
+                                                    customItemsHeight: 4,
+                                                    value: selectedValue,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedValue =
+                                                            value as String;
+                                                        print(selectedValue);
+                                                      });
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.keyboard_arrow_up,
+                                                    ),
+                                                    iconSize: 14,
+                                                    iconEnabledColor:
+                                                        Colors.grey,
+                                                    iconDisabledColor:
+                                                        Colors.grey.shade100,
+                                                    buttonHeight: 50,
+                                                    style: GoogleFonts.mulish(
+                                                        color: Colors.grey,
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                    buttonWidth: 160,
+                                                    buttonPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 14,
+                                                            right: 14),
+                                                    buttonDecoration:
+                                                        BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              kTextFieldCircularBorderRadius),
+                                                      border: Border.all(
+                                                        color: kTextFieldGrey,
+                                                      ),
+                                                      color: Colors.white,
+                                                    ),
+                                                    buttonElevation: 0,
+                                                    itemHeight: 26.sp,
+                                                    itemPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 14,
+                                                            right: 14),
+                                                    dropdownMaxHeight: 200,
+                                                    dropdownWidth: 314.sp,
+                                                    dropdownPadding: null,
+                                                    dropdownDecoration:
+                                                        BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              kTextFieldCircularBorderRadius),
+                                                      color:
+                                                          Colors.grey.shade100,
+                                                    ),
+                                                    dropdownElevation: 0,
+                                                    scrollbarRadius:
+                                                        const Radius.circular(
+                                                            40),
+                                                    scrollbarThickness: 6,
+                                                    scrollbarAlwaysShow: true,
+                                                    offset: const Offset(0, 0),
                                                   ),
-                                                  buttonElevation: 0,
-                                                  itemHeight: 40,
-                                                  itemPadding:
-                                                      const EdgeInsets.only(
-                                                          left: 14, right: 14),
-                                                  dropdownMaxHeight: 200,
-                                                  dropdownWidth: 314.sp,
-                                                  dropdownPadding: null,
-                                                  dropdownDecoration:
-                                                      BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            kTextFieldCircularBorderRadius),
-                                                    color: Colors.grey.shade100,
-                                                  ),
-                                                  dropdownElevation: 0,
-                                                  scrollbarRadius:
-                                                      const Radius.circular(40),
-                                                  scrollbarThickness: 6,
-                                                  scrollbarAlwaysShow: true,
-                                                  offset: const Offset(0, 0),
                                                 ),
                                               ),
                                             ),
@@ -756,7 +780,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                     color: kTextGrey),
                               ),
                               SizedBox(
-                                height: screenWidth * 40,
+                                height: screenWidth * 45,
                                 width: screenWidth * 50,
                                 child: SvgPicture.asset(
                                   'assets/new_tab_arrow.svg',

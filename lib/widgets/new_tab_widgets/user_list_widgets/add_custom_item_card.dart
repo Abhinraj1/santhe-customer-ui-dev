@@ -10,6 +10,7 @@ import 'package:group_button/group_button.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:santhe/models/santhe_item_model.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../../controllers/api_service_controller.dart';
 import '../../../controllers/boxes_controller.dart';
@@ -19,8 +20,12 @@ import '../../../models/santhe_list_item_model.dart';
 class AddCustomItemCard extends StatefulWidget {
   final int currentUserListDBKey;
   final String searchQuery;
+  final VoidCallback clearSearchQuery;
   const AddCustomItemCard(
-      {required this.currentUserListDBKey, required this.searchQuery, Key? key})
+      {required this.currentUserListDBKey,
+      required this.searchQuery,
+      required this.clearSearchQuery,
+      Key? key})
       : super(key: key);
 
   @override
@@ -39,6 +44,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
   final TextEditingController _customNotesController = TextEditingController();
   final _unitsController = GroupButtonController(selectedIndex: 0);
   List<String> availableUnits = ['Kg', 'gms', 'L', 'ml', 'pack/s', 'Piece/s'];
+  int buttonTapCount = 0;
 
   int customItemId = 4000;
 
@@ -50,8 +56,9 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
   bool isProcessing = false;
-  final imageController =
-      Get.find<CustomImageController>().addItemCustomImageUrl.value = '';
+  final imageController = Get.find<CustomImageController>()
+      .addItemCustomImageUrl
+      .value = 'https://i.imgur.com/XcM6VIv.png';
 
   String removeDecimalZeroFormat(double n) {
     return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
@@ -61,6 +68,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
   Widget build(BuildContext context) {
     final int currentUserListDBKey = widget.currentUserListDBKey;
     final String searchQuery = widget.searchQuery;
+
     final imageController = Get.find<CustomImageController>();
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
@@ -204,9 +212,10 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         textAlignVertical:
                                             TextAlignVertical.center,
                                         style: GoogleFonts.mulish(
-                                            color: Colors.grey.shade500,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16.0),
+                                          color: Colors.grey.shade500,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.sp,
+                                        ),
                                         onSaved: (value) {
                                           _customItemNameController.text =
                                               value!;
@@ -233,6 +242,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                           hintStyle: GoogleFonts.mulish(
                                               fontWeight: FontWeight.w300,
                                               fontStyle: FontStyle.italic,
+                                              fontSize: 15.sp,
                                               color: Colors.grey.shade500),
                                         ),
                                       ),
@@ -398,10 +408,11 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                         TextAlignVertical
                                                             .center,
                                                     style: GoogleFonts.mulish(
-                                                        color: Colors.orange,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 16.0),
+                                                      color: Colors.orange,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 15.sp,
+                                                    ),
                                                     onSaved: (value) {
                                                       _customQtyController
                                                           .text = value!;
@@ -528,7 +539,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                     imageUrl: imageController
                                                             .addItemCustomImageUrl
                                                             .isEmpty
-                                                        ? 'https://icon-library.com/images/add-new-icon/add-new-icon-29.jpg'
+                                                        ? 'https://i.imgur.com/XcM6VIv.png'
                                                         : imageController
                                                             .addItemCustomImageUrl
                                                             .value,
@@ -636,7 +647,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                             onTap:
                                                                                 () async {
                                                                               Navigator.pop(context);
-                                                                              await FirebaseHelper().addCustomItemImage(DateTime.now().toUtc().toString().replaceAll(' ', 'T'), true, true).toString();
+                                                                              await FirebaseHelper().addCustomItemImage(DateTime.now().toUtc().toString().replaceAll(' ', 'T'), true, true, false).toString();
                                                                             },
                                                                             child:
                                                                                 const CircleAvatar(
@@ -671,7 +682,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                                 () async {
                                                                               //todo same as above
                                                                               Navigator.pop(context);
-                                                                              await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}', false, true).toString();
+                                                                              await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}', false, true, false).toString();
                                                                             },
                                                                             child:
                                                                                 const CircleAvatar(
@@ -807,9 +818,10 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         textAlignVertical:
                                             TextAlignVertical.center,
                                         style: GoogleFonts.mulish(
-                                            color: Colors.grey.shade500,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16.0),
+                                          color: Colors.grey.shade500,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.sp,
+                                        ),
                                         onSaved: (value) {
                                           _customBrandController.text = value!;
                                         },
@@ -835,6 +847,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                           hintStyle: GoogleFonts.mulish(
                                               fontWeight: FontWeight.w300,
                                               fontStyle: FontStyle.italic,
+                                              fontSize: 14.sp,
                                               color: Colors.grey.shade500),
                                         ),
                                       ),
@@ -869,9 +882,10 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                             TextAlignVertical.center,
                                         maxLines: 3,
                                         style: GoogleFonts.mulish(
-                                            color: Colors.grey.shade500,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16.0),
+                                          color: Colors.grey.shade500,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.sp,
+                                        ),
                                         onSaved: (value) {
                                           _customNotesController.text = value!;
                                         },
@@ -897,6 +911,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                           hintStyle: GoogleFonts.mulish(
                                               fontWeight: FontWeight.w300,
                                               fontStyle: FontStyle.italic,
+                                              fontSize: 14.sp,
                                               color: Colors.grey.shade500),
                                         ),
                                       ),
@@ -944,112 +959,116 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                       print(
                                                           '---------------${_customQtyController.text} $itemUnit---------------');
 
-                                                      if (itemCount != 0) {
-                                                        //todo add custom item to firebase
-                                                        Item newCustomItem = Item(
-                                                            dBrandType:
-                                                                _customBrandController
-                                                                    .text,
-                                                            dItemNotes:
-                                                                _customNotesController
-                                                                    .text,
-                                                            itemImageTn:
-                                                                imageController
-                                                                    .addItemCustomImageUrl
-                                                                    .value,
-                                                            catId: '4000',
-                                                            createUser:
-                                                                custPhone,
-                                                            dQuantity: 1,
-                                                            dUnit: selectedUnit,
-                                                            itemAlias: _customItemNameController
-                                                                .text,
-                                                            itemId: itemCount,
-                                                            itemImageId:
-                                                                imageController
-                                                                    .addItemCustomImageUrl
-                                                                    .value,
-                                                            itemName:
-                                                                _customItemNameController
-                                                                    .text,
-                                                            status: 'inactive',
-                                                            unit: [
-                                                              selectedUnit
-                                                            ],
-                                                            updateUser:
-                                                                custPhone);
+                                                      if (buttonTapCount == 0) {
+                                                        if (itemCount != 0) {
+                                                          //todo add custom item to firebase
+                                                          Item newCustomItem = Item(
+                                                              dBrandType:
+                                                                  _customBrandController
+                                                                      .text,
+                                                              dItemNotes:
+                                                                  _customNotesController
+                                                                      .text,
+                                                              itemImageTn: imageController
+                                                                  .addItemCustomImageUrl
+                                                                  .value,
+                                                              catId: '4000',
+                                                              createUser:
+                                                                  custPhone,
+                                                              dQuantity: 1,
+                                                              dUnit:
+                                                                  selectedUnit,
+                                                              itemAlias:
+                                                                  _customItemNameController
+                                                                      .text,
+                                                              itemId: itemCount,
+                                                              itemImageId:
+                                                                  imageController
+                                                                      .addItemCustomImageUrl
+                                                                      .value,
+                                                              itemName:
+                                                                  _customItemNameController
+                                                                      .text,
+                                                              status:
+                                                                  'inactive',
+                                                              unit: [
+                                                                selectedUnit
+                                                              ],
+                                                              updateUser:
+                                                                  custPhone);
 
-                                                        int response =
-                                                            await apiController
-                                                                .addItem(
-                                                                    newCustomItem);
+                                                          int response =
+                                                              await apiController
+                                                                  .addItem(
+                                                                      newCustomItem);
 
-                                                        if (response == 1) {
-                                                          final box = Boxes
-                                                              .getUserListDB();
-                                                          //adding item to user list
-                                                          box
-                                                              .get(
-                                                                  currentUserListDBKey)
-                                                              ?.items
-                                                              .add(ListItem(
-                                                                brandType:
-                                                                    _customBrandController
-                                                                        .text,
-                                                                //item ref
-                                                                itemId:
-                                                                    '$itemCount',
-                                                                itemImageId:
-                                                                    imageController
-                                                                        .addItemCustomImageUrl
-                                                                        .value,
-                                                                //todo make it work
-                                                                itemName:
-                                                                    _customItemNameController
-                                                                        .text,
-                                                                quantity: double.parse(
-                                                                    _customQtyController
-                                                                        .text),
-                                                                notes:
-                                                                    _customNotesController
-                                                                        .text,
-                                                                unit: itemUnit,
-                                                                possibleUnits:
-                                                                    availableUnits,
-                                                                catName:
-                                                                    'Others',
-                                                                catId: 4000,
-                                                              ));
+                                                          if (response == 1) {
+                                                            final box = Boxes
+                                                                .getUserListDB();
+                                                            //adding item to user list
+                                                            box
+                                                                .get(
+                                                                    currentUserListDBKey)
+                                                                ?.items
+                                                                .add(ListItem(
+                                                                  brandType:
+                                                                      _customBrandController
+                                                                          .text,
+                                                                  //item ref
+                                                                  itemId:
+                                                                      '$itemCount',
+                                                                  itemImageId:
+                                                                      imageController
+                                                                          .addItemCustomImageUrl
+                                                                          .value,
+                                                                  status:
+                                                                      'inactive',
+                                                                  //todo make it work
+                                                                  itemName:
+                                                                      _customItemNameController
+                                                                          .text,
+                                                                  quantity: double.parse(
+                                                                      _customQtyController
+                                                                          .text),
+                                                                  notes:
+                                                                      _customNotesController
+                                                                          .text,
+                                                                  unit:
+                                                                      itemUnit,
+                                                                  possibleUnits:
+                                                                      availableUnits,
+                                                                  catName:
+                                                                      'Others',
+                                                                  catId: 4000,
+                                                                ));
 
-                                                          //make changes persistent
-                                                          box
-                                                              .get(
-                                                                  currentUserListDBKey)
-                                                              ?.save();
-                                                          print(
-                                                              'URL: ${imageController.addItemCustomImageUrl.value}');
-                                                          Navigator.pop(
-                                                              context);
+                                                            //make changes persistent
+                                                            box
+                                                                .get(
+                                                                    currentUserListDBKey)
+                                                                ?.save();
+                                                            print(
+                                                                'URL: ${imageController.addItemCustomImageUrl.value}');
+                                                            buttonTapCount++;
+                                                            //clear search field
+
+                                                            if (mounted) {
+                                                              widget
+                                                                  .clearSearchQuery();
+                                                            }
+
+                                                            Navigator.pop(
+                                                                context);
+                                                          } else {
+                                                            print(
+                                                                'Error, action not completed!');
+                                                          }
                                                         } else {
-                                                          print(
-                                                              'Error, action not completed!');
+                                                          errorMsg(
+                                                              'Please fill all required values',
+                                                              'Please enter all the values for required');
                                                         }
                                                       }
-                                                    } else {
-                                                      Get.snackbar(
-                                                        'Please fill all required values',
-                                                        'Please enter all the values for required fields...',
-                                                        snackPosition:
-                                                            SnackPosition.TOP,
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                        margin: const EdgeInsets
-                                                            .all(10.0),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(15.0),
-                                                        colorText: Colors.grey,
-                                                      );
                                                     }
 
                                                     setState(() {

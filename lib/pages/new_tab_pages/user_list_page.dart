@@ -46,11 +46,11 @@ class _UserListPageState extends State<UserListPage> {
   final apiController = Get.find<APIs>();
   final box = Boxes.getUserListDB();
   late final int currentUserListDBKey;
-  late Future<List<Item>> searchedItemsResult;
 
   void clearSearchQuery() {
     searchQueryController.clear();
     searchQuery = '';
+    WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
   }
 
   // print('---+---+---+ ${userList.items.length}');
@@ -71,13 +71,30 @@ class _UserListPageState extends State<UserListPage> {
         .values
         .firstWhere((element) => element.listId == widget.userList.listId)
         .key;
-    searchedItemsResult = Future.value([]);
+    // searchedItemsResult = Future.value([]);
     super.initState();
+  }
+
+  void syncListtoDB() async {
+    UserList currentUserList = box.values
+        .singleWhere((element) => element.listId == widget.userList.listId);
+
+    //todo send list to firebase (currentUserList)
+    int custId = Boxes.getUserCredentialsDB()
+            .get('currentUserCredentials')
+            ?.phoneNumber ??
+        404;
+    if (custId == 404) {
+      Get.off(() => const LoginPage());
+    }
+    int response =
+        await apiController.updateUserList(custId, currentUserList, 'new');
   }
 
   @override
   void dispose() {
     searchQueryController.dispose();
+    syncListtoDB();
     super.dispose();
   }
 
@@ -316,11 +333,9 @@ class _UserListPageState extends State<UserListPage> {
                 textAlignVertical: TextAlignVertical.center,
                 textAlign: TextAlign.left,
                 onChanged: (value) {
+                  // apiController.searchedItemsResult.clear();
                   if (value.length > 2) {
-                    setState(() {
-                      searchedItemsResult =
-                          apiController.searchedItemResult(value);
-                    });
+                    apiController.searchedItemResult(value);
                   }
                 },
                 style: GoogleFonts.mulish(
@@ -488,7 +503,12 @@ class _UserListPageState extends State<UserListPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(value),
+                                            Text(
+                                              value,
+                                              style: GoogleFonts.mulish(
+                                                  color: kTextGrey,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                             const Divider(
                                               color: Colors.grey,
                                               thickness: 1,
@@ -902,7 +922,8 @@ class _UserListPageState extends State<UserListPage> {
                                                                   int response =
                                                                       await apiController.updateUserList(
                                                                           custId,
-                                                                          currentUserList);
+                                                                          currentUserList,
+                                                                          'sent');
 
                                                                   if (response ==
                                                                       1) {
@@ -1053,137 +1074,125 @@ class _UserListPageState extends State<UserListPage> {
                   Visibility(
                     visible: searchQuery.length > 2,
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.97),
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(16),
-                            bottomRight: Radius.circular(16),
-                          ),
-                          border:
-                              Border.all(color: Colors.grey.shade300, width: 2),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(16),
                         ),
-                        child: searchQuery.length > 2
-                            ? FutureBuilder(
-                                future: searchedItemsResult,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<dynamic> snapshot) {
-                                  ScreenUtil.init(
-                                      BoxConstraints(
-                                          maxWidth:
-                                              MediaQuery.of(context).size.width,
-                                          maxHeight: MediaQuery.of(context)
-                                              .size
-                                              .height),
-                                      designSize: const Size(390, 844),
-                                      context: context,
-                                      minTextAdapt: true,
-                                      orientation: Orientation.portrait);
-                                  if (snapshot.hasError) {
-                                    //todo show proper error screen
-                                    return Text('${snapshot.error}');
-                                  } else if (snapshot.hasData &&
-                                      snapshot.data.length < 1) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: SizedBox(
-                                        height: screenHeight * 12 < 120
-                                            ? 120
-                                            : screenHeight * 12,
+                        child: Obx(
+                          () => Container(
+                            height: apiController.searchedItemsResult.isEmpty
+                                ? 150
+                                : null,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.97),
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(16),
+                                bottomRight: Radius.circular(16),
+                              ),
+                              border: Border.all(
+                                  color: Colors.grey.shade300, width: 2),
+                            ),
+                            child: searchQuery.length > 2 &&
+                                    !apiController.searchingFlag
+                                ? Obx(() => apiController
+                                        .searchedItemsResult.isEmpty
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 21.0, left: 12.0),
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            AddCustomItemCard(
-                                                currentUserListDBKey:
-                                                    currentUserListDBKey,
-                                                searchQuery: searchQuery),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20.0),
-                                              child: Text(
-                                                'No Search Results Found...',
-                                                style: GoogleFonts.mulish(
-                                                    fontStyle:
-                                                        FontStyle.italic),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  } else if (snapshot.hasData &&
-                                      snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                    return ListView.builder(
-                                      shrinkWrap: true,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 8.0),
-                                      physics: const BouncingScrollPhysics(
-                                          parent:
-                                              AlwaysScrollableScrollPhysics()),
-                                      itemCount: snapshot.data?.length,
-                                      itemBuilder: (context, index) {
-                                        ScreenUtil.init(
-                                            BoxConstraints(
-                                                maxWidth: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                maxHeight:
-                                                    MediaQuery.of(context)
-                                                        .size
-                                                        .height),
-                                            designSize: const Size(390, 844),
-                                            context: context,
-                                            minTextAdapt: true,
-                                            orientation: Orientation.portrait);
-                                        if (index ==
-                                            snapshot.data?.length - 1) {
-                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              SearchedItemCard(
-                                                searchQuery: searchQuery,
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20.0),
+                                                child: Text(
+                                                  'No results found...',
+                                                  style: GoogleFonts.mulish(
+                                                      fontStyle:
+                                                          FontStyle.italic),
+                                                ),
+                                              ),
+                                              AddCustomItemCard(
                                                 currentUserListDBKey:
                                                     currentUserListDBKey,
-                                                item: snapshot.data![index],
+                                                searchQuery: searchQuery,
                                                 clearSearchQuery:
                                                     clearSearchQuery,
                                               ),
-                                              AddCustomItemCard(
+                                            ]),
+                                      )
+                                    : ListView.builder(
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 8.0),
+                                        physics: const BouncingScrollPhysics(
+                                            parent:
+                                                AlwaysScrollableScrollPhysics()),
+                                        itemCount: apiController
+                                            .searchedItemsResult.length,
+                                        itemBuilder: (context, index) {
+                                          ScreenUtil.init(
+                                              BoxConstraints(
+                                                  maxWidth:
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width,
+                                                  maxHeight:
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .height),
+                                              designSize: const Size(390, 844),
+                                              context: context,
+                                              minTextAdapt: true,
+                                              orientation:
+                                                  Orientation.portrait);
+                                          if (index ==
+                                              apiController.searchedItemsResult
+                                                      .length -
+                                                  1) {
+                                            return Column(
+                                              children: [
+                                                SearchedItemCard(
+                                                  searchQuery: searchQuery,
                                                   currentUserListDBKey:
                                                       currentUserListDBKey,
-                                                  searchQuery: searchQuery),
-                                            ],
-                                          );
-                                        } else {
-                                          return SearchedItemCard(
-                                            searchQuery: searchQuery,
-                                            currentUserListDBKey:
-                                                currentUserListDBKey,
-                                            item: snapshot.data![index],
-                                            clearSearchQuery: clearSearchQuery,
-                                          );
-                                        }
-                                      },
-                                    );
-                                  } else {
-                                    return Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: screenWidth * 41.2,
-                                          vertical: screenHeight * 15),
-                                      child: const CircularProgressIndicator(),
-                                    );
-                                  }
-                                },
-                              )
-                            : null,
-                      ),
-                    ),
+                                                  item: apiController
+                                                          .searchedItemsResult[
+                                                      index],
+                                                  clearSearchQuery:
+                                                      clearSearchQuery,
+                                                ),
+                                                AddCustomItemCard(
+                                                  currentUserListDBKey:
+                                                      currentUserListDBKey,
+                                                  searchQuery: searchQuery,
+                                                  clearSearchQuery:
+                                                      clearSearchQuery,
+                                                ),
+                                              ],
+                                            );
+                                          } else {
+                                            return SearchedItemCard(
+                                              searchQuery: searchQuery,
+                                              currentUserListDBKey:
+                                                  currentUserListDBKey,
+                                              item: apiController
+                                                  .searchedItemsResult[index],
+                                              clearSearchQuery:
+                                                  clearSearchQuery,
+                                            );
+                                          }
+                                        },
+                                      ))
+                                : searchQuery.length > 2 &&
+                                        apiController.searchingFlag
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : null,
+                          ),
+                        )),
                   )
                 ]),
               ),

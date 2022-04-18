@@ -27,6 +27,10 @@ class APIs extends GetxController {
   //deleted user list buffer
   var deletedUserLists = <UserList>[].obs;
 
+  //searched item result
+  var searchedItemsResult = <Item>[].obs;
+  //searching flag
+  var searchingFlag = false;
   var itemsDB = <Item>[].obs;
 
   // Future getAllItems() async {
@@ -302,7 +306,7 @@ class APIs extends GetxController {
           data[0]['document']['fields'] != null) {
         for (int i = 0; i < data.length; i++) {
           if (data[i]['document']['fields']['custListStatus']['stringValue'] !=
-              'deleted') {
+              'pruned') {
             UserList onlineUserList =
                 UserList.fromJson(data[i]['document']['fields']);
 
@@ -507,6 +511,7 @@ class APIs extends GetxController {
           "arrayValue": {"values": items}
         },
         "custListStatus": {"stringValue": status},
+        "dealProcess": {"booleanValue": false},
         "custId": {
           "referenceValue":
               "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
@@ -543,7 +548,7 @@ class APIs extends GetxController {
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList) async {
+  Future updateUserList(int custId, UserList userList, String status) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
     List items = [];
@@ -583,14 +588,17 @@ class APIs extends GetxController {
         },
         "processStatus": {"stringValue": "draft"},
         "custOfferWaitTime": {
-          "timestampValue":
-              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+          "timestampValue": DateTime.now()
+              .add(const Duration(hours: 3))
+              .toUtc()
+              .toString()
+              .replaceAll(' ', 'T')
         },
         "createListTime": {
           "timestampValue":
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
-        "custListStatus": {"stringValue": "sent"},
+        "custListStatus": {"stringValue": status},
         "custId": {
           "referenceValue":
               "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
@@ -632,7 +640,7 @@ class APIs extends GetxController {
 
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": "deleted"}
+        "custListStatus": {"stringValue": "purged"}
       }
     };
 
@@ -925,6 +933,67 @@ class APIs extends GetxController {
     }
   }
 
+  Future<List<UserList>> getNewCustList(int custId) async {
+    List<UserList> userLists = [];
+    const String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    var body = {
+      "structuredQuery": {
+        "from": [
+          {"collectionId": "customerList"}
+        ],
+        "orderBy": {
+          "field": {"fieldPath": "custListSentTime"}
+        },
+        "where": {
+          "compositeFilter": {
+            "filters": [
+              {
+                "fieldFilter": {
+                  "field": {"fieldPath": "custListStatus"},
+                  "op": "EQUAL",
+                  "value": {"stringValue": "new"}
+                }
+              },
+              {
+                "fieldFilter": {
+                  "field": {"fieldPath": "custId"},
+                  "op": "EQUAL",
+                  "value": {
+                    "referenceValue":
+                        "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+                  }
+                }
+              }
+            ],
+            "op": "AND"
+          }
+        }
+      }
+    };
+
+    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      if (data[0]['document'] != null &&
+          data[0]['document']['fields'] != null) {
+        for (int i = 0; i < data.length; i++) {
+          userLists.add(UserList.fromJson(data[i]['document']['fields']));
+          print('${userLists[i].listId}, ${userLists[i].processStatus}');
+        }
+        userLists
+            .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
+      } else {
+        return userLists;
+      }
+
+      return userLists;
+    } else {
+      throw 'Error retrieving user lists!';
+    }
+  }
+
   //SENT TAB PAGE ----------------------------------------------------------------------
   //get sent user lists
   Future<List<UserList>> getCustListByStatus(int custId) async {
@@ -1058,7 +1127,7 @@ class APIs extends GetxController {
                 "fieldFilter": {
                   "field": {"fieldPath": "merchResponse.merchResponseStatus"},
                   "op": "EQUAL",
-                  "value": {"stringValue": "answered"}
+                  "value": {"stringValue": "offered"}
                 }
               },
               {
@@ -1143,7 +1212,7 @@ class APIs extends GetxController {
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
     var body = {
       "fields": {
-        "processStatus": {"stringValue": "processed"}
+        "processStatus": {"stringValue": "accepted"}
       }
     };
 
@@ -1162,9 +1231,9 @@ class APIs extends GetxController {
     }
   }
 
-  //Archived Tab APIs------------------------------------------------
+  //Archived List Page
   //POST
-  Future<List<UserList>> getArchivedCust(int custId) async {
+  Future<List<UserList>> getArchivedList(int custId) async {
     List<UserList> userLists = [];
     const String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
@@ -1212,8 +1281,8 @@ class APIs extends GetxController {
           userLists.add(UserList.fromJson(data[i]['document']['fields']));
           print('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
-        // userLists
-        //     .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
+        userLists
+            .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
       } else {
         return userLists;
       }
@@ -1222,11 +1291,11 @@ class APIs extends GetxController {
       throw 'Error retrieving user lists!';
     }
   }
+//SEARCH GET
 
-//SEARCH POST
-
-  Future<List<Item>> searchedItemResult(String searchQuery) async {
-    List<Item> searchResults = [];
+  Future searchedItemResult(String searchQuery) async {
+    print('search executed for: $searchQuery');
+    searchingFlag = true;
     final String url =
         'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/search/items?searchCriteria=$searchQuery';
 
@@ -1234,14 +1303,15 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       List jsonResponse = jsonDecode(response.body);
-
+      searchedItemsResult.clear();
       for (int i = 0; i < jsonResponse.length; i++) {
         if (jsonResponse[i]['status'] == 'active') {
-          searchResults.add(Item.fromJson(jsonResponse[i]));
+          searchedItemsResult.add(Item.fromJson(jsonResponse[i]));
+          print('search rsult->${Item.fromJson(jsonResponse[i]).itemName}');
         }
       }
-
-      return searchResults;
+      searchingFlag = false;
+      return searchedItemsResult;
     } else {
       print('Request failed with status: ${response.statusCode}.');
       throw 'error!';

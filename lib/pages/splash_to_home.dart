@@ -20,8 +20,8 @@ class _SplashToHomeState extends State<SplashToHome> {
 
   void bootHome() {
     Future.delayed(const Duration(milliseconds: 4000), () {
-      Get.off(() => const HomePage(), transition: Transition.fadeIn);
-      print('called!');
+      Get.offAll(() => const HomePage(),
+          transition: Transition.fadeIn, opaque: true);
     });
   }
 

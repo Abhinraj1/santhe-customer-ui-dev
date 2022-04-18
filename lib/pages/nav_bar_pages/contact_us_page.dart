@@ -441,8 +441,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               }
                               // Get.offAll(() => const HomePage());
                             } else {
-                              errorMsg('Enter Message',
-                                  'Please write some message before sending it.');
+                              // errorMsg('Enter Message',
+                              //     'Please write some message before sending it.');
                             }
                           },
                           child: FittedBox(

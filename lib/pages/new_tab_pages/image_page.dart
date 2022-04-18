@@ -37,10 +37,12 @@ class ImageViewerPage extends StatelessWidget {
                     : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$itemImageUrl',
                 errorWidget: (context, url, error) {
                   print(error);
-                  return Container(
-                    color: Colors.red,
+                  return CachedNetworkImage(
+                    imageUrl:
+                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$itemImageUrl',
                     width: screenWidth * 25,
                     height: screenWidth * 25,
+                    fit: BoxFit.cover,
                   );
                 },
               ),

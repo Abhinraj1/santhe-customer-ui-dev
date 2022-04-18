@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const String kAppName = "Santhe";
 const Color kTextFieldGrey = Color(0xffD1D1D1);
 const Color kTextGrey = Color(0xff8B8B8B);
+const Color kErrorTextRedColor = Color(0xffF94943);
 const double kTextFieldCircularBorderRadius = 14.0;
 
 class Constant {

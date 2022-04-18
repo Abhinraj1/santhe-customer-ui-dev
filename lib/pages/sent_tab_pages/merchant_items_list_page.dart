@@ -7,6 +7,7 @@ import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
+import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../models/offer/offer_model.dart';
 import '../../widgets/sent_tab_widgets/merchant_item_card.dart';
@@ -81,10 +82,11 @@ class MerchantItemsListPage extends StatelessWidget {
               child: GroupedListView(
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(
+                padding: EdgeInsets.only(
                   top: 8.0,
-                  left: 15.0,
-                  right: 15.0,
+                  left: 23.sp,
+                  right: 23.sp,
+                  bottom: 8.0,
                 ),
                 elements: currentMerchantOffer.offerItems,
                 groupBy: (OfferItem offerItem) => offerItem.catName,
@@ -92,7 +94,11 @@ class MerchantItemsListPage extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(value),
+                      Text(
+                        value,
+                        style: GoogleFonts.mulish(
+                            color: kTextGrey, fontWeight: FontWeight.w700),
+                      ),
                       const Divider(
                         color: Colors.grey,
                         thickness: 1,

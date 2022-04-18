@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+import 'package:santhe/constants.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
+import '../../models/santhe_user_list_model.dart';
 import '../customer_registration_pages/customer_registration.dart';
 import '../home_page.dart';
 
@@ -151,11 +155,8 @@ class _OtpPageState extends State<OtpPage> {
                             border: Border.all(color: borderColor),
                           ),
                         ),
-                        errorPinTheme: defaultPinTheme.copyWith(
-                          decoration: BoxDecoration(
-                            color: errorColor,
-                            borderRadius: BorderRadius.circular(7),
-                          ),
+                        errorPinTheme: defaultPinTheme.copyBorderWith(
+                          border: Border.all(color: Colors.redAccent),
                         ),
                       ),
                     ),
@@ -164,11 +165,17 @@ class _OtpPageState extends State<OtpPage> {
                       child: isLoading
                           ? const CircularProgressIndicator.adaptive()
                           : Text(
-                              'Enter OTP to verify',
+                              showError
+                                  ? 'OTP is Incorrect'
+                                  : 'Enter OTP to verify',
                               style: GoogleFonts.mulish(
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: showError
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
                                   fontSize: 18.sp,
-                                  color: Colors.orange),
+                                  color: showError
+                                      ? kErrorTextRedColor
+                                      : Colors.orange),
                             ),
                     ),
                     Padding(
@@ -186,10 +193,9 @@ class _OtpPageState extends State<OtpPage> {
                             print('--> OTP: $enteredOtp');
                             if (controller.text.isEmpty ||
                                 controller.text.length != 6) {
-                              Get.snackbar('Enter all 6 Digits',
-                                  'Please Enter All the 6 Digits of Your OTP!',
-                                  backgroundColor: Colors.orange,
-                                  colorText: Colors.white);
+                              setState(() {
+                                showError = true;
+                              });
                             } else if (controller.text.length == 6) {
                               setState(() {
                                 isLoading = true;
@@ -233,38 +239,27 @@ class _OtpPageState extends State<OtpPage> {
                                   Boxes.getUserPrefs()
                                       .put('isRegistered', true);
 
+                                  //getting and adding old lists to offline db
+                                  List<UserList> newStatusUserLists =
+                                      await apiController
+                                          .getNewCustList(userPhone);
+                                  Boxes.getUserListDB()
+                                      .addAll(newStatusUserLists);
+
                                   _countdownController.pause();
                                   Get.off(() => const HomePage(),
                                       transition: Transition.fadeIn);
                                 }
+                                setState(() {
+                                  showError = false;
+                                });
                               } else {
                                 controller.text = '';
-                                Get.snackbar(
-                                  '',
-                                  '',
-                                  titleText: const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Text('Invalid OTP!'),
-                                  ),
-                                  messageText: const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                        'Please enter the correct OTP verify.'),
-                                  ),
-                                  margin: const EdgeInsets.all(10.0),
-                                  padding: const EdgeInsets.all(8.0),
-                                  backgroundColor: Colors.white,
-                                  shouldIconPulse: true,
-                                  icon: const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(
-                                      CupertinoIcons
-                                          .exclamationmark_triangle_fill,
-                                      color: Colors.orange,
-                                      size: 45,
-                                    ),
-                                  ),
-                                );
+                                // errorMsg('Invalid OTP!',
+                                //     'Please enter the correct OTP verify.');
+                                setState(() {
+                                  showError = true;
+                                });
                               }
 
                               if (mounted) {
@@ -324,32 +319,9 @@ class _OtpPageState extends State<OtpPage> {
                                       //todo implement resend feature
                                       if (resendOtpActive) {
                                         await apiController.getOTP(userPhone);
-                                        Get.snackbar(
-                                          '',
-                                          '',
-                                          titleText: const Padding(
-                                            padding: EdgeInsets.only(left: 8.0),
-                                            child: Text('OTP Resent!'),
-                                          ),
-                                          messageText: const Padding(
-                                            padding: EdgeInsets.only(left: 8.0),
-                                            child: Text(
-                                                'Please await a new OTP, then verify to continue...'),
-                                          ),
-                                          margin: const EdgeInsets.all(10.0),
-                                          padding: const EdgeInsets.all(8.0),
-                                          backgroundColor: Colors.white,
-                                          shouldIconPulse: true,
-                                          icon: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Icon(
-                                              CupertinoIcons
-                                                  .checkmark_alt_circle_fill,
-                                              color: Colors.green,
-                                              size: 45,
-                                            ),
-                                          ),
-                                        );
+                                        successMsg('OTP Resent!',
+                                            'Please await a new OTP, then verify to continue...');
+
                                         setState(() {
                                           resendOtpActive = false;
                                         });

@@ -33,6 +33,9 @@ class ListItem {
   @HiveField(9)
   final List<String> possibleUnits;
 
+  @HiveField(10)
+  final String status;
+
   ListItem({
     required this.brandType,
     required this.itemId,
@@ -44,6 +47,7 @@ class ListItem {
     required this.catName,
     required this.catId,
     required this.possibleUnits,
+    required this.status,
   });
 
   factory ListItem.fromJson(data) {
@@ -57,6 +61,7 @@ class ListItem {
       unit: data['unit']['stringValue'],
       possibleUnits: [data['unit']['stringValue']],
       catName: data['catName']['stringValue'],
+      status: data['status']['stringValue'],
       catId: int.parse(data['catId']['referenceValue'].toString().replaceAll(
           'projects/santhe-425a8/databases/(default)/documents/category/', '')),
     );

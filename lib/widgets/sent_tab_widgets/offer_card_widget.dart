@@ -43,12 +43,18 @@ class OfferCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          print('UserList Process Status: ${userList.processStatus}');
-          Get.to(
-            () => SentUserListDetailsPage(
-              userList: userList,
-            ),
-          );
+          if (
+              // userList.processStatus == 'processed' ||
+              true
+              // userList.processStatus == 'maxOffer' ||
+              //     userList.processStatus == 'minOffer' &&
+              //         userList.custOfferWaitTime.isBefore(DateTime.now())
+              ) {
+            print('UserList Process Status: ${userList.processStatus}');
+            Get.to(() => SentUserListDetailsPage(
+                  userList: userList,
+                ));
+          }
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -130,15 +136,16 @@ class OfferCard extends StatelessWidget {
                           color: const Color(0xffBBBBBB),
                           fontWeight: FontWeight.w400),
                     ),
-
-                    //------LIST STATUS ROW----------
                     Padding(
+                      //todo fix this
                       padding: const EdgeInsets.only(right: 0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          //draft - TEXT
-                          userList.custOfferWaitTime.isAfter(DateTime.now())
+                          //TEXT TEXT TEXT
+                          //draft
+                          userList.processStatus == 'draft' ||
+                                  userList.processStatus == 'processing' ||
+                                  userList.processStatus == 'waiting'
                               ? AutoSizeText(
                                   'Waiting for Offers',
                                   style: GoogleFonts.mulish(
@@ -150,24 +157,9 @@ class OfferCard extends StatelessWidget {
                                   visible: false,
                                   child: SizedBox(),
                                 ),
-                          //draft - ICON
-                          userList.custOfferWaitTime.isAfter(DateTime.now())
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 3.0),
-                                  child: Icon(
-                                    CupertinoIcons.time_solid,
-                                    color: const Color(0xffFFC300),
-                                    size: 18.sp,
-                                  ),
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-
-                          //nooffer - TEXT
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'nooffer'
+                          //nooofer
+                          userList.processStatus == 'nooffer' ||
+                                  userList.processStatus == 'noMerchants'
                               ? AutoSizeText(
                                   'No Offers',
                                   style: GoogleFonts.mulish(
@@ -179,55 +171,8 @@ class OfferCard extends StatelessWidget {
                                   visible: false,
                                   child: SizedBox(),
                                 ),
-                          //noofffer & nomerchant - ICON
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'nooffer'
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 3.0),
-                                  child: Icon(
-                                    CupertinoIcons.xmark_circle_fill,
-                                    color: Colors.red,
-                                    size: 18.sp,
-                                  ),
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-
-                          //nomerchant - TEXT
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'nomerchant'
-                              ? AutoSizeText(
-                                  'No Offers',
-                                  style: GoogleFonts.mulish(
-                                      fontSize: 14.sp,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.w400),
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-                          //noofffer & nomerchant - ICON
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'nomerchant'
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 3.0),
-                                  child: Icon(
-                                    CupertinoIcons.xmark_circle_fill,
-                                    color: Colors.red,
-                                    size: 18.sp,
-                                  ),
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-
-                          //processed - TEXT
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'processed'
+                          //processed
+                          userList.processStatus == 'processed'
                               ? AutoSizeText(
                                   'Accepted',
                                   style: GoogleFonts.mulish(
@@ -239,25 +184,8 @@ class OfferCard extends StatelessWidget {
                                   visible: false,
                                   child: SizedBox(),
                                 ),
-                          //processed-ICON
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'processed'
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 3.0),
-                                  child: Icon(
-                                    CupertinoIcons.checkmark_alt_circle_fill,
-                                    color: Colors.green,
-                                    size: 18.sp,
-                                  ),
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-
-                          //minoffer - TEXT
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'minoffer'
+                          //minoffer
+                          userList.processStatus == 'minoffer'
                               ? AutoSizeText(
                                   '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
                                   style: GoogleFonts.mulish(
@@ -269,22 +197,8 @@ class OfferCard extends StatelessWidget {
                                   visible: false,
                                   child: SizedBox(),
                                 ),
-                          //minoffer - ICON
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'minoffer'
-                              ? Icon(
-                                  CupertinoIcons.hand_thumbsup,
-                                  color: Colors.orangeAccent,
-                                  size: 18.sp,
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-
-                          //maxoffer - TEXT
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'maxoffer'
+                          //minoffer
+                          userList.processStatus == 'maxoffer'
                               ? AutoSizeText(
                                   '${userList.listOfferCounter} Offers Available',
                                   style: GoogleFonts.mulish(
@@ -296,22 +210,8 @@ class OfferCard extends StatelessWidget {
                                   visible: false,
                                   child: SizedBox(),
                                 ),
-                          //maxoffer - ICON
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'maxoffer'
-                              ? Icon(
-                                  CupertinoIcons.hand_thumbsup_fill,
-                                  color: Colors.deepPurple,
-                                  size: 18.sp,
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-
-                          //expired - TEXT
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'expired'
+                          //expired
+                          userList.processStatus == 'expired'
                               ? AutoSizeText(
                                   'Offers Missed',
                                   style: GoogleFonts.mulish(
@@ -323,17 +223,72 @@ class OfferCard extends StatelessWidget {
                                   visible: false,
                                   child: SizedBox(),
                                 ),
-
-                          //expired - ICON
-                          userList.custOfferWaitTime.isBefore(DateTime.now()) &&
-                                  userList.processStatus == 'expired'
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 3.0),
-                                  child: Icon(
-                                    CupertinoIcons.exclamationmark_circle_fill,
-                                    color: Colors.grey,
-                                    size: 18.sp,
-                                  ),
+                          const SizedBox(width: 3),
+                          //ICON ICON ICON
+                          //draft
+                          userList.processStatus == 'draft' ||
+                                  userList.processStatus == 'waiting' ||
+                                  userList.processStatus == 'processing'
+                              ? Icon(
+                                  CupertinoIcons.time_solid,
+                                  color: const Color(0xffFFC300),
+                                  size: 18.sp,
+                                )
+                              : const Visibility(
+                                  visible: false,
+                                  child: SizedBox(),
+                                ),
+                          //noofffer & nomerchants
+                          userList.processStatus == 'nooffer' ||
+                                  userList.processStatus == 'noMerchants'
+                              ? Icon(
+                                  CupertinoIcons.xmark_circle_fill,
+                                  color: Colors.red,
+                                  size: 18.sp,
+                                )
+                              : const Visibility(
+                                  visible: false,
+                                  child: SizedBox(),
+                                ),
+                          //processed
+                          userList.processStatus == 'processed'
+                              ? Icon(
+                                  CupertinoIcons.checkmark_alt_circle_fill,
+                                  color: Colors.green,
+                                  size: 18.sp,
+                                )
+                              : const Visibility(
+                                  visible: false,
+                                  child: SizedBox(),
+                                ),
+                          //minoffer
+                          userList.processStatus == 'minoffer'
+                              ? Icon(
+                                  CupertinoIcons.hand_thumbsup,
+                                  color: Colors.orangeAccent,
+                                  size: 18.sp,
+                                )
+                              : const Visibility(
+                                  visible: false,
+                                  child: SizedBox(),
+                                ),
+                          //minoffer
+                          userList.processStatus == 'maxoffer'
+                              ? Icon(
+                                  CupertinoIcons.hand_thumbsup_fill,
+                                  color: Colors.deepPurple,
+                                  size: 18.sp,
+                                )
+                              : const Visibility(
+                                  visible: false,
+                                  child: SizedBox(),
+                                ),
+                          //expired
+                          userList.processStatus == 'expired'
+                              ? Icon(
+                                  CupertinoIcons.exclamationmark_circle_fill,
+                                  color: Colors.grey,
+                                  size: 18.sp,
                                 )
                               : const Visibility(
                                   visible: false,

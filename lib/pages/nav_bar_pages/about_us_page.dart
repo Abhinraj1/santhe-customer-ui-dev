@@ -21,8 +21,7 @@ class AboutUsPage extends StatelessWidget {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
         toolbarHeight: screenHeight * 5.5,
@@ -81,6 +80,6 @@ ${Boxes.getContent().get('aboutUs')}
           )
         ],
       ),
-    ));
+    );
   }
 }

@@ -66,7 +66,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       Boxes.getUserPrefs().put('showHome', false);
       Boxes.getUserPrefs().put('isRegistered', false);
       Boxes.getUserPrefs().put('isLoggedIn', false);
-      Get.offAll(() => const LoginPage(), transition: Transition.fadeIn);
+      Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
     }
 
     ScreenUtil.init(
@@ -89,8 +89,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
 
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
         toolbarHeight: screenHeight * 5.5,
@@ -206,7 +205,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             width: 1.0, color: kTextFieldGrey),
                                       ),
                                       hintText:
-                                          '+91-${currentUser?.custId ?? '91-9876543210'}',
+                                      '+91-${currentUser?.custId ?? '91-9876543210'}',
                                       hintStyle: GoogleFonts.mulish(
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 1.0,
@@ -361,7 +360,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   addressUpdateFlag = true;
                                   //remove focus from text fields
                                   FocusScopeNode currentScope =
-                                      FocusScope.of(context);
+                                  FocusScope.of(context);
                                   if (!currentScope.hasPrimaryFocus &&
                                       currentScope.hasFocus) {
                                     FocusManager.instance.primaryFocus
@@ -431,8 +430,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   if (_formKey.currentState!.validate()) {
                                     //final otp check
                                     bool isUserLoggedin = Boxes.getUserPrefs()
-                                            .get('isLoggedIn',
-                                                defaultValue: false) ??
+                                        .get('isLoggedIn',
+                                        defaultValue: false) ??
                                         false;
 
                                     if (isUserLoggedin) {
@@ -441,24 +440,24 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       Boxes.getUserPrefs()
                                           .put('isRegistered', true);
                                       User? currentUser = Boxes.getUser()
-                                              .get('currentUserDetails') ??
+                                          .get('currentUserDetails') ??
                                           fallBack_error_user;
 
                                       int userPhone =
                                           Boxes.getUserCredentialsDB()
-                                                  .get('currentUserCredentials')
-                                                  ?.phoneNumber ??
+                                              .get('currentUserCredentials')
+                                              ?.phoneNumber ??
                                               404;
 
                                       if (userPhone == 404) {
-                                        Get.off(() => const LoginPage());
+                                        Get.off(() => const LoginScreen());
                                       }
 
                                       //todo add how to reach howToReach
                                       User updatedUser = User(
                                           address: addressUpdateFlag
                                               ? registrationController
-                                                  .address.value
+                                              .address.value
                                               : currentUser.address,
                                           emailId: _userEmailController.text,
                                           lat: addressUpdateFlag
@@ -469,7 +468,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               : currentUser.lng,
                                           pincode: addressUpdateFlag
                                               ? int.parse(registrationController
-                                                  .pinCode.value)
+                                              .pinCode.value)
                                               : currentUser.pincode,
                                           phoneNumber: userPhone,
                                           custId: userPhone,
@@ -484,7 +483,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       //todo add to firebase
                                       int userUpdated = await apiController
                                           .updateCustomerInfo(
-                                              userPhone, updatedUser);
+                                          userPhone, updatedUser);
                                       if (userUpdated == 1) {
 //since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
                                         successMsg('Profile Updated',
@@ -507,7 +506,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           .put('isRegistered', false);
                                       Boxes.getUserPrefs()
                                           .put('isLoggedIn', false);
-                                      Get.offAll(() => const LoginPage(),
+                                      Get.offAll(() => const LoginScreen(),
                                           transition: Transition.fadeIn);
                                     }
                                   }
@@ -548,6 +547,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
           ),
         ),
       ),
-    ));
+    );
   }
 }

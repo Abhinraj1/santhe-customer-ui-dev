@@ -16,6 +16,8 @@ import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/location_controller.dart';
 import '../../controllers/boxes_controller.dart';
+import '../../core/app_colors.dart';
+import '../../core/app_theme.dart';
 import '../../models/santhe_cache_refresh.dart';
 import '../login_pages/phone_number_login_page.dart';
 import 'mapSearchScreen.dart';
@@ -137,7 +139,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       Boxes.getUserPrefs().put('isRegistered', false);
       Boxes.getUserPrefs().put('isLoggedIn', false);
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-        Get.offAll(() => const LoginPage(), transition: Transition.fadeIn);
+        Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
       });
     }
 
@@ -161,8 +163,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
 
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SizedBox(
@@ -173,7 +174,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               Column(
                 children: [
                   SizedBox(
-                    height: 20.sp,
+                    height: 20.sp + MediaQuery.of(context).padding.top,
                   ),
                   Text(
                     'Register',
@@ -245,14 +246,14 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius:
-                                            BorderRadius.circular(16.0),
+                                        BorderRadius.circular(16.0),
                                         borderSide: const BorderSide(
                                             width: 1.0,
                                             color: Color(0xffD1D1D1)),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius:
-                                            BorderRadius.circular(16.0),
+                                        BorderRadius.circular(16.0),
                                         borderSide: const BorderSide(
                                             width: 1.0,
                                             color: Color(0xffD1D1D1)),
@@ -416,7 +417,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 onTap: () async {
                                   //remove focus from text fields
                                   FocusScopeNode currentScope =
-                                      FocusScope.of(context);
+                                  FocusScope.of(context);
                                   if (!currentScope.hasPrimaryFocus &&
                                       currentScope.hasFocus) {
                                     FocusManager.instance.primaryFocus
@@ -429,59 +430,44 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     });
                                   }
                                   var res = await Get.to(
-                                      () => const MapSearchScreen());
+                                          () => const MapSearchScreen());
                                   if (res == 1) {
                                     setState(() {});
                                   }
                                 },
-                                child: InputDecorator(
-                                  decoration: InputDecoration(
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4.0, horizontal: 6),
-                                      child: CircleAvatar(
-                                        radius: 4.h,
-                                        backgroundColor: Colors.orange,
-                                        child: Icon(
-                                          Icons.home,
-                                          color: Colors.white,
-                                          size: 24.h,
-                                        ),
-                                      ),
-                                    ),
-                                    suffix: registrationController
-                                                .address.value.isEmpty &&
-                                            mapSelected == false
-                                        ? Text(
-                                            'Add Address',
-                                            style: GoogleFonts.mulish(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.orange,
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: 13.sp,
-                                            ),
-                                          )
-                                        : Text(
-                                            'Edit Address',
-                                            style: GoogleFonts.mulish(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.orange,
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: 13.sp,
-                                            ),
-                                          ),
-                                    border: InputBorder.none,
-                                    hintText: 'Your address',
-                                    hintStyle: kHintStyle,
+                                child: Container(
+                                  width: 344.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(color: AppColors().grey40, width: 1.sp)
                                   ),
-                                  child: Text(
-                                    registrationController.address.value,
-                                    maxLines: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16.sp,
-                                        color: Colors.grey),
+                                  padding: EdgeInsets.only(top: 13.h, left: 10.w, right: 10.w, bottom: 13.h),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      //icon
+                                      Container(
+                                          height: 24.w,
+                                          width: 24.w,
+                                          decoration: BoxDecoration(
+                                              color: AppColors().brandDark,
+                                              borderRadius: BorderRadius.circular(20)
+                                          ),
+                                          child: Icon(
+                                            Icons.home,
+                                            color: AppColors().white100,
+                                            size: 15.sp,
+                                          )
+                                      ),
+                                      SizedBox(width: 10.w,),
+                                      //text
+                                      Expanded(
+                                        child: Obx(() => Text(
+                                          registrationController.address.value.trim() == '' ? 'Select Address' : registrationController.address.value + '\n\n' + registrationController.howToReach.value,
+                                          style: AppTheme().normal500(13),
+                                        )),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
@@ -566,8 +552,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                           .pinCode.isNotEmpty) {
                                     //final otp check
                                     bool isUserLoggedin = Boxes.getUserPrefs()
-                                            .get('isLoggedIn',
-                                                defaultValue: false) ??
+                                        .get('isLoggedIn',
+                                        defaultValue: false) ??
                                         false;
 
                                     if (isUserLoggedin) {
@@ -578,8 +564,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
 
                                       int userPhone =
                                           Boxes.getUserCredentialsDB()
-                                                  .get('currentUserCredentials')
-                                                  ?.phoneNumber ??
+                                              .get('currentUserCredentials')
+                                              ?.phoneNumber ??
                                               404;
 
                                       //todo add how to reach howToReach
@@ -615,7 +601,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       } else {
                                         print('error occured');
                                         Get.offAll(
-                                            () => const OnboardingPage());
+                                                () => const OnboardingPage());
                                       }
                                     } else {
                                       // Get.snackbar('Verify Number First',
@@ -629,7 +615,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       //to not show start from odl lsit to new user
                                       Boxes.getContent()
                                           .put('userListCount', '0');
-                                      Get.offAll(() => const LoginPage(),
+                                      Get.offAll(() => const LoginScreen(),
                                           transition: Transition.fadeIn);
                                     }
                                   } else {
@@ -666,11 +652,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                         boxShadows: [
                                           BoxShadow(
                                             color:
-                                                Colors.grey.withOpacity(0.21),
+                                            Colors.grey.withOpacity(0.21),
                                             blurRadius:
-                                                15.0, // soften the shadow
+                                            15.0, // soften the shadow
                                             spreadRadius:
-                                                3.6, //extend the shadow
+                                            3.6, //extend the shadow
                                             offset: const Offset(
                                               0.0,
                                               0.0,
@@ -716,6 +702,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
           ),
         ),
       ),
-    ));
+    );
   }
 }

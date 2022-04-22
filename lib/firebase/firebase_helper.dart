@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
-import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
 import '../controllers/boxes_controller.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +43,8 @@ class FirebaseHelper {
   // }
 
 //Upload user image to firestore
-  Future<String> addCustomItemImage(String imageName, bool shootPic,
-      bool addNewItem, bool editListItem) async {
+  Future<String> addCustomItemImage(
+      String imageName, bool shootPic, bool addNewItem) async {
     final imageController = Get.find<CustomImageController>();
 
     final ImagePicker _picker = ImagePicker();
@@ -72,16 +71,36 @@ class FirebaseHelper {
       final urlDownload = await snapshot.ref.getDownloadURL();
       if (addNewItem) {
         imageController.addItemCustomImageUrl.value = urlDownload;
-      } else if (editListItem) {
-        imageController.listItemEditItemImageUrl.value = urlDownload;
       } else {
         imageController.editItemCustomImageUrl.value = urlDownload;
       }
-
       print('Download Url: $urlDownload');
       imageController.imageUploadProgress.value = '';
+      Get.snackbar(
+        '',
+        '',
+        titleText: const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: Text('Image Uploaded'),
+        ),
+        messageText: const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: Text('Image Successfully updated!'),
+        ),
+        margin: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(8.0),
+        backgroundColor: Colors.white,
+        shouldIconPulse: true,
+        icon: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(
+            CupertinoIcons.checkmark_alt_circle_fill,
+            color: Colors.green,
+            size: 45,
+          ),
+        ),
+      );
 
-      successMsg('Upload Complete', 'Image Successfully Uploaded!');
       return urlDownload;
     } on FirebaseException catch (e) {
       print(e);

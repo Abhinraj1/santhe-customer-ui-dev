@@ -74,8 +74,12 @@ class UserListCard extends StatelessWidget {
           ),
           child: Slidable(
             endActionPane: ActionPane(
+              // A motion is a widget used to control how the pane animates.
               motion: const ScrollMotion(),
+
+              // All actions are defined in the children parameter.
               children: [
+                // A SlidableAction can have an icon and/or a label.
                 SlidableAction(
                   onPressed: (context) {},
                   backgroundColor: Colors.transparent,
@@ -134,12 +138,10 @@ class UserListCard extends StatelessWidget {
                             Boxes.getUserListDB().add(userList);
                           }
                           pressCount++;
-
                           if (box.length >= 2) {
                             Get.offAll(() => const HomePage(),
                                 transition: Transition.fadeIn);
                           }
-                          Get.closeCurrentSnackbar();
                         },
                         child: Text(
                           'Undo',

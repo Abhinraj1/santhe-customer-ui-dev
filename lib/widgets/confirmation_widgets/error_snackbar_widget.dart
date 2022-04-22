@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart';
 
 SnackbarController errorMsg(String title, String body) {
+  print(title);
   return Get.snackbar(
     '',
     '',

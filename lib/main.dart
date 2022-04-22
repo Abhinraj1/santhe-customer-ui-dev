@@ -7,12 +7,14 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:resize/resize.dart';
 
 import 'package:santhe/REEEEEEEEEEE/firestoreeeee.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
+import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/firebase/firebase_helper.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/pages/customer_registration_pages/customer_registration.dart';
@@ -26,6 +28,7 @@ import 'REEEEEEEEEEE/firestoraaage.dart';
 import 'controllers/boxes_controller.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'controllers/notification_controller.dart';
 import 'controllers/registrationController.dart';
 import 'controllers/search_query_controller.dart';
 import 'controllers/sent_tab_offer_card_controller.dart';
@@ -79,28 +82,13 @@ void main() async {
   final bool isRegistered =
       Boxes.getUserPrefs().get('isRegistered', defaultValue: false) ?? false;
 
-  if (showHome) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.orange,
-      statusBarBrightness: Brightness.light,
-    ));
-  } else {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.orange,
-      systemNavigationBarIconBrightness: Brightness.light,
-      statusBarColor: Colors.orange,
-      statusBarBrightness: Brightness.light,
-    ));
-  }
-
   final apiController = Get.put(APIs());
   final locationController = Get.put(LocationController());
   final registrationController = Get.put(RegistrationController());
   final customImageUrl = Get.put(CustomImageController());
   final sentUserListController = Get.put(SentUserListController());
   final searchQueryController = Get.put(SearchQueryController());
+  Get.put(NotificationController());
   // apiController.initCategoriesDB();
 
   //content update check and caching
@@ -222,43 +210,22 @@ class MyApp extends StatelessWidget {
     }
     bool hasInternet = false;
 
-    return GetMaterialApp(
+    return Resize(
+        builder: () => GetMaterialApp(
       defaultTransition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 500),
       debugShowCheckedModeBanner: false,
       title: kAppName,
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.orangeAccent,
-        backgroundColor: Colors.grey.shade50,
-        textTheme: TextTheme(
-          bodyText1: GoogleFonts.mulish(color: Colors.grey.shade600),
-          bodyText2: GoogleFonts.mulish(color: Colors.grey.shade600),
-        ),
-        textSelectionTheme: const TextSelectionThemeData(
-          selectionHandleColor: Colors.transparent,
-        ),
-        appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(color: Colors.white),
-          elevation: 1.0,
-          shadowColor: Colors.orange,
-          centerTitle: true,
-          color: Colors.orange,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.light,
-            statusBarColor: Colors.orange,
-          ),
-        ),
-      ),
+      theme: AppTheme().themeData,
       home: showHome2 && isLoggedIn2
           ? isRegistered2
-              ? const SplashToHome()
-              : UserRegistrationPage(userPhoneNumber: userPhone)
+          ? const SplashToHome()
+          : UserRegistrationPage(userPhoneNumber: userPhone)
           : const SplashToOnboarding(),
 
       // home: showHome ? const SplashToHome() : const OnboardingPage(),
-    );
+    ),
+      allowtextScaling: false,
+      size: const Size(390, 844),);
   }
 }

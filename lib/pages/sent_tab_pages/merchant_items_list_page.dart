@@ -7,7 +7,6 @@ import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
-import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../models/offer/offer_model.dart';
 import '../../widgets/sent_tab_widgets/merchant_item_card.dart';
@@ -34,8 +33,7 @@ class MerchantItemsListPage extends StatelessWidget {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
         toolbarHeight: screenHeight * 5.5,
@@ -82,11 +80,10 @@ class MerchantItemsListPage extends StatelessWidget {
               child: GroupedListView(
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 8.0,
-                  left: 23.sp,
-                  right: 23.sp,
-                  bottom: 8.0,
+                  left: 15.0,
+                  right: 15.0,
                 ),
                 elements: currentMerchantOffer.offerItems,
                 groupBy: (OfferItem offerItem) => offerItem.catName,
@@ -94,11 +91,7 @@ class MerchantItemsListPage extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        value,
-                        style: GoogleFonts.mulish(
-                            color: kTextGrey, fontWeight: FontWeight.w700),
-                      ),
+                      Text(value),
                       const Divider(
                         color: Colors.grey,
                         thickness: 1,
@@ -163,15 +156,15 @@ class MerchantItemsListPage extends StatelessWidget {
                             backgroundColor: Colors.transparent,
                             context: context,
                             barrierColor:
-                                const Color.fromARGB(165, 241, 241, 241),
+                            const Color.fromARGB(165, 241, 241, 241),
                             isScrollControlled: true,
                             builder: (BuildContext context) {
                               ScreenUtil.init(
                                   BoxConstraints(
                                       maxWidth:
-                                          MediaQuery.of(context).size.width,
+                                      MediaQuery.of(context).size.width,
                                       maxHeight:
-                                          MediaQuery.of(context).size.height),
+                                      MediaQuery.of(context).size.height),
                                   designSize: const Size(390, 844),
                                   context: context,
                                   minTextAdapt: true,
@@ -201,21 +194,21 @@ class MerchantItemsListPage extends StatelessWidget {
                                       padding: const EdgeInsets.all(10.0),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                         children: [
                                           Stack(
                                             children: <Widget>[
                                               Center(
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8.0),
+                                                  const EdgeInsets.all(8.0),
                                                   child: Text(
                                                     'Are you sure?',
                                                     style: GoogleFonts.mulish(
                                                       fontWeight:
-                                                          FontWeight.w700,
+                                                      FontWeight.w700,
                                                       fontSize: 24.sp,
                                                       color: Colors.orange,
                                                     ),
@@ -250,7 +243,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                       fontSize: 18.sp,
                                                       color: Colors.grey,
                                                       fontWeight:
-                                                          FontWeight.w400),
+                                                      FontWeight.w400),
                                                   children: [
                                                     TextSpan(
                                                       text: ' can accept ',
@@ -258,23 +251,23 @@ class MerchantItemsListPage extends StatelessWidget {
                                                           fontSize: 18.sp,
                                                           color: Colors.grey,
                                                           fontWeight:
-                                                              FontWeight.w700),
+                                                          FontWeight.w700),
                                                     ),
                                                     TextSpan(
                                                       text:
-                                                          'offer. If you accept this offer, all other offers will disappear',
+                                                      'offer. If you accept this offer, all other offers will disappear',
                                                       style: GoogleFonts.mulish(
                                                           fontSize: 18.sp,
                                                           color: Colors.grey,
                                                           fontWeight:
-                                                              FontWeight.w400),
+                                                          FontWeight.w400),
                                                     ),
                                                   ]),
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                                EdgeInsets.only(top: 25.sp),
+                                            EdgeInsets.only(top: 25.sp),
                                             child: SizedBox(
                                               height: 50.sp,
                                               width: 234.sp,
@@ -282,18 +275,18 @@ class MerchantItemsListPage extends StatelessWidget {
                                                 onPressed: () async {
                                                   //todo push acceptance changes to db
                                                   int response =
-                                                      await apiController
-                                                          .acceptOffer(
-                                                              currentMerchantOffer
-                                                                  .listEventId);
+                                                  await apiController
+                                                      .acceptOffer(
+                                                      currentMerchantOffer
+                                                          .listEventId);
 
                                                   int response2 = await apiController
                                                       .processedStatusChange(int
-                                                          .parse(currentMerchantOffer
-                                                              .listId
-                                                              .replaceAll(
-                                                                  'projects/santhe-425a8/databases/(default)/documents/customerList/',
-                                                                  '')));
+                                                      .parse(currentMerchantOffer
+                                                      .listId
+                                                      .replaceAll(
+                                                      'projects/santhe-425a8/databases/(default)/documents/customerList/',
+                                                      '')));
                                                   // int response = 1;
                                                   if (response == 1 &&
                                                       response2 == 1) {
@@ -313,7 +306,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                   style: GoogleFonts.mulish(
                                                       color: Colors.white,
                                                       fontWeight:
-                                                          FontWeight.w700,
+                                                      FontWeight.w700,
                                                       fontSize: 18.sp),
                                                 ),
                                                 color: Colors.orange,
@@ -321,8 +314,8 @@ class MerchantItemsListPage extends StatelessWidget {
                                                 highlightElevation: 0.0,
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            16.0)),
+                                                    BorderRadius.circular(
+                                                        16.0)),
                                               ),
                                             ),
                                           )
@@ -352,6 +345,6 @@ class MerchantItemsListPage extends StatelessWidget {
           )
         ],
       ),
-    ));
+    );
   }
 }

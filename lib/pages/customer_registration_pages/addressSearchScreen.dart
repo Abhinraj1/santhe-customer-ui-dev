@@ -24,7 +24,10 @@ class AddressSearch extends SearchDelegate<Suggestion> {
     return [
       IconButton(
         tooltip: 'Clear',
-        icon: Icon(Icons.clear),
+        icon: const Icon(
+          Icons.clear,
+          color: Colors.grey,
+        ),
         onPressed: () {
           query = '';
         },
@@ -36,7 +39,11 @@ class AddressSearch extends SearchDelegate<Suggestion> {
   Widget buildLeading(BuildContext context) {
     return IconButton(
       tooltip: 'Back',
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(
+        Icons.arrow_back_ios_rounded,
+        color: Colors.grey,
+        size: 20.0,
+      ),
       onPressed: () {
         //close(context, null);
         Navigator.pop(context);
@@ -46,12 +53,12 @@ class AddressSearch extends SearchDelegate<Suggestion> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Text("No Result Found");
+    return const Text("No Result Found");
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var length;
+    // var length;
     return FutureBuilder(
         future: query == ""
             ? null
@@ -59,7 +66,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                 query, Localizations.localeOf(context).languageCode),
         builder: (context, AsyncSnapshot snapshot) => query == ''
             ? Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Enter your address',
                   style: Constant.regularGrayText16,
@@ -77,10 +84,10 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                                   snapshot.data[index].placeId);
                             },
                             child: Container(
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               child: Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.add_location_outlined,
                                     size: 15,
                                   ),
@@ -109,7 +116,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                             )),
                         itemCount: snapshot.data.length,
                       )
-                    : Container(child: Text('Loading...'))
+                    : const Text('Loading...')
                 : Container());
   }
 }

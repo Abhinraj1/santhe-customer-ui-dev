@@ -114,64 +114,36 @@ class _OfferTabPageState extends State<OfferTabPage> {
               ),
             );
           } else if (snapshot.hasData && snapshot.data?.length == 0) {
-            ScreenUtil.init(
-                BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width,
-                    maxHeight: MediaQuery.of(context).size.height),
-                designSize: const Size(390, 844),
-                context: context,
-                minTextAdapt: true,
-                orientation: Orientation.portrait);
-            return SizedBox(
-              height: double.infinity,
-              width: double.infinity,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // SizedBox(height: screenHeight * 23),
-                    SizedBox(
-                      height: screenWidth * 100,
-                      width: screenWidth * 100,
-                      child: SvgPicture.asset(
-                        'assets/sent_tab_image.svg',
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 42.sp, left: 23.sp, right: 23.sp),
-                      child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                              text:
-                                  'All your shopping lists that you have sent to\nShops in last 72 hours will appear here. Go to',
-                              style: GoogleFonts.mulish(
-                                  color: kTextGrey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16.sp),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: '\nNew ',
-                                  style: GoogleFonts.mulish(
-                                      color: kTextGrey,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 16.sp),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'tab to create and send your shopping lists',
-                                  style: GoogleFonts.mulish(
-                                      color: kTextGrey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16.sp),
-                                ),
-                              ])),
-                    )
-                  ],
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 25.0,
                 ),
-              ),
+                SizedBox(
+                  width: screenWidth * 60,
+                  child: SvgPicture.asset(
+                    'assets/onboarding_sentPage_arrow.svg',
+                    color: Colors.orange,
+                    height: screenHeight * 30,
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10.0, left: 20.0, right: 20.0),
+                    child: Text(
+                      'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.mulish(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                          color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ],
             );
           } else if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {

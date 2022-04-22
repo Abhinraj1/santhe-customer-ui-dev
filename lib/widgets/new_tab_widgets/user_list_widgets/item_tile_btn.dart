@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:group_button/group_button.dart';
 import 'package:santhe/controllers/error_user_fallback.dart';
 import 'package:santhe/firebase/firebase_helper.dart';
-import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../../controllers/api_service_controller.dart';
 import '../../../controllers/boxes_controller.dart';
 import '../../../controllers/custom_image_controller.dart';
@@ -45,8 +44,6 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
   int custPhone =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
-  int buttonTapCount = 0;
-  bool goAhead = true;
   String removeDecimalZeroFormat(double n) {
     return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
   }
@@ -237,10 +234,9 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                               textAlignVertical:
                                                   TextAlignVertical.center,
                                               style: GoogleFonts.mulish(
-                                                color: Colors.orange,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 15.sp,
-                                              ),
+                                                  color: Colors.orange,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 16.0),
                                               onSaved: (value) {
                                                 _qtyController.text = value!;
                                               },
@@ -378,18 +374,17 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                               }
                                               // showOverlay(context);
                                             },
-                                            child:
-                                                //todo fix error due to builder logic issue move logic elsewhere
+                                            child: Obx(
+                                              //todo fix error due to builder logic issue move logic elsewhere
+                                              () =>
+                                                  // double.parse(
+                                                  // imageController
+                                                  //     .imageUploadProgress
+                                                  //     .value))
 
-                                                // double.parse(
-                                                // imageController
-                                                //     .imageUploadProgress
-                                                //     .value))
-
-                                                Stack(
-                                              children: [
-                                                Obx(
-                                                  () => CachedNetworkImage(
+                                                  Stack(
+                                                children: [
+                                                  CachedNetworkImage(
                                                     imageUrl: imageController
                                                                 .editItemCustomImageUrl
                                                                 .value
@@ -419,27 +414,27 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                                       );
                                                     },
                                                   ),
-                                                ),
-                                                Positioned(
-                                                  top: 10,
-                                                  bottom: 10,
-                                                  left: 10,
-                                                  right: 10,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    value: imageController
-                                                            .imageUploadProgress
-                                                            .value
-                                                            .isNotEmpty
-                                                        ? double.parse(
-                                                            imageController
-                                                                .imageUploadProgress
-                                                                .value)
-                                                        : 0.0,
-                                                    strokeWidth: 5.0,
-                                                  ),
-                                                )
-                                              ],
+                                                  Positioned(
+                                                    top: 10,
+                                                    bottom: 10,
+                                                    left: 10,
+                                                    right: 10,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      value: imageController
+                                                              .imageUploadProgress
+                                                              .value
+                                                              .isNotEmpty
+                                                          ? double.parse(
+                                                              imageController
+                                                                  .imageUploadProgress
+                                                                  .value)
+                                                          : 0.0,
+                                                      strokeWidth: 5.0,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -520,19 +515,14 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                                                           () async {
                                                                         Navigator.pop(
                                                                             context);
-                                                                        goAhead =
-                                                                            false;
                                                                         String url = await FirebaseHelper().addCustomItemImage(
                                                                             '${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}',
                                                                             true,
-                                                                            false,
                                                                             false);
                                                                         url.isNotEmpty
                                                                             ? imageController.editItemCustomImageItemId.value =
                                                                                 item.itemId.toString()
                                                                             : null;
-                                                                        goAhead =
-                                                                            true;
                                                                       },
                                                                       child:
                                                                           const CircleAvatar(
@@ -576,21 +566,16 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                                                     GestureDetector(
                                                                       onTap:
                                                                           () async {
-                                                                        goAhead =
-                                                                            false;
                                                                         Navigator.pop(
                                                                             context);
                                                                         String url = await FirebaseHelper().addCustomItemImage(
                                                                             '${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}-${item.itemId}',
-                                                                            false,
                                                                             false,
                                                                             false);
                                                                         url.isNotEmpty
                                                                             ? imageController.editItemCustomImageItemId.value =
                                                                                 item.itemId.toString()
                                                                             : null;
-                                                                        goAhead =
-                                                                            true;
                                                                       },
                                                                       child:
                                                                           const CircleAvatar(
@@ -716,10 +701,9 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                   // maxLines: 2,
                                   textAlignVertical: TextAlignVertical.center,
                                   style: GoogleFonts.mulish(
-                                    color: Colors.grey.shade500,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15.sp,
-                                  ),
+                                      color: Colors.grey.shade500,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16.0),
                                   onSaved: (value) {
                                     _brandController.text = value!;
                                   },
@@ -741,7 +725,6 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                     hintStyle: GoogleFonts.mulish(
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic,
-                                        fontSize: 15.sp,
                                         color: Colors.grey.shade500),
                                   ),
                                 ),
@@ -774,10 +757,9 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                   textAlignVertical: TextAlignVertical.center,
                                   maxLines: 3,
                                   style: GoogleFonts.mulish(
-                                    color: Colors.grey.shade500,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15.sp,
-                                  ),
+                                      color: Colors.grey.shade500,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16.0),
                                   onSaved: (value) {
                                     _notesController.text = value!;
                                   },
@@ -799,7 +781,6 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                     hintStyle: GoogleFonts.mulish(
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic,
-                                        fontSize: 15.sp,
                                         color: Colors.grey.shade500),
                                   ),
                                 ),
@@ -822,8 +803,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                         print(
                                             '${_qtyController.text} $itemUnit');
 
-                                        if (_formKey.currentState!.validate() &&
-                                            goAhead) {
+                                        if (_formKey.currentState!.validate()) {
                                           //--------------------------Creating List Item from Item and new data gathered from user------------------------
                                           //TODO add parameter validation
                                           if (imageController
@@ -835,7 +815,6 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                               itemId: '${item.itemId}',
                                               itemImageId: item.itemImageId,
                                               itemName: item.itemName,
-                                              status: item.status,
                                               quantity: double.parse(
                                                   _qtyController.text),
                                               notes: _notesController.text,
@@ -871,112 +850,107 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                             print(
                                                 '---------------${_qtyController.text} $itemUnit---------------');
 
-                                            if (buttonTapCount == 0 &&
-                                                goAhead) {
-                                              if (itemCount != 0) {
-                                                //todo add custom item to firebase
-                                                Item newCustomItem = Item(
-                                                    dBrandType:
-                                                        _brandController.text,
-                                                    dItemNotes:
-                                                        _notesController.text,
-                                                    itemImageTn: imageController
-                                                        .editItemCustomImageUrl
-                                                        .value,
-                                                    catId: '4000',
-                                                    createUser: custPhone,
-                                                    dQuantity: 1,
-                                                    dUnit: selectedUnit,
-                                                    itemAlias: item.itemName,
-                                                    itemId: itemCount,
-                                                    itemImageId: imageController
-                                                        .editItemCustomImageUrl
-                                                        .value,
-                                                    itemName: item.itemName,
-                                                    status: 'inactive',
-                                                    unit: [selectedUnit],
-                                                    updateUser: custPhone);
+                                            if (itemCount != 0) {
+                                              //todo add custom item to firebase
+                                              Item newCustomItem = Item(
+                                                  dBrandType:
+                                                      _brandController.text,
+                                                  dItemNotes:
+                                                      _notesController.text,
+                                                  itemImageTn: imageController
+                                                      .editItemCustomImageUrl
+                                                      .value,
+                                                  catId: '4000',
+                                                  createUser: custPhone,
+                                                  dQuantity: 1,
+                                                  dUnit: selectedUnit,
+                                                  itemAlias: item.itemName,
+                                                  itemId: itemCount,
+                                                  itemImageId: imageController
+                                                      .editItemCustomImageUrl
+                                                      .value,
+                                                  itemName: item.itemName,
+                                                  status: 'inactive',
+                                                  unit: [selectedUnit],
+                                                  updateUser: custPhone);
 
-                                                int response =
-                                                    await apiController
-                                                        .addItem(newCustomItem);
+                                              int response = await apiController
+                                                  .addItem(newCustomItem);
 
-                                                if (response == 1) {
-                                                  currentUserList.items
-                                                      .add(ListItem(
-                                                    brandType:
-                                                        _brandController.text,
-                                                    //item ref
-                                                    itemId:
-                                                        'projects/santhe-425a8/databases/(default)/documents/item/${itemCount}',
-                                                    itemImageId: imageController
-                                                        .editItemCustomImageUrl
-                                                        .value,
+                                              if (response == 1) {
+                                                currentUserList.items
+                                                    .add(ListItem(
+                                                  brandType:
+                                                      _brandController.text,
+                                                  //item ref
+                                                  itemId:
+                                                      'projects/santhe-425a8/databases/(default)/documents/item/${itemCount}',
+                                                  itemImageId: imageController
+                                                      .editItemCustomImageUrl
+                                                      .value,
+                                                  //todo make it work
+                                                  itemName: item.itemName,
+                                                  quantity: double.parse(
+                                                      _qtyController.text),
+                                                  notes: _notesController.text,
+                                                  unit: itemUnit,
+                                                  possibleUnits: item.unit,
+                                                  catName: Boxes
+                                                              .getCategoriesDB()
+                                                          .get(int.parse(item
+                                                              .catId
+                                                              .replaceAll(
+                                                                  'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                                  '')))
+                                                          ?.catName ??
+                                                      'Error',
+                                                  catId: 4000,
+                                                ));
 
-                                                    itemName: item.itemName,
-                                                    status: 'inactive',
-                                                    quantity: double.parse(
-                                                        _qtyController.text),
-                                                    notes:
-                                                        _notesController.text,
-                                                    unit: itemUnit,
-                                                    possibleUnits: item.unit,
-                                                    catName: Boxes
-                                                                .getCategoriesDB()
-                                                            .get(int.parse(item
-                                                                .catId
-                                                                .replaceAll(
-                                                                    'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                                    '')))
-                                                            ?.catName ??
-                                                        'Error',
-                                                    catId: 4000,
-                                                  ));
-
-                                                  //make changes persistent
-                                                  currentUserList.save();
-                                                  print(
-                                                      'URL: ${imageController.addItemCustomImageUrl.value}');
-                                                } else {
-                                                  errorMsg('Network Error',
-                                                      'Error Adding item to the list!');
-                                                }
-
-                                                Navigator.pop(context);
+                                                //make changes persistent
+                                                currentUserList.save();
+                                                print(
+                                                    'URL: ${imageController.addItemCustomImageUrl.value}');
                                               } else {
-                                                Get.snackbar(
-                                                  '',
-                                                  '',
-                                                  titleText: const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 8.0),
-                                                    child:
-                                                        Text('Enter Quantity'),
-                                                  ),
-                                                  messageText: const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 8.0),
-                                                    child: Text(
-                                                        'Please enter some quantity to add...'),
-                                                  ),
-                                                  margin: const EdgeInsets.all(
-                                                      10.0),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  backgroundColor: Colors.white,
-                                                  shouldIconPulse: true,
-                                                  icon: const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Icon(
-                                                      CupertinoIcons
-                                                          .exclamationmark_triangle_fill,
-                                                      color: Colors.yellow,
-                                                      size: 45,
-                                                    ),
-                                                  ),
-                                                );
+                                                Get.snackbar('Network Error',
+                                                    'Error Adding item to the list!',
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    colorText: Colors.grey);
                                               }
+
+                                              Navigator.pop(context);
+                                            } else {
+                                              Get.snackbar(
+                                                '',
+                                                '',
+                                                titleText: const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 8.0),
+                                                  child: Text('Enter Quantity'),
+                                                ),
+                                                messageText: const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 8.0),
+                                                  child: Text(
+                                                      'Please enter some quantity to add...'),
+                                                ),
+                                                margin:
+                                                    const EdgeInsets.all(10.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                backgroundColor: Colors.white,
+                                                shouldIconPulse: true,
+                                                icon: const Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Icon(
+                                                    CupertinoIcons
+                                                        .exclamationmark_triangle_fill,
+                                                    color: Colors.yellow,
+                                                    size: 45,
+                                                  ),
+                                                ),
+                                              );
                                             }
                                           }
                                         }

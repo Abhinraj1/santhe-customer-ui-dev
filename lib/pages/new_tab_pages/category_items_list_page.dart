@@ -45,153 +45,151 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          toolbarHeight: screenHeight * 5.5,
-          leading: IconButton(
-            splashRadius: 0.1,
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              size: 13.sp,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        toolbarHeight: screenHeight * 5.5,
+        leading: IconButton(
+          splashRadius: 0.1,
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 13.sp,
           ),
-          title: Text(
-            Boxes.getCategoriesDB().get(catID)?.catName ?? 'Category Items',
-            style: GoogleFonts.mulish(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                fontSize: 18.sp),
-          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: Stack(children: [
-          FutureBuilder<List<Item>>(
-            future: apiController.getCategoryItems(catID),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else if (snapshot.hasData) {
-                return GridView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.all(8),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 4 / 5,
-                    ),
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (context, index) {
-                      return ItemTileBtn(
-                        item: snapshot.data![index],
-                        currentUserListDBKey: currentUserListDBKey,
-                      );
-                    });
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: GestureDetector(
-                onTap: () {
-                  Get.close(2);
-                },
-                child: Hero(
-                  tag: 'item_counter',
-                  child: Container(
-                    width: 344.sp,
-                    height: 69.sp,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.21),
-                          blurRadius: 15.0, // soften the shadow
-                          spreadRadius: 3.6, //extend the shadow
-                          offset: const Offset(
-                            0.0,
-                            0.0,
-                          ),
-                        )
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 18.0, vertical: 10.0),
-                      child: ValueListenableBuilder<Box<UserList>>(
-                        valueListenable: Boxes.getUserListDB().listenable(),
-                        builder: (context, box, widget) {
-                          UserList currentUserList =
-                              Boxes.getUserListDB().get(currentUserListDBKey) ??
-                                  fallBack_error_userList;
+        title: Text(
+          Boxes.getCategoriesDB().get(catID)?.catName ?? 'Category Items',
+          style: GoogleFonts.mulish(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 18.sp),
+        ),
+      ),
+      body: Stack(children: [
+        FutureBuilder<List<Item>>(
+          future: apiController.getCategoryItems(catID),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else if (snapshot.hasData) {
+              return GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 4 / 5,
+                  ),
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (context, index) {
+                    return ItemTileBtn(
+                      item: snapshot.data![index],
+                      currentUserListDBKey: currentUserListDBKey,
+                    );
+                  });
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.close(2);
+              },
+              child: Hero(
+                tag: 'item_counter',
+                child: Container(
+                  width: 344.sp,
+                  height: 69.sp,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.21),
+                        blurRadius: 15.0, // soften the shadow
+                        spreadRadius: 3.6, //extend the shadow
+                        offset: const Offset(
+                          0.0,
+                          0.0,
+                        ),
+                      )
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18.0, vertical: 10.0),
+                    child: ValueListenableBuilder<Box<UserList>>(
+                      valueListenable: Boxes.getUserListDB().listenable(),
+                      builder: (context, box, widget) {
+                        UserList currentUserList =
+                            Boxes.getUserListDB().get(currentUserListDBKey) ??
+                                fallBack_error_userList;
 
-                          ScreenUtil.init(
-                              BoxConstraints(
-                                  maxWidth: MediaQuery.of(context).size.width,
-                                  maxHeight:
-                                      MediaQuery.of(context).size.height),
-                              designSize: const Size(390, 844),
-                              context: context,
-                              minTextAdapt: true,
-                              orientation: Orientation.portrait);
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: AutoSizeText(
-                                  currentUserList.listName,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.left,
-                                  minFontSize: 14,
+                        ScreenUtil.init(
+                            BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width,
+                                maxHeight:
+                                MediaQuery.of(context).size.height),
+                            designSize: const Size(390, 844),
+                            context: context,
+                            minTextAdapt: true,
+                            orientation: Orientation.portrait);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: AutoSizeText(
+                                currentUserList.listName,
+                                maxLines: 2,
+                                textAlign: TextAlign.left,
+                                minFontSize: 14,
+                                style: GoogleFonts.mulish(
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xffB0B0B0),
+                                    fontSize: 18.sp),
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  '${currentUserList.items.length}',
+                                  style: GoogleFonts.mulish(
+                                      fontSize: 21.sp,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.orange),
+                                ),
+                                Text(
+                                  currentUserList.items.length < 2
+                                      ? 'Item'
+                                      : 'Items',
+                                  textAlign: TextAlign.center,
                                   style: GoogleFonts.mulish(
                                       fontWeight: FontWeight.w400,
-                                      color: const Color(0xffB0B0B0),
-                                      fontSize: 18.sp),
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    '${currentUserList.items.length}',
-                                    style: GoogleFonts.mulish(
-                                        fontSize: 21.sp,
-                                        fontWeight: FontWeight.w800,
-                                        color: Colors.orange),
-                                  ),
-                                  Text(
-                                    currentUserList.items.length < 2
-                                        ? 'Item'
-                                        : 'Items',
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.mulish(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14.sp,
-                                        color: Colors.orange),
-                                  )
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                                      fontSize: 14.sp,
+                                      color: Colors.orange),
+                                )
+                              ],
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
               ),
             ),
-          )
-        ]),
-      ),
+          ),
+        )
+      ]),
     );
   }
 }

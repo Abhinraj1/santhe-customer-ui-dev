@@ -1,388 +1,349 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:santhe/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
-import '../../controllers/api_service_controller.dart';
-import 'otp_validation_page.dart';
+import 'package:resize/resize.dart';
+import 'package:flutter/material.dart';
+import 'package:santhe/core/app_colors.dart';
+import '../../constants.dart';
+import 'otpScreen.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  String userPhone = '';
-  bool isLoading = false;
-  bool isPhoneNumberWrong = false;
-  @override
-  void initState() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.orange,
-      statusBarBrightness: Brightness.dark,
-    ));
-    super.initState();
-  }
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
-
-    var apiServiceController = Get.find<APIs>();
-
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
+    final GlobalKey<FormState> _key = GlobalKey();
+    String? _number;
+    return Scaffold(
+      backgroundColor: AppColors().white100,
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SizedBox(
-            height: 0.9.sh,
-            width: 1.sw,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 130.h,
+            ),
+            //header
+            Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 130.h),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Santhe',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.mulish(
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 60.sp,
-                          letterSpacing: -0.02.w,
-                        ),
-                      ),
-                      Text(
-                        'Supporting local economy',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.mulish(
-                          fontWeight: FontWeight.w400,
-                          color: Colors.orange,
-                          fontSize: 15.sp,
-                          letterSpacing: -0.02.w,
-                        ),
-                      ),
-                    ],
-                  ),
+                Text(
+                  "Santhe",
+                  style: TextStyle(
+                      fontSize: 60.sp,
+                      fontWeight: FontWeight.w900,
+                      color: Constant.bgColor),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: 0.1.sw,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              errorText: ' ',
-                              errorBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                color: Colors.orange,
-                              )),
-                              errorStyle: TextStyle(
-                                color: Colors.transparent,
-                              ),
-                              hintStyle: GoogleFonts.mulish(
-                                color: Colors.orange,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18.sp,
-                              ),
-                              disabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                color: Colors.orange,
-                              )),
-                              hintText: '+91',
-                              enabled: false,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 0.6.sw,
-                          child: Form(
-                            key: _formKey,
-                            child: TextFormField(
-                              autofocus: true,
-                              onChanged: (value) {
-                                userPhone = value;
-                              },
-                              validator: (value) {
-                                final RegExp phoneRegExp =
-                                    RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
-                                if (value == null || value.isEmpty) {
-                                  setState(() {
-                                    isPhoneNumberWrong = true;
-                                  });
-                                  return 'Please enter your phone number here';
-                                } else if (value.length != 10) {
-                                  setState(() {
-                                    isPhoneNumberWrong = true;
-                                  });
-                                  return 'Please enter a proper 10 digit number';
-                                } else if (!phoneRegExp.hasMatch(value)) {
-                                  setState(() {
-                                    isPhoneNumberWrong = true;
-                                  });
-                                  return 'Please enter a valid phone number';
-                                } else {
-                                  setState(() {
-                                    isPhoneNumberWrong = false;
-                                  });
-                                  return null;
-                                }
-                              },
-                              decoration: InputDecoration(
-                                errorText: ' ',
-                                errorStyle: GoogleFonts.mulish(
-                                  fontWeight: FontWeight.w500,
-                                  color: kErrorTextRedColor,
-                                  fontSize: 13.sp,
-                                ),
-                                errorBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: kErrorTextRedColor,
-                                )),
-                                focusedErrorBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.orange, width: 2.0)),
-                                disabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                                enabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                                hintText: 'Enter Your Number',
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 5.0,
-                                ),
-                                hintStyle: GoogleFonts.mulish(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 16.sp,
-                                ),
-                              ),
-                              style: GoogleFonts.mulish(
-                                  color: isPhoneNumberWrong
-                                      ? kErrorTextRedColor
-                                      : Colors.orange,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18.sp),
-                              keyboardType: TextInputType.phone,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.h),
-                      child: isLoading
-                          ? const CircularProgressIndicator.adaptive()
-                          : RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                  text: 'Enter your phone number to ',
-                                  style: GoogleFonts.mulish(
-                                      color: Colors.orange,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18.sp),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: 'Login\n',
-                                      style: GoogleFonts.mulish(
-                                          color: Colors.orange,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 18.sp),
-                                    ),
-                                    TextSpan(
-                                      text: 'or',
-                                      style: GoogleFonts.mulish(
-                                          color: Colors.orange,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 18.sp),
-                                    ),
-                                    TextSpan(
-                                      text: ' Sign up',
-                                      style: GoogleFonts.mulish(
-                                          color: Colors.orange,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 18.sp),
-                                    ),
-                                  ]),
-                            ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 70.h),
-                      child: SizedBox(
-                        height: 55.h,
-                        width: 244.w,
-                        child: MaterialButton(
-                          elevation: 0.0,
-                          highlightElevation: 0.0,
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              Future.delayed(const Duration(seconds: 10), () {
-                                if (mounted) {
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                }
-                              });
-                              String sessionInfo = await apiServiceController
-                                  .getOTP(int.parse(userPhone));
-                              Get.off(
-                                  () => OtpPage(
-                                        sessionInfo: sessionInfo,
-                                        userPhone: int.parse(userPhone),
-                                      ),
-                                  transition: Transition.fadeIn);
-
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          },
-                          color: Colors.orange,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: Text(
-                            'Next',
-                            style: GoogleFonts.mulish(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18.sp),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 35.h),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            text:
-                                'By continuing to use the app, you accept our\n',
-                            style: GoogleFonts.mulish(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13.sp),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Terms & Conditions',
-                                style: GoogleFonts.mulish(
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13.sp),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    launch('https://www.google.com');
-                                  },
-                              ),
-                              TextSpan(
-                                text: ' and ',
-                                style: GoogleFonts.mulish(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13.sp),
-                              ),
-                              TextSpan(
-                                text: 'Privacy Policy',
-                                style: GoogleFonts.mulish(
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13.sp),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    launch('https://www.google.com');
-                                  },
-                              ),
-                            ]),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 34.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        textBaseline: TextBaseline.alphabetic,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        children: [
-                          Icon(
-                            CupertinoIcons.exclamationmark_circle_fill,
-                            color: Colors.orange,
-                            size: 12.w,
-                          ),
-                          SizedBox(
-                            width: 5.0,
-                          ),
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                                text: 'If you are a merchant, please use the\n',
-                                style: GoogleFonts.mulish(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13.sp),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: 'Santhe Merchant App',
-                                    style: GoogleFonts.mulish(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13.sp),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        launch('https://www.google.com');
-                                      },
-                                  ),
-                                ]),
-                          ),
-                          SizedBox(
-                            width: 5.0,
-                          ),
-                          Icon(
-                            CupertinoIcons.exclamationmark_circle_fill,
-                            color: Colors.transparent,
-                            size: 12.w,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                Text(
+                  "Supporting Local Economy",
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    color: Constant.bgColor,
+                  ),
                 )
               ],
             ),
-          ),
+            SizedBox(
+              height: 214.h,
+            ),
+            //mobile field
+            Form(
+              key: _key,
+              child: SizedBox(
+                width: 276.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom:
+                          BorderSide(width: 2.0, color: Constant.bgColor),
+                        ),
+                      ),
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        "+91",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          color: Constant.bgColor,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20.w,),
+                    Container(
+                      width: 50.vw,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom:
+                          BorderSide(width: 2.0, color: Constant.bgColor),
+                        ),
+                      ),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10)
+                        ],
+                        onChanged: (String? val) => _number = val!,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          color: Constant.bgColor,
+                          letterSpacing: 6.sp,
+                        ),
+                        validator: (String? val){
+                          if(val != null && val.length == 10) return null;
+                          return 'Valid mobile number required';
+                        },
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Mobile Number',
+                            hintStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            )),
+                      ),
+                    )
+                  ],
+                ),
+              ),),
+            SizedBox(
+              height: 22.h,
+            ),
+            //field sub header
+            SizedBox(
+              width: 70.vw,
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    text: "Enter your phone number to ",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Constant.bgColor,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: "Login ",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Constant.bgColor,
+                              fontWeight: FontWeight.w900)),
+                      TextSpan(
+                          text: "or ",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Constant.bgColor,
+                          )),
+                      TextSpan(
+                          text: "SignUp",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Constant.bgColor,
+                              fontWeight: FontWeight.w900)),
+                    ]),
+              ),
+            ),
+            SizedBox(
+              height: 70.h,
+            ),
+            //next
+            InkWell(
+              onTap: () async {
+                if (_key.currentState!.validate()) {
+                  Get.to(OtpScreen(phoneNumber: _number!));
+                }
+              },
+              child: Container(
+                width: 55.vw,
+                decoration: BoxDecoration(
+                  color: Constant.bgColor,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(14),
+                  ),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 24),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(
+                          color: Constant.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height:35.h ,
+            ),
+            //privacy policy
+            SizedBox(
+              width: 70.vw,
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    text: "By continuing to use the app, you accept our ",
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: "Terms & Conditions ",
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: Constant.bgColor,
+                              fontWeight: FontWeight.w600)),
+                      const TextSpan(
+                          text: "and ",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          )),
+                      TextSpan(
+                          text: "Privacy Policy",
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: Constant.bgColor,
+                              fontWeight: FontWeight.w600)),
+                    ]),
+              ),
+            ),
+            SizedBox(
+              height:34.h ,
+            ),
+            //footer
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      CupertinoIcons.exclamationmark_circle_fill,
+                      color: Colors.orange,
+                      size: 12.w,
+                    ),
+                    const Text("  If you are a merchant, please use the",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ))
+                  ],
+                ),
+                Text("Santhe Merchant App",
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Constant.bgColor,
+                        fontWeight: FontWeight.w600))
+              ],
+            )
+          ],
         ),
       ),
-    ));
+    );
   }
 }
+
+/*// Get.to(() => const OtpPage());
+
+int enteredOtp = int.parse(controller.text);
+print('--> OTP: $enteredOtp');
+if (controller.text.isEmpty ||
+controller.text.length != 6) {
+Get.snackbar('Enter all 6 Digits',
+'Please Enter All the 6 Digits of Your OTP!',
+backgroundColor: Colors.orange,
+colorText: Colors.white);
+} else if (controller.text.length == 6) {
+setState(() {
+isLoading = true;
+});
+
+bool userVerified = await apiController.verifyOTP(
+sessionInfo, enteredOtp);
+
+if (userVerified) {
+Boxes.getUserPrefs().put('isLoggedIn', true);
+Boxes.getUserPrefs().put('showHome', false);
+Boxes.getUserPrefs().put('isRegistered', false);
+
+//skipping check and sending existing user directly to HomePage
+//                                 Boxes.getUserCredentialsDB()
+//                                     .get('currentUserCredentials')
+//                                     ?.isNewUser ??
+//                                     false
+
+int response = await apiController
+    .getCustomerInfo(userPhone);
+
+if (response == 0) {
+//if new user, get them registered
+
+print("--------$userPhone--------");
+//to not show start from old list to new user (code is inside of registration page), get's triggerd only after successful registration
+_countdownController.pause();
+if (userPhone == 404) return;
+Get.off(
+() => UserRegistrationPage(
+userPhoneNumber: userPhone),
+transition: Transition.fadeIn);
+} else {
+//Send user to Home Page directly as they r pre existing
+//take data from firebase & add
+//response will auto add it to hive.
+
+Boxes.getUserPrefs().put('isLoggedIn', true);
+Boxes.getUserPrefs().put('showHome', true);
+Boxes.getUserPrefs()
+    .put('isRegistered', true);
+
+_countdownController.pause();
+Get.off(() => const HomePage(),
+transition: Transition.fadeIn);
+}
+} else {
+controller.text = '';
+Get.snackbar(
+'',
+'',
+titleText: const Padding(
+padding: EdgeInsets.only(left: 8.0),
+child: Text('Invalid OTP!'),
+),
+messageText: const Padding(
+padding: EdgeInsets.only(left: 8.0),
+child: Text(
+'Please enter the correct OTP verify.'),
+),
+margin: const EdgeInsets.all(10.0),
+padding: const EdgeInsets.all(8.0),
+backgroundColor: Colors.white,
+shouldIconPulse: true,
+icon: const Padding(
+padding: EdgeInsets.all(8.0),
+child: Icon(
+CupertinoIcons
+    .exclamationmark_triangle_fill,
+color: Colors.orange,
+size: 45,
+),
+),
+);
+}
+
+if (mounted) {
+setState(() {
+isLoading = false;
+});
+}
+} else {
+print('ERROROROROROOROROR');
+}*/
+
+

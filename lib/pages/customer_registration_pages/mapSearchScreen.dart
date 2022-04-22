@@ -69,7 +69,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
         child: Stack(
           children: [
             Column(
@@ -82,7 +82,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                     textAlignVertical: TextAlignVertical.center,
                     // autofocus: true,
                     keyboardType: TextInputType.text,
-                    style: TextStyle(
+                    style: GoogleFonts.mulish(
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp,
                       color: const Color(0xff8B8B8B),
@@ -117,7 +117,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                         ),
                       ),
                       hintText: "Enter your address",
-                      hintStyle: TextStyle(
+                      hintStyle: GoogleFonts.mulish(
                           fontWeight: FontWeight.w300,
                           fontStyle: FontStyle.italic,
                           color: Colors.grey.shade500),
@@ -137,77 +137,11 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                   ),
                 ),
                 Visibility(
-                  child: SizedBox(
-                    height: 10,
-                  ),
-                  visible: _controller.text.isEmpty ? true : false,
-                ),
-                Visibility(
-                  child: SizedBox(
-                      width: double.maxFinite,
-                      child: Text(
-                        "OR",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey),
-                      )),
-                  visible: _controller.text.isEmpty ? true : false,
-                ),
-                Visibility(
-                  child: SizedBox(
-                    height: 10,
-                  ),
-                  visible: _controller.text.isEmpty ? true : false,
-                ),
-                Visibility(
-                  child: GestureDetector(
-                    onTap: () async {
-                      Position position =
-                          await LocationController.getGeoLocationPosition();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MapAddressPicker(
-                                    lng: position.longitude,
-                                    lat: position.latitude,
-                                  )));
-                    },
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Constant.bgColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(14))),
-                        margin: EdgeInsets.symmetric(horizontal: 50.w),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 13.h, horizontal: 30.w),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.gps_fixed,
-                              color: Constant.white,
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Text(
-                              "Use current location",
-                              style: TextStyle(
-                                  color: Constant.white,
-                                  fontWeight: FontWeight.w800),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  visible: _controller.text.isEmpty ? true : false,
-                ),
-                Visibility(
                   child: Flexible(
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Color(0xffE0E0E0).withOpacity(0.5),
-                          borderRadius: BorderRadius.only(
+                          color: const Color(0xffE0E0E0).withOpacity(0.5),
+                          borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(14),
                               bottomRight: Radius.circular(14))),
                       child: FutureBuilder(
@@ -278,16 +212,17 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                                   )),
                                           itemCount: snapshot.data.length,
                                         )
-                                      : Container(child: Text('Loading...'))
+                                      : Container(
+                                          child: const Text('Loading...'))
                                   : Container()),
                     ),
                   ),
                   visible: _controller.text.isEmpty ? false : true,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Visibility(
@@ -300,23 +235,62 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                             visible: userInfoController.address.isEmpty
                                 ? false
                                 : true,
-                            child: Text(
-                              "Current Address",
+                            child: const Text(
+                              "Recent Address",
                               style: TextStyle(
                                   color: Colors.black87,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 17),
                             )),
                       ),
-                      Obx(() => Text(userInfoController.address.obs.string +
-                          "\n" +
-                          userInfoController.howToReach.obs.string))
+                      Obx(() => Text(userInfoController.address.obs.string))
                     ],
                   ),
                   visible: _controller.text.isEmpty ? true : false,
                 )
               ],
             ),
+            Positioned(
+              child: GestureDetector(
+                onTap: () async {
+                  Position position =
+                      await LocationController.getGeoLocationPosition();
+                  Get.to(() => MapAddressPicker(
+                        lng: position.longitude,
+                        lat: position.latitude,
+                      ));
+                },
+                child: Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Constant.bgColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(14))),
+                    margin: EdgeInsets.symmetric(horizontal: 65.w),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 13.h, horizontal: 30.w),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.gps_fixed,
+                          color: Constant.white,
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(
+                          "Use current location",
+                          style: TextStyle(
+                              color: Constant.white,
+                              fontWeight: FontWeight.w800),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              bottom: 50.h,
+            )
           ],
         ),
       ),

@@ -58,47 +58,45 @@ class SentUserListDetailsPage extends StatelessWidget {
       ],
     );
 
-    return SafeArea(
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            toolbarHeight: screenHeight * 5.5,
-            leading: IconButton(
-              splashRadius: 0.1,
-              icon: Icon(
-                Icons.arrow_back_ios_rounded,
-                size: 13.sp,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          toolbarHeight: screenHeight * 5.5,
+          leading: IconButton(
+            splashRadius: 0.1,
+            icon: Icon(
+              Icons.arrow_back_ios_rounded,
+              size: 13.sp,
             ),
-            title: Text(
-              userList.listName,
-              style: GoogleFonts.mulish(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18.sp),
-            ),
-            bottom: PreferredSize(
-              preferredSize: _tabBar.preferredSize,
-              child: ColoredBox(
-                color: Colors.grey.shade50,
-                child: _tabBar,
-              ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            userList.listName,
+            style: GoogleFonts.mulish(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                fontSize: 18.sp),
+          ),
+          bottom: PreferredSize(
+            preferredSize: _tabBar.preferredSize,
+            child: ColoredBox(
+              color: Colors.grey.shade50,
+              child: _tabBar,
             ),
           ),
-          body: TabBarView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              OffersListPage(userList: userList),
-              UserListItemDetailsPage(
-                userList: userList,
-              ),
-            ],
-          ),
+        ),
+        body: TabBarView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            OffersListPage(userList: userList),
+            UserListItemDetailsPage(
+              userList: userList,
+            ),
+          ],
         ),
       ),
     );

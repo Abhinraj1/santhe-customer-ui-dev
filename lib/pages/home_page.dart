@@ -27,12 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.orange,
-      statusBarBrightness: Brightness.dark,
-    ));
+
     super.initState();
   }
 
@@ -54,8 +49,7 @@ class _HomePageState extends State<HomePage> {
         minTextAdapt: true,
         orientation: Orientation.portrait);
 
-    return SafeArea(
-        child: DefaultTabController(
+    return DefaultTabController(
       length: 3,
       initialIndex: pageIndex,
       child: Scaffold(
@@ -145,6 +139,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    ));
+    );
   }
 }

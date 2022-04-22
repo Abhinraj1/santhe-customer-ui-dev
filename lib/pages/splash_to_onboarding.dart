@@ -20,8 +20,8 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
 
   void bootHome() {
     Future.delayed(const Duration(milliseconds: 4000), () {
-      Get.offAll(() => const OnboardingPage(),
-          transition: Transition.fadeIn, opaque: true);
+      Get.off(() => const OnboardingPage(), transition: Transition.fadeIn);
+      print('called!');
     });
   }
 

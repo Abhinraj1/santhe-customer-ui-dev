@@ -66,7 +66,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       Boxes.getUserPrefs().put('showHome', false);
       Boxes.getUserPrefs().put('isRegistered', false);
       Boxes.getUserPrefs().put('isLoggedIn', false);
-      Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
+      Get.offAll(() => LoginScreen(), transition: Transition.fadeIn);
     }
 
     ScreenUtil.init(
@@ -450,7 +450,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               404;
 
                                       if (userPhone == 404) {
-                                        Get.off(() => const LoginScreen());
+                                        Get.off(() =>  LoginScreen());
                                       }
 
                                       //todo add how to reach howToReach
@@ -506,7 +506,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           .put('isRegistered', false);
                                       Boxes.getUserPrefs()
                                           .put('isLoggedIn', false);
-                                      Get.offAll(() => const LoginScreen(),
+                                      Get.offAll(() =>  LoginScreen(),
                                           transition: Transition.fadeIn);
                                     }
                                   }

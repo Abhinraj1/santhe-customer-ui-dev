@@ -1,14 +1,7 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:resize/resize.dart';
-
 import 'package:santhe/REEEEEEEEEEE/firestoreeeee.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';

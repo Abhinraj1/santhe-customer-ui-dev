@@ -144,7 +144,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             initialValue: userPhoneNumber.toString(),
                             validator: (value) {
                               final RegExp phoneRegExp =
-                              RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
+                                  RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your phone number here';
                               } else if (value.length != 10) {
@@ -424,8 +424,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 userPhoneNumber,
                                 _messageController.text,
                                 Boxes.getUser()
-                                    .get('currentUserDetails')
-                                    ?.custRatings ??
+                                        .get('currentUserDetails')
+                                        ?.custRatings ??
                                     5.0);
 
                             //checking for API call's success | 1 = success
@@ -440,8 +440,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             }
                             // Get.offAll(() => const HomePage());
                           } else {
-                            errorMsg('Enter Message',
-                                'Please write some message before sending it.');
+                            // errorMsg('Enter Message',
+                            //     'Please write some message before sending it.');
                           }
                         },
                         child: FittedBox(

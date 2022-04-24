@@ -17,7 +17,6 @@ import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 import '../customer_registration_pages/customer_registration.dart';
 import '../home_page.dart';
 
-
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
   const OtpScreen({Key? key, required this.phoneNumber}) : super(key: key);
@@ -26,7 +25,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   int start = 60;
   bool wait = false;
@@ -36,6 +34,7 @@ class _OtpScreenState extends State<OtpScreen> {
   Timer? _timer;
   String _otp = '';
   bool _isLoading = false;
+  bool _isSubmitted = false;
 
   @override
   void initState() {
@@ -50,9 +49,7 @@ class _OtpScreenState extends State<OtpScreen> {
       height: 49.h,
       width: 40.w,
       textStyle: TextStyle(
-          fontSize: 15.sp,
-          color: Colors.orange,
-          fontWeight: FontWeight.w700),
+          fontSize: 15.sp, color: Colors.orange, fontWeight: FontWeight.w700),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(7),
@@ -89,16 +86,27 @@ class _OtpScreenState extends State<OtpScreen> {
             //pin input
             Pinput(
               length: 6,
-              defaultPinTheme: defaultPinTheme,
+              defaultPinTheme: defaultPinTheme.copyWith(
+                height: 49.h,
+                width: 40.w,
+                decoration: defaultPinTheme.decoration!.copyWith(
+                  border: _isSubmitted == true && _otp.length < 6
+                      ? Border.all(color: AppColors().red100)
+                      : Border.all(color: AppColors().grey100),
+                ),
+              ),
               focusedPinTheme: defaultPinTheme.copyWith(
                 height: 49.h,
                 width: 40.w,
                 decoration: defaultPinTheme.decoration!.copyWith(
-                  border: Border.all(color: AppColors().grey40),
+                  border: _isSubmitted == true && _otp.length < 6
+                      ? Border.all(color: AppColors().red100)
+                      : Border.all(color: AppColors().grey100),
                 ),
               ),
               errorPinTheme: defaultPinTheme.copyWith(
                 decoration: BoxDecoration(
+                  border: Border.all(color: AppColors().red100),
                   color: AppColors().red100,
                   borderRadius: BorderRadius.circular(7),
                 ),
@@ -108,7 +116,11 @@ class _OtpScreenState extends State<OtpScreen> {
             Padding(
               padding: EdgeInsets.only(top: 34.h),
               child: Text(
-                'Enter OTP to verify',
+                _otp.isEmpty
+                    ? !_isSubmitted
+                        ? 'Enter OTP to verify'
+                        : 'OTP is Incorrect'
+                    : 'OTP is Incorrect',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 18.sp,
@@ -123,29 +135,41 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             //button
             InkWell(
-              onTap: () => signInWithPhoneNumber(verificationIdFinal, _otp, context),
-              child: _isLoading ? Center(child: CircularProgressIndicator(color: AppColors().brandDark, strokeWidth: 2,),) : Container(
-                width: MediaQuery.of(context).size.width * 0.55,
-                decoration: BoxDecoration(
-                  color: Constant.bgColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(14),
-                  ),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 24),
-                    child: Text(
-                      "Next",
-                      style: TextStyle(
-                          color: Constant.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700),
+              onTap: () {
+                signInWithPhoneNumber(verificationIdFinal, _otp, context);
+                setState(() {
+                  _isSubmitted = true;
+                });
+              },
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors().brandDark,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width * 0.55,
+                      decoration: BoxDecoration(
+                        color: Constant.bgColor,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(14),
+                        ),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 24),
+                          child: Text(
+                            "Next",
+                            style: TextStyle(
+                                color: Constant.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ),
             SizedBox(
               height: 35.h,
@@ -160,16 +184,18 @@ class _OtpScreenState extends State<OtpScreen> {
                     child: InkWell(
                       onTap: () {
                         if (start <= 0) {
-                          verifyPhoneNumber('+91' + widget.phoneNumber, setData);
+                          verifyPhoneNumber(
+                              '+91' + widget.phoneNumber, setData);
                           start = 60;
                           startTimer();
                         } else {
-                          errorMsg(
-                              'Please wait before trying again', '');
+                          errorMsg('Please wait before trying again', '');
                         }
                       },
                       child: Text(
-                        start > 0 ? ' Request Again in'.tr + ' $start ' + 'secs' : ' Request Again',
+                        start > 0
+                            ? ' Request Again in'.tr + ' $start ' + 'secs'
+                            : ' Request Again',
                         maxLines: 4,
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -220,7 +246,7 @@ class _OtpScreenState extends State<OtpScreen> {
   Future<void> verifyPhoneNumber(String phoneNumber, Function setData) async {
     try {
       await _auth.verifyPhoneNumber(
-        //after this you can't enter the code
+          //after this you can't enter the code
           timeout: const Duration(seconds: 50),
           phoneNumber: phoneNumber,
           verificationCompleted: onVerificationCompleted,
@@ -234,7 +260,8 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   //manual verification
-  Future<void> signInWithPhoneNumber(String verificationId, String smsCode, BuildContext context) async {
+  Future<void> signInWithPhoneNumber(
+      String verificationId, String smsCode, BuildContext context) async {
     setState(() {
       _isLoading = true;
     });
@@ -252,7 +279,7 @@ class _OtpScreenState extends State<OtpScreen> {
         setState(() {
           _isLoading = false;
         });
-        errorMsg('Invalid OTP', 'Please try again');
+        // errorMsg('Invalid OTP', 'Please try again');
       });
     } catch (e) {
       setState(() {
@@ -263,54 +290,50 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   Future<void> _nextStep() async {
+    final apiController = Get.find<APIs>();
 
-  final apiController = Get.find<APIs>();
-
-  Boxes.getUserCredentialsDB().put('currentUserCredentials', uc.UserCredential(
-      idToken: 'idToken',
-      refreshToken: 'refreshToken',
-      expiresIn: 3,
-      localId: 'localId',
-      isNewUser: true,
-      phoneNumber: int.parse(widget.phoneNumber)));
+    Boxes.getUserCredentialsDB().put(
+        'currentUserCredentials',
+        uc.UserCredential(
+            idToken: 'idToken',
+            refreshToken: 'refreshToken',
+            expiresIn: 3,
+            localId: 'localId',
+            isNewUser: true,
+            phoneNumber: int.parse(widget.phoneNumber)));
 
     bool userVerified = true;
 
     if (userVerified) {
-        Boxes.getUserPrefs().put('isLoggedIn', true);
-        Boxes.getUserPrefs().put('showHome', false);
-        Boxes.getUserPrefs().put('isRegistered', false);
+      Boxes.getUserPrefs().put('isLoggedIn', true);
+      Boxes.getUserPrefs().put('showHome', false);
+      Boxes.getUserPrefs().put('isRegistered', false);
 
-        //skipping check and sending existing user directly to HomePage
-        //                                 Boxes.getUserCredentialsDB()
-        //                                     .get('currentUserCredentials')
-        //                                     ?.isNewUser ??
-        //                                     false
+      //skipping check and sending existing user directly to HomePage
+      //                                 Boxes.getUserCredentialsDB()
+      //                                     .get('currentUserCredentials')
+      //                                     ?.isNewUser ??
+      //                                     false
 
-        int userPhone = int.parse(widget.phoneNumber);
-        int response = await apiController.getCustomerInfo(userPhone);
+      int userPhone = int.parse(widget.phoneNumber);
+      int response = await apiController.getCustomerInfo(userPhone);
 
-        if (response == 0) {
+      if (response == 0) {
         if (userPhone == 404) return;
-        Get.off(
-        () => UserRegistrationPage(
-        userPhoneNumber: userPhone),
-        transition: Transition.fadeIn);
-        } else {
+        Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone),
+            transition: Transition.fadeIn);
+      } else {
         //Send user to Home Page directly as they r pre existing
         //take data from firebase & add
         //response will auto add it to hive.
 
         Boxes.getUserPrefs().put('isLoggedIn', true);
         Boxes.getUserPrefs().put('showHome', true);
-        Boxes.getUserPrefs()
-            .put('isRegistered', true);
-        Get.off(() => const HomePage(),
-        transition: Transition.fadeIn);
-        }
+        Boxes.getUserPrefs().put('isRegistered', true);
+        Get.off(() => const HomePage(), transition: Transition.fadeIn);
+      }
     }
   }
-
 
   onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
     _auth.signInWithCredential(phoneAuthCredential).then((value) async {

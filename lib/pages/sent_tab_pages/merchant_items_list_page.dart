@@ -276,9 +276,8 @@ class MerchantItemsListPage extends StatelessWidget {
                                                   //todo push acceptance changes to db
                                                   int response =
                                                   await apiController
-                                                      .acceptOffer(
-                                                      currentMerchantOffer
-                                                          .listEventId);
+                                                      .acceptOffer(currentMerchantOffer
+                                                      .listEventId);
 
                                                   int response2 = await apiController
                                                       .processedStatusChange(int

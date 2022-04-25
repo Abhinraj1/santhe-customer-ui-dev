@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -44,10 +45,15 @@ import 'models/santhe_user_model.dart';
 
 //todo start with new list page, send list name data till end of piperline
 //todo then to list controller, then display on new list tab on homepage
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
 void main() async {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // FirebaseHelper().offerStream();
 
@@ -89,6 +95,7 @@ void main() async {
   final sentUserListController = Get.put(SentUserListController());
   final searchQueryController = Get.put(SearchQueryController());
   Get.put(NotificationController());
+  Notifications().fcmInit();
   // apiController.initCategoriesDB();
 
   //content update check and caching

@@ -356,7 +356,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         keyboardType: TextInputType.text,
                         controller: _messageController,
                         autofocus: true,
-                        maxLength: 150,
+                        maxLength: 500,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter some feedback or query here';

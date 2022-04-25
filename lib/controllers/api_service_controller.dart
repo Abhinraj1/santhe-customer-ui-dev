@@ -513,12 +513,16 @@ class APIs extends GetxController {
               "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
         },
         "custListSentTime": {
-          "timestampValue":
-              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+          "timestampValue": userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+        },
+        'notificationProcess' : {
+          'stringValue': 'reminder'
+        },
+        'dealProcess': {
+          'booleanValue': false
         },
         "custOfferWaitTime": {
-          "timestampValue":
-              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+          "timestampValue": DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
         "listOfferCounter": {"integerValue": "0"},
         "processStatus": {"stringValue": "draft"},
@@ -759,7 +763,6 @@ class APIs extends GetxController {
 
     var response = await http.post(Uri.parse(url), body: jsonEncode(body));
     var data = jsonDecode(response.body);
-    print(data);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -805,8 +808,7 @@ class APIs extends GetxController {
 
   //patch
   Future updateCustomerInfo(int custId, User updatedUser) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId?updateMask.fieldPaths=custName&updateMask.fieldPaths=custReferal&updateMask.fieldPaths=contact&updateMask.fieldPaths=custStatus&updateMask.fieldPaths=custRatings&updateMask.fieldPaths=custId';
+    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId?updateMask.fieldPaths=custName&updateMask.fieldPaths=custReferal&updateMask.fieldPaths=contact&updateMask.fieldPaths=custStatus&updateMask.fieldPaths=custRatings&updateMask.fieldPaths=custId';
 
     final body = {
       "fields": {
@@ -1120,7 +1122,6 @@ class APIs extends GetxController {
         "custOfferResponse": {
           "mapValue": {
             "fields": {
-              "custDeal": {"stringValue": "bestoffer"},
               "custOfferStatus": {"stringValue": "accepted"},
               "custUpdateTime": {
                 "timestampValue":

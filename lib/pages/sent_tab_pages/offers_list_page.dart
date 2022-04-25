@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/widgets/sent_tab_widgets/merchant_offer_card.dart';
 
 import '../../controllers/api_service_controller.dart';
@@ -48,11 +50,8 @@ class _OffersListPageState extends State<OffersListPage> {
         if (snapshot.hasError) {
           //todo show proper error screen
           return Center(child: Text('${snapshot.error}'));
-          return const Center(
-              child: Text('Awaiting New Offers\nNo Offer Yet!'));
         } else if (snapshot.hasData && snapshot.data?.length == 0) {
-          return const Center(
-              child: Text('Awaiting New Offers\nNo Offer Yet!'));
+          return _waitingImage();
         } else if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
           return RefreshIndicator(
@@ -137,4 +136,19 @@ class _OffersListPageState extends State<OffersListPage> {
       },
     );
   }
+
+  Widget _waitingImage() => Column(
+    children: [
+      Image.asset('assets/sent_tab/waiting_for_offer.png'),
+      SizedBox(height: 27.h,),
+      Text('Waiting for Offers', style: AppTheme().bold700(24, color: AppColors().grey100),),
+      SizedBox(height: 10.h,),
+      SizedBox(
+        width: 314.w,
+          child: Text(
+            'The Merchants are working on your Shopping List. We will let you know as soon as there are offers',
+            textAlign: TextAlign.center,
+            style: AppTheme().normal400(16, color: AppColors().grey100, height: 2.h),))
+    ],
+  );
 }

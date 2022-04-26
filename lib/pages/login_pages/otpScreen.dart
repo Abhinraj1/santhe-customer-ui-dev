@@ -35,6 +35,7 @@ class _OtpScreenState extends State<OtpScreen> {
   String _otp = '';
   bool _isLoading = false;
   bool _isSubmitted = false;
+  bool _incorrectOtp = false;
 
   @override
   void initState() {
@@ -86,15 +87,16 @@ class _OtpScreenState extends State<OtpScreen> {
             //pin input
             Pinput(
               length: 6,
-              defaultPinTheme: defaultPinTheme.copyWith(
-                height: 49.h,
-                width: 40.w,
-                decoration: defaultPinTheme.decoration!.copyWith(
-                  border: _isSubmitted == true && _otp.length < 6
-                      ? Border.all(color: AppColors().red100)
-                      : Border.all(color: AppColors().grey100),
-                ),
-              ),
+              defaultPinTheme:
+                  (_isSubmitted && _otp.length < 6) || _incorrectOtp
+                      ? defaultPinTheme.copyWith(
+                          height: 49.h,
+                          width: 40.w,
+                          decoration: defaultPinTheme.decoration!.copyWith(
+                            border: Border.all(color: AppColors().red100),
+                          ),
+                        )
+                      : defaultPinTheme,
               focusedPinTheme: defaultPinTheme.copyWith(
                 height: 49.h,
                 width: 40.w,
@@ -116,11 +118,13 @@ class _OtpScreenState extends State<OtpScreen> {
             Padding(
               padding: EdgeInsets.only(top: 34.h),
               child: Text(
-                _otp.isEmpty
-                    ? !_isSubmitted
-                        ? 'Enter OTP to verify'
-                        : 'OTP is Incorrect'
-                    : 'OTP is Incorrect',
+                _otp.length == 0
+                    ? 'Enter OTP to verify'
+                    : _otp.length < 6 && _isSubmitted
+                        ? 'Invalid OTP'
+                        : _incorrectOtp
+                            ? "Incorrect OTP"
+                            : 'Enter OTP to verify',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 18.sp,
@@ -278,6 +282,7 @@ class _OtpScreenState extends State<OtpScreen> {
       }).catchError((e) {
         setState(() {
           _isLoading = false;
+          _incorrectOtp = true;
         });
         // errorMsg('Invalid OTP', 'Please try again');
       });

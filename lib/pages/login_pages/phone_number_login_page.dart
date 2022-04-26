@@ -57,11 +57,19 @@ class LoginScreen extends StatelessWidget {
                         enabled: false,
                         cursorColor: Constant.bgColor,
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
+                          disabledBorder: UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),
                           focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),
@@ -94,11 +102,15 @@ class LoginScreen extends StatelessWidget {
                       child: TextFormField(
                         cursorColor: Constant.bgColor,
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
+                          focusedBorder: UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),
-                          focusedBorder: UnderlineInputBorder(
+                          errorBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),

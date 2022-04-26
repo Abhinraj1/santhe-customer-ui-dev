@@ -19,12 +19,9 @@ import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/widgets/new_tab_widgets/user_list_card.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 
-import '../../models/santhe_user_credenetials_model.dart';
-import 'user_list_page.dart';
 
 class NewTabPage extends StatefulWidget {
   const NewTabPage({Key? key}) : super(key: key);

@@ -134,7 +134,7 @@ class CategoriesPage extends StatelessWidget {
                                 Text(
                                   '${currentUserList.items.length}',
                                   style: GoogleFonts.mulish(
-                                      fontSize: 21.sp,
+                                      fontSize: 20.sp,
                                       fontWeight: FontWeight.w800,
                                       color: Colors.orange),
                                 ),

@@ -1,33 +1,18 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:resize/resize.dart';
-
-import 'package:santhe/REEEEEEEEEEE/firestoreeeee.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_theme.dart';
-import 'package:santhe/firebase/firebase_helper.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/pages/customer_registration_pages/customer_registration.dart';
-import 'package:santhe/pages/error_pages/no_internet_error.dart';
-import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
-import 'package:santhe/pages/onboarding_page.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/pages/splash_to_onboarding.dart';
-import 'REEEEEEEEEEE/firestoraaage.dart';
 import 'controllers/boxes_controller.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'controllers/notification_controller.dart';
 import 'controllers/registrationController.dart';
@@ -39,8 +24,6 @@ import 'models/santhe_item_model.dart';
 import 'models/santhe_list_item_model.dart';
 import 'models/santhe_user_credenetials_model.dart';
 import 'models/santhe_user_list_model.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-
 import 'models/santhe_user_model.dart';
 
 //todo start with new list page, send list name data till end of piperline

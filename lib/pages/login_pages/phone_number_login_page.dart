@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_theme.dart';
 import '../../constants.dart';
 import 'otpScreen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> _key = GlobalKey();
@@ -50,36 +50,84 @@ class LoginScreen extends StatelessWidget {
               child: SizedBox(
                 width: 276.w,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom:
-                          BorderSide(width: 2.0, color: Constant.bgColor),
+                    SizedBox(
+                      width: 50,
+                      child: TextFormField(
+                        enabled: false,
+                        cursorColor: Constant.bgColor,
+                        decoration: InputDecoration(
+                          disabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          border: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          contentPadding: EdgeInsets.zero,
+                          label: Text(
+                            '+91',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: Constant.bgColor,
+                            ),
+                          ),
                         ),
-                      ),
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Text(
-                        "+91",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                          color: Constant.bgColor,
-                        ),
+                        validator: (String? val) {
+                          if (_number != null &&
+                              _number.toString().length == 10) return null;
+                          return '';
+                        },
+                        readOnly: true,
                       ),
                     ),
-                    SizedBox(width: 20.w,),
-                    Container(
-                      width: 50.vw,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom:
-                          BorderSide(width: 2.0, color: Constant.bgColor),
-                        ),
-                      ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Expanded(
                       child: TextFormField(
+                        cursorColor: Constant.bgColor,
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          border: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Constant.bgColor, width: 2.0),
+                          ),
+                          contentPadding: EdgeInsets.zero,
+                          // prefixIcon: Text(
+                          //   '+91',
+                          //   style: TextStyle(
+                          //     fontSize: 18,
+                          //     fontWeight: FontWeight.w900,
+                          //     color: Constant.bgColor,
+                          //   ),
+                          // ),
+                        ),
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -92,23 +140,78 @@ class LoginScreen extends StatelessWidget {
                           color: Constant.bgColor,
                           letterSpacing: 6.sp,
                         ),
-                        validator: (String? val){
-                          if(val != null && val.length == 10) return null;
+                        validator: (String? val) {
+                          if (val != null && val.length == 10) return null;
                           return 'Valid mobile number required';
                         },
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Mobile Number',
-                            hintStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
-                            )),
                       ),
-                    )
+                    ),
                   ],
                 ),
-              ),),
+
+                // child: Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   crossAxisAlignment: CrossAxisAlignment.end,
+                //   children: [
+                //     Container(
+                //       decoration: BoxDecoration(
+                //         border: Border(
+                //           bottom:
+                //               BorderSide(width: 2.0, color: Constant.bgColor),
+                //         ),
+                //       ),
+                //       padding: const EdgeInsets.only(bottom: 12),
+                //       child: Text(
+                //         "+91",
+                //         style: TextStyle(
+                //           fontSize: 18,
+                //           fontWeight: FontWeight.w900,
+                //           color: Constant.bgColor,
+                //         ),
+                //       ),
+                //     ),
+                //     SizedBox(
+                //       width: 20.w,
+                //     ),
+                //     Container(
+                //       width: 50.vw,
+                //       // decoration: BoxDecoration(
+                //       //   border: Border(
+                //       //     bottom:
+                //       //         BorderSide(width: 2.0, color: Constant.bgColor),
+                //       //   ),
+                //       // ),
+                //       child: TextFormField(
+                //         keyboardType: TextInputType.number,
+                //         inputFormatters: [
+                //           FilteringTextInputFormatter.digitsOnly,
+                //           LengthLimitingTextInputFormatter(10)
+                //         ],
+                //         onChanged: (String? val) => _number = val!,
+                //         style: TextStyle(
+                //           fontSize: 18,
+                //           fontWeight: FontWeight.w900,
+                //           color: Constant.bgColor,
+                //           letterSpacing: 6.sp,
+                //         ),
+                //         validator: (String? val) {
+                //           if (val != null && val.length == 10) return null;
+                //           return 'Valid mobile number required';
+                //         },
+                //         // decoration: const InputDecoration(
+                //         //     border: InputBorder.none,
+                //         //     hintText: 'Mobile Number',
+                //         //     hintStyle: TextStyle(
+                //         //       fontSize: 15,
+                //         //       fontWeight: FontWeight.w400,
+                //         //       color: Colors.grey,
+                //         //     )),
+                //       ),
+                //     )
+                //   ],
+                // ),
+              ),
+            ),
             SizedBox(
               height: 22.h,
             ),
@@ -179,7 +282,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height:35.h ,
+              height: 35.h,
             ),
             //privacy policy
             SizedBox(
@@ -215,7 +318,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height:34.h ,
+              height: 34.h,
             ),
             //footer
             Column(

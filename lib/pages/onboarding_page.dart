@@ -291,7 +291,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           Boxes.getUserPrefs().put('showHome', true);
 
                           //show login screen for onboarded user
-                          Get.off(() => const LoginScreen());
+                          Get.off(() =>  const LoginScreen());
                         },
                         color: Colors.white,
                         child: AutoSizeText(

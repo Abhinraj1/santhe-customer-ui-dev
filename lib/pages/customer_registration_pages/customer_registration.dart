@@ -139,7 +139,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       Boxes.getUserPrefs().put('isRegistered', false);
       Boxes.getUserPrefs().put('isLoggedIn', false);
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-        Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
+        Get.offAll(() => LoginScreen(), transition: Transition.fadeIn);
       });
     }
 
@@ -246,14 +246,14 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius:
-                                        BorderRadius.circular(16.0),
+                                            BorderRadius.circular(16.0),
                                         borderSide: const BorderSide(
                                             width: 1.0,
                                             color: Color(0xffD1D1D1)),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius:
-                                        BorderRadius.circular(16.0),
+                                            BorderRadius.circular(16.0),
                                         borderSide: const BorderSide(
                                             width: 1.0,
                                             color: Color(0xffD1D1D1)),
@@ -417,7 +417,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 onTap: () async {
                                   //remove focus from text fields
                                   FocusScopeNode currentScope =
-                                  FocusScope.of(context);
+                                      FocusScope.of(context);
                                   if (!currentScope.hasPrimaryFocus &&
                                       currentScope.hasFocus) {
                                     FocusManager.instance.primaryFocus
@@ -430,7 +430,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     });
                                   }
                                   var res = await Get.to(
-                                          () => const MapSearchScreen());
+                                      () => const MapSearchScreen());
                                   if (res == 1) {
                                     setState(() {});
                                   }
@@ -439,11 +439,17 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                   width: 344.w,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
-                                      border: Border.all(color: AppColors().grey40, width: 1.sp)
-                                  ),
-                                  padding: EdgeInsets.only(top: 13.h, left: 10.w, right: 10.w, bottom: 13.h),
+                                      border: Border.all(
+                                          color: AppColors().grey40,
+                                          width: 1.sp)),
+                                  padding: EdgeInsets.only(
+                                      top: 13.h,
+                                      left: 10.w,
+                                      right: 10.w,
+                                      bottom: 13.h),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       //icon
                                       Container(
@@ -451,21 +457,31 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                           width: 24.w,
                                           decoration: BoxDecoration(
                                               color: AppColors().brandDark,
-                                              borderRadius: BorderRadius.circular(20)
-                                          ),
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
                                           child: Icon(
                                             Icons.home,
                                             color: AppColors().white100,
                                             size: 15.sp,
-                                          )
+                                          )),
+                                      SizedBox(
+                                        width: 10.w,
                                       ),
-                                      SizedBox(width: 10.w,),
                                       //text
                                       Expanded(
                                         child: Obx(() => Text(
-                                          registrationController.address.value.trim() == '' ? 'Select Address' : registrationController.address.value + '\n\n' + registrationController.howToReach.value,
-                                          style: AppTheme().normal500(13),
-                                        )),
+                                              registrationController
+                                                          .address.value
+                                                          .trim() ==
+                                                      ''
+                                                  ? 'Select Address'
+                                                  : registrationController
+                                                          .address.value +
+                                                      '\n\n' +
+                                                      registrationController
+                                                          .howToReach.value,
+                                              style: AppTheme().normal500(13),
+                                            )),
                                       )
                                     ],
                                   ),
@@ -552,8 +568,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                           .pinCode.isNotEmpty) {
                                     //final otp check
                                     bool isUserLoggedin = Boxes.getUserPrefs()
-                                        .get('isLoggedIn',
-                                        defaultValue: false) ??
+                                            .get('isLoggedIn',
+                                                defaultValue: false) ??
                                         false;
 
                                     if (isUserLoggedin) {
@@ -564,8 +580,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
 
                                       int userPhone =
                                           Boxes.getUserCredentialsDB()
-                                              .get('currentUserCredentials')
-                                              ?.phoneNumber ??
+                                                  .get('currentUserCredentials')
+                                                  ?.phoneNumber ??
                                               404;
 
                                       //todo add how to reach howToReach
@@ -601,7 +617,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       } else {
                                         print('error occurred');
                                         Get.offAll(
-                                                () => const OnboardingPage());
+                                            () => const OnboardingPage());
                                       }
                                     } else {
                                       // Get.snackbar('Verify Number First',
@@ -615,55 +631,55 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       //to not show start from odl lsit to new user
                                       Boxes.getContent()
                                           .put('userListCount', '0');
-                                      Get.offAll(() => const LoginScreen(),
+                                      Get.offAll(() => LoginScreen(),
                                           transition: Transition.fadeIn);
                                     }
                                   } else {
-                                    Get.snackbar('', '',
-                                        titleText: Text(
-                                          'Enter Values Properly',
-                                          style: GoogleFonts.mulish(
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.orange,
-                                              fontSize: 16.0),
-                                        ),
-                                        messageText: Text(
-                                          'Please enter all the required values before continuing...',
-                                          style: GoogleFonts.mulish(
-                                              fontWeight: FontWeight.w500,
-                                              color: const Color(0xff8B8B8B),
-                                              fontSize: 13.0),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                            top: 13.0,
-                                            bottom: 13.0,
-                                            left: 20.0,
-                                            right: 13.0),
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 13.0, horizontal: 10.0),
-                                        icon: Icon(
-                                          CupertinoIcons
-                                              .exclamationmark_triangle_fill,
-                                          size: 40,
-                                          color: Colors.orange,
-                                        ),
-                                        shouldIconPulse: false,
-                                        snackPosition: SnackPosition.TOP,
-                                        boxShadows: [
-                                          BoxShadow(
-                                            color:
-                                            Colors.grey.withOpacity(0.21),
-                                            blurRadius:
-                                            15.0, // soften the shadow
-                                            spreadRadius:
-                                            3.6, //extend the shadow
-                                            offset: const Offset(
-                                              0.0,
-                                              0.0,
-                                            ),
-                                          )
-                                        ],
-                                        backgroundColor: Colors.white);
+                                    // Get.snackbar('', '',
+                                    //     titleText: Text(
+                                    //       'Enter Values Properly',
+                                    //       style: GoogleFonts.mulish(
+                                    //           fontWeight: FontWeight.w700,
+                                    //           color: Colors.orange,
+                                    //           fontSize: 16.0),
+                                    //     ),
+                                    //     messageText: Text(
+                                    //       'Please enter all the required values before continuing...',
+                                    //       style: GoogleFonts.mulish(
+                                    //           fontWeight: FontWeight.w500,
+                                    //           color: const Color(0xff8B8B8B),
+                                    //           fontSize: 13.0),
+                                    //     ),
+                                    //     padding: const EdgeInsets.only(
+                                    //         top: 13.0,
+                                    //         bottom: 13.0,
+                                    //         left: 20.0,
+                                    //         right: 13.0),
+                                    //     margin: const EdgeInsets.symmetric(
+                                    //         vertical: 13.0, horizontal: 10.0),
+                                    //     icon: Icon(
+                                    //       CupertinoIcons
+                                    //           .exclamationmark_triangle_fill,
+                                    //       size: 40,
+                                    //       color: Colors.orange,
+                                    //     ),
+                                    //     shouldIconPulse: false,
+                                    //     snackPosition: SnackPosition.TOP,
+                                    //     boxShadows: [
+                                    //       BoxShadow(
+                                    //         color:
+                                    //         Colors.grey.withOpacity(0.21),
+                                    //         blurRadius:
+                                    //         15.0, // soften the shadow
+                                    //         spreadRadius:
+                                    //         3.6, //extend the shadow
+                                    //         offset: const Offset(
+                                    //           0.0,
+                                    //           0.0,
+                                    //         ),
+                                    //       )
+                                    //     ],
+                                    //     backgroundColor: Colors.white);
                                   }
                                 },
                                 child: FittedBox(

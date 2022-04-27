@@ -16,7 +16,11 @@ import 'package:santhe/models/santhe_user_list_model.dart';
 
 class UserListCard extends StatelessWidget {
   final UserList userList;
-  const UserListCard({required this.userList, Key? key}) : super(key: key);
+  final box = Boxes.getUserListDB();
+  UserListCard({required this.userList, Key? key}) : super(key: key);
+  int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,7 @@ class UserListCard extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
+    
 
     //image logic
     Color clr = Colors.orange;
@@ -81,12 +86,52 @@ class UserListCard extends StatelessWidget {
               children: [
                 // A SlidableAction can have an icon and/or a label.
                 SlidableAction(
-                  onPressed: (context) {},
+                  onPressed: (context) async {
+                    int userListCount =
+                        await apiController.getAllCustomerLists(custId);
+                    UserList oldUserList = apiController.userListsDB.firstWhere(
+                        (element) => element.listId == userList.listId);
+                    UserList newImportedList = UserList(
+                        createListTime: DateTime.now(),
+                        custId: oldUserList.custId,
+                        items: oldUserList.items,
+                        listId: int.parse('$custId${userListCount + 1}'),
+                        listName: '(COPY) ${oldUserList.listName}',
+                        custListSentTime: oldUserList.custListSentTime,
+                        custListStatus: oldUserList.custListStatus,
+                        listOfferCounter: oldUserList.listOfferCounter,
+                        processStatus: oldUserList.processStatus,
+                        custOfferWaitTime: oldUserList.custOfferWaitTime);
+                    //add to firebase
+                    int response = await apiController.addCustomerList(
+                        newImportedList, custId, 'new');
+
+                    if (response == 1) {
+                      box.add(newImportedList);
+                    } else {
+                      Get.dialog(const Card(
+                        child: Center(
+                          child: Text('Error!'),
+                        ),
+                      ));
+                    }
+
+                    //Dismiss the pop up
+                    // if (box.values.length == 3) {
+                    //   Get.offAll(() => const HomePage(),
+                    //       transition: Transition.noTransition);
+                    // } else {
+                    //   Navigator.pop(context);
+                    // }
+
+
+                  },
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   autoClose: true,
                   icon: Icons.copy_rounded,
                   label: 'Copy',
+
                 ),
                 SlidableAction(
                   onPressed: (context) async {

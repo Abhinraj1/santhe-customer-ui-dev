@@ -121,155 +121,151 @@ class _UserListPageState extends State<UserListPage> {
         ),
         title: listNameEditFlag
             ? Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
-          child: SizedBox(
-            height: screenHeight * 4.5,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.0)),
-              child: Stack(children: [
-                TextFormField(
-                  autofocus: true,
-                  initialValue: userList.listName,
-                  // enableInteractiveSelection: false,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.mulish(
-                    color: Colors.grey,
-                    fontSize: 14.0,
-                  ),
-                  cursorHeight: 18.sp,
-                  maxLength: 30,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: const EdgeInsets.only(
-                        top: 10.0,
-                        bottom: 10.0,
-                        right: 30.0,
-                        left: 30.0),
-                    counterText: '',
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: SizedBox(
+                  height: screenHeight * 4.5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.0)),
+                    child: Stack(children: [
+                      TextFormField(
+                        autofocus: true,
+                        initialValue: userList.listName,
+                        // enableInteractiveSelection: false,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.mulish(
+                          color: Colors.grey,
+                          fontSize: 14.0,
+                        ),
+                        cursorHeight: 18.sp,
+                        maxLength: 30,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.only(
+                              top: 10.0, bottom: 10.0, right: 30.0, left: 30.0),
+                          counterText: '',
 
-                    // hintText: userList.listName,
-                    hintStyle: GoogleFonts.mulish(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(21),
-                      borderSide: const BorderSide(
-                          width: 0.0, color: Colors.transparent),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(21),
-                      borderSide: const BorderSide(
-                          width: 0.0, color: Colors.transparent),
-                    ),
-                  ),
+                          // hintText: userList.listName,
+                          hintStyle: GoogleFonts.mulish(
+                              fontWeight: FontWeight.w300, color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(21),
+                            borderSide: const BorderSide(
+                                width: 0.0, color: Colors.transparent),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(21),
+                            borderSide: const BorderSide(
+                                width: 0.0, color: Colors.transparent),
+                          ),
+                        ),
 
-                  onChanged: (String value) {
-                    newListName = value;
-                  },
-                  onEditingComplete: () {
-                    if (newListName.isNotEmpty) {
-                      final box = Boxes.getUserListDB();
-                      //getting current list object in db
-                      // UserList oldList = box.values.firstWhere(
-                      //     (element) =>
-                      //         element.listId == userList.listId);
-                      //
-                      // int userListDBKey = box.values
-                      //     .singleWhere((element) =>
-                      //         element.listId == userList.listId)
-                      //     .key;
-                      //
-                      // UserList newUserList = UserList(
-                      //     createListTime: oldList.createListTime,
-                      //     custId: oldList.custId,
-                      //     items: oldList.items,
-                      //     listId: oldList.listId,
-                      //     listName: newListName,
-                      //     custListSentTime: oldList.custListSentTime,
-                      //     custListStatus: oldList.custListStatus,
-                      //     listOfferCounter: oldList.listOfferCounter,
-                      //     processStatus: oldList.processStatus);
-                      //
-                      // box.putAt(userListDBKey, newUserList);
+                        onChanged: (String value) {
+                          newListName = value;
+                        },
+                        onEditingComplete: () {
+                          if (newListName.isNotEmpty) {
+                            final box = Boxes.getUserListDB();
+                            //getting current list object in db
+                            // UserList oldList = box.values.firstWhere(
+                            //     (element) =>
+                            //         element.listId == userList.listId);
+                            //
+                            // int userListDBKey = box.values
+                            //     .singleWhere((element) =>
+                            //         element.listId == userList.listId)
+                            //     .key;
+                            //
+                            // UserList newUserList = UserList(
+                            //     createListTime: oldList.createListTime,
+                            //     custId: oldList.custId,
+                            //     items: oldList.items,
+                            //     listId: oldList.listId,
+                            //     listName: newListName,
+                            //     custListSentTime: oldList.custListSentTime,
+                            //     custListStatus: oldList.custListStatus,
+                            //     listOfferCounter: oldList.listOfferCounter,
+                            //     processStatus: oldList.processStatus);
+                            //
+                            // box.putAt(userListDBKey, newUserList);
 
-                      //go back to text widget showing list name
-                      box.get(currentUserListDBKey)?.listName =
-                          newListName;
+                            //go back to text widget showing list name
+                            box.get(currentUserListDBKey)?.listName =
+                                newListName;
 
-                      box.get(currentUserListDBKey)?.save();
+                            box.get(currentUserListDBKey)?.save();
 
-                      setState(() {
-                        listNameEditFlag = false;
-                      });
-                    }
-                  },
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        listNameEditFlag = false;
-                      });
-                      if (newListName.isNotEmpty) {
-                        final box = Boxes.getUserListDB();
-                        //getting current list object in db
-                        // UserList oldList = box.values.firstWhere(
-                        //     (element) =>
-                        //         element.listId == userList.listId);
-                        //
-                        // int userListDBKey = box.values
-                        //     .singleWhere((element) =>
-                        //         element.listId == userList.listId)
-                        //     .key;
-                        //
-                        // UserList newUserList = UserList(
-                        //     createListTime: oldList.createListTime,
-                        //     custId: oldList.custId,
-                        //     items: oldList.items,
-                        //     listId: oldList.listId,
-                        //     listName: newListName,
-                        //     custListSentTime: oldList.custListSentTime,
-                        //     custListStatus: oldList.custListStatus,
-                        //     listOfferCounter: oldList.listOfferCounter,
-                        //     processStatus: oldList.processStatus);
-                        //
-                        // box.putAt(userListDBKey, newUserList);
-
-                        //go back to text widget showing list name
-                        box.get(currentUserListDBKey)?.listName =
-                            newListName;
-
-                        box.get(currentUserListDBKey)?.save();
-
-                        setState(() {
-                          listNameEditFlag = false;
-                        });
-                      }
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 3.0),
-                      child: Icon(
-                        CupertinoIcons.check_mark_circled_solid,
-                        color: Colors.orange,
-                        size: 26,
+                            setState(() {
+                              listNameEditFlag = false;
+                            });
+                          }
+                        },
                       ),
-                    ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              listNameEditFlag = false;
+                            });
+                            if (newListName.isNotEmpty) {
+                              final box = Boxes.getUserListDB();
+                              //getting current list object in db
+                              // UserList oldList = box.values.firstWhere(
+                              //     (element) =>
+                              //         element.listId == userList.listId);
+                              //
+                              // int userListDBKey = box.values
+                              //     .singleWhere((element) =>
+                              //         element.listId == userList.listId)
+                              //     .key;
+                              //
+                              // UserList newUserList = UserList(
+                              //     createListTime: oldList.createListTime,
+                              //     custId: oldList.custId,
+                              //     items: oldList.items,
+                              //     listId: oldList.listId,
+                              //     listName: newListName,
+                              //     custListSentTime: oldList.custListSentTime,
+                              //     custListStatus: oldList.custListStatus,
+                              //     listOfferCounter: oldList.listOfferCounter,
+                              //     processStatus: oldList.processStatus);
+                              //
+                              // box.putAt(userListDBKey, newUserList);
+
+                              //go back to text widget showing list name
+                              box.get(currentUserListDBKey)?.listName =
+                                  newListName;
+
+                              box.get(currentUserListDBKey)?.save();
+
+                              setState(() {
+                                listNameEditFlag = false;
+                              });
+                            }
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.only(right: 3.0),
+                            child: Icon(
+                              CupertinoIcons.check_mark_circled_solid,
+                              color: Colors.orange,
+                              size: 26,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
-              ]),
-            ),
-          ),
-        )
+              )
             : Text(
-          currentCustomerList.listName,
-          style: GoogleFonts.mulish(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 18.sp),
-        ),
+                currentCustomerList.listName,
+                style: GoogleFonts.mulish(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18.sp),
+              ),
         actions: [
           Visibility(
             visible: !listNameEditFlag,
@@ -364,7 +360,7 @@ class _UserListPageState extends State<UserListPage> {
                           : const Radius.circular(0),
                     ),
                     borderSide:
-                    BorderSide(width: 1.0, color: Colors.grey.shade400),
+                        BorderSide(width: 1.0, color: Colors.grey.shade400),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
@@ -405,7 +401,7 @@ class _UserListPageState extends State<UserListPage> {
                               BoxConstraints(
                                   maxWidth: MediaQuery.of(context).size.width,
                                   maxHeight:
-                                  MediaQuery.of(context).size.height),
+                                      MediaQuery.of(context).size.height),
                               designSize: const Size(390, 844),
                               context: context,
                               minTextAdapt: true,
@@ -446,99 +442,97 @@ class _UserListPageState extends State<UserListPage> {
                                     fallBack_error_userList;
                             ScreenUtil.init(
                                 BoxConstraints(
-                                    maxWidth:
-                                    MediaQuery.of(context).size.width,
+                                    maxWidth: MediaQuery.of(context).size.width,
                                     maxHeight:
-                                    MediaQuery.of(context).size.height),
+                                        MediaQuery.of(context).size.height),
                                 designSize: const Size(390, 844),
                                 context: context,
                                 minTextAdapt: true,
                                 orientation: Orientation.portrait);
                             return currentUserList.items.isNotEmpty
                                 ? GroupedListView(
-                              physics: const BouncingScrollPhysics(),
-                              elements: currentUserList.items,
-                              groupBy: (ListItem element) =>
-                              element.catName,
-                              indexedItemBuilder: (BuildContext context,
-                                  dynamic element, int index) {
-                                return ListItemCard(
-                                  listItem:
-                                  currentUserList.items[index],
-                                  currentUserListDBKey:
-                                  currentUserListDBKey,
-                                );
-                              },
-                              groupSeparatorBuilder: (String value) {
-                                return Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(value),
-                                    const Divider(
-                                      color: Colors.grey,
-                                      thickness: 1,
-                                    )
-                                  ],
-                                );
-                              },
-                            )
+                                    physics: const BouncingScrollPhysics(),
+                                    elements: currentUserList.items,
+                                    groupBy: (ListItem element) =>
+                                        element.catName,
+                                    indexedItemBuilder: (BuildContext context,
+                                        dynamic element, int index) {
+                                      return ListItemCard(
+                                        listItem: currentUserList.items[index],
+                                        currentUserListDBKey:
+                                            currentUserListDBKey,
+                                      );
+                                    },
+                                    groupSeparatorBuilder: (String value) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(value),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            thickness: 1,
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  )
                                 : SizedBox(
-                              height: double.infinity,
-                              width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: screenWidth * 20),
-                                        child: SizedBox(
-                                          height: screenHeight * 24,
-                                          child: SvgPicture.asset(
-                                            'assets/search_items_pointer_arrow.svg',
-                                            width: screenWidth * 50,
-                                            color: Colors.orange,
-                                          ),
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: screenWidth * 20),
+                                              child: SizedBox(
+                                                height: screenHeight * 24,
+                                                child: SvgPicture.asset(
+                                                  'assets/search_items_pointer_arrow.svg',
+                                                  width: screenWidth * 50,
+                                                  color: Colors.orange,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              'Add your item by searching',
+                                              style: GoogleFonts.mulish(
+                                                color: Colors.grey,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      Text(
-                                        'Add your item by searching',
-                                        style: GoogleFonts.mulish(
-                                          color: Colors.grey,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400,
+                                        Column(
+                                          children: [
+                                            Text(
+                                              'Add your item from catalog',
+                                              style: GoogleFonts.mulish(
+                                                color: Colors.grey,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: screenHeight * 20,
+                                              child: SvgPicture.asset(
+                                                'assets/item_catalog_arrow.svg',
+                                                width: screenWidth * 70,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Add your item from catalog',
-                                        style: GoogleFonts.mulish(
-                                          color: Colors.grey,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: screenHeight * 20,
-                                        child: SvgPicture.asset(
-                                          'assets/item_catalog_arrow.svg',
-                                          width: screenWidth * 70,
-                                          color: Colors.orange,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ); //todo here
+                                      ],
+                                    ),
+                                  ); //todo here
                           },
                         ),
                       ),
@@ -553,467 +547,393 @@ class _UserListPageState extends State<UserListPage> {
                         ScreenUtil.init(
                             BoxConstraints(
                                 maxWidth: MediaQuery.of(context).size.width,
-                                maxHeight:
-                                MediaQuery.of(context).size.height),
+                                maxHeight: MediaQuery.of(context).size.height),
                             designSize: const Size(390, 844),
                             context: context,
                             minTextAdapt: true,
                             orientation: Orientation.portrait);
                         return currentUserList.items.isNotEmpty
                             ? Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              height: 55,
-                              width: screenWidth * 65,
-                              child: MaterialButton(
-                                elevation: 0.0,
-                                highlightElevation: 0.0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(16.0)),
-                                color: Colors.orange,
-                                onPressed: () {
-                                  // SnackBar snackBar = const SnackBar(
-                                  //     content: Text('Sending to Shops...'));
-                                  // ScaffoldMessenger.of(context)
-                                  //     .showSnackBar(snackBar);
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
+                                    height: 55,
+                                    width: screenWidth * 65,
+                                    child: MaterialButton(
+                                      elevation: 0.0,
+                                      highlightElevation: 0.0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      color: Colors.orange,
+                                      onPressed: () {
+                                        // SnackBar snackBar = const SnackBar(
+                                        //     content: Text('Sending to Shops...'));
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(snackBar);
 
-                                  //SEND TO SHOP BOTTOM SHEET
-                                  showModalBottomSheet<void>(
-                                      backgroundColor:
-                                      Colors.transparent,
-                                      context: context,
-                                      barrierColor:
-                                      const Color.fromARGB(
-                                          165, 241, 241, 241),
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) {
-                                        ScreenUtil.init(
-                                            BoxConstraints(
-                                                maxWidth: MediaQuery.of(
-                                                    context)
-                                                    .size
-                                                    .width,
-                                                maxHeight:
-                                                MediaQuery.of(
-                                                    context)
-                                                    .size
-                                                    .height),
-                                            designSize:
-                                            const Size(390, 844),
+                                        //SEND TO SHOP BOTTOM SHEET
+                                        showModalBottomSheet<void>(
+                                            backgroundColor: Colors.transparent,
                                             context: context,
-                                            minTextAdapt: true,
-                                            orientation:
-                                            Orientation.portrait);
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom:
-                                              MediaQuery.of(context)
-                                                  .viewInsets
-                                                  .bottom),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.only(
-                                                topRight:
-                                                Radius.circular(
-                                                    30.r),
-                                                topLeft:
-                                                Radius.circular(
-                                                    30.r),
-                                              ),
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors
-                                                      .grey.shade300,
-                                                  blurRadius: 16.0,
-                                                ),
-                                              ],
-                                            ),
-                                            //giving a new context so that modal sheet can also set state
-                                            child:
-                                            SingleChildScrollView(
-                                              physics:
-                                              const BouncingScrollPhysics(),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(
-                                                    23.sp),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceEvenly,
-                                                  children: <Widget>[
-                                                    Row(
-                                                      children: [
-                                                        Column(
-                                                          children: const [
-                                                            Icon(
-                                                                Icons
-                                                                    .close,
-                                                                color: Colors
-                                                                    .transparent),
-                                                            SizedBox(
-                                                              height:
-                                                              30.0,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Expanded(
-                                                          child: Text(
-                                                            'Send list to shops\nnear you',
-                                                            textAlign:
-                                                            TextAlign
+                                            barrierColor: const Color.fromARGB(
+                                                165, 241, 241, 241),
+                                            isScrollControlled: true,
+                                            builder: (BuildContext context) {
+                                              ScreenUtil.init(
+                                                  BoxConstraints(
+                                                      maxWidth:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      maxHeight:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .height),
+                                                  designSize:
+                                                      const Size(390, 844),
+                                                  context: context,
+                                                  minTextAdapt: true,
+                                                  orientation:
+                                                      Orientation.portrait);
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(30.r),
+                                                      topLeft:
+                                                          Radius.circular(30.r),
+                                                    ),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors
+                                                            .grey.shade300,
+                                                        blurRadius: 16.0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  //giving a new context so that modal sheet can also set state
+                                                  child: SingleChildScrollView(
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.all(23.sp),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
                                                                 .center,
-                                                            style: GoogleFonts
-                                                                .mulish(
-                                                              color: Colors
-                                                                  .orange,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w700,
-                                                              fontSize:
-                                                              24.sp,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: <Widget>[
+                                                          Row(
+                                                            children: [
+                                                              Column(
+                                                                children: const [
+                                                                  Icon(
+                                                                      Icons
+                                                                          .close,
+                                                                      color: Colors
+                                                                          .transparent),
+                                                                  SizedBox(
+                                                                    height:
+                                                                        30.0,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  'Send list to shops\nnear you',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .mulish(
+                                                                    color: Colors
+                                                                        .orange,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        24.sp,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Column(
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: const Icon(
+                                                                        Icons
+                                                                            .close,
+                                                                        color:
+                                                                            kTextFieldGrey),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height:
+                                                                        30.0,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Image.asset(
+                                                            'assets/send_to_shops.gif',
+                                                            height: 235.sp,
+                                                            width: 344.sp,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(
+                                                                textBaseline:
+                                                                    TextBaseline
+                                                                        .ideographic,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .baseline,
+                                                                children: [
+                                                                  Text(
+                                                                    '1.',
+                                                                    style:
+                                                                        popupTextStyle,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 12.36
+                                                                          .sp),
+                                                                  Expanded(
+                                                                      child:
+                                                                          RichText(
+                                                                    text:
+                                                                        TextSpan(
+                                                                      text:
+                                                                          'Your list will be sent to all the registered shops with in',
+                                                                      style:
+                                                                          popupTextStyle,
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                        TextSpan(
+                                                                            text:
+                                                                                ' 3 Km ',
+                                                                            style:
+                                                                                popupTextStyle.copyWith(fontWeight: FontWeight.w700)),
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'from your home address.',
+                                                                          style:
+                                                                              popupTextStyle,
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height:
+                                                                      13.sp),
+                                                              Row(
+                                                                textBaseline:
+                                                                    TextBaseline
+                                                                        .ideographic,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .baseline,
+                                                                children: [
+                                                                  Text(
+                                                                    '2.',
+                                                                    style:
+                                                                        popupTextStyle,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 12.36
+                                                                          .sp),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      'It will take anywhere between 3 to 12 hours before you get offers from shops.',
+                                                                      style:
+                                                                          popupTextStyle,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height:
+                                                                      13.sp),
+                                                              Row(
+                                                                textBaseline:
+                                                                    TextBaseline
+                                                                        .ideographic,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .baseline,
+                                                                children: [
+                                                                  Text(
+                                                                    '3.',
+                                                                    style:
+                                                                        popupTextStyle,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 12.36
+                                                                          .sp),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      'Once sent, you cannot modify this list.',
+                                                                      style:
+                                                                          popupTextStyle,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                              height: 30.sp),
+                                                          //send to shops button material
+                                                          SizedBox(
+                                                            height: 50,
+                                                            width: 234.sp,
+                                                            child:
+                                                                MaterialButton(
+                                                              elevation: 0.0,
+                                                              highlightElevation:
+                                                                  0.0,
+                                                              color:
+                                                                  Colors.orange,
+                                                              shape: RoundedRectangleBorder(
+                                                                  side: const BorderSide(
+                                                                      color: Colors
+                                                                          .orange,
+                                                                      width:
+                                                                          2.0),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              16.0)),
+                                                              onPressed:
+                                                                  () async {
+                                                                //get userList
+                                                                UserList oldCurrentUserList = box
+                                                                    .values
+                                                                    .singleWhere((element) =>
+                                                                        element
+                                                                            .listId ==
+                                                                        userList
+                                                                            .listId);
+                                                                UserList currentUserList = UserList(
+                                                                    listOfferCounter:
+                                                                        0,
+                                                                    custId: oldCurrentUserList
+                                                                        .custId,
+                                                                    custListSentTime:
+                                                                        DateTime
+                                                                            .now(),
+                                                                    custListStatus:
+                                                                        'sent',
+                                                                    items: oldCurrentUserList
+                                                                        .items,
+                                                                    listId: oldCurrentUserList
+                                                                        .listId,
+                                                                    listName:
+                                                                        oldCurrentUserList
+                                                                            .listName,
+                                                                    createListTime:
+                                                                        oldCurrentUserList
+                                                                            .createListTime,
+                                                                    processStatus:
+                                                                        'draft',
+                                                                    custOfferWaitTime:
+                                                                        oldCurrentUserList
+                                                                            .custOfferWaitTime);
+
+                                                                //todo send list to firebase (currentUserList)
+                                                                int custId = Boxes
+                                                                            .getUserCredentialsDB()
+                                                                        .get(
+                                                                            'currentUserCredentials')
+                                                                        ?.phoneNumber ??
+                                                                    404;
+                                                                if (custId ==
+                                                                    404) {
+                                                                  Get.off(() =>
+                                                                      LoginScreen());
+                                                                }
+                                                                int response = await apiController
+                                                                    .updateUserList(
+                                                                        custId,
+                                                                        currentUserList);
+
+                                                                if (response ==
+                                                                    1) {
+                                                                  //dismiss page
+                                                                  successMsg(
+                                                                      'List Sent',
+                                                                      'List has been succsessfully sent to merchants.');
+                                                                  Get.off(
+                                                                      () =>
+                                                                          const HomePage(
+                                                                            pageIndex:
+                                                                                1,
+                                                                          ),
+                                                                      transition:
+                                                                          Transition
+                                                                              .leftToRight);
+
+                                                                  Future.delayed(
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              2),
+                                                                      () {
+                                                                    box.values
+                                                                        .singleWhere((element) =>
+                                                                            element.listId ==
+                                                                            userList.listId)
+                                                                        .delete();
+                                                                  });
+                                                                } else {
+                                                                  errorMsg(
+                                                                      'Connectivity Error',
+                                                                      'Some connectivity error has occurred, please try again later!');
+                                                                }
+                                                              },
+                                                              child: Text(
+                                                                'Send to Shops',
+                                                                style: GoogleFonts.mulish(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        18.sp),
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Column(
-                                                          children: [
-                                                            GestureDetector(
-                                                              onTap:
-                                                                  () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: const Icon(
-                                                                  Icons
-                                                                      .close,
-                                                                  color:
-                                                                  kTextFieldGrey),
-                                                            ),
-                                                            const SizedBox(
-                                                              height:
-                                                              30.0,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Image.asset(
-                                                      'assets/send_to_shops.gif',
-                                                      height: 235.sp,
-                                                      width: 344.sp,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .start,
-                                                      children: [
-                                                        Row(
-                                                          textBaseline:
-                                                          TextBaseline
-                                                              .ideographic,
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .baseline,
-                                                          children: [
-                                                            Text(
-                                                              '1.',
-                                                              style:
-                                                              popupTextStyle,
-                                                            ),
-                                                            SizedBox(
-                                                                width: 12.36
-                                                                    .sp),
-                                                            Expanded(
-                                                                child:
-                                                                RichText(
-                                                                  text:
-                                                                  TextSpan(
-                                                                    text:
-                                                                    'Your list will be sent to all the registered shops with in',
-                                                                    style:
-                                                                    popupTextStyle,
-                                                                    children: <
-                                                                        TextSpan>[
-                                                                      TextSpan(
-                                                                          text: ' 3 Km ',
-                                                                          style: popupTextStyle.copyWith(fontWeight: FontWeight.w700)),
-                                                                      TextSpan(
-                                                                        text:
-                                                                        'from your home address.',
-                                                                        style:
-                                                                        popupTextStyle,
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                )),
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                            height:
-                                                            13.sp),
-                                                        Row(
-                                                          textBaseline:
-                                                          TextBaseline
-                                                              .ideographic,
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .baseline,
-                                                          children: [
-                                                            Text(
-                                                              '2.',
-                                                              style:
-                                                              popupTextStyle,
-                                                            ),
-                                                            SizedBox(
-                                                                width: 12.36
-                                                                    .sp),
-                                                            Expanded(
-                                                              child:
-                                                              Text(
-                                                                'It will take anywhere between 3 to 12 hours before you get offers from shops.',
-                                                                style:
-                                                                popupTextStyle,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                            height:
-                                                            13.sp),
-                                                        Row(
-                                                          textBaseline:
-                                                          TextBaseline
-                                                              .ideographic,
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .baseline,
-                                                          children: [
-                                                            Text(
-                                                              '3.',
-                                                              style:
-                                                              popupTextStyle,
-                                                            ),
-                                                            SizedBox(
-                                                                width: 12.36
-                                                                    .sp),
-                                                            Expanded(
-                                                              child:
-                                                              Text(
-                                                                'Once sent, you cannot modify this list.',
-                                                                style:
-                                                                popupTextStyle,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                        height: 30.sp),
-                                                    //send to shops button material
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 234.sp,
-                                                      child:
-                                                      MaterialButton(
-                                                        elevation: 0.0,
-                                                        highlightElevation:
-                                                        0.0,
-                                                        color: Colors
-                                                            .orange,
-                                                        shape: RoundedRectangleBorder(
-                                                            side: const BorderSide(
-                                                                color: Colors
-                                                                    .orange,
-                                                                width:
-                                                                2.0),
-                                                            borderRadius:
-                                                            BorderRadius.circular(
-                                                                16.0)),
-                                                        onPressed:
-                                                            () async {
-                                                          //get userList
-                                                          UserList oldCurrentUserList = box
-                                                              .values
-                                                              .singleWhere((element) =>
-                                                          element
-                                                              .listId ==
-                                                              userList
-                                                                  .listId);
-                                                          UserList currentUserList = UserList(
-                                                              listOfferCounter:
-                                                              0,
-                                                              custId: oldCurrentUserList
-                                                                  .custId,
-                                                              custListSentTime:
-                                                              DateTime
-                                                                  .now(),
-                                                              custListStatus:
-                                                              'sent',
-                                                              items: oldCurrentUserList
-                                                                  .items,
-                                                              listId: oldCurrentUserList
-                                                                  .listId,
-                                                              listName:
-                                                              oldCurrentUserList
-                                                                  .listName,
-                                                              createListTime:
-                                                              oldCurrentUserList
-                                                                  .createListTime,
-                                                              processStatus:
-                                                              'draft',
-                                                              custOfferWaitTime:
-                                                              oldCurrentUserList
-                                                                  .custOfferWaitTime);
-
-                                                          //todo send list to firebase (currentUserList)
-                                                          int custId = Boxes
-                                                              .getUserCredentialsDB()
-                                                              .get(
-                                                              'currentUserCredentials')
-                                                              ?.phoneNumber ??
-                                                              404;
-                                                          if (custId ==
-                                                              404) {
-                                                            Get.off(() =>
-                                                            const LoginScreen());
-                                                          }
-                                                          int response =
-                                                          await apiController.updateUserList(
-                                                              custId,
-                                                              currentUserList);
-
-                                                          if (response ==
-                                                              1) {
-                                                            //dismiss page
-                                                            successMsg(
-                                                                'List Sent',
-                                                                'List has been succsessfully sent to merchants.');
-                                                            Get.off(
-                                                                    () =>
-                                                                const HomePage(
-                                                                  pageIndex: 1,
-                                                                ),
-                                                                transition:
-                                                                Transition.leftToRight);
-
-                                                            Future.delayed(
-                                                                const Duration(
-                                                                    seconds:
-                                                                    2),
-                                                                    () {
-                                                                  box.values
-                                                                      .singleWhere((element) =>
-                                                                  element.listId ==
-                                                                      userList.listId)
-                                                                      .delete();
-                                                                });
-                                                          } else {
-                                                            errorMsg(
-                                                                'Connectivity Error',
-                                                                'Some connectivity error has occurred, please try again later!');
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          'Send to Shops',
-                                                          style: GoogleFonts.mulish(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w700,
-                                                              color: Colors
-                                                                  .white,
-                                                              fontSize:
-                                                              18.sp),
-                                                        ),
+                                                        ],
                                                       ),
                                                     ),
-                                                  ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      });
-                                },
-                                child: Text(
-                                  'Send to Shops',
-                                  style: GoogleFonts.mulish(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 53,
-                              width: 77.sp,
-                              child: MaterialButton(
-                                elevation: 0.0,
-                                highlightElevation: 0.0,
-                                splashColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                        color: Colors.orange,
-                                        width: 2.0),
-                                    borderRadius:
-                                    BorderRadius.circular(16.0)),
-                                color: Colors.white,
-                                onPressed: () {
-                                  //todo implement category / catalog page opening
-                                  Get.to(() => CategoriesPage(
-                                      currentUserListDBKey:
-                                      currentUserListDBKey));
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.square_grid_2x2,
-                                  color: Colors.orange,
-                                  size: 35,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                            : SizedBox(
-                          height: 50,
-                          width: 325.sp,
-                          child: MaterialButton(
-                            elevation: 0.0,
-                            highlightElevation: 0.0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(16.0)),
-                            color: Colors.orange,
-                            onPressed: () {
-                              Get.to(() => CategoriesPage(
-                                  currentUserListDBKey:
-                                  currentUserListDBKey));
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 4.5),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    CupertinoIcons.square_grid_2x2,
-                                    color: Colors.white,
-                                    size: 28,
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: AutoSizeText(
-                                        'Item Catalog',
+                                              );
+                                            });
+                                      },
+                                      child: Text(
+                                        'Send to Shops',
                                         style: GoogleFonts.mulish(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
@@ -1022,15 +942,84 @@ class _UserListPageState extends State<UserListPage> {
                                       ),
                                     ),
                                   ),
-                                  const Icon(
-                                    CupertinoIcons.square_grid_2x2,
-                                    color: Colors.transparent,
+                                  SizedBox(
+                                    height: 53,
+                                    width: 77.sp,
+                                    child: MaterialButton(
+                                      elevation: 0.0,
+                                      highlightElevation: 0.0,
+                                      splashColor: Colors.transparent,
+                                      shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color: Colors.orange, width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        //todo implement category / catalog page opening
+                                        Get.to(() => CategoriesPage(
+                                            currentUserListDBKey:
+                                                currentUserListDBKey));
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.square_grid_2x2,
+                                        color: Colors.orange,
+                                        size: 35,
+                                      ),
+                                    ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ),
-                        );
+                              )
+                            : SizedBox(
+                                height: 50,
+                                width: 325.sp,
+                                child: MaterialButton(
+                                  elevation: 0.0,
+                                  highlightElevation: 0.0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(16.0)),
+                                  color: Colors.orange,
+                                  onPressed: () {
+                                    Get.to(() => CategoriesPage(
+                                        currentUserListDBKey:
+                                            currentUserListDBKey));
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth * 4.5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          CupertinoIcons.square_grid_2x2,
+                                          color: Colors.white,
+                                          size: 28,
+                                        ),
+                                        Expanded(
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              'Item Catalog',
+                                              style: GoogleFonts.mulish(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const Icon(
+                                          CupertinoIcons.square_grid_2x2,
+                                          color: Colors.transparent,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
                       },
                     ),
                   ],
@@ -1052,121 +1041,117 @@ class _UserListPageState extends State<UserListPage> {
                           bottomRight: Radius.circular(16),
                         ),
                         border:
-                        Border.all(color: Colors.grey.shade300, width: 2),
+                            Border.all(color: Colors.grey.shade300, width: 2),
                       ),
                       child: searchQuery.length > 2
                           ? FutureBuilder(
-                        future: searchedItemsResult,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          ScreenUtil.init(
-                              BoxConstraints(
-                                  maxWidth:
-                                  MediaQuery.of(context).size.width,
-                                  maxHeight: MediaQuery.of(context)
-                                      .size
-                                      .height),
-                              designSize: const Size(390, 844),
-                              context: context,
-                              minTextAdapt: true,
-                              orientation: Orientation.portrait);
-                          if (snapshot.hasError) {
-                            //todo show proper error screen
-                            return Text('${snapshot.error}');
-                          } else if (snapshot.hasData &&
-                              snapshot.data.length < 1) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: SizedBox(
-                                height: screenHeight * 12 < 120
-                                    ? 120
-                                    : screenHeight * 12,
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    AddCustomItemCard(
-                                        currentUserListDBKey:
-                                        currentUserListDBKey,
-                                        searchQuery: searchQuery),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20.0),
-                                      child: Text(
-                                        'No Search Results Found...',
-                                        style: GoogleFonts.mulish(
-                                            fontStyle:
-                                            FontStyle.italic),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          } else if (snapshot.hasData &&
-                              snapshot.connectionState ==
-                                  ConnectionState.done) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 8.0),
-                              physics: const BouncingScrollPhysics(
-                                  parent:
-                                  AlwaysScrollableScrollPhysics()),
-                              itemCount: snapshot.data?.length,
-                              itemBuilder: (context, index) {
+                              future: searchedItemsResult,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
                                 ScreenUtil.init(
                                     BoxConstraints(
-                                        maxWidth: MediaQuery.of(context)
-                                            .size
-                                            .width,
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width,
                                         maxHeight:
-                                        MediaQuery.of(context)
-                                            .size
-                                            .height),
+                                            MediaQuery.of(context).size.height),
                                     designSize: const Size(390, 844),
                                     context: context,
                                     minTextAdapt: true,
                                     orientation: Orientation.portrait);
-                                if (index ==
-                                    snapshot.data?.length - 1) {
-                                  return Column(
-                                    children: [
-                                      SearchedItemCard(
-                                        searchQuery: searchQuery,
-                                        currentUserListDBKey:
-                                        currentUserListDBKey,
-                                        item: snapshot.data![index],
-                                        clearSearchQuery:
-                                        clearSearchQuery,
+                                if (snapshot.hasError) {
+                                  //todo show proper error screen
+                                  return Text('${snapshot.error}');
+                                } else if (snapshot.hasData &&
+                                    snapshot.data.length < 1) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: SizedBox(
+                                      height: screenHeight * 12 < 120
+                                          ? 120
+                                          : screenHeight * 12,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AddCustomItemCard(
+                                              currentUserListDBKey:
+                                                  currentUserListDBKey,
+                                              searchQuery: searchQuery),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: Text(
+                                              'No Search Results Found...',
+                                              style: GoogleFonts.mulish(
+                                                  fontStyle: FontStyle.italic),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      AddCustomItemCard(
+                                    ),
+                                  );
+                                } else if (snapshot.hasData &&
+                                    snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 8.0),
+                                    physics: const BouncingScrollPhysics(
+                                        parent:
+                                            AlwaysScrollableScrollPhysics()),
+                                    itemCount: snapshot.data?.length,
+                                    itemBuilder: (context, index) {
+                                      ScreenUtil.init(
+                                          BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              maxHeight: MediaQuery.of(context)
+                                                  .size
+                                                  .height),
+                                          designSize: const Size(390, 844),
+                                          context: context,
+                                          minTextAdapt: true,
+                                          orientation: Orientation.portrait);
+                                      if (index == snapshot.data?.length - 1) {
+                                        return Column(
+                                          children: [
+                                            SearchedItemCard(
+                                              searchQuery: searchQuery,
+                                              currentUserListDBKey:
+                                                  currentUserListDBKey,
+                                              item: snapshot.data![index],
+                                              clearSearchQuery:
+                                                  clearSearchQuery,
+                                            ),
+                                            AddCustomItemCard(
+                                                currentUserListDBKey:
+                                                    currentUserListDBKey,
+                                                searchQuery: searchQuery),
+                                          ],
+                                        );
+                                      } else {
+                                        return SearchedItemCard(
+                                          searchQuery: searchQuery,
                                           currentUserListDBKey:
-                                          currentUserListDBKey,
-                                          searchQuery: searchQuery),
-                                    ],
+                                              currentUserListDBKey,
+                                          item: snapshot.data![index],
+                                          clearSearchQuery: clearSearchQuery,
+                                        );
+                                      }
+                                    },
                                   );
                                 } else {
-                                  return SearchedItemCard(
-                                    searchQuery: searchQuery,
-                                    currentUserListDBKey:
-                                    currentUserListDBKey,
-                                    item: snapshot.data![index],
-                                    clearSearchQuery: clearSearchQuery,
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth * 41.2,
+                                        vertical: screenHeight * 15),
+                                    child: const CircularProgressIndicator(),
                                   );
                                 }
                               },
-                            );
-                          } else {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 41.2,
-                                  vertical: screenHeight * 15),
-                              child: const CircularProgressIndicator(),
-                            );
-                          }
-                        },
-                      )
+                            )
                           : null,
                     ),
                   ),

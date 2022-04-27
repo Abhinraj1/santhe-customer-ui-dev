@@ -27,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>app-1-445035608011-ios-01a228f61de66127d9684e</string>
+				<string>app-1-445035608011-ios-3bceec5078ca20d3d9684e</string>
 			</array>
 		</dict>
 	</array>
@@ -36,17 +36,17 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-    <string>Need to access camera in order to get image</string>
-    <key>NSContactsUsageDescription</key>
-    <string>This app requires contacts access to function properly.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Application needs your location</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Need access for microphone</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Need to access photo library</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Need to access gallery in order to get image</string>
+	<string>Need to access camera in order to get image</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This app requires contacts access to function properly.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Application needs your location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need access for microphone</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Need to access photo library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need to access gallery in order to get image</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -58,8 +58,7 @@ class _OffersListPageState extends State<OffersListPage> {
             onRefresh: () async {
               setState(() {
                 //future builder will take care of future value so no need to mark this function async
-                listOffersData = apiController
-                    .getAllMerchOfferByListId(widget.userList.listId);
+                listOffersData = apiController.getAllMerchOfferByListId(widget.userList.listId);
               });
               return;
             },

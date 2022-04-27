@@ -777,8 +777,7 @@ class APIs extends GetxController {
 
   //get
   Future<int> getCustomerInfo(int custId) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId';
+    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId';
 
     var response = await http.get(Uri.parse(url));
 
@@ -788,9 +787,6 @@ class APIs extends GetxController {
         var jsonData = data['fields'];
 
         User currentUser = User.fromJson(jsonData);
-        print('>>>>>PIN-CODE: ${currentUser.pincode}');
-
-        //put current user data into DB
 
         var box = Boxes.getUser();
         box.put('currentUserDetails', currentUser);
@@ -1053,47 +1049,13 @@ class APIs extends GetxController {
   Future<List<Offer>> getAllMerchOfferByListId(int listId) async {
     print(listId);
     List<Offer> merchOffers = [];
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
-    var body = {
-      "structuredQuery": {
-        "from": [
-          {"collectionId": "listEvent"}
-        ],
-        "orderBy": {
-          "field": {"fieldPath": "merchResponse.merchUpdateTime"}
-        },
-        "where": {
-          "compositeFilter": {
-            "filters": [
-              {
-                "fieldFilter": {
-                  "field": {"fieldPath": "merchResponse.merchResponseStatus"},
-                  "op": "EQUAL",
-                  "value": {"stringValue": "answered"}
-                }
-              },
-              {
-                "fieldFilter": {
-                  "field": {"fieldPath": "listId"},
-                  "op": "EQUAL",
-                  "value": {
-                    "referenceValue":
-                        "projects/santhe-425a8/databases/(default)/documents/customerList/$listId"
-                  }
-                }
-              }
-            ],
-            "op": "AND"
-          }
-        }
-      }
-    };
+    String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
-
+    var response = await http.get(Uri.parse(url));
+    print(response.statusCode);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print(data);
 
       if (data[0] != null && data[0]['document'] != null) {
         for (int i = 0; i < data.length; i++) {

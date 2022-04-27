@@ -33,6 +33,8 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
   TextEditingController pincodeController = TextEditingController();
   TextEditingController optionalAddController = TextEditingController();
   bool isVisible = false;
+  final _formKey = GlobalKey<FormState>();
+
   late SharedPreferences pref;
   PlaceApiProvider placeApiProvider = PlaceApiProvider();
   var textController = TextEditingController();
@@ -193,148 +195,171 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                             padding: EdgeInsets.all(
                                 MediaQuery.of(context).size.width * 0.02),
                             height: MediaQuery.of(context).size.height * 0.4,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "Address *",
-                                          style: Constant.mediumOrangeText16,
-                                        ),
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      //initialValue: textController.value.text.isEmpty?" ":registrationController.address.value,
-                                      controller: addressTextController,
-                                      minLines: 2,
-                                      maxLines: 5,
-                                      decoration: InputDecoration(
-                                        prefixIcon: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 4.0, horizontal: 6),
-                                          child: CircleAvatar(
-                                            radius: 4,
-                                            backgroundColor: Constant.bgColor,
-                                            child: Icon(
-                                              Icons.home,
-                                              color: Constant.white,
-                                              size: 25,
-                                            ),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Address *",
+                                            style: Constant.mediumOrangeText16,
                                           ),
                                         ),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                RegisterationTextFeild(
-                                  labelText: "How to reach (Optional)",
-                                  hintText: "eg. Near Xyz hospital",
-                                  icon: Icons.directions,
-                                  controller: optionalAddController,
-                                  readOnly: false,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  child: TextButton(
-                                    child: const Text(
-                                      "Submit",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                        color: Color(0xFFFFFFFF),
-                                        fontSize: 19,
-                                        // height: 19/19,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      var containPincode =
-                                          RegExp(r'^.*\d{6}.*$').hasMatch(
-                                              addressTextController.value.text);
-
-                                      if (containPincode) {
-                                        if (addressTextController
-                                            .value.text.isNotEmpty) {
-                                          List<String> ls =
-                                              addressTextController.value.text
-                                                  .split(' ');
-                                          var pin;
-                                          for (var i in ls) {
-                                            var a = RegExp(r'^.*\d{6}.*$')
-                                                .hasMatch(i);
-                                            if (a) {
-                                              pin = i;
-                                            }
+                                      TextFormField(
+                                        validator: (value) {
+                                          if (value.toString().isEmpty) {
+                                            return "Please Filled Required Fields.";
                                           }
-                                          locationController.mapSelected =
-                                              true.obs;
-                                          registrationController.isMapSelected =
-                                              true.obs;
-                                          registrationController.pinCode.value =
-                                              pin.split(',')[0];
-                                          registrationController.address =
-                                              addressTextController
-                                                  .value.text.obs;
-                                          registrationController
-                                                  .howToReach.value =
-                                              optionalAddController.text;
-                                          print(registrationController.address);
-
-                                          //go back to registration screen
-                                          Get.close(2);
-                                        } else {
-                                          print("Outside if");
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  "Please Filled Required Fields."),
-                                              backgroundColor: Colors.red,
+                                          var containPincode =
+                                              RegExp(r'^.*\d{6}.*$')
+                                                  .hasMatch(value.toString());
+                                          if (!containPincode) {
+                                            return 'Address Should Contain Pincode';
+                                          }
+                                          return null;
+                                        },
+                                        //initialValue: textController.value.text.isEmpty?" ":registrationController.address.value,
+                                        controller: addressTextController,
+                                        minLines: 2,
+                                        maxLines: 5,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0, horizontal: 6),
+                                            child: CircleAvatar(
+                                              radius: 4,
+                                              backgroundColor: Constant.bgColor,
+                                              child: Icon(
+                                                Icons.home,
+                                                color: Constant.white,
+                                                size: 25,
+                                              ),
                                             ),
-                                          );
-                                        }
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                "Address Should Contain Pincode"),
-                                            backgroundColor: Colors.red,
                                           ),
-                                        );
-                                      }
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  RegisterationTextFeild(
+                                    labelText: "How to reach (Optional)",
+                                    hintText: "eg. Near Xyz hospital",
+                                    icon: Icons.directions,
+                                    controller: optionalAddController,
+                                    readOnly: false,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    child: TextButton(
+                                      child: const Text(
+                                        "Submit",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                          color: Color(0xFFFFFFFF),
+                                          fontSize: 19,
+                                          // height: 19/19,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          // var containPincode =
+                                          //     RegExp(r'^.*\d{6}.*$').hasMatch(
+                                          //         addressTextController
+                                          //             .value.text);
+                                          setState(() {});
+                                          if (addressTextController
+                                              .value.text.isNotEmpty) {
+                                            setState(() {
+                                              List<String> ls =
+                                                  addressTextController
+                                                      .value.text
+                                                      .split(' ');
+                                              var pin;
+                                              for (var i in ls) {
+                                                var a = RegExp(r'^.*\d{6}.*$')
+                                                    .hasMatch(i);
+                                                if (a) {
+                                                  pin = i;
+                                                }
+                                              }
+                                              locationController.mapSelected =
+                                                  true.obs;
+                                              registrationController
+                                                  .isMapSelected = true.obs;
+                                              registrationController.pinCode
+                                                  .value = pin.split(',')[0];
+                                              registrationController.address =
+                                                  addressTextController
+                                                      .value.text.obs;
+                                              registrationController
+                                                      .howToReach.value =
+                                                  optionalAddController.text;
+                                              print(registrationController
+                                                  .address);
 
-                                      //
-                                      // Navigator.pop(context);
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Constant.bgColor),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
+                                              //go back to registration screen
+                                              Get.close(2);
+                                            });
+                                          } else {
+                                            print("Outside if");
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    "Please Filled Required Fields."),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                        // } else {
+                                        //   ScaffoldMessenger.of(context)
+                                        //       .showSnackBar(
+                                        //     const SnackBar(
+                                        //       content: Text(
+                                        //           "Address Should Contain Pincode"),
+                                        //       backgroundColor: Colors.red,
+                                        //     ),
+                                        //   );
+                                        // }
+
+                                        //
+                                        // Navigator.pop(context);
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Constant.bgColor),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         )

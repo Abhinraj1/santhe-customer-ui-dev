@@ -194,21 +194,26 @@ class MyApp extends StatelessWidget {
     bool hasInternet = false;
 
     return Resize(
-        builder: () => GetMaterialApp(
-      defaultTransition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 500),
-      debugShowCheckedModeBanner: false,
-      title: kAppName,
-      theme: AppTheme().themeData,
-      home: showHome2 && isLoggedIn2
-          ? isRegistered2
-          ? const SplashToHome()
-          : UserRegistrationPage(userPhoneNumber: userPhone)
-          : const SplashToOnboarding(),
+      builder: () => GetMaterialApp(
+        defaultTransition: Transition.rightToLeft,
+        transitionDuration: const Duration(milliseconds: 500),
+        debugShowCheckedModeBanner: false,
+        title: kAppName,
+        theme: AppTheme().themeData.copyWith(
+              textSelectionTheme: TextSelectionThemeData(
+                selectionHandleColor: Colors.transparent,
+              ),
+            ),
+        home: showHome2 && isLoggedIn2
+            ? isRegistered2
+                ? const SplashToHome()
+                : UserRegistrationPage(userPhoneNumber: userPhone)
+            : const SplashToOnboarding(),
 
-      // home: showHome ? const SplashToHome() : const OnboardingPage(),
-    ),
+        // home: showHome ? const SplashToHome() : const OnboardingPage(),
+      ),
       allowtextScaling: false,
-      size: const Size(390, 844),);
+      size: const Size(390, 844),
+    );
   }
 }

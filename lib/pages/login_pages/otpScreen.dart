@@ -86,6 +86,11 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             //pin input
             Pinput(
+              // validator: (value) {
+              //   return _otp.toString().length < 6 && _isSubmitted
+              //       ? 'Invalid OTP'
+              //       : null;
+              // },
               length: 6,
               defaultPinTheme:
                   (_isSubmitted && _otp.length < 6) || _incorrectOtp
@@ -101,15 +106,12 @@ class _OtpScreenState extends State<OtpScreen> {
                 height: 49.h,
                 width: 40.w,
                 decoration: defaultPinTheme.decoration!.copyWith(
-                  border: _isSubmitted == true && _otp.length < 6
-                      ? Border.all(color: AppColors().red100)
-                      : Border.all(color: AppColors().grey100),
+                  border: Border.all(color: AppColors().grey40),
                 ),
               ),
               errorPinTheme: defaultPinTheme.copyWith(
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors().red100),
-                  color: AppColors().red100,
                   borderRadius: BorderRadius.circular(7),
                 ),
               ),

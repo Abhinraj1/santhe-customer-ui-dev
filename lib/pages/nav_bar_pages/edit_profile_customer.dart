@@ -15,6 +15,8 @@ import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
 import '../../controllers/location_controller.dart';
 import '../../controllers/registrationController.dart';
+import '../../core/app_colors.dart';
+import '../../core/app_theme.dart';
 import '../../models/santhe_user_model.dart';
 import '../customer_registration_pages/mapSearchScreen.dart';
 import '../home_page.dart';
@@ -356,8 +358,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {
-                                  addressUpdateFlag = true;
+                                onTap: () async {
                                   //remove focus from text fields
                                   FocusScopeNode currentScope =
                                   FocusScope.of(context);
@@ -366,49 +367,64 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                     FocusManager.instance.primaryFocus
                                         ?.unfocus();
                                   }
-                                  Get.to(() => const MapSearchScreen(),
-                                      transition: Transition.fade);
+                                  if (locationController.lng.value != 0.0 ||
+                                      locationController.lat.value != 0.0) {
+                                  }
+                                  var res = await Get.to(
+                                          () => const MapSearchScreen());
+                                  if (res == 1) {
+                                    setState(() {});
+                                  }
                                 },
                                 child: Container(
-                                  child: InputDecorator(
-                                    decoration: InputDecoration(
-                                      prefixIcon: Align(
-                                        alignment: Alignment.topCenter,
-                                        widthFactor: 1.1,
-                                        heightFactor: 2.1,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.0.sp, horizontal: 6),
-                                          child: CircleAvatar(
-                                              radius: 19.sp,
-                                              backgroundColor: Colors.orange,
-                                              child: Icon(
-                                                Icons.home,
-                                                color: Colors.white,
-                                              )),
-                                        ),
+                                  width: 344.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(
+                                          color: AppColors().grey40,
+                                          width: 1.sp)),
+                                  padding: EdgeInsets.only(
+                                      top: 13.h,
+                                      left: 10.w,
+                                      right: 10.w,
+                                      bottom: 13.h),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      //icon
+                                      Container(
+                                          height: 24.w,
+                                          width: 24.w,
+                                          decoration: BoxDecoration(
+                                              color: AppColors().brandDark,
+                                              borderRadius:
+                                              BorderRadius.circular(20)),
+                                          child: Icon(
+                                            Icons.home,
+                                            color: AppColors().white100,
+                                            size: 15.sp,
+                                          )),
+                                      SizedBox(
+                                        width: 10.w,
                                       ),
-                                      suffix: Text(
-                                        'Edit Address',
-                                        style: GoogleFonts.mulish(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.orange,
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: 13.sp,
-                                        ),
-                                      ),
-                                      border: InputBorder.none,
-                                      hintText: 'Your address',
-                                      hintStyle: kHintStyle,
-                                    ),
-                                    child: Text(
-                                      '${registrationController.address.isEmpty ? Boxes.getUser().get('currentUserDetails')?.address : registrationController.address}',
-                                      maxLines: 5,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16.sp,
-                                          color: Colors.grey),
-                                    ),
+                                      //text
+                                      Expanded(
+                                        child: Obx(() => Text(
+                                          registrationController
+                                              .address.value
+                                              .trim() ==
+                                              ''
+                                              ? 'Select Address'
+                                              : registrationController
+                                              .address.value +
+                                              '\n\n' +
+                                              registrationController
+                                                  .howToReach.value,
+                                          style: AppTheme().normal500(13),
+                                        )),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
@@ -426,7 +442,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
                                 onPressed: () async {
-                                  // print('>>>>>>>>>${_userNameController.text}');
                                   if (_formKey.currentState!.validate()) {
                                     //final otp check
                                     bool isUserLoggedin = Boxes.getUserPrefs()
@@ -455,10 +470,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
 
                                       //todo add how to reach howToReach
                                       User updatedUser = User(
-                                          address: addressUpdateFlag
-                                              ? registrationController
-                                              .address.value
-                                              : currentUser.address,
+                                          address: registrationController
+                                              .address.value,
                                           emailId: _userEmailController.text,
                                           lat: addressUpdateFlag
                                               ? registrationController.lat.value
@@ -476,7 +489,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           custRatings: currentUser.custRatings,
                                           custReferal: 0000,
                                           custStatus: 'active',
-                                          howToReach: '',
+                                          howToReach: registrationController.howToReach.value,
                                           custLoginTime: DateTime.now(),
                                           custPlan: 'default');
 //todo add cust plan

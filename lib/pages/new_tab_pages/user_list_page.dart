@@ -347,19 +347,6 @@ class _UserListPageState extends State<UserListPage> {
                       color: Colors.orange,
                     ),
                   ),
-                  // border: OutlineInputBorder(
-                  //     borderRadius: BorderRadius.only(
-                  //       topLeft: const Radius.circular(16),
-                  //       topRight: const Radius.circular(16),
-                  //       bottomRight: searchQuery.length < 3
-                  //           ? const Radius.circular(16)
-                  //           : const Radius.circular(0),
-                  //       bottomLeft: searchQuery.length < 3
-                  //           ? const Radius.circular(16)
-                  //           : const Radius.circular(0),
-                  //     ),
-                  //     borderSide:
-                  //         const BorderSide(color: Colors.orange, width: 1.0)),
 
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
@@ -858,8 +845,7 @@ class _UserListPageState extends State<UserListPage> {
                                                                             .now(),
                                                                     custListStatus:
                                                                         'sent',
-                                                                    items: oldCurrentUserList
-                                                                        .items,
+                                                                    items: oldCurrentUserList.items,
                                                                     listId: oldCurrentUserList
                                                                         .listId,
                                                                     listName:

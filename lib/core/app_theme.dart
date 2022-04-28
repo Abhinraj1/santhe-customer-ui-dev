@@ -38,6 +38,7 @@ class AppTheme{
       iconTheme: IconThemeData(
         color: AppColors().white100,
       ),
+      centerTitle: true,
       backgroundColor: AppColors().brandDark,
       titleTextStyle: TextStyle(
           fontSize: 24.sp,
@@ -83,6 +84,7 @@ class AppTheme{
       fontSize: fontSize.sp,
       fontWeight: FontWeight.w400,
       height: height,
+
       color: color ?? AppColors().grey100);
 
   TextStyle hintTextStyle({Color? color}) => TextStyle(

@@ -130,7 +130,7 @@ class NavigationDrawer extends StatelessWidget {
                 ],
               ),
               Text(
-                '+${Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 'X'}',
+                '+91 ${Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 'X'}',
                 style: GoogleFonts.mulish(
                     fontSize: 14.0,
                     color: Colors.orange,

@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "445035608011-tqih3c799ttfkbkqsu72nibo18mvbgia.apps.googleusercontent.com",
+          "client_id": "445035608011-70rvv1lg2mmp7t5geod52me4djg1ulkt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.santhe",
+            "certificate_hash": "065da10701705206ca33519d22bcada04da19cc2"
+          }
+        },
+        {
+          "client_id": "445035608011-t12gdu0dth6gfd88sptb9sge6b0krj2h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.santhe",
             "certificate_hash": "33f4ee09b3ca1fbf1cb7e7f6d95829514cffaaed"
+          }
+        },
+        {
+          "client_id": "445035608011-tf6gs2kc8bbcikmf6kh28kur392b8577.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.santhe",
+            "certificate_hash": "93d862b7592d5bfad753543da9d2fd4f6c735175"
           }
         },
         {
@@ -38,6 +54,13 @@
             {
               "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.santhe.customer"
+              }
             }
           ]
         }
@@ -51,6 +74,30 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "445035608011-2orptkt048uiqd4bf7j4tsbln35iokee.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.www.santhe",
+            "certificate_hash": "93d862b7592d5bfad753543da9d2fd4f6c735175"
+          }
+        },
+        {
+          "client_id": "445035608011-j6vt1rkuevo78cgtj5osuqsqg190rm81.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.www.santhe",
+            "certificate_hash": "38e7a9bf4537f4a0711284d036797ff171d9231b"
+          }
+        },
+        {
+          "client_id": "445035608011-qbvv681g7q8kc9joke5socilqp9v7jd2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.www.santhe",
+            "certificate_hash": "3bb128f026fe9bcaabd873293b436d1cdc3bbb84"
+          }
+        },
         {
           "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
           "client_type": 3
@@ -67,6 +114,13 @@
             {
               "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.santhe.customer"
+              }
             }
           ]
         }

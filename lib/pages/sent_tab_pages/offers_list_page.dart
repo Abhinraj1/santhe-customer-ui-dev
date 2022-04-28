@@ -3,23 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/widgets/sent_tab_widgets/merchant_offer_card.dart';
 
 import '../../controllers/api_service_controller.dart';
+import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/offer_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../widgets/sent_tab_widgets/offer_card_widget.dart';
 
 class OffersListPage extends StatefulWidget {
   final UserList userList;
-  const OffersListPage({required this.userList, Key? key}) : super(key: key);
+  final bool showOffers;
+  const OffersListPage({required this.userList, Key? key, required this.showOffers}) : super(key: key);
 
   @override
   State<OffersListPage> createState() => _OffersListPageState();
 }
 
 class _OffersListPageState extends State<OffersListPage> {
-  late Future<List<Offer>> listOffersData;
+  late Future<List<CustomerOfferResponse>> listOffersData;
   final apiController = Get.find<APIs>();
 
   @override
@@ -42,25 +46,19 @@ class _OffersListPageState extends State<OffersListPage> {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    return FutureBuilder<List<Offer>>(
+    print(widget.userList.listId);
+    return !widget.showOffers ? FutureBuilder<List<CustomerOfferResponse>>(
       future: apiController.getAllMerchOfferByListId(widget.userList.listId),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          //todo show proper error screen
-          return Center(child: Text('${snapshot.error}'));
-          return const Center(
-              child: Text('Awaiting New Offers\nNo Offer Yet!'));
-        } else if (snapshot.hasData && snapshot.data?.length == 0) {
-          return const Center(
-              child: Text('Awaiting New Offers\nNo Offer Yet!'));
+        if (snapshot.hasData && snapshot.data?.length == 0 || snapshot.hasError) {
+          return _waitingImage();
         } else if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
           return RefreshIndicator(
             onRefresh: () async {
               setState(() {
                 //future builder will take care of future value so no need to mark this function async
-                listOffersData = apiController
-                    .getAllMerchOfferByListId(widget.userList.listId);
+                listOffersData = apiController.getAllMerchOfferByListId(widget.userList.listId);
               });
               return;
             },
@@ -82,7 +80,7 @@ class _OffersListPageState extends State<OffersListPage> {
                 if (index == 0) {
                   return Column(
                     children: [
-                      Container(
+                      if(widget.userList.processStatus == 'maxoffer' && widget.userList.custListSentTime.toLocal().isBefore(DateTime.now()))Container(
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(16.0),
@@ -112,7 +110,7 @@ class _OffersListPageState extends State<OffersListPage> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: EdgeInsets.only(right: 15.0),
+                              padding: const EdgeInsets.only(right: 15.0),
                               child: Container(),
                             ),
                           ),
@@ -135,6 +133,21 @@ class _OffersListPageState extends State<OffersListPage> {
           return const Center(child: CircularProgressIndicator.adaptive());
         }
       },
-    );
+    ) : _waitingImage();
   }
+
+  Widget _waitingImage() => Column(
+    children: [
+      Image.asset('assets/sent_tab/waiting_for_offer.png'),
+      SizedBox(height: 27.h,),
+      Text('Waiting for Offers', style: AppTheme().bold700(24, color: AppColors().grey100),),
+      SizedBox(height: 10.h,),
+      SizedBox(
+        width: 314.w,
+          child: Text(
+            'The Merchants are working on your Shopping List. We will let you know as soon as there are offers',
+            textAlign: TextAlign.center,
+            style: AppTheme().normal400(16, color: AppColors().grey100, height: 2.h),))
+    ],
+  );
 }

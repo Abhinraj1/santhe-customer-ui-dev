@@ -3,13 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/offer_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/merchant_items_list_page.dart';
 
 class MerchantOfferCard extends StatelessWidget {
   final UserList userList;
-  final Offer currentMerchantOffer;
+  final CustomerOfferResponse currentMerchantOffer;
   const MerchantOfferCard(
       {required this.currentMerchantOffer, required this.userList, Key? key})
       : super(key: key);
@@ -17,11 +18,11 @@ class MerchantOfferCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String imagePath = 'assets/sent_tab/0star.png';
-    if (currentMerchantOffer.custDeal == 'best1') {
+    if (currentMerchantOffer.custOfferResponse.custDeal == 'best1') {
       imagePath = 'assets/sent_tab/3star.png';
-    } else if (currentMerchantOffer.custDeal == 'best2') {
+    } else if (currentMerchantOffer.custOfferResponse.custDeal == 'best2') {
       imagePath = 'assets/sent_tab/2star.png';
-    } else if (currentMerchantOffer.custDeal == 'best3') {
+    } else if (currentMerchantOffer.custOfferResponse.custDeal == 'best3') {
       imagePath = 'assets/sent_tab/1star.png';
     } else {
       imagePath = 'assets/sent_tab/0star.png';
@@ -41,6 +42,7 @@ class MerchantOfferCard extends StatelessWidget {
         onTap: () {
           Get.to(() => MerchantItemsListPage(
                 currentMerchantOffer: currentMerchantOffer,
+            userList: userList,
               ));
         },
         child: Container(
@@ -82,7 +84,7 @@ class MerchantOfferCard extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text:
-                                    'Rs ${currentMerchantOffer.merchTotalPrice}',
+                                    'Rs ${currentMerchantOffer.merchResponse.merchTotalPrice}',
                                 style: GoogleFonts.mulish(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.w700,
@@ -94,7 +96,7 @@ class MerchantOfferCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 12.0),
                         child: Text(
-                          '${currentMerchantOffer.merchOfferQuantity} of ${userList.items.length} items\navailable',
+                          '${currentMerchantOffer.merchResponse.merchOfferQuantity} of ${userList.items.length} items\navailable',
                           style: GoogleFonts.mulish(
                             color: Colors.orange,
                             fontSize: 24.sp,
@@ -116,7 +118,7 @@ class MerchantOfferCard extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text:
-                                      '${currentMerchantOffer.merchDelivery ? 'Does home delivery' : 'No home delivery'}',
+                                      currentMerchantOffer.merchResponse.merchDelivery ? 'Does home delivery' : 'No home delivery',
                                   style: GoogleFonts.mulish(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w700,
@@ -134,8 +136,8 @@ class MerchantOfferCard extends StatelessWidget {
                     left: 6,
                     top: 5,
                     child: Container(
-                      width: 142.sp,
-                      height: 142.sp,
+                      width: 142.w,
+                      height: 142.w,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
@@ -150,7 +152,7 @@ class MerchantOfferCard extends StatelessWidget {
                       height: 150.sp,
                       child: CircularProgressIndicator(
                         value: double.parse(
-                          '${currentMerchantOffer.merchOfferQuantity / userList.items.length}',
+                          '${currentMerchantOffer.merchResponse.merchOfferQuantity / userList.items.length}',
                         ),
                         strokeWidth: 9.0,
                       ),

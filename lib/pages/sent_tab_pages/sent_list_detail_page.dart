@@ -4,14 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:santhe/pages/sent_tab_pages/user_list_item_page.dart';
 
 import '../../models/santhe_user_list_model.dart';
-import '../archive_tab_pages/archive_tab_page.dart';
-import '../new_tab_pages/new_tab_page.dart';
-import 'sent_tab_page.dart';
 import 'offers_list_page.dart';
 
 class SentUserListDetailsPage extends StatelessWidget {
   final UserList userList;
-  const SentUserListDetailsPage({required this.userList, Key? key})
+  final bool showOffers;
+  const SentUserListDetailsPage({required this.userList, Key? key, required this.showOffers})
       : super(key: key);
 
   @override
@@ -92,7 +90,7 @@ class SentUserListDetailsPage extends StatelessWidget {
         body: TabBarView(
           physics: const BouncingScrollPhysics(),
           children: [
-            OffersListPage(userList: userList),
+            OffersListPage(userList: userList, showOffers: showOffers),
             UserListItemDetailsPage(
               userList: userList,
             ),

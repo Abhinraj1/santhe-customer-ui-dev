@@ -71,9 +71,7 @@ class AboutUsPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Html(data: """
-${Boxes.getContent().get('aboutUs')}
-                        """),
+            child: Html(data: """${Boxes.getContent().get('aboutUs')}"""),
           ),
           const SizedBox(
             height: 10.0,

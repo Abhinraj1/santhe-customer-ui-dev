@@ -247,10 +247,51 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                     ],
                   ),
                   visible: _controller.text.isEmpty ? true : false,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    Position position =
+                    await LocationController.getGeoLocationPosition();
+                    Get.to(() => MapAddressPicker(
+                      lng: position.longitude,
+                      lat: position.latitude,
+                    ));
+                  },
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Constant.bgColor,
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(14))),
+                      margin: EdgeInsets.symmetric(horizontal: 55.w),
+                      padding:
+                      EdgeInsets.symmetric(vertical: 13.h, horizontal: 30.w),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.gps_fixed,
+                            color: Constant.white,
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Text(
+                            "Use current location",
+                            style: TextStyle(
+                                color: Constant.white,
+                                fontWeight: FontWeight.w800),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
-            Positioned(
+            /*Positioned(
               child: GestureDetector(
                 onTap: () async {
                   Position position =
@@ -290,7 +331,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 ),
               ),
               bottom: 50.h,
-            )
+            )*/
           ],
         ),
       ),

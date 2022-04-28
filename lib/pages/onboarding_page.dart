@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:santhe/constants.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

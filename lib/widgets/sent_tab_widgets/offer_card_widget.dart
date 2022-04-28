@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:santhe/pages/sent_tab_pages/offers_list_page.dart';
 
 import 'package:get/get.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/sent_list_detail_page.dart';
@@ -43,18 +44,10 @@ class OfferCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          if (
-              // userList.processStatus == 'processed' ||
-              true
-              // userList.processStatus == 'maxOffer' ||
-              //     userList.processStatus == 'minOffer' &&
-              //         userList.custOfferWaitTime.isBefore(DateTime.now())
-              ) {
-            print('UserList Process Status: ${userList.processStatus}');
-            Get.to(() => SentUserListDetailsPage(
-                  userList: userList,
-                ));
-          }
+          Get.to(() => SentUserListDetailsPage(
+            userList: userList,
+            showOffers: _showOffer(),
+          ));
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -141,22 +134,6 @@ class OfferCard extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 0),
                       child: Row(
                         children: [
-                          //TEXT TEXT TEXT
-                          //draft
-                          userList.processStatus == 'draft' ||
-                                  userList.processStatus == 'processing' ||
-                                  userList.processStatus == 'waiting'
-                              ? AutoSizeText(
-                                  'Waiting for Offers',
-                                  style: GoogleFonts.mulish(
-                                      fontSize: 14.sp,
-                                      color: const Color(0xffFFC300),
-                                      fontWeight: FontWeight.w400),
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
                           //nooofer
                           userList.processStatus == 'nooffer' ||
                                   userList.processStatus == 'noMerchants'
@@ -185,18 +162,20 @@ class OfferCard extends StatelessWidget {
                                   child: SizedBox(),
                                 ),
                           //minoffer
-                          userList.processStatus == 'minoffer'
-                              ? AutoSizeText(
-                                  '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
+                          _showOffer() ? AutoSizeText(
+                                  'Waiting for offers',
                                   style: GoogleFonts.mulish(
                                       fontSize: 14.sp,
-                                      color: Colors.green,
+                                      color: const Color(0xffFFC300),
                                       fontWeight: FontWeight.w400),
                                 )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
+                              : userList.processStatus != 'processed' ? AutoSizeText(
+                            '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
+                            style: GoogleFonts.mulish(
+                                fontSize: 14.sp,
+                                color: Colors.green,
+                                fontWeight: FontWeight.w400),
+                          ) : SizedBox(),
                           //minoffer
                           userList.processStatus == 'maxoffer'
                               ? AutoSizeText(
@@ -226,18 +205,6 @@ class OfferCard extends StatelessWidget {
                           const SizedBox(width: 3),
                           //ICON ICON ICON
                           //draft
-                          userList.processStatus == 'draft' ||
-                                  userList.processStatus == 'waiting' ||
-                                  userList.processStatus == 'processing'
-                              ? Icon(
-                                  CupertinoIcons.time_solid,
-                                  color: const Color(0xffFFC300),
-                                  size: 18.sp,
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
                           //noofffer & nomerchants
                           userList.processStatus == 'nooffer' ||
                                   userList.processStatus == 'noMerchants'
@@ -262,38 +229,29 @@ class OfferCard extends StatelessWidget {
                                   child: SizedBox(),
                                 ),
                           //minoffer
-                          userList.processStatus == 'minoffer'
+                          _showOffer()
                               ? Icon(
-                                  CupertinoIcons.hand_thumbsup,
+                                  CupertinoIcons.time_solid,
                                   color: Colors.orangeAccent,
                                   size: 18.sp,
                                 )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
-                          //minoffer
-                          userList.processStatus == 'maxoffer'
-                              ? Icon(
+                              : userList.processStatus != 'processed' ? Icon(
+                              CupertinoIcons.hand_thumbsup,
+                              color: Colors.orangeAccent,
+                              size: 18.sp,
+                          ) : const SizedBox(),
+                          //max offer
+                          if(userList.processStatus == 'maxoffer') Icon(
                                   CupertinoIcons.hand_thumbsup_fill,
                                   color: Colors.deepPurple,
                                   size: 18.sp,
-                                )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
                                 ),
                           //expired
-                          userList.processStatus == 'expired'
-                              ? Icon(
+                          if(userList.processStatus == 'expired') Icon(
                                   CupertinoIcons.exclamationmark_circle_fill,
                                   color: Colors.grey,
                                   size: 18.sp,
                                 )
-                              : const Visibility(
-                                  visible: false,
-                                  child: SizedBox(),
-                                ),
                         ],
                       ),
                     ),
@@ -305,5 +263,9 @@ class OfferCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _showOffer(){
+    return (userList.processStatus == 'minoffer' && userList.custListSentTime.toLocal().isBefore(DateTime.now())) || userList.processStatus == 'draft' || userList.processStatus == 'processing' || userList.processStatus == 'waiting' ? true : false;
   }
 }

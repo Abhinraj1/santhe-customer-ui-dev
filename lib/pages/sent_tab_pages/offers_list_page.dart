@@ -8,20 +8,22 @@ import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/widgets/sent_tab_widgets/merchant_offer_card.dart';
 
 import '../../controllers/api_service_controller.dart';
+import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/offer_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../widgets/sent_tab_widgets/offer_card_widget.dart';
 
 class OffersListPage extends StatefulWidget {
   final UserList userList;
-  const OffersListPage({required this.userList, Key? key}) : super(key: key);
+  final bool showOffers;
+  const OffersListPage({required this.userList, Key? key, required this.showOffers}) : super(key: key);
 
   @override
   State<OffersListPage> createState() => _OffersListPageState();
 }
 
 class _OffersListPageState extends State<OffersListPage> {
-  late Future<List<Offer>> listOffersData;
+  late Future<List<CustomerOfferResponse>> listOffersData;
   final apiController = Get.find<APIs>();
 
   @override
@@ -44,13 +46,11 @@ class _OffersListPageState extends State<OffersListPage> {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    return FutureBuilder<List<Offer>>(
+    print(widget.userList.listId);
+    return !widget.showOffers ? FutureBuilder<List<CustomerOfferResponse>>(
       future: apiController.getAllMerchOfferByListId(widget.userList.listId),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          //todo show proper error screen
-          return Center(child: Text('${snapshot.error}'));
-        } else if (snapshot.hasData && snapshot.data?.length == 0) {
+        if (snapshot.hasData && snapshot.data?.length == 0 || snapshot.hasError) {
           return _waitingImage();
         } else if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
@@ -80,7 +80,7 @@ class _OffersListPageState extends State<OffersListPage> {
                 if (index == 0) {
                   return Column(
                     children: [
-                      Container(
+                      if(widget.userList.processStatus == 'maxoffer' && widget.userList.custListSentTime.toLocal().isBefore(DateTime.now()))Container(
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(16.0),
@@ -110,7 +110,7 @@ class _OffersListPageState extends State<OffersListPage> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: EdgeInsets.only(right: 15.0),
+                              padding: const EdgeInsets.only(right: 15.0),
                               child: Container(),
                             ),
                           ),
@@ -133,7 +133,7 @@ class _OffersListPageState extends State<OffersListPage> {
           return const Center(child: CircularProgressIndicator.adaptive());
         }
       },
-    );
+    ) : _waitingImage();
   }
 
   Widget _waitingImage() => Column(

@@ -65,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                             borderSide:
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),
-                          errorBorder: UnderlineInputBorder(
+                          errorBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.red, width: 2.0),
                           ),
@@ -106,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                             borderSide:
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),
-                          errorBorder: UnderlineInputBorder(
+                          errorBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.red, width: 2.0),
                           ),

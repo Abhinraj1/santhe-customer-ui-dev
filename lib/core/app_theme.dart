@@ -38,6 +38,7 @@ class AppTheme{
       iconTheme: IconThemeData(
         color: AppColors().white100,
       ),
+      centerTitle: true,
       backgroundColor: AppColors().brandDark,
       titleTextStyle: TextStyle(
           fontSize: 24.sp,

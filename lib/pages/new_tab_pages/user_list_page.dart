@@ -845,8 +845,7 @@ class _UserListPageState extends State<UserListPage> {
                                                                             .now(),
                                                                     custListStatus:
                                                                         'sent',
-                                                                    items: oldCurrentUserList
-                                                                        .items,
+                                                                    items: oldCurrentUserList.items,
                                                                     listId: oldCurrentUserList
                                                                         .listId,
                                                                     listName:

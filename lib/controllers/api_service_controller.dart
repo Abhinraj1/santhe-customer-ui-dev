@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/error_user_fallback.dart';
+import 'package:santhe/models/offer/customer_offer_response.dart';
+import 'package:santhe/models/offer/merchant_offer_response.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart';
@@ -12,6 +15,7 @@ import '../models/santhe_faq_model.dart';
 import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
 import '../models/santhe_user_model.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'boxes_controller.dart';
 
 class APIs extends GetxController {
@@ -717,6 +721,7 @@ class APIs extends GetxController {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/?documentId=${user.custId}';
     String _token = await AppHelpers().getToken;
+    String _uid = await AppHelpers().getDeviceId();
 
     var body = {
       "fields": {
@@ -749,13 +754,13 @@ class APIs extends GetxController {
         "custStatus": {"stringValue": "active"},
         "custRatings": {"doubleValue": "5.0"},
         "custPlan": {"stringValue": user.custPlan},
-        "deviceToken": {
-          "arrayValue": {
-            "values": [
-              {
+        "deviceMap": {
+          "mapValue": {
+            "fields": {
+              _uid: {
                 "stringValue": _token
-              },
-            ]
+              }
+            }
           }
         }
       }
@@ -1046,28 +1051,13 @@ class APIs extends GetxController {
   // }
 
   //SENT TAB POST
-  Future<List<Offer>> getAllMerchOfferByListId(int listId) async {
-    print(listId);
-    List<Offer> merchOffers = [];
+  Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(int listId) async {
     String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await http.get(Uri.parse(url));
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      print(data);
-
-      if (data[0] != null && data[0]['document'] != null) {
-        for (int i = 0; i < data.length; i++) {
-          merchOffers
-              .add(Offer.fromFirebaseRestApi(data[i]['document']['fields']));
-          print(
-              'List ID: ${merchOffers[i].listId}, Merch ID: ${merchOffers[i].merchId}');
-        }
-      } else {
-        return merchOffers;
-      }
-      return merchOffers;
+      List<CustomerOfferResponse> resp = customerOfferResponseFromJson(response.body);
+      return resp;
     } else {
       throw 'Error retrieving user lists!';
     }
@@ -1107,6 +1097,19 @@ class APIs extends GetxController {
       print(
           'Request failed with status: ${response.statusCode}.Details? ${response.body}');
       return 0;
+    }
+  }
+
+  Future<MerchantOfferResponse> getMerchantResponse(String listId) async {
+    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/$listId';
+
+    var response = await http.get(Uri.parse(url));
+    if(response.statusCode == 200){
+      MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
+      return data;
+    }
+    else {
+      throw 'Error retrieving merchant response';
     }
   }
 

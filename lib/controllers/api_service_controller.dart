@@ -1147,7 +1147,7 @@ class APIs extends GetxController {
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
     var body = {
       "fields": {
-        "processStatus": {"stringValue": "processed"}
+        "processStatus": {"stringValue": "accepted"}
       }
     };
 

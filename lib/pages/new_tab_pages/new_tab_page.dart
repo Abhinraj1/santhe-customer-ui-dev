@@ -90,6 +90,7 @@ class _NewTabPageState extends State<NewTabPage> {
           ? FloatingActionButton(
               elevation: 0.0,
               onPressed: () async {
+                setState(() {});
                 if (custId == 404) {
                   print('login to continue');
                   Get.snackbar('Login to Continue',
@@ -372,95 +373,6 @@ class _NewTabPageState extends State<NewTabPage> {
                                                   ),
                                                 ),
                                               ),
-                                              // Obx(
-                                              //   () => SizedBox(
-                                              //     width: 314.sp,
-                                              //     height: 65.sp,
-                                              //     child:
-                                              //         DropdownButtonHideUnderline(
-                                              //       child: DropdownButton2(
-                                              //         isExpanded: true,
-                                              //         hint: Text(
-                                              //           'Select',
-                                              //           style: GoogleFonts.mulish(
-                                              //               fontSize: 16.sp,
-                                              //               fontWeight:
-                                              //                   FontWeight.w400,
-                                              //               fontStyle:
-                                              //                   FontStyle.italic,
-                                              //               color: Colors.grey),
-                                              //           overflow:
-                                              //               TextOverflow.ellipsis,
-                                              //         ),
-                                              //         items: _addDividersAfterItems(
-                                              //             top5UserLists
-                                              //             ),
-                                              //         customItemsHeight: 4,
-                                              //         value: selectedValue,
-                                              //         onChanged: (value) {
-                                              //           setState(() {
-                                              //             selectedValue =
-                                              //                 value as String;
-                                              //             print(selectedValue);
-                                              //           });
-                                              //         },
-                                              //         icon: const Icon(
-                                              //           Icons.keyboard_arrow_up,
-                                              //         ),
-                                              //         iconSize: 14,
-                                              //         iconEnabledColor:
-                                              //             Colors.grey,
-                                              //         iconDisabledColor:
-                                              //             Colors.grey.shade100,
-                                              //         buttonHeight: 50,
-                                              //         style: GoogleFonts.mulish(
-                                              //             color: Colors.grey,
-                                              //             fontSize: 14.sp,
-                                              //             fontWeight:
-                                              //                 FontWeight.w400),
-                                              //         buttonWidth: 160,
-                                              //         buttonPadding:
-                                              //             const EdgeInsets.only(
-                                              //                 left: 14,
-                                              //                 right: 14),
-                                              //         buttonDecoration:
-                                              //             BoxDecoration(
-                                              //           borderRadius:
-                                              //               BorderRadius.circular(
-                                              //                   kTextFieldCircularBorderRadius),
-                                              //           border: Border.all(
-                                              //             color: kTextFieldGrey,
-                                              //           ),
-                                              //           color: Colors.white,
-                                              //         ),
-                                              //         buttonElevation: 0,
-                                              //         itemHeight: 40,
-                                              //         itemPadding:
-                                              //             const EdgeInsets.only(
-                                              //                 left: 14,
-                                              //                 right: 14),
-                                              //         dropdownMaxHeight: 200,
-                                              //         dropdownWidth: 314.sp,
-                                              //         dropdownPadding: null,
-                                              //         dropdownDecoration:
-                                              //             BoxDecoration(
-                                              //           borderRadius:
-                                              //               BorderRadius.circular(
-                                              //                   kTextFieldCircularBorderRadius),
-                                              //           color:
-                                              //               Colors.grey.shade100,
-                                              //         ),
-                                              //         dropdownElevation: 0,
-                                              //         scrollbarRadius:
-                                              //             const Radius.circular(
-                                              //                 40),
-                                              //         scrollbarThickness: 6,
-                                              //         scrollbarAlwaysShow: true,
-                                              //         offset: const Offset(0, 0),
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // ),
                                             ],
                                           ),
                                         ),

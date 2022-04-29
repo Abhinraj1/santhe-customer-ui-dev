@@ -83,6 +83,7 @@ class _UserListPageState extends State<UserListPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(currentUserListDBKey);
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     final UserList userList = widget.userList;
@@ -347,7 +348,6 @@ class _UserListPageState extends State<UserListPage> {
                       color: Colors.orange,
                     ),
                   ),
-
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(16),
@@ -845,7 +845,8 @@ class _UserListPageState extends State<UserListPage> {
                                                                             .now(),
                                                                     custListStatus:
                                                                         'sent',
-                                                                    items: oldCurrentUserList.items,
+                                                                    items: oldCurrentUserList
+                                                                        .items,
                                                                     listId: oldCurrentUserList
                                                                         .listId,
                                                                     listName:

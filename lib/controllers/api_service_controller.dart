@@ -15,7 +15,6 @@ import '../models/santhe_faq_model.dart';
 import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
 import '../models/santhe_user_model.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'boxes_controller.dart';
 
 class APIs extends GetxController {
@@ -517,16 +516,14 @@ class APIs extends GetxController {
               "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
         },
         "custListSentTime": {
-          "timestampValue": userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+          "timestampValue":
+              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
-        'notificationProcess' : {
-          'stringValue': 'reminder'
-        },
-        'dealProcess': {
-          'booleanValue': false
-        },
+        'notificationProcess': {'stringValue': 'reminder'},
+        'dealProcess': {'booleanValue': false},
         "custOfferWaitTime": {
-          "timestampValue": DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+          "timestampValue":
+              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
         "listOfferCounter": {"integerValue": "0"},
         "processStatus": {"stringValue": "draft"},
@@ -698,7 +695,8 @@ class APIs extends GetxController {
       var data = jsonDecode(response.body);
       UserCredential currentUserCredentials = UserCredential.fromJson(data);
 
-      Boxes.getUserCredentialsDB().put('currentUserCredentials', currentUserCredentials);
+      Boxes.getUserCredentialsDB()
+          .put('currentUserCredentials', currentUserCredentials);
 
       // UserCredential? myUsr =
       //     Boxes.getUserCredentialsDB().get('currentUserCredentials');
@@ -757,9 +755,7 @@ class APIs extends GetxController {
         "deviceMap": {
           "mapValue": {
             "fields": {
-              _uid: {
-                "stringValue": _token
-              }
+              _uid: {"stringValue": _token}
             }
           }
         }
@@ -782,7 +778,8 @@ class APIs extends GetxController {
 
   //get
   Future<int> getCustomerInfo(int custId) async {
-    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId';
+    final String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId';
 
     var response = await http.get(Uri.parse(url));
 
@@ -809,7 +806,8 @@ class APIs extends GetxController {
 
   //patch
   Future updateCustomerInfo(int custId, User updatedUser) async {
-    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId?updateMask.fieldPaths=custName&updateMask.fieldPaths=custReferal&updateMask.fieldPaths=contact&updateMask.fieldPaths=custStatus&updateMask.fieldPaths=custRatings&updateMask.fieldPaths=custId';
+    final String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId?updateMask.fieldPaths=custName&updateMask.fieldPaths=custReferal&updateMask.fieldPaths=contact&updateMask.fieldPaths=custStatus&updateMask.fieldPaths=custRatings&updateMask.fieldPaths=custId';
 
     final body = {
       "fields": {
@@ -1051,12 +1049,15 @@ class APIs extends GetxController {
   // }
 
   //SENT TAB POST
-  Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(int listId) async {
-    String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
+  Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
+      int listId) async {
+    String url =
+        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      List<CustomerOfferResponse> resp = customerOfferResponseFromJson(response.body);
+      List<CustomerOfferResponse> resp =
+          customerOfferResponseFromJson(response.body);
       return resp;
     } else {
       throw 'Error retrieving user lists!';
@@ -1101,14 +1102,14 @@ class APIs extends GetxController {
   }
 
   Future<MerchantOfferResponse> getMerchantResponse(String listId) async {
-    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/$listId';
+    final String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/$listId';
 
     var response = await http.get(Uri.parse(url));
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;
-    }
-    else {
+    } else {
       throw 'Error retrieving merchant response';
     }
   }

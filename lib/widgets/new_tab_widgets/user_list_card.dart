@@ -5,8 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:santhe/REEEEEEEEEEE/api_test/test.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../constants.dart';
 import 'package:get/get.dart';
 
@@ -28,7 +31,6 @@ class UserListCard extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
-    
 
     //image logic
     Color clr = Colors.orange;
@@ -85,69 +87,72 @@ class UserListCard extends StatelessWidget {
               // All actions are defined in the children parameter.
               children: [
                 // A SlidableAction can have an icon and/or a label.
-                SlidableAction(
-                  onPressed: (context) async {
-                    int userListCount =
-                        await apiController.getAllCustomerLists(custId);
-                    UserList oldUserList = apiController.userListsDB.firstWhere(
-                        (element) => element.listId == userList.listId);
-                    UserList newImportedList = UserList(
-                        createListTime: DateTime.now(),
-                        custId: oldUserList.custId,
-                        items: oldUserList.items,
-                        listId: int.parse('$custId${userListCount + 1}'),
-                        listName: '(COPY) ${oldUserList.listName}',
-                        custListSentTime: oldUserList.custListSentTime,
-                        custListStatus: oldUserList.custListStatus,
-                        listOfferCounter: oldUserList.listOfferCounter,
-                        processStatus: oldUserList.processStatus,
-                        custOfferWaitTime: oldUserList.custOfferWaitTime);
-                    //add to firebase
-                    int response = await apiController.addCustomerList(
-                        newImportedList, custId, 'new');
 
-                    if (response == 1) {
-                      box.add(newImportedList);
-                    } else {
-                      Get.dialog(const Card(
-                        child: Center(
-                          child: Text('Error!'),
-                        ),
-                      ));
-                    }
+                // } else if (int.parse(snapshot.data.toString()) < 3) {
+                Visibility(
+                  visible: Boxes.getUserListDB().values.length < 3,
+                  child: SlidableAction(
+                    onPressed: (context) async {
+                      int userListCount =
+                          await apiController.getAllCustomerLists(custId);
 
-                    //Dismiss the pop up
-                    // if (box.values.length == 3) {
-                    //   Get.offAll(() => const HomePage(),
-                    //       transition: Transition.noTransition);
-                    // } else {
-                    //   Navigator.pop(context);
-                    // }
+                      // UserList oldUserList = apiController.userListsDB
+                      //     .singleWhere((element) =>
+                      //         element.listId == userList.listId);
+                      UserList oldUserList =
+                          Boxes.getUserListDB().values.firstWhere(
+                                (element) => element.listId == userList.listId,
+                              );
 
+                      // print(
+                      //     "Name: ${oldUserList.listName}, Items: ${oldUserList.items}, id: ${oldUserList.listId}");
+                      UserList newImportedList = UserList(
+                          createListTime: DateTime.now(),
+                          custId: oldUserList.custId,
+                          items: oldUserList.items,
+                          listId: int.parse('$custId${userListCount + 1}'),
+                          listName: '(COPY) ${oldUserList.listName}',
+                          custListSentTime: oldUserList.custListSentTime,
+                          custListStatus: oldUserList.custListStatus,
+                          listOfferCounter: oldUserList.listOfferCounter,
+                          processStatus: oldUserList.processStatus,
+                          custOfferWaitTime: oldUserList.custOfferWaitTime);
 
-                  },
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.orange,
-                  autoClose: true,
-                  icon: Icons.copy_rounded,
-                  label: 'Copy',
+                      print(
+                          "New ------> Name: ${newImportedList.listName}, Items: ${newImportedList.items}, id: ${newImportedList.listId}");
 
+                      // //add to firebase
+                      int response = await apiController.addCustomerList(
+                          newImportedList, custId, 'new');
+
+                      if (response == 1) {
+                        box.add(newImportedList);
+                      } else {
+                        Get.dialog(const Card(
+                          child: Center(
+                            child: Text('Error!'),
+                          ),
+                        ));
+                      }
+
+                      //Dismiss the pop up
+                      // if (box.values.length == 3) {
+                      //   Get.offAll(() => const HomePage(),
+                      //       transition: Transition.noTransition);
+                      // } else {
+                      //   Navigator.pop(context);
+                      // }
+                    },
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.orange,
+                    autoClose: true,
+                    icon: Icons.copy_rounded,
+                    label: 'Copy',
+                  ),
                 ),
                 SlidableAction(
                   onPressed: (context) async {
                     int pressCount = 0;
-                    apiController.deletedUserLists.add(userList);
-
-                    Future.delayed(const Duration(milliseconds: 5000),
-                        () async {
-                      print('Deleting list - 4 Sec Elapsed!');
-                      int response =
-                          await apiController.deleteUserList(userList.listId);
-
-                      if (response == 1) {
-                        apiController.deletedUserLists.remove(userList);
-                      }
-                    });
 
                     //delete userList from DB
                     final box = Boxes.getUserListDB();
@@ -197,6 +202,19 @@ class UserListCard extends StatelessWidget {
                         ),
                       ),
                     );
+
+                    apiController.deletedUserLists.add(userList);
+
+                    Future.delayed(const Duration(milliseconds: 5000),
+                        () async {
+                      print('Deleting list - 4 Sec Elapsed!');
+                      int response =
+                          await apiController.deleteUserList(userList.listId);
+
+                      if (response == 1) {
+                        apiController.deletedUserLists.remove(userList);
+                      }
+                    });
 
                     //for bringing Floating Action Button
                     if (box.length >= 2) {

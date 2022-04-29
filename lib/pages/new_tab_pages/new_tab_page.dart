@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:santhe/REEEEEEEEEEE/api_test/test.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
@@ -73,7 +74,7 @@ class _NewTabPageState extends State<NewTabPage> {
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
     final box = Boxes.getUserListDB();
-    
+
     print(box.values.map((e) => e.listId).toList());
 
     ScreenUtil.init(
@@ -103,7 +104,10 @@ class _NewTabPageState extends State<NewTabPage> {
 
                 List<UserList> top5UserList =
                     apiController.userListsDB.length > 5
-                        ? apiController.userListsDB.getRange(apiController.userListsDB.length - 6, apiController.userListsDB.length - 1).toList()
+                        ? apiController.userListsDB
+                            .getRange(apiController.userListsDB.length - 6,
+                                apiController.userListsDB.length - 1)
+                            .toList()
                         : apiController.userListsDB;
 
                 int userListCount =
@@ -124,9 +128,12 @@ class _NewTabPageState extends State<NewTabPage> {
                           minTextAdapt: true,
                           orientation: Orientation.portrait);
                       return Padding(
-                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
                         child: Container(
-                          height: userListCount < 1 ? screenHeight * 40 : screenHeight * 50,
+                          height: userListCount < 1
+                              ? screenHeight * 40
+                              : screenHeight * 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(30.r),
@@ -145,8 +152,10 @@ class _NewTabPageState extends State<NewTabPage> {
                             builder: (context, setState) {
                               ScreenUtil.init(
                                   BoxConstraints(
-                                      maxWidth: MediaQuery.of(context).size.width,
-                                      maxHeight: MediaQuery.of(context).size.height),
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width,
+                                      maxHeight:
+                                          MediaQuery.of(context).size.height),
                                   designSize: const Size(390, 844),
                                   context: context,
                                   minTextAdapt: true,
@@ -158,8 +167,10 @@ class _NewTabPageState extends State<NewTabPage> {
                                   child: Form(
                                     key: _formKey,
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
                                         Row(
                                             mainAxisAlignment:
@@ -266,7 +277,9 @@ class _NewTabPageState extends State<NewTabPage> {
                                         ),
                                         const SizedBox(height: 2.0),
                                         Visibility(
-                                          visible: userListCount > 0 ? true : false,
+                                          visible: userListsDB.isNotEmpty
+                                              ? true
+                                              : false,
                                           child: Column(
                                             children: [
                                               ListTile(
@@ -282,9 +295,11 @@ class _NewTabPageState extends State<NewTabPage> {
                                                   ),
                                                 ),
                                                 leading: Radio<NewListType>(
-                                                  value: NewListType.importFromOld,
+                                                  value:
+                                                      NewListType.importFromOld,
                                                   groupValue: _type,
-                                                  onChanged: (NewListType? value) {
+                                                  onChanged:
+                                                      (NewListType? value) {
                                                     setState(() {
                                                       _type = value;
                                                     });
@@ -307,14 +322,18 @@ class _NewTabPageState extends State<NewTabPage> {
                                                           fontStyle:
                                                               FontStyle.italic,
                                                           color: Colors.grey),
-                                                      overflow: TextOverflow.ellipsis,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                    items: _addDividersAfterItems(top5UserList),
+                                                    items:
+                                                        _addDividersAfterItems(
+                                                            top5UserList),
                                                     customItemsHeight: 4,
                                                     value: selectedValue,
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        selectedValue = value as String;
+                                                        selectedValue =
+                                                            value as String;
                                                       });
                                                     },
                                                     icon: const Icon(
@@ -388,92 +407,155 @@ class _NewTabPageState extends State<NewTabPage> {
                                                     BorderRadius.circular(16)),
                                             color: Colors.orange,
                                             onPressed: () async {
-                                              if (listName.isNotEmpty && _type == NewListType.startFromNew) {
-                                                if(_formKey.currentState!.validate()){
+                                              if (listName.isNotEmpty &&
+                                                  _type ==
+                                                      NewListType
+                                                          .startFromNew) {
+                                                if (_formKey.currentState!
+                                                    .validate()) {
                                                   //add to user list to hive db
-                                                  final box = Boxes.getUserListDB();
+                                                  final box =
+                                                      Boxes.getUserListDB();
 
                                                   if (custId == 404) {
                                                     print('login to continue');
                                                     Get.snackbar(
                                                         'Login to Continue',
                                                         'Please log in to sync your data and process futher...',
-                                                        backgroundColor: Colors.orange,
-                                                        colorText: Colors.white);
-                                                    Get.offAll(() => const LoginScreen());
+                                                        backgroundColor:
+                                                            Colors.orange,
+                                                        colorText:
+                                                            Colors.white);
+                                                    Get.offAll(() =>
+                                                        const LoginScreen());
                                                   }
-                                                  print('TOTAL USER LIST NUMBER: $userListCount');
-                                                  print('New List Id: ${userListCount + 1}');
-                                                  UserList newUserList = UserList(createListTime: DateTime.now(),
+                                                  print(
+                                                      'TOTAL USER LIST NUMBER: $userListCount');
+                                                  print(
+                                                      'New List Id: ${userListCount + 1}');
+                                                  UserList newUserList =
+                                                      UserList(
+                                                    createListTime:
+                                                        DateTime.now(),
                                                     custId: custId,
                                                     items: [],
-                                                    listId: int.parse('$custId${userListCount + 1}'),
+                                                    listId: int.parse(
+                                                        '$custId${userListCount + 1}'),
                                                     listName: listName,
                                                     processStatus: 'draft',
-                                                    custListSentTime: DateTime.now(),
+                                                    custListSentTime:
+                                                        DateTime.now(),
                                                     custListStatus: 'new',
                                                     listOfferCounter: 0,
-                                                    custOfferWaitTime: DateTime.now(),
+                                                    custOfferWaitTime:
+                                                        DateTime.now(),
                                                   );
                                                   //add to firebase
-                                                  int response = await apiController.addCustomerList(newUserList, custId, 'new');
+                                                  int response =
+                                                      await apiController
+                                                          .addCustomerList(
+                                                              newUserList,
+                                                              custId,
+                                                              'new');
 
                                                   if (response == 1) {
                                                     box.add(newUserList);
                                                   } else {
-                                                    Get.dialog(const Card(child: Center(child: Text('Error!'),),
+                                                    Get.dialog(const Card(
+                                                      child: Center(
+                                                        child: Text('Error!'),
+                                                      ),
                                                     ));
                                                   }
 
                                                   //Dismiss the pop up
                                                   if (box.values.length == 3) {
-                                                    Get.offAll(() => const HomePage(), transition: Transition.noTransition);
+                                                    Get.offAll(
+                                                        () => const HomePage(),
+                                                        transition: Transition
+                                                            .noTransition);
                                                   } else {
                                                     Navigator.pop(context);
                                                   }
                                                 }
-                                              }
-                                              else if (listName.isEmpty && _type == NewListType.startFromNew) {
+                                              } else if (listName.isEmpty &&
+                                                  _type ==
+                                                      NewListType
+                                                          .startFromNew) {
                                                 Get.snackbar(
                                                   '',
                                                   '',
                                                   titleText: const Padding(
-                                                    padding: EdgeInsets.only(left: 8.0),
-                                                    child: Text('Enter a List Name'),
+                                                    padding: EdgeInsets.only(
+                                                        left: 8.0),
+                                                    child: Text(
+                                                        'Enter a List Name'),
                                                   ),
                                                   messageText: const Padding(
-                                                    padding: EdgeInsets.only(left: 8.0),
-                                                    child: Text('Please enter a new list name before continuing...'),
+                                                    padding: EdgeInsets.only(
+                                                        left: 8.0),
+                                                    child: Text(
+                                                        'Please enter a new list name before continuing...'),
                                                   ),
-                                                  margin: const EdgeInsets.all(10.0),
-                                                  padding: const EdgeInsets.all(8.0),
+                                                  margin: const EdgeInsets.all(
+                                                      10.0),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
                                                   backgroundColor: Colors.white,
                                                   shouldIconPulse: true,
                                                   icon: const Padding(
-                                                    padding: EdgeInsets.all(8.0),
-                                                    child: Icon(CupertinoIcons.exclamationmark_triangle_fill,
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Icon(
+                                                      CupertinoIcons
+                                                          .exclamationmark_triangle_fill,
                                                       color: Colors.orange,
                                                       size: 45,
                                                     ),
                                                   ),
                                                 );
-                                              }
-                                              else if (_type == NewListType.importFromOld) {
-                                                if(selectedValue != null){
-                                                  UserList oldUserList = apiController.userListsDB.firstWhere((element) => element.listId == int.parse(selectedValue!));
+                                              } else if (_type ==
+                                                  NewListType.importFromOld) {
+                                                if (selectedValue != null) {
+                                                  UserList oldUserList =
+                                                      apiController
+                                                          .userListsDB
+                                                          .firstWhere((element) =>
+                                                              element.listId ==
+                                                              int.parse(
+                                                                  selectedValue!));
 
                                                   UserList newImportedList = UserList(
-                                                      createListTime: DateTime.now(),
-                                                      custId: oldUserList.custId,
+                                                      createListTime:
+                                                          DateTime.now(),
+                                                      custId:
+                                                          oldUserList.custId,
                                                       items: oldUserList.items,
-                                                      listId: int.parse('$custId${userListCount + 1}'),
-                                                      listName: '(COPY) ${oldUserList.listName}',
-                                                      custListSentTime: oldUserList.custListSentTime,
-                                                      custListStatus: oldUserList.custListStatus,
-                                                      listOfferCounter: oldUserList.listOfferCounter,
-                                                      processStatus: oldUserList.processStatus, custOfferWaitTime: oldUserList.custOfferWaitTime);
+                                                      listId: int.parse(
+                                                          '$custId${userListCount + 1}'),
+                                                      listName:
+                                                          '(COPY) ${oldUserList.listName}',
+                                                      custListSentTime:
+                                                          oldUserList
+                                                              .custListSentTime,
+                                                      custListStatus:
+                                                          oldUserList
+                                                              .custListStatus,
+                                                      listOfferCounter:
+                                                          oldUserList
+                                                              .listOfferCounter,
+                                                      processStatus: oldUserList
+                                                          .processStatus,
+                                                      custOfferWaitTime:
+                                                          oldUserList
+                                                              .custOfferWaitTime);
                                                   //add to firebase
-                                                  int response = await apiController.addCustomerList(newImportedList, custId, 'new');
+                                                  int response =
+                                                      await apiController
+                                                          .addCustomerList(
+                                                              newImportedList,
+                                                              custId,
+                                                              'new');
 
                                                   if (response == 1) {
                                                     box.add(newImportedList);
@@ -488,43 +570,55 @@ class _NewTabPageState extends State<NewTabPage> {
                                                   //Dismiss the pop up
                                                   if (box.values.length == 3) {
                                                     Get.offAll(
-                                                            () => const HomePage(),
+                                                        () => const HomePage(),
                                                         transition: Transition
                                                             .noTransition);
                                                   } else {
                                                     Navigator.pop(context);
                                                   }
-                                                }
-                                                else{
+                                                } else {
                                                   Get.snackbar(
                                                     '',
                                                     '',
                                                     titleText: const Padding(
-                                                      padding: EdgeInsets.only(left: 8.0),
-                                                      child: Text('Please select a list'),
+                                                      padding: EdgeInsets.only(
+                                                          left: 8.0),
+                                                      child: Text(
+                                                          'Please select a list'),
                                                     ),
                                                     messageText: const Padding(
-                                                      padding: EdgeInsets.only(left: 8.0),
-                                                      child: Text('Else create a new list'),
+                                                      padding: EdgeInsets.only(
+                                                          left: 8.0),
+                                                      child: Text(
+                                                          'Else create a new list'),
                                                     ),
-                                                    margin: const EdgeInsets.all(10.0),
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    backgroundColor: Colors.white,
+                                                    margin:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    backgroundColor:
+                                                        Colors.white,
                                                     shouldIconPulse: true,
                                                     icon: const Padding(
-                                                      padding: EdgeInsets.all(8.0),
-                                                      child: Icon(CupertinoIcons.exclamationmark_triangle_fill,
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Icon(
+                                                        CupertinoIcons
+                                                            .exclamationmark_triangle_fill,
                                                         color: Colors.orange,
                                                         size: 45,
                                                       ),
                                                     ),
                                                   );
                                                 }
+                                              } else {
+                                                print(
+                                                    'implement import feature');
                                               }
-                                              else {
-                                                print('implement import feature');
-                                              }
-                                              await apiController.getAllCustomerLists(custId);
+                                              await apiController
+                                                  .getAllCustomerLists(custId);
                                             },
                                             child: Text(
                                               'Next',
@@ -622,6 +716,8 @@ class _NewTabPageState extends State<NewTabPage> {
                   itemCount: userLists.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
+                    print("NEW TAB PAGE");
+                    print(userLists[index].listId);
                     return UserListCard(
                       userList: userLists[index],
                     );

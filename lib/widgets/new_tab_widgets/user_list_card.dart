@@ -114,6 +114,7 @@ class UserListCard extends StatelessWidget {
 
                       if (response == 1) {
                         box.add(newImportedList);
+                        
                       } else {
                         Get.dialog(const Card(
                           child: Center(
@@ -157,14 +158,14 @@ class UserListCard extends StatelessWidget {
                       messageText: Text(
                         'List has been deleted',
                         style: GoogleFonts.mulish(
-                            color: kTextGrey,
+                            color: AppColors().grey100,
                             fontWeight: FontWeight.w400,
                             fontSize: 15),
                       ),
                       mainButton: TextButton(
                         onPressed: () async {
                           if (pressCount < 1) {
-                            Future.delayed(const Duration(seconds: 8),
+                            Future.delayed(const Duration(seconds: 1),
                                 () async {
                               int response = await apiController
                                   .undoDeleteUserList(userList.listId);

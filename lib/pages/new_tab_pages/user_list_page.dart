@@ -71,6 +71,7 @@ class _UserListPageState extends State<UserListPage> {
         .values
         .firstWhere((element) => element.listId == widget.userList.listId)
         .key;
+    print('---+---+---+ $currentUserListDBKey');
     searchedItemsResult = Future.value([]);
     super.initState();
   }
@@ -778,27 +779,62 @@ class _UserListPageState extends State<UserListPage> {
                                                               onPressed:
                                                                   () async {
                                                                 //get userList
-                                                                UserList oldCurrentUserList = box.values.singleWhere((element) => element.listId == userList.listId);
+                                                                UserList oldCurrentUserList = box
+                                                                    .values
+                                                                    .singleWhere((element) =>
+                                                                        element
+                                                                            .listId ==
+                                                                        userList
+                                                                            .listId);
                                                                 UserList currentUserList = UserList(
-                                                                    listOfferCounter: 0,
-                                                                    custId: oldCurrentUserList.custId,
-                                                                    custListSentTime: DateTime.now(),
-                                                                    custListStatus: 'sent',
-                                                                    items: oldCurrentUserList.items,
-                                                                    listId: oldCurrentUserList.listId,
-                                                                    listName: oldCurrentUserList.listName,
-                                                                    createListTime: oldCurrentUserList.createListTime,
-                                                                    processStatus: 'draft',
-                                                                    custOfferWaitTime: oldCurrentUserList.custOfferWaitTime);
+                                                                    listOfferCounter:
+                                                                        0,
+                                                                    custId: oldCurrentUserList
+                                                                        .custId,
+                                                                    custListSentTime:
+                                                                        DateTime
+                                                                            .now(),
+                                                                    custListStatus:
+                                                                        'sent',
+                                                                    items: oldCurrentUserList
+                                                                        .items,
+                                                                    listId: oldCurrentUserList
+                                                                        .listId,
+                                                                    listName:
+                                                                        oldCurrentUserList
+                                                                            .listName,
+                                                                    createListTime:
+                                                                        oldCurrentUserList
+                                                                            .createListTime,
+                                                                    processStatus:
+                                                                        'draft',
+                                                                    custOfferWaitTime:
+                                                                        oldCurrentUserList
+                                                                            .custOfferWaitTime);
 
                                                                 //todo send list to firebase (currentUserList)
-                                                                int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
-                                                                if (custId == 404) {Get.off(() => LoginScreen());}
-                                                                int response = await apiController.updateUserList(custId,currentUserList);
+                                                                int custId = Boxes
+                                                                            .getUserCredentialsDB()
+                                                                        .get(
+                                                                            'currentUserCredentials')
+                                                                        ?.phoneNumber ??
+                                                                    404;
+                                                                if (custId ==
+                                                                    404) {
+                                                                  Get.off(() =>
+                                                                      LoginScreen());
+                                                                }
+                                                                int response = await apiController
+                                                                    .updateUserList(
+                                                                        custId,
+                                                                        currentUserList);
 
-                                                                if (response ==1) {
+                                                                if (response ==
+                                                                    1) {
                                                                   //dismiss page
-                                                                  successMsg('List Sent','List has been succsessfully sent to merchants.');
+                                                                  successMsg(
+                                                                      'List Sent',
+                                                                      'List has been succsessfully sent to merchants.');
                                                                   Get.off(
                                                                       () =>
                                                                           const HomePage(
@@ -872,7 +908,9 @@ class _UserListPageState extends State<UserListPage> {
                                       color: Colors.white,
                                       onPressed: () {
                                         //todo implement category / catalog page opening
-                                        Get.to(() => CategoriesPage(currentUserListDBKey: currentUserListDBKey));
+                                        Get.to(() => CategoriesPage(
+                                            currentUserListDBKey:
+                                                currentUserListDBKey));
                                       },
                                       child: const Icon(
                                         CupertinoIcons.square_grid_2x2,

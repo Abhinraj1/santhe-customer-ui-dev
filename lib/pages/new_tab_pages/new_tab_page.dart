@@ -1,19 +1,11 @@
-import 'dart:math';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
-import 'package:group_button/group_button.dart';
 import 'package:santhe/constants.dart';
-import 'package:santhe/controllers/error_user_fallback.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
@@ -21,7 +13,6 @@ import 'package:santhe/widgets/new_tab_widgets/user_list_card.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
-
 
 class NewTabPage extends StatefulWidget {
   const NewTabPage({Key? key}) : super(key: key);
@@ -82,7 +73,7 @@ class _NewTabPageState extends State<NewTabPage> {
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
     final box = Boxes.getUserListDB();
-
+    
     print(box.values.map((e) => e.listId).toList());
 
     ScreenUtil.init(

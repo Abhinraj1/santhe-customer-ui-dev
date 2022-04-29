@@ -169,7 +169,7 @@ class OfferCard extends StatelessWidget {
                                       color: const Color(0xffFFC300),
                                       fontWeight: FontWeight.w400),
                                 )
-                              : userList.processStatus != 'processed' ? AutoSizeText(
+                              : userList.processStatus == 'Accepted' ? AutoSizeText(
                             '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
                             style: GoogleFonts.mulish(
                                 fontSize: 14.sp,
@@ -235,7 +235,7 @@ class OfferCard extends StatelessWidget {
                                   color: Colors.orangeAccent,
                                   size: 18.sp,
                                 )
-                              : userList.processStatus != 'processed' ? Icon(
+                              : userList.processStatus == 'Accepted' ? Icon(
                               CupertinoIcons.hand_thumbsup,
                               color: Colors.orangeAccent,
                               size: 18.sp,

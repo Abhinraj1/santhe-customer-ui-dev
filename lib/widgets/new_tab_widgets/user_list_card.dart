@@ -21,9 +21,7 @@ class UserListCard extends StatelessWidget {
   final UserList userList;
   final box = Boxes.getUserListDB();
   UserListCard({required this.userList, Key? key}) : super(key: key);
-  int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
+  final int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +54,7 @@ class UserListCard extends StatelessWidget {
       padding: EdgeInsets.all(15.sp),
       child: GestureDetector(
         onTap: () {
-//goto create new list page
-
+            //goto create new list page
           Get.to(() => UserListPage(
                 userList: userList,
               ));
@@ -86,26 +83,14 @@ class UserListCard extends StatelessWidget {
 
               // All actions are defined in the children parameter.
               children: [
-                // A SlidableAction can have an icon and/or a label.
-
-                // } else if (int.parse(snapshot.data.toString()) < 3) {
+                //copy from old list
                 Visibility(
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      int userListCount = await apiController.getAllCustomerLists(custId);
+                      UserList oldUserList = Boxes.getUserListDB().values.firstWhere((element) => element.listId == userList.listId);
 
-                      // UserList oldUserList = apiController.userListsDB
-                      //     .singleWhere((element) =>
-                      //         element.listId == userList.listId);
-                      UserList oldUserList =
-                          Boxes.getUserListDB().values.firstWhere(
-                                (element) => element.listId == userList.listId,
-                              );
-
-                      // print(
-                      //     "Name: ${oldUserList.listName}, Items: ${oldUserList.items}, id: ${oldUserList.listId}");
                       UserList newImportedList = UserList(
                           createListTime: DateTime.now(),
                           custId: oldUserList.custId,
@@ -118,12 +103,7 @@ class UserListCard extends StatelessWidget {
                           processStatus: oldUserList.processStatus,
                           custOfferWaitTime: oldUserList.custOfferWaitTime);
 
-                      print(
-                          "New ------> Name: ${newImportedList.listName}, Items: ${newImportedList.items}, id: ${newImportedList.listId}");
-
-                      // //add to firebase
-                      int response = await apiController.addCustomerList(
-                          newImportedList, custId, 'new');
+                      int response = await apiController.addCustomerList(newImportedList, custId, 'new');
 
                       if (response == 1) {
                         box.add(newImportedList);
@@ -134,14 +114,6 @@ class UserListCard extends StatelessWidget {
                           ),
                         ));
                       }
-
-                      //Dismiss the pop up
-                      // if (box.values.length == 3) {
-                      //   Get.offAll(() => const HomePage(),
-                      //       transition: Transition.noTransition);
-                      // } else {
-                      //   Navigator.pop(context);
-                      // }
                     },
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
@@ -150,6 +122,7 @@ class UserListCard extends StatelessWidget {
                     label: 'Copy',
                   ),
                 ),
+                //delete list
                 SlidableAction(
                   onPressed: (context) async {
                     int pressCount = 0;
@@ -182,15 +155,21 @@ class UserListCard extends StatelessWidget {
                             fontSize: 15),
                       ),
                       mainButton: TextButton(
-                        onPressed: () {
-                          print('Undo Button Pressed');
+                        onPressed: () async {
                           if (pressCount < 1) {
-                            Boxes.getUserListDB().add(userList);
+                            Future.delayed(const Duration(seconds: 8), () async {
+                              int response = await apiController.undoDeleteUserList(userList.listId);
+                              if(response == 1){
+                                Boxes.getUserListDB().add(userList);
+                              }
+                              else {
+                                errorMsg('Unable to undo the list', '');
+                              }
+                            });
                           }
                           pressCount++;
                           if (box.length >= 2) {
-                            Get.offAll(() => const HomePage(),
-                                transition: Transition.fadeIn);
+                            Get.offAll(() => const HomePage(), transition: Transition.fadeIn);
                           }
                         },
                         child: Text(
@@ -205,16 +184,11 @@ class UserListCard extends StatelessWidget {
 
                     apiController.deletedUserLists.add(userList);
 
-                    Future.delayed(const Duration(milliseconds: 5000),
-                        () async {
-                      print('Deleting list - 4 Sec Elapsed!');
-                      int response =
-                          await apiController.deleteUserList(userList.listId);
+                    int response = await apiController.deleteUserList(userList.listId);
 
-                      if (response == 1) {
-                        apiController.deletedUserLists.remove(userList);
-                      }
-                    });
+                    if (response == 1) {
+                      apiController.deletedUserLists.remove(userList);
+                    }
 
                     //for bringing Floating Action Button
                     if (box.length >= 2) {

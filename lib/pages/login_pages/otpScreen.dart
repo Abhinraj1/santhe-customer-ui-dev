@@ -334,6 +334,7 @@ class _OtpScreenState extends State<OtpScreen> {
         //take data from firebase & add
         //response will auto add it to hive.
 
+        apiController.updateDeviceToken(widget.phoneNumber.toString());
         Boxes.getUserPrefs().put('isLoggedIn', true);
         Boxes.getUserPrefs().put('showHome', true);
         Boxes.getUserPrefs().put('isRegistered', true);

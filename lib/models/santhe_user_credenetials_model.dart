@@ -31,20 +31,6 @@ class UserCredential {
   });
 
   factory UserCredential.fromJson(Map<String, dynamic> json) {
-    // print(json['phoneNumber']);
-    // print(int.parse(json['phoneNumber']
-    //     .toString()
-    //     .substring(0, json['phoneNumber'].toString().length)));
-    // print(int.parse(json['phoneNumber']
-    //     .toString()
-    //     .substring(1, json['phoneNumber'].toString().length)));
-    // print(int.parse(json['phoneNumber']
-    //     .toString()
-    //     .substring(2, json['phoneNumber'].toString().length)));
-    // print(int.parse(json['phoneNumber']
-    //     .toString()
-    //     .substring(3, json['phoneNumber'].toString().length)));
-    //phone nuber comes out like +91XXXXXXXXXX so remove first 3 digit
 
     return UserCredential(
       idToken: json['idToken'],

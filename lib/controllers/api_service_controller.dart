@@ -508,7 +508,7 @@ class APIs extends GetxController {
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
         "items": {
-          "arrayValue": {"values": items}
+          "arrayValue": {"values": []}
         },
         "custListStatus": {"stringValue": status},
         "custId": {
@@ -639,6 +639,31 @@ class APIs extends GetxController {
     final body = {
       "fields": {
         "custListStatus": {"stringValue": "deleted"}
+      }
+    };
+
+    var response = await http.patch(Uri.parse(url), body: jsonEncode(body));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return 1;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      var data = jsonDecode(response.body);
+      print(data);
+      print(response.reasonPhrase);
+      return 0;
+    }
+  }
+
+  Future undoDeleteUserList(int userListId) async {
+    final String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$userListId?updateMask.fieldPaths=custListStatus';
+
+    final body = {
+      "fields": {
+        "custListStatus": {"stringValue": "new"}
       }
     };
 
@@ -1051,10 +1076,12 @@ class APIs extends GetxController {
   //SENT TAB POST
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
       int listId) async {
+    print(listId);
     String url =
         'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await http.get(Uri.parse(url));
+    print(response.body);
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);

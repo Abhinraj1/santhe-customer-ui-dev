@@ -83,11 +83,9 @@ class _UserListPageState extends State<UserListPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(currentUserListDBKey);
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     final UserList userList = widget.userList;
-    // print("================${userList.listId}======================");
     final TextStyle popupTextStyle = GoogleFonts.mulish(
       fontWeight: FontWeight.w400,
       fontSize: screenWidth * 3.5,
@@ -168,30 +166,6 @@ class _UserListPageState extends State<UserListPage> {
                         onEditingComplete: () {
                           if (newListName.isNotEmpty) {
                             final box = Boxes.getUserListDB();
-                            //getting current list object in db
-                            // UserList oldList = box.values.firstWhere(
-                            //     (element) =>
-                            //         element.listId == userList.listId);
-                            //
-                            // int userListDBKey = box.values
-                            //     .singleWhere((element) =>
-                            //         element.listId == userList.listId)
-                            //     .key;
-                            //
-                            // UserList newUserList = UserList(
-                            //     createListTime: oldList.createListTime,
-                            //     custId: oldList.custId,
-                            //     items: oldList.items,
-                            //     listId: oldList.listId,
-                            //     listName: newListName,
-                            //     custListSentTime: oldList.custListSentTime,
-                            //     custListStatus: oldList.custListStatus,
-                            //     listOfferCounter: oldList.listOfferCounter,
-                            //     processStatus: oldList.processStatus);
-                            //
-                            // box.putAt(userListDBKey, newUserList);
-
-                            //go back to text widget showing list name
                             box.get(currentUserListDBKey)?.listName =
                                 newListName;
 
@@ -212,30 +186,6 @@ class _UserListPageState extends State<UserListPage> {
                             });
                             if (newListName.isNotEmpty) {
                               final box = Boxes.getUserListDB();
-                              //getting current list object in db
-                              // UserList oldList = box.values.firstWhere(
-                              //     (element) =>
-                              //         element.listId == userList.listId);
-                              //
-                              // int userListDBKey = box.values
-                              //     .singleWhere((element) =>
-                              //         element.listId == userList.listId)
-                              //     .key;
-                              //
-                              // UserList newUserList = UserList(
-                              //     createListTime: oldList.createListTime,
-                              //     custId: oldList.custId,
-                              //     items: oldList.items,
-                              //     listId: oldList.listId,
-                              //     listName: newListName,
-                              //     custListSentTime: oldList.custListSentTime,
-                              //     custListStatus: oldList.custListStatus,
-                              //     listOfferCounter: oldList.listOfferCounter,
-                              //     processStatus: oldList.processStatus);
-                              //
-                              // box.putAt(userListDBKey, newUserList);
-
-                              //go back to text widget showing list name
                               box.get(currentUserListDBKey)?.listName =
                                   newListName;
 
@@ -828,62 +778,27 @@ class _UserListPageState extends State<UserListPage> {
                                                               onPressed:
                                                                   () async {
                                                                 //get userList
-                                                                UserList oldCurrentUserList = box
-                                                                    .values
-                                                                    .singleWhere((element) =>
-                                                                        element
-                                                                            .listId ==
-                                                                        userList
-                                                                            .listId);
+                                                                UserList oldCurrentUserList = box.values.singleWhere((element) => element.listId == userList.listId);
                                                                 UserList currentUserList = UserList(
-                                                                    listOfferCounter:
-                                                                        0,
-                                                                    custId: oldCurrentUserList
-                                                                        .custId,
-                                                                    custListSentTime:
-                                                                        DateTime
-                                                                            .now(),
-                                                                    custListStatus:
-                                                                        'sent',
-                                                                    items: oldCurrentUserList
-                                                                        .items,
-                                                                    listId: oldCurrentUserList
-                                                                        .listId,
-                                                                    listName:
-                                                                        oldCurrentUserList
-                                                                            .listName,
-                                                                    createListTime:
-                                                                        oldCurrentUserList
-                                                                            .createListTime,
-                                                                    processStatus:
-                                                                        'draft',
-                                                                    custOfferWaitTime:
-                                                                        oldCurrentUserList
-                                                                            .custOfferWaitTime);
+                                                                    listOfferCounter: 0,
+                                                                    custId: oldCurrentUserList.custId,
+                                                                    custListSentTime: DateTime.now(),
+                                                                    custListStatus: 'sent',
+                                                                    items: oldCurrentUserList.items,
+                                                                    listId: oldCurrentUserList.listId,
+                                                                    listName: oldCurrentUserList.listName,
+                                                                    createListTime: oldCurrentUserList.createListTime,
+                                                                    processStatus: 'draft',
+                                                                    custOfferWaitTime: oldCurrentUserList.custOfferWaitTime);
 
                                                                 //todo send list to firebase (currentUserList)
-                                                                int custId = Boxes
-                                                                            .getUserCredentialsDB()
-                                                                        .get(
-                                                                            'currentUserCredentials')
-                                                                        ?.phoneNumber ??
-                                                                    404;
-                                                                if (custId ==
-                                                                    404) {
-                                                                  Get.off(() =>
-                                                                      LoginScreen());
-                                                                }
-                                                                int response = await apiController
-                                                                    .updateUserList(
-                                                                        custId,
-                                                                        currentUserList);
+                                                                int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
+                                                                if (custId == 404) {Get.off(() => LoginScreen());}
+                                                                int response = await apiController.updateUserList(custId,currentUserList);
 
-                                                                if (response ==
-                                                                    1) {
+                                                                if (response ==1) {
                                                                   //dismiss page
-                                                                  successMsg(
-                                                                      'List Sent',
-                                                                      'List has been succsessfully sent to merchants.');
+                                                                  successMsg('List Sent','List has been succsessfully sent to merchants.');
                                                                   Get.off(
                                                                       () =>
                                                                           const HomePage(
@@ -957,9 +872,7 @@ class _UserListPageState extends State<UserListPage> {
                                       color: Colors.white,
                                       onPressed: () {
                                         //todo implement category / catalog page opening
-                                        Get.to(() => CategoriesPage(
-                                            currentUserListDBKey:
-                                                currentUserListDBKey));
+                                        Get.to(() => CategoriesPage(currentUserListDBKey: currentUserListDBKey));
                                       },
                                       child: const Icon(
                                         CupertinoIcons.square_grid_2x2,

@@ -47,6 +47,16 @@ class AppTheme{
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: AppColors().brandDark
+    ),
+    radioTheme: RadioThemeData(
+      fillColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return AppColors().brandLight;
+          }
+          return AppColors().brandDark;// Use the component's default.
+        },
+      ),
     )
   );
 

@@ -61,6 +61,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final registrationController = Get.find<RegistrationController>();
     final apiController = Get.find<APIs>();
     double screenHeight = MediaQuery.of(context).size.height / 100;
+    registrationController.address.value = currentUser?.address ?? '';
+    registrationController.howToReach.value = currentUser?.howToReach ?? '';
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
@@ -184,13 +186,22 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       prefixIcon: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 4.0, horizontal: 6),
-                                        child: CircleAvatar(
-                                          radius: 4.h,
-                                          backgroundColor: Colors.orange,
-                                          child: Icon(
-                                            CupertinoIcons.phone_fill,
-                                            color: Colors.white,
-                                            size: 24.h,
+                                        child: SizedBox(
+                                          height: 25.w,
+                                          width: 25.w,
+                                          child: Center(
+                                            child: Container(
+                                                height: 24.w,
+                                                width: 24.w,
+                                                decoration: BoxDecoration(
+                                                    color: AppColors().brandDark,
+                                                    borderRadius:
+                                                    BorderRadius.circular(20)),
+                                                child: Icon(
+                                                  Icons.phone,
+                                                  color: AppColors().white100,
+                                                  size: 15.sp,
+                                                )),
                                           ),
                                         ),
                                       ),
@@ -249,13 +260,22 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                     prefixIcon: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 4.0, horizontal: 6),
-                                      child: CircleAvatar(
-                                        radius: 4.h,
-                                        backgroundColor: Colors.orange,
-                                        child: Icon(
-                                          CupertinoIcons.person_solid,
-                                          color: Colors.white,
-                                          size: 24.h,
+                                      child: SizedBox(
+                                        height: 25.w,
+                                        width: 25.w,
+                                        child: Center(
+                                          child: Container(
+                                              height: 24.w,
+                                              width: 24.w,
+                                              decoration: BoxDecoration(
+                                                  color: AppColors().brandDark,
+                                                  borderRadius:
+                                                  BorderRadius.circular(20)),
+                                              child: Icon(
+                                                Icons.person,
+                                                color: AppColors().white100,
+                                                size: 15.sp,
+                                              )),
                                         ),
                                       ),
                                     ),
@@ -313,13 +333,22 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                     prefixIcon: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 4.0, horizontal: 6),
-                                      child: CircleAvatar(
-                                        radius: 4.h,
-                                        backgroundColor: Colors.orange,
-                                        child: Icon(
-                                          Icons.email,
-                                          color: Colors.white,
-                                          size: 24.h,
+                                      child: SizedBox(
+                                        height: 25.w,
+                                        width: 25.w,
+                                        child: Center(
+                                          child: Container(
+                                              height: 24.w,
+                                              width: 24.w,
+                                              decoration: BoxDecoration(
+                                                  color: AppColors().brandDark,
+                                                  borderRadius:
+                                                  BorderRadius.circular(20)),
+                                              child: Icon(
+                                                Icons.email,
+                                                color: AppColors().white100,
+                                                size: 15.sp,
+                                              )),
                                         ),
                                       ),
                                     ),
@@ -421,7 +450,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               '\n\n' +
                                               registrationController
                                                   .howToReach.value,
-                                          style: AppTheme().normal500(13),
+                                            style: kTextInputStyle,
                                         )),
                                       )
                                     ],

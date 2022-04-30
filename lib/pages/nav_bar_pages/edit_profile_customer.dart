@@ -456,7 +456,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               child: Center(
                                                 child: Icon(
                                                   Icons.home,
-                                                  color: AppColors().white100,
+                                                  color: AppColors().white100,                                               
                                                   size: 15.sp,
                                                 ),
                                               )),

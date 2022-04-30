@@ -810,6 +810,8 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                               .editItemCustomImageUrl
                                               .value
                                               .isEmpty) {
+                                            print(
+                                                "Item added=== > DB KEY: ${currentUserList.key}");
                                             currentUserList.items.add(ListItem(
                                               brandType: _brandController.text,
                                               itemId: '${item.itemId}',

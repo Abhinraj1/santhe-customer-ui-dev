@@ -19,7 +19,7 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
   final apiController = Get.find<APIs>();
 
   void bootHome() {
-    Future.delayed(const Duration(milliseconds: 4000), () {
+    Future.delayed(const Duration(milliseconds: 3500), () {
       Get.off(() => const OnboardingPage(), transition: Transition.fadeIn);
       print('called!');
     });
@@ -117,7 +117,8 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
       statusBarBrightness: Brightness.dark,
     ));
 
-    init().then((value) => bootHome());
+    bootHome();
+    init();
 
     super.initState();
   }

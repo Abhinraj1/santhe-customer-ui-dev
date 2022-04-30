@@ -31,12 +31,8 @@ class APIs extends GetxController {
   //deleted user list buffer
   var deletedUserLists = <UserList>[].obs;
 
-  //* archived list buffer
-  var archivedUserLists = <UserList>[].obs;
 
   var itemsDB = <Item>[].obs;
-
-
 
   // Future getAllItems() async {
   //   String pageToken = '';
@@ -1260,24 +1256,20 @@ class APIs extends GetxController {
   Future<void> updateDeviceToken(String userId) async {
     final String _token = await AppHelpers().getToken;
     String _uid = await AppHelpers().getDeviceId();
-    var headers = {
-      'Content-Type': 'application/json'
-    };
-    var request = http.Request('PUT', Uri.parse('https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/customers/:$userId/deviceToken'));
-    request.body = json.encode({
-      "deviceToken": _token,
-      "deviceId": _uid
-    });
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request(
+        'PUT',
+        Uri.parse(
+            'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/customers/:$userId/deviceToken'));
+    request.body = json.encode({"deviceToken": _token, "deviceId": _uid});
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
-
   }
 }

@@ -75,9 +75,16 @@ class _NewTabPageState extends State<NewTabPage> {
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
     Box<UserList> box = Boxes.getUserListDB();
+    box.clear();
+    apiController.getAllCustomerLists(custId);
+    setState(() {});
 
-    print(box.values.map((e) => e.listId).toList());
+    // print(box.values.map((e) => e.listId).toList());
 
+    // print('Archived List: ${apiController.archivedUserLists.length}');
+    // for (var i = 0; i < apiController.archivedUserLists.length; i++) {
+    //   print(apiController.archivedUserLists[i].listName);
+    // }
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,

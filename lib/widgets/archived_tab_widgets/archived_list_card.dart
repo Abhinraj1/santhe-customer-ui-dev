@@ -13,16 +13,20 @@ import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
-class ArchivedUserListCard extends StatelessWidget {
+class ArchivedUserListCard extends StatefulWidget {
   final UserList userList;
-  
 
   // final box = Boxes.getUserListDB();
   ArchivedUserListCard({
     required this.userList,
     Key? key,
-    
   }) : super(key: key);
+
+  @override
+  State<ArchivedUserListCard> createState() => _ArchivedUserListCardState();
+}
+
+class _ArchivedUserListCardState extends State<ArchivedUserListCard> {
   final int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
@@ -39,11 +43,11 @@ class ArchivedUserListCard extends StatelessWidget {
     });
 
     //image logic
-    if (userList.items.isEmpty) {
+    if (widget.userList.items.isEmpty) {
       imagePath = 'assets/basket0.png';
-    } else if (userList.items.length <= 10) {
+    } else if (widget.userList.items.length <= 10) {
       imagePath = 'assets/basket1.png';
-    } else if (userList.items.length <= 20) {
+    } else if (widget.userList.items.length <= 20) {
       imagePath = 'assets/basket2.png';
     } else {
       imagePath = 'assets/basket3.png';
@@ -62,7 +66,7 @@ class ArchivedUserListCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           //todo
-          print('UserList Process Status: ${userList.processStatus}');
+          print('UserList Process Status: ${widget.userList.processStatus}');
           // Get.to(() => ArchivedUserListPage(
           //       userList: userList,
           //     ));
@@ -101,21 +105,22 @@ class ArchivedUserListCard extends StatelessWidget {
                       // print('oldUserList: $oldUserList');
                       int userListCount =
                           await apiController.getAllCustomerLists(custId);
+                      print('userListCount: $userListCount');
 
                       UserList newImportedList = UserList(
                           createListTime: DateTime.now(),
-                          custId: userList.custId,
-                          items: userList.items,
+                          custId: widget.userList.custId,
+                          items: widget.userList.items,
                           listId: int.parse('$custId${userListCount + 1}'),
-                          listName: '(COPY) ${userList.listName}',
-                          custListSentTime: userList.custListSentTime,
-                          custListStatus: userList.custListStatus,
-                          listOfferCounter: userList.listOfferCounter,
-                          processStatus: userList.processStatus,
-                          custOfferWaitTime: userList.custOfferWaitTime);
+                          listName: '(COPY) ${widget.userList.listName}',
+                          custListSentTime: widget.userList.custListSentTime,
+                          custListStatus: widget.userList.custListStatus,
+                          listOfferCounter: widget.userList.listOfferCounter,
+                          processStatus: widget.userList.processStatus,
+                          custOfferWaitTime: widget.userList.custOfferWaitTime);
 
                       int response = await apiController.addCustomerList(
-                          userList, custId, 'new');
+                          widget.userList, custId, 'new');
 
                       if (response == 1) {
                         Get.to(const HomePage());
@@ -170,7 +175,8 @@ class ArchivedUserListCard extends StatelessWidget {
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
                                 () async {
-                              int response = await apiController.undoDeleteUserList(userList.listId);
+                              int response = await apiController
+                                  .undoDeleteUserList(widget.userList.listId);
                               if (response == 1) {
                                 // Boxes.getUserListDB().add(userList);
                                 // archivedList.add(userList);
@@ -195,13 +201,13 @@ class ArchivedUserListCard extends StatelessWidget {
                       ),
                     );
                     if (pressCount == 0) {
-                      apiController.deletedUserLists.add(userList);
+                      apiController.deletedUserLists.add(widget.userList);
 
-                      int response =
-                          await apiController.deleteUserList(userList.listId);
+                      int response = await apiController
+                          .deleteUserList(widget.userList.listId);
 
                       if (response == 1) {
-                        apiController.deletedUserLists.remove(userList);
+                        apiController.deletedUserLists.remove(widget.userList);
                       }
                     }
 
@@ -232,7 +238,7 @@ class ArchivedUserListCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             AutoSizeText(
-                              userList.listName,
+                              widget.userList.listName,
                               maxLines: 2,
                               style: GoogleFonts.mulish(
                                   letterSpacing: 0.2,
@@ -243,7 +249,7 @@ class ArchivedUserListCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(top: 18.77.sp),
                               child: AutoSizeText(
-                                '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
+                                '${widget.userList.items.length} ${widget.userList.items.length > 1 ? 'Items' : 'Item'}',
                                 style: GoogleFonts.mulish(
                                     fontSize: 36.sp,
                                     color: Colors.orange,
@@ -254,7 +260,7 @@ class ArchivedUserListCard extends StatelessWidget {
                               padding:
                                   EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
                               child: AutoSizeText(
-                                'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                                'Added on ${widget.userList.createListTime.day}/${widget.userList.createListTime.month}/${widget.userList.createListTime.year}',
                                 style: GoogleFonts.mulish(
                                     fontSize: 14.sp,
                                     color: Colors.transparent,
@@ -275,7 +281,7 @@ class ArchivedUserListCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AutoSizeText(
-                        'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                        'Added on ${widget.userList.createListTime.day}/${widget.userList.createListTime.month}/${widget.userList.createListTime.year}',
                         style: GoogleFonts.mulish(
                             fontSize: 14.sp,
                             color: const Color(0xffBBBBBB),
@@ -288,9 +294,10 @@ class ArchivedUserListCard extends StatelessWidget {
                           children: [
                             //TEXT TEXT TEXT
                             //draft
-                            userList.processStatus == 'draft' ||
-                                    userList.processStatus == 'processing' ||
-                                    userList.processStatus == 'waiting'
+                            widget.userList.processStatus == 'draft' ||
+                                    widget.userList.processStatus ==
+                                        'processing' ||
+                                    widget.userList.processStatus == 'waiting'
                                 ? AutoSizeText(
                                     'Waiting for Offers',
                                     style: GoogleFonts.mulish(
@@ -303,8 +310,9 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //nooofer
-                            userList.processStatus == 'nooffer' ||
-                                    userList.processStatus == 'noMerchants'
+                            widget.userList.processStatus == 'nooffer' ||
+                                    widget.userList.processStatus ==
+                                        'noMerchants'
                                 ? AutoSizeText(
                                     'No Offers',
                                     style: GoogleFonts.mulish(
@@ -317,7 +325,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //processed
-                            userList.processStatus == 'processed'
+                            widget.userList.processStatus == 'processed'
                                 ? AutoSizeText(
                                     'Accepted',
                                     style: GoogleFonts.mulish(
@@ -330,9 +338,9 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //minoffer
-                            userList.processStatus == 'minoffer'
+                            widget.userList.processStatus == 'minoffer'
                                 ? AutoSizeText(
-                                    '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
+                                    '${widget.userList.listOfferCounter} ${widget.userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
                                     style: GoogleFonts.mulish(
                                         fontSize: 14.sp,
                                         color: Colors.green,
@@ -343,9 +351,9 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //minoffer
-                            userList.processStatus == 'maxoffer'
+                            widget.userList.processStatus == 'maxoffer'
                                 ? AutoSizeText(
-                                    '${userList.listOfferCounter} Offers Available',
+                                    '${widget.userList.listOfferCounter} Offers Available',
                                     style: GoogleFonts.mulish(
                                         fontSize: 14.sp,
                                         color: Colors.green,
@@ -356,7 +364,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //expired
-                            userList.processStatus == 'expired'
+                            widget.userList.processStatus == 'expired'
                                 ? AutoSizeText(
                                     'Offers Missed',
                                     style: GoogleFonts.mulish(
@@ -371,9 +379,11 @@ class ArchivedUserListCard extends StatelessWidget {
                             const SizedBox(width: 3),
                             //ICON ICON ICON
                             //draft
-                            userList.processStatus == 'draft' ||
-                                    userList.processStatus == 'waiting' ||
-                                    userList.processStatus == 'processing'
+                            widget.userList.processStatus == 'draft' ||
+                                    widget.userList.processStatus ==
+                                        'waiting' ||
+                                    widget.userList.processStatus ==
+                                        'processing'
                                 ? Icon(
                                     CupertinoIcons.time_solid,
                                     color: const Color(0xffFFC300),
@@ -384,8 +394,9 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //noofffer & nomerchants
-                            userList.processStatus == 'nooffer' ||
-                                    userList.processStatus == 'noMerchants'
+                            widget.userList.processStatus == 'nooffer' ||
+                                    widget.userList.processStatus ==
+                                        'noMerchants'
                                 ? Icon(
                                     CupertinoIcons.xmark_circle_fill,
                                     color: Colors.red,
@@ -396,7 +407,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //processed
-                            userList.processStatus == 'processed'
+                            widget.userList.processStatus == 'processed'
                                 ? Icon(
                                     CupertinoIcons.checkmark_alt_circle_fill,
                                     color: Colors.green,
@@ -407,7 +418,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //minoffer
-                            userList.processStatus == 'minoffer'
+                            widget.userList.processStatus == 'minoffer'
                                 ? Icon(
                                     CupertinoIcons.hand_thumbsup,
                                     color: Colors.orangeAccent,
@@ -418,7 +429,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //minoffer
-                            userList.processStatus == 'maxoffer'
+                            widget.userList.processStatus == 'maxoffer'
                                 ? Icon(
                                     CupertinoIcons.hand_thumbsup_fill,
                                     color: Colors.deepPurple,
@@ -429,7 +440,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //expired
-                            userList.processStatus == 'expired'
+                            widget.userList.processStatus == 'expired'
                                 ? Icon(
                                     CupertinoIcons.exclamationmark_circle_fill,
                                     color: Colors.grey,

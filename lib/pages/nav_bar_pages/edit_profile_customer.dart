@@ -61,8 +61,12 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final registrationController = Get.find<RegistrationController>();
     final apiController = Get.find<APIs>();
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    registrationController.address.value = currentUser?.address ?? '';
-    registrationController.howToReach.value = currentUser?.howToReach ?? '';
+    if(registrationController.address.value.trim().isEmpty){
+      registrationController.address.value = currentUser?.address ?? '';
+    }
+    if(registrationController.howToReach.value.trim().isEmpty){
+      registrationController.howToReach.value = currentUser?.howToReach ?? '';
+    }
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
@@ -92,7 +96,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final TextStyle kLabelStyle =
         GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
-
+    print(registrationController
+        .howToReach.value);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -447,7 +452,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               ? 'Select Address'
                                               : registrationController
                                               .address.value +
-                                              '\n\n' +
+                                              '\n' +
                                               registrationController
                                                   .howToReach.value,
                                             style: kTextInputStyle,

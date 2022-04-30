@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/location_controller.dart';
+import '../../core/app_colors.dart';
 import '../../widgets/registration_widgets/textFieldRegistration.dart';
 
 class MapAddressPicker extends StatefulWidget {
@@ -66,6 +67,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
   Widget build(BuildContext context) {
     final locationController = Get.put(LocationController());
     final registrationController = Get.put(RegistrationController());
+    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -196,6 +198,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                 MediaQuery.of(context).size.width * 0.02),
                             height: MediaQuery.of(context).size.height * 0.4,
                             child: Form(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               key: _formKey,
                               child: Column(
                                 mainAxisAlignment:
@@ -227,6 +230,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                           }
                                           return null;
                                         },
+                                        textInputAction: TextInputAction.done,
                                         //initialValue: textController.value.text.isEmpty?" ":registrationController.address.value,
                                         controller: addressTextController,
                                         minLines: 2,
@@ -249,6 +253,12 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                             borderRadius:
                                                 BorderRadius.circular(14),
                                           ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                kTextFieldCircularBorderRadius),
+                                            borderSide: BorderSide(
+                                                width: 1.0, color: AppColors().brandDark),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -266,10 +276,10 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                   SizedBox(
                                     height: 50,
                                     width:
-                                        MediaQuery.of(context).size.width * 0.8,
+                                        MediaQuery.of(context).size.width * 0.4,
                                     child: TextButton(
                                       child: const Text(
-                                        "Submit",
+                                        "Save",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontStyle: FontStyle.normal,
@@ -300,20 +310,12 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                                   pin = i;
                                                 }
                                               }
-                                              locationController.mapSelected =
-                                                  true.obs;
-                                              registrationController
-                                                  .isMapSelected = true.obs;
-                                              registrationController.pinCode
-                                                  .value = pin.split(',')[0];
-                                              registrationController.address =
-                                                  addressTextController
-                                                      .value.text.obs;
-                                              registrationController
-                                                      .howToReach.value =
-                                                  optionalAddController.text;
-                                              print(registrationController
-                                                  .address);
+                                              locationController.mapSelected = true.obs;
+                                              registrationController.isMapSelected = true.obs;
+                                              registrationController.pinCode.value = pin.split(',')[0];
+                                              registrationController.address = addressTextController.value.text.obs;
+                                              registrationController.howToReach.value = optionalAddController.text;
+                                              print(registrationController.address);
 
                                               //go back to registration screen
                                               Get.close(2);
@@ -371,10 +373,9 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
           !isVisible
               ? Positioned(
                   bottom: 24,
-                  left: 24,
-                  right: 24,
                   child: SizedBox(
                     height: 50,
+                    width: size.width * 0.4,
                     child: TextButton(
                       child: const Text(
                         "Continue",

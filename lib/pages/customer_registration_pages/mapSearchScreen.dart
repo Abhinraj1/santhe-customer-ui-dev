@@ -10,6 +10,7 @@ import '../../API/addressSearchAPI.dart';
 import '../../constants.dart';
 import '../../controllers/location_controller.dart';
 import '../../controllers/registrationController.dart';
+import '../../core/app_colors.dart';
 import '../customer_registration_pages/MapAddressPicker.dart';
 import '../customer_registration_pages/addressSearchScreen.dart';
 
@@ -75,65 +76,68 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 45.sp,
-                  child: TextField(
-                    controller: _controller,
-                    textAlignVertical: TextAlignVertical.center,
-                    // autofocus: true,
-                    keyboardType: TextInputType.text,
-                    style: GoogleFonts.mulish(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      color: const Color(0xff8B8B8B),
+                TextField(
+                  controller: _controller,
+                  textAlignVertical: TextAlignVertical.center,
+                  // autofocus: true,
+                  keyboardType: TextInputType.text,
+                  style: GoogleFonts.mulish(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.sp,
+                    color: const Color(0xff8B8B8B),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      query = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    suffixIcon: Visibility(
+                      visible: query.isNotEmpty,
+                      child: GestureDetector(
+                          onTap: () {
+                            _controller.clear();
+                            setState(() {
+                              query = "";
+                            });
+                          },
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.grey.shade300,
+                          )),
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        query = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      suffixIcon: Visibility(
-                        visible: query.isNotEmpty,
-                        child: GestureDetector(
-                            onTap: () {
-                              _controller.clear();
-                              setState(() {
-                                query = "";
-                              });
-                            },
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.grey.shade300,
-                            )),
+                    prefixIcon: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
+                      child: Icon(
+                        CupertinoIcons.search_circle_fill,
+                        color: Colors.orange,
+                        size: 30,
                       ),
-                      prefixIcon: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
-                        child: Icon(
-                          CupertinoIcons.search_circle_fill,
-                          color: Colors.orange,
-                          size: 30,
-                        ),
-                      ),
-                      hintText: "Enter your address",
-                      hintStyle: GoogleFonts.mulish(
-                          fontWeight: FontWeight.w300,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.grey.shade500),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.only(
-                        topRight: const Radius.circular(16),
-                        topLeft: const Radius.circular(16),
-                        bottomLeft: query.isEmpty
-                            ? const Radius.circular(16)
-                            : const Radius.circular(2),
-                        bottomRight: query.isEmpty
-                            ? const Radius.circular(16)
-                            : const Radius.circular(2),
-                      )),
-                      contentPadding: EdgeInsets.symmetric(vertical: 5.sp),
                     ),
+                    hintText: "Enter your address",
+                    hintStyle: GoogleFonts.mulish(
+                        fontWeight: FontWeight.w300,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey.shade500),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.only(
+                      topRight: const Radius.circular(16),
+                      topLeft: const Radius.circular(16),
+                      bottomLeft: query.isEmpty
+                          ? const Radius.circular(16)
+                          : const Radius.circular(2),
+                      bottomRight: query.isEmpty
+                          ? const Radius.circular(16)
+                          : const Radius.circular(2),
+                    )),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            kTextFieldCircularBorderRadius),
+                        borderSide: BorderSide(
+                            width: 1.0, color: AppColors().brandDark),
+                      ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5.sp),
                   ),
                 ),
                 Visibility(
@@ -219,37 +223,12 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                   ),
                   visible: _controller.text.isEmpty ? false : true,
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 15.h,
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Visibility(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Visibility(
-                            visible: userInfoController.address.isEmpty
-                                ? false
-                                : true,
-                            child: const Text(
-                              "Recent Address",
-                              style: TextStyle(
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17),
-                            )),
-                      ),
-                      Obx(() => Text(userInfoController.address.obs.string))
-                    ],
-                  ),
-                  visible: _controller.text.isEmpty ? true : false,
-                ),
-                const SizedBox(
-                  height: 10,
+                Visibility(child: SizedBox(width: double.maxFinite,child: const Text("OR",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey),)),visible: _controller.text.isEmpty ? true : false,),
+                SizedBox(
+                  height: 15.h,
                 ),
                 GestureDetector(
                   onTap: () async {
@@ -288,7 +267,33 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Visibility(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Visibility(
+                            visible: userInfoController.address.isEmpty
+                                ? false
+                                : true,
+                            child: const Text(
+                              "Current Address",
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17),
+                            )),
+                      ),
+                      Obx(() => Text(userInfoController.address.obs.string + '\n' + userInfoController.howToReach.value))
+                    ],
+                  ),
+                  visible: _controller.text.isEmpty ? true : false,
+                ),
               ],
             ),
             /*Positioned(

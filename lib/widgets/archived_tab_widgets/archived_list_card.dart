@@ -10,6 +10,7 @@ import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
@@ -81,22 +82,87 @@ class ArchivedUserListCard extends StatelessWidget {
                   icon: Icons.copy_rounded,
                   label: 'Copy',
                 ),
+                //* delete button
+                // SlidableAction(
+                //   onPressed: (context) async {
+                //     //todo implement delete feature for archive lists
+                //     int pressCount = 0;
+                //     apiController.deletedUserLists.add(userList);
+
+                //     Future.delayed(const Duration(milliseconds: 5000),
+                //         () async {
+                //       print('Deleting list - 4 Sec Elapsed!');
+                //       int response =
+                //           await apiController.deleteUserList(userList.listId);
+
+                //       if (response == 1) {
+                //         apiController.deletedUserLists.remove(userList);
+                //       }
+                //     });
+
+                //     //delete userList from DB
+                //     final box = Boxes.getUserListDB();
+                //     userList.delete();
+
+                //     //undo feature
+                //     Get.snackbar(
+                //       '',
+                //       '',
+                //       duration: const Duration(milliseconds: 4000),
+                //       snackPosition: SnackPosition.BOTTOM,
+                //       icon: const Icon(
+                //           CupertinoIcons.exclamationmark_circle_fill,
+                //           color: Colors.orange,
+                //           size: 15),
+                //       snackStyle: SnackStyle.FLOATING,
+                //       shouldIconPulse: true,
+                //       backgroundColor: Colors.white,
+                //       margin: const EdgeInsets.all(12.0),
+                //       padding: const EdgeInsets.all(12.0),
+                //       titleText: const Text('List Deleted'),
+                //       messageText: Text(
+                //         'List has been deleted',
+                //         style: GoogleFonts.mulish(
+                //             color: AppColors().grey100,
+                //             fontWeight: FontWeight.w400,
+                //             fontSize: 15),
+                //       ),
+                //       mainButton: TextButton(
+                //         onPressed: () {
+                //           print('Undo Button Pressed');
+                //           if (pressCount < 1) {
+                //             Boxes.getUserListDB().add(userList);
+                //           }
+                //           pressCount++;
+                //           if (box.length >= 2) {
+                //             Get.offAll(() => const HomePage(),
+                //                 transition: Transition.fadeIn);
+                //           }
+                //         },
+                //         child: Text(
+                //           'Undo',
+                //           style: GoogleFonts.mulish(
+                //               color: Colors.orange,
+                //               fontWeight: FontWeight.w700,
+                //               fontSize: 15),
+                //         ),
+                //       ),
+                //     );
+
+                //     //for bringing Floating Action Button
+                //     if (box.length >= 2) {
+                //       Get.offAll(() => const HomePage(),
+                //           transition: Transition.fadeIn);
+                //     }
+                //   },
+                //   backgroundColor: Colors.transparent,
+                //   foregroundColor: Colors.orange,
+                //   icon: CupertinoIcons.delete_solid,
+                //   label: 'Delete',
+                // ),
                 SlidableAction(
                   onPressed: (context) async {
-                    //todo implement delete feature for archive lists
                     int pressCount = 0;
-                    apiController.deletedUserLists.add(userList);
-
-                    Future.delayed(const Duration(milliseconds: 5000),
-                        () async {
-                      print('Deleting list - 4 Sec Elapsed!');
-                      int response =
-                          await apiController.deleteUserList(userList.listId);
-
-                      if (response == 1) {
-                        apiController.deletedUserLists.remove(userList);
-                      }
-                    });
 
                     //delete userList from DB
                     final box = Boxes.getUserListDB();
@@ -126,10 +192,18 @@ class ArchivedUserListCard extends StatelessWidget {
                             fontSize: 15),
                       ),
                       mainButton: TextButton(
-                        onPressed: () {
-                          print('Undo Button Pressed');
+                        onPressed: () async {
                           if (pressCount < 1) {
-                            Boxes.getUserListDB().add(userList);
+                            Future.delayed(const Duration(seconds: 1),
+                                () async {
+                              int response = await apiController
+                                  .undoDeleteUserList(userList.listId);
+                              if (response == 1) {
+                                Boxes.getUserListDB().add(userList);
+                              } else {
+                                errorMsg('Unable to undo the list', '');
+                              }
+                            });
                           }
                           pressCount++;
                           if (box.length >= 2) {
@@ -146,6 +220,16 @@ class ArchivedUserListCard extends StatelessWidget {
                         ),
                       ),
                     );
+                    if (pressCount == 0) {
+                      apiController.deletedUserLists.add(userList);
+
+                      int response =
+                          await apiController.deleteUserList(userList.listId);
+
+                      if (response == 1) {
+                        apiController.deletedUserLists.remove(userList);
+                      }
+                    }
 
                     //for bringing Floating Action Button
                     if (box.length >= 2) {

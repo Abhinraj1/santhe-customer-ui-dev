@@ -21,7 +21,9 @@ class UserListCard extends StatelessWidget {
   final UserList userList;
   final box = Boxes.getUserListDB();
   UserListCard({required this.userList, Key? key}) : super(key: key);
-  final int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
+  final int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class UserListCard extends StatelessWidget {
       padding: EdgeInsets.all(15.sp),
       child: GestureDetector(
         onTap: () {
-            //goto create new list page
+          //goto create new list page
           Get.to(() => UserListPage(
                 userList: userList,
               ));
@@ -88,8 +90,12 @@ class UserListCard extends StatelessWidget {
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount = await apiController.getAllCustomerLists(custId);
-                      UserList oldUserList = Boxes.getUserListDB().values.firstWhere((element) => element.listId == userList.listId);
+                      int userListCount =
+                          await apiController.getAllCustomerLists(custId);
+                      UserList oldUserList = Boxes.getUserListDB()
+                          .values
+                          .firstWhere(
+                              (element) => element.listId == userList.listId);
 
                       UserList newImportedList = UserList(
                           createListTime: DateTime.now(),
@@ -103,10 +109,12 @@ class UserListCard extends StatelessWidget {
                           processStatus: oldUserList.processStatus,
                           custOfferWaitTime: oldUserList.custOfferWaitTime);
 
-                      int response = await apiController.addCustomerList(newImportedList, custId, 'new');
+                      int response = await apiController.addCustomerList(
+                          newImportedList, custId, 'new');
 
                       if (response == 1) {
                         box.add(newImportedList);
+                        
                       } else {
                         Get.dialog(const Card(
                           child: Center(
@@ -150,26 +158,28 @@ class UserListCard extends StatelessWidget {
                       messageText: Text(
                         'List has been deleted',
                         style: GoogleFonts.mulish(
-                            color: kTextGrey,
+                            color: AppColors().grey100,
                             fontWeight: FontWeight.w400,
                             fontSize: 15),
                       ),
                       mainButton: TextButton(
                         onPressed: () async {
                           if (pressCount < 1) {
-                            Future.delayed(const Duration(seconds: 8), () async {
-                              int response = await apiController.undoDeleteUserList(userList.listId);
-                              if(response == 1){
+                            Future.delayed(const Duration(seconds: 1),
+                                () async {
+                              int response = await apiController
+                                  .undoDeleteUserList(userList.listId);
+                              if (response == 1) {
                                 Boxes.getUserListDB().add(userList);
-                              }
-                              else {
+                              } else {
                                 errorMsg('Unable to undo the list', '');
                               }
                             });
                           }
                           pressCount++;
                           if (box.length >= 2) {
-                            Get.offAll(() => const HomePage(), transition: Transition.fadeIn);
+                            Get.offAll(() => const HomePage(),
+                                transition: Transition.fadeIn);
                           }
                         },
                         child: Text(
@@ -181,13 +191,15 @@ class UserListCard extends StatelessWidget {
                         ),
                       ),
                     );
+                    if (pressCount == 0) {
+                      apiController.deletedUserLists.add(userList);
 
-                    apiController.deletedUserLists.add(userList);
+                      int response =
+                          await apiController.deleteUserList(userList.listId);
 
-                    int response = await apiController.deleteUserList(userList.listId);
-
-                    if (response == 1) {
-                      apiController.deletedUserLists.remove(userList);
+                      if (response == 1) {
+                        apiController.deletedUserLists.remove(userList);
+                      }
                     }
 
                     //for bringing Floating Action Button

@@ -199,9 +199,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                                             ]),
                                                           ],
                                                         ),
-                                                        SizedBox(
-                                                          width: 35.w,
-                                                        ),
+                                                        const Spacer(),
                                                         Icon(
                                                           Icons
                                                               .arrow_forward_ios,
@@ -254,22 +252,22 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 GestureDetector(
                   onTap: () async {
                     Position position =
-                    await LocationController.getGeoLocationPosition();
+                        await LocationController.getGeoLocationPosition();
                     Get.to(() => MapAddressPicker(
-                      lng: position.longitude,
-                      lat: position.latitude,
-                    ));
+                          lng: position.longitude,
+                          lat: position.latitude,
+                        ));
                   },
                   child: Center(
                     child: Container(
                       decoration: BoxDecoration(
                           color: Constant.bgColor,
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(14))),
-                      margin: EdgeInsets.symmetric(horizontal: 55.w),
-                      padding:
-                      EdgeInsets.symmetric(vertical: 13.h, horizontal: 30.w),
+                              const BorderRadius.all(Radius.circular(14))),
+                      margin: EdgeInsets.symmetric(horizontal: 40.w),
+                      padding: const EdgeInsets.all(10),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.gps_fixed,

@@ -79,8 +79,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
               return GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(8),
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     childAspectRatio: 4 / 5,
                   ),
@@ -137,8 +136,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                         ScreenUtil.init(
                             BoxConstraints(
                                 maxWidth: MediaQuery.of(context).size.width,
-                                maxHeight:
-                                MediaQuery.of(context).size.height),
+                                maxHeight: MediaQuery.of(context).size.height),
                             designSize: const Size(390, 844),
                             context: context,
                             minTextAdapt: true,
@@ -160,12 +158,14 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                             ),
                             Column(
                               children: [
-                                Text(
-                                  '${currentUserList.items.length}',
-                                  style: GoogleFonts.mulish(
-                                      fontSize: 21.sp,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.orange),
+                                Flexible(
+                                  child: Text(
+                                    '${currentUserList.items.length}',
+                                    style: GoogleFonts.mulish(
+                                        fontSize: 21.sp,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.orange),
+                                  ),
                                 ),
                                 Text(
                                   currentUserList.items.length < 2

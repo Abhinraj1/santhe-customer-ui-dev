@@ -131,12 +131,14 @@ class CategoriesPage extends StatelessWidget {
                             ),
                             Column(
                               children: [
-                                Text(
-                                  '${currentUserList.items.length}',
-                                  style: GoogleFonts.mulish(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.orange),
+                                Flexible(
+                                  child: Text(
+                                    '${currentUserList.items.length}',
+                                    style: GoogleFonts.mulish(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.orange),
+                                  ),
                                 ),
                                 Text(
                                   currentUserList.items.length < 2

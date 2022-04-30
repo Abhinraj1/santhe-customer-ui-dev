@@ -329,7 +329,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: BorderSide(
-                                          width: 1.0, color: AppColors().brandDark),
+                                          width: 1.0,
+                                          color: AppColors().brandDark),
                                     ),
                                     hintText: 'Your name',
                                     hintStyle: kHintStyle,
@@ -401,7 +402,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: BorderSide(
-                                          width: 1.0, color: AppColors().brandDark),
+                                          width: 1.0,
+                                          color: AppColors().brandDark),
                                     ),
                                     hintText: 'youremail@here.com',
                                     hintStyle: kHintStyle,
@@ -458,30 +460,42 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                               ? AppColors().red100
                                               : AppColors().grey40,
                                           width: 1.sp)),
-                                  padding: EdgeInsets.only(
-                                      top: 13.h,
-                                      left: 10.w,
-                                      right: 10.w,
-                                      bottom: 13.h),
+                                  // padding: EdgeInsets.only(
+                                  //     top: 13.h,
+                                  //     left: 10.w,
+                                  //     right: 10.w,
+                                  //     bottom: 13.h),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       //icon
-                                      Container(
-                                          height: 24.w,
-                                          width: 24.w,
-                                          decoration: BoxDecoration(
-                                              color: AppColors().brandDark,
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: Icon(
-                                            Icons.home,
-                                            color: AppColors().white100,
-                                            size: 15.sp,
-                                          )),
+                                      Padding(
+                                        padding: registrationController
+                                                    .address.value
+                                                    .trim() ==
+                                                ''
+                                            ? const EdgeInsets.symmetric(
+                                                vertical: 12.0, horizontal: 6)
+                                            : const EdgeInsets.symmetric(
+                                                vertical: 35.0, horizontal: 6),
+                                        child: Container(
+                                            height: 40.w,
+                                            width: 40.w,
+                                            decoration: BoxDecoration(
+                                                color: AppColors().brandDark,
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.home,
+                                                color: AppColors().white100,
+                                                size: 25.h,
+                                              ),
+                                            )),
+                                      ),
                                       SizedBox(
-                                        width: 10.w,
+                                        width: 1.w,
                                       ),
                                       //text
                                       Expanded(
@@ -493,14 +507,32 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                                   ? 'Select Address'
                                                   : registrationController
                                                           .address.value +
-                                                      '\n\n' +
+                                                      ' ' +
                                                       registrationController
                                                           .howToReach.value,
-                                              style: AppTheme().normal500(13),
+                                              style: registrationController
+                                                          .address.value
+                                                          .trim() ==
+                                                      ''
+                                                  ? kHintStyle
+                                                  : kTextInputStyle,
                                             )),
                                       )
                                     ],
                                   ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Visibility(
+                                visible:
+                                    registrationController.address.isEmpty &&
+                                        donePressed,
+                                child: Text(
+                                  'Please Enter your Address',
+                                  style: AppTheme().normal400(12).copyWith(
+                                      color: Color.fromARGB(255, 214, 77, 93)),
                                 ),
                               ),
                               /*TextFormField(
@@ -578,7 +610,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             ],
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 100.sp),
+                            padding: EdgeInsets.only(top: 30.sp),
                             child: SizedBox(
                               width: 244.sp,
                               height: 50.sp,
@@ -589,6 +621,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
                                 onPressed: () async {
+                                  setState(() {
+                                    donePressed = true;
+                                  });
                                   if (_formKey.currentState!.validate()) {
                                     //final otp check
                                     bool isUserLoggedin = Boxes.getUserPrefs()
@@ -727,7 +762,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(top: 105.sp),
+                padding: EdgeInsets.only(top: 50.sp),
                 child: Text(
                   'We will use your Phone number and Email to send you important communications',
                   textAlign: TextAlign.center,

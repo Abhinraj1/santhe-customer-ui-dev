@@ -73,9 +73,7 @@ class _NewTabPageState extends State<NewTabPage> {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    var box = Boxes.getUserListDB();
-    box.clear();
-    box = Boxes.getUserListDB();
+    Box<UserList> box = Boxes.getUserListDB();
 
     print(box.values.map((e) => e.listId).toList());
 
@@ -279,7 +277,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                         ),
                                         const SizedBox(height: 2.0),
                                         Visibility(
-                                          visible: userListsDB.isNotEmpty
+                                          visible: userListsDB.length > 0
                                               ? true
                                               : false,
                                           child: Column(

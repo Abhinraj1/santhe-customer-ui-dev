@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:santhe/REEEEEEEEEEE/api_test/test.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
@@ -14,8 +15,11 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
-  const ArchivedUserListCard({required this.userList, Key? key})
-      : super(key: key);
+  final box = Boxes.getUserListDB();
+  ArchivedUserListCard({required this.userList, Key? key}) : super(key: key);
+  final int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,10 @@ class ArchivedUserListCard extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
+
+    userListsDB.forEach((element) {
+      print(element.listName);
+    });
 
     //image logic
     if (userList.items.isEmpty) {
@@ -74,92 +82,49 @@ class ArchivedUserListCard extends StatelessWidget {
             endActionPane: ActionPane(
               motion: const ScrollMotion(),
               children: [
-                SlidableAction(
-                  onPressed: (context) {},
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.orange,
-                  autoClose: true,
-                  icon: Icons.copy_rounded,
-                  label: 'Copy',
+                Visibility(
+                  visible: Boxes.getUserListDB().values.length < 3,
+                  child: SlidableAction(
+                    onPressed: (context) async {
+                      // UserList oldUserList =
+                      //     apiController.getAllCustomerLists(custId);
+
+                      UserList list = userListsDB.firstWhere(
+                          (element) => element.processStatus == 'archived');
+                      // print('oldUserList: $oldUserList');
+
+                      // UserList newImportedList = UserList(
+                      //     createListTime: DateTime.now(),
+                      //     custId: oldUserList.custId,
+                      //     items: oldUserList.items,
+                      //     listId: int.parse('$custId${userListCount + 1}'),
+                      //     listName: '(COPY) ${oldUserList.listName}',
+                      //     custListSentTime: oldUserList.custListSentTime,
+                      //     custListStatus: oldUserList.custListStatus,
+                      //     listOfferCounter: oldUserList.listOfferCounter,
+                      //     processStatus: oldUserList.processStatus,
+                      //     custOfferWaitTime: oldUserList.custOfferWaitTime);
+
+                      // int response = await apiController.addCustomerList(
+                      //     newImportedList, custId, 'new');
+
+                      // if (response == 1) {
+                      //   box.add(newImportedList);
+                      // } else {
+                      //   Get.dialog(const Card(
+                      //     child: Center(
+                      //       child: Text('Error!'),
+                      //     ),
+                      //   ));
+                      // }
+                    },
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.orange,
+                    autoClose: true,
+                    icon: Icons.copy_rounded,
+                    label: 'Copy',
+                  ),
                 ),
-                //* delete button
-                // SlidableAction(
-                //   onPressed: (context) async {
-                //     //todo implement delete feature for archive lists
-                //     int pressCount = 0;
-                //     apiController.deletedUserLists.add(userList);
-
-                //     Future.delayed(const Duration(milliseconds: 5000),
-                //         () async {
-                //       print('Deleting list - 4 Sec Elapsed!');
-                //       int response =
-                //           await apiController.deleteUserList(userList.listId);
-
-                //       if (response == 1) {
-                //         apiController.deletedUserLists.remove(userList);
-                //       }
-                //     });
-
-                //     //delete userList from DB
-                //     final box = Boxes.getUserListDB();
-                //     userList.delete();
-
-                //     //undo feature
-                //     Get.snackbar(
-                //       '',
-                //       '',
-                //       duration: const Duration(milliseconds: 4000),
-                //       snackPosition: SnackPosition.BOTTOM,
-                //       icon: const Icon(
-                //           CupertinoIcons.exclamationmark_circle_fill,
-                //           color: Colors.orange,
-                //           size: 15),
-                //       snackStyle: SnackStyle.FLOATING,
-                //       shouldIconPulse: true,
-                //       backgroundColor: Colors.white,
-                //       margin: const EdgeInsets.all(12.0),
-                //       padding: const EdgeInsets.all(12.0),
-                //       titleText: const Text('List Deleted'),
-                //       messageText: Text(
-                //         'List has been deleted',
-                //         style: GoogleFonts.mulish(
-                //             color: AppColors().grey100,
-                //             fontWeight: FontWeight.w400,
-                //             fontSize: 15),
-                //       ),
-                //       mainButton: TextButton(
-                //         onPressed: () {
-                //           print('Undo Button Pressed');
-                //           if (pressCount < 1) {
-                //             Boxes.getUserListDB().add(userList);
-                //           }
-                //           pressCount++;
-                //           if (box.length >= 2) {
-                //             Get.offAll(() => const HomePage(),
-                //                 transition: Transition.fadeIn);
-                //           }
-                //         },
-                //         child: Text(
-                //           'Undo',
-                //           style: GoogleFonts.mulish(
-                //               color: Colors.orange,
-                //               fontWeight: FontWeight.w700,
-                //               fontSize: 15),
-                //         ),
-                //       ),
-                //     );
-
-                //     //for bringing Floating Action Button
-                //     if (box.length >= 2) {
-                //       Get.offAll(() => const HomePage(),
-                //           transition: Transition.fadeIn);
-                //     }
-                //   },
-                //   backgroundColor: Colors.transparent,
-                //   foregroundColor: Colors.orange,
-                //   icon: CupertinoIcons.delete_solid,
-                //   label: 'Delete',
-                // ),
                 SlidableAction(
                   onPressed: (context) async {
                     int pressCount = 0;

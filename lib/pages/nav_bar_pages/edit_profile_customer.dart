@@ -44,6 +44,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   late final TextEditingController _userEmailController =
       TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
   bool addressUpdateFlag = false;
+  bool donePressed = false;
+  bool mapSelected = false;
 
   @override
   void initState() {
@@ -401,7 +403,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         ?.unfocus();
                                   }
                                   if (locationController.lng.value != 0.0 ||
-                                      locationController.lat.value != 0.0) {}
+                                      locationController.lat.value != 0.0) {
+                                    setState(() {
+                                      mapSelected = true;
+                                    });
+                                  }
                                   var res = await Get.to(
                                       () => const MapSearchScreen());
                                   if (res == 1) {
@@ -413,7 +419,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
                                       border: Border.all(
-                                          color: AppColors().grey40,
+                                          color: registrationController
+                                                      .address.isEmpty &&
+                                                  donePressed
+                                              ? AppColors().red100
+                                              : AppColors().grey40,
                                           width: 1.sp)),
                                   padding: EdgeInsets.only(
                                       top: 13.h,
@@ -453,11 +463,24 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                       '\n\n' +
                                                       registrationController
                                                           .howToReach.value,
-                                              style: kTextInputStyle,
+                                              style: AppTheme().normal500(13),
                                             )),
                                       )
                                     ],
                                   ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Visibility(
+                                visible:
+                                    registrationController.address.isEmpty &&
+                                        donePressed,
+                                child: Text(
+                                  'Please Enter your Address',
+                                  style: AppTheme().normal400(12).copyWith(
+                                      color: Color.fromARGB(255, 214, 77, 93)),
                                 ),
                               ),
                             ],

@@ -37,6 +37,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   String userName = '', userEmail = '', userRefferal = '';
   final TextEditingController _addressController = TextEditingController();
   bool mapSelected = false;
+  bool donePressed = false;
 
   Future init() async {
     //OVOOVOVOOO
@@ -440,7 +441,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
                                       border: Border.all(
-                                          color: AppColors().grey40,
+                                          color: registrationController
+                                                      .address.isEmpty &&
+                                                  donePressed
+                                              ? AppColors().red100
+                                              : AppColors().grey40,
                                           width: 1.sp)),
                                   padding: EdgeInsets.only(
                                       top: 13.h,
@@ -485,6 +490,19 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       )
                                     ],
                                   ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Visibility(
+                                visible:
+                                    registrationController.address.isEmpty &&
+                                        donePressed,
+                                child: Text(
+                                  'Please Enter your Address',
+                                  style: AppTheme().normal400(12).copyWith(
+                                      color: Color.fromARGB(255, 214, 77, 93)),
                                 ),
                               ),
                             ],
@@ -563,6 +581,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
                                 onPressed: () async {
+                                  setState(() {
+                                    donePressed = true;
+                                  });
                                   if (_formKey.currentState!.validate() &&
                                       registrationController
                                           .pinCode.isNotEmpty) {

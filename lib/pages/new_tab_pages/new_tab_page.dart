@@ -73,7 +73,9 @@ class _NewTabPageState extends State<NewTabPage> {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    final box = Boxes.getUserListDB();
+    var box = Boxes.getUserListDB();
+    box.clear();
+    box = Boxes.getUserListDB();
 
     print(box.values.map((e) => e.listId).toList());
 

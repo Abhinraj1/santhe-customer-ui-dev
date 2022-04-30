@@ -26,6 +26,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> {
   @override
   void initState() {
     userArchivedListsData = apiController.getArchivedCust(custId);
+
     super.initState();
   }
 
@@ -33,7 +34,10 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-
+    var box = Boxes.getUserListDB();
+    box.clear();
+    box = Boxes.getUserListDB();
+    print(box.values.where((element) => element.custListStatus == 'archived'));
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,

@@ -213,6 +213,88 @@ class UserListCard extends StatelessWidget {
                   icon: CupertinoIcons.delete_solid,
                   label: 'Delete',
                 ),
+                SlidableAction(
+                  onPressed: (context) async {
+                    int pressCount = 0;
+
+                    //delete userList from DB
+                    final box = Boxes.getUserListDB();
+                    userList.delete();
+
+                    //undo feature
+                    Get.snackbar(
+                      '',
+                      '',
+                      duration: const Duration(milliseconds: 4000),
+                      snackPosition: SnackPosition.BOTTOM,
+                      icon: const Icon(
+                          CupertinoIcons.exclamationmark_circle_fill,
+                          color: Colors.orange,
+                          size: 15),
+                      snackStyle: SnackStyle.FLOATING,
+                      shouldIconPulse: true,
+                      backgroundColor: Colors.white,
+                      margin: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(12.0),
+                      titleText: const Text('List Deleted'),
+                      messageText: Text(
+                        'List has been deleted',
+                        style: GoogleFonts.mulish(
+                            color: AppColors().grey100,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15),
+                      ),
+                      mainButton: TextButton(
+                        onPressed: () async {
+                          if (pressCount < 1) {
+                            Future.delayed(const Duration(seconds: 1),
+                                () async {
+                              int response = await apiController
+                                  .undoDeleteUserList(userList.listId);
+                              if (response == 1) {
+                                Boxes.getUserListDB().add(userList);
+                              } else {
+                                errorMsg('Unable to undo the list', '');
+                              }
+                            });
+                          }
+                          pressCount++;
+                          if (box.length >= 2) {
+                            Get.offAll(() => const HomePage(),
+                                transition: Transition.fadeIn);
+                          }
+                        },
+                        child: Text(
+                          'Undo',
+                          style: GoogleFonts.mulish(
+                              color: Colors.orange,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15),
+                        ),
+                      ),
+                    );
+                    if (pressCount == 0) {
+                      apiController.deletedUserLists.add(userList);
+
+                      int response =
+                          await apiController.deleteUserList(userList.listId);
+
+                      if (response == 1) {
+                        apiController.deletedUserLists.remove(userList);
+                      }
+                    }
+
+                    //for bringing Floating Action Button
+                    if (box.length >= 2) {
+                      Get.offAll(() => const HomePage(),
+                          transition: Transition.fadeIn);
+                    }
+                  },
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.orange,
+                  icon: CupertinoIcons.delete_solid,
+                  label: 'Delete',
+                ),
               ],
             ),
             child: Padding(

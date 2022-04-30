@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/constants.dart';
+import 'package:santhe/controllers/archived_controller.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
@@ -77,6 +78,7 @@ void main() async {
   final customImageUrl = Get.put(CustomImageController());
   final sentUserListController = Get.put(SentUserListController());
   final searchQueryController = Get.put(SearchQueryController());
+  Get.put(ArchivedController());
   Get.put(NotificationController());
   Notifications().fcmInit();
   // apiController.initCategoriesDB();

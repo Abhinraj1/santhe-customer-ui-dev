@@ -12,13 +12,17 @@ import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
+import '../../controllers/archived_controller.dart';
+
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
-  const ArchivedUserListCard({required this.userList, Key? key})
+  final int index;
+  const ArchivedUserListCard({required this.userList, Key? key, required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final ArchivedController _archivedController = Get.find();
     double screenHeight = MediaQuery.of(context).size.height / 100;
     double screenWidth = MediaQuery.of(context).size.width / 100;
     final apiController = Get.find<APIs>();
@@ -165,8 +169,6 @@ class ArchivedUserListCard extends StatelessWidget {
                     int pressCount = 0;
 
                     //delete userList from DB
-                    final box = Boxes.getUserListDB();
-                    userList.delete();
 
                     //undo feature
                     Get.snackbar(
@@ -198,17 +200,13 @@ class ArchivedUserListCard extends StatelessWidget {
                                 () async {
                               int response = await apiController.undoDeleteUserList(userList.listId);
                               if (response == 1) {
-                                Boxes.getUserListDB().add(userList);
+
                               } else {
                                 errorMsg('Unable to undo the list', '');
                               }
                             });
                           }
                           pressCount++;
-                          if (box.length >= 2) {
-                            Get.offAll(() => const HomePage(),
-                                transition: Transition.fadeIn);
-                          }
                         },
                         child: Text(
                           'Undo',
@@ -227,14 +225,11 @@ class ArchivedUserListCard extends StatelessWidget {
 
                       if (response == 1) {
                         apiController.deletedUserLists.remove(userList);
+                        _archivedController.archivedList.removeAt(index);
+                        _archivedController.update();
                       }
                     }
 
-                    //for bringing Floating Action Button
-                    if (box.length >= 2) {
-                      Get.offAll(() => const HomePage(),
-                          transition: Transition.fadeIn);
-                    }
                   },
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,

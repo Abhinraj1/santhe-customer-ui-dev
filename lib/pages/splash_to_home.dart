@@ -19,7 +19,7 @@ class _SplashToHomeState extends State<SplashToHome> {
   final apiController = Get.find<APIs>();
 
   void bootHome() {
-    Future.delayed(const Duration(milliseconds: 4000), () {
+    Future.delayed(const Duration(milliseconds: 3500), () {
       Get.off(() => const HomePage(), transition: Transition.fadeIn);
       print('called!');
     });
@@ -116,7 +116,8 @@ class _SplashToHomeState extends State<SplashToHome> {
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.dark,
     ));
-    init().then((value) => bootHome());
+    bootHome();
+    init();
     super.initState();
   }
 

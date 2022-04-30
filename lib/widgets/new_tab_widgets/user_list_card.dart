@@ -114,7 +114,6 @@ class UserListCard extends StatelessWidget {
 
                       if (response == 1) {
                         box.add(newImportedList);
-                        
                       } else {
                         Get.dialog(const Card(
                           child: Center(

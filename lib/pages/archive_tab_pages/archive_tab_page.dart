@@ -16,7 +16,8 @@ class ArchiveTabPage extends StatefulWidget {
   State<ArchiveTabPage> createState() => _ArchiveTabPageState();
 }
 
-class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAliveClientMixin{
+class _ArchiveTabPageState extends State<ArchiveTabPage>
+    with AutomaticKeepAliveClientMixin {
   int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
@@ -34,7 +35,10 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
     super.build(context);
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-
+    // var box = Boxes.getUserListDB();
+    // box.clear();
+    // box = Boxes.getUserListDB();
+    // print(box.values.where((element) => element.custListStatus == 'archived'));
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
@@ -82,7 +86,8 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
                       child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                              text: 'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
+                              text:
+                                  'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
                               style: GoogleFonts.mulish(
                                   color: kTextGrey,
                                   fontWeight: FontWeight.w400,
@@ -194,7 +199,9 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
                       context: context,
                       minTextAdapt: true,
                       orientation: Orientation.portrait);
-                  return ArchivedUserListCard(userList: snapshot.data![index]);
+                  return ArchivedUserListCard(
+                    userList: snapshot.data![index],
+                  );
                 },
               ),
             );

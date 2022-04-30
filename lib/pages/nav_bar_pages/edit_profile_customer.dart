@@ -44,6 +44,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   late final TextEditingController _userEmailController =
       TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
   bool addressUpdateFlag = false;
+  bool donePressed = false;
+  bool mapSelected = false;
 
   @override
   void initState() {
@@ -61,10 +63,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final registrationController = Get.find<RegistrationController>();
     final apiController = Get.find<APIs>();
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    if(registrationController.address.value.trim().isEmpty){
+    if (registrationController.address.value.trim().isEmpty) {
       registrationController.address.value = currentUser?.address ?? '';
     }
-    if(registrationController.howToReach.value.trim().isEmpty){
+    if (registrationController.howToReach.value.trim().isEmpty) {
       registrationController.howToReach.value = currentUser?.howToReach ?? '';
     }
 
@@ -96,8 +98,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final TextStyle kLabelStyle =
         GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
-    print(registrationController
-        .howToReach.value);
+    print(registrationController.howToReach.value);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -199,9 +200,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                 height: 24.w,
                                                 width: 24.w,
                                                 decoration: BoxDecoration(
-                                                    color: AppColors().brandDark,
+                                                    color:
+                                                        AppColors().brandDark,
                                                     borderRadius:
-                                                    BorderRadius.circular(20)),
+                                                        BorderRadius.circular(
+                                                            20)),
                                                 child: Icon(
                                                   Icons.phone,
                                                   color: AppColors().white100,
@@ -223,7 +226,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             width: 1.0, color: kTextFieldGrey),
                                       ),
                                       hintText:
-                                      '+91-${currentUser?.custId ?? '91-9876543210'}',
+                                          '+91-${currentUser?.custId ?? '91-9876543210'}',
                                       hintStyle: GoogleFonts.mulish(
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 1.0,
@@ -275,7 +278,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               decoration: BoxDecoration(
                                                   color: AppColors().brandDark,
                                                   borderRadius:
-                                                  BorderRadius.circular(20)),
+                                                      BorderRadius.circular(
+                                                          20)),
                                               child: Icon(
                                                 Icons.person,
                                                 color: AppColors().white100,
@@ -303,7 +307,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                               ),
                             ],
                           ),
-                          //email
+                          //* email
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -348,7 +352,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               decoration: BoxDecoration(
                                                   color: AppColors().brandDark,
                                                   borderRadius:
-                                                  BorderRadius.circular(20)),
+                                                      BorderRadius.circular(
+                                                          20)),
                                               child: Icon(
                                                 Icons.email,
                                                 color: AppColors().white100,
@@ -395,7 +400,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 onTap: () async {
                                   //remove focus from text fields
                                   FocusScopeNode currentScope =
-                                  FocusScope.of(context);
+                                      FocusScope.of(context);
                                   if (!currentScope.hasPrimaryFocus &&
                                       currentScope.hasFocus) {
                                     FocusManager.instance.primaryFocus
@@ -403,9 +408,12 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   }
                                   if (locationController.lng.value != 0.0 ||
                                       locationController.lat.value != 0.0) {
+                                    setState(() {
+                                      mapSelected = true;
+                                    });
                                   }
                                   var res = await Get.to(
-                                          () => const MapSearchScreen());
+                                      () => const MapSearchScreen());
                                   if (res == 1) {
                                     setState(() {});
                                   }
@@ -415,51 +423,84 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
                                       border: Border.all(
-                                          color: AppColors().grey40,
+                                          color: registrationController
+                                                      .address.isEmpty &&
+                                                  donePressed
+                                              ? AppColors().red100
+                                              : AppColors().grey40,
                                           width: 1.sp)),
-                                  padding: EdgeInsets.only(
-                                      top: 13.h,
-                                      left: 10.w,
-                                      right: 10.w,
-                                      bottom: 13.h),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      //icon
-                                      Container(
-                                          height: 24.w,
-                                          width: 24.w,
-                                          decoration: BoxDecoration(
-                                              color: AppColors().brandDark,
-                                              borderRadius:
-                                              BorderRadius.circular(20)),
-                                          child: Icon(
-                                            Icons.home,
-                                            color: AppColors().white100,
-                                            size: 15.sp,
-                                          )),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      //text
-                                      Expanded(
-                                        child: Obx(() => Text(
-                                          registrationController
-                                              .address.value
-                                              .trim() ==
-                                              ''
-                                              ? 'Select Address'
-                                              : registrationController
-                                              .address.value +
-                                              '\n' +
-                                              registrationController
-                                                  .howToReach.value,
-                                            style: kTextInputStyle,
-                                        )),
-                                      )
-                                    ],
+                                  // padding: EdgeInsets.only(
+                                  //     top: 13.h,
+                                  //     left: 10.w,
+                                  //     right: 10.w,
+                                  //     bottom: 13.h),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        //icon
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4.0, horizontal: 12),
+                                          child: Container(
+                                              height: 24.w,
+                                              width: 24.w,
+                                              decoration: BoxDecoration(
+                                                  color: AppColors().brandDark,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.home,
+                                                  color: AppColors().white100,                                               
+                                                  size: 15.sp,
+                                                ),
+                                              )),
+                                        ),
+                                        SizedBox(
+                                          width: 1.w,
+                                        ),
+                                        //text
+                                        Expanded(
+                                          child: Obx(() => Text(
+                                                registrationController
+                                                            .address.value
+                                                            .trim() ==
+                                                        ''
+                                                    ? 'Select Address'
+                                                    : registrationController
+                                                            .address.value +
+                                                        ' ' +
+                                                        registrationController
+                                                            .howToReach.value,
+                                                style: registrationController
+                                                            .address.value
+                                                            .trim() ==
+                                                        ''
+                                                    ? kHintStyle
+                                                    : kTextInputStyle,
+                                              )),
+                                        )
+                                      ],
+                                    ),
                                   ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Visibility(
+                                visible:
+                                    registrationController.address.isEmpty &&
+                                        donePressed,
+                                child: Text(
+                                  'Please Enter your Address',
+                                  style: AppTheme().normal400(12).copyWith(
+                                      color: Color.fromARGB(255, 214, 77, 93)),
                                 ),
                               ),
                             ],
@@ -476,11 +517,14 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
                                 onPressed: () async {
+                                  setState(() {
+                                    donePressed = true;
+                                  });
                                   if (_formKey.currentState!.validate()) {
                                     //final otp check
                                     bool isUserLoggedin = Boxes.getUserPrefs()
-                                        .get('isLoggedIn',
-                                        defaultValue: false) ??
+                                            .get('isLoggedIn',
+                                                defaultValue: false) ??
                                         false;
 
                                     if (isUserLoggedin) {
@@ -489,17 +533,17 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       Boxes.getUserPrefs()
                                           .put('isRegistered', true);
                                       User? currentUser = Boxes.getUser()
-                                          .get('currentUserDetails') ??
+                                              .get('currentUserDetails') ??
                                           fallBack_error_user;
 
                                       int userPhone =
                                           Boxes.getUserCredentialsDB()
-                                              .get('currentUserCredentials')
-                                              ?.phoneNumber ??
+                                                  .get('currentUserCredentials')
+                                                  ?.phoneNumber ??
                                               404;
 
                                       if (userPhone == 404) {
-                                        Get.off(() =>  LoginScreen());
+                                        Get.off(() => LoginScreen());
                                       }
 
                                       //todo add how to reach howToReach
@@ -515,7 +559,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               : currentUser.lng,
                                           pincode: addressUpdateFlag
                                               ? int.parse(registrationController
-                                              .pinCode.value)
+                                                  .pinCode.value)
                                               : currentUser.pincode,
                                           phoneNumber: userPhone,
                                           custId: userPhone,
@@ -523,14 +567,15 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           custRatings: currentUser.custRatings,
                                           custReferal: 0000,
                                           custStatus: 'active',
-                                          howToReach: registrationController.howToReach.value,
+                                          howToReach: registrationController
+                                              .howToReach.value,
                                           custLoginTime: DateTime.now(),
                                           custPlan: 'default');
 //todo add cust plan
                                       //todo add to firebase
                                       int userUpdated = await apiController
                                           .updateCustomerInfo(
-                                          userPhone, updatedUser);
+                                              userPhone, updatedUser);
                                       if (userUpdated == 1) {
 //since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
                                         successMsg('Profile Updated',
@@ -553,7 +598,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           .put('isRegistered', false);
                                       Boxes.getUserPrefs()
                                           .put('isLoggedIn', false);
-                                      Get.offAll(() =>  LoginScreen(),
+                                      Get.offAll(() => LoginScreen(),
                                           transition: Transition.fadeIn);
                                     }
                                   }

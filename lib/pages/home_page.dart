@@ -27,7 +27,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarColor: Colors.white,
+      statusBarBrightness: Brightness.dark,
+    ));
     super.initState();
   }
 

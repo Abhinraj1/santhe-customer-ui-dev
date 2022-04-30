@@ -163,7 +163,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     final TextStyle kLabelStyle =
         GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
-
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -326,6 +325,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       borderSide: const BorderSide(
                                           width: 1.0, color: kTextFieldGrey),
                                     ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kTextFieldCircularBorderRadius),
+                                      borderSide: BorderSide(
+                                          width: 1.0, color: AppColors().brandDark),
+                                    ),
                                     hintText: 'Your name',
                                     hintStyle: kHintStyle,
                                   ),
@@ -391,6 +396,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
                                           width: 1.0, color: kTextFieldGrey),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kTextFieldCircularBorderRadius),
+                                      borderSide: BorderSide(
+                                          width: 1.0, color: AppColors().brandDark),
                                     ),
                                     hintText: 'youremail@here.com',
                                     hintStyle: kHintStyle,
@@ -492,83 +503,80 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                height: 4.h,
-                              ),
-                              Visibility(
-                                visible:
-                                    registrationController.address.isEmpty &&
-                                        donePressed,
-                                child: Text(
-                                  'Please Enter your Address',
-                                  style: AppTheme().normal400(12).copyWith(
-                                      color: Color.fromARGB(255, 214, 77, 93)),
-                                ),
-                              ),
+                              /*TextFormField(
+                                onTap: () async {
+                                  //remove focus from text fields
+                                  FocusScopeNode currentScope =
+                                  FocusScope.of(context);
+                                  if (!currentScope.hasPrimaryFocus &&
+                                      currentScope.hasFocus) {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                  }
+                                  if (locationController.lng.value != 0.0 ||
+                                      locationController.lat.value != 0.0) {
+                                    setState(() {
+                                      mapSelected = true;
+                                    });
+                                  }
+                                  var res = await Get.to(() => const MapSearchScreen());
+                                  if (res == 1) {
+                                    setState(() {});
+                                  }
+                                },
+                                readOnly: true,
+                                  style: kTextInputStyle,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0, horizontal: 6),
+                                      child: CircleAvatar(
+                                        radius: 4.h,
+                                        backgroundColor: Colors.orange,
+                                        child: Icon(
+                                          Icons.home,
+                                          color: Colors.white,
+                                          size: 24.h,
+                                        ),
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kTextFieldCircularBorderRadius),
+                                      borderSide: const BorderSide(
+                                          width: 1.0, color: kTextFieldGrey),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kTextFieldCircularBorderRadius),
+                                      borderSide: const BorderSide(
+                                          width: 1.0, color: kTextFieldGrey),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kTextFieldCircularBorderRadius),
+                                      borderSide: BorderSide(
+                                          width: 1.0, color: AppColors().brandDark),
+                                    ),
+                                    hintText: 'select address',
+                                    hintStyle: kHintStyle,
+                                  ),
+                                validator: (value) {
+                                  if (registrationController.address.value.trim() == null || registrationController.address.value.trim().isEmpty) {
+                                    return 'Please select an address';
+                                  } else {
+                                    return null;
+                                  }
+                                  if(registrationController.address.value.trim() == ''){
+                                    return 'Enter valid address';
+                                  }
+                                  else {
+                                    return null;
+                                  }
+                                },
+                              )*/
                             ],
                           ),
-                          //referral
-                          // Column(
-                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //   children: [
-                          //     Padding(
-                          //       padding: EdgeInsets.only(top: 23.sp, bottom: 5),
-                          //       child: Text(
-                          //         'Referral Code (optional)',
-                          //         textAlign: TextAlign.start,
-                          //         style: GoogleFonts.mulish(
-                          //             fontWeight: FontWeight.w500,
-                          //             fontSize: 16.sp,
-                          //             color: Colors.orange),
-                          //       ),
-                          //     ),
-                          //     Center(
-                          //       child: TextFormField(
-                          //         keyboardType: TextInputType.text,
-                          //         onChanged: (value) {
-                          //           userRefferal = value;
-                          //         },
-                          //         validator: (value) {
-                          //           final RegExp referralRegExp =
-                          //               RegExp(r"^[0-9 -]+$");
-                          //           if (!referralRegExp.hasMatch(value!)) {
-                          //             return 'Please enter a valid referral code';
-                          //           } else {
-                          //             return null;
-                          //           }
-                          //         },
-                          //         style: kTextInputStyle,
-                          //         decoration: InputDecoration(
-                          //           prefixIcon: Padding(
-                          //             padding: const EdgeInsets.symmetric(
-                          //                 vertical: 4.0, horizontal: 6),
-                          //             child: CircleAvatar(
-                          //               radius: 4.h,
-                          //               backgroundColor: Colors.orange,
-                          //               child: Icon(
-                          //                 Icons.monetization_on,
-                          //                 color: Colors.white,
-                          //                 size: 24.h,
-                          //               ),
-                          //             ),
-                          //           ),
-                          // border: OutlineInputBorder(
-                          //   borderRadius: BorderRadius.circular(16.0),
-                          //   borderSide: const BorderSide(
-                          //       width: 1.0, color: Color(0xffD1D1D1)),
-                          // ),
-                          // enabledBorder: OutlineInputBorder(
-                          //   borderRadius: BorderRadius.circular(16.0),
-                          //   borderSide: const BorderSide(
-                          //       width: 1.0, color: Color(0xffD1D1D1)),
-                          // ),
-                          //           hintText: 'Your Referral Code',
-                          //           hintStyle: kHintStyle,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                           Padding(
                             padding: EdgeInsets.only(top: 100.sp),
                             child: SizedBox(
@@ -581,12 +589,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
                                 onPressed: () async {
-                                  setState(() {
-                                    donePressed = true;
-                                  });
-                                  if (_formKey.currentState!.validate() &&
-                                      registrationController
-                                          .pinCode.isNotEmpty) {
+                                  if (_formKey.currentState!.validate()) {
                                     //final otp check
                                     bool isUserLoggedin = Boxes.getUserPrefs()
                                             .get('isLoggedIn',

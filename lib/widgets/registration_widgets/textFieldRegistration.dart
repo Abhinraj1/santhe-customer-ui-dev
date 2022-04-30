@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
+import '../../core/app_colors.dart';
 
 class RegisterationTextFeild extends StatelessWidget {
   RegisterationTextFeild(
@@ -44,7 +45,7 @@ class RegisterationTextFeild extends StatelessWidget {
                 ),
               ),
               hintText: hintText,
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                   color: Color(0xffD1D1D1),
                   fontSize: 16,
                   fontStyle: FontStyle.italic),
@@ -57,6 +58,12 @@ class RegisterationTextFeild extends StatelessWidget {
                 borderRadius:
                     BorderRadius.circular(kTextFieldCircularBorderRadius),
                 borderSide: const BorderSide(width: 1.0, color: kTextFieldGrey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(
+                    kTextFieldCircularBorderRadius),
+                borderSide: BorderSide(
+                    width: 1.0, color: AppColors().brandDark),
               ),
             ),
           ),

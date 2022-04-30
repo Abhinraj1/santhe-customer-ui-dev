@@ -74,9 +74,6 @@ class SearchedItemCard extends StatelessWidget {
             ?.phoneNumber ??
         404;
 
-    final queryText = item.itemName.substring(0, searchQuery.length);
-    final remainingText = item.itemName.substring(searchQuery.length);
-
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,

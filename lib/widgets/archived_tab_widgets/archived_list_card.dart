@@ -15,8 +15,14 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
-  final box = Boxes.getUserListDB();
-  ArchivedUserListCard({required this.userList, Key? key}) : super(key: key);
+  
+
+  // final box = Boxes.getUserListDB();
+  ArchivedUserListCard({
+    required this.userList,
+    Key? key,
+    
+  }) : super(key: key);
   final int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
@@ -89,34 +95,37 @@ class ArchivedUserListCard extends StatelessWidget {
                       // UserList oldUserList =
                       //     apiController.getAllCustomerLists(custId);
 
-                      UserList list = userListsDB.firstWhere(
-                          (element) => element.processStatus == 'archived');
+                      // UserList list = userListsDB.firstWhere(
+                      //     (element) => element.processStatus == 'archived');
+
                       // print('oldUserList: $oldUserList');
+                      int userListCount =
+                          await apiController.getAllCustomerLists(custId);
 
-                      // UserList newImportedList = UserList(
-                      //     createListTime: DateTime.now(),
-                      //     custId: oldUserList.custId,
-                      //     items: oldUserList.items,
-                      //     listId: int.parse('$custId${userListCount + 1}'),
-                      //     listName: '(COPY) ${oldUserList.listName}',
-                      //     custListSentTime: oldUserList.custListSentTime,
-                      //     custListStatus: oldUserList.custListStatus,
-                      //     listOfferCounter: oldUserList.listOfferCounter,
-                      //     processStatus: oldUserList.processStatus,
-                      //     custOfferWaitTime: oldUserList.custOfferWaitTime);
+                      UserList newImportedList = UserList(
+                          createListTime: DateTime.now(),
+                          custId: userList.custId,
+                          items: userList.items,
+                          listId: int.parse('$custId${userListCount + 1}'),
+                          listName: '(COPY) ${userList.listName}',
+                          custListSentTime: userList.custListSentTime,
+                          custListStatus: userList.custListStatus,
+                          listOfferCounter: userList.listOfferCounter,
+                          processStatus: userList.processStatus,
+                          custOfferWaitTime: userList.custOfferWaitTime);
 
-                      // int response = await apiController.addCustomerList(
-                      //     newImportedList, custId, 'new');
+                      int response = await apiController.addCustomerList(
+                          userList, custId, 'new');
 
-                      // if (response == 1) {
-                      //   box.add(newImportedList);
-                      // } else {
-                      //   Get.dialog(const Card(
-                      //     child: Center(
-                      //       child: Text('Error!'),
-                      //     ),
-                      //   ));
-                      // }
+                      if (response == 1) {
+                        Get.to(const HomePage());
+                      } else {
+                        Get.dialog(const Card(
+                          child: Center(
+                            child: Text('Error!'),
+                          ),
+                        ));
+                      }
                     },
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
@@ -130,8 +139,8 @@ class ArchivedUserListCard extends StatelessWidget {
                     int pressCount = 0;
 
                     //delete userList from DB
-                    final box = Boxes.getUserListDB();
-                    userList.delete();
+                    // final box = Boxes.getUserListDB();
+                    // userList.delete();
 
                     //undo feature
                     Get.snackbar(
@@ -164,17 +173,18 @@ class ArchivedUserListCard extends StatelessWidget {
                               int response = await apiController
                                   .undoDeleteUserList(userList.listId);
                               if (response == 1) {
-                                Boxes.getUserListDB().add(userList);
+                                // Boxes.getUserListDB().add(userList);
+                                // archivedList.add(userList);
                               } else {
                                 errorMsg('Unable to undo the list', '');
                               }
                             });
                           }
                           pressCount++;
-                          if (box.length >= 2) {
-                            Get.offAll(() => const HomePage(),
-                                transition: Transition.fadeIn);
-                          }
+                          // if (box.length >= 2) {
+                          //   Get.offAll(() => const HomePage(),
+                          //       transition: Transition.fadeIn);
+                          // }
                         },
                         child: Text(
                           'Undo',
@@ -197,10 +207,10 @@ class ArchivedUserListCard extends StatelessWidget {
                     }
 
                     //for bringing Floating Action Button
-                    if (box.length >= 2) {
-                      Get.offAll(() => const HomePage(),
-                          transition: Transition.fadeIn);
-                    }
+                    // if (box.length >= 2) {
+                    //   Get.offAll(() => const HomePage(),
+                    //       transition: Transition.fadeIn);
+                    // }
                   },
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,

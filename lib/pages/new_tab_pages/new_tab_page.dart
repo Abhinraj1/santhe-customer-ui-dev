@@ -770,8 +770,6 @@ class _NewTabPageState extends State<NewTabPage> {
                   itemCount: userLists.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    print("NEW TAB PAGE");
-                    print(userLists[index].listId);
                     return UserListCard(
                       userList: userLists[index],
                     );

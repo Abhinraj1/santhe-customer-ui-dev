@@ -34,10 +34,10 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    var box = Boxes.getUserListDB();
-    box.clear();
-    box = Boxes.getUserListDB();
-    print(box.values.where((element) => element.custListStatus == 'archived'));
+    // var box = Boxes.getUserListDB();
+    // box.clear();
+    // box = Boxes.getUserListDB();
+    // print(box.values.where((element) => element.custListStatus == 'archived'));
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
@@ -198,7 +198,9 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> {
                       context: context,
                       minTextAdapt: true,
                       orientation: Orientation.portrait);
-                  return ArchivedUserListCard(userList: snapshot.data![index]);
+                  return ArchivedUserListCard(
+                    userList: snapshot.data![index],
+                  );
                 },
               ),
             );

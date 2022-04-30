@@ -31,7 +31,12 @@ class APIs extends GetxController {
   //deleted user list buffer
   var deletedUserLists = <UserList>[].obs;
 
+  //* archived list buffer
+  var archivedUserLists = <UserList>[].obs;
+
   var itemsDB = <Item>[].obs;
+
+
 
   // Future getAllItems() async {
   //   String pageToken = '';

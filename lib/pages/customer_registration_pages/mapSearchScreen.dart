@@ -224,18 +224,13 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 SizedBox(
                   height: 15.h,
                 ),
-                Visibility(child: SizedBox(width: double.maxFinite,child: const Text("OR",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey),)),visible: _controller.text.isEmpty ? true : false,),
+                Visibility(child: const SizedBox(width: double.maxFinite,child: Text("OR",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey),)),visible: _controller.text.isEmpty ? true : false,),
                 SizedBox(
                   height: 15.h,
                 ),
                 GestureDetector(
                   onTap: () async {
-                    Position position =
-                        await LocationController.getGeoLocationPosition();
-                    Get.to(() => MapAddressPicker(
-                          lng: position.longitude,
-                          lat: position.latitude,
-                        ));
+                    Get.to(() => MapAddressPicker());
                   },
                   child: Center(
                     child: Container(

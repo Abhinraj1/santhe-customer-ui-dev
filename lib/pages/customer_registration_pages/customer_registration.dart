@@ -532,81 +532,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 child: Text(
                                   'Please Enter your Address',
                                   style: AppTheme().normal400(12).copyWith(
-                                      color: Color.fromARGB(255, 214, 77, 93)),
+                                      color: const Color.fromARGB(255, 214, 77, 93)),
                                 ),
                               ),
-                              /*TextFormField(
-                                onTap: () async {
-                                  //remove focus from text fields
-                                  FocusScopeNode currentScope =
-                                  FocusScope.of(context);
-                                  if (!currentScope.hasPrimaryFocus &&
-                                      currentScope.hasFocus) {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                  }
-                                  if (locationController.lng.value != 0.0 ||
-                                      locationController.lat.value != 0.0) {
-                                    setState(() {
-                                      mapSelected = true;
-                                    });
-                                  }
-                                  var res = await Get.to(() => const MapSearchScreen());
-                                  if (res == 1) {
-                                    setState(() {});
-                                  }
-                                },
-                                readOnly: true,
-                                  style: kTextInputStyle,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4.0, horizontal: 6),
-                                      child: CircleAvatar(
-                                        radius: 4.h,
-                                        backgroundColor: Colors.orange,
-                                        child: Icon(
-                                          Icons.home,
-                                          color: Colors.white,
-                                          size: 24.h,
-                                        ),
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          kTextFieldCircularBorderRadius),
-                                      borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          kTextFieldCircularBorderRadius),
-                                      borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          kTextFieldCircularBorderRadius),
-                                      borderSide: BorderSide(
-                                          width: 1.0, color: AppColors().brandDark),
-                                    ),
-                                    hintText: 'select address',
-                                    hintStyle: kHintStyle,
-                                  ),
-                                validator: (value) {
-                                  if (registrationController.address.value.trim() == null || registrationController.address.value.trim().isEmpty) {
-                                    return 'Please select an address';
-                                  } else {
-                                    return null;
-                                  }
-                                  if(registrationController.address.value.trim() == ''){
-                                    return 'Enter valid address';
-                                  }
-                                  else {
-                                    return null;
-                                  }
-                                },
-                              )*/
                             ],
                           ),
                           Padding(

@@ -33,11 +33,9 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  int userPhoneNumber =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+  int userPhoneNumber = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
-  User? currentUser =
-      Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
+  User? currentUser = Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
   late final TextEditingController _addressController = TextEditingController();
   late final TextEditingController _userNameController =
       TextEditingController(text: currentUser?.custName ?? 'John Doe');
@@ -551,12 +549,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           address: registrationController
                                               .address.value,
                                           emailId: _userEmailController.text,
-                                          lat: addressUpdateFlag
-                                              ? registrationController.lat.value
-                                              : currentUser.lat,
-                                          lng: addressUpdateFlag
-                                              ? registrationController.lng.value
-                                              : currentUser.lng,
+                                          lat: registrationController.lat.value,
+                                          lng: registrationController.lng.value,
                                           pincode: addressUpdateFlag
                                               ? int.parse(registrationController
                                                   .pinCode.value)

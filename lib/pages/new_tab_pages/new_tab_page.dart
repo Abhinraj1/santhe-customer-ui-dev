@@ -662,9 +662,6 @@ class _NewTabPageState extends State<NewTabPage> {
               context: context,
               minTextAdapt: true,
               orientation: Orientation.portrait);
-          userLists.forEach((element) {
-            print(element.listId);
-          });
           return userLists.isEmpty
               ? SizedBox(
                   height: double.infinity,

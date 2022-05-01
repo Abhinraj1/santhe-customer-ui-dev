@@ -198,7 +198,7 @@ class ArchivedUserListCard extends StatelessWidget {
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
                                 () async {
-                              int response = await apiController.undoDeleteUserList(userList.listId);
+                              int response = await apiController.undoDeleteUserList(userList.listId, true);
                               if (response == 1) {
 
                               } else {

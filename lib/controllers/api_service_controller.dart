@@ -647,13 +647,13 @@ class APIs extends GetxController {
     }
   }
 
-  Future undoDeleteUserList(int userListId) async {
+  Future undoDeleteUserList(int userListId, bool isArchived) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$userListId?updateMask.fieldPaths=custListStatus';
 
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": "new"}
+        "custListStatus": {"stringValue": isArchived ? "archived" : "new"}
       }
     };
 

@@ -76,12 +76,6 @@ class _NewTabPageState extends State<NewTabPage> {
 
     Box<UserList> box = Boxes.getUserListDB();
 
-    // print(box.values.map((e) => e.listId).toList());
-
-    // print('Archived List: ${apiController.archivedUserLists.length}');
-    // for (var i = 0; i < apiController.archivedUserLists.length; i++) {
-    //   print(apiController.archivedUserLists[i].listName);
-    // }
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
@@ -232,7 +226,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 314.sp,
+                                          width: 314.w,
                                           child: TextFormField(
                                             validator: (value) {
                                               if (value!.isEmpty) {

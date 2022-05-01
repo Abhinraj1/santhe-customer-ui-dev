@@ -75,9 +75,6 @@ class _NewTabPageState extends State<NewTabPage> {
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
     Box<UserList> box = Boxes.getUserListDB();
-    box.clear();
-    apiController.getAllCustomerLists(custId);
-    setState(() {});
 
     // print(box.values.map((e) => e.listId).toList());
 

@@ -225,19 +225,19 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         borderRadius: BorderRadius.circular(
                                             kTextFieldCircularBorderRadius),
                                         borderSide: const BorderSide(
-                                            width: 1.0, color: kTextFieldGrey),
+                                            width: 2.0, color: kTextFieldGrey),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             kTextFieldCircularBorderRadius),
                                         borderSide: const BorderSide(
-                                            width: 1.0, color: kTextFieldGrey),
+                                            width: 2.0, color: kTextFieldGrey),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             kTextFieldCircularBorderRadius),
                                         borderSide: BorderSide(
-                                            width: 1.0,
+                                            width: 2.0,
                                             color: AppColors().brandDark),
                                       ),
                                       hintText:
@@ -307,19 +307,19 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: BorderSide(
-                                          width: 1.0,
+                                          width: 2.0,
                                           color: AppColors().brandDark),
                                     ),
                                     hintText: 'Your name',
@@ -388,19 +388,19 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: BorderSide(
-                                          width: 1.0,
+                                          width: 2.0,
                                           color: AppColors().brandDark),
                                     ),
                                     hintText: 'youremail@here.com',
@@ -457,7 +457,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                   donePressed
                                               ? AppColors().red100
                                               : AppColors().grey40,
-                                          width: 1.sp)),
+                                          width: 2.0)),
                                   // padding: EdgeInsets.only(
                                   //     top: 13.h,
                                   //     left: 10.w,

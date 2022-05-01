@@ -405,19 +405,19 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             borderRadius: BorderRadius.circular(
                                 kTextFieldCircularBorderRadius),
                             borderSide: const BorderSide(
-                                width: 1.0, color: kTextFieldGrey),
+                                width: 2.0, color: kTextFieldGrey),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 kTextFieldCircularBorderRadius),
                             borderSide: const BorderSide(
-                                width: 1.0, color: kTextFieldGrey),
+                                width: 2.0, color: kTextFieldGrey),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 kTextFieldCircularBorderRadius),
                             borderSide: BorderSide(
-                                width: 1.0, color: AppColors().brandDark),
+                                width: 2.0, color: AppColors().brandDark),
                           ),
                           hintText: 'Write your message here...',
                           hintStyle: kHintStyle,

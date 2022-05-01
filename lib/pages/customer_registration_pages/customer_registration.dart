@@ -573,22 +573,18 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
 
                                       //todo add how to reach howToReach
                                       User currentUser = User(
-                                          address: registrationController
-                                              .address.value,
+                                          address: registrationController.address.value,
                                           emailId: userEmail,
                                           lat: registrationController.lat.value,
                                           lng: registrationController.lng.value,
-                                          pincode: int.parse(
-                                              registrationController
-                                                  .pinCode.value),
+                                          pincode: int.parse(registrationController.pinCode.value),
                                           phoneNumber: userPhone,
                                           custId: userPhone,
                                           custName: userName,
                                           custRatings: 5.0,
                                           custReferal: 0,
                                           custStatus: 'active',
-                                          howToReach: registrationController
-                                              .howToReach.value,
+                                          howToReach: registrationController.howToReach.value,
                                           custPlan: 'default',
                                           custLoginTime: DateTime.now());
 

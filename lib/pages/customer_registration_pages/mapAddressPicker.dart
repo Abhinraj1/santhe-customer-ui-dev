@@ -178,9 +178,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                           if (value.toString().isEmpty) {
                                             return "Please Filled Required Fields.";
                                           }
-                                          var containPincode =
-                                              RegExp(r'^.*\d{6}.*$')
-                                                  .hasMatch(value.toString());
+                                          var containPincode = RegExp(r'^.*\d{6}.*$').hasMatch(value.toString());
                                           if (!containPincode) {
                                             return 'Address Should Contain Pincode';
                                           }
@@ -257,7 +255,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                                   addressTextController
                                                       .value.text
                                                       .split(' ');
-                                              var pin;
+                                              String pin = '';
                                               for (var i in ls) {
                                                 var a = RegExp(r'^.*\d{6}.*$')
                                                     .hasMatch(i);
@@ -267,7 +265,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                               }
                                               locationController.mapSelected = true.obs;
                                               registrationController.isMapSelected = true.obs;
-                                              registrationController.pinCode.value = pin.split(',')[0];
+                                              registrationController.pinCode.value = pin.replaceAll(',', '');
                                               registrationController.address = addressTextController.value.text.obs;
                                               registrationController.howToReach.value = optionalAddController.text;
                                               registrationController.lat.value = lat;
@@ -277,7 +275,6 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                               Get.close(2);
                                             });
                                           } else {
-                                            print("Outside if");
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               const SnackBar(
@@ -312,7 +309,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
               ),
             ),
           ),
-          !isVisible ? Positioned(
+          !isVisible && textController.text.isNotEmpty ? Positioned(
                   bottom: 24,
                   child: SizedBox(
                     height: 50,
@@ -345,7 +342,13 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                       ),
                     ),
                   ),
-                ) : Container()
+                ) : Container(),
+          if(textController.text.isEmpty) Container(
+            height: size.height,
+            width: size.width,
+            color: Colors.black12,
+            child: const Center(child: CircularProgressIndicator.adaptive()),
+          )
         ],
       ),
     );

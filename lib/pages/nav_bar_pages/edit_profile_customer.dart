@@ -67,6 +67,13 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     if (registrationController.howToReach.value.trim().isEmpty) {
       registrationController.howToReach.value = currentUser?.howToReach ?? '';
     }
+    if (registrationController.lat.value == 0.0 || registrationController.lng.value ==0.0) {
+      registrationController.lat.value = currentUser?.lat ?? 0.0;
+      registrationController.lng.value = currentUser?.lng ?? 0.0;
+    }
+    if (registrationController.pinCode.value.isEmpty) {
+      registrationController.pinCode.value = currentUser?.pincode.toString() ?? '';
+    }
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
@@ -96,7 +103,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final TextStyle kLabelStyle =
         GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
-    print(registrationController.howToReach.value);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -544,6 +550,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         Get.off(() => LoginScreen());
                                       }
 
+                                      print('------>>>>>>>>' + registrationController.pinCode.value);
                                       //todo add how to reach howToReach
                                       User updatedUser = User(
                                           address: registrationController
@@ -551,10 +558,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           emailId: _userEmailController.text,
                                           lat: registrationController.lat.value,
                                           lng: registrationController.lng.value,
-                                          pincode: addressUpdateFlag
-                                              ? int.parse(registrationController
-                                                  .pinCode.value)
-                                              : currentUser.pincode,
+                                          pincode: int.parse(registrationController.pinCode.value),
                                           phoneNumber: userPhone,
                                           custId: userPhone,
                                           custName: _userNameController.text,

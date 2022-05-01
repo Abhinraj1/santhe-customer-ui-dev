@@ -33,11 +33,9 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  int userPhoneNumber =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+  int userPhoneNumber = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
-  User? currentUser =
-      Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
+  User? currentUser = Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
   late final TextEditingController _addressController = TextEditingController();
   late final TextEditingController _userNameController =
       TextEditingController(text: currentUser?.custName ?? 'John Doe');
@@ -69,6 +67,13 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     if (registrationController.howToReach.value.trim().isEmpty) {
       registrationController.howToReach.value = currentUser?.howToReach ?? '';
     }
+    if (registrationController.lat.value == 0.0 || registrationController.lng.value ==0.0) {
+      registrationController.lat.value = currentUser?.lat ?? 0.0;
+      registrationController.lng.value = currentUser?.lng ?? 0.0;
+    }
+    if (registrationController.pinCode.value.isEmpty) {
+      registrationController.pinCode.value = currentUser?.pincode.toString() ?? '';
+    }
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
@@ -98,7 +103,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final TextStyle kLabelStyle =
         GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
-    print(registrationController.howToReach.value);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -546,21 +550,15 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         Get.off(() => LoginScreen());
                                       }
 
+                                      print('------>>>>>>>>' + registrationController.pinCode.value);
                                       //todo add how to reach howToReach
                                       User updatedUser = User(
                                           address: registrationController
                                               .address.value,
                                           emailId: _userEmailController.text,
-                                          lat: addressUpdateFlag
-                                              ? registrationController.lat.value
-                                              : currentUser.lat,
-                                          lng: addressUpdateFlag
-                                              ? registrationController.lng.value
-                                              : currentUser.lng,
-                                          pincode: addressUpdateFlag
-                                              ? int.parse(registrationController
-                                                  .pinCode.value)
-                                              : currentUser.pincode,
+                                          lat: registrationController.lat.value,
+                                          lng: registrationController.lng.value,
+                                          pincode: int.parse(registrationController.pinCode.value),
                                           phoneNumber: userPhone,
                                           custId: userPhone,
                                           custName: _userNameController.text,

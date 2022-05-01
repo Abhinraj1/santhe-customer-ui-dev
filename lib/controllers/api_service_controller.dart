@@ -266,8 +266,7 @@ class APIs extends GetxController {
     offlineCustLists.clear();
     int userListsCount = 0;
 
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    const String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
     var body = {
       "structuredQuery": {
         "from": [
@@ -339,21 +338,11 @@ class APIs extends GetxController {
       userListsDB.forEach((element) {
         print(element.listId);
       });
-      //     int custListNumber = 0;
-      //     for (int i = 0; i < data.length; i++) {
-      //       custListNumber++;
-      //     }
-      //     if (custListNumber == 1 && data[0]['document'] == null) {
-      //       custListNumber = 0;
-      //     }
-      //
-      //     Boxes.getContent().put('userListCount', '$custListNumber');
 
       return userListsCount;
     } else {
       print('Error Occured! ${response.statusCode}: ${response.body}');
       return 9999999999;
-      throw 'Error retrieving user lists!';
     }
   }
 

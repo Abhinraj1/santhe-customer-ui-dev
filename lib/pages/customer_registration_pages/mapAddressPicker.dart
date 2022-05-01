@@ -13,12 +13,12 @@ import '../../constants.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/location_controller.dart';
 import '../../core/app_colors.dart';
+import '../../models/santhe_user_model.dart';
 import '../../widgets/registration_widgets/textFieldRegistration.dart';
 
 class MapAddressPicker extends StatefulWidget {
-  final double lat, lng;
-  const MapAddressPicker({Key? key, required this.lat, required this.lng})
-      : super(key: key);
+  final double? lat, lng;
+  const MapAddressPicker({Key? key, this.lat, this.lng}) : super(key: key);
 
   @override
   _MapAddressPickerState createState() => _MapAddressPickerState();
@@ -29,34 +29,41 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
   final _controller = Completer<GoogleMapController>();
   MapPickerController mapPickerController = MapPickerController();
   late double lat, lng;
-  late CameraPosition cameraPosition;
+  late CameraPosition initialCameraPosition;
   var addressTextController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
   TextEditingController optionalAddController = TextEditingController();
   bool isVisible = false;
   final _formKey = GlobalKey<FormState>();
-
-  late SharedPreferences pref;
+  User? currentUser = Boxes.getUser().get('currentUserDetails');
   PlaceApiProvider placeApiProvider = PlaceApiProvider();
   var textController = TextEditingController();
+  GoogleMapController? _googleMapController;
   @override
   void initState() {
-    print("Hello");
-    lat = widget.lat;
-    lng = widget.lng;
-    initAdd(lat, lng);
-    cameraPosition = CameraPosition(
-      target: LatLng(lat, lng),
-      zoom: 18,
-    );
+    if(widget.lat != null && widget.lng != null){
+      lat = widget.lat!;
+      lng = widget.lng!;
+      initialCameraPosition = CameraPosition(target: LatLng(lat, lng), zoom: 18,);
+    }
+    else{
+      initialCameraPosition = CameraPosition(target: LatLng(currentUser?.lat ?? 12.980143644412847, currentUser?.lng ?? 77.56857242435218), zoom: 18,);
+      LocationController.getGeoLocationPosition().then((value) async {
+        lat = value.latitude;
+        lng = value.longitude;
+        await initAdd(lat, lng);
+        if(_googleMapController != null){
+          _googleMapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(lat, lng))));
+        }
+      });
+    }
+
     // TODO: implement initState
     super.initState();
   }
 
   initAdd(lat, lng) async {
-    var res = await placeApiProvider.getAddressFromLatLong(
-        lat.toString(), lng.toString());
-    pref = await SharedPreferences.getInstance();
+    var res = await placeApiProvider.getAddressFromLatLong(lat.toString(), lng.toString());
     setState(() {
       textController.text = res;
       addressTextController.text = res;
@@ -105,93 +112,42 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                       child: GoogleMap(
                         myLocationEnabled: true,
                         zoomControlsEnabled: false,
-                        // hide location button
                         myLocationButtonEnabled: false,
                         mapType: MapType.normal,
-                        //  camera position
-                        initialCameraPosition: cameraPosition,
+                        initialCameraPosition: initialCameraPosition,
                         onMapCreated: (GoogleMapController controller) {
                           _controller.complete(controller);
+                          _googleMapController = controller;
                         },
                         onCameraMoveStarted: () {
-                          // notify map is moving
                           mapPickerController.mapMoving!();
                           textController.text = "checking ...";
                         },
-                        onCameraMove: (cameraPosition) {
-                          this.cameraPosition = cameraPosition;
+                        onCameraMove: (initialCameraPosition) {
+                          this.initialCameraPosition = initialCameraPosition;
                         },
                         onCameraIdle: () async {
-                          // notify map stopped moving
                           mapPickerController.mapFinishedMoving!();
-                          //get address name from camera position
-                          // List<Suggestion> placemarks = await placemarkFromCoordinates(
-                          //   cameraPosition.target.latitude,
-                          //   cameraPosition.target.longitude,
-                          // );
-                          print("jjr");
                           var a = await placeApiProvider.getAddressFromLatLong(
-                              cameraPosition.target.latitude.toString(),
-                              cameraPosition.target.longitude.toString());
+                              initialCameraPosition.target.latitude.toString(),
+                              initialCameraPosition.target.longitude.toString());
                           setState(() {
-                            textController.text =
-                                a; //'${cameraPosition.target.longitude},${cameraPosition.target.latitude}';
+                            textController.text = a;
                             registrationController.address = a.obs;
                             addressTextController.text = a;
 
                             registrationController.lat.value =
-                                cameraPosition.target.latitude;
+                                initialCameraPosition.target.latitude;
                             registrationController.lng.value =
-                                cameraPosition.target.longitude;
+                                initialCameraPosition.target.longitude;
                             registrationController.address.value =
                                 textController.value.text;
-
-                            pref.setDouble(
-                                'lat', cameraPosition.target.latitude);
-                            pref.setDouble(
-                                'lng', cameraPosition.target.longitude);
                           });
-
-                          // update the ui with the address
-                          print('------------' +
-                              textController.value.text +
-                              '-----------');
-                          //'${placemarks.first.name}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}';
                         },
                       ),
-                      // GoogleMap(
-                      //   myLocationEnabled: true,
-                      //   zoomControlsEnabled: false,
-                      //   // hide location button
-                      //   myLocationButtonEnabled: false,
-                      //   mapType: MapType.normal,
-                      //   //  camera position
-                      //   initialCameraPosition: cameraPosition,
-                      //   onMapCreated: (GoogleMapController controller) {
-                      //     _controller.complete(controller);
-                      //     print("heje");
-                      //   },
-                      //   onCameraMoveStarted: () {
-                      //     // notify map is moving
-                      //     mapPickerController.mapMoving!();
-                      //   },
-                      //   onCameraMove: (cameraPosition) {
-                      //     this.cameraPosition = cameraPosition;
-                      //   },
-                      //   onCameraIdle: () async {
-                      //     // notify map stopped moving
-                      //     mapPickerController.mapFinishedMoving!();
-                      //     //get address name from camera position
-                      //     // List<Placemark> placemarks = await placemarkFromCoordinates(
-                      //     //   cameraPosition.target.latitude,
-                      //     //   cameraPosition.target.longitude,
-                      //     // );
-                      //   },
-                      // ),
                     ),
                   ),
-                  isVisible
-                      ? Expanded(
+                  isVisible ? Expanded(
                           flex: 14,
                           child: Container(
                             padding: EdgeInsets.all(
@@ -222,9 +178,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                           if (value.toString().isEmpty) {
                                             return "Please Filled Required Fields.";
                                           }
-                                          var containPincode =
-                                              RegExp(r'^.*\d{6}.*$')
-                                                  .hasMatch(value.toString());
+                                          var containPincode = RegExp(r'^.*\d{6}.*$').hasMatch(value.toString());
                                           if (!containPincode) {
                                             return 'Address Should Contain Pincode';
                                           }
@@ -295,14 +249,13 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                           //         addressTextController
                                           //             .value.text);
                                           setState(() {});
-                                          if (addressTextController
-                                              .value.text.isNotEmpty) {
+                                          if (addressTextController.value.text.isNotEmpty) {
                                             setState(() {
                                               List<String> ls =
                                                   addressTextController
                                                       .value.text
                                                       .split(' ');
-                                              var pin;
+                                              String pin = '';
                                               for (var i in ls) {
                                                 var a = RegExp(r'^.*\d{6}.*$')
                                                     .hasMatch(i);
@@ -312,16 +265,16 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                               }
                                               locationController.mapSelected = true.obs;
                                               registrationController.isMapSelected = true.obs;
-                                              registrationController.pinCode.value = pin.split(',')[0];
+                                              registrationController.pinCode.value = pin.replaceAll(',', '');
                                               registrationController.address = addressTextController.value.text.obs;
                                               registrationController.howToReach.value = optionalAddController.text;
-                                              print(registrationController.address);
+                                              registrationController.lat.value = lat;
+                                              registrationController.lng.value = lng;
 
                                               //go back to registration screen
                                               Get.close(2);
                                             });
                                           } else {
-                                            print("Outside if");
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               const SnackBar(
@@ -332,19 +285,6 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                             );
                                           }
                                         }
-                                        // } else {
-                                        //   ScaffoldMessenger.of(context)
-                                        //       .showSnackBar(
-                                        //     const SnackBar(
-                                        //       content: Text(
-                                        //           "Address Should Contain Pincode"),
-                                        //       backgroundColor: Colors.red,
-                                        //     ),
-                                        //   );
-                                        // }
-
-                                        //
-                                        // Navigator.pop(context);
                                       },
                                       style: ButtonStyle(
                                         backgroundColor:
@@ -364,14 +304,12 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                               ),
                             ),
                           ),
-                        )
-                      : Container()
+                        ) : Container()
                 ],
               ),
             ),
           ),
-          !isVisible
-              ? Positioned(
+          !isVisible && textController.text.isNotEmpty ? Positioned(
                   bottom: 24,
                   child: SizedBox(
                     height: 50,
@@ -404,8 +342,13 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                       ),
                     ),
                   ),
-                )
-              : Container()
+                ) : Container(),
+          if(textController.text.isEmpty) Container(
+            height: size.height,
+            width: size.width,
+            color: Colors.black12,
+            child: const Center(child: CircularProgressIndicator.adaptive()),
+          )
         ],
       ),
     );

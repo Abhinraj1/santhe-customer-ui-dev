@@ -44,16 +44,16 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
     if(widget.lat != null && widget.lng != null){
       lat = widget.lat!;
       lng = widget.lng!;
-      initialCameraPosition = CameraPosition(target: LatLng(lat, lng), zoom: 18,);
+      initialCameraPosition = CameraPosition(target: LatLng(lat, lng), zoom: 14,);
     }
     else{
-      initialCameraPosition = CameraPosition(target: LatLng(currentUser?.lat ?? 12.980143644412847, currentUser?.lng ?? 77.56857242435218), zoom: 18,);
+      initialCameraPosition = CameraPosition(target: LatLng(currentUser?.lat ?? 12.980143644412847, currentUser?.lng ?? 77.56857242435218), zoom: 14);
       LocationController.getGeoLocationPosition().then((value) async {
         lat = value.latitude;
         lng = value.longitude;
         await initAdd(lat, lng);
         if(_googleMapController != null){
-          _googleMapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(lat, lng))));
+          _googleMapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(lat, lng), zoom: 14)));
         }
       });
     }

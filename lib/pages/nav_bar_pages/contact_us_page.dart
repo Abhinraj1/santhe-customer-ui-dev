@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:get/get.dart';
 import 'package:santhe/constants.dart';
@@ -193,6 +194,12 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 borderSide: const BorderSide(
                                     width: 1.0, color: kTextFieldGrey),
                               ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    kTextFieldCircularBorderRadius),
+                                borderSide: BorderSide(
+                                    width: 1.0, color: AppColors().brandDark),
+                              ),
                             ),
                           ),
                         ),
@@ -257,6 +264,12 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                     kTextFieldCircularBorderRadius),
                                 borderSide: const BorderSide(
                                     width: 1.0, color: kTextFieldGrey),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    kTextFieldCircularBorderRadius),
+                                borderSide: BorderSide(
+                                    width: 1.0, color: AppColors().brandDark),
                               ),
                               hintText: 'e.g. Your name here...',
                               hintStyle: kHintStyle,
@@ -399,6 +412,12 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 kTextFieldCircularBorderRadius),
                             borderSide: const BorderSide(
                                 width: 1.0, color: kTextFieldGrey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                kTextFieldCircularBorderRadius),
+                            borderSide: BorderSide(
+                                width: 1.0, color: AppColors().brandDark),
                           ),
                           hintText: 'Write your message here...',
                           hintStyle: kHintStyle,

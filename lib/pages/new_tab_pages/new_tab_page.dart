@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:santhe/constants.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
@@ -30,9 +31,7 @@ class _NewTabPageState extends State<NewTabPage> {
 
   String listName = '';
   int totalCustList = 0;
-  int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
+  int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
   String? selectedValue;
   // List<UserList> items = Boxes.getUserListDB().values.map((e) => e).toList();
 
@@ -47,7 +46,7 @@ class _NewTabPageState extends State<NewTabPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 item.listName,
-                style: GoogleFonts.mulish(
+                style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
                     fontWeight: FontWeight.w400),
@@ -73,8 +72,6 @@ class _NewTabPageState extends State<NewTabPage> {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    Box<UserList> box = Boxes.getUserListDB();
-
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
@@ -83,6 +80,7 @@ class _NewTabPageState extends State<NewTabPage> {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
+    apiController.getAllCustomerLists(custId);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: ValueListenableBuilder<Box<UserList>>(
@@ -93,19 +91,12 @@ class _NewTabPageState extends State<NewTabPage> {
                 ? FloatingActionButton(
                     elevation: 0.0,
                     onPressed: () async {
-                      setState(() {});
                       //todo have the same api do all the heavy lifting
                       List<UserList> top5UserList =
-                          apiController.userListsDB.length > 5
-                              ? apiController.userListsDB
-                                  .getRange(
-                                      apiController.userListsDB.length - 6,
-                                      apiController.userListsDB.length - 1)
-                                  .toList()
+                          apiController.userListsDB.length > 5 ? apiController.userListsDB.getRange(apiController.userListsDB.length - 6, apiController.userListsDB.length - 1).toList()
                               : apiController.userListsDB;
 
-                      int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      int userListCount = await apiController.getAllCustomerLists(custId);
 
                       showModalBottomSheet<void>(
                           backgroundColor: Colors.transparent,
@@ -192,7 +183,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:
-                                                            GoogleFonts.mulish(
+                                                            TextStyle(
                                                           color: Colors.orange,
                                                           fontWeight:
                                                               FontWeight.w700,
@@ -222,7 +213,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                         horizontal: 0.0),
                                                 title: Text(
                                                   'Create a new list',
-                                                  style: GoogleFonts.mulish(
+                                                  style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.grey.shade600,
@@ -260,7 +251,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                   decoration: InputDecoration(
                                                     hintText: 'Enter list Name',
                                                     hintStyle:
-                                                        GoogleFonts.mulish(
+                                                        TextStyle(
                                                             fontSize: 16.sp,
                                                             fontWeight:
                                                                 FontWeight.w400,
@@ -299,7 +290,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                               .brandDark),
                                                     ),
                                                   ),
-                                                  style: GoogleFonts.mulish(
+                                                  style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.grey.shade600,
@@ -322,7 +313,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                       title: Text(
                                                         'Start from an old list',
                                                         style:
-                                                            GoogleFonts.mulish(
+                                                            TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w500,
@@ -363,7 +354,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                                     true,
                                                                 hint: Text(
                                                                   'Select',
-                                                                  style: GoogleFonts.mulish(
+                                                                  style: TextStyle(
                                                                       fontSize:
                                                                           16.sp,
                                                                       fontWeight:
@@ -405,7 +396,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                                         .shade100,
                                                                 buttonHeight:
                                                                     50,
-                                                                style: GoogleFonts.mulish(
+                                                                style: TextStyle(
                                                                     color: Colors
                                                                         .grey,
                                                                     fontSize:
@@ -512,12 +503,9 @@ class _NewTabPageState extends State<NewTabPage> {
                                                       if (_formKey.currentState!
                                                           .validate()) {
                                                         //add to user list to hive db
-                                                        final box = Boxes
-                                                            .getUserListDB();
+                                                        final box = Boxes.getUserListDB();
 
                                                         if (custId == 404) {
-                                                          print(
-                                                              'login to continue');
                                                           Get.snackbar(
                                                               'Login to Continue',
                                                               'Please log in to sync your data and process futher...',
@@ -752,7 +740,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                   },
                                                   child: Text(
                                                     'Next',
-                                                    style: GoogleFonts.mulish(
+                                                    style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.w700,
@@ -784,7 +772,8 @@ class _NewTabPageState extends State<NewTabPage> {
       body: ValueListenableBuilder<Box<UserList>>(
         valueListenable: Boxes.getUserListDB().listenable(),
         builder: (context, box, widget) {
-          var userLists = box.values.toList().cast<UserList>();
+          Map<dynamic, UserList> userLists = box.toMap();
+          List<dynamic> _userListKeys = userLists.keys.toList();
           ScreenUtil.init(
               BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width,
@@ -793,63 +782,66 @@ class _NewTabPageState extends State<NewTabPage> {
               context: context,
               minTextAdapt: true,
               orientation: Orientation.portrait);
-          return userLists.isEmpty
+          return RefreshIndicator(child: userLists.isEmpty
               ? SizedBox(
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
+            height: double.infinity,
+            width: double.infinity,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // SizedBox(height: screenHeight * 23),
+                  SizedBox(
+                    height: screenWidth * 100,
+                    width: screenWidth * 100,
+                    child: SvgPicture.asset(
+                      'assets/new_tab_image.svg',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 80.sp),
+                    child: Stack(
                       children: [
-                        // SizedBox(height: screenHeight * 23),
-                        SizedBox(
-                          height: screenWidth * 100,
-                          width: screenWidth * 100,
-                          child: SvgPicture.asset(
-                            'assets/new_tab_image.svg',
-                          ),
+                        Text(
+                          'Get started by easily creating your\nshopping list',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16.sp,
+                              color: kTextGrey),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 80.sp),
-                          child: Stack(
-                            children: [
-                              Text(
-                                'Get started by easily creating your\nshopping list',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.mulish(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16.sp,
-                                    color: kTextGrey),
-                              ),
-                              SizedBox(
-                                height: screenWidth * 40,
-                                width: screenWidth * 50,
-                                child: SvgPicture.asset(
-                                  'assets/new_tab_arrow.svg',
-                                  color: Colors.orange,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ],
+                        SizedBox(
+                          height: screenWidth * 40,
+                          width: screenWidth * 50,
+                          child: SvgPicture.asset(
+                            'assets/new_tab_arrow.svg',
+                            color: Colors.orange,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ],
                     ),
                   ),
-                )
+                ],
+              ),
+            ),
+          )
               : ListView.builder(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 18.0, horizontal: 3.0),
-                  itemCount: userLists.length,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return UserListCard(
-                      userList: userLists[index],
-                    );
-                  },
-                );
+            padding: const EdgeInsets.symmetric(
+                vertical: 18.0, horizontal: 3.0),
+            itemCount: userLists.length,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return UserListCard(
+                userKey: _userListKeys[index],
+                userList: userLists[_userListKeys[index]]!,
+              );
+            },
+          ), onRefresh: () async {
+            await apiController.getAllCustomerLists(custId);
+          });
         },
       ),
     );

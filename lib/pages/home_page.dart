@@ -25,6 +25,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final apiController = Get.find<APIs>();
+
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -33,6 +36,7 @@ class _HomePageState extends State<HomePage> {
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
+    apiController.searchedItemResult('potato');
     super.initState();
   }
 
@@ -79,7 +83,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 10.0,
           title: AutoSizeText(
             kAppName,
-            style: GoogleFonts.mulish(
+            style: TextStyle(
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
                 fontSize: 26.sp),
@@ -106,12 +110,12 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
               ),
             ),
-            unselectedLabelStyle: GoogleFonts.mulish(
+            unselectedLabelStyle: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 18.sp,
             ),
             labelColor: Colors.white,
-            labelStyle: GoogleFonts.mulish(
+            labelStyle: TextStyle(
                 fontSize: 18.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w800),

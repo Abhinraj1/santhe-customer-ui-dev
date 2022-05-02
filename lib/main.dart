@@ -34,15 +34,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  // FirebaseHelper().offerStream();
-
-  // DataFeeder().itemDataFeeder();
-  // await FireStorage().getFirebaseImageFolder();
 
   Hive.registerAdapter(ListItemAdapter());
   Hive.registerAdapter(UserListAdapter());
@@ -65,103 +59,19 @@ void main() async {
   await Hive.openBox<String>('contentDB');
   await Hive.openBox<UserList>('userListDB');
 
-  final bool showHome =
-      Boxes.getUserPrefs().get('showHome', defaultValue: false) ?? false;
-  final bool isLoggedIn =
-      Boxes.getUserPrefs().get('isLoggedIn', defaultValue: false) ?? false;
-  final bool isRegistered =
-      Boxes.getUserPrefs().get('isRegistered', defaultValue: false) ?? false;
+  final bool showHome = Boxes.getUserPrefs().get('showHome', defaultValue: false) ?? false;
+  final bool isLoggedIn = Boxes.getUserPrefs().get('isLoggedIn', defaultValue: false) ?? false;
+  final bool isRegistered = Boxes.getUserPrefs().get('isRegistered', defaultValue: false) ?? false;
 
-  final apiController = Get.put(APIs());
-  final locationController = Get.put(LocationController());
-  final registrationController = Get.put(RegistrationController());
-  final customImageUrl = Get.put(CustomImageController());
-  final sentUserListController = Get.put(SentUserListController());
-  final searchQueryController = Get.put(SearchQueryController());
+  Get.put(APIs());
+  Get.put(LocationController());
+  Get.put(RegistrationController());
+  Get.put(CustomImageController());
+  Get.put(SentUserListController());
+  Get.put(SearchQueryController());
   Get.put(ArchivedController());
   Get.put(NotificationController());
   Notifications().fcmInit();
-  // apiController.initCategoriesDB();
-
-  //content update check and caching
-
-// //OVOOVOVOOO
-//   CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
-//   var box = Boxes.getCacheRefreshInfo();
-//
-//   //getting all content that's to be cached if not already done
-//   if (!box.containsKey('cacheRefresh') || box.isEmpty) {
-//     //cat data
-//     await apiController.getAllCategories();
-//     box.put('cacheRefresh', newCacheRefresh);
-//
-//     //faq data
-//     await apiController.getAllFAQs();
-//
-//     //aboutUs & terms n condition data
-//     await apiController.getCommonContent();
-//
-//     //items data for search
-//     // await apiController.getAllItems();
-//
-//     print('first cache load');
-//   }
-//
-//   //catUpdate checking
-//   if (box.get('cacheRefresh')?.catUpdate.isBefore(newCacheRefresh.catUpdate) ??
-//       true) {
-//     print(
-//         '========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
-// //calling api and saving to db (api code has db write code integrated)
-//     await apiController.getAllCategories();
-//     print('>>>>>>>>>>>>>>fetching cat');
-//   }
-//   // apiController.initCategoriesDB();
-//
-//   //faq cache check and storing
-//   if (box
-//           .get('cacheRefresh')
-//           ?.custFaqUpdate
-//           .isBefore(newCacheRefresh.custFaqUpdate) ??
-//       true) {
-//     //get & store faq data
-//     print('-----------------Updating FAQ------------------');
-//     await apiController.getAllFAQs();
-//   }
-//
-//   // aboutUs cache check and storing
-//   if (box
-//           .get('cacheRefresh')
-//           ?.aboutUsUpdate
-//           .isBefore(newCacheRefresh.aboutUsUpdate) ??
-//       true) {
-//     print('-----------------Updating About Us------------------');
-//     await apiController.getCommonContent();
-//   } else if (box
-//           .get('cacheRefresh')
-//           ?.termsUpdate
-//           .isBefore(newCacheRefresh.termsUpdate) ??
-//       true) {
-//     print('-----------------Updating Terms & Condition------------------');
-//     await apiController.getCommonContent();
-//   }
-//
-//   //item cache check and storing
-//   if (box
-//           .get('cacheRefresh')
-//           ?.itemUpdate
-//           .isBefore(newCacheRefresh.itemUpdate) ??
-//       true) {
-//     print('-----------------Refreshing Item Image------------------');
-//     // await apiController.getAllItems();
-//     //clearing image cache
-//     DefaultCacheManager manager = DefaultCacheManager();
-//     manager.emptyCache();
-//   }
-//
-//   box.put('cacheRefresh', newCacheRefresh);
-//
-// //OVOVOVO
 
   runApp(MyApp(
     showHome: showHome,
@@ -209,7 +119,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: kAppName,
         theme: AppTheme().themeData.copyWith(
-              textSelectionTheme: TextSelectionThemeData(
+              textSelectionTheme: const TextSelectionThemeData(
                 selectionHandleColor: Colors.transparent,
               ),
             ),
@@ -218,8 +128,6 @@ class MyApp extends StatelessWidget {
                 ? const SplashToHome()
                 : UserRegistrationPage(userPhoneNumber: userPhone)
             : const SplashToOnboarding(),
-
-        // home: showHome ? const SplashToHome() : const OnboardingPage(),
       ),
       allowtextScaling: false,
       size: const Size(390, 844),

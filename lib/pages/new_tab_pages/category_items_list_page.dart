@@ -61,7 +61,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
         ),
         title: Text(
           Boxes.getCategoriesDB().get(catID)?.catName ?? 'Category Items',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 18.sp),
@@ -150,7 +150,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
                                 minFontSize: 14,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xffB0B0B0),
                                     fontSize: 18.sp),
@@ -161,7 +161,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                                 Flexible(
                                   child: Text(
                                     '${currentUserList.items.length}',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 21.sp,
                                         fontWeight: FontWeight.w800,
                                         color: Colors.orange),
@@ -172,7 +172,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                                       ? 'Item'
                                       : 'Items',
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14.sp,
                                       color: Colors.orange),

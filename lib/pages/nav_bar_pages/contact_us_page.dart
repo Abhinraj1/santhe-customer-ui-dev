@@ -38,16 +38,16 @@ class _ContactUsPageState extends State<ContactUsPage> {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     final apiController = Get.find<APIs>();
-    final TextStyle kHintStyle = GoogleFonts.mulish(
+    final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
         color: Colors.grey.shade500);
-    final TextStyle kTextInputStyle = GoogleFonts.mulish(
+    final TextStyle kTextInputStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
     final TextStyle kLabelStyle =
-        GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
+        TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0);
 
     ScreenUtil.init(
         BoxConstraints(
@@ -73,7 +73,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
         ),
         title: Text(
           'Contact Us/Feedback',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 18.sp),
@@ -87,7 +87,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
           //   child: Center(
           //     child: Text(
           //       'Contact Us',
-          //       style: GoogleFonts.mulish(
+          //       style: TextStyle(
           //           color: Colors.orange,
           //           fontWeight: FontWeight.w700,
           //           fontSize: 24.sp),
@@ -103,7 +103,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
             child: Text(
               'Your opinion and feedback is of utmost importance to us. Please leave your comments and contact information below and we will get back to you. You can also reach us on your favorite social media sites and apps.',
               textAlign: TextAlign.left,
-              style: GoogleFonts.mulish(
+              style: TextStyle(
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.w400,
                 // height: 1.2,
@@ -127,7 +127,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         child: Text(
                           'Phone no.',
                           textAlign: TextAlign.start,
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
                               color: Colors.orange),
@@ -156,7 +156,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 return null;
                               }
                             },
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 1.0,
                                 fontSize: 16.sp,
@@ -215,7 +215,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         child: Text(
                           'Name',
                           textAlign: TextAlign.start,
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
                               color: Colors.orange),
@@ -288,7 +288,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         child: Text(
                           'Email Id',
                           textAlign: TextAlign.start,
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
                               color: Colors.orange),
@@ -359,7 +359,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         child: Text(
                           'Your Message',
                           textAlign: TextAlign.start,
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
                               color: Colors.orange),
@@ -400,7 +400,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               ),
                             ),
                           ),
-                          // counterStyle: GoogleFonts.mulish(color: Colors.grey),
+                          // counterStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 kTextFieldCircularBorderRadius),
@@ -467,7 +467,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           fit: BoxFit.scaleDown,
                           child: Text(
                             'Send',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontSize: 18.sp,

@@ -101,7 +101,7 @@ class _OffersListPageState extends State<OffersListPage> {
                             alignment: Alignment.center,
                             child: Text(
                               'More offers awaited in next hours',
-                              style: GoogleFonts.mulish(
+                              style: TextStyle(
                                   color: const Color(0xffBBBBBB),
                                   fontWeight: FontWeight.w400,
                                   fontSize: 13.sp),

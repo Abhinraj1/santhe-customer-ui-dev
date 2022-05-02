@@ -76,7 +76,7 @@ class MerchantOfferCard extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                             text: 'Offer Price: ',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.w400,
                               color: Colors.orange,
@@ -85,7 +85,7 @@ class MerchantOfferCard extends StatelessWidget {
                               TextSpan(
                                 text:
                                     'Rs ${currentMerchantOffer.merchResponse.merchTotalPrice}',
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.orange,
@@ -97,7 +97,7 @@ class MerchantOfferCard extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 12.0),
                         child: Text(
                           '${currentMerchantOffer.merchResponse.merchOfferQuantity} of ${userList.items.length} items\navailable',
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                             color: Colors.orange,
                             fontSize: 24.sp,
                             fontWeight: FontWeight.w900,
@@ -110,7 +110,7 @@ class MerchantOfferCard extends StatelessWidget {
                           text: TextSpan(
                               text:
                                   'Merchant is ${currentMerchantOffer.custDistance} ${currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
-                              style: GoogleFonts.mulish(
+                              style: TextStyle(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w400,
                                 color: const Color(0xffBBBBBB),
@@ -119,7 +119,7 @@ class MerchantOfferCard extends StatelessWidget {
                                 TextSpan(
                                   text:
                                       currentMerchantOffer.merchResponse.merchDelivery ? 'Does home delivery' : 'No home delivery',
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w700,
                                     color: const Color(0xffBBBBBB),

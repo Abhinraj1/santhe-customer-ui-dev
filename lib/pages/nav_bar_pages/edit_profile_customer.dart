@@ -96,16 +96,16 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    final TextStyle kHintStyle = GoogleFonts.mulish(
+    final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
         color: Colors.grey.shade500);
-    final TextStyle kTextInputStyle = GoogleFonts.mulish(
+    final TextStyle kTextInputStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
     final TextStyle kLabelStyle =
-        GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
+        TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
     return Scaffold(
       appBar: AppBar(
@@ -123,7 +123,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         ),
         title: Text(
           'Edit Profile',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 18.sp),
@@ -175,7 +175,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 child: Text(
                                   'Phone no.*',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -191,7 +191,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   child: TextFormField(
                                     keyboardType: TextInputType.phone,
                                     enabled: false,
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: 1.0,
                                         fontSize: 16.sp,
@@ -242,7 +242,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       ),
                                       hintText:
                                           '+91-${currentUser?.custId ?? '91-9876543210'}',
-                                      hintStyle: GoogleFonts.mulish(
+                                      hintStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 1.0,
                                           color: Colors.grey.shade500),
@@ -261,7 +261,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 child: Text(
                                   'Name *',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -338,7 +338,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 child: Text(
                                   'Email Id *',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -419,7 +419,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 child: Text(
                                   'Address *',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -633,7 +633,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   fit: BoxFit.scaleDown,
                                   child: Text(
                                     'Done',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 18.sp,
@@ -654,7 +654,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                 child: Text(
                   'We will use your Phone number and Email to send you important communications',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.mulish(
+                  style: TextStyle(
                     color: const Color(0xff8B8B8B),
                     fontWeight: FontWeight.w500,
                     fontSize: 13.sp,

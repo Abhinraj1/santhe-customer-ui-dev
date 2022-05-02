@@ -36,7 +36,7 @@ class FAQPage extends StatelessWidget {
         ),
         title: Text(
           'FAQ',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 18.sp),

@@ -83,7 +83,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                     crossAxisCount: 3,
                     childAspectRatio: 4 / 5,
                   ),
-                  itemCount: snapshot.data?.length,
+                  itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     return ItemTileBtn(
                       item: snapshot.data![index],

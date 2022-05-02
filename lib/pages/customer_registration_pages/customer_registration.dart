@@ -258,6 +258,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                             width: 1.0,
                                             color: Color(0xffD1D1D1)),
                                       ),
+                                      
                                       hintText: '+91-9090909090',
                                       hintStyle: GoogleFonts.mulish(
                                           fontWeight: FontWeight.w500,

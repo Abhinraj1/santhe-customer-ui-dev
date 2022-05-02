@@ -456,7 +456,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                                 isScrollControlled: true,
                                                 builder: (context) {
                                                   return Container(
-                                                    height: screenHeight * 24,
+                                                    height: screenHeight * 30,
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           const BorderRadius

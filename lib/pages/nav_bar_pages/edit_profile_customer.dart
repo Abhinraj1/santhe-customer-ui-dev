@@ -33,9 +33,11 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  int userPhoneNumber = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+  int userPhoneNumber =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
-  User? currentUser = Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
+  User? currentUser =
+      Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
   late final TextEditingController _addressController = TextEditingController();
   late final TextEditingController _userNameController =
       TextEditingController(text: currentUser?.custName ?? 'John Doe');
@@ -67,12 +69,14 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     if (registrationController.howToReach.value.trim().isEmpty) {
       registrationController.howToReach.value = currentUser?.howToReach ?? '';
     }
-    if (registrationController.lat.value == 0.0 || registrationController.lng.value ==0.0) {
+    if (registrationController.lat.value == 0.0 ||
+        registrationController.lng.value == 0.0) {
       registrationController.lat.value = currentUser?.lat ?? 0.0;
       registrationController.lng.value = currentUser?.lng ?? 0.0;
     }
     if (registrationController.pinCode.value.isEmpty) {
-      registrationController.pinCode.value = currentUser?.pincode.toString() ?? '';
+      registrationController.pinCode.value =
+          currentUser?.pincode.toString() ?? '';
     }
 
     if (userPhoneNumber == 404) {
@@ -221,13 +225,20 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         borderRadius: BorderRadius.circular(
                                             kTextFieldCircularBorderRadius),
                                         borderSide: const BorderSide(
-                                            width: 1.0, color: kTextFieldGrey),
+                                            width: 2.0, color: kTextFieldGrey),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             kTextFieldCircularBorderRadius),
                                         borderSide: const BorderSide(
-                                            width: 1.0, color: kTextFieldGrey),
+                                            width: 2.0, color: kTextFieldGrey),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            kTextFieldCircularBorderRadius),
+                                        borderSide: BorderSide(
+                                            width: 2.0,
+                                            color: AppColors().brandDark),
                                       ),
                                       hintText:
                                           '+91-${currentUser?.custId ?? '91-9876543210'}',
@@ -296,13 +307,20 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kTextFieldCircularBorderRadius),
+                                      borderSide: BorderSide(
+                                          width: 2.0,
+                                          color: AppColors().brandDark),
                                     ),
                                     hintText: 'Your name',
                                     hintStyle: kHintStyle,
@@ -370,13 +388,20 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                           kTextFieldCircularBorderRadius),
                                       borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
+                                          width: 2.0, color: kTextFieldGrey),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kTextFieldCircularBorderRadius),
+                                      borderSide: BorderSide(
+                                          width: 2.0,
+                                          color: AppColors().brandDark),
                                     ),
                                     hintText: 'youremail@here.com',
                                     hintStyle: kHintStyle,
@@ -432,7 +457,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                   donePressed
                                               ? AppColors().red100
                                               : AppColors().grey40,
-                                          width: 1.sp)),
+                                          width: 2.0)),
                                   // padding: EdgeInsets.only(
                                   //     top: 13.h,
                                   //     left: 10.w,
@@ -460,7 +485,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               child: Center(
                                                 child: Icon(
                                                   Icons.home,
-                                                  color: AppColors().white100,                                               
+                                                  color: AppColors().white100,
                                                   size: 15.sp,
                                                 ),
                                               )),
@@ -550,7 +575,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         Get.off(() => LoginScreen());
                                       }
 
-                                      print('------>>>>>>>>' + registrationController.pinCode.value);
+                                      print('------>>>>>>>>' +
+                                          registrationController.pinCode.value);
                                       //todo add how to reach howToReach
                                       User updatedUser = User(
                                           address: registrationController
@@ -558,7 +584,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           emailId: _userEmailController.text,
                                           lat: registrationController.lat.value,
                                           lng: registrationController.lng.value,
-                                          pincode: int.parse(registrationController.pinCode.value),
+                                          pincode: int.parse(
+                                              registrationController
+                                                  .pinCode.value),
                                           phoneNumber: userPhone,
                                           custId: userPhone,
                                           custName: _userNameController.text,

@@ -4,13 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:group_button/group_button.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_item_model.dart';
-
 import '../../../controllers/api_service_controller.dart';
 import '../../../controllers/boxes_controller.dart';
 import '../../../firebase/firebase_helper.dart';
@@ -199,6 +198,14 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         keyboardType: TextInputType.text,
                                         controller: _customItemNameController,
                                         maxLength: 30,
+                                        validator: (value) {
+                                          if (value!.trim().isEmpty) {
+                                            return 'Please enter a name';
+                                          } else if (value.length > 30) {
+                                            return 'Name is too long';
+                                          }
+                                          return null;
+                                        },
                                         // maxLines: 2,
                                         textAlignVertical:
                                             TextAlignVertical.center,
@@ -226,6 +233,13 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                             borderSide: const BorderSide(
                                                 width: 1.0,
                                                 color: kTextFieldGrey),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                kTextFieldCircularBorderRadius),
+                                            borderSide: BorderSide(
+                                                width: 1.0,
+                                                color: AppColors().brandDark),
                                           ),
                                           hintText:
                                               'Enter product name here...',
@@ -361,6 +375,16 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                 width: 1.0,
                                                                 color:
                                                                     kTextFieldGrey),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                kTextFieldCircularBorderRadius),
+                                                        borderSide: BorderSide(
+                                                            width: 1.0,
+                                                            color: AppColors()
+                                                                .brandDark),
                                                       ),
                                                       prefix: GestureDetector(
                                                         onTap: () {
@@ -731,7 +755,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                       TextFormField(
                                         keyboardType: TextInputType.text,
                                         controller: _customBrandController,
-                                        maxLength: 45,
+                                        maxLength: 30,
                                         textAlignVertical:
                                             TextAlignVertical.center,
                                         style: TextStyle(
@@ -740,6 +764,12 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                             fontSize: 16.0),
                                         onSaved: (value) {
                                           _customBrandController.text = value!;
+                                        },
+                                        validator: (value) {
+                                          if (value!.length > 30) {
+                                            return 'Name is too long';
+                                          }
+                                          return null;
                                         },
                                         decoration: InputDecoration(
                                           counterStyle:
@@ -750,6 +780,13 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                             borderSide: const BorderSide(
                                                 width: 1.0,
                                                 color: kTextFieldGrey),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                kTextFieldCircularBorderRadius),
+                                            borderSide: BorderSide(
+                                                width: 1.0,
+                                                color: AppColors().brandDark),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(
@@ -792,7 +829,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                       TextFormField(
                                         keyboardType: TextInputType.text,
                                         controller: _customNotesController,
-                                        maxLength: 90,
+                                        maxLength: 50,
                                         textAlignVertical:
                                             TextAlignVertical.center,
                                         maxLines: 3,
@@ -803,6 +840,12 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         onSaved: (value) {
                                           _customNotesController.text = value!;
                                         },
+                                        validator: (value) {
+                                          if (value!.length > 50) {
+                                            return 'Note is too long';
+                                          }
+                                          return null;
+                                        },
                                         decoration: InputDecoration(
                                           counterStyle:
                                               TextStyle(color: Colors.grey),
@@ -812,6 +855,13 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                             borderSide: const BorderSide(
                                                 width: 1.0,
                                                 color: kTextFieldGrey),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                kTextFieldCircularBorderRadius),
+                                            borderSide: BorderSide(
+                                                width: 1.0,
+                                                color: AppColors().brandDark),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(
@@ -834,23 +884,26 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         child: SizedBox(
                                           width: screenWidth * 45,
                                           height: 50,
-                                          child: isProcessing
-                                              ? const CircularProgressIndicator()
-                                              : MaterialButton(
-                                                  elevation: 0.0,
-                                                  highlightElevation: 0.0,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16.0)),
-                                                  color: Colors.orange,
-                                                  onPressed: () async {
+                                          child: MaterialButton(
+                                            elevation: 0.0,
+                                            disabledColor: Colors.grey,
+                                            highlightElevation: 0.0,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        16.0)),
+                                            color: Colors.orange,
+                                            onPressed: isProcessing
+                                                ? null
+                                                : () async {
                                                     //todo add list item to user list on firebase
                                                     final itemUnit =
                                                         selectedUnit;
 
                                                     setState(() {
+                                                      print('Set State Called');
                                                       isProcessing = true;
+                                                      print(isProcessing);
                                                     });
 
                                                     if (_formKey.currentState!
@@ -915,7 +968,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                         if (response == 1) {
                                                           final box = Boxes
                                                               .getUserListDB();
-                                                          //adding item to user list
+                                                          //adding item to user lis 
                                                           box
                                                               .get(
                                                                   currentUserListDBKey)
@@ -964,20 +1017,20 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                         }
                                                       }
                                                     } else {
-                                                      Get.snackbar(
-                                                        'Please fill all required values',
-                                                        'Please enter all the values for required fields...',
-                                                        snackPosition:
-                                                            SnackPosition.TOP,
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                        margin: const EdgeInsets
-                                                            .all(10.0),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(15.0),
-                                                        colorText: Colors.grey,
-                                                      );
+                                                      // Get.snackbar(
+                                                      //   'Please fill all required values',
+                                                      //   'Please enter all the values for required fields...',
+                                                      //   snackPosition:
+                                                      //       SnackPosition.TOP,
+                                                      //   backgroundColor:
+                                                      //       Colors.white,
+                                                      //   margin: const EdgeInsets
+                                                      //       .all(10.0),
+                                                      //   padding:
+                                                      //       const EdgeInsets
+                                                      //           .all(15.0),
+                                                      //   colorText: Colors.grey,
+                                                      // );
                                                     }
 
                                                     setState(() {

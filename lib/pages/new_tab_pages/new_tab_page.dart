@@ -31,7 +31,9 @@ class _NewTabPageState extends State<NewTabPage> {
 
   String listName = '';
   int totalCustList = 0;
-  int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
+  int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
   String? selectedValue;
   // List<UserList> items = Boxes.getUserListDB().values.map((e) => e).toList();
 
@@ -93,10 +95,16 @@ class _NewTabPageState extends State<NewTabPage> {
                     onPressed: () async {
                       //todo have the same api do all the heavy lifting
                       List<UserList> top5UserList =
-                          apiController.userListsDB.length > 5 ? apiController.userListsDB.getRange(apiController.userListsDB.length - 6, apiController.userListsDB.length - 1).toList()
+                          apiController.userListsDB.length > 5
+                              ? apiController.userListsDB
+                                  .getRange(
+                                      apiController.userListsDB.length - 6,
+                                      apiController.userListsDB.length - 1)
+                                  .toList()
                               : apiController.userListsDB;
 
-                      int userListCount = await apiController.getAllCustomerLists(custId);
+                      int userListCount =
+                          await apiController.getAllCustomerLists(custId);
 
                       showModalBottomSheet<void>(
                           backgroundColor: Colors.transparent,
@@ -182,8 +190,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                         'Add New List',
                                                         textAlign:
                                                             TextAlign.center,
-                                                        style:
-                                                            TextStyle(
+                                                        style: TextStyle(
                                                           color: Colors.orange,
                                                           fontWeight:
                                                               FontWeight.w700,
@@ -250,14 +257,13 @@ class _NewTabPageState extends State<NewTabPage> {
                                                   },
                                                   decoration: InputDecoration(
                                                     hintText: 'Enter list Name',
-                                                    hintStyle:
-                                                        TextStyle(
-                                                            fontSize: 16.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontStyle: FontStyle
-                                                                .italic,
-                                                            color: Colors.grey),
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        color: Colors.grey),
                                                     border: OutlineInputBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -312,8 +318,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                               0.0),
                                                       title: Text(
                                                         'Start from an old list',
-                                                        style:
-                                                            TextStyle(
+                                                        style: TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w500,
@@ -503,7 +508,8 @@ class _NewTabPageState extends State<NewTabPage> {
                                                       if (_formKey.currentState!
                                                           .validate()) {
                                                         //add to user list to hive db
-                                                        final box = Boxes.getUserListDB();
+                                                        final box = Boxes
+                                                            .getUserListDB();
 
                                                         if (custId == 404) {
                                                           Get.snackbar(
@@ -782,66 +788,68 @@ class _NewTabPageState extends State<NewTabPage> {
               context: context,
               minTextAdapt: true,
               orientation: Orientation.portrait);
-          return RefreshIndicator(child: userLists.isEmpty
-              ? SizedBox(
-            height: double.infinity,
-            width: double.infinity,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // SizedBox(height: screenHeight * 23),
-                  SizedBox(
-                    height: screenWidth * 100,
-                    width: screenWidth * 100,
-                    child: SvgPicture.asset(
-                      'assets/new_tab_image.svg',
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 80.sp),
-                    child: Stack(
-                      children: [
-                        Text(
-                          'Get started by easily creating your\nshopping list',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16.sp,
-                              color: kTextGrey),
+          return RefreshIndicator(
+              child: userLists.isEmpty
+                  ? SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // SizedBox(height: screenHeight * 23),
+                            SizedBox(
+                              height: screenWidth * 100,
+                              width: screenWidth * 100,
+                              child: SvgPicture.asset(
+                                'assets/new_tab_image.svg',
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 80.sp),
+                              child: Stack(
+                                children: [
+                                  Text(
+                                    'Get started by easily creating your\nshopping list',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16.sp,
+                                        color: kTextGrey),
+                                  ),
+                                  SizedBox(
+                                    height: screenWidth * 40,
+                                    width: screenWidth * 50,
+                                    child: SvgPicture.asset(
+                                      'assets/new_tab_arrow.svg',
+                                      color: Colors.orange,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: screenWidth * 40,
-                          width: screenWidth * 50,
-                          child: SvgPicture.asset(
-                            'assets/new_tab_arrow.svg',
-                            color: Colors.orange,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 18.0, horizontal: 3.0),
+                      itemCount: userLists.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return UserListCard(
+                          userKey: _userListKeys[index],
+                          userList: userLists[_userListKeys[index]]!,
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-            ),
-          )
-              : ListView.builder(
-            padding: const EdgeInsets.symmetric(
-                vertical: 18.0, horizontal: 3.0),
-            itemCount: userLists.length,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return UserListCard(
-                userKey: _userListKeys[index],
-                userList: userLists[_userListKeys[index]]!,
-              );
-            },
-          ), onRefresh: () async {
-            await apiController.getAllCustomerLists(custId);
-          });
+              onRefresh: () async {
+                await apiController.getAllCustomerLists(custId);
+              });
         },
       ),
     );

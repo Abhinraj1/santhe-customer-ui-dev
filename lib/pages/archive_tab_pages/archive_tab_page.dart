@@ -17,8 +17,11 @@ class ArchiveTabPage extends StatefulWidget {
   State<ArchiveTabPage> createState() => _ArchiveTabPageState();
 }
 
-class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAliveClientMixin{
-  int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
+class _ArchiveTabPageState extends State<ArchiveTabPage>
+    with AutomaticKeepAliveClientMixin {
+  int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
   final apiController = Get.find<APIs>();
   late Future<List<UserList>> userArchivedListsData;
   final ArchivedController _archivedController = Get.find();
@@ -27,12 +30,12 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
   void initState() {
     _archivedController.isDataLoading = true;
     _archivedController.update();
-    apiController.getArchivedCust(custId).then((value){
+    apiController.getArchivedCust(custId).then((value) {
       print(value);
       _archivedController.archivedList = value;
       _archivedController.isDataLoading = false;
       _archivedController.update();
-    }).catchError((e){
+    }).catchError((e) {
       _archivedController.isDataLoading = false;
       _archivedController.update();
     });
@@ -57,71 +60,82 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
     return Scaffold(
       body: GetBuilder<ArchivedController>(
         builder: (controller) {
-          if(controller.isDataLoading) return const Center(child: CircularProgressIndicator.adaptive());
-          if(controller.archivedList.isEmpty) {
+          if (controller.isDataLoading) {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
+          if (controller.archivedList.isEmpty) {
             return SizedBox(
-            height: double.infinity,
-            width: double.infinity,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // SizedBox(height: screenHeight * 23),
-                  SizedBox(
-                    height: screenWidth * 100,
-                    width: screenWidth * 100,
-                    child: SvgPicture.asset(
-                      'assets/archive_tab_image.svg',
+              height: double.infinity,
+              width: double.infinity,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // SizedBox(height: screenHeight * 23),
+                    SizedBox(
+                      height: screenWidth * 100,
+                      width: screenWidth * 100,
+                      child: SvgPicture.asset(
+                        'assets/archive_tab_image.svg',
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 28.sp, left: 23.sp, right: 23.sp),
-                    child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            text:
-                            'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
-                            style: GoogleFonts.mulish(
-                                color: kTextGrey,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16.sp),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: '\nNew ',
-                                style: GoogleFonts.mulish(
-                                    color: kTextGrey,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16.sp),
-                              ),
-                              TextSpan(
-                                text:
-                                'tab to create and send your shopping lists',
-                                style: GoogleFonts.mulish(
-                                    color: kTextGrey,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16.sp),
-                              ),
-                            ])),
-                  )
-                ],
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: 28.sp, left: 23.sp, right: 23.sp),
+                      child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              text:
+                                  'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
+                              style: GoogleFonts.mulish(
+                                  color: kTextGrey,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16.sp),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '\nNew ',
+                                  style: GoogleFonts.mulish(
+                                      color: kTextGrey,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 16.sp),
+                                ),
+                                TextSpan(
+                                  text:
+                                      'tab to create and send your shopping lists',
+                                  style: GoogleFonts.mulish(
+                                      color: kTextGrey,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16.sp),
+                                ),
+                              ])),
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
+            );
           }
           return RefreshIndicator(
             onRefresh: () async {
               setState(() {
                 //future builder will take care of future value so no need to mark this function async
                 userArchivedListsData = apiController.getArchivedCust(custId);
+                apiController.getArchivedCust(custId).then((value) {
+                  print(value);
+                  _archivedController.archivedList = value;
+                  _archivedController.isDataLoading = false;
+                  _archivedController.update();
+                }).catchError((e) {
+                  _archivedController.isDataLoading = false;
+                  _archivedController.update();
+                });
               });
               return;
             },
             child: ListView.builder(
               padding:
-              const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
+                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
               physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
               itemCount: controller.archivedList.length,
@@ -134,7 +148,8 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
                     context: context,
                     minTextAdapt: true,
                     orientation: Orientation.portrait);
-                return ArchivedUserListCard(userList: controller.archivedList[index], index: index);
+                return ArchivedUserListCard(
+                    userList: controller.archivedList[index], index: index);
               },
             ),
           );

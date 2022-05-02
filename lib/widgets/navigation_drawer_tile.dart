@@ -29,7 +29,7 @@ class NavigationDrawerTile extends StatelessWidget {
       ),
       title: Text(
         tileText,
-        style: GoogleFonts.mulish(
+        style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
             color: Colors.grey.shade600),

@@ -13,7 +13,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
       appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0.0),
       inputDecorationTheme: searchFieldDecorationTheme,
       textTheme: Theme.of(context).textTheme.copyWith(
-            headline6: GoogleFonts.mulish(
+            headline6: TextStyle(
                 color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w400),
           ),
     );

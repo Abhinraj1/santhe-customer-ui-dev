@@ -42,7 +42,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
 
   int customItemId = 4000;
 
-  final TextStyle kLabelTextStyle = GoogleFonts.mulish(
+  final TextStyle kLabelTextStyle = TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
   //todo add login check
@@ -101,13 +101,13 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(searchQuery,
-                      style: GoogleFonts.mulish(
-                          color: const Color(0xff8B8B8B),
+                      style: const TextStyle(
+                          color: Color(0xff8B8B8B),
                           fontWeight: FontWeight.w500,
                           fontSize: 16.0)),
-                  Text(
+                  const Text(
                     'Add a custom item',
-                    style: GoogleFonts.mulish(
+                    style: TextStyle(
                         color: Colors.orange,
                         fontWeight: FontWeight.w400,
                         fontSize: 15.0),
@@ -119,7 +119,6 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
           IconButton(
               onPressed: () {
                 //todo implement add to user list on firebase
-
                 showDialog(
                     context: context,
                     barrierColor: const Color.fromARGB(165, 241, 241, 241),
@@ -145,7 +144,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                       child: AutoSizeText(
                                         'Custom Item',
                                         textAlign: TextAlign.center,
-                                        style: GoogleFonts.mulish(
+                                        style: TextStyle(
                                             color: Colors.orange,
                                             fontWeight: FontWeight.w700,
                                             fontSize: screenWidth * 6),
@@ -188,7 +187,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                               children: <TextSpan>[
                                                 TextSpan(
                                                     text: ' *',
-                                                    style: GoogleFonts.mulish(
+                                                    style: TextStyle(
                                                         color: Colors.orange,
                                                         fontWeight:
                                                             FontWeight.w400,
@@ -203,7 +202,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         // maxLines: 2,
                                         textAlignVertical:
                                             TextAlignVertical.center,
-                                        style: GoogleFonts.mulish(
+                                        style: TextStyle(
                                             color: Colors.grey.shade500,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16.0),
@@ -213,7 +212,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         },
                                         decoration: InputDecoration(
                                           counterStyle:
-                                              TextStyle(color: Colors.grey),
+                                              const TextStyle(color: Colors.grey),
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(
                                                 kTextFieldCircularBorderRadius),
@@ -230,79 +229,12 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                           ),
                                           hintText:
                                               'Enter product name here...',
-                                          hintStyle: GoogleFonts.mulish(
+                                          hintStyle: TextStyle(
                                               fontWeight: FontWeight.w300,
                                               fontStyle: FontStyle.italic,
                                               color: Colors.grey.shade500),
                                         ),
                                       ),
-
-                                      //Category text field
-                                      // Padding(
-                                      //   padding: EdgeInsets.only(
-                                      //     bottom: 7.sp,
-                                      //     top: 21.sp,
-                                      //   ),
-                                      //   child: RichText(
-                                      //     text: TextSpan(
-                                      //         text: 'Category *',
-                                      //         style: kLabelTextStyle,
-                                      //         children: <TextSpan>[
-                                      //           TextSpan(
-                                      //               text: '',
-                                      //               style: GoogleFonts.mulish(
-                                      //                   color: const Color(
-                                      //                       0xffFFBE74),
-                                      //                   fontWeight:
-                                      //                       FontWeight.w300,
-                                      //                   fontSize: 13.sp))
-                                      //         ]),
-                                      //   ),
-                                      // ),
-                                      // TextFormField(
-                                      //   keyboardType: TextInputType.text,
-                                      //   controller:
-                                      //       _customerCategoryNameController,
-                                      //   textAlignVertical:
-                                      //       TextAlignVertical.center,
-                                      //   style: GoogleFonts.mulish(
-                                      //       color: Colors.grey.shade500,
-                                      //       fontWeight: FontWeight.w400,
-                                      //       fontSize: 16.0),
-                                      //   onSaved: (value) {
-                                      //     _customerCategoryNameController.text =
-                                      //         value!;
-                                      //   },
-                                      //   decoration: InputDecoration(
-                                      //     border: OutlineInputBorder(
-                                      //                                                           borderRadius:
-                                      //                                                               BorderRadius
-                                      //                                                                   .circular(
-                                      //                                                                       16.0),
-                                      //                                                           borderSide: BorderSide(
-                                      //                                                               color: Colors.grey
-                                      //                                                                   .shade200)),
-                                      //                                                       enabledBorder:
-                                      //                                                           OutlineInputBorder(
-                                      //                                                               borderRadius:
-                                      //                                                                   BorderRadius
-                                      //                                                                       .circular(
-                                      //                                                                           16.0),
-                                      //                                                               borderSide: BorderSide(
-                                      //                                                                   width: 2.0,
-                                      //                                                                   color: Colors
-                                      //                                                                       .grey
-                                      //                                                                       .shade200)),
-                                      //     hintText:
-                                      //         'Enter category name here...',
-                                      //     hintStyle: GoogleFonts.mulish(
-                                      //         fontWeight: FontWeight.w300,
-                                      //         fontStyle: FontStyle.italic,
-                                      //         color: Colors.grey.shade500),
-                                      //   ),
-                                      // ),
-
-                                      //Quantity Row
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.baseline,
@@ -339,7 +271,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                         topLeft:
                                                             Radius.circular(
                                                                 16.0),
-                                                        bottomLeft: const Radius
+                                                        bottomLeft: Radius
                                                             .circular(16.0),
                                                       ),
                                                       child: Container(
@@ -397,7 +329,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                     textAlignVertical:
                                                         TextAlignVertical
                                                             .center,
-                                                    style: GoogleFonts.mulish(
+                                                    style: const TextStyle(
                                                         color: Colors.orange,
                                                         fontWeight:
                                                             FontWeight.w700,
@@ -529,9 +461,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                             .addItemCustomImageUrl
                                                             .isEmpty
                                                         ? 'https://icon-library.com/images/add-new-icon/add-new-icon-29.jpg'
-                                                        : imageController
-                                                            .addItemCustomImageUrl
-                                                            .value,
+                                                        : imageController.addItemCustomImageUrl.value,
                                                     width: screenWidth * 25,
                                                     height: screenWidth * 25,
                                                     useOldImageOnUrlChange:
@@ -557,8 +487,6 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                               right: 10.0,
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  print(
-                                                      'upload custom image CTA triggered');
                                                   showModalBottomSheet<void>(
                                                       backgroundColor:
                                                           Colors.transparent,
@@ -617,14 +545,14 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                         FontWeight
                                                                             .w700,
                                                                     fontSize:
-                                                                        24,
+                                                                        22.sp,
                                                                   ),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets
+                                                                  padding: EdgeInsets
                                                                           .only(
                                                                       top:
-                                                                          12.0),
+                                                                          12.0.h),
                                                                   child: Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
@@ -636,7 +564,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                             onTap:
                                                                                 () async {
                                                                               Navigator.pop(context);
-                                                                              await FirebaseHelper().addCustomItemImage(DateTime.now().toUtc().toString().replaceAll(' ', 'T'), true, true).toString();
+                                                                              FirebaseHelper().addCustomItemImage(DateTime.now().toUtc().toString().replaceAll(' ', 'T'), true, true).toString();
                                                                             },
                                                                             child:
                                                                                 const CircleAvatar(
@@ -653,10 +581,10 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                          Text(
+                                                                          const Text(
                                                                             'Camera',
                                                                             style:
-                                                                                GoogleFonts.mulish(
+                                                                                TextStyle(
                                                                               color: Colors.grey,
                                                                               fontWeight: FontWeight.w500,
                                                                               fontSize: 16,
@@ -668,10 +596,10 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                         children: [
                                                                           GestureDetector(
                                                                             onTap:
-                                                                                () async {
+                                                                                () {
                                                                               //todo same as above
                                                                               Navigator.pop(context);
-                                                                              await FirebaseHelper().addCustomItemImage('${DateTime.now().toUtc().toString().replaceAll(' ', 'T')}', false, true).toString();
+                                                                              FirebaseHelper().addCustomItemImage(DateTime.now().toUtc().toString().replaceAll(' ', 'T'), false, true).toString();
                                                                             },
                                                                             child:
                                                                                 const CircleAvatar(
@@ -688,10 +616,10 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                          Text(
+                                                                          const Text(
                                                                             'Gallery',
                                                                             style:
-                                                                                GoogleFonts.mulish(
+                                                                                TextStyle(
                                                                               color: Colors.grey,
                                                                               fontWeight: FontWeight.w500,
                                                                               fontSize: 16,
@@ -745,7 +673,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                   BorderRadius.circular(10.0),
                                               selectedColor: Colors.orange,
                                               unselectedTextStyle:
-                                                  GoogleFonts.mulish(
+                                                  TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontSize: 16.sp,
@@ -760,7 +688,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                 const BoxShadow()
                                               ],
                                               selectedTextStyle:
-                                                  GoogleFonts.mulish(
+                                                  TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontSize: 16.sp,
@@ -788,7 +716,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                               children: <TextSpan>[
                                                 TextSpan(
                                                     text: ' (optional)',
-                                                    style: GoogleFonts.mulish(
+                                                    style: TextStyle(
                                                         color: const Color(
                                                             0xffFFBE74),
                                                         fontWeight:
@@ -806,7 +734,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         maxLength: 45,
                                         textAlignVertical:
                                             TextAlignVertical.center,
-                                        style: GoogleFonts.mulish(
+                                        style: TextStyle(
                                             color: Colors.grey.shade500,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16.0),
@@ -832,7 +760,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                           ),
                                           hintText:
                                               'You can mention brand, type or size of the item here',
-                                          hintStyle: GoogleFonts.mulish(
+                                          hintStyle: TextStyle(
                                               fontWeight: FontWeight.w300,
                                               fontStyle: FontStyle.italic,
                                               color: Colors.grey.shade500),
@@ -850,7 +778,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                               children: <TextSpan>[
                                                 TextSpan(
                                                     text: ' (optional)',
-                                                    style: GoogleFonts.mulish(
+                                                    style: TextStyle(
                                                         color: const Color(
                                                             0xffFFBE74),
                                                         fontWeight:
@@ -868,7 +796,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                         textAlignVertical:
                                             TextAlignVertical.center,
                                         maxLines: 3,
-                                        style: GoogleFonts.mulish(
+                                        style: TextStyle(
                                             color: Colors.grey.shade500,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16.0),
@@ -894,7 +822,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                           ),
                                           hintText:
                                               'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here ',
-                                          hintStyle: GoogleFonts.mulish(
+                                          hintStyle: TextStyle(
                                               fontWeight: FontWeight.w300,
                                               fontStyle: FontStyle.italic,
                                               color: Colors.grey.shade500),
@@ -1058,7 +986,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
                                                   },
                                                   child: AutoSizeText(
                                                     'Add',
-                                                    style: GoogleFonts.mulish(
+                                                    style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,

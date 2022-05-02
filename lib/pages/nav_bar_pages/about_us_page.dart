@@ -37,7 +37,7 @@ class AboutUsPage extends StatelessWidget {
         ),
         title: Text(
           'About Us',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 16.sp),
@@ -54,14 +54,14 @@ class AboutUsPage extends StatelessWidget {
               children: [
                 Text(
                   'Santhe',
-                  style: GoogleFonts.mulish(
+                  style: TextStyle(
                       color: Colors.orange,
                       fontWeight: FontWeight.w900,
                       fontSize: 60.sp),
                 ),
                 Text(
                   'Supporting local economy',
-                  style: GoogleFonts.mulish(
+                  style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.orange,
                       fontSize: 18.sp),

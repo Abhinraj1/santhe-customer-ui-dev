@@ -87,14 +87,14 @@ class _OfferTabPageState extends State<OfferTabPage> {
                           text: TextSpan(
                               text:
                                   'All your shopping lists that you have sent to\nShops in last 72 hours will appear here. Go to',
-                              style: GoogleFonts.mulish(
+                              style: TextStyle(
                                   color: kTextGrey,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 16.sp),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: '\nNew ',
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       color: kTextGrey,
                                       fontWeight: FontWeight.w900,
                                       fontSize: 16.sp),
@@ -102,7 +102,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                                 TextSpan(
                                   text:
                                       'tab to create and send your shopping lists',
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       color: kTextGrey,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16.sp),
@@ -136,7 +136,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                     child: Text(
                       'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 16.sp,
                           color: Colors.grey),
@@ -205,7 +205,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
 //         child: Text(
 //           'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
 //           textAlign: TextAlign.center,
-//           style: GoogleFonts.mulish(
+//           style: TextStyle(
 //               fontWeight: FontWeight.w400,
 //               fontSize: 16.sp,
 //               color: Colors.grey),

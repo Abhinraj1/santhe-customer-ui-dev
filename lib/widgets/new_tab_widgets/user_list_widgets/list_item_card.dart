@@ -37,7 +37,7 @@ class ListItemCard extends StatelessWidget {
     }
 
     final TextEditingController _qtyController = TextEditingController(
-        text: '${removeDecimalZeroFormat(listItem.quantity)}');
+        text: removeDecimalZeroFormat(listItem.quantity));
     final TextEditingController _brandController =
         TextEditingController(text: listItem.brandType);
     final TextEditingController _notesController =
@@ -47,19 +47,12 @@ class ListItemCard extends StatelessWidget {
         .indexWhere((element) => element == listItem.unit);
     final _unitsController = GroupButtonController(selectedIndex: unitIndex);
 
-    // print(
-    //     'TEST TEST TEST: ${listItem.possibleUnits.indexWhere((element) => element == listItem.unit)}');
 
     String selectedUnit = listItem.unit;
 
-    UserList currentUserList =
-        Boxes.getUserListDB().get(currentUserListDBKey) ??
-            fallBack_error_userList;
+    UserList currentUserList = Boxes.getUserListDB().get(currentUserListDBKey) ?? fallBack_error_userList;
 
-    final TextStyle kLabelTextStyle = GoogleFonts.mulish(
-        color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
-
-    // print('>>card built with image url: ${listItem.itemImageId}');
+    const TextStyle kLabelTextStyle = TextStyle(color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
     ScreenUtil.init(
         BoxConstraints(
@@ -81,10 +74,7 @@ class ListItemCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
-                      imageUrl: int.parse(listItem.itemId.replaceAll(
-                                  'projects/santhe-425a8/databases/(default)/documents/item/',
-                                  '')) <
-                              4000
+                      imageUrl: int.parse(listItem.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')) < 4000
                           ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
                           : listItem.itemImageId,
                       width: 50,
@@ -115,7 +105,7 @@ class ListItemCard extends StatelessWidget {
                                     : '${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit},\n${listItem.notes}',
                                 // softWrap: false,
                                 overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                   color: Colors.orange,
                                   fontSize: 16.sp,
                                 ),
@@ -125,7 +115,7 @@ class ListItemCard extends StatelessWidget {
                                 textAlign: TextAlign.start,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                   color: Colors.orange,
                                   fontSize: 14.sp,
                                 ),
@@ -178,7 +168,7 @@ class ListItemCard extends StatelessWidget {
                                             child: AutoSizeText(
                                               listItem.itemName,
                                               textAlign: TextAlign.center,
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                   color: Colors.orange,
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: screenWidth * 6),
@@ -227,7 +217,7 @@ class ListItemCard extends StatelessWidget {
                                                       padding: EdgeInsets.only(
                                                         bottom: 7.sp,
                                                       ),
-                                                      child: Text(
+                                                      child: const Text(
                                                         'Quantity',
                                                         style: kLabelTextStyle,
                                                       ),
@@ -248,7 +238,7 @@ class ListItemCard extends StatelessWidget {
                                                                   .circular(
                                                                       16.0),
                                                               bottomLeft:
-                                                                  const Radius
+                                                                  Radius
                                                                           .circular(
                                                                       16.0),
                                                             ),
@@ -611,9 +601,9 @@ class ListItemCard extends StatelessWidget {
                                                                                     ),
                                                                                   ),
                                                                                 ),
-                                                                                Text(
+                                                                                const Text(
                                                                                   'Camera',
-                                                                                  style: GoogleFonts.mulish(
+                                                                                  style: TextStyle(
                                                                                     color: Colors.grey,
                                                                                     fontWeight: FontWeight.w500,
                                                                                     fontSize: 16,
@@ -642,9 +632,9 @@ class ListItemCard extends StatelessWidget {
                                                                                     ),
                                                                                   ),
                                                                                 ),
-                                                                                Text(
+                                                                                const Text(
                                                                                   'Gallery',
-                                                                                  style: GoogleFonts.mulish(
+                                                                                  style: TextStyle(
                                                                                     color: Colors.grey,
                                                                                     fontWeight: FontWeight.w500,
                                                                                     fontSize: 16,
@@ -662,9 +652,9 @@ class ListItemCard extends StatelessWidget {
                                                             });
                                                       },
                                                       //todo fix image edit
-                                                      child: Visibility(
+                                                      child: const Visibility(
                                                         visible: false,
-                                                        child: const Icon(
+                                                        child: Icon(
                                                           CupertinoIcons
                                                               .pencil_circle_fill,
                                                           color: Colors.orange,
@@ -680,7 +670,7 @@ class ListItemCard extends StatelessWidget {
                                               padding: EdgeInsets.only(
                                                 bottom: 7.sp,
                                               ),
-                                              child: Text(
+                                              child: const Text(
                                                 'Unit',
                                                 style: kLabelTextStyle,
                                               ),
@@ -703,7 +693,7 @@ class ListItemCard extends StatelessWidget {
                                                     BorderRadius.circular(10.0),
                                                 selectedColor: Colors.orange,
                                                 unselectedTextStyle:
-                                                    GoogleFonts.mulish(
+                                                    TextStyle(
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         fontSize: 16.sp,
@@ -712,7 +702,7 @@ class ListItemCard extends StatelessWidget {
                                                 buttonWidth: 69.sp,
                                                 buttonHeight: 50.sp,
                                                 selectedTextStyle:
-                                                    GoogleFonts.mulish(
+                                                    TextStyle(
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         fontSize: 16.sp,
@@ -742,7 +732,7 @@ class ListItemCard extends StatelessWidget {
                                                     children: <TextSpan>[
                                                       TextSpan(
                                                           text: ' (optional)',
-                                                          style: GoogleFonts.mulish(
+                                                          style: TextStyle(
                                                               color: const Color(
                                                                   0xffFFBE74),
                                                               fontWeight:
@@ -762,7 +752,7 @@ class ListItemCard extends StatelessWidget {
                                               // maxLines: 2,
                                               textAlignVertical:
                                                   TextAlignVertical.center,
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                   color: Colors.grey.shade500,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 16.0),
@@ -791,7 +781,7 @@ class ListItemCard extends StatelessWidget {
                                                 ),
                                                 hintText:
                                                     'Your product type, brand or size goes here',
-                                                hintStyle: GoogleFonts.mulish(
+                                                hintStyle: TextStyle(
                                                     fontWeight: FontWeight.w300,
                                                     fontStyle: FontStyle.italic,
                                                     color:
@@ -810,7 +800,7 @@ class ListItemCard extends StatelessWidget {
                                                     children: <TextSpan>[
                                                       TextSpan(
                                                           text: ' (optional)',
-                                                          style: GoogleFonts.mulish(
+                                                          style: TextStyle(
                                                               color: const Color(
                                                                   0xffFFBE74),
                                                               fontWeight:
@@ -829,7 +819,7 @@ class ListItemCard extends StatelessWidget {
                                                   TextAlignVertical.center,
                                               maxLines: 3,
                                               maxLength: 90,
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                   color: Colors.grey.shade500,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 16.0),
@@ -858,7 +848,7 @@ class ListItemCard extends StatelessWidget {
                                                 ),
                                                 hintText:
                                                     'Mention type of package, number of packs, number of items in a pack etc here',
-                                                hintStyle: GoogleFonts.mulish(
+                                                hintStyle: TextStyle(
                                                     fontWeight: FontWeight.w300,
                                                     fontStyle: FontStyle.italic,
                                                     color:
@@ -880,29 +870,19 @@ class ListItemCard extends StatelessWidget {
                                                               16.0)),
                                                   color: Colors.orange,
                                                   onPressed: () async {
-                                                    print(
-                                                        '---------------${_qtyController.text} $selectedUnit---------------');
-                                                    print(
-                                                        '---------------${_brandController.text}---------------');
-                                                    print(
-                                                        '---------------${_notesController.text}---------------');
 
-                                                    if (_formKey.currentState!
-                                                        .validate()) {
+                                                    if (_formKey.currentState!.validate()) {
                                                       //--------------------------Creating List Item from Item and new data gathered from user------------------------
                                                       //TODO add parameter validation
 
                                                       //making a copy of current list item
-                                                      ListItem currentListItem =
-                                                          listItem;
+                                                      ListItem currentListItem = listItem;
 
                                                       //delete item
-                                                      currentUserList.items
-                                                          .remove(listItem);
+                                                      currentUserList.items.remove(listItem);
 
                                                       //add new updated item
-                                                      currentUserList.items
-                                                          .add(ListItem(
+                                                      currentUserList.items.add(ListItem(
                                                         brandType:
                                                             _brandController
                                                                 .text,
@@ -928,7 +908,7 @@ class ListItemCard extends StatelessWidget {
                                                       ));
 
                                                       //make changes persistent
-                                                      currentUserList.save();
+                                                      Boxes.getUserListDB().put(currentUserListDBKey, currentUserList);
 
                                                       Get.back();
                                                     } else {
@@ -944,8 +924,8 @@ class ListItemCard extends StatelessWidget {
                                                     }
                                                   },
                                                   child: AutoSizeText(
-                                                    'Done',
-                                                    style: GoogleFonts.mulish(
+                                                    'dfacn,',
+                                                    style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,

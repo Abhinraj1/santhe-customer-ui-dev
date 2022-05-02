@@ -70,7 +70,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: [
                     AutoSizeText(
                       'Welcome to',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                         fontSize: 24.sp,
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
@@ -78,14 +78,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     AutoSizeText(
                       'Santhe',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontSize: 60.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w900),
                     ),
                     AutoSizeText(
                       'Supporting Local Economy',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontSize: 15.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w400),
@@ -104,7 +104,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     AutoSizeText(
                       'Create your shopping list',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontSize: 21.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w600),
@@ -142,7 +142,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: [
                     AutoSizeText(
                       'Welcome to',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                         fontSize: 24.sp,
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
@@ -150,14 +150,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     AutoSizeText(
                       'Santhe',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontSize: 60.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w900),
                     ),
                     AutoSizeText(
                       'Supporting Local Economy',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontSize: 15.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w400),
@@ -179,7 +179,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       child: AutoSizeText(
                         'Send your shopping list to shops near you',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.mulish(
+                        style: TextStyle(
                             fontSize: 21.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.w600),
@@ -218,7 +218,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: [
                     AutoSizeText(
                       'Welcome to',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                         fontSize: 24.sp,
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
@@ -226,14 +226,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     AutoSizeText(
                       'Santhe',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontSize: 60.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w900),
                     ),
                     AutoSizeText(
                       'Supporting Local Economy',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           fontSize: 15.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w400),
@@ -255,7 +255,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       child: AutoSizeText(
                         'Get great deals while supporting local economy',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.mulish(
+                        style: TextStyle(
                             fontSize: 21.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.w600),
@@ -297,7 +297,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         color: Colors.white,
                         child: AutoSizeText(
                           'Get Started',
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               color: Colors.orange,
                               fontSize: 18.sp,
                               fontWeight: FontWeight.w700),

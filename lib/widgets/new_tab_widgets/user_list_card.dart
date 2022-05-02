@@ -20,15 +20,12 @@ import 'package:santhe/models/santhe_user_list_model.dart';
 class UserListCard extends StatelessWidget {
   final UserList userList;
   final box = Boxes.getUserListDB();
-  UserListCard({required this.userList, Key? key}) : super(key: key);
-  final int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
+  final int userKey;
+  UserListCard({required this.userList, Key? key, required this.userKey}) : super(key: key);
+  final int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height / 100;
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
 
@@ -56,9 +53,10 @@ class UserListCard extends StatelessWidget {
       padding: EdgeInsets.all(15.sp),
       child: GestureDetector(
         onTap: () {
-          //goto create new list page
+          //print(userList.items.first.quantity);
           Get.to(() => UserListPage(
                 userList: userList,
+            userKey: userKey
               ));
         },
         child: Container(
@@ -90,12 +88,8 @@ class UserListCard extends StatelessWidget {
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount =
-                          await apiController.getAllCustomerLists(custId);
-                      UserList oldUserList = Boxes.getUserListDB()
-                          .values
-                          .firstWhere(
-                              (element) => element.listId == userList.listId);
+                      int userListCount = await apiController.getAllCustomerLists(custId);
+                      UserList oldUserList = Boxes.getUserListDB().values.firstWhere((element) => element.listId == userList.listId);
 
                       UserList newImportedList = UserList(
                           createListTime: DateTime.now(),
@@ -156,7 +150,7 @@ class UserListCard extends StatelessWidget {
                       titleText: const Text('List Deleted'),
                       messageText: Text(
                         'List has been deleted',
-                        style: GoogleFonts.mulish(
+                        style: TextStyle(
                             color: AppColors().grey100,
                             fontWeight: FontWeight.w400,
                             fontSize: 15),
@@ -181,9 +175,9 @@ class UserListCard extends StatelessWidget {
                                 transition: Transition.fadeIn);
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           'Undo',
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.w700,
                               fontSize: 15),
@@ -230,7 +224,7 @@ class UserListCard extends StatelessWidget {
                           child: AutoSizeText(
                             userList.listName,
                             maxLines: 2,
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 letterSpacing: 0.2,
                                 fontSize: 21.sp,
                                 color: Colors.orange,
@@ -241,7 +235,7 @@ class UserListCard extends StatelessWidget {
                           padding: EdgeInsets.only(top: 18.77.sp),
                           child: AutoSizeText(
                             '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 fontSize: 36.sp,
                                 color: Colors.orange,
                                 fontWeight: FontWeight.w700),
@@ -252,7 +246,7 @@ class UserListCard extends StatelessWidget {
                               EdgeInsets.only(top: 28.53.sp, bottom: 16.32.sp),
                           child: AutoSizeText(
                             'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 fontSize: 14.sp,
                                 color: const Color(0xffBBBBBB),
                                 fontWeight: FontWeight.w400),

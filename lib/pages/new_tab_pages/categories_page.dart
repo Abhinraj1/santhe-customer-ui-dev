@@ -48,7 +48,7 @@ class CategoriesPage extends StatelessWidget {
         ),
         title: Text(
           'Categories',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 18.sp),
@@ -123,7 +123,7 @@ class CategoriesPage extends StatelessWidget {
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
                                 minFontSize: 14,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xffB0B0B0),
                                     fontSize: 18.sp),
@@ -134,7 +134,7 @@ class CategoriesPage extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     '${currentUserList.items.length}',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 20.sp,
                                         fontWeight: FontWeight.w800,
                                         color: Colors.orange),
@@ -145,7 +145,7 @@ class CategoriesPage extends StatelessWidget {
                                       ? 'Item'
                                       : 'Items',
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14.sp,
                                       color: Colors.orange),

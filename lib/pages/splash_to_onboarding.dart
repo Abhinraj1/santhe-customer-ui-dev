@@ -19,14 +19,13 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
   final apiController = Get.find<APIs>();
 
   void bootHome() {
-    Future.delayed(const Duration(milliseconds: 3500), () {
+    Future.delayed(const Duration(milliseconds: 4000), () {
       Get.off(() => const OnboardingPage(), transition: Transition.fadeIn);
       print('called!');
     });
   }
 
   Future init() async {
-    //OVOOVOVOOO
     CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
     var box = Boxes.getCacheRefreshInfo();
 
@@ -44,8 +43,6 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
 
       //items data for search
       // await apiController.getAllItems();
-
-      print('first cache load');
     }
 
     //catUpdate checking

@@ -84,14 +84,14 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
                         text: TextSpan(
                             text:
                             'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 color: kTextGrey,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16.sp),
                             children: <TextSpan>[
                               TextSpan(
                                 text: '\nNew ',
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                     color: kTextGrey,
                                     fontWeight: FontWeight.w900,
                                     fontSize: 16.sp),
@@ -99,7 +99,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
                               TextSpan(
                                 text:
                                 'tab to create and send your shopping lists',
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                     color: kTextGrey,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16.sp),

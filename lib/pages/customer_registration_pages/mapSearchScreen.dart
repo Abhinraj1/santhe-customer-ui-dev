@@ -63,7 +63,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
         ),
         title: Text(
           'Your Address',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 18.sp),
@@ -81,7 +81,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                   textAlignVertical: TextAlignVertical.center,
                   // autofocus: true,
                   keyboardType: TextInputType.text,
-                  style: GoogleFonts.mulish(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16.sp,
                     color: const Color(0xff8B8B8B),
@@ -116,7 +116,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                       ),
                     ),
                     hintText: "Enter your address",
-                    hintStyle: GoogleFonts.mulish(
+                    hintStyle: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontStyle: FontStyle.italic,
                         color: Colors.grey.shade500),

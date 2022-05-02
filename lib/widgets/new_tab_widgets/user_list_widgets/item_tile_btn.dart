@@ -80,7 +80,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
         Boxes.getUserListDB().get(currentUserListDBKey) ??
             fallBack_error_userList;
 
-    final TextStyle kLabelTextStyle = GoogleFonts.mulish(
+    final TextStyle kLabelTextStyle = TextStyle(
         color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
     ScreenUtil.init(
@@ -120,7 +120,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                 child: AutoSizeText(
                                   item.itemName,
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       color: Colors.orange,
                                       fontWeight: FontWeight.w700,
                                       fontSize: screenWidth * 6),
@@ -233,7 +233,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                               maxLength: 6,
                                               textAlignVertical:
                                                   TextAlignVertical.center,
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                   color: Colors.orange,
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 16.0),
@@ -653,13 +653,13 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                       selectedShadow: [const BoxShadow()],
                                       unselectedShadow: [const BoxShadow()],
                                       selectedColor: Colors.orange,
-                                      unselectedTextStyle: GoogleFonts.mulish(
+                                      unselectedTextStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16.sp,
                                           color: const Color(0xff8B8B8B)),
                                       buttonWidth: 69.sp,
                                       buttonHeight: 50.sp,
-                                      selectedTextStyle: GoogleFonts.mulish(
+                                      selectedTextStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16.sp,
                                           color: Colors.white),
@@ -684,7 +684,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                         children: <TextSpan>[
                                           TextSpan(
                                               text: ' (optional)',
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                   color:
                                                       const Color(0xffFFBE74),
                                                   fontWeight: FontWeight.w300,
@@ -700,7 +700,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                   controller: _brandController, maxLength: 45,
                                   // maxLines: 2,
                                   textAlignVertical: TextAlignVertical.center,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       color: Colors.grey.shade500,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16.0),
@@ -722,7 +722,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                           width: 1.0, color: kTextFieldGrey),
                                     ),
                                     hintText: item.dBrandType,
-                                    hintStyle: GoogleFonts.mulish(
+                                    hintStyle: TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic,
                                         color: Colors.grey.shade500),
@@ -740,7 +740,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                         children: <TextSpan>[
                                           TextSpan(
                                               text: ' (optional)',
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                   color:
                                                       const Color(0xffFFBE74),
                                                   fontWeight: FontWeight.w300,
@@ -756,7 +756,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                   maxLength: 90,
                                   textAlignVertical: TextAlignVertical.center,
                                   maxLines: 3,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       color: Colors.grey.shade500,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16.0),
@@ -778,7 +778,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                           width: 1.0, color: kTextFieldGrey),
                                     ),
                                     hintText: item.dItemNotes,
-                                    hintStyle: GoogleFonts.mulish(
+                                    hintStyle: TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic,
                                         color: Colors.grey.shade500),
@@ -959,7 +959,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                       },
                                       child: AutoSizeText(
                                         'Add',
-                                        style: GoogleFonts.mulish(
+                                        style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           fontSize: screenWidth * 5,

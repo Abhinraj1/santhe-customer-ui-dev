@@ -41,7 +41,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
   GoogleMapController? _googleMapController;
   @override
   void initState() {
-    if(widget.lat != null && widget.lng != null){
+    if (widget.lat != null && widget.lng != null) {
       lat = widget.lat!;
       lng = widget.lng!;
       initialCameraPosition = CameraPosition(target: LatLng(lat, lng), zoom: 7,);
@@ -63,7 +63,8 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
   }
 
   initAdd(lat, lng) async {
-    var res = await placeApiProvider.getAddressFromLatLong(lat.toString(), lng.toString());
+    var res = await placeApiProvider.getAddressFromLatLong(
+        lat.toString(), lng.toString());
     setState(() {
       textController.text = res;
       addressTextController.text = res;
@@ -130,7 +131,8 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                           mapPickerController.mapFinishedMoving!();
                           var a = await placeApiProvider.getAddressFromLatLong(
                               initialCameraPosition.target.latitude.toString(),
-                              initialCameraPosition.target.longitude.toString());
+                              initialCameraPosition.target.longitude
+                                  .toString());
                           setState(() {
                             textController.text = a;
                             registrationController.address = a.obs;
@@ -147,14 +149,16 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                       ),
                     ),
                   ),
-                  isVisible ? Expanded(
+                  isVisible
+                      ? Expanded(
                           flex: 14,
                           child: Container(
                             padding: EdgeInsets.all(
                                 MediaQuery.of(context).size.width * 0.02),
                             height: MediaQuery.of(context).size.height * 0.4,
                             child: Form(
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               key: _formKey,
                               child: Column(
                                 mainAxisAlignment:
@@ -178,7 +182,9 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                           if (value.toString().isEmpty) {
                                             return "Please Filled Required Fields.";
                                           }
-                                          var containPincode = RegExp(r'^.*\d{6}.*$').hasMatch(value.toString());
+                                          var containPincode =
+                                              RegExp(r'^.*\d{6}.*$')
+                                                  .hasMatch(value.toString());
                                           if (!containPincode) {
                                             return 'Address Should Contain Pincode';
                                           }
@@ -211,7 +217,8 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                             borderRadius: BorderRadius.circular(
                                                 kTextFieldCircularBorderRadius),
                                             borderSide: BorderSide(
-                                                width: 1.0, color: AppColors().brandDark),
+                                                width: 1.0,
+                                                color: AppColors().brandDark),
                                           ),
                                         ),
                                       ),
@@ -249,7 +256,8 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                           //         addressTextController
                                           //             .value.text);
                                           setState(() {});
-                                          if (addressTextController.value.text.isNotEmpty) {
+                                          if (addressTextController
+                                              .value.text.isNotEmpty) {
                                             setState(() {
                                               List<String> ls =
                                                   addressTextController
@@ -263,13 +271,23 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                                   pin = i;
                                                 }
                                               }
-                                              locationController.mapSelected = true.obs;
-                                              registrationController.isMapSelected = true.obs;
-                                              registrationController.pinCode.value = pin.replaceAll(',', '');
-                                              registrationController.address = addressTextController.value.text.obs;
-                                              registrationController.howToReach.value = optionalAddController.text;
-                                              registrationController.lat.value = lat;
-                                              registrationController.lng.value = lng;
+                                              locationController.mapSelected =
+                                                  true.obs;
+                                              registrationController
+                                                  .isMapSelected = true.obs;
+                                              registrationController
+                                                      .pinCode.value =
+                                                  pin.replaceAll(',', '');
+                                              registrationController.address =
+                                                  addressTextController
+                                                      .value.text.obs;
+                                              registrationController
+                                                      .howToReach.value =
+                                                  optionalAddController.text;
+                                              registrationController.lat.value =
+                                                  lat;
+                                              registrationController.lng.value =
+                                                  lng;
 
                                               //go back to registration screen
                                               Get.close(2);
@@ -304,12 +322,14 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                               ),
                             ),
                           ),
-                        ) : Container()
+                        )
+                      : Container()
                 ],
               ),
             ),
           ),
-          !isVisible && textController.text.isNotEmpty ? Positioned(
+          !isVisible && textController.text.isNotEmpty
+              ? Positioned(
                   bottom: 24,
                   child: SizedBox(
                     height: 50,
@@ -342,13 +362,15 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                       ),
                     ),
                   ),
-                ) : Container(),
-          if(textController.text.isEmpty) Container(
-            height: size.height,
-            width: size.width,
-            color: Colors.black12,
-            child: const Center(child: CircularProgressIndicator.adaptive()),
-          )
+                )
+              : Container(),
+          if (textController.text.isEmpty)
+            Container(
+              height: size.height,
+              width: size.width,
+              color: Colors.black12,
+              child: const Center(child: CircularProgressIndicator.adaptive()),
+            )
         ],
       ),
     );

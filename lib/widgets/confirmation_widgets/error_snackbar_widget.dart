@@ -14,7 +14,7 @@ SnackbarController errorMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         title,
-        style: GoogleFonts.mulish(
+        style: TextStyle(
             fontWeight: FontWeight.w700,
             letterSpacing: 0.05,
             fontSize: 16,
@@ -25,7 +25,7 @@ SnackbarController errorMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         body,
-        style: GoogleFonts.mulish(
+        style: TextStyle(
             fontWeight: FontWeight.w400, fontSize: 16, color: kTextGrey),
       ),
     ),

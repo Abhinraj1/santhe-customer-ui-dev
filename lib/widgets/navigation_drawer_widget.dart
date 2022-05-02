@@ -108,7 +108,7 @@ class NavigationDrawer extends StatelessWidget {
                           currentUser.custName,
                           maxLines: 2,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               fontSize: 24.0, fontWeight: FontWeight.w300),
                         ),
                       );
@@ -131,7 +131,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
               Text(
                 '+91 ${Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 'X'}',
-                style: GoogleFonts.mulish(
+                style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.orange,
                     fontWeight: FontWeight.w700),

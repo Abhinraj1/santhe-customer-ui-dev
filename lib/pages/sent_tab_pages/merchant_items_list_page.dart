@@ -53,7 +53,7 @@ class MerchantItemsListPage extends StatelessWidget {
         ),
         title: Text(
           'Offer Rs. ${currentMerchantOffer.merchResponse.merchTotalPrice}',
-          style: GoogleFonts.mulish(
+          style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w500,
             fontSize: 18.sp,
@@ -92,7 +92,7 @@ class MerchantItemsListPage extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'Items and Price',
-                      style: GoogleFonts.mulish(
+                      style: TextStyle(
                           color: Colors.orange,
                           fontWeight: FontWeight.w700,
                           fontSize: 16.sp),
@@ -153,14 +153,14 @@ class MerchantItemsListPage extends StatelessWidget {
                         children: [
                           Text(
                             'Total:',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 24.sp,
                                 color: const Color(0xff8B8B8B)),
                           ),
                           Text(
                             'Rs. ${removeDecimalZeroFormat(double.parse(currentMerchantOffer.merchResponse.merchTotalPrice))}',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 24.sp,
                                 color: Colors.orange),
@@ -232,7 +232,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                       const EdgeInsets.all(8.0),
                                                       child: Text(
                                                         'Are you sure?',
-                                                        style: GoogleFonts.mulish(
+                                                        style: TextStyle(
                                                           fontWeight:
                                                           FontWeight.w700,
                                                           fontSize: 24.sp,
@@ -265,7 +265,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                   textAlign: TextAlign.center,
                                                   text: TextSpan(
                                                       text: 'You can accept',
-                                                      style: GoogleFonts.mulish(
+                                                      style: TextStyle(
                                                           fontSize: 18.sp,
                                                           color: Colors.grey,
                                                           fontWeight:
@@ -273,7 +273,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                       children: [
                                                         TextSpan(
                                                           text: ' can accept ',
-                                                          style: GoogleFonts.mulish(
+                                                          style: TextStyle(
                                                               fontSize: 18.sp,
                                                               color: Colors.grey,
                                                               fontWeight:
@@ -282,7 +282,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                         TextSpan(
                                                           text:
                                                           'offer. If you accept this offer, all other offers will disappear',
-                                                          style: GoogleFonts.mulish(
+                                                          style: TextStyle(
                                                               fontSize: 18.sp,
                                                               color: Colors.grey,
                                                               fontWeight:
@@ -324,7 +324,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                     },
                                                     child: Text(
                                                       'Accept',
-                                                      style: GoogleFonts.mulish(
+                                                      style: TextStyle(
                                                           color: Colors.white,
                                                           fontWeight:
                                                           FontWeight.w700,
@@ -353,7 +353,7 @@ class MerchantItemsListPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.0)),
                           child: Text(
                             'Accept Offer',
-                            style: GoogleFonts.mulish(
+                            style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 18.sp,
                                 color: Colors.white),

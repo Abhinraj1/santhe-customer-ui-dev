@@ -81,35 +81,38 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                         'assets/archive_tab_image.svg',
                       ),
                     ),
+
                     Padding(
                       padding: EdgeInsets.only(
                           top: 28.sp, left: 23.sp, right: 23.sp),
                       child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text:
+                              'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
+                          style: TextStyle(
+                              color: kTextGrey,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16.sp),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '\nNew ',
+                              style: TextStyle(
+                                  color: kTextGrey,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 16.sp),
+                            ),
+                            TextSpan(
                               text:
-                                  'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
-                              style: GoogleFonts.mulish(
+                                  'tab to create and send your shopping lists',
+                              style: TextStyle(
                                   color: kTextGrey,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 16.sp),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: '\nNew ',
-                                  style: GoogleFonts.mulish(
-                                      color: kTextGrey,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 16.sp),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'tab to create and send your shopping lists',
-                                  style: GoogleFonts.mulish(
-                                      color: kTextGrey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16.sp),
-                                ),
-                              ])),
+                            ),
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 ),

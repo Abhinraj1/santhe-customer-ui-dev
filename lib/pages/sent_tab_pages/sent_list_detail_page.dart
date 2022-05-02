@@ -35,10 +35,10 @@ class SentUserListDetailsPage extends StatelessWidget {
           color: Colors.orange,
         ),
       ),
-      unselectedLabelStyle: GoogleFonts.mulish(
+      unselectedLabelStyle: TextStyle(
           fontWeight: FontWeight.w400, fontSize: 18.sp, color: Colors.grey),
       labelColor: Colors.orange,
-      labelStyle: GoogleFonts.mulish(
+      labelStyle: TextStyle(
           fontSize: 18.sp, color: Colors.orange, fontWeight: FontWeight.w700),
       unselectedLabelColor: const Color(0xffBBBBBB),
       labelPadding: const EdgeInsets.all(4.0),
@@ -74,7 +74,7 @@ class SentUserListDetailsPage extends StatelessWidget {
           ),
           title: Text(
             userList.listName,
-            style: GoogleFonts.mulish(
+            style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 fontSize: 18.sp),

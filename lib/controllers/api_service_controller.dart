@@ -300,6 +300,7 @@ class APIs extends GetxController {
 
       for (UserList usrLst in Boxes.getUserListDB().values) {
         offlineCustLists.add(usrLst);
+        print(usrLst.listId);
       }
 
       if (data[0]['document'] != null &&
@@ -307,19 +308,17 @@ class APIs extends GetxController {
         for (int i = 0; i < data.length; i++) {
           if (data[i]['document']['fields']['custListStatus']['stringValue'] !=
               'deleted') {
-            UserList onlineUserList =
-                UserList.fromJson(data[i]['document']['fields']);
-
-            if (onlineUserList.listId ==
-                offlineCustLists
-                    .firstWhereOrNull((e) => e.listId == onlineUserList.listId)
-                    ?.listId) {
-              print('Duplicate Found: ${onlineUserList.listId}');
+            UserList onlineUserList = UserList.fromJson(data[i]['document']['fields']);
+            final box = Boxes.getUserListDB();
+            if (onlineUserList.listId == offlineCustLists.firstWhereOrNull((e) => e.listId == onlineUserList.listId)?.listId) {
+              print('Duplicate Found: ${onlineUserList.listId} and not added to local cache');
             } else {
               onlineCustLists.add(onlineUserList);
+              if(onlineUserList.custListStatus == 'new') {
+                box.add(onlineUserList);
+              }
             }
 
-            // print('${userListsDB[i].listId}, ${userListsDB[i].processStatus}');
           }
         }
         userListsDB.addAll(onlineCustLists);
@@ -498,7 +497,7 @@ class APIs extends GetxController {
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
         "items": {
-          "arrayValue": {"values": []}
+          "arrayValue": {"values": items}
         },
         "custListStatus": {"stringValue": status},
         "custId": {
@@ -539,7 +538,7 @@ class APIs extends GetxController {
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList) async {
+  Future updateUserList(int custId, UserList userList, {String? status}) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
     List items = [];
@@ -586,7 +585,7 @@ class APIs extends GetxController {
           "timestampValue":
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
-        "custListStatus": {"stringValue": "sent"},
+        "custListStatus": {"stringValue": status ?? "sent"},
         "custId": {
           "referenceValue":
               "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
@@ -1227,6 +1226,8 @@ class APIs extends GetxController {
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
+      print(searchQuery);
+      print(response.body);
       List jsonResponse = jsonDecode(response.body);
 
       for (int i = 0; i < jsonResponse.length; i++) {
@@ -1249,7 +1250,7 @@ class APIs extends GetxController {
     var request = http.Request(
         'PUT',
         Uri.parse(
-            'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/customers/:$userId/deviceToken'));
+            'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/customers/$userId/deviceToken'));
     request.body = json.encode({"deviceToken": _token, "deviceId": _uid});
     request.headers.addAll(headers);
 

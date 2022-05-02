@@ -1,13 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'dart:collection';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/pages/new_tab_pages/categories_page.dart';
@@ -27,8 +26,8 @@ import '../login_pages/phone_number_login_page.dart';
 
 class UserListPage extends StatefulWidget {
   final UserList userList;
-
-  const UserListPage({required this.userList, Key? key}) : super(key: key);
+  final int userKey;
+  const UserListPage({required this.userList, Key? key, required this.userKey}) : super(key: key);
 
   @override
   _UserListPageState createState() => _UserListPageState();
@@ -45,17 +44,13 @@ class _UserListPageState extends State<UserListPage> {
 
   final apiController = Get.find<APIs>();
   final box = Boxes.getUserListDB();
-  late final int currentUserListDBKey;
   late Future<List<Item>> searchedItemsResult;
 
   void clearSearchQuery() {
     searchQueryController.clear();
     searchQuery = '';
   }
-
-  // print('---+---+---+ ${userList.items.length}');
-
-  // userList.items.sort((a, b) => a.catName.compareTo(b.catName));
+  
 
   void _latestSearchQuery() {
     setState(() {
@@ -67,11 +62,6 @@ class _UserListPageState extends State<UserListPage> {
   @override
   void initState() {
     searchQueryController.addListener(_latestSearchQuery);
-    currentUserListDBKey = Boxes.getUserListDB()
-        .values
-        .firstWhere((element) => element.listId == widget.userList.listId)
-        .key;
-    print('---+---+---+ $currentUserListDBKey');
     searchedItemsResult = Future.value([]);
     super.initState();
   }
@@ -87,14 +77,13 @@ class _UserListPageState extends State<UserListPage> {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     final UserList userList = widget.userList;
-    final TextStyle popupTextStyle = GoogleFonts.mulish(
+    final TextStyle popupTextStyle = TextStyle(
       fontWeight: FontWeight.w400,
       fontSize: screenWidth * 3.5,
       color: const Color(0xffB0B0B0),
     );
 
-    UserList currentCustomerList =
-        box.get(currentUserListDBKey) ?? fallBack_error_userList;
+    UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
 
     ScreenUtil.init(
         BoxConstraints(
@@ -115,8 +104,10 @@ class _UserListPageState extends State<UserListPage> {
             Icons.arrow_back_ios_rounded,
             size: 13.sp,
           ),
-          onPressed: () {
+          onPressed: () async {
             Navigator.pop(context);
+            int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')!.phoneNumber;
+            await apiController.updateUserList(custId, box.get(widget.userKey)!, status: 'new');
           },
         ),
         title: listNameEditFlag
@@ -134,7 +125,7 @@ class _UserListPageState extends State<UserListPage> {
                         initialValue: userList.listName,
                         // enableInteractiveSelection: false,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.mulish(
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
                         ),
@@ -147,7 +138,7 @@ class _UserListPageState extends State<UserListPage> {
                           counterText: '',
 
                           // hintText: userList.listName,
-                          hintStyle: GoogleFonts.mulish(
+                          hintStyle: TextStyle(
                               fontWeight: FontWeight.w300, color: Colors.grey),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(21),
@@ -167,10 +158,10 @@ class _UserListPageState extends State<UserListPage> {
                         onEditingComplete: () {
                           if (newListName.isNotEmpty) {
                             final box = Boxes.getUserListDB();
-                            box.get(currentUserListDBKey)?.listName =
+                            box.get(widget.userKey)?.listName =
                                 newListName;
 
-                            box.get(currentUserListDBKey)?.save();
+                            box.get(widget.userKey)?.save();
 
                             setState(() {
                               listNameEditFlag = false;
@@ -187,10 +178,10 @@ class _UserListPageState extends State<UserListPage> {
                             });
                             if (newListName.isNotEmpty) {
                               final box = Boxes.getUserListDB();
-                              box.get(currentUserListDBKey)?.listName =
+                              box.get(widget.userKey)?.listName =
                                   newListName;
 
-                              box.get(currentUserListDBKey)?.save();
+                              box.get(widget.userKey)?.save();
 
                               setState(() {
                                 listNameEditFlag = false;
@@ -213,7 +204,7 @@ class _UserListPageState extends State<UserListPage> {
               )
             : Text(
                 currentCustomerList.listName,
-                style: GoogleFonts.mulish(
+                style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                     fontSize: 18.sp),
@@ -264,13 +255,14 @@ class _UserListPageState extends State<UserListPage> {
               textAlign: TextAlign.left,
               onChanged: (value) {
                 if (value.length > 2) {
-                  setState(() {
-                    searchedItemsResult =
-                        apiController.searchedItemResult(value);
+                  EasyDebounce.debounce('searchItem', const Duration(milliseconds: 500), () {
+                    setState(() {
+                      searchedItemsResult = apiController.searchedItemResult(value);
+                    });
                   });
                 }
               },
-              style: GoogleFonts.mulish(
+              style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: const Color(0xff8B8B8B),
                   fontSize: 16.sp),
@@ -328,7 +320,7 @@ class _UserListPageState extends State<UserListPage> {
                         width: searchQuery.length < 3 ? 1.0 : 2.0,
                         color: Colors.grey.shade400),
                   ),
-                  hintStyle: GoogleFonts.mulish(
+                  hintStyle: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.grey.shade500,
                       fontStyle: FontStyle.italic,
@@ -344,9 +336,9 @@ class _UserListPageState extends State<UserListPage> {
                       padding: EdgeInsets.only(top: 15.sp, bottom: 0.0),
                       child: ValueListenableBuilder<Box<UserList>>(
                         valueListenable: Boxes.getUserListDB().listenable(),
-                        builder: (context, box, widget) {
+                        builder: (context, box, widget1) {
                           UserList currentUserList =
-                              box.get(currentUserListDBKey) ??
+                              box.get(widget.userKey) ??
                                   fallBack_error_userList;
                           ScreenUtil.init(
                               BoxConstraints(
@@ -361,7 +353,7 @@ class _UserListPageState extends State<UserListPage> {
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Text(
                               '${currentUserList.items.length} ${currentUserList.items.length < 2 ? 'Item' : 'Items'}',
-                              style: GoogleFonts.mulish(
+                              style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black54),
@@ -376,20 +368,12 @@ class _UserListPageState extends State<UserListPage> {
                         padding: const EdgeInsets.only(
                             left: 8.0, right: 8.0, bottom: 8.0),
                         child: ValueListenableBuilder<Box<UserList>>(
-                          //todo make this page refresh stream or smthin
                           valueListenable: Boxes.getUserListDB().listenable(),
 
-                          builder: (context, box, widget) {
-                            // var userLists =
-                            //     box.values.toList().cast<UserList>();
-                            // int itemNumber = userLists
-                            //     .singleWhere((element) =>
-                            //         element.listId == userList.listId)
-                            //     .items
-                            //     .length;
+                          builder: (context, box, widget1) {
 
                             UserList currentUserList =
-                                box.get(currentUserListDBKey) ??
+                                box.get(widget.userKey) ??
                                     fallBack_error_userList;
                             ScreenUtil.init(
                                 BoxConstraints(
@@ -411,7 +395,7 @@ class _UserListPageState extends State<UserListPage> {
                                       return ListItemCard(
                                         listItem: currentUserList.items[index],
                                         currentUserListDBKey:
-                                            currentUserListDBKey,
+                                        widget.userKey,
                                       );
                                     },
                                     groupSeparatorBuilder: (String value) {
@@ -451,9 +435,9 @@ class _UserListPageState extends State<UserListPage> {
                                                 ),
                                               ),
                                             ),
-                                            Text(
+                                            const Text(
                                               'Add your item by searching',
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w400,
@@ -463,9 +447,9 @@ class _UserListPageState extends State<UserListPage> {
                                         ),
                                         Column(
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Add your item from catalog',
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w400,
@@ -491,9 +475,9 @@ class _UserListPageState extends State<UserListPage> {
 //BUTTONS
                     ValueListenableBuilder<Box<UserList>>(
                       valueListenable: Boxes.getUserListDB().listenable(),
-                      builder: (context, box, widget) {
+                      builder: (context, box, widget1) {
                         UserList currentUserList =
-                            box.get(currentUserListDBKey) ??
+                            box.get(widget.userKey) ??
                                 fallBack_error_userList;
                         ScreenUtil.init(
                             BoxConstraints(
@@ -803,20 +787,12 @@ class _UserListPageState extends State<UserListPage> {
                                                                     listName:
                                                                         oldCurrentUserList
                                                                             .listName,
-                                                                    createListTime:
-                                                                        oldCurrentUserList
-                                                                            .createListTime,
-                                                                    processStatus:
-                                                                        'draft',
-                                                                    custOfferWaitTime:
-                                                                        oldCurrentUserList
-                                                                            .custOfferWaitTime);
+                                                                    createListTime: oldCurrentUserList.createListTime,
+                                                                    processStatus: 'draft',
+                                                                    custOfferWaitTime: oldCurrentUserList.custOfferWaitTime);
 
                                                                 //todo send list to firebase (currentUserList)
-                                                                int custId = Boxes
-                                                                            .getUserCredentialsDB()
-                                                                        .get(
-                                                                            'currentUserCredentials')
+                                                                int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')
                                                                         ?.phoneNumber ??
                                                                     404;
                                                                 if (custId ==
@@ -824,17 +800,14 @@ class _UserListPageState extends State<UserListPage> {
                                                                   Get.off(() =>
                                                                       LoginScreen());
                                                                 }
-                                                                int response = await apiController
-                                                                    .updateUserList(
-                                                                        custId,
-                                                                        currentUserList);
+                                                                int response = await apiController.updateUserList(custId, currentUserList);
 
                                                                 if (response ==
                                                                     1) {
                                                                   //dismiss page
                                                                   successMsg(
                                                                       'List Sent',
-                                                                      'List has been succsessfully sent to merchants.');
+                                                                      'List has been successfully sent to merchants.');
                                                                   Get.off(
                                                                       () =>
                                                                           const HomePage(
@@ -864,7 +837,7 @@ class _UserListPageState extends State<UserListPage> {
                                                               },
                                                               child: Text(
                                                                 'Send to Shops',
-                                                                style: GoogleFonts.mulish(
+                                                                style: TextStyle(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700,
@@ -883,9 +856,9 @@ class _UserListPageState extends State<UserListPage> {
                                               );
                                             });
                                       },
-                                      child: Text(
+                                      child: const Text(
                                         'Send to Shops',
-                                        style: GoogleFonts.mulish(
+                                        style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 18,
@@ -910,7 +883,7 @@ class _UserListPageState extends State<UserListPage> {
                                         //todo implement category / catalog page opening
                                         Get.to(() => CategoriesPage(
                                             currentUserListDBKey:
-                                                currentUserListDBKey));
+                                            widget.userKey));
                                       },
                                       child: const Icon(
                                         CupertinoIcons.square_grid_2x2,
@@ -934,7 +907,7 @@ class _UserListPageState extends State<UserListPage> {
                                   onPressed: () {
                                     Get.to(() => CategoriesPage(
                                         currentUserListDBKey:
-                                            currentUserListDBKey));
+                                        widget.userKey));
                                   },
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -944,8 +917,8 @@ class _UserListPageState extends State<UserListPage> {
                                           MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: [
-                                        const Icon(
+                                      children: const [
+                                        Icon(
                                           CupertinoIcons.square_grid_2x2,
                                           color: Colors.white,
                                           size: 28,
@@ -954,7 +927,7 @@ class _UserListPageState extends State<UserListPage> {
                                           child: Center(
                                             child: AutoSizeText(
                                               'Item Catalog',
-                                              style: GoogleFonts.mulish(
+                                              style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 18,
@@ -962,7 +935,7 @@ class _UserListPageState extends State<UserListPage> {
                                             ),
                                           ),
                                         ),
-                                        const Icon(
+                                        Icon(
                                           CupertinoIcons.square_grid_2x2,
                                           color: Colors.transparent,
                                         ),
@@ -997,8 +970,7 @@ class _UserListPageState extends State<UserListPage> {
                       child: searchQuery.length > 2
                           ? FutureBuilder(
                               future: searchedItemsResult,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
+                              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                                 ScreenUtil.init(
                                     BoxConstraints(
                                         maxWidth:
@@ -1012,8 +984,8 @@ class _UserListPageState extends State<UserListPage> {
                                 if (snapshot.hasError) {
                                   //todo show proper error screen
                                   return Text('${snapshot.error}');
-                                } else if (snapshot.hasData &&
-                                    snapshot.data.length < 1) {
+                                }
+                                else if (snapshot.hasData && snapshot.data.length < 1) {
                                   return Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: SizedBox(
@@ -1024,33 +996,20 @@ class _UserListPageState extends State<UserListPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          AddCustomItemCard(
-                                              currentUserListDBKey:
-                                                  currentUserListDBKey,
-                                              searchQuery: searchQuery),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20.0),
-                                            child: Text(
-                                              'No Search Results Found...',
-                                              style: GoogleFonts.mulish(
-                                                  fontStyle: FontStyle.italic),
-                                            ),
+                                          AddCustomItemCard(currentUserListDBKey: widget.userKey, searchQuery: searchQuery),
+                                          const Padding(padding: EdgeInsets.only(left: 20.0),
+                                            child: Text('No Search Results Found...', style: TextStyle(fontStyle: FontStyle.italic),),
                                           ),
                                         ],
                                       ),
                                     ),
                                   );
-                                } else if (snapshot.hasData &&
-                                    snapshot.connectionState ==
-                                        ConnectionState.done) {
+                                }
+                                else if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
                                   return ListView.builder(
                                     shrinkWrap: true,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 8.0),
-                                    physics: const BouncingScrollPhysics(
-                                        parent:
-                                            AlwaysScrollableScrollPhysics()),
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                                     itemCount: snapshot.data?.length,
                                     itemBuilder: (context, index) {
                                       ScreenUtil.init(
@@ -1065,28 +1024,28 @@ class _UserListPageState extends State<UserListPage> {
                                           context: context,
                                           minTextAdapt: true,
                                           orientation: Orientation.portrait);
+                                      print('custom item length' + snapshot.data.length.toString());
                                       if (index == snapshot.data?.length - 1) {
                                         return Column(
                                           children: [
                                             SearchedItemCard(
                                               searchQuery: searchQuery,
                                               currentUserListDBKey:
-                                                  currentUserListDBKey,
+                                              widget.userKey,
                                               item: snapshot.data![index],
                                               clearSearchQuery:
                                                   clearSearchQuery,
                                             ),
                                             AddCustomItemCard(
                                                 currentUserListDBKey:
-                                                    currentUserListDBKey,
+                                                widget.userKey,
                                                 searchQuery: searchQuery),
                                           ],
                                         );
                                       } else {
                                         return SearchedItemCard(
                                           searchQuery: searchQuery,
-                                          currentUserListDBKey:
-                                              currentUserListDBKey,
+                                          currentUserListDBKey: widget.userKey,
                                           item: snapshot.data![index],
                                           clearSearchQuery: clearSearchQuery,
                                         );

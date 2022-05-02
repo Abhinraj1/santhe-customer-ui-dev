@@ -40,7 +40,7 @@ class PrivacyPolicyPage extends StatelessWidget {
           ),
           title: Text(
             'Privacy Policy',
-            style: GoogleFonts.mulish(
+            style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 fontSize: 18.sp),
@@ -55,7 +55,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   'Santhe Privacy Policy',
-                  style: GoogleFonts.mulish(
+                  style: TextStyle(
                       color: Colors.orange,
                       fontWeight: FontWeight.w700,
                       fontSize: 24.sp),

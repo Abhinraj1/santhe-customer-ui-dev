@@ -69,7 +69,7 @@ class _TextDropWidgetState extends State<TextDropWidget> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           question,
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                             color: qClr,
                             fontSize: 16.sp,
                           ),
@@ -115,7 +115,7 @@ class _TextDropWidgetState extends State<TextDropWidget> {
                   ),
                   child: Text(
                     answer,
-                    style: GoogleFonts.mulish(
+                    style: TextStyle(
                       color: Colors.grey.shade500,
                       fontSize: 16.sp,
                       height: 1.5,

@@ -162,7 +162,7 @@ class ArchivedUserListCard extends StatelessWidget {
                 //       titleText: const Text('List Deleted'),
                 //       messageText: Text(
                 //         'List has been deleted',
-                //         style: GoogleFonts.mulish(
+                //         style: TextStyle(
                 //             color: AppColors().grey100,
                 //             fontWeight: FontWeight.w400,
                 //             fontSize: 15),
@@ -181,7 +181,7 @@ class ArchivedUserListCard extends StatelessWidget {
                 //         },
                 //         child: Text(
                 //           'Undo',
-                //           style: GoogleFonts.mulish(
+                //           style: TextStyle(
                 //               color: Colors.orange,
                 //               fontWeight: FontWeight.w700,
                 //               fontSize: 15),
@@ -224,7 +224,7 @@ class ArchivedUserListCard extends StatelessWidget {
                       titleText: const Text('List Deleted'),
                       messageText: Text(
                         'List has been deleted',
-                        style: GoogleFonts.mulish(
+                        style: TextStyle(
                             color: AppColors().grey100,
                             fontWeight: FontWeight.w400,
                             fontSize: 15),
@@ -248,7 +248,7 @@ class ArchivedUserListCard extends StatelessWidget {
                         },
                         child: Text(
                           'Undo',
-                          style: GoogleFonts.mulish(
+                          style: TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.w700,
                               fontSize: 15),
@@ -291,7 +291,7 @@ class ArchivedUserListCard extends StatelessWidget {
                             AutoSizeText(
                               userList.listName,
                               maxLines: 2,
-                              style: GoogleFonts.mulish(
+                              style: TextStyle(
                                   letterSpacing: 0.2,
                                   fontSize: 21.sp,
                                   color: Colors.orange,
@@ -301,7 +301,7 @@ class ArchivedUserListCard extends StatelessWidget {
                               padding: EdgeInsets.only(top: 18.77.sp),
                               child: AutoSizeText(
                                 '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                     fontSize: 36.sp,
                                     color: Colors.orange,
                                     fontWeight: FontWeight.w700),
@@ -312,7 +312,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                   EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
                               child: AutoSizeText(
                                 'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                     fontSize: 14.sp,
                                     color: Colors.transparent,
                                     fontWeight: FontWeight.w400),
@@ -333,7 +333,7 @@ class ArchivedUserListCard extends StatelessWidget {
                     children: [
                       AutoSizeText(
                         'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
-                        style: GoogleFonts.mulish(
+                        style: TextStyle(
                             fontSize: 14.sp,
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
@@ -350,7 +350,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     userList.processStatus == 'waiting'
                                 ? AutoSizeText(
                                     'Waiting for Offers',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 14.sp,
                                         color: const Color(0xffFFC300),
                                         fontWeight: FontWeight.w400),
@@ -364,7 +364,7 @@ class ArchivedUserListCard extends StatelessWidget {
                                     userList.processStatus == 'noMerchants'
                                 ? AutoSizeText(
                                     'No Offers',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 14.sp,
                                         color: Colors.red,
                                         fontWeight: FontWeight.w400),
@@ -377,7 +377,7 @@ class ArchivedUserListCard extends StatelessWidget {
                             userList.processStatus == 'processed'
                                 ? AutoSizeText(
                                     'Accepted',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 14.sp,
                                         color: Colors.green,
                                         fontWeight: FontWeight.w400),
@@ -390,7 +390,7 @@ class ArchivedUserListCard extends StatelessWidget {
                             userList.processStatus == 'minoffer'
                                 ? AutoSizeText(
                                     '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 14.sp,
                                         color: Colors.green,
                                         fontWeight: FontWeight.w400),
@@ -403,7 +403,7 @@ class ArchivedUserListCard extends StatelessWidget {
                             userList.processStatus == 'maxoffer'
                                 ? AutoSizeText(
                                     '${userList.listOfferCounter} Offers Available',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 14.sp,
                                         color: Colors.green,
                                         fontWeight: FontWeight.w400),
@@ -416,7 +416,7 @@ class ArchivedUserListCard extends StatelessWidget {
                             userList.processStatus == 'expired'
                                 ? AutoSizeText(
                                     'Offers Missed',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontSize: 14.sp,
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w400),

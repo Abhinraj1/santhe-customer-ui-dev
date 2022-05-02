@@ -33,7 +33,7 @@
 //             ),
 //             title: Text(
 //               'Accept Offer?',
-//               style: GoogleFonts.mulish(
+//               style: TextStyle(
 //                   color: Colors.white,
 //                   fontWeight: FontWeight.w500,
 //                   fontSize: 16),
@@ -47,7 +47,7 @@
 //                 Center(
 //                   child: Text(
 //                     'Item & Price',
-//                     style: GoogleFonts.mulish(
+//                     style: TextStyle(
 //                         color: Colors.orange,
 //                         fontWeight: FontWeight.bold,
 //                         fontSize: 18.0),
@@ -60,14 +60,14 @@
 //                     children: [
 //                       Text(
 //                         'Items',
-//                         style: GoogleFonts.mulish(
+//                         style: TextStyle(
 //                             color: Colors.grey,
 //                             fontWeight: FontWeight.bold,
 //                             fontSize: 15.0),
 //                       ),
 //                       Text(
 //                         'Rs',
-//                         style: GoogleFonts.mulish(
+//                         style: TextStyle(
 //                             color: Colors.orange,
 //                             fontWeight: FontWeight.bold,
 //                             fontSize: 15),
@@ -103,14 +103,14 @@
 //                         children: [
 //                           Text(
 //                             'Total:',
-//                             style: GoogleFonts.mulish(
+//                             style: TextStyle(
 //                                 color: Colors.grey,
 //                                 fontWeight: FontWeight.w300,
 //                                 fontSize: 30.0),
 //                           ),
 //                           Text(
 //                             'Rs. ${merchantOffer.price.toStringAsFixed(0)}',
-//                             style: GoogleFonts.mulish(
+//                             style: TextStyle(
 //                                 color: Colors.orange,
 //                                 fontWeight: FontWeight.bold,
 //                                 fontSize: 30.0),
@@ -138,7 +138,7 @@
 //                             fit: BoxFit.scaleDown,
 //                             child: Text(
 //                               'Accept Offer',
-//                               style: GoogleFonts.mulish(
+//                               style: TextStyle(
 //                                 color: Colors.white,
 //                                 fontWeight: FontWeight.bold,
 //                                 fontSize: screenWidth * 5.5,

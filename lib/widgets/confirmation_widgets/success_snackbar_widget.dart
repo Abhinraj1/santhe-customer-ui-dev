@@ -13,7 +13,7 @@ SnackbarController successMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         title,
-        style: GoogleFonts.mulish(
+        style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 16,
             letterSpacing: 0.05,
@@ -24,7 +24,7 @@ SnackbarController successMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         body,
-        style: GoogleFonts.mulish(
+        style: TextStyle(
             fontWeight: FontWeight.w400, fontSize: 16, color: kTextGrey),
       ),
     ),

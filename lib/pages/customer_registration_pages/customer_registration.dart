@@ -152,16 +152,16 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    final TextStyle kHintStyle = GoogleFonts.mulish(
+    final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
         color: Colors.grey.shade500);
-    final TextStyle kTextInputStyle = GoogleFonts.mulish(
+    final TextStyle kTextInputStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
     final TextStyle kLabelStyle =
-        GoogleFonts.mulish(fontWeight: FontWeight.w500, fontSize: 16.0);
+        TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
     return Scaffold(
       body: SingleChildScrollView(
@@ -178,7 +178,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                   ),
                   Text(
                     'Register',
-                    style: GoogleFonts.mulish(
+                    style: TextStyle(
                       fontWeight: FontWeight.w800,
                       color: Colors.orange,
                       fontSize: 24.sp,
@@ -201,7 +201,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 child: Text(
                                   'Phone no.*',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -218,7 +218,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     keyboardType: TextInputType.phone,
                                     enabled: false,
                                     initialValue: '$userPhoneNumber',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: 1.0,
                                         fontSize: 16.sp,
@@ -260,7 +260,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       ),
                                       
                                       hintText: '+91-9090909090',
-                                      hintStyle: GoogleFonts.mulish(
+                                      hintStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 1.0,
                                           color: Colors.grey.shade500),
@@ -279,7 +279,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 child: Text(
                                   'Name *',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -349,7 +349,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 child: Text(
                                   'Email Id *',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -422,7 +422,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 child: Text(
                                   'Address *',
                                   textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.sp,
                                       color: Colors.orange),
@@ -622,14 +622,14 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     // Get.snackbar('', '',
                                     //     titleText: Text(
                                     //       'Enter Values Properly',
-                                    //       style: GoogleFonts.mulish(
+                                    //       style: TextStyle(
                                     //           fontWeight: FontWeight.w700,
                                     //           color: Colors.orange,
                                     //           fontSize: 16.0),
                                     //     ),
                                     //     messageText: Text(
                                     //       'Please enter all the required values before continuing...',
-                                    //       style: GoogleFonts.mulish(
+                                    //       style: TextStyle(
                                     //           fontWeight: FontWeight.w500,
                                     //           color: const Color(0xff8B8B8B),
                                     //           fontSize: 13.0),
@@ -670,7 +670,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                   fit: BoxFit.scaleDown,
                                   child: Text(
                                     'Done',
-                                    style: GoogleFonts.mulish(
+                                    style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 18.sp,
@@ -691,7 +691,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 child: Text(
                   'We will use your Phone number and Email to send you important communications',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.mulish(
+                  style: TextStyle(
                     color: const Color(0xff8B8B8B),
                     fontWeight: FontWeight.w500,
                     fontSize: 13.sp,

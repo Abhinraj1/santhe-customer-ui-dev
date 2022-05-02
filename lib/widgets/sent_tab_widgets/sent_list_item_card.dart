@@ -72,7 +72,7 @@ class SentListItemCard extends StatelessWidget {
                                     : '${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}, ${listItem.notes}',
                                 softWrap: false,
                                 overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                   color: Colors.orange,
                                 ),
                               )
@@ -82,7 +82,7 @@ class SentListItemCard extends StatelessWidget {
                                 maxLines: 2,
                                 minFontSize: 10,
                                 overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                   color: Colors.orange,
                                   fontSize: screenWidth * 4,
                                 ),

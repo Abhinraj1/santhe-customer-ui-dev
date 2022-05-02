@@ -73,7 +73,7 @@ class MerchantItemCard extends StatelessWidget {
                                     : '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${merchantItem.itemNotes}',
                                 // softWrap: false,
                                 overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                   color: Colors.orange,
                                   fontSize: 16.sp,
                                 ),
@@ -84,7 +84,7 @@ class MerchantItemCard extends StatelessWidget {
                                 maxLines: 2,
                                 // minFontSize: 10,
                                 overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.mulish(
+                                style: TextStyle(
                                   color: Colors.orange,
                                   fontSize: 14.sp,
                                 ),
@@ -107,7 +107,7 @@ class MerchantItemCard extends StatelessWidget {
                 const SizedBox(width: 10.0),
                 Text(
                   'Rs. ${merchantItem.merchPrice}',
-                  style: GoogleFonts.mulish(color: Colors.orange),
+                  style: TextStyle(color: Colors.orange),
                 ),
               ],
             ),

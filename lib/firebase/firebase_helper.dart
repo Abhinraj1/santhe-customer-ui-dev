@@ -29,19 +29,6 @@ class FirebaseHelper {
     });
   }
 
-  // Stream<QuerySnapshot> offerStream() {
-  //   CollectionReference collectionReference =
-  //       _firebaseFirestore.collection('customerList');
-  //
-  //   Stream<QuerySnapshot> data = collectionReference
-  //       .where('listId', isGreaterThanOrEqualTo: '919769420366')
-  //       .where('custListStatus', isEqualTo: 'sent')
-  //       // .orderBy('custListSentTime')
-  //       .snapshots();
-  //
-  //   return data;
-  // }
-
 //Upload user image to firestore
   Future<String> addCustomItemImage(
       String imageName, bool shootPic, bool addNewItem) async {

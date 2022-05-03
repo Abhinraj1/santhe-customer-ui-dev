@@ -17,8 +17,12 @@ import '../../controllers/archived_controller.dart';
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
   final int index;
-  const ArchivedUserListCard({required this.userList, Key? key, required this.index})
+  ArchivedUserListCard({required this.userList, Key? key, required this.index})
       : super(key: key);
+  final int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
+  final box = Boxes.getUserListDB();
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +83,39 @@ class ArchivedUserListCard extends StatelessWidget {
               motion: const ScrollMotion(),
               children: [
                 SlidableAction(
-                  onPressed: (context) {},
+                  onPressed: (context) async {
+                    int userListCount =
+                        await apiController.getAllCustomerLists(custId);
+                    UserList oldUserList = userList;
+
+                    UserList newImportedList = UserList(
+                        createListTime: DateTime.now(),
+                        custId: oldUserList.custId,
+                        items: oldUserList.items,
+                        listId: int.parse('$custId${userListCount + 1}'),
+                        listName: '(COPY) ${oldUserList.listName}',
+                        custListSentTime: oldUserList.custListSentTime,
+                        custListStatus: oldUserList.custListStatus,
+                        listOfferCounter: oldUserList.listOfferCounter,
+                        processStatus: oldUserList.processStatus,
+                        custOfferWaitTime: oldUserList.custOfferWaitTime);
+
+                    int response = await apiController.addCustomerList(
+                        newImportedList, custId, 'new');
+
+                    if (response == 1) {
+                      box.add(newImportedList);
+                      Get.to(const HomePage(
+                        pageIndex: 0,
+                      ));
+                    } else {
+                      Get.dialog(const Card(
+                        child: Center(
+                          child: Text('Error!'),
+                        ),
+                      ));
+                    }
+                  },
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   autoClose: true,
@@ -198,9 +234,11 @@ class ArchivedUserListCard extends StatelessWidget {
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
                                 () async {
-                              int response = await apiController.undoDeleteUserList(userList.listId, true);
+                              int response = await apiController
+                                  .undoDeleteUserList(userList.listId, true);
+                              _archivedController.archivedList
+                                  .insert(index, userList);
                               if (response == 1) {
-
                               } else {
                                 errorMsg('Unable to undo the list', '');
                               }
@@ -229,7 +267,6 @@ class ArchivedUserListCard extends StatelessWidget {
                         _archivedController.update();
                       }
                     }
-
                   },
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,

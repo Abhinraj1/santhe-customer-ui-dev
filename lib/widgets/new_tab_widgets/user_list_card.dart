@@ -157,6 +157,7 @@ class UserListCard extends StatelessWidget {
                       ),
                       mainButton: TextButton(
                         onPressed: () async {
+                          Get.closeCurrentSnackbar();
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
                                 () async {
@@ -164,6 +165,7 @@ class UserListCard extends StatelessWidget {
                                   .undoDeleteUserList(userList.listId, false);
                               if (response == 1) {
                                 Boxes.getUserListDB().add(userList);
+                                
                               } else {
                                 errorMsg('Unable to undo the list', '');
                               }

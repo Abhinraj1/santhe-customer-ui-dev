@@ -124,7 +124,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
 
   @override
   void initState() {
-    init();
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarColor: Colors.white,
+      statusBarBrightness: Brightness.dark,
+    ));
     super.initState();
   }
 
@@ -258,7 +263,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                             width: 1.0,
                                             color: Color(0xffD1D1D1)),
                                       ),
-                                      
                                       hintText: '+91-9090909090',
                                       hintStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
@@ -533,7 +537,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 child: Text(
                                   'Please Enter your Address',
                                   style: AppTheme().normal400(12).copyWith(
-                                      color: const Color.fromARGB(255, 214, 77, 93)),
+                                      color: const Color.fromARGB(
+                                          255, 214, 77, 93)),
                                 ),
                               ),
                             ],
@@ -574,18 +579,22 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
 
                                       //todo add how to reach howToReach
                                       User currentUser = User(
-                                          address: registrationController.address.value,
+                                          address: registrationController
+                                              .address.value,
                                           emailId: userEmail,
                                           lat: registrationController.lat.value,
                                           lng: registrationController.lng.value,
-                                          pincode: int.parse(registrationController.pinCode.value),
+                                          pincode: int.parse(
+                                              registrationController
+                                                  .pinCode.value),
                                           phoneNumber: userPhone,
                                           custId: userPhone,
                                           custName: userName,
                                           custRatings: 5.0,
                                           custReferal: 0,
                                           custStatus: 'active',
-                                          howToReach: registrationController.howToReach.value,
+                                          howToReach: registrationController
+                                              .howToReach.value,
                                           custPlan: 'default',
                                           custLoginTime: DateTime.now());
 

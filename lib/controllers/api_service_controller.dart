@@ -31,7 +31,6 @@ class APIs extends GetxController {
   //deleted user list buffer
   var deletedUserLists = <UserList>[].obs;
 
-
   var itemsDB = <Item>[].obs;
 
   // Future getAllItems() async {
@@ -266,7 +265,8 @@ class APIs extends GetxController {
     offlineCustLists.clear();
     int userListsCount = 0;
 
-    const String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    const String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
     var body = {
       "structuredQuery": {
         "from": [
@@ -308,17 +308,21 @@ class APIs extends GetxController {
         for (int i = 0; i < data.length; i++) {
           if (data[i]['document']['fields']['custListStatus']['stringValue'] !=
               'deleted') {
-            UserList onlineUserList = UserList.fromJson(data[i]['document']['fields']);
+            UserList onlineUserList =
+                UserList.fromJson(data[i]['document']['fields']);
             final box = Boxes.getUserListDB();
-            if (onlineUserList.listId == offlineCustLists.firstWhereOrNull((e) => e.listId == onlineUserList.listId)?.listId) {
-              print('Duplicate Found: ${onlineUserList.listId} and not added to local cache');
+            if (onlineUserList.listId ==
+                offlineCustLists
+                    .firstWhereOrNull((e) => e.listId == onlineUserList.listId)
+                    ?.listId) {
+              print(
+                  'Duplicate Found: ${onlineUserList.listId} and not added to local cache');
             } else {
               onlineCustLists.add(onlineUserList);
-              if(onlineUserList.custListStatus == 'new') {
+              if (onlineUserList.custListStatus == 'new') {
                 box.add(onlineUserList);
               }
             }
-
           }
         }
         userListsDB.addAll(onlineCustLists);
@@ -646,13 +650,13 @@ class APIs extends GetxController {
     }
   }
 
-  Future undoDeleteUserList(int userListId, bool isArchived) async {
+  Future undoDeleteUserList(int userListId, String status) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$userListId?updateMask.fieldPaths=custListStatus';
 
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": isArchived ? "archived" : "new"}
+        "custListStatus": {"stringValue": status}
       }
     };
 

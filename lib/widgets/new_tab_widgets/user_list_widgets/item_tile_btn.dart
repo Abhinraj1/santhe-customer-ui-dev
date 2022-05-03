@@ -920,7 +920,6 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
                                                         Colors.white,
                                                     colorText: Colors.grey);
                                               }
-
                                               Navigator.pop(context);
                                             } else {
                                               Get.snackbar(

@@ -21,8 +21,11 @@ class UserListCard extends StatelessWidget {
   final UserList userList;
   final box = Boxes.getUserListDB();
   final int userKey;
-  UserListCard({required this.userList, Key? key, required this.userKey}) : super(key: key);
-  final int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
+  UserListCard({required this.userList, Key? key, required this.userKey})
+      : super(key: key);
+  final int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +57,7 @@ class UserListCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           //print(userList.items.first.quantity);
-          Get.to(() => UserListPage(
-                userList: userList,
-            userKey: userKey
-              ));
+          Get.to(() => UserListPage(userList: userList, userKey: userKey));
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -88,8 +88,12 @@ class UserListCard extends StatelessWidget {
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount = await apiController.getAllCustomerLists(custId);
-                      UserList oldUserList = Boxes.getUserListDB().values.firstWhere((element) => element.listId == userList.listId);
+                      int userListCount =
+                          await apiController.getAllCustomerLists(custId);
+                      UserList oldUserList = Boxes.getUserListDB()
+                          .values
+                          .firstWhere(
+                              (element) => element.listId == userList.listId);
 
                       UserList newImportedList = UserList(
                           createListTime: DateTime.now(),
@@ -162,10 +166,9 @@ class UserListCard extends StatelessWidget {
                             Future.delayed(const Duration(seconds: 1),
                                 () async {
                               int response = await apiController
-                                  .undoDeleteUserList(userList.listId, false);
+                                  .undoDeleteUserList(userList.listId, "new");
                               if (response == 1) {
                                 Boxes.getUserListDB().add(userList);
-                                
                               } else {
                                 errorMsg('Unable to undo the list', '');
                               }

@@ -828,6 +828,7 @@ class _UserListPageState extends State<UserListPage> {
                                                                             element.listId ==
                                                                             userList.listId)
                                                                         .delete();
+                                                                        
                                                                   });
                                                                 } else {
                                                                   errorMsg(

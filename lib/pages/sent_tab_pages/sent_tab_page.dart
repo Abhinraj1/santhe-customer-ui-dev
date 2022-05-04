@@ -183,34 +183,3 @@ class _OfferTabPageState extends State<OfferTabPage> {
     );
   }
 }
-
-//     body: Column(
-//   crossAxisAlignment: CrossAxisAlignment.start,
-//   mainAxisAlignment: MainAxisAlignment.start,
-//   children: [
-//     const SizedBox(
-//       height: 25.0,
-//     ),
-//     SizedBox(
-//       width: screenWidth * 60,
-//       child: SvgPicture.asset(
-//         'assets/onboarding_sentPage_arrow.svg',
-//         color: Colors.orange,
-//         height: screenHeight * 30,
-//       ),
-//     ),
-//     Center(
-//       child: Padding(
-//         padding: const EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
-//         child: Text(
-//           'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
-//           textAlign: TextAlign.center,
-//           style: TextStyle(
-//               fontWeight: FontWeight.w400,
-//               fontSize: 16.sp,
-//               color: Colors.grey),
-//         ),
-//       ),
-//     ),
-//   ],
-// ),

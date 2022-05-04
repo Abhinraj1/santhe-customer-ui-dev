@@ -82,45 +82,48 @@ class ArchivedUserListCard extends StatelessWidget {
             endActionPane: ActionPane(
               motion: const ScrollMotion(),
               children: [
-                SlidableAction(
-                  onPressed: (context) async {
-                    int userListCount =
-                        await apiController.getAllCustomerLists(custId);
-                    UserList oldUserList = userList;
+                Visibility(
+                  visible: Boxes.getUserListDB().values.length < 3,
+                  child: SlidableAction(
+                    onPressed: (context) async {
+                      int userListCount =
+                          await apiController.getAllCustomerLists(custId);
+                      UserList oldUserList = userList;
 
-                    UserList newImportedList = UserList(
-                        createListTime: DateTime.now(),
-                        custId: oldUserList.custId,
-                        items: oldUserList.items,
-                        listId: int.parse('$custId${userListCount + 1}'),
-                        listName: '(COPY) ${oldUserList.listName}',
-                        custListSentTime: oldUserList.custListSentTime,
-                        custListStatus: oldUserList.custListStatus,
-                        listOfferCounter: oldUserList.listOfferCounter,
-                        processStatus: oldUserList.processStatus,
-                        custOfferWaitTime: oldUserList.custOfferWaitTime);
+                      UserList newImportedList = UserList(
+                          createListTime: DateTime.now(),
+                          custId: oldUserList.custId,
+                          items: oldUserList.items,
+                          listId: int.parse('$custId${userListCount + 1}'),
+                          listName: '(COPY) ${oldUserList.listName}',
+                          custListSentTime: oldUserList.custListSentTime,
+                          custListStatus: oldUserList.custListStatus,
+                          listOfferCounter: oldUserList.listOfferCounter,
+                          processStatus: oldUserList.processStatus,
+                          custOfferWaitTime: oldUserList.custOfferWaitTime);
 
-                    int response = await apiController.addCustomerList(
-                        newImportedList, custId, 'new');
+                      int response = await apiController.addCustomerList(
+                          newImportedList, custId, 'new');
 
-                    if (response == 1) {
-                      box.add(newImportedList);
-                      Get.to(const HomePage(
-                        pageIndex: 0,
-                      ));
-                    } else {
-                      Get.dialog(const Card(
-                        child: Center(
-                          child: Text('Error!'),
-                        ),
-                      ));
-                    }
-                  },
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.orange,
-                  autoClose: true,
-                  icon: Icons.copy_rounded,
-                  label: 'Copy',
+                      if (response == 1) {
+                        box.add(newImportedList);
+                        Get.offAll(const HomePage(
+                          pageIndex: 0,
+                        ));
+                      } else {
+                        Get.dialog(const Card(
+                          child: Center(
+                            child: Text('Error!'),
+                          ),
+                        ));
+                      }
+                    },
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.orange,
+                    autoClose: true,
+                    icon: Icons.copy_rounded,
+                    label: 'Copy',
+                  ),
                 ),
                 //* delete button
                 // SlidableAction(
@@ -234,10 +237,12 @@ class ArchivedUserListCard extends StatelessWidget {
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
                                 () async {
-                              int response = await apiController
-                                  .undoDeleteUserList(userList.listId, true);
+                              int response =
+                                  await apiController.undoDeleteUserList(
+                                      userList.listId, "archived");
                               _archivedController.archivedList
                                   .insert(index, userList);
+                              _archivedController.update();
                               if (response == 1) {
                               } else {
                                 errorMsg('Unable to undo the list', '');
@@ -246,7 +251,7 @@ class ArchivedUserListCard extends StatelessWidget {
                           }
                           pressCount++;
                         },
-                        child: Text(
+                        child: const Text(
                           'Undo',
                           style: TextStyle(
                               color: Colors.orange,

@@ -134,7 +134,6 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                   _archivedController.update();
                 });
               });
-              return;
             },
             child: ListView.builder(
               padding:

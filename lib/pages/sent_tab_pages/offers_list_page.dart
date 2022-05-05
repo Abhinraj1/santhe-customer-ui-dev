@@ -47,10 +47,10 @@ class _OffersListPageState extends State<OffersListPage> {
         minTextAdapt: true,
         orientation: Orientation.portrait);
     print(widget.userList.listId);
-    return !widget.showOffers ? FutureBuilder<List<CustomerOfferResponse>>(
+    return widget.showOffers ? FutureBuilder<List<CustomerOfferResponse>>(
       future: apiController.getAllMerchOfferByListId(widget.userList.listId),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data?.length == 0 || snapshot.hasError) {
+        if (snapshot.hasData && snapshot.data!.isEmpty || snapshot.hasError) {
           return _waitingImage();
         } else if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
@@ -63,8 +63,7 @@ class _OffersListPageState extends State<OffersListPage> {
               return;
             },
             child: ListView.builder(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
+              padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
               physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
               itemCount: snapshot.data?.length,

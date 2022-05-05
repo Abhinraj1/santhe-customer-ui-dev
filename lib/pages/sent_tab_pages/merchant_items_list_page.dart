@@ -3,12 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
 import '../../controllers/api_service_controller.dart';
+import '../../core/app_theme.dart';
+import '../../models/merchant_details_response.dart';
 import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/merchant_offer_response.dart';
 import '../../models/santhe_user_list_model.dart';
@@ -17,7 +20,8 @@ import '../../widgets/sent_tab_widgets/merchant_item_card.dart';
 class MerchantItemsListPage extends StatelessWidget {
   final CustomerOfferResponse currentMerchantOffer;
   final UserList userList;
-  const MerchantItemsListPage({required this.currentMerchantOffer, Key? key, required this.userList})
+  final MerchantDetailsResponse? merchantResponse;
+  const MerchantItemsListPage({required this.currentMerchantOffer, Key? key, required this.userList, required this.merchantResponse})
       : super(key: key);
 
   @override
@@ -91,9 +95,9 @@ class MerchantItemsListPage extends StatelessWidget {
                   padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: Text(
-                      'Items and Price',
+                      isDone() ? 'Offer Accepted' : 'Items and Price',
                       style: TextStyle(
-                          color: Colors.orange,
+                          color: isDone() ? AppColors().green100 : Colors.orange,
                           fontWeight: FontWeight.w700,
                           fontSize: 16.sp),
                     ),
@@ -117,6 +121,50 @@ class MerchantItemsListPage extends StatelessWidget {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          if(isDone())
+                            Row(
+                              children: [
+                                SizedBox(width: 30.w,),
+                                Image.asset('assets/offers/store_icon.png', height: 75.h,),
+                                SizedBox(width: 19.w,),
+                                Expanded(child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(merchantResponse!.fields.merchName.stringValue, style: AppTheme().bold700(24, color: AppColors().grey100),),
+                                    SizedBox(height: 9.h,),
+                                    Text(merchantResponse!.fields.contact.mapValue.fields.address.stringValue, style: AppTheme().normal400(13, color: AppColors().grey100),),
+                                    SizedBox(height: 9.h,),
+                                    //contact number
+                                    Row(
+                                      children: [
+                                        //phone icon
+                                        Container(
+                                          height: 24.h,
+                                          width: 24.h,
+                                          decoration: BoxDecoration(
+                                              color: AppColors().brandDark,
+                                              borderRadius: BorderRadius.circular(60)
+                                          ),
+                                          child: Center(
+                                            child: Icon(Icons.phone, color: AppColors().white100, size: 15,),
+                                          ),
+                                        ),
+                                        SizedBox(width: 9.w,),
+                                        //phone number
+                                        Text('+91-' + merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue, style: AppTheme().bold700(16, color: AppColors().brandDark),)
+                                      ],
+                                    ),
+                                    SizedBox(height: 20.h,),
+                                    //chat button
+                                    SizedBox(
+                                        height: 32.h,
+                                        width: 92.w,
+                                        child: ElevatedButton(onPressed: (){}, child: Text('Chat', style: AppTheme().bold700(16, color: AppColors().white100),)))
+                                  ],
+                                ))
+                              ],
+                            ),
+                          SizedBox(height: 15.h,),
                           Text(value),
                           const Divider(
                             color: Colors.grey,
@@ -134,7 +182,7 @@ class MerchantItemsListPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
+              if(!isDone())Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
                     color: Colors.white,
@@ -300,17 +348,14 @@ class MerchantItemsListPage extends StatelessWidget {
                                                   child: MaterialButton(
                                                     onPressed: () async {
                                                       //todo push acceptance changes to db
-                                                      int response =
-                                                      await apiController
-                                                          .acceptOffer(currentMerchantOffer.listEventId);
+                                                      int response = await apiController.acceptOffer(currentMerchantOffer.listEventId);
 
                                                       int response2 = await apiController
                                                           .processedStatusChange(int
                                                           .parse(currentMerchantOffer
                                                           .listId.path.segments.last));
                                                       // int response = 1;
-                                                      if (response == 1 &&
-                                                          response2 == 1) {
+                                                      if (response == 1 && response2 == 1) {
                                                         //todo refresh and send to sent page
                                                         successMsg(
                                                             'Yay! Offer Accepted!',
@@ -375,5 +420,9 @@ class MerchantItemsListPage extends StatelessWidget {
         return const Center(child: CircularProgressIndicator.adaptive());
       }),
     );
+  }
+
+  bool isDone() {
+    return userList.processStatus == 'accepted' || userList.processStatus == 'processed' ? true : false;
   }
 }

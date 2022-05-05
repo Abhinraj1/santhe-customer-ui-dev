@@ -122,93 +122,6 @@ class OfferCard extends StatelessWidget {
                     label: 'Copy',
                   ),
                 ),
-                // //delete list
-                // SlidableAction(
-                //   onPressed: (context) async {
-                //     int pressCount = 0;
-                //     //delete userList from DB
-                //     final box = Boxes.getUserListDB();
-                //     userList.delete();
-                //     //undo feature
-                //     Get.snackbar(
-                //       '',
-                //       '',
-                //       duration: const Duration(milliseconds: 4000),
-                //       snackPosition: SnackPosition.BOTTOM,
-                //       icon: const Icon(
-                //           CupertinoIcons.exclamationmark_circle_fill,
-                //           color: Colors.orange,
-                //           size: 15),
-                //       snackStyle: SnackStyle.FLOATING,
-                //       shouldIconPulse: true,
-                //       backgroundColor: Colors.white,
-                //       margin: const EdgeInsets.all(12.0),
-                //       padding: const EdgeInsets.all(12.0),
-                //       titleText: const Text('List Deleted'),
-                //       messageText: Text(
-                //         'List has been deleted',
-                //         style: TextStyle(
-                //             color: AppColors().grey100,
-                //             fontWeight: FontWeight.w400,
-                //             fontSize: 15),
-                //       ),
-                //       mainButton: TextButton(
-                //         onPressed: () async {
-                //           Get.closeCurrentSnackbar();
-                //           if (pressCount < 1) {
-                //             Future.delayed(const Duration(seconds: 1),
-                //                 () async {
-                //               int response = await apiController
-                //                   .undoDeleteUserList(userList.listId, "sent");
-                //               _sentItemsController.sentItems
-                //                   .insert(index, userList);
-                //               _sentItemsController.update();
-                //               if (response == 1) {
-                //                 // Boxes.getUserListDB().add(userList);
-                //               } else {
-                //                 errorMsg('Unable to undo the list', '');
-                //               }
-                //             });
-                //           }
-                //           pressCount++;
-                //           if (box.length >= 2) {
-                //             Get.offAll(() => const HomePage(),
-                //                 transition: Transition.fadeIn);
-                //           }
-                //         },
-                //         child: const Text(
-                //           'Undo',
-                //           style: TextStyle(
-                //               color: Colors.orange,
-                //               fontWeight: FontWeight.w700,
-                //               fontSize: 15),
-                //         ),
-                //       ),
-                //     );
-                //     if (pressCount == 0) {
-                //       apiController.deletedUserLists.add(userList);
-
-                //       int response =
-                //           await apiController.deleteUserList(userList.listId);
-
-                //       if (response == 1) {
-                //         apiController.deletedUserLists.remove(userList);
-                //         _sentItemsController.sentItems.removeAt(index);
-                //         _sentItemsController.update();
-                //       }
-                //     }
-
-                //     //for bringing Floating Action Button
-                //     if (box.length >= 2) {
-                //       Get.offAll(() => const HomePage(),
-                //           transition: Transition.fadeIn);
-                //     }
-                //   },
-                //   backgroundColor: Colors.transparent,
-                //   foregroundColor: Colors.orange,
-                //   icon: CupertinoIcons.delete_solid,
-                //   label: 'Delete',
-                // ),
               ],
             ),
             child: Padding(
@@ -279,9 +192,8 @@ class OfferCard extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 0),
                         child: Row(
                           children: [
-                            //nooofer
-                            userList.processStatus == 'nooffer' ||
-                                    userList.processStatus == 'noMerchants'
+                            //no offer
+                            userList.processStatus == 'nooffer' || userList.processStatus == 'nomerchants'
                                 ? AutoSizeText(
                                     'No Offers',
                                     style: TextStyle(
@@ -294,7 +206,7 @@ class OfferCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //processed
-                            userList.processStatus == 'processed'
+                            userList.processStatus == 'processed' || userList.processStatus == 'accepted'
                                 ? AutoSizeText(
                                     'Accepted',
                                     style: TextStyle(
@@ -306,25 +218,29 @@ class OfferCard extends StatelessWidget {
                                     visible: false,
                                     child: SizedBox(),
                                   ),
-                            //minoffer
-                            _showOffer()
+                            //min offer
+                            _minOffer()
                                 ? AutoSizeText(
-                                    'Waiting for offers',
+                                '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
                                     style: TextStyle(
                                         fontSize: 14.sp,
                                         color: const Color(0xffFFC300),
                                         fontWeight: FontWeight.w400),
-                                  )
-                                : userList.processStatus == 'Accepted'
-                                    ? AutoSizeText(
-                                        '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
-                                        style: TextStyle(
-                                            fontSize: 14.sp,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w400),
-                                      )
-                                    : SizedBox(),
-                            //minoffer
+                                  ) : const SizedBox(),
+                            //processing
+                            userList.processStatus == 'processing' || userList.processStatus == 'waiting' || userList.processStatus == 'draft' || !_minOffer()
+                                ? AutoSizeText(
+                              'Waiting for offers',
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: const Color(0xffFFC300),
+                                  fontWeight: FontWeight.w400),
+                            )
+                                : const Visibility(
+                              visible: false,
+                              child: SizedBox(),
+                            ),
+                            //max offer
                             userList.processStatus == 'maxoffer'
                                 ? AutoSizeText(
                                     '${userList.listOfferCounter} Offers Available',
@@ -351,11 +267,9 @@ class OfferCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             const SizedBox(width: 3),
-                            //ICON ICON ICON
-                            //draft
-                            //noofffer & nomerchants
+                            //ICON ICON ICO
                             userList.processStatus == 'nooffer' ||
-                                    userList.processStatus == 'noMerchants'
+                                    userList.processStatus == 'nomerchants'
                                 ? Icon(
                                     CupertinoIcons.xmark_circle_fill,
                                     color: Colors.red,
@@ -366,7 +280,7 @@ class OfferCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //processed
-                            userList.processStatus == 'processed'
+                            userList.processStatus == 'processed' || userList.processStatus == 'accepted'
                                 ? Icon(
                                     CupertinoIcons.checkmark_alt_circle_fill,
                                     color: Colors.green,
@@ -377,19 +291,13 @@ class OfferCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //minoffer
-                            _showOffer()
+                            _minOffer()
                                 ? Icon(
-                                    CupertinoIcons.time_solid,
+                                    CupertinoIcons.hand_thumbsup,
                                     color: Colors.orangeAccent,
                                     size: 18.sp,
                                   )
-                                : userList.processStatus == 'Accepted'
-                                    ? Icon(
-                                        CupertinoIcons.hand_thumbsup,
-                                        color: Colors.orangeAccent,
-                                        size: 18.sp,
-                                      )
-                                    : const SizedBox(),
+                                : const SizedBox(),
                             //max offer
                             if (userList.processStatus == 'maxoffer')
                               Icon(
@@ -397,6 +305,12 @@ class OfferCard extends StatelessWidget {
                                 color: Colors.deepPurple,
                                 size: 18.sp,
                               ),
+                            if (userList.processStatus == 'processing' || userList.processStatus == 'waiting' || userList.processStatus == 'draft' || !_minOffer())
+                            Icon(
+                              CupertinoIcons.time_solid,
+                              color: Colors.orangeAccent,
+                              size: 18.sp,
+                            ),
                             //expired
                             if (userList.processStatus == 'expired')
                               Icon(
@@ -419,12 +333,15 @@ class OfferCard extends StatelessWidget {
   }
 
   bool _showOffer() {
-    return (userList.processStatus == 'minoffer' &&
-                userList.custListSentTime.toLocal().isBefore(DateTime.now())) ||
-            userList.processStatus == 'draft' ||
-            userList.processStatus == 'processing' ||
-            userList.processStatus == 'waiting'
+    return (userList.processStatus == 'minoffer' && userList.custOfferWaitTime.toLocal().isBefore(DateTime.now())) ||
+            userList.processStatus == 'maxoffer' ||
+            userList.processStatus == 'accepted' ||
+            userList.processStatus == 'processed'
         ? true
         : false;
+  }
+
+  bool _minOffer() {
+    return (userList.processStatus == 'minoffer' && userList.custOfferWaitTime.toLocal().isBefore(DateTime.now())) ? true : false;
   }
 }

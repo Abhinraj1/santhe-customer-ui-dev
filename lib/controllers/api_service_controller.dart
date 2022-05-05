@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/error_user_fallback.dart';
+import 'package:santhe/models/merchant_details_response.dart';
 import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/offer/merchant_offer_response.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
@@ -1067,11 +1068,8 @@ class APIs extends GetxController {
   // }
 
   //SENT TAB POST
-  Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
-      int listId) async {
-    print(listId);
-    String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
+  Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(int listId) async {
+    String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await http.get(Uri.parse(url));
     print(response.body);
@@ -1081,6 +1079,21 @@ class APIs extends GetxController {
       return resp;
     } else {
       throw 'Error retrieving user lists!';
+    }
+  }
+
+  Future<MerchantDetailsResponse> getMerchantDetails(String merchId) async {
+    String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/merchant/$merchId';
+
+    var response = await http.get(Uri.parse(url));
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      MerchantDetailsResponse resp =
+      merchantDetailsResponseFromJson(response.body);
+      return resp;
+    } else {
+      throw 'Error retrieving merchant details!';
     }
   }
 
@@ -1095,10 +1108,14 @@ class APIs extends GetxController {
         "custOfferResponse": {
           "mapValue": {
             "fields": {
-              "custOfferStatus": {"stringValue": "accepted"},
+              "custDeal": {
+                "stringValue": "best1"
+              },
+              "custOfferStatus": {
+                "stringValue": "accepted"
+              },
               "custUpdateTime": {
-                "timestampValue":
-                    DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+                "timestampValue": "2022-05-03T08:50:12Z"
               }
             }
           }
@@ -1136,8 +1153,7 @@ class APIs extends GetxController {
 
   Future<int> processedStatusChange(int listId) async {
     print('**********processedStatusChange***********');
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
+    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
     var body = {
       "fields": {
         "processStatus": {"stringValue": "accepted"}

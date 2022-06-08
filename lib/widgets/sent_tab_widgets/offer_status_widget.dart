@@ -14,46 +14,44 @@ enum Status {
 }
 
 class OfferStatus extends StatelessWidget {
-  OfferStatus({Key? key, required this.userList}) : super(key: key) {
-    setStatus(userList.processStatus);
-  }
-
+  OfferStatus({Key? key, required this.userList}) : super(key: key);
   final UserList userList;
-  Status state = Status.noOffer;
 
-  void setStatus(String status) {
-    if (status == 'nooffer' || status == 'nomerchants') {
-      state = Status.noOffer;
+  Status setStatus(String status) {
+    if (_minOffer()) {
+      return Status.minOffer;
+    }else if (_maxOffer()) {
+      return Status.maxOffer;
+    }else if (status == 'nooffer' || status == 'nomerchant') {
+      return Status.noOffer;
     } else if (status == 'accepted' || status == 'processed') {
-      state = Status.accepted;
+      return Status.accepted;
     } else if (status == 'processing' ||
         status == 'waiting' ||
         status == 'draft') {
-      state = Status.waiting;
-    } else if (_minOffer()) {
-      state == Status.minOffer;
-    } else if (status == 'expired') {
-      state = Status.expired;
-    } else if (_maxOffer()) {
-      state == Status.maxOffer;
+      return Status.waiting;
+    }  else if (status == 'expired') {
+      return Status.expired;
+    } else{
+      return Status.waiting;
     }
   }
 
   bool _minOffer() {
     return (userList.processStatus == 'minoffer' &&
-            userList.custOfferWaitTime.toLocal().isBefore(DateTime.now()))
+            userList.custOfferWaitTime.toLocal().isAfter(DateTime.now()))
         ? true
         : false;
   }
 
   bool _maxOffer() {
     return (userList.processStatus == 'maxoffer' &&
-            userList.custOfferWaitTime.toLocal().isBefore(DateTime.now()))
+            userList.custOfferWaitTime.toLocal().isAfter(DateTime.now()))
         ? true
         : false;
   }
 
-  Widget getText() {
+  Widget getText(Status state) {
     switch (state) {
       case Status.noOffer:
         {
@@ -126,7 +124,7 @@ class OfferStatus extends StatelessWidget {
     }
   }
 
-  Widget getIcon() {
+  Widget getIcon(Status state) {
     switch(state){
       case Status.accepted:{
         return Icon(
@@ -183,8 +181,8 @@ class OfferStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        getText(),
-        getIcon()
+        getText(setStatus(userList.processStatus)),
+        getIcon(setStatus(userList.processStatus)),
       ],
     );
   }

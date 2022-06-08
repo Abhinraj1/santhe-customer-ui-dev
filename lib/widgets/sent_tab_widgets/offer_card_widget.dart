@@ -203,7 +203,7 @@ class OfferCard extends StatelessWidget {
   }
 
   bool _showOffer() {
-    return (userList.processStatus == 'minoffer' && userList.custOfferWaitTime.toLocal().isBefore(DateTime.now())) ||
+    return (userList.processStatus == 'minoffer' && userList.custOfferWaitTime.toLocal().isAfter(DateTime.now())) ||
             userList.processStatus == 'maxoffer' ||
             userList.processStatus == 'accepted' ||
             userList.processStatus == 'processed'

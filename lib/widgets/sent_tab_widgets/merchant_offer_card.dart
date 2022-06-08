@@ -16,6 +16,7 @@ import '../../pages/sent_tab_pages/merchant_items_list_page.dart';
 class MerchantOfferCard extends StatelessWidget {
   final UserList userList;
   final CustomerOfferResponse currentMerchantOffer;
+
   const MerchantOfferCard(
       {required this.currentMerchantOffer, required this.userList, Key? key})
       : super(key: key);
@@ -46,12 +47,13 @@ class MerchantOfferCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          if(merchantResponse != null || !isDone()) {
+          if (merchantResponse != null || !isDone()) {
             Get.to(() => MerchantItemsListPage(
-                currentMerchantOffer: currentMerchantOffer, userList: userList, merchantResponse: merchantResponse,
-              ));
-          }
-          else{
+                  currentMerchantOffer: currentMerchantOffer,
+                  userList: userList,
+                  merchantResponse: merchantResponse,
+                ));
+          } else {
             errorMsg('Please wait till loading', '');
           }
         },
@@ -72,7 +74,8 @@ class MerchantOfferCard extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
+            padding: const EdgeInsets.only(
+                top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
             child: Column(
               children: [
                 Row(
@@ -95,7 +98,7 @@ class MerchantOfferCard extends StatelessWidget {
                                 children: [
                                   TextSpan(
                                     text:
-                                    'Rs ${currentMerchantOffer.merchResponse.merchTotalPrice}',
+                                        'Rs ${currentMerchantOffer.merchResponse.merchTotalPrice}',
                                     style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w700,
@@ -120,7 +123,7 @@ class MerchantOfferCard extends StatelessWidget {
                             child: RichText(
                               text: TextSpan(
                                   text:
-                                  'Merchant is ${currentMerchantOffer.custDistance} ${currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
+                                      'Merchant is ${currentMerchantOffer.custDistance} ${currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w400,
@@ -128,8 +131,10 @@ class MerchantOfferCard extends StatelessWidget {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text:
-                                      currentMerchantOffer.merchResponse.merchDelivery ? 'Does home delivery' : 'No home delivery',
+                                      text: currentMerchantOffer
+                                              .merchResponse.merchDelivery
+                                          ? 'Does home delivery'
+                                          : 'No home delivery',
                                       style: TextStyle(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w700,
@@ -142,18 +147,21 @@ class MerchantOfferCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Stack(
+                    SizedBox(
+                      height: 150.sp,
+                      width: 150.sp,
+                      child: Stack(
                         children: [
-                          Positioned(
-                            left: 6,
-                            top: 5,
+                          Align(
+                            alignment: Alignment.center,
                             child: Container(
                               width: 142.w,
                               height: 142.w,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image: AssetImage(imagePath), fit: BoxFit.contain),
+                                    image: AssetImage(imagePath),
+                                    fit: BoxFit.contain),
                               ),
                             ),
                           ),
@@ -170,82 +178,142 @@ class MerchantOfferCard extends StatelessWidget {
                                 color: AppColors().brandDark,
                               ),
                             ),
-                          )
-                        ])
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                if(isDone()) Column(
-                  children: [
-                    SizedBox(height: 35.h,),
-                    Center(
-                      child: Text('Offer Accepted', style: AppTheme().bold800(20, color: AppColors().green100),),
-                    ),
-                    SizedBox(height: 36.h,),
-                    //store details
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.asset('assets/offers/store_icon.png', height: 75.h,),
-                        SizedBox(width: 19.w,),
-                        Expanded(
-                          child: FutureBuilder<MerchantDetailsResponse>(
-                            future: APIs().getMerchantDetails(currentMerchantOffer.merchId.path.segments.last),
-                            builder: (builder, snapShot){
-                              if(snapShot.connectionState == ConnectionState.waiting){
-                                return const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                );
-                              }
-
-                              if(snapShot.hasError){
-                                return const Center(
-                                  child: Text('Something went wrong please try again'),
-                                );
-                              }
-
-                              merchantResponse = snapShot.data;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(snapShot.data!.fields.merchName.stringValue, style: AppTheme().bold700(24, color: AppColors().grey100),),
-                                  SizedBox(height: 9.h,),
-                                  Text(snapShot.data!.fields.contact.mapValue.fields.address.stringValue, style: AppTheme().normal400(13, color: AppColors().grey100),),
-                                  SizedBox(height: 9.h,),
-                                  //contact number
-                                  Row(
-                                    children: [
-                                      //phone icon
-                                      Container(
-                                        height: 24.h,
-                                        width: 24.h,
-                                        decoration: BoxDecoration(
-                                          color: AppColors().brandDark,
-                                          borderRadius: BorderRadius.circular(60)
-                                        ),
-                                        child: Center(
-                                          child: Icon(Icons.phone, color: AppColors().white100, size: 15,),
-                                        ),
-                                      ),
-                                      SizedBox(width: 9.w,),
-                                      //phone number
-                                      Text('+91-' + snapShot.data!.fields.contact.mapValue.fields.phoneNumber.integerValue, style: AppTheme().bold700(16, color: AppColors().brandDark),)
-                                    ],
-                                  ),
-                                  SizedBox(height: 20.h,),
-                                  //chat button
-                                  SizedBox(
-                                    height: 32.h,
-                                      width: 92.w,
-                                      child: ElevatedButton(onPressed: (){}, child: Text('Chat', style: AppTheme().bold700(16, color: AppColors().white100),)))
-                                ],
-                              );
-                            },
+                if (isDone())
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 35.h,
+                      ),
+                      Center(
+                        child: Text(
+                          'Offer Accepted',
+                          style: AppTheme()
+                              .bold800(20, color: AppColors().green100),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 36.h,
+                      ),
+                      //store details
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            'assets/offers/store_icon.png',
+                            height: 75.h,
                           ),
-                        )
-                      ],
-                    )
-                  ],
-                )
+                          SizedBox(
+                            width: 19.w,
+                          ),
+                          Expanded(
+                            child: FutureBuilder<MerchantDetailsResponse>(
+                              future: APIs().getMerchantDetails(
+                                  currentMerchantOffer
+                                      .merchId.path.segments.last),
+                              builder: (builder, snapShot) {
+                                if (snapShot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator.adaptive(),
+                                  );
+                                }
+
+                                if (snapShot.hasError) {
+                                  return const Center(
+                                    child: Text(
+                                        'Something went wrong please try again'),
+                                  );
+                                }
+
+                                merchantResponse = snapShot.data;
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      snapShot
+                                          .data!.fields.merchName.stringValue,
+                                      style: AppTheme().bold700(24,
+                                          color: AppColors().grey100),
+                                    ),
+                                    SizedBox(
+                                      height: 9.h,
+                                    ),
+                                    Text(
+                                      snapShot.data!.fields.contact.mapValue
+                                          .fields.address.stringValue,
+                                      style: AppTheme().normal400(13,
+                                          color: AppColors().grey100),
+                                    ),
+                                    SizedBox(
+                                      height: 9.h,
+                                    ),
+                                    //contact number
+                                    Row(
+                                      children: [
+                                        //phone icon
+                                        Container(
+                                          height: 24.h,
+                                          width: 24.h,
+                                          decoration: BoxDecoration(
+                                              color: AppColors().brandDark,
+                                              borderRadius:
+                                                  BorderRadius.circular(60)),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.phone,
+                                              color: AppColors().white100,
+                                              size: 15,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 9.w,
+                                        ),
+                                        //phone number
+                                        Text(
+                                          '+91-' +
+                                              snapShot
+                                                  .data!
+                                                  .fields
+                                                  .contact
+                                                  .mapValue
+                                                  .fields
+                                                  .phoneNumber
+                                                  .integerValue,
+                                          style: AppTheme().bold700(16,
+                                              color: AppColors().brandDark),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    //chat button
+                                    SizedBox(
+                                        height: 32.h,
+                                        width: 92.w,
+                                        child: ElevatedButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              'Chat',
+                                              style: AppTheme().bold700(16,
+                                                  color: AppColors().white100),
+                                            )))
+                                  ],
+                                );
+                              },
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  )
               ],
             ),
           ),
@@ -255,6 +323,9 @@ class MerchantOfferCard extends StatelessWidget {
   }
 
   bool isDone() {
-    return userList.processStatus == 'accepted' || userList.processStatus == 'processed' ? true : false;
+    return userList.processStatus == 'accepted' ||
+            userList.processStatus == 'processed'
+        ? true
+        : false;
   }
 }

@@ -20,7 +20,7 @@ class OfferStatus extends StatelessWidget {
   Status setStatus(String status) {
     if (_minOffer()) {
       return Status.minOffer;
-    }else if (_maxOffer()) {
+    }else if (status == 'maxoffer') {
       return Status.maxOffer;
     }else if (status == 'nooffer' || status == 'nomerchant') {
       return Status.noOffer;
@@ -39,14 +39,7 @@ class OfferStatus extends StatelessWidget {
 
   bool _minOffer() {
     return (userList.processStatus == 'minoffer' &&
-            userList.custOfferWaitTime.toLocal().isAfter(DateTime.now()))
-        ? true
-        : false;
-  }
-
-  bool _maxOffer() {
-    return (userList.processStatus == 'maxoffer' &&
-            userList.custOfferWaitTime.toLocal().isAfter(DateTime.now()))
+            userList.custOfferWaitTime.toLocal().isBefore(DateTime.now()))
         ? true
         : false;
   }

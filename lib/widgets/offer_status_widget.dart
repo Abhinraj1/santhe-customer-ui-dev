@@ -11,6 +11,7 @@ enum Status {
   waiting,
   minOffer,
   expired,
+  missed,
 }
 
 class OfferStatus extends StatelessWidget {
@@ -22,17 +23,19 @@ class OfferStatus extends StatelessWidget {
       return Status.minOffer;
     }else if (status == 'maxoffer') {
       return Status.maxOffer;
-    }else if (status == 'nooffer' || status == 'nomerchant' || status=='missed') {
+    }else if (status == 'nooffer' || status == 'nomerchant') {
       return Status.noOffer;
-    } else if (status == 'accepted' || status == 'processed') {
+    }else if (status=='missed') {
+      return Status.missed;
+    }else if (status == 'accepted' || status == 'processed') {
       return Status.accepted;
-    } else if (status == 'processing' ||
+    }else if (status == 'processing' ||
         status == 'waiting' ||
         status == 'draft') {
       return Status.waiting;
-    }  else if (status == 'expired') {
+    }else if (status == 'expired') {
       return Status.expired;
-    } else{
+    }else{
       return Status.waiting;
     }
   }
@@ -56,6 +59,16 @@ class OfferStatus extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           );
         }
+
+      case Status.missed:{
+        return AutoSizeText(
+          'Offers Missed',
+          style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.red,
+              fontWeight: FontWeight.w400),
+        );
+      }
 
       case Status.accepted:
         {
@@ -100,7 +113,7 @@ class OfferStatus extends StatelessWidget {
       case Status.expired:
         {
           return AutoSizeText(
-            'Offers Missed',
+            'Offers Expired',
             style: TextStyle(
                 fontSize: 14.sp,
                 color: Colors.grey,
@@ -140,6 +153,15 @@ class OfferStatus extends StatelessWidget {
           size: 18.sp,
         );
       }
+
+      case Status.missed: {
+        return Icon(
+          CupertinoIcons.xmark_circle_fill,
+          color: Colors.red,
+          size: 18.sp,
+        );
+      }
+
       case Status.waiting: {
         return Icon(
           Icons.hourglass_bottom_rounded,

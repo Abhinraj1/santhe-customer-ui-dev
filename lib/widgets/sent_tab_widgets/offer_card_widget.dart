@@ -6,7 +6,7 @@ import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:get/get.dart';
-import 'package:santhe/pages/sent_tab_pages/no_offer_page.dart';
+import 'package:santhe/pages/no_offer_page.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
 import '../../models/santhe_user_list_model.dart';

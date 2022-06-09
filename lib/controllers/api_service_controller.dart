@@ -543,7 +543,7 @@ class APIs extends GetxController {
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList, {String? status}) async {
+  Future updateUserList(int custId, UserList userList, {String? status, String? processStatus}) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
     List items = [];
@@ -581,7 +581,7 @@ class APIs extends GetxController {
           "timestampValue":
               DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
-        "processStatus": {"stringValue": "draft"},
+        "processStatus": {"stringValue": processStatus ?? "draft"},
         "custOfferWaitTime": {
           "timestampValue":
               DateTime.now().toUtc().toString().replaceAll(' ', 'T')

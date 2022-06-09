@@ -10,7 +10,7 @@ import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/pages/sent_tab_pages/no_offer_page.dart';
+import 'package:santhe/pages/no_offer_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
@@ -57,12 +57,16 @@ class ArchivedUserListCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          Get.to(
-                () => NoOfferPage(
-              userList: userList,
-              missed: userList.processStatus == 'missed',
-            ),
-          );
+          if (userList.processStatus == 'nomerchant' ||
+              userList.processStatus == 'nooffer' ||
+              userList.processStatus == 'missed') {
+            Get.to(
+                  () => NoOfferPage(
+                userList: userList,
+                missed: userList.processStatus == 'missed',
+              ),
+            );
+          }
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),

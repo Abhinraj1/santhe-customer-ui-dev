@@ -8,9 +8,11 @@ import 'package:get/get.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/no_offer_page.dart';
+import 'package:santhe/pages/sent_tab_pages/merchant_items_list_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
@@ -19,6 +21,7 @@ import '../../controllers/archived_controller.dart';
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
   final int index;
+
   ArchivedUserListCard({required this.userList, Key? key, required this.index})
       : super(key: key);
   final int custId =
@@ -29,8 +32,7 @@ class ArchivedUserListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ArchivedController _archivedController = Get.find();
-    double screenHeight = MediaQuery.of(context).size.height / 100;
-    double screenWidth = MediaQuery.of(context).size.width / 100;
+    final screenSize = MediaQuery.of(context).size;
     final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
 
@@ -56,14 +58,53 @@ class ArchivedUserListCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (userList.processStatus == 'nomerchant' ||
               userList.processStatus == 'nooffer' ||
               userList.processStatus == 'missed') {
             Get.to(
-                  () => NoOfferPage(
+              () => NoOfferPage(
                 userList: userList,
                 missed: userList.processStatus == 'missed',
+              ),
+            );
+          } else if (userList.processStatus == 'accepted' ||
+              userList.processStatus == 'processed') {
+            BuildContext? c;
+            showDialog(
+                context: context,
+                builder: (ctx) {
+                  c = ctx;
+                  return AlertDialog(
+                    content: SizedBox(
+                      height: screenSize.height/3,
+                      width: screenSize.width * 4/5,
+                      child: Center(
+                        child: Container(
+                          color: AppColors().white100,
+                          height: 50,
+                          width: 50,
+                          child: const CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  );
+                });
+            final data =
+                await apiController.getAllMerchOfferByListId(userList.listId);
+            final resp = data.firstWhere((element) =>
+                element.custOfferResponse.custOfferStatus == 'accepted');
+            final merch = await apiController
+                .getMerchantDetails(resp.merchId.path.segments.last);
+            if (c != null) {
+              Navigator.of(c!).pop();
+            }
+            Get.to(
+              () => MerchantItemsListPage(
+                currentMerchantOffer: resp,
+                userList: userList,
+                merchantResponse: merch,
+                archived: true,
               ),
             );
           }
@@ -351,9 +392,10 @@ class ArchivedUserListCard extends StatelessWidget {
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 0),
-                        child: OfferStatus(userList: userList,)
-                      ),
+                          padding: const EdgeInsets.only(right: 0),
+                          child: OfferStatus(
+                            userList: userList,
+                          )),
                     ],
                   )
                 ],

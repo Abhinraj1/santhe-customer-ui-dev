@@ -1072,10 +1072,11 @@ class APIs extends GetxController {
     String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await http.get(Uri.parse(url));
-    print(response.body);
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
+      // resp.sort((a, b) => a.merchResponse.merchOfferQuantity.compareTo(b.merchResponse.merchOfferQuantity));
+      // resp.sort((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice));
       return resp;
     } else {
       throw 'Error retrieving user lists!';

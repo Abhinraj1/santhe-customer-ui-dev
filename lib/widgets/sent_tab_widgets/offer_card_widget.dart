@@ -6,15 +6,16 @@ import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:get/get.dart';
-import 'package:santhe/widgets/sent_tab_widgets/offer_status_widget.dart';
+import 'package:santhe/pages/sent_tab_pages/no_offer_page.dart';
+import 'package:santhe/widgets/offer_status_widget.dart';
 
 import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/sent_list_detail_page.dart';
 
 class OfferCard extends StatelessWidget {
   final UserList userList;
-  OfferCard({required this.userList, Key? key})
-      : super(key: key);
+
+  OfferCard({required this.userList, Key? key}) : super(key: key);
   final apiController = Get.find<APIs>();
   final int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
@@ -50,10 +51,23 @@ class OfferCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          Get.to(() => SentUserListDetailsPage(
+          if (userList.processStatus == 'nomerchant' ||
+              userList.processStatus == 'nooffer' ||
+              userList.processStatus == 'missed') {
+            Get.to(
+              () => NoOfferPage(
+                userList: userList,
+                missed: userList.processStatus == 'missed',
+              ),
+            );
+          } else {
+            Get.to(
+              () => SentUserListDetailsPage(
                 userList: userList,
                 showOffers: _showOffer(),
-              ));
+              ),
+            );
+          }
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -188,9 +202,10 @@ class OfferCard extends StatelessWidget {
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 0),
-                        child: OfferStatus(userList: userList,)
-                      ),
+                          padding: const EdgeInsets.only(right: 0),
+                          child: OfferStatus(
+                            userList: userList,
+                          )),
                     ],
                   )
                 ],
@@ -203,7 +218,10 @@ class OfferCard extends StatelessWidget {
   }
 
   bool _showOffer() {
-    return (userList.processStatus == 'minoffer' && userList.custOfferWaitTime.toLocal().isBefore(DateTime.now())) ||
+    return (userList.processStatus == 'minoffer' &&
+                userList.custOfferWaitTime
+                    .toLocal()
+                    .isBefore(DateTime.now())) ||
             userList.processStatus == 'maxoffer' ||
             userList.processStatus == 'accepted' ||
             userList.processStatus == 'processed'

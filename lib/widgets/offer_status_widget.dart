@@ -22,7 +22,7 @@ class OfferStatus extends StatelessWidget {
       return Status.minOffer;
     }else if (status == 'maxoffer') {
       return Status.maxOffer;
-    }else if (status == 'nooffer' || status == 'nomerchant') {
+    }else if (status == 'nooffer' || status == 'nomerchant' || status=='missed') {
       return Status.noOffer;
     } else if (status == 'accepted' || status == 'processed') {
       return Status.accepted;

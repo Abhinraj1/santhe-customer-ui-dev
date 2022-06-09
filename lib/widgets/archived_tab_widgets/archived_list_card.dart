@@ -10,7 +10,9 @@ import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/pages/sent_tab_pages/no_offer_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:santhe/widgets/offer_status_widget.dart';
 
 import '../../controllers/archived_controller.dart';
 
@@ -55,11 +57,12 @@ class ArchivedUserListCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          //todo
-          print('UserList Process Status: ${userList.processStatus}');
-          // Get.to(() => ArchivedUserListPage(
-          //       userList: userList,
-          //     ));
+          Get.to(
+                () => NoOfferPage(
+              userList: userList,
+              missed: userList.processStatus == 'missed',
+            ),
+          );
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -344,165 +347,8 @@ class ArchivedUserListCard extends StatelessWidget {
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
-                        //todo fix this
                         padding: const EdgeInsets.only(right: 0),
-                        child: Row(
-                          children: [
-                            //TEXT TEXT TEXT
-                            //draft
-                            userList.processStatus == 'draft' ||
-                                    userList.processStatus == 'processing' ||
-                                    userList.processStatus == 'waiting'
-                                ? AutoSizeText(
-                                    'Waiting for Offers',
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: const Color(0xffFFC300),
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //nooofer
-                            userList.processStatus == 'nooffer' ||
-                                    userList.processStatus == 'noMerchants'
-                                ? AutoSizeText(
-                                    'No Offers',
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //processed
-                            userList.processStatus == 'processed'
-                                ? AutoSizeText(
-                                    'Accepted',
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //minoffer
-                            userList.processStatus == 'minoffer'
-                                ? AutoSizeText(
-                                    '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //minoffer
-                            userList.processStatus == 'maxoffer'
-                                ? AutoSizeText(
-                                    '${userList.listOfferCounter} Offers Available',
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //expired
-                            userList.processStatus == 'expired'
-                                ? AutoSizeText(
-                                    'Offers Missed',
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            const SizedBox(width: 3),
-                            //ICON ICON ICON
-                            //draft
-                            userList.processStatus == 'draft' ||
-                                    userList.processStatus == 'waiting' ||
-                                    userList.processStatus == 'processing'
-                                ? Icon(
-                                    CupertinoIcons.time_solid,
-                                    color: const Color(0xffFFC300),
-                                    size: 18.sp,
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //noofffer & nomerchants
-                            userList.processStatus == 'nooffer' ||
-                                    userList.processStatus == 'noMerchants'
-                                ? Icon(
-                                    CupertinoIcons.xmark_circle_fill,
-                                    color: Colors.red,
-                                    size: 18.sp,
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //processed
-                            userList.processStatus == 'processed'
-                                ? Icon(
-                                    CupertinoIcons.checkmark_alt_circle_fill,
-                                    color: Colors.green,
-                                    size: 18.sp,
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //minoffer
-                            userList.processStatus == 'minoffer'
-                                ? Icon(
-                                    CupertinoIcons.hand_thumbsup,
-                                    color: Colors.orangeAccent,
-                                    size: 18.sp,
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //minoffer
-                            userList.processStatus == 'maxoffer'
-                                ? Icon(
-                                    CupertinoIcons.hand_thumbsup_fill,
-                                    color: Colors.deepPurple,
-                                    size: 18.sp,
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                            //expired
-                            userList.processStatus == 'expired'
-                                ? Icon(
-                                    CupertinoIcons.exclamationmark_circle_fill,
-                                    color: Colors.grey,
-                                    size: 18.sp,
-                                  )
-                                : const Visibility(
-                                    visible: false,
-                                    child: SizedBox(),
-                                  ),
-                          ],
-                        ),
+                        child: OfferStatus(userList: userList,)
                       ),
                     ],
                   )

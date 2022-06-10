@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 //EditCustomerProfile

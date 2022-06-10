@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/merchant_details_response.dart';
@@ -11,6 +11,7 @@ import '../../core/app_theme.dart';
 import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/offer_model.dart';
 import '../../models/santhe_user_list_model.dart';
+import '../../pages/chat/chat_screen.dart';
 import '../../pages/sent_tab_pages/merchant_items_list_page.dart';
 
 class MerchantOfferCard extends StatelessWidget {
@@ -236,7 +237,13 @@ class MerchantOfferCard extends StatelessWidget {
                                   SizedBox(
                                     height: 32.h,
                                       width: 92.w,
-                                      child: ElevatedButton(onPressed: (){}, child: Text('Chat', style: AppTheme().bold700(16, color: AppColors().white100),)))
+                                      child: ElevatedButton(onPressed: (){
+                                        print(merchantResponse!.fields.merchId.integerValue + userList.listId.toString());
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ChatScreen(chatId: userList.listId.toString(), title: currentMerchantOffer.merchResponse.merchTotalPrice, fromNotification: false, listEventId: merchantResponse!.fields.merchId.integerValue + userList.listId.toString(),)));
+                                      }, child: Text('Chat', style: AppTheme().bold700(16, color: AppColors().white100),)))
                                 ],
                               );
                             },

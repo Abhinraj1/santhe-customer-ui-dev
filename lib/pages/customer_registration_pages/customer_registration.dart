@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:get/get.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/models/santhe_user_model.dart';

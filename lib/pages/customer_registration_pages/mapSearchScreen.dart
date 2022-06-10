@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 import '../../API/addressSearchAPI.dart';
 import '../../constants.dart';

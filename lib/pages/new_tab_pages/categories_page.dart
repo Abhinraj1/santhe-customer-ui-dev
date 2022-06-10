@@ -95,65 +95,68 @@ class CategoriesPage extends StatelessWidget {
                       )
                     ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 10.0),
-                    child: ValueListenableBuilder<Box<UserList>>(
-                      valueListenable: Boxes.getUserListDB().listenable(),
-                      builder: (context, box, widget) {
-                        UserList currentUserList =
-                            Boxes.getUserListDB().get(currentUserListDBKey) ??
-                                fallBack_error_userList;
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 10.0),
+                      child: ValueListenableBuilder<Box<UserList>>(
+                        valueListenable: Boxes.getUserListDB().listenable(),
+                        builder: (context, box, widget) {
+                          UserList currentUserList =
+                              Boxes.getUserListDB().get(currentUserListDBKey) ??
+                                  fallBack_error_userList;
 
-                        ScreenUtil.init(
-                            BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width,
-                                maxHeight: MediaQuery.of(context).size.height),
-                            designSize: const Size(390, 844),
-                            context: context,
-                            minTextAdapt: true,
-                            orientation: Orientation.portrait);
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: AutoSizeText(
-                                currentUserList.listName,
-                                maxLines: 2,
-                                textAlign: TextAlign.left,
-                                minFontSize: 14,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xffB0B0B0),
-                                    fontSize: 18.sp),
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    '${currentUserList.items.length}',
-                                    style: TextStyle(
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w800,
-                                        color: Colors.orange),
-                                  ),
-                                ),
-                                Text(
-                                  currentUserList.items.length < 2
-                                      ? 'Item'
-                                      : 'Items',
-                                  textAlign: TextAlign.center,
+                          ScreenUtil.init(
+                              BoxConstraints(
+                                  maxWidth: MediaQuery.of(context).size.width,
+                                  maxHeight: MediaQuery.of(context).size.height),
+                              designSize: const Size(390, 844),
+                              context: context,
+                              minTextAdapt: true,
+                              orientation: Orientation.portrait);
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: AutoSizeText(
+                                  currentUserList.listName,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.left,
+                                  minFontSize: 14,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 14.sp,
-                                      color: Colors.orange),
-                                )
-                              ],
-                            ),
-                          ],
-                        );
-                      },
+                                      color: const Color(0xffB0B0B0),
+                                      fontSize: 18.sp),
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      '${currentUserList.items.length}',
+                                      style: TextStyle(
+                                          fontSize: 21.sp,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.orange),
+                                    ),
+                                  ),
+                                  Text(
+                                    currentUserList.items.length < 2
+                                        ? 'Item'
+                                        : 'Items',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14.sp,
+                                        color: Colors.orange),
+                                  )
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

@@ -161,7 +161,7 @@ class ListItemCard extends StatelessWidget {
                               itemName: listItem.itemName,
                               updateUser: 0,
                               createUser: 0,
-                            ), currentUserListDBKey: currentUserListDBKey);
+                            ), currentUserListDBKey: currentUserListDBKey, edit: true,);
                           });
                     },
                     splashRadius: 0.1,

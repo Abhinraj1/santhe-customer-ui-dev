@@ -1075,8 +1075,14 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
+      // resp.sort((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice)); 
       // resp.sort((a, b) => a.merchResponse.merchOfferQuantity.compareTo(b.merchResponse.merchOfferQuantity));
-      // resp.sort((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice));
+      // resp[0].custOfferResponse.custDeal = 'best1';
+      // resp[1].custOfferResponse.custDeal = 'best2';
+      // resp[2].custOfferResponse.custDeal = 'best3';
+      // for(var i=3;i<resp.length;i++){
+      //   resp[i].custOfferResponse.custDeal = '';
+      // }
       return resp;
     } else {
       throw 'Error retrieving user lists!';

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:group_button/group_button.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
@@ -116,20 +116,10 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
               ),
             ],
           ),
-          IconButton(
-              onPressed: () {
-                //todo implement add to user list on firebase
-                showDialog(
-                    context: context,
-                    barrierColor: const Color.fromARGB(165, 241, 241, 241),
-                    builder: (context) {
-                      return CustomItemPopUpWidget(currentUserListDBKey: currentUserListDBKey, searchQuery: searchQuery);
-                    });
-              },
-              icon: const Icon(
+          const Icon(
                 Icons.add,
                 color: Colors.orange,
-              )),
+              ),
         ],
       ),
     );

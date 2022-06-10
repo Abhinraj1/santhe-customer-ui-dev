@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:get/get.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
@@ -13,6 +13,7 @@ import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../controllers/archived_controller.dart';
+import '../../pages/archive_tab_pages/archive_detailed_page.dart';
 
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
@@ -55,11 +56,9 @@ class ArchivedUserListCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          //todo
-          print('UserList Process Status: ${userList.processStatus}');
-          // Get.to(() => ArchivedUserListPage(
-          //       userList: userList,
-          //     ));
+          Get.to(() => ArchiveDetailedPage(
+                userList: userList,
+              ));
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -354,10 +353,10 @@ class ArchivedUserListCard extends StatelessWidget {
                                     userList.processStatus == 'processing' ||
                                     userList.processStatus == 'waiting'
                                 ? AutoSizeText(
-                                    'Waiting for Offers',
+                                    'No Offers',
                                     style: TextStyle(
                                         fontSize: 14.sp,
-                                        color: const Color(0xffFFC300),
+                                        color: AppColors().red100,
                                         fontWeight: FontWeight.w400),
                                   )
                                 : const Visibility(
@@ -418,12 +417,12 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //expired
-                            userList.processStatus == 'expired'
+                            userList.processStatus == 'expired' || userList.processStatus == 'missed'
                                 ? AutoSizeText(
                                     'Offers Missed',
                                     style: TextStyle(
                                         fontSize: 14.sp,
-                                        color: Colors.grey,
+                                        color: Colors.red,
                                         fontWeight: FontWeight.w400),
                                   )
                                 : const Visibility(
@@ -437,8 +436,8 @@ class ArchivedUserListCard extends StatelessWidget {
                                     userList.processStatus == 'waiting' ||
                                     userList.processStatus == 'processing'
                                 ? Icon(
-                                    CupertinoIcons.time_solid,
-                                    color: const Color(0xffFFC300),
+                              CupertinoIcons.xmark_circle_fill,
+                              color: Colors.red,
                                     size: 18.sp,
                                   )
                                 : const Visibility(
@@ -491,10 +490,10 @@ class ArchivedUserListCard extends StatelessWidget {
                                     child: SizedBox(),
                                   ),
                             //expired
-                            userList.processStatus == 'expired'
+                            userList.processStatus == 'expired'  || userList.processStatus == 'missed'
                                 ? Icon(
-                                    CupertinoIcons.exclamationmark_circle_fill,
-                                    color: Colors.grey,
+                              CupertinoIcons.xmark_circle_fill,
+                              color: Colors.red,
                                     size: 18.sp,
                                   )
                                 : const Visibility(

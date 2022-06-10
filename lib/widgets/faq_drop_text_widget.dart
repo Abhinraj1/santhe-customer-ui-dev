@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:santhe/widgets/animated_clip_r_rect_widget.dart';
 
 class TextDropWidget extends StatefulWidget {

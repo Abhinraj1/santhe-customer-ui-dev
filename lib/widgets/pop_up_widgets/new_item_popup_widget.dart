@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:group_button/group_button.dart';
 
 import '../../constants.dart';
@@ -46,13 +46,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   @override
   void initState() {
-    // print(
-    //     '${widget.item.unit.indexWhere((element) => element == widget.item.dUnit)}');
     _unitsController = GroupButtonController(
         selectedIndex: widget.item.unit.indexWhere((element) =>
         element.toLowerCase() == widget.item.dUnit.toLowerCase()));
-    // print('dUnit:${widget.item.dUnit}');
-    // print('Units:${widget.item.unit}');
     _qtyController = TextEditingController(text: '${widget.item.dQuantity}');
     super.initState();
   }
@@ -460,10 +456,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             CrossAxisAlignment
                                                 .center,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 'Add Custom Image',
-                                                style: GoogleFonts
-                                                    .mulish(
+                                                style: TextStyle(
                                                   color:
                                                   Colors.orange,
                                                   fontWeight:
@@ -521,10 +516,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             ),
                                                           ),
                                                         ),
-                                                        Text(
+                                                        const Text(
                                                           'Camera',
-                                                          style: GoogleFonts
-                                                              .mulish(
+                                                          style: TextStyle(
                                                             color: Colors
                                                                 .grey,
                                                             fontWeight:
@@ -574,10 +568,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             ),
                                                           ),
                                                         ),
-                                                        Text(
+                                                        const Text(
                                                           'Gallery',
-                                                          style: GoogleFonts
-                                                              .mulish(
+                                                          style: TextStyle(
                                                             color: Colors
                                                                 .grey,
                                                             fontWeight:
@@ -667,7 +660,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                       ),
                     ),
                     //add widget
-
                     //Brand/Type
                     TextFormField(
                       keyboardType: TextInputType.text,
@@ -772,27 +764,17 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                               BorderRadius.circular(16.0)),
                           color: Colors.orange,
                           onPressed: () async {
-                            final itemUnit =
-                                selectedUnit; //todo firebase and add custom image item
-                            print(
-                                '${_qtyController.text} $itemUnit');
-
+                            final itemUnit = selectedUnit;
                             if (_formKey.currentState!.validate()) {
                               //--------------------------Creating List Item from Item and new data gathered from user------------------------
                               //TODO add parameter validation
-                              if (imageController
-                                  .editItemCustomImageUrl
-                                  .value
-                                  .isEmpty) {
-                                print(
-                                    "Item added=== > DB KEY: ${currentUserList.key}");
+                              if (imageController.editItemCustomImageUrl.value.isEmpty) {
                                 currentUserList.items.add(ListItem(
                                   brandType: _brandController.text,
                                   itemId: '${item.itemId}',
                                   itemImageId: item.itemImageId,
                                   itemName: item.itemName,
-                                  quantity: double.parse(
-                                      _qtyController.text),
+                                  quantity: double.parse(_qtyController.text),
                                   notes: _notesController.text,
                                   unit: itemUnit,
                                   possibleUnits: item.unit,
@@ -808,23 +790,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       'projects/santhe-425a8/databases/(default)/documents/category/',
                                       '')),
                                 ));
-
-                                //make changes persistent
                                 currentUserList.save();
                                 Navigator.pop(context);
                               } else {
-                                int itemCount = await apiController
-                                    .getItemsCount();
-
-                                print(
-                                    '>>>>>>>>>>>>ITEM COUNT: $itemCount');
-                                print(
-                                    '>>>>>>>>>>>>OFFLINE COUNT: ${apiController.itemsDB.length}');
-                                //--------------------------Creating List Item from Item and new data gathered from user------------------------
-                                //TODO add parameter validation
-
-                                print(
-                                    '---------------${_qtyController.text} $itemUnit---------------');
+                                int itemCount = await apiController.getItemsCount();
 
                                 if (itemCount != 0) {
                                   //todo add custom item to firebase
@@ -850,8 +819,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       unit: [selectedUnit],
                                       updateUser: custPhone);
 
-                                  int response = await apiController
-                                      .addItem(newCustomItem);
+                                  int response = await apiController.addItem(newCustomItem);
 
                                   if (response == 1) {
                                     currentUserList.items
@@ -885,8 +853,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
                                     //make changes persistent
                                     currentUserList.save();
-                                    print(
-                                        'URL: ${imageController.addItemCustomImageUrl.value}');
                                   } else {
                                     Get.snackbar('Network Error',
                                         'Error Adding item to the list!',

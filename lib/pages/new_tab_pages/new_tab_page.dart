@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';

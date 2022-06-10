@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:grouped_list/grouped_list.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
@@ -16,6 +16,7 @@ import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/merchant_offer_response.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../widgets/sent_tab_widgets/merchant_item_card.dart';
+import '../chat/chat_screen.dart';
 
 class MerchantItemsListPage extends StatelessWidget {
   final CustomerOfferResponse currentMerchantOffer;
@@ -159,7 +160,12 @@ class MerchantItemsListPage extends StatelessWidget {
                                     SizedBox(
                                         height: 32.h,
                                         width: 92.w,
-                                        child: ElevatedButton(onPressed: (){}, child: Text('Chat', style: AppTheme().bold700(16, color: AppColors().white100),)))
+                                        child: ElevatedButton(onPressed: (){
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => ChatScreen(chatId: userList.listId.toString(), title: currentMerchantOffer.merchResponse.merchTotalPrice, fromNotification: false, listEventId: '',)));
+                                        }, child: Text('edf', style: AppTheme().bold700(16, color: AppColors().white100),)))
                                   ],
                                 ))
                               ],

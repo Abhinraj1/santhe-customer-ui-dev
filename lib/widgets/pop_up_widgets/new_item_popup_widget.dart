@@ -227,7 +227,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                     prefix: GestureDetector(
                                       onTap: () {
                                         WidgetsBinding
-                                            .instance?.focusManager.primaryFocus
+                                            .instance.focusManager.primaryFocus
                                             ?.unfocus();
                                         if (_qtyController.text.isEmpty) {
                                           _qtyController.text = 0.toString();
@@ -252,7 +252,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                     suffix: GestureDetector(
                                       onTap: () {
                                         WidgetsBinding
-                                            .instance?.focusManager.primaryFocus
+                                            .instance.focusManager.primaryFocus
                                             ?.unfocus();
                                         if (_qtyController.text.isEmpty) {
                                           _qtyController.text = 0.toString();
@@ -692,14 +692,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                     //-----------------ADD BUTTON---------------
                     Center(
                       child: SizedBox(
-                        width: screenWidth * 45,
-                        height: 50,
+                        width: isProcessing ? 30 : screenWidth * 45,
+                        height: isProcessing ? 30 : 50,
                         child: isProcessing
-                            ? const SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: CircularProgressIndicator(),
-                              )
+                            ? const CircularProgressIndicator()
                             : MaterialButton(
                                 elevation: 0.0,
                                 highlightElevation: 0.0,
@@ -712,14 +708,16 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   });
 
                                   final itemUnit =
-                                      selectedUnit; //todo firebase and add custom image item
+                                      selectedUnit;
                                   print('${_qtyController.text} $itemUnit');
 
                                   if (_formKey.currentState!.validate()) {
                                     //--------------------------Creating List Item from Item and new data gathered from user------------------------
-                                    //TODO add parameter validation
-                                    if (imageController
-                                        .editItemCustomImageUrl.value.isEmpty) {
+                                    if (imageController.editItemCustomImageUrl
+                                            .value.isEmpty ||
+                                        imageController
+                                                .editItemCustomImageUrl.value ==
+                                            '') {
                                       print(
                                           "Item added=== > DB KEY: ${currentUserList.key}");
                                       final listItem = ListItem(
@@ -728,16 +726,16 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                         itemImageId: item.itemImageId,
                                         itemName: item.itemName,
                                         quantity:
-                                        double.parse(_qtyController.text),
+                                            double.parse(_qtyController.text),
                                         notes: _notesController.text,
                                         unit: itemUnit,
                                         possibleUnits: item.unit,
                                         catName: Boxes.getCategoriesDB()
-                                            .get(int.parse(item.catId
-                                            .replaceAll(
-                                            'projects/santhe-425a8/databases/(default)/documents/category/',
-                                            '')))
-                                            ?.catName ??
+                                                .get(int.parse(item.catId
+                                                    .replaceAll(
+                                                        'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                        '')))
+                                                ?.catName ??
                                             'Error',
                                         catId: int.parse(
                                           item.catId.replaceAll(
@@ -745,9 +743,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                               ''),
                                         ),
                                       );
-                                      if(widget.edit){
-                                        currentUserList.items.removeWhere((element) => element.itemId==listItem.itemId);
-
+                                      if (widget.edit) {
+                                        currentUserList.items.removeWhere(
+                                            (element) =>
+                                                element.itemId ==
+                                                listItem.itemId);
                                       }
                                       currentUserList.items.add(listItem);
                                       //make changes persistent
@@ -768,7 +768,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                           '---------------${_qtyController.text} $itemUnit---------------');
 
                                       if (itemCount != 0) {
-                                        //todo add custom item to firebase
                                         Item newCustomItem = Item(
                                             dBrandType: _brandController.text,
                                             dItemNotes: _notesController.text,
@@ -791,15 +790,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             .addItem(newCustomItem);
 
                                         if (response == 1) {
-
                                           final listItem = ListItem(
                                             brandType: _brandController.text,
                                             //item ref
                                             itemId:
-                                            'projects/santhe-425a8/databases/(default)/documents/item/${itemCount}',
+                                                'projects/santhe-425a8/databases/(default)/documents/item/${itemCount}',
                                             itemImageId: imageController
                                                 .editItemCustomImageUrl.value,
-                                            //todo make it work
                                             itemName: item.itemName,
                                             quantity: double.parse(
                                                 _qtyController.text),
@@ -807,19 +804,24 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             unit: itemUnit,
                                             possibleUnits: item.unit,
                                             catName: Boxes.getCategoriesDB()
-                                                .get(int.parse(item.catId
-                                                .replaceAll(
-                                                'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                '')))
-                                                ?.catName ??
+                                                    .get(int.parse(item.catId
+                                                        .replaceAll(
+                                                            'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                            '')))
+                                                    ?.catName ??
                                                 'Error',
                                             catId: 4000,
                                           );
 
-                                          if(widget.edit){
-                                            currentUserList.items.removeWhere((element) => element.itemId==listItem.itemId);
+                                          if (widget.edit) {
+                                            currentUserList.items.removeWhere(
+                                                (element) =>
+                                                    element.itemId ==
+                                                    '${item.itemId}');
                                           }
                                           currentUserList.items.add(listItem);
+                                          imageController.editItemCustomImageUrl
+                                              .value = '';
                                           //make changes persistent
                                           currentUserList.save();
                                         } else {
@@ -865,7 +867,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   });
                                 },
                                 child: AutoSizeText(
-                                  'Add',
+                                  widget.edit ? 'Update' : 'Add',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

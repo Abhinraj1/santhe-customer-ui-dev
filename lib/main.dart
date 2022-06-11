@@ -8,6 +8,7 @@ import 'package:santhe/controllers/archived_controller.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/pages/customer_registration_pages/customer_registration.dart';
@@ -27,7 +28,7 @@ import 'models/santhe_user_credenetials_model.dart';
 import 'models/santhe_user_list_model.dart';
 import 'models/santhe_user_model.dart';
 
-//todo start with new list page, send list name data till end of piperline  
+//todo start with new list page, send list name data till end of piperline
 //todo then to list controller, then display on new list tab on homepage
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -59,9 +60,12 @@ void main() async {
   await Hive.openBox<String>('contentDB');
   await Hive.openBox<UserList>('userListDB');
 
-  final bool showHome = Boxes.getUserPrefs().get('showHome', defaultValue: false) ?? false;
-  final bool isLoggedIn = Boxes.getUserPrefs().get('isLoggedIn', defaultValue: false) ?? false;
-  final bool isRegistered = Boxes.getUserPrefs().get('isRegistered', defaultValue: false) ?? false;
+  final bool showHome =
+      Boxes.getUserPrefs().get('showHome', defaultValue: false) ?? false;
+  final bool isLoggedIn =
+      Boxes.getUserPrefs().get('isLoggedIn', defaultValue: false) ?? false;
+  final bool isRegistered =
+      Boxes.getUserPrefs().get('isRegistered', defaultValue: false) ?? false;
 
   Get.put(APIs());
   Get.put(LocationController());
@@ -84,6 +88,7 @@ class MyApp extends StatelessWidget {
   final bool showHome;
   final bool isRegistered;
   final bool isLoggedIn;
+
   const MyApp(
       {required this.showHome,
       required this.isRegistered,
@@ -119,6 +124,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: kAppName,
         theme: AppTheme().themeData.copyWith(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors().brandDark,
+                primary: AppColors().brandDark,
+              ),
               textSelectionTheme: const TextSelectionThemeData(
                 selectionHandleColor: Colors.transparent,
               ),
@@ -126,7 +135,7 @@ class MyApp extends StatelessWidget {
         home: showHome2 && isLoggedIn2
             ? isRegistered2
                 ? const SplashToHome()
-                : UserRegistrationPage(userPhoneNumber: userPhone)
+            : UserRegistrationPage(userPhoneNumber: userPhone)
             : const SplashToOnboarding(),
       ),
       allowtextScaling: false,

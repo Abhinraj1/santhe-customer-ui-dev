@@ -279,54 +279,117 @@ class MerchantItemsListPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.only(
-                    bottom: 10.sp,
-                  ),
-                  child: GroupedListView(
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                      top: 8.0,
-                      left: 15.0,
-                      right: 15.0,
+                Expanded(
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.only(
+                      bottom: 10.sp,
                     ),
-                    elements: _items,
-                    groupBy: (OfferItem offerItem) => offerItem.catName,
-                    groupSeparatorBuilder: (String value) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Text(value),
-                          const Divider(
-                            color: Colors.grey,
-                            thickness: 1,
-                          )
-                        ],
-                      );
-                    },
-                    indexedItemBuilder:
-                        (BuildContext context, dynamic element, int index) {
-                      return MerchantItemCard(
-                        merchantItem: _items[index],
-                      );
-                    },
+                    child: GroupedListView(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                        left: 15.0,
+                        right: 15.0,
+                      ),
+                      elements: _items,
+                      groupBy: (OfferItem offerItem) => offerItem.catName,
+                      groupSeparatorBuilder: (String value) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.sp,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    value,
+                                    style: TextStyle(
+                                      color: const Color(0xff8B8B8B),
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Price',
+                                    style: TextStyle(
+                                      color: AppColors().brandDark,
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Divider(
+                              color: Colors.grey,
+                              thickness: 1,
+                            )
+                          ],
+                        );
+                      },
+                      indexedItemBuilder:
+                          (BuildContext context, dynamic element, int index) {
+                        return MerchantItemCard(
+                          merchantItem: _items[index],
+                        );
+                      },
+                    ),
                   ),
                 ),
+                SizedBox(
+                  height: 10.sp,
+                ),
+                isDone()
+                    ? Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          width: screenSize.width,
+                          color: AppColors().white100,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 40.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Total:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 24.sp,
+                                    color: const Color(0xff8B8B8B)),
+                              ),
+                              Text(
+                                '₹ ${removeDecimalZeroFormat(double.parse(currentMerchantOffer.merchResponse.merchTotalPrice))}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 24.sp,
+                                    color: Colors.orange),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
                 if (!isDone())
                   Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                            top: BorderSide(
-                                color: Colors.grey,
-                                style: BorderStyle.solid,
-                                width: 1.0))),
+                      color: Colors.white,
+                      border: Border(
+                        top: BorderSide(
+                            color: Colors.grey,
+                            style: BorderStyle.solid,
+                            width: 1.0),
+                      ),
+                    ),
                     child: Column(
                       children: [
                         Padding(

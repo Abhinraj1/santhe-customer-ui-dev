@@ -77,8 +77,8 @@ class ArchivedUserListCard extends StatelessWidget {
                   c = ctx;
                   return AlertDialog(
                     content: SizedBox(
-                      height: screenSize.height/3,
-                      width: screenSize.width * 4/5,
+                      height: screenSize.height / 3,
+                      width: screenSize.width * 4 / 5,
                       child: Center(
                         child: Container(
                           color: AppColors().white100,
@@ -392,10 +392,13 @@ class ArchivedUserListCard extends StatelessWidget {
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(right: 0),
-                          child: OfferStatus(
-                            userList: userList,
-                          )),
+                        padding: EdgeInsets.only(
+                          right: 15.sp,
+                        ),
+                        child: OfferStatus(
+                          userList: userList,
+                        ),
+                      ),
                     ],
                   )
                 ],

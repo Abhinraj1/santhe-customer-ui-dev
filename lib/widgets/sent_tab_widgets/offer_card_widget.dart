@@ -202,10 +202,13 @@ class OfferCard extends StatelessWidget {
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(right: 0),
-                          child: OfferStatus(
-                            userList: userList,
-                          )),
+                        padding: EdgeInsets.only(
+                          right: 15.sp,
+                        ),
+                        child: OfferStatus(
+                          userList: userList,
+                        ),
+                      ),
                     ],
                   )
                 ],

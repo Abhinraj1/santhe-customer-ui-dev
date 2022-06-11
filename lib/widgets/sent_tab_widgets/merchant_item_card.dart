@@ -16,16 +16,27 @@ class MerchantItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width / 100;
-    final screenSize = MediaQuery.of(context).size;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width / 100;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
     String removeDecimalZeroFormat(double n) {
       return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
 
     ScreenUtil.init(
         BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
+            maxWidth: MediaQuery
+                .of(context)
+                .size
+                .width,
+            maxHeight: MediaQuery
+                .of(context)
+                .size
+                .height),
         designSize: const Size(390, 844),
         context: context,
         minTextAdapt: true,
@@ -39,13 +50,14 @@ class MerchantItemCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: CachedNetworkImage(
               imageUrl: int.parse(merchantItem.itemId.replaceAll(
-                          'projects/santhe-425a8/databases/(default)/documents/item/',
-                          '')) <
-                      4000
-                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${merchantItem.itemImageId}'
+                  'projects/santhe-425a8/databases/(default)/documents/item/',
+                  '')) <
+                  4000
+                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${merchantItem
+                  .itemImageId}'
                   : merchantItem.itemImageId,
-              width: 50,
-              height: 50,
+              width: 65.sp,
+              height: 65.sp,
               fit: BoxFit.cover,
               errorWidget: (context, url, error) {
                 log('$error');
@@ -68,30 +80,43 @@ class MerchantItemCard extends StatelessWidget {
                 Text(
                   merchantItem.itemName,
                   softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xff8B8B8B),
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 merchantItem.brandType.isEmpty
                     ? Text(
-                        merchantItem.itemNotes.isEmpty
-                            ? '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}'
-                            : '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${merchantItem.itemNotes}',
-                        // softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontSize: 16.sp,
-                        ),
-                      )
+                  merchantItem.itemNotes.isEmpty
+                      ? '${removeDecimalZeroFormat(
+                      merchantItem.quantity)} ${merchantItem.unit}'
+                      : '${removeDecimalZeroFormat(
+                      merchantItem.quantity)} ${merchantItem
+                      .unit}, ${merchantItem.itemNotes}',
+                  // softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 18.sp,
+                  ),
+                )
                     : Text(
-                        '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${merchantItem.itemNotes.isEmpty ? '${merchantItem.brandType}' : '${merchantItem.brandType}, ${merchantItem.itemNotes}'}',
-                        // softWrap: true,
-                        maxLines: 2,
-                        // minFontSize: 10,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontSize: 14.sp,
-                        ),
-                      ),
+                  '${removeDecimalZeroFormat(
+                      merchantItem.quantity)} ${merchantItem
+                      .unit}, ${merchantItem.itemNotes.isEmpty ? merchantItem
+                      .brandType : '${merchantItem.brandType}, ${merchantItem
+                      .itemNotes}'}',
+                  // softWrap: true,
+                  maxLines: 2,
+                  // minFontSize: 10,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 18.sp,
+                  ),
+                ),
               ],
             ),
           ),
@@ -103,12 +128,17 @@ class MerchantItemCard extends StatelessWidget {
                   ? CupertinoIcons.checkmark_circle_fill
                   : CupertinoIcons.xmark_circle_fill,
               color:
-                  merchantItem.merchAvailability ? Colors.green : Colors.red),
+              merchantItem.merchAvailability ? Colors.green : Colors.red),
           const SizedBox(width: 10.0),
           Expanded(
             child: Text(
-              'Rs. ${merchantItem.merchPrice}',
-              style: const TextStyle(color: Colors.orange),
+              '₹ ${merchantItem.merchPrice}',
+              style: TextStyle(
+                color: Colors.orange,
+                fontSize: 17.sp,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.fade,
               textAlign: TextAlign.right,
             ),
           ),

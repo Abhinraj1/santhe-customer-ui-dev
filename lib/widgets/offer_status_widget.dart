@@ -197,6 +197,9 @@ class OfferStatus extends StatelessWidget {
     return Row(
       children: [
         getText(setStatus(userList.processStatus)),
+        SizedBox(
+          width: 5.sp,
+        ),
         getIcon(setStatus(userList.processStatus)),
       ],
     );

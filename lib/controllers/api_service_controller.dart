@@ -543,7 +543,7 @@ class APIs extends GetxController {
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList, {String? status}) async {
+  Future updateUserList(int custId, UserList userList, {String? status, String? processStatus}) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
     List items = [];
@@ -581,7 +581,7 @@ class APIs extends GetxController {
           "timestampValue":
               DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
-        "processStatus": {"stringValue": "draft"},
+        "processStatus": {"stringValue": processStatus ?? "draft"},
         "custOfferWaitTime": {
           "timestampValue":
               DateTime.now().toUtc().toString().replaceAll(' ', 'T')
@@ -1072,10 +1072,17 @@ class APIs extends GetxController {
     String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await http.get(Uri.parse(url));
-    print(response.body);
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
+      // resp.sort((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice)); 
+      // resp.sort((a, b) => a.merchResponse.merchOfferQuantity.compareTo(b.merchResponse.merchOfferQuantity));
+      // resp[0].custOfferResponse.custDeal = 'best1';
+      // resp[1].custOfferResponse.custDeal = 'best2';
+      // resp[2].custOfferResponse.custDeal = 'best3';
+      // for(var i=3;i<resp.length;i++){
+      //   resp[i].custOfferResponse.custDeal = '';
+      // }
       return resp;
     } else {
       throw 'Error retrieving user lists!';

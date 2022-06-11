@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:group_button/group_button.dart';
 
 import '../../constants.dart';
@@ -402,13 +401,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 'Add Custom Image',
-                                                style: GoogleFonts.mulish(
+                                                style: TextStyle(
                                                   color: Colors.orange,
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 24,
-                                                ),
+                                                  fontFamily: 'Mulish'
+                                                )
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
@@ -457,14 +457,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             ),
                                                           ),
                                                         ),
-                                                        Text(
+                                                        const Text(
                                                           'Camera',
-                                                          style: GoogleFonts
-                                                              .mulish(
-                                                            color: Colors.grey,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 16,
+                                                          style: TextStyle(
+                                                              color: Colors.grey,
+                                                              fontWeight:
+                                                              FontWeight.w500,
+                                                              fontSize: 16,
+                                                              fontFamily: 'Mulish'
                                                           ),
                                                         )
                                                       ],
@@ -508,16 +508,16 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             ),
                                                           ),
                                                         ),
-                                                        Text(
+                                                        const Text(
                                                           'Gallery',
-                                                          style: GoogleFonts
-                                                              .mulish(
+                                                          style: TextStyle(
                                                             color: Colors.grey,
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                            FontWeight.w500,
                                                             fontSize: 16,
+                                                            fontFamily: 'Mulish'
                                                           ),
-                                                        )
+                                                        ),
                                                       ],
                                                     )
                                                   ],

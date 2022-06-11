@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/merchant_details_response.dart';
+import 'package:santhe/pages/chat/chat_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../core/app_theme.dart';
@@ -299,7 +299,32 @@ class MerchantOfferCard extends StatelessWidget {
                                         height: 32.h,
                                         width: 92.w,
                                         child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              print(merchantResponse!.fields
+                                                      .merchId.integerValue +
+                                                  userList.listId.toString());
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                    chatId: userList.listId
+                                                        .toString(),
+                                                    title: currentMerchantOffer
+                                                        .merchResponse
+                                                        .merchTotalPrice,
+                                                    fromNotification: false,
+                                                    listEventId:
+                                                        merchantResponse!
+                                                                .fields
+                                                                .merchId
+                                                                .integerValue +
+                                                            userList.listId
+                                                                .toString(),
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                             child: Text(
                                               'Chat',
                                               style: AppTheme().bold700(16,

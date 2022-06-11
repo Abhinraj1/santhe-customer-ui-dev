@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
+import 'package:santhe/pages/chat/chat_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
@@ -142,87 +143,115 @@ class MerchantItemsListPage extends StatelessWidget {
                                     width: 19.w,
                                   ),
                                   Expanded(
-                                      child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        merchantResponse!
-                                            .fields.merchName.stringValue,
-                                        style: AppTheme().bold700(24,
-                                            color: AppColors().grey100),
-                                      ),
-                                      SizedBox(
-                                        height: 9.h,
-                                      ),
-                                      Text(
-                                        merchantResponse!
-                                            .fields
-                                            .contact
-                                            .mapValue
-                                            .fields
-                                            .address
-                                            .stringValue,
-                                        style: AppTheme().normal400(13,
-                                            color: AppColors().grey100),
-                                      ),
-                                      SizedBox(
-                                        height: 9.h,
-                                      ),
-                                      //contact number
-                                      Row(
-                                        children: [
-                                          //phone icon
-                                          Container(
-                                            height: 24.h,
-                                            width: 24.h,
-                                            decoration: BoxDecoration(
-                                                color: AppColors().brandDark,
-                                                borderRadius:
-                                                    BorderRadius.circular(60)),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.phone,
-                                                color: AppColors().white100,
-                                                size: 15,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          merchantResponse!
+                                              .fields.merchName.stringValue,
+                                          style: AppTheme().bold700(24,
+                                              color: AppColors().grey100),
+                                        ),
+                                        SizedBox(
+                                          height: 9.h,
+                                        ),
+                                        Text(
+                                          merchantResponse!
+                                              .fields
+                                              .contact
+                                              .mapValue
+                                              .fields
+                                              .address
+                                              .stringValue,
+                                          style: AppTheme().normal400(13,
+                                              color: AppColors().grey100),
+                                        ),
+                                        SizedBox(
+                                          height: 9.h,
+                                        ),
+                                        //contact number
+                                        Row(
+                                          children: [
+                                            //phone icon
+                                            Container(
+                                              height: 24.h,
+                                              width: 24.h,
+                                              decoration: BoxDecoration(
+                                                  color: AppColors().brandDark,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          60)),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.phone,
+                                                  color: AppColors().white100,
+                                                  size: 15,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 9.w,
-                                          ),
-                                          //phone number
-                                          Text(
-                                            '+91-' +
-                                                merchantResponse!
-                                                    .fields
-                                                    .contact
-                                                    .mapValue
-                                                    .fields
-                                                    .phoneNumber
-                                                    .integerValue,
-                                            style: AppTheme().bold700(16,
-                                                color: AppColors().brandDark),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
-                                      //chat button
-                                      SizedBox(
+                                            SizedBox(
+                                              width: 9.w,
+                                            ),
+                                            //phone number
+                                            Text(
+                                              '+91-' +
+                                                  merchantResponse!
+                                                      .fields
+                                                      .contact
+                                                      .mapValue
+                                                      .fields
+                                                      .phoneNumber
+                                                      .integerValue,
+                                              style: AppTheme().bold700(16,
+                                                  color: AppColors().brandDark),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
+                                        //chat button
+                                        SizedBox(
                                           height: 32.h,
                                           width: 92.w,
                                           child: ElevatedButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                'Chat',
-                                                style: AppTheme().bold700(16,
-                                                    color:
-                                                        AppColors().white100),
-                                              )))
-                                    ],
-                                  ))
+                                            onPressed: () {
+                                              print(merchantResponse!.fields
+                                                      .merchId.integerValue +
+                                                  userList.listId.toString());
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                    chatId: userList.listId
+                                                        .toString(),
+                                                    title: currentMerchantOffer
+                                                        .merchResponse
+                                                        .merchTotalPrice,
+                                                    fromNotification: false,
+                                                    listEventId:
+                                                        merchantResponse!
+                                                                .fields
+                                                                .merchId
+                                                                .integerValue +
+                                                            userList.listId
+                                                                .toString(),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Text(
+                                              'Chat',
+                                              style: AppTheme().bold700(16,
+                                                  color: AppColors().white100),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
                             )

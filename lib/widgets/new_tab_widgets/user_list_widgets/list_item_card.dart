@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:group_button/group_button.dart';
 import 'package:santhe/models/santhe_item_model.dart';
 import '../../../controllers/api_service_controller.dart';
@@ -39,7 +39,7 @@ class ListItemCard extends StatelessWidget {
     }
 
     final TextEditingController _qtyController = TextEditingController(
-        text: removeDecimalZeroFormat(listItem.quantity));
+        text: listItem.quantity.toString());
     final TextEditingController _brandController =
         TextEditingController(text: listItem.brandType);
     final TextEditingController _notesController =
@@ -64,6 +64,7 @@ class ListItemCard extends StatelessWidget {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
+    String img = listItem.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '');
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -76,9 +77,7 @@ class ListItemCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
-                      imageUrl: int.parse(listItem.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')) < 4000
-                          ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
-                          : listItem.itemImageId,
+                      imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
@@ -103,8 +102,8 @@ class ListItemCard extends StatelessWidget {
                         listItem.brandType.isEmpty
                             ? Text(
                                 listItem.notes.isEmpty
-                                    ? '${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}'
-                                    : '${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit},\n${listItem.notes}',
+                                    ? '${listItem.quantity} ${listItem.unit}'
+                                    : '${listItem.quantity} ${listItem.unit},\n${listItem.notes}',
                                 // softWrap: false,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -113,7 +112,7 @@ class ListItemCard extends StatelessWidget {
                                 ),
                               )
                             : Text(
-                                '''${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}, ${listItem.notes.isEmpty ? '${listItem.brandType}' : '${listItem.brandType},\n${listItem.notes}'}''',
+                                '''${listItem.quantity} ${listItem.unit}, ${listItem.notes.isEmpty ? '${listItem.brandType}' : '${listItem.brandType},\n${listItem.notes}'}''',
                                 textAlign: TextAlign.start,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -146,11 +145,13 @@ class ListItemCard extends StatelessWidget {
                                 context: context,
                                 minTextAdapt: true,
                                 orientation: Orientation.portrait);
+                            print('here');
+                            print(listItem.itemId);
                             return NewItemPopUpWidget(item: Item(
                               status: '',
                               catId: listItem.catId.toString(),
                               dItemNotes: listItem.notes,
-                              itemId: int.parse(listItem.itemId),
+                              itemId: int.parse(listItem.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/projects/santhe-425a8/databases/(default)/documents/item/projects/santhe-425a8/databases/(default)/documents/item/', '')),
                               unit: listItem.possibleUnits,
                               dUnit: listItem.unit,
                               dBrandType: listItem.brandType,

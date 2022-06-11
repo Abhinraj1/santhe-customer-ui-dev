@@ -4,7 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 import '../../models/santhe_list_item_model.dart';
 
@@ -70,8 +70,8 @@ class SentListItemCard extends StatelessWidget {
                         listItem.brandType.isEmpty
                             ? AutoSizeText(
                                 listItem.notes.isEmpty
-                                    ? '${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}'
-                                    : '${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}, ${listItem.notes}',
+                                    ? '${listItem.quantity} ${listItem.unit}'
+                                    : '${listItem.quantity} ${listItem.unit}, ${listItem.notes}',
                                 softWrap: false,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -79,7 +79,7 @@ class SentListItemCard extends StatelessWidget {
                                 ),
                               )
                             : AutoSizeText(
-                                '${removeDecimalZeroFormat(listItem.quantity)} ${listItem.unit}, ${listItem.notes.isEmpty ? '${listItem.brandType}' : '${listItem.brandType}, ${listItem.notes}'}',
+                                '${listItem.quantity} ${listItem.unit}, ${listItem.notes.isEmpty ? '${listItem.brandType}' : '${listItem.brandType}, ${listItem.notes}'}',
                                 softWrap: false,
                                 maxLines: 2,
                                 minFontSize: 10,

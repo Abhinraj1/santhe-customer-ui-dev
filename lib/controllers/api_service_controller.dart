@@ -553,7 +553,7 @@ class APIs extends GetxController {
         "mapValue": {
           "fields": {
             "quantity": {"doubleValue": "${item.quantity}"},
-            "itemImageId": {"stringValue": item.itemImageId},
+            "itemImageId": {"stringValue": item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')},
             "unit": {"stringValue": item.unit},
             "itemName": {"stringValue": item.itemName},
             "catName": {"stringValue": item.catName},

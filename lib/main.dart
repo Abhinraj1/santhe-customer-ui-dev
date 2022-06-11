@@ -16,6 +16,7 @@ import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/pages/splash_to_onboarding.dart';
 import 'controllers/boxes_controller.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'controllers/chat_controller.dart';
 import 'controllers/notification_controller.dart';
 import 'controllers/registrationController.dart';
 import 'controllers/search_query_controller.dart';
@@ -75,6 +76,7 @@ void main() async {
   Get.put(SearchQueryController());
   Get.put(ArchivedController());
   Get.put(NotificationController());
+  Get.put(ChatController());
   Notifications().fcmInit();
 
   runApp(MyApp(
@@ -135,7 +137,7 @@ class MyApp extends StatelessWidget {
         home: showHome2 && isLoggedIn2
             ? isRegistered2
                 ? const SplashToHome()
-            : UserRegistrationPage(userPhoneNumber: userPhone)
+                : UserRegistrationPage(userPhoneNumber: userPhone)
             : const SplashToOnboarding(),
       ),
       allowtextScaling: false,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -7,10 +9,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:santhe/constants.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
+import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
+import '../core/app_helpers.dart';
 import 'new_tab_pages/new_tab_page.dart';
 import 'sent_tab_pages/sent_tab_page.dart';
 
@@ -32,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.dark,
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
@@ -92,7 +96,17 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.only(right: 4.5),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (Platform.isIOS) {
+                    Share.share(
+                      AppHelpers().appStoreLink,
+                    );
+                  } else {
+                    Share.share(
+                      AppHelpers().playStoreLink,
+                    );
+                  }
+                },
                 splashRadius: 25.0,
                 icon: Icon(
                   Icons.adaptive.share,

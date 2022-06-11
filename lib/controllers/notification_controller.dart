@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
+import '../pages/chat/chat_screen.dart';
+import 'chat_controller.dart';
+
 class NotificationController extends GetxController {
   static NotificationController instance = Get.find();
 
@@ -163,8 +166,12 @@ class Notifications {
 }
 
 class NavigateNotifications {
+  final ChatController _chatController = Get.find();
   void toScreen(Map<String, dynamic> data) {
-    if (data['notification_type'] == 'chat'){
+    if(data['landingScreen'] == 'chat'){
+      if(!_chatController.inChatScreen) {
+        Get.to(ChatScreen(chatId: data['chatId'], title: data['title'], fromNotification: true, listEventId: data['listEventId'],));
+      }
     }
-    }
+  }
 }

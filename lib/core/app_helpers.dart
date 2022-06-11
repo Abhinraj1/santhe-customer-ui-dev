@@ -17,6 +17,13 @@ class AppHelpers {
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';
 
+  String get playStoreLink => appStoreLink;
+  String get appStoreLink => '''Hey,
+
+Santhe Merchant App is an app built for supporting local economy. The app helps local merchants to grow their business by getting access to customers via online channel. Install the app now and grow your business.
+
+Get it for free at https://santhe.in''';
+
   Future<String> getDeviceId() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {

@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 
+import '../constants.dart';
+
 class AppTheme{
 
   final ThemeData themeData = ThemeData(
@@ -14,22 +16,28 @@ class AppTheme{
               if (states.contains(MaterialState.disabled)) {
                 return AppColors().brandLight;
               }
-              return AppColors().brandDark;// Use the component's default.
+              return AppColors().brandDark; // Use the component's default.
             },
           ),
           textStyle: MaterialStateProperty.resolveWith<TextStyle>(
                 (Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
                 return TextStyle(
-                    fontSize: 18.sp, color: AppColors().white100, fontWeight: FontWeight.w700);
+                    fontSize: 18.sp,
+                    color: AppColors().white100,
+                    fontWeight: FontWeight.w700);
               }
               return TextStyle(
-                  fontSize: 18.sp, color: AppColors().yellow90, fontWeight: FontWeight.w700);// Use the component's default.
+                  fontSize: 18.sp,
+                  color: AppColors().yellow90,
+                  fontWeight: FontWeight.w700); // Use the component's default.
             },
           ),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.sp)))
-      ),),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.sp)))),
+    ),
     appBarTheme: AppBarTheme(
+      centerTitle: true,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light,
         statusBarColor: AppColors().brandDark,
@@ -38,15 +46,11 @@ class AppTheme{
       iconTheme: IconThemeData(
         color: AppColors().white100,
       ),
-      centerTitle: true,
       backgroundColor: AppColors().brandDark,
       titleTextStyle: TextStyle(
-          fontSize: 24.sp,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w900,
           color: AppColors().white100),
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: AppColors().brandDark
     ),
     radioTheme: RadioThemeData(
       fillColor: MaterialStateProperty.resolveWith<Color>(
@@ -54,9 +58,12 @@ class AppTheme{
           if (states.contains(MaterialState.disabled)) {
             return AppColors().brandLight;
           }
-          return AppColors().brandDark;// Use the component's default.
+          return AppColors().brandDark; // Use the component's default.
         },
       ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors().brandDark
     )
   );
 
@@ -136,6 +143,24 @@ class AppTheme{
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
     ),
+  );
+
+  OutlineInputBorder borderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: BorderSide(color: Constant.bgColor));
+  OutlineInputBorder focusedBorderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: BorderSide(color: Constant.bgColor));
+  OutlineInputBorder enabledBorderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: BorderSide(color: AppColors().grey40));
+  OutlineInputBorder disabledBorderStyle = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(14),
+    borderSide: const BorderSide(color: Colors.transparent),
+  );
+  OutlineInputBorder errorBorderStyle = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(14),
+    borderSide: const BorderSide(color: Colors.red),
   );
 
 }

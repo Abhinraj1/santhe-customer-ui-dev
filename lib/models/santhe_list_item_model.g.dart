@@ -20,7 +20,7 @@ class ListItemAdapter extends TypeAdapter<ListItem> {
       brandType: fields[0] as String,
       itemId: fields[2] as String,
       notes: fields[5] as String,
-      quantity: fields[6] as double,
+      quantity: fields[6] as num,
       itemName: fields[4] as String,
       itemImageId: fields[3] as String,
       unit: fields[7] as String,

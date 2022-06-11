@@ -2,9 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,6 +14,7 @@ import 'package:santhe/pages/new_tab_pages/categories_page.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 import 'package:santhe/widgets/new_tab_widgets/user_list_widgets/add_custom_item_card.dart';
+import 'package:santhe/widgets/pop_up_widgets/new_item_popup_widget.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
@@ -22,6 +24,7 @@ import '../../models/santhe_user_list_model.dart';
 import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/new_tab_widgets/user_list_widgets/list_item_card.dart';
 import '../../widgets/new_tab_widgets/user_list_widgets/searched_item_card.dart';
+import '../../widgets/pop_up_widgets/custom_item_popup_widget.dart';
 import '../login_pages/phone_number_login_page.dart';
 
 class UserListPage extends StatefulWidget {
@@ -33,7 +36,7 @@ class UserListPage extends StatefulWidget {
   _UserListPageState createState() => _UserListPageState();
 }
 
-class _UserListPageState extends State<UserListPage> {
+class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver{
   bool safeGuard = false;
   bool listNameEditFlag = false;
 
@@ -49,6 +52,9 @@ class _UserListPageState extends State<UserListPage> {
   void clearSearchQuery() {
     searchQueryController.clear();
     searchQuery = '';
+    setState(() {
+
+    });
   }
   
 
@@ -60,15 +66,26 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.paused){
+      int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')!.phoneNumber;
+      apiController.updateUserList(custId, box.get(widget.userKey)!, status: 'new');
+    }
+  }
+
+  @override
   void initState() {
     searchQueryController.addListener(_latestSearchQuery);
     searchedItemsResult = Future.value([]);
+    WidgetsBinding.instance?.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
     searchQueryController.dispose();
+    int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')!.phoneNumber;
+    apiController.updateUserList(custId, box.get(widget.userKey)!, status: 'new');
     super.dispose();
   }
 
@@ -84,6 +101,7 @@ class _UserListPageState extends State<UserListPage> {
     );
 
     UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
+    FocusNode _searchNode = FocusNode();
 
     ScreenUtil.init(
         BoxConstraints(
@@ -106,8 +124,6 @@ class _UserListPageState extends State<UserListPage> {
           ),
           onPressed: () async {
             Navigator.pop(context);
-            int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')!.phoneNumber;
-            await apiController.updateUserList(custId, box.get(widget.userKey)!, status: 'new');
           },
         ),
         title: listNameEditFlag
@@ -247,12 +263,12 @@ class _UserListPageState extends State<UserListPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextField(
+            TextFormField(
               controller: searchQueryController,
-              autofocus: false,
-              keyboardType: TextInputType.name,
+              focusNode: _searchNode,
               textAlignVertical: TextAlignVertical.center,
               textAlign: TextAlign.left,
+              textInputAction: TextInputAction.done,
               onChanged: (value) {
                 if (value.length > 2) {
                   EasyDebounce.debounce('searchItem', const Duration(milliseconds: 500), () {
@@ -303,7 +319,7 @@ class _UserListPageState extends State<UserListPage> {
                           : const Radius.circular(0),
                     ),
                     borderSide:
-                        BorderSide(width: 1.0, color: Colors.grey.shade400),
+                    BorderSide(width: 1.0, color: Colors.grey.shade400),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
@@ -472,7 +488,7 @@ class _UserListPageState extends State<UserListPage> {
                         ),
                       ),
                     ),
-//BUTTONS
+                    //BUTTONS
                     ValueListenableBuilder<Box<UserList>>(
                       valueListenable: Boxes.getUserListDB().listenable(),
                       builder: (context, box, widget1) {
@@ -593,8 +609,7 @@ class _UserListPageState extends State<UserListPage> {
                                                                       TextAlign
                                                                           .center,
                                                                   style:
-                                                                      GoogleFonts
-                                                                          .mulish(
+                                                                      TextStyle(
                                                                     color: Colors
                                                                         .orange,
                                                                     fontWeight:
@@ -763,30 +778,15 @@ class _UserListPageState extends State<UserListPage> {
                                                               onPressed:
                                                                   () async {
                                                                 //get userList
-                                                                UserList oldCurrentUserList = box
-                                                                    .values
-                                                                    .singleWhere((element) =>
-                                                                        element
-                                                                            .listId ==
-                                                                        userList
-                                                                            .listId);
+                                                                UserList oldCurrentUserList = box.values.singleWhere((element) => element.listId == userList.listId);
                                                                 UserList currentUserList = UserList(
-                                                                    listOfferCounter:
-                                                                        0,
-                                                                    custId: oldCurrentUserList
-                                                                        .custId,
-                                                                    custListSentTime:
-                                                                        DateTime
-                                                                            .now(),
-                                                                    custListStatus:
-                                                                        'sent',
-                                                                    items: oldCurrentUserList
-                                                                        .items,
-                                                                    listId: oldCurrentUserList
-                                                                        .listId,
-                                                                    listName:
-                                                                        oldCurrentUserList
-                                                                            .listName,
+                                                                    listOfferCounter: 0,
+                                                                    custId: oldCurrentUserList.custId,
+                                                                    custListSentTime: DateTime.now(),
+                                                                    custListStatus: 'sent',
+                                                                    items: oldCurrentUserList.items,
+                                                                    listId: oldCurrentUserList.listId,
+                                                                    listName: oldCurrentUserList.listName,
                                                                     createListTime: oldCurrentUserList.createListTime,
                                                                     processStatus: 'draft',
                                                                     custOfferWaitTime: oldCurrentUserList.custOfferWaitTime);
@@ -997,7 +997,23 @@ class _UserListPageState extends State<UserListPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          AddCustomItemCard(currentUserListDBKey: widget.userKey, searchQuery: searchQuery),
+                                          InkWell(
+                                            onTap:(){
+                                              showDialog(
+                                                  context: context,
+                                                  barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                                                  builder: (context) {
+                                                    return CustomItemPopUpWidget(currentUserListDBKey: widget.userKey, searchQuery: searchQuery);
+                                                  }).then((value){
+                                                _searchNode.unfocus();
+                                                searchQueryController.clear();
+                                                searchQuery = '';
+                                                setState(() {
+
+                                                });
+                                              });
+                                            },
+                                              child: AddCustomItemCard(currentUserListDBKey: widget.userKey, searchQuery: searchQuery)),
                                           const Padding(padding: EdgeInsets.only(left: 20.0),
                                             child: Text('No Search Results Found...', style: TextStyle(fontStyle: FontStyle.italic),),
                                           ),
@@ -1025,30 +1041,76 @@ class _UserListPageState extends State<UserListPage> {
                                           context: context,
                                           minTextAdapt: true,
                                           orientation: Orientation.portrait);
-                                      print('custom item length' + snapshot.data.length.toString());
                                       if (index == snapshot.data?.length - 1) {
                                         return Column(
                                           children: [
-                                            SearchedItemCard(
-                                              searchQuery: searchQuery,
-                                              currentUserListDBKey:
-                                              widget.userKey,
-                                              item: snapshot.data![index],
-                                              clearSearchQuery:
-                                                  clearSearchQuery,
-                                            ),
-                                            AddCustomItemCard(
+                                            InkWell(
+                                              onTap: (){
+                                                showDialog(
+                                                    context: context,
+                                                    barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                                                    builder: (context) {
+                                                      return NewItemPopUpWidget(item: snapshot.data![index], currentUserListDBKey: widget.userKey);
+                                                    }).then((value){
+                                                  searchQueryController.clear();
+                                                  _searchNode.unfocus();
+                                                  searchQuery = '';
+                                                  setState(() {
+
+                                                  });
+                                                });
+                                              },
+                                              child: SearchedItemCard(
+                                                searchQuery: searchQuery,
                                                 currentUserListDBKey:
                                                 widget.userKey,
-                                                searchQuery: searchQuery),
+                                                item: snapshot.data![index],
+                                                clearSearchQuery: clearSearchQuery,
+                                              ),
+                                            ),
+                                            InkWell(
+                                                onTap:(){
+                                                  showDialog(
+                                                      context: context,
+                                                      barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                                                      builder: (context) {
+                                                        return CustomItemPopUpWidget(currentUserListDBKey: widget.userKey, searchQuery: searchQuery);
+                                                      }).then((value){
+                                                    _searchNode.unfocus();
+                                                    searchQueryController.clear();
+                                                    searchQuery = '';
+                                                    setState(() {
+
+                                                    });
+                                                  });
+                                                },
+                                                child: AddCustomItemCard(currentUserListDBKey: widget.userKey, searchQuery: searchQuery)),
                                           ],
                                         );
                                       } else {
-                                        return SearchedItemCard(
-                                          searchQuery: searchQuery,
-                                          currentUserListDBKey: widget.userKey,
-                                          item: snapshot.data![index],
-                                          clearSearchQuery: clearSearchQuery,
+                                        return InkWell(
+                                          onTap: (){
+                                            showDialog(
+                                                context: context,
+                                                barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                                                builder: (context) {
+                                                  return NewItemPopUpWidget(item: snapshot.data![index], currentUserListDBKey: widget.userKey);
+                                                }).then((value){
+                                              _searchNode.unfocus();
+                                              searchQueryController.clear();
+                                              searchQuery = '';
+                                              setState(() {
+
+                                              });
+                                            });
+                                          },
+                                          child: SearchedItemCard(
+                                            searchQuery: searchQuery,
+                                            currentUserListDBKey:
+                                            widget.userKey,
+                                            item: snapshot.data![index],
+                                            clearSearchQuery: clearSearchQuery,
+                                          ),
                                         );
                                       }
                                     },

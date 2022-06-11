@@ -12,6 +12,12 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: AppColors().white100,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: AppColors().white100,
+      statusBarIconBrightness: Brightness.dark,
+    ));
     final GlobalKey<FormState> _key = GlobalKey();
     String? _number;
     return Scaffold(
@@ -119,14 +125,6 @@ class LoginScreen extends StatelessWidget {
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),
                           contentPadding: EdgeInsets.zero,
-                          // prefixIcon: Text(
-                          //   '+91',
-                          //   style: TextStyle(
-                          //     fontSize: 18,
-                          //     fontWeight: FontWeight.w900,
-                          //     color: Constant.bgColor,
-                          //   ),
-                          // ),
                         ),
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -148,68 +146,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                // child: Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   crossAxisAlignment: CrossAxisAlignment.end,
-                //   children: [
-                //     Container(
-                //       decoration: BoxDecoration(
-                //         border: Border(
-                //           bottom:
-                //               BorderSide(width: 2.0, color: Constant.bgColor),
-                //         ),
-                //       ),
-                //       padding: const EdgeInsets.only(bottom: 12),
-                //       child: Text(
-                //         "+91",
-                //         style: TextStyle(
-                //           fontSize: 18,
-                //           fontWeight: FontWeight.w900,
-                //           color: Constant.bgColor,
-                //         ),
-                //       ),
-                //     ),
-                //     SizedBox(
-                //       width: 20.w,
-                //     ),
-                //     Container(
-                //       width: 50.vw,
-                //       // decoration: BoxDecoration(
-                //       //   border: Border(
-                //       //     bottom:
-                //       //         BorderSide(width: 2.0, color: Constant.bgColor),
-                //       //   ),
-                //       // ),
-                //       child: TextFormField(
-                //         keyboardType: TextInputType.number,
-                //         inputFormatters: [
-                //           FilteringTextInputFormatter.digitsOnly,
-                //           LengthLimitingTextInputFormatter(10)
-                //         ],
-                //         onChanged: (String? val) => _number = val!,
-                //         style: TextStyle(
-                //           fontSize: 18,
-                //           fontWeight: FontWeight.w900,
-                //           color: Constant.bgColor,
-                //           letterSpacing: 6.sp,
-                //         ),
-                //         validator: (String? val) {
-                //           if (val != null && val.length == 10) return null;
-                //           return 'Valid mobile number required';
-                //         },
-                //         // decoration: const InputDecoration(
-                //         //     border: InputBorder.none,
-                //         //     hintText: 'Mobile Number',
-                //         //     hintStyle: TextStyle(
-                //         //       fontSize: 15,
-                //         //       fontWeight: FontWeight.w400,
-                //         //       color: Colors.grey,
-                //         //     )),
-                //       ),
-                //     )
-                //   ],
-                // ),
               ),
             ),
             SizedBox(

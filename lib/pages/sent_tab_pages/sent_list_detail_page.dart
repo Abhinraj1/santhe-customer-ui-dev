@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+
 import 'package:santhe/pages/sent_tab_pages/user_list_item_page.dart';
 
+import '../../controllers/chat_controller.dart';
 import '../../models/santhe_user_list_model.dart';
 import 'offers_list_page.dart';
 
-class SentUserListDetailsPage extends StatelessWidget {
+class SentUserListDetailsPage extends StatefulWidget {
   final UserList userList;
   final bool showOffers;
   const SentUserListDetailsPage({required this.userList, Key? key, required this.showOffers})
       : super(key: key);
+
+  @override
+  State<SentUserListDetailsPage> createState() => _SentUserListDetailsPageState();
+}
+
+class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
+
+  final ChatController _controller = Get.find();
+
+  @override
+  void initState(){
+    _controller.inOfferScreen = true;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +89,7 @@ class SentUserListDetailsPage extends StatelessWidget {
             },
           ),
           title: Text(
-            userList.listName,
+            widget.userList.listName,
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
@@ -90,13 +106,19 @@ class SentUserListDetailsPage extends StatelessWidget {
         body: TabBarView(
           physics: const BouncingScrollPhysics(),
           children: [
-            OffersListPage(userList: userList, showOffers: showOffers),
+            OffersListPage(userList: widget.userList, showOffers: widget.showOffers),
             UserListItemDetailsPage(
-              userList: userList,
+              userList: widget.userList,
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose(){
+    _controller.inOfferScreen = false;
+    super.dispose();
   }
 }

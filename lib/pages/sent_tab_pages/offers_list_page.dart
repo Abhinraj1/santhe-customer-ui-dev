@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/widgets/sent_tab_widgets/merchant_offer_card.dart';
@@ -46,7 +46,6 @@ class _OffersListPageState extends State<OffersListPage> {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    print(widget.userList.listId);
     return widget.showOffers ? FutureBuilder<List<CustomerOfferResponse>>(
       future: apiController.getAllMerchOfferByListId(widget.userList.listId),
       builder: (context, snapshot) {

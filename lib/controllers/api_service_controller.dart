@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:santhe/controllers/error_user_fallback.dart';
+import 'package:santhe/core/error/exceptions.dart';
 import 'package:santhe/models/merchant_details_response.dart';
 import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/offer/merchant_offer_response.dart';
@@ -11,7 +10,6 @@ import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import '../core/app_helpers.dart';
-import '../models/offer/offer_model.dart';
 import '../models/santhe_faq_model.dart';
 import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
@@ -33,6 +31,7 @@ class APIs extends GetxController {
   var deletedUserLists = <UserList>[].obs;
 
   var itemsDB = <Item>[].obs;
+
 
   // Future getAllItems() async {
   //   String pageToken = '';
@@ -115,6 +114,20 @@ class APIs extends GetxController {
   //   }
   // }
 
+  Future<http.Response?> callApi({required int mode, required Uri url, String? body}) async {
+    // case 1: get
+    // case 2: post
+    // case 3: update
+    switch(mode){
+      case 1: return await http.get(url);
+
+      case 2: return await http.post(url, body: body!);
+
+      case 3: return await http.patch(url, body: body!);
+
+      default: throw WrongModePassedForAPICall('Wrong mode passed for API call.');
+    }
+  }
   //get
   Future<int> getItemsCount() async {
     // Boxes.getItemsDB().clear();

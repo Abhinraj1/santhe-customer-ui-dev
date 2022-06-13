@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
+import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/pages/error_pages/no_internet_page.dart';
 
 import '../controllers/api_service_controller.dart';
 import '../controllers/boxes_controller.dart';
@@ -26,7 +30,6 @@ class _SplashToHomeState extends State<SplashToHome> {
   }
 
   Future init() async {
-    //OVOOVOVOOO
     CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
     var box = Boxes.getCacheRefreshInfo();
 
@@ -105,7 +108,6 @@ class _SplashToHomeState extends State<SplashToHome> {
 
     box.put('cacheRefresh', newCacheRefresh);
 
-//OVOVOVO
   }
 
   @override
@@ -116,13 +118,38 @@ class _SplashToHomeState extends State<SplashToHome> {
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.dark,
     ));
-    bootHome();
-    init();
+
+    checkNet();
+
     super.initState();
+  }
+
+  void checkNet() async {
+    final hasNet = await AppHelpers.checkConnection();
+    if (hasNet) {
+      bootHome();
+      init();
+    } else {
+      Get.to(
+            () => const NoInternetPage(),
+        transition: Transition.fade,
+      );
+    }
+  }
+
+  Timer? timer;
+
+  @override
+  void dispose() {
+    if(timer!=null) {
+      timer!.cancel();
+    }
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    timer = Timer.periodic(const Duration(seconds: 4), (_) => checkNet());
     return Container(
       color: Colors.orange,
       width: double.infinity,

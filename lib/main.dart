@@ -117,7 +117,6 @@ class MyApp extends StatelessWidget {
       showHome2 = false;
       Boxes.getUserPrefs().put('showHome', false);
     }
-    bool hasInternet = false;
 
     return Resize(
       builder: () => GetMaterialApp(

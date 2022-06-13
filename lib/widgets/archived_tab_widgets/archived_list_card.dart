@@ -71,40 +71,9 @@ class ArchivedUserListCard extends StatelessWidget {
             );
           } else if (userList.processStatus == 'accepted' ||
               userList.processStatus == 'processed') {
-            BuildContext? c;
-            showDialog(
-                context: context,
-                builder: (ctx) {
-                  c = ctx;
-                  return AlertDialog(
-                    content: SizedBox(
-                      height: screenSize.height / 3,
-                      width: screenSize.width * 4 / 5,
-                      child: Center(
-                        child: Container(
-                          color: AppColors().white100,
-                          height: 50,
-                          width: 50,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ),
-                    ),
-                  );
-                });
-            final data =
-                await apiController.getAllMerchOfferByListId(userList.listId);
-            final resp = data.firstWhere((element) =>
-                element.custOfferResponse.custOfferStatus == 'accepted');
-            final merch = await apiController
-                .getMerchantDetails(resp.merchId.path.segments.last);
-            if (c != null) {
-              Navigator.of(c!).pop();
-            }
             Get.to(
-              () => MerchantItemsListPage(
-                currentMerchantOffer: resp,
+                  () => MerchantItemsListPage(
                 userList: userList,
-                merchantResponse: merch,
                 archived: true,
               ),
             );

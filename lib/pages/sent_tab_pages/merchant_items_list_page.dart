@@ -18,18 +18,33 @@ import '../../models/santhe_user_list_model.dart';
 import '../../widgets/sent_tab_widgets/merchant_item_card.dart';
 
 class MerchantItemsListPage extends StatelessWidget {
-  final CustomerOfferResponse currentMerchantOffer;
+  CustomerOfferResponse? currentMerchantOffer;
   final UserList userList;
-  final MerchantDetailsResponse? merchantResponse;
+  MerchantDetailsResponse? merchantResponse;
   bool? archived = false;
 
   MerchantItemsListPage(
-      {required this.currentMerchantOffer,
+      {this.currentMerchantOffer,
       Key? key,
       required this.userList,
-      required this.merchantResponse,
+      this.merchantResponse,
       this.archived})
       : super(key: key);
+
+  Future<MerchantOfferResponse> getDetails() async {
+    final apiController = Get.find<APIs>();
+    if (currentMerchantOffer == null || merchantResponse == null || archived!) {
+      final data =
+          await apiController.getAllMerchOfferByListId(userList.listId);
+      currentMerchantOffer = data.firstWhere(
+          (element) => element.custOfferResponse.custOfferStatus == 'accepted');
+      merchantResponse = await apiController
+          .getMerchantDetails(currentMerchantOffer!.merchId.path.segments.last);
+    }
+
+    return await apiController
+        .getMerchantResponse(currentMerchantOffer!.listEventId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +78,7 @@ class MerchantItemsListPage extends StatelessWidget {
           },
         ),
         title: Text(
-          'Offer Rs. ${currentMerchantOffer.merchResponse.merchTotalPrice}',
+          'Offer Rs. ${currentMerchantOffer!.merchResponse.merchTotalPrice}',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w500,
@@ -72,8 +87,7 @@ class MerchantItemsListPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<MerchantOfferResponse>(
-        future:
-            apiController.getMerchantResponse(currentMerchantOffer.listEventId),
+        future: getDetails(),
         builder: (builder, snapShot) {
           if (snapShot.hasData) {
             List<OfferItem> _items = [];
@@ -227,7 +241,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                                       ChatScreen(
                                                     chatId: userList.listId
                                                         .toString(),
-                                                    title: currentMerchantOffer
+                                                    title: currentMerchantOffer!
                                                         .merchResponse
                                                         .merchTotalPrice,
                                                     fromNotification: false,
@@ -396,7 +410,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                     color: const Color(0xff8B8B8B)),
                               ),
                               Text(
-                                '₹ ${removeDecimalZeroFormat(double.parse(currentMerchantOffer.merchResponse.merchTotalPrice))}',
+                                '₹ ${removeDecimalZeroFormat(double.parse(currentMerchantOffer!.merchResponse.merchTotalPrice))}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24.sp,
@@ -435,7 +449,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                     color: const Color(0xff8B8B8B)),
                               ),
                               Text(
-                                'Rs. ${removeDecimalZeroFormat(double.parse(currentMerchantOffer.merchResponse.merchTotalPrice))}',
+                                'Rs. ${removeDecimalZeroFormat(double.parse(currentMerchantOffer!.merchResponse.merchTotalPrice))}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24.sp,
@@ -592,13 +606,13 @@ class MerchantItemsListPage extends StatelessWidget {
                                                         int response =
                                                             await apiController
                                                                 .acceptOffer(
-                                                                    currentMerchantOffer
+                                                                    currentMerchantOffer!
                                                                         .listEventId);
 
                                                         int response2 = await apiController
                                                             .processedStatusChange(
                                                                 int.parse(
-                                                                    currentMerchantOffer
+                                                                    currentMerchantOffer!
                                                                         .listId
                                                                         .path
                                                                         .segments

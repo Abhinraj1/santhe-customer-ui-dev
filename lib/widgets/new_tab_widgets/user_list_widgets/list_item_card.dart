@@ -151,7 +151,7 @@ class ListItemCard extends StatelessWidget {
                               status: '',
                               catId: listItem.catId.toString(),
                               dItemNotes: listItem.notes,
-                              itemId: int.parse(listItem.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/projects/santhe-425a8/databases/(default)/documents/item/projects/santhe-425a8/databases/(default)/documents/item/', '')),
+                              itemId: int.parse(listItem.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')),
                               unit: listItem.possibleUnits,
                               dUnit: listItem.unit,
                               dBrandType: listItem.brandType,

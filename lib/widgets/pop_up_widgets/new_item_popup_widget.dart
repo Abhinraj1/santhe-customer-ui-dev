@@ -84,6 +84,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   @override
   Widget build(BuildContext context) {
+    imageController.editItemCustomImageUrl.value = '';
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Dialog(
@@ -326,8 +327,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   return Stack(
                                     children: [
                                       CachedNetworkImage(
-                                        imageUrl:
-                                            'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
+                                        imageUrl: imageController
+                                                .editItemCustomImageUrl.isEmpty
+                                            ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img'
+                                            : imageController
+                                                .editItemCustomImageUrl.value,
                                         width: screenWidth * 25,
                                         height: screenWidth * 25,
                                         useOldImageOnUrlChange: true,
@@ -736,7 +740,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         'projects/santhe-425a8/databases/(default)/documents/category/',
                                                         '')))
                                                 ?.catName ??
-                                            'Other',
+                                            'Others',
                                         catId: int.parse(
                                           item.catId.replaceAll(
                                               'projects/santhe-425a8/databases/(default)/documents/category/',
@@ -809,7 +813,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             'projects/santhe-425a8/databases/(default)/documents/category/',
                                                             '')))
                                                     ?.catName ??
-                                                'Error',
+                                                'Others',
                                             catId: 4000,
                                           );
 

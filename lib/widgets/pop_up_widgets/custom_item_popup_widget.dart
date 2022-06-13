@@ -294,8 +294,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     prefix: GestureDetector(
                                       onTap: () {
                                         WidgetsBinding
-                                            .instance
-                                            ?.focusManager
+                                            .instance.focusManager
                                             .primaryFocus
                                             ?.unfocus();
                                         if (_customQtyController
@@ -331,8 +330,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     suffix: GestureDetector(
                                       onTap: () {
                                         WidgetsBinding
-                                            .instance
-                                            ?.focusManager
+                                            .instance.focusManager
                                             .primaryFocus
                                             ?.unfocus();
                                         if (_customQtyController

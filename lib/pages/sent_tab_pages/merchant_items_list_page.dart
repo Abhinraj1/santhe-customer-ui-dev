@@ -48,6 +48,7 @@ class MerchantItemsListPage extends StatelessWidget {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
+    apiController.getMerchantResponse(currentMerchantOffer.listEventId);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -72,8 +73,7 @@ class MerchantItemsListPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<MerchantOfferResponse>(
-        future:
-            apiController.getMerchantResponse(currentMerchantOffer.listEventId),
+        future: apiController.getMerchantResponse(currentMerchantOffer.listEventId),
         builder: (builder, snapShot) {
           if (snapShot.hasData) {
             List<OfferItem> _items = [];
@@ -93,7 +93,7 @@ class MerchantItemsListPage extends StatelessWidget {
                   merchPrice: double.parse(
                       element.mapValue.fields.merchPrice.stringValue),
                   quantity: double.parse(
-                      element.mapValue.fields.quantity.stringValue),
+                      element.mapValue.fields.quantity.stringValue.toString()),
                   unit: element.mapValue.fields.unit.stringValue));
             }
             return Column(
@@ -668,8 +668,8 @@ class MerchantItemsListPage extends StatelessWidget {
           }
 
           if (snapShot.hasError) {
-            return const Center(
-              child: Text('Error fetching merchant response'),
+            return Center(
+              child: Text(snapShot.error.toString()),
             );
           }
           return const Center(child: CircularProgressIndicator.adaptive());

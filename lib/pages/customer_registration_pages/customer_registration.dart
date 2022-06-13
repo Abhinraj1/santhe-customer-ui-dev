@@ -144,7 +144,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       Boxes.getUserPrefs().put('showHome', false);
       Boxes.getUserPrefs().put('isRegistered', false);
       Boxes.getUserPrefs().put('isLoggedIn', false);
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Get.offAll(() => LoginScreen(), transition: Transition.fadeIn);
       });
     }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,6 +57,14 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   late String searchQuery = widget.searchQuery;
   late APIs apiController = Get.find<APIs>();
   late String selectedUnit = availableUnits[0];
+
+  @override
+  void initState() {
+    imageController.editItemCustomImageItemId.value = '';
+    imageController.editItemCustomImageUrl.value = '';
+    imageController.addItemCustomImageUrl.value = '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +142,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                     TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _customItemNameController,
+                      textInputAction: TextInputAction.next,
                       maxLength: 30,
                       // maxLines: 2,
                       textAlignVertical: TextAlignVertical.center,
@@ -226,6 +237,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     return null;
                                   },
                                   controller: _customQtyController,
+                                  textInputAction: TextInputAction.next,
                                   textAlign: TextAlign.center,
                                   keyboardType: TextInputType.number,
                                   maxLength: 6,
@@ -254,7 +266,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     prefix: GestureDetector(
                                       onTap: () {
                                         WidgetsBinding
-                                            .instance?.focusManager.primaryFocus
+                                            .instance.focusManager.primaryFocus
                                             ?.unfocus();
                                         if (_customQtyController.text.isEmpty) {
                                           _customQtyController.text =
@@ -280,7 +292,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     suffix: GestureDetector(
                                       onTap: () {
                                         WidgetsBinding
-                                            .instance?.focusManager.primaryFocus
+                                            .instance.focusManager.primaryFocus
                                             ?.unfocus();
                                         if (_customQtyController.text.isEmpty) {
                                           _customQtyController.text =
@@ -334,7 +346,6 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                       useOldImageOnUrlChange: true,
                                       fit: BoxFit.cover,
                                       errorWidget: (context, url, error) {
-                                        print(error);
                                         return Container(
                                           color: Colors.red,
                                           width: screenWidth * 25,
@@ -599,6 +610,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                       controller: _customBrandController,
                       maxLength: 45,
                       textAlignVertical: TextAlignVertical.center,
+                      textInputAction: TextInputAction.next,
                       style: TextStyle(
                           color: Colors.grey.shade500,
                           fontWeight: FontWeight.w400,
@@ -607,7 +619,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                         _customBrandController.text = value!;
                       },
                       decoration: InputDecoration(
-                        counterStyle: TextStyle(color: Colors.grey),
+                        counterStyle: const TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               kTextFieldCircularBorderRadius),
@@ -652,6 +664,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                     TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _customNotesController,
+                      textInputAction: TextInputAction.done,
                       maxLength: 90,
                       textAlignVertical: TextAlignVertical.center,
                       maxLines: 3,
@@ -663,7 +676,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                         _customNotesController.text = value!;
                       },
                       decoration: InputDecoration(
-                        counterStyle: TextStyle(color: Colors.grey),
+                        counterStyle: const TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               kTextFieldCircularBorderRadius),
@@ -684,7 +697,9 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                             color: Colors.grey.shade500),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(
+                      height: 5.sp,
+                    ),
                     //-----------------ADD BUTTON---------------
                     Center(
                       child: SizedBox(
@@ -712,15 +727,6 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                           .text.isNotEmpty) {
                                     int itemCount =
                                         await apiController.getItemsCount();
-
-                                    print('>>>>>>>>>>>>ITEM COUNT: $itemCount');
-                                    print(
-                                        '>>>>>>>>>>>>OFFLINE COUNT: ${apiController.itemsDB.length}');
-                                    //--------------------------Creating List Item from Item and new data gathered from user------------------------
-                                    //TODO add parameter validation
-
-                                    print(
-                                        '---------------${_customQtyController.text} $itemUnit---------------');
 
                                     String image = imageController
                                         .addItemCustomImageUrl.value;
@@ -782,11 +788,9 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
 
                                         //make changes persistent
                                         box.get(currentUserListDBKey)?.save();
-                                        print(
-                                            'URL: ${imageController.addItemCustomImageUrl.value}');
                                         Navigator.pop(context);
                                       } else {
-                                        print('Error, action not completed!');
+                                        log('Error, action not completed!');
                                       }
                                     }
                                   } else {

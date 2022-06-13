@@ -12,7 +12,6 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/pages/customer_registration_pages/customer_registration.dart';
-import 'package:santhe/pages/error_pages/server_error_page.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/pages/splash_to_onboarding.dart';
 import 'package:santhe/widgets/restart_widget.dart';

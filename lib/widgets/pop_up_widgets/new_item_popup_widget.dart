@@ -20,9 +20,9 @@ import '../../pages/new_tab_pages/image_page.dart';
 class NewItemPopUpWidget extends StatefulWidget {
   final Item item;
   final int currentUserListDBKey;
-  bool edit;
+  final bool edit;
 
-  NewItemPopUpWidget(
+  const NewItemPopUpWidget(
       {Key? key,
       required this.item,
       required this.currentUserListDBKey,
@@ -37,6 +37,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   bool packQuantityVisible = false;
   bool removeOverlay = false;
   bool isProcessing = false;
+
+  final brand = 'Your product type, brand or size goes here';
+  final notes = 'Mention type of package, number of packs, number of items in a pack etc here';
 
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
@@ -61,6 +64,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
     // print('dUnit:${widget.item.dUnit}');
     // print('Units:${widget.item.unit}');
     _qtyController = TextEditingController(text: '${widget.item.dQuantity}');
+    if(widget.item.dBrandType!=brand) _brandController.text = widget.item.dBrandType;
+    if(widget.item.dItemNotes!=notes) _notesController.text = widget.item.dItemNotes;
+    imageController.editItemCustomImageUrl.value = '';
+    imageController.editItemCustomImageItemId.value = '';
+    imageController.addItemCustomImageUrl.value = '';
     super.initState();
   }
 
@@ -84,7 +92,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   @override
   Widget build(BuildContext context) {
-    imageController.editItemCustomImageUrl.value = '';
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Dialog(
@@ -199,6 +206,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                     return null;
                                   },
                                   controller: _qtyController,
+                                  textInputAction: TextInputAction.next,
                                   textAlign: TextAlign.center,
                                   keyboardType: TextInputType.number,
                                   maxLength: 6,
@@ -306,8 +314,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                         transition: Transition.fadeIn,
                                         opaque: false);
                                   } else {
-                                    print(
-                                        '${imageController.editItemCustomImageItemId.value} : Item->${item.itemId}');
                                     Get.to(
                                         () => ImageViewerPage(
                                             itemImageUrl: item.itemImageId,
@@ -337,7 +343,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                         useOldImageOnUrlChange: true,
                                         fit: BoxFit.cover,
                                         errorWidget: (context, url, error) {
-                                          print(error);
                                           return Container(
                                             color: Colors.red,
                                             width: screenWidth * 25,
@@ -434,6 +439,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                                     item.itemId
                                                                         .toString()
                                                                 : null;
+                                                            url.isNotEmpty
+                                                                ? imageController
+                                                                    .editItemCustomImageUrl
+                                                                    .value = url
+                                                                : null;
                                                           },
                                                           child:
                                                               const CircleAvatar(
@@ -486,6 +496,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                                         .value =
                                                                     item.itemId
                                                                         .toString()
+                                                                : null;
+                                                            url.isNotEmpty
+                                                                ? imageController
+                                                                .editItemCustomImageUrl
+                                                                .value = url
                                                                 : null;
                                                           },
                                                           child:
@@ -610,6 +625,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                       maxLength: 45,
                       // maxLines: 2,
                       textAlignVertical: TextAlignVertical.center,
+                      textInputAction: TextInputAction.next,
                       style: TextStyle(
                           color: Colors.grey.shade500,
                           fontWeight: FontWeight.w400,
@@ -664,6 +680,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                       controller: _notesController,
                       maxLength: 90,
                       textAlignVertical: TextAlignVertical.center,
+                      textInputAction: TextInputAction.done,
                       maxLines: 3,
                       style: TextStyle(
                           color: Colors.grey.shade500,
@@ -713,7 +730,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   });
 
                                   final itemUnit = selectedUnit;
-                                  print('${_qtyController.text} $itemUnit');
 
                                   if (_formKey.currentState!.validate()) {
                                     //--------------------------Creating List Item from Item and new data gathered from user------------------------
@@ -722,8 +738,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                         imageController
                                                 .editItemCustomImageUrl.value ==
                                             '') {
-                                      print(
-                                          "Item added=== > DB KEY: ${currentUserList.key}");
                                       final listItem = ListItem(
                                         brandType: _brandController.text,
                                         itemId: '${item.itemId}',
@@ -761,23 +775,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       int itemCount =
                                           await apiController.getItemsCount();
 
-                                      print(
-                                          '>>>>>>>>>>>>ITEM COUNT: $itemCount');
-                                      print(
-                                          '>>>>>>>>>>>>OFFLINE COUNT: ${apiController.itemsDB.length}');
-                                      //--------------------------Creating List Item from Item and new data gathered from user------------------------
-                                      //TODO add parameter validation
-
-                                      print(
-                                          '---------------${_qtyController.text} $itemUnit---------------');
-
                                       if (itemCount != 0) {
                                         Item newCustomItem = Item(
                                             dBrandType: _brandController.text,
                                             dItemNotes: _notesController.text,
                                             itemImageTn: imageController
                                                 .editItemCustomImageUrl.value,
-                                            catId: '4000',
+                                            catId: item.catId,
                                             createUser: custPhone,
                                             dQuantity: 1,
                                             dUnit: selectedUnit,
@@ -786,7 +790,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             itemImageId: imageController
                                                 .editItemCustomImageUrl.value,
                                             itemName: item.itemName,
-                                            status: 'inactive',
+                                            status: 'active',
                                             unit: [selectedUnit],
                                             updateUser: custPhone);
 
@@ -797,8 +801,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                           final listItem = ListItem(
                                             brandType: _brandController.text,
                                             //item ref
-                                            itemId:
-                                                'projects/santhe-425a8/databases/(default)/documents/item/${itemCount}',
+                                            itemId: '${item.itemId}',
                                             itemImageId: imageController
                                                 .editItemCustomImageUrl.value,
                                             itemName: item.itemName,
@@ -814,7 +817,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             '')))
                                                     ?.catName ??
                                                 'Others',
-                                            catId: 4000,
+                                            catId: int.parse(item.catId),
                                           );
 
                                           if (widget.edit) {
@@ -824,8 +827,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                     '${item.itemId}');
                                           }
                                           currentUserList.items.add(listItem);
-                                          imageController.editItemCustomImageUrl
-                                              .value = '';
                                           //make changes persistent
                                           currentUserList.save();
                                         } else {

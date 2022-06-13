@@ -12,8 +12,10 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/pages/customer_registration_pages/customer_registration.dart';
+import 'package:santhe/pages/error_pages/server_error_page.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/pages/splash_to_onboarding.dart';
+import 'package:santhe/widgets/restart_widget.dart';
 import 'controllers/boxes_controller.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'controllers/chat_controller.dart';
@@ -79,11 +81,15 @@ void main() async {
   Get.put(ChatController());
   Notifications().fcmInit();
 
-  runApp(MyApp(
-    showHome: showHome,
-    isRegistered: isRegistered,
-    isLoggedIn: isLoggedIn,
-  ));
+  runApp(
+    RestartWidget(
+      child: MyApp(
+        showHome: showHome,
+        isRegistered: isRegistered,
+        isLoggedIn: isLoggedIn,
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -138,6 +144,7 @@ class MyApp extends StatelessWidget {
                 ? const SplashToHome()
                 : UserRegistrationPage(userPhoneNumber: userPhone)
             : const SplashToOnboarding(),
+        // home: const ServerErrorPage(),
       ),
       allowtextScaling: false,
       size: const Size(390, 844),

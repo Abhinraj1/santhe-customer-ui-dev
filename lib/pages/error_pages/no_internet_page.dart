@@ -5,9 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/widgets/restart_widget.dart';
 
 class NoInternetPage extends StatelessWidget {
-  const NoInternetPage({Key? key}) : super(key: key);
+  NoInternetPage({Key? key, this.fromException = false}) : super(key: key);
+  bool fromException;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class NoInternetPage extends StatelessWidget {
       (_) async {
         final hasConnection = await AppHelpers.checkConnection();
         if (hasConnection) {
-          Get.back();
+          fromException ? RestartWidget.restartApp(context) : Get.back();
         }
       },
     );

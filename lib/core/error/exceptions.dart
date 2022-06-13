@@ -12,3 +12,5 @@ class WrongModePassedForAPICall implements Exception {
   String cause;
   WrongModePassedForAPICall(this.cause);
 }
+
+class NoInternetError implements Exception{}

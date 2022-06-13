@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/error/exceptions.dart';
@@ -9,6 +10,8 @@ import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
+import 'package:santhe/pages/error_pages/no_internet_page.dart';
+import 'package:santhe/pages/error_pages/server_error_page.dart';
 import '../core/app_helpers.dart';
 import '../models/santhe_faq_model.dart';
 import '../models/santhe_item_model.dart';
@@ -31,7 +34,6 @@ class APIs extends GetxController {
   var deletedUserLists = <UserList>[].obs;
 
   var itemsDB = <Item>[].obs;
-
 
   // Future getAllItems() async {
   //   String pageToken = '';
@@ -114,20 +116,63 @@ class APIs extends GetxController {
   //   }
   // }
 
-  Future<http.Response?> callApi({required int mode, required Uri url, String? body}) async {
+  Future<http.Response> callApi(
+      {required int mode, required Uri url, String? body}) async {
     // case 1: get
     // case 2: post
     // case 3: update
-    switch(mode){
-      case 1: return await http.get(url);
+    switch (mode) {
+      case 1:
+        {
+          try {
+            return await http.get(url);
+          } on SocketException {
+            Get.to(
+              () => NoInternetPage(
+                fromException: true,
+              ),
+              transition: Transition.fade,
+            );
+          }
+          break;
+        }
 
-      case 2: return await http.post(url, body: body!);
+      case 2:
+        {
+          try {
+            return await http.post(url, body: body!);
+          } on SocketException {
+            Get.to(
+              () => NoInternetPage(
+                fromException: true,
+              ),
+              transition: Transition.fade,
+            );
+          }
+          break;
+        }
 
-      case 3: return await http.patch(url, body: body!);
+      case 3:
+        {
+          try {
+            return await http.patch(url, body: body!);
+          } on SocketException {
+            Get.to(
+              () => NoInternetPage(
+                fromException: true,
+              ),
+              transition: Transition.fade,
+            );
+          }
+          break;
+        }
 
-      default: throw WrongModePassedForAPICall('Wrong mode passed for API call.');
+      default:
+        throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
+    throw NoInternetError;
   }
+
   //get
   Future<int> getItemsCount() async {
     // Boxes.getItemsDB().clear();
@@ -135,12 +180,13 @@ class APIs extends GetxController {
     String url =
         'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/items/next-id';
 
-    var response = await http.get(Uri.parse(url));
+    var response = await callApi(mode: 1, url: Uri.parse(url));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null) {
       int nextItemCount = jsonResponse;
       return nextItemCount;
     } else {
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -217,7 +263,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
     print(jsonDecode(response.body));
     if (response.statusCode == 200) {
@@ -236,7 +283,7 @@ class APIs extends GetxController {
     const String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/config/cacheRefresh/';
 
-    final response = await http.get(Uri.parse(url));
+    final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body)['fields'];
@@ -246,6 +293,7 @@ class APIs extends GetxController {
       return cacheRefresh;
     } else {
       print('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       throw 'error!';
     }
   }
@@ -254,7 +302,7 @@ class APIs extends GetxController {
     const String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/category?pageSize=30';
 
-    final response = await http.get(Uri.parse(url));
+    final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -308,7 +356,8 @@ class APIs extends GetxController {
         }
       }
     };
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       List data = jsonDecode(response.body);
 
@@ -359,6 +408,7 @@ class APIs extends GetxController {
       return userListsCount;
     } else {
       print('Error Occured! ${response.statusCode}: ${response.body}');
+      Get.to(() => const ServerErrorPage());
       return 9999999999;
     }
   }
@@ -368,7 +418,7 @@ class APIs extends GetxController {
     const String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/content/custContent';
 
-    final response = await http.get(Uri.parse(url));
+    final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -384,6 +434,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       print('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -394,7 +445,7 @@ class APIs extends GetxController {
     const String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/content/common/';
 
-    final response = await http.get(Uri.parse(url));
+    final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -410,6 +461,7 @@ class APIs extends GetxController {
 
       return 1;
     } else {
+      Get.to(() => const ServerErrorPage());
       print('Request failed with status: ${response.statusCode}.');
       return 0;
     }
@@ -460,7 +512,8 @@ class APIs extends GetxController {
         }
       }
     };
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       for (int i = 0; i < data.length; i++) {
@@ -470,6 +523,7 @@ class APIs extends GetxController {
       print('#####Returning with cat items#######');
       return categoryItems;
     } else {
+      Get.to(() => const ServerErrorPage());
       throw 'Error, Category Does not Exist!';
     }
   }
@@ -539,7 +593,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     var data = jsonDecode(response.body);
     print(data);
     if (response.statusCode == 200) {
@@ -556,7 +611,8 @@ class APIs extends GetxController {
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList, {String? status, String? processStatus}) async {
+  Future updateUserList(int custId, UserList userList,
+      {String? status, String? processStatus}) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
     List items = [];
@@ -566,7 +622,11 @@ class APIs extends GetxController {
         "mapValue": {
           "fields": {
             "quantity": {"doubleValue": "${item.quantity}"},
-            "itemImageId": {"stringValue": item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')},
+            "itemImageId": {
+              "stringValue": item.itemImageId.replaceAll(
+                  'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                  '')
+            },
             "unit": {"stringValue": item.unit},
             "itemName": {"stringValue": item.itemName},
             "catName": {"stringValue": item.catName},
@@ -699,7 +759,8 @@ class APIs extends GetxController {
 
     var body = {"phoneNumber": "+91$phoneNumber"};
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
     print(jsonDecode(response.body));
     if (response.statusCode == 200) {
@@ -721,7 +782,8 @@ class APIs extends GetxController {
 
     var body = {"sessionInfo": "$sessionInfo", "code": code};
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -742,6 +804,7 @@ class APIs extends GetxController {
       return true;
     } else {
       print('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       return false;
     }
   }
@@ -794,7 +857,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     var data = jsonDecode(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -813,7 +877,7 @@ class APIs extends GetxController {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId';
 
-    var response = await http.get(Uri.parse(url));
+    var response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -832,6 +896,7 @@ class APIs extends GetxController {
       }
     } else {
       print('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -882,6 +947,7 @@ class APIs extends GetxController {
     } else {
       print('Request failed with status: ${response.statusCode}.');
       print(response.reasonPhrase);
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -956,7 +1022,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -964,6 +1031,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       print('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -1009,7 +1077,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -1025,6 +1094,7 @@ class APIs extends GetxController {
       }
       return userLists;
     } else {
+      Get.to(() => const ServerErrorPage());
       throw 'Error retrieving user lists!';
     }
   }
@@ -1081,14 +1151,16 @@ class APIs extends GetxController {
   // }
 
   //SENT TAB POST
-  Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(int listId) async {
-    String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
+  Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
+      int listId) async {
+    String url =
+        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
-    var response = await http.get(Uri.parse(url));
+    var response = await callApi(mode: 1, url: Uri.parse(url));
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
-      // resp.sort((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice)); 
+      // resp.sort((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice));
       // resp.sort((a, b) => a.merchResponse.merchOfferQuantity.compareTo(b.merchResponse.merchOfferQuantity));
       // resp[0].custOfferResponse.custDeal = 'best1';
       // resp[1].custOfferResponse.custDeal = 'best2';
@@ -1098,21 +1170,24 @@ class APIs extends GetxController {
       // }
       return resp;
     } else {
+      Get.to(() => const ServerErrorPage());
       throw 'Error retrieving user lists!';
     }
   }
 
   Future<MerchantDetailsResponse> getMerchantDetails(String merchId) async {
-    String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/merchant/$merchId';
+    String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/merchant/$merchId';
 
-    var response = await http.get(Uri.parse(url));
+    var response = await callApi(mode: 1, url: Uri.parse(url));
     print(response.body);
 
     if (response.statusCode == 200) {
       MerchantDetailsResponse resp =
-      merchantDetailsResponseFromJson(response.body);
+          merchantDetailsResponseFromJson(response.body);
       return resp;
     } else {
+      Get.to(() => const ServerErrorPage());
       throw 'Error retrieving merchant details!';
     }
   }
@@ -1128,27 +1203,21 @@ class APIs extends GetxController {
         "custOfferResponse": {
           "mapValue": {
             "fields": {
-              "custDeal": {
-                "stringValue": "best1"
-              },
-              "custOfferStatus": {
-                "stringValue": "accepted"
-              },
-              "custUpdateTime": {
-                "timestampValue": "2022-05-03T08:50:12Z"
-              }
+              "custDeal": {"stringValue": "best1"},
+              "custOfferStatus": {"stringValue": "accepted"},
+              "custUpdateTime": {"timestampValue": "2022-05-03T08:50:12Z"}
             }
           }
         },
       }
     };
 
-    var response = await http.patch(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
     var data = jsonDecode(response.body);
     print(data);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
       print('Offer Accepted! ListEvent ID: ${listEventId}');
       return 1;
     } else {
@@ -1162,7 +1231,7 @@ class APIs extends GetxController {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/$listId';
 
-    var response = await http.get(Uri.parse(url));
+    var response = await callApi(mode: 1, url: Uri.parse(url));
     if (response.statusCode == 200) {
       MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;
@@ -1173,7 +1242,8 @@ class APIs extends GetxController {
 
   Future<int> processedStatusChange(int listId) async {
     print('**********processedStatusChange***********');
-    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
+    final String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
     var body = {
       "fields": {
         "processStatus": {"stringValue": "accepted"}
@@ -1236,7 +1306,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.post(Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -1252,6 +1323,7 @@ class APIs extends GetxController {
       }
       return userLists;
     } else {
+      Get.to(() => const ServerErrorPage());
       throw 'Error retrieving user lists!';
     }
   }
@@ -1263,7 +1335,7 @@ class APIs extends GetxController {
     final String url =
         'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/search/items?searchCriteria=$searchQuery';
 
-    final response = await http.get(Uri.parse(url));
+    final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       print(searchQuery);

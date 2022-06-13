@@ -131,7 +131,7 @@ class _SplashToHomeState extends State<SplashToHome> {
       init();
     } else {
       Get.to(
-            () => const NoInternetPage(),
+            () => NoInternetPage(),
         transition: Transition.fade,
       );
     }

@@ -140,7 +140,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     final hasNet = await AppHelpers.checkConnection();
     if (!hasNet) {
       Get.to(
-        () => const NoInternetPage(),
+        () => NoInternetPage(),
         transition: Transition.fade,
       );
     }

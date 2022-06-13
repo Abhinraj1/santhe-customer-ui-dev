@@ -114,7 +114,7 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
       init();
     } else {
       Get.to(
-        () => const NoInternetPage(),
+        () => NoInternetPage(),
         transition: Transition.fade,
       );
     }

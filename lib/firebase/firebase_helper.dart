@@ -66,10 +66,7 @@ class FirebaseHelper {
       Get.snackbar(
         '',
         '',
-        titleText: const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text('Image Uploaded'),
-        ),
+        titleText: const SizedBox.shrink(),
         messageText: const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: Text('Image Successfully updated!'),

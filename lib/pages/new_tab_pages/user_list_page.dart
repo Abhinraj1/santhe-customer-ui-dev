@@ -101,7 +101,7 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
     );
 
     UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
-    FocusNode _searchNode = FocusNode();
+    // FocusNode _searchNode = FocusNode();
 
     ScreenUtil.init(
         BoxConstraints(
@@ -265,7 +265,6 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
           children: [
             TextFormField(
               controller: searchQueryController,
-              focusNode: _searchNode,
               textAlignVertical: TextAlignVertical.center,
               textAlign: TextAlign.left,
               textInputAction: TextInputAction.done,
@@ -999,13 +998,13 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
                                         children: [
                                           InkWell(
                                             onTap:(){
+                                              FocusManager.instance.primaryFocus?.unfocus();
                                               showDialog(
                                                   context: context,
                                                   barrierColor: const Color.fromARGB(165, 241, 241, 241),
                                                   builder: (context) {
                                                     return CustomItemPopUpWidget(currentUserListDBKey: widget.userKey, searchQuery: searchQuery);
                                                   }).then((value){
-                                                _searchNode.unfocus();
                                                 searchQueryController.clear();
                                                 searchQuery = '';
                                                 setState(() {
@@ -1046,6 +1045,7 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
                                           children: [
                                             InkWell(
                                               onTap: (){
+                                                FocusManager.instance.primaryFocus?.unfocus();
                                                 showDialog(
                                                     context: context,
                                                     barrierColor: const Color.fromARGB(165, 241, 241, 241),
@@ -1053,7 +1053,6 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
                                                       return NewItemPopUpWidget(item: snapshot.data![index], currentUserListDBKey: widget.userKey);
                                                     }).then((value){
                                                   searchQueryController.clear();
-                                                  _searchNode.unfocus();
                                                   searchQuery = '';
                                                   setState(() {
 
@@ -1070,13 +1069,13 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
                                             ),
                                             InkWell(
                                                 onTap:(){
+                                                  FocusManager.instance.primaryFocus?.unfocus();
                                                   showDialog(
                                                       context: context,
                                                       barrierColor: const Color.fromARGB(165, 241, 241, 241),
                                                       builder: (context) {
                                                         return CustomItemPopUpWidget(currentUserListDBKey: widget.userKey, searchQuery: searchQuery);
                                                       }).then((value){
-                                                    _searchNode.unfocus();
                                                     searchQueryController.clear();
                                                     searchQuery = '';
                                                     setState(() {
@@ -1090,13 +1089,13 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
                                       } else {
                                         return InkWell(
                                           onTap: (){
+                                            FocusManager.instance.primaryFocus?.unfocus();
                                             showDialog(
                                                 context: context,
                                                 barrierColor: const Color.fromARGB(165, 241, 241, 241),
                                                 builder: (context) {
                                                   return NewItemPopUpWidget(item: snapshot.data![index], currentUserListDBKey: widget.userKey);
                                                 }).then((value){
-                                              _searchNode.unfocus();
                                               searchQueryController.clear();
                                               searchQuery = '';
                                               setState(() {

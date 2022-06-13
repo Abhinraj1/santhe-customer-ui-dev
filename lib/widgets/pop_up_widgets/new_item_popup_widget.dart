@@ -48,7 +48,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
           404;
 
   String removeDecimalZeroFormat(double n) {
-    return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
+    return n.toStringAsFixed(2);
   }
 
   @override
@@ -286,8 +286,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                             width: screenWidth * 30,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
-                                top: 8.sp, left: 8.sp, right: 8.sp),
+                            padding: EdgeInsets.all(10.sp),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: GestureDetector(
@@ -318,21 +317,17 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   // showOverlay(context);
                                 },
                                 child: Obx(
-                                  //todo fix error due to builder logic issue move logic elsewhere
-                                  () => Stack(
+                                    //todo fix error due to builder logic issue move logic elsewhere
+                                    () {
+                                  String img = item.itemImageId.replaceAll(
+                                    'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                                    '',
+                                  );
+                                  return Stack(
                                     children: [
                                       CachedNetworkImage(
-                                        imageUrl: imageController
-                                                    .editItemCustomImageUrl
-                                                    .value
-                                                    .isNotEmpty &&
-                                                imageController
-                                                        .editItemCustomImageItemId
-                                                        .value ==
-                                                    item.itemId.toString()
-                                            ? imageController
-                                                .editItemCustomImageUrl.value
-                                            : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId}',
+                                        imageUrl:
+                                            'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
                                         width: screenWidth * 25,
                                         height: screenWidth * 25,
                                         useOldImageOnUrlChange: true,
@@ -363,14 +358,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                         ),
                                       )
                                     ],
-                                  ),
-                                ),
+                                  );
+                                }),
                               ),
                             ),
                           ),
                           Positioned(
-                            top: 0.0,
-                            right: 6.0,
+                            top: -1.0,
+                            right: -1.0,
                             child: GestureDetector(
                               onTap: () {
                                 showModalBottomSheet<void>(
@@ -401,15 +396,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              const Text(
-                                                'Add Custom Image',
-                                                style: TextStyle(
-                                                  color: Colors.orange,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 24,
-                                                  fontFamily: 'Mulish'
-                                                )
-                                              ),
+                                              const Text('Add Custom Image',
+                                                  style: TextStyle(
+                                                      color: Colors.orange,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 24,
+                                                      fontFamily: 'Mulish')),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 12.0),
@@ -460,12 +453,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         const Text(
                                                           'Camera',
                                                           style: TextStyle(
-                                                              color: Colors.grey,
+                                                              color:
+                                                                  Colors.grey,
                                                               fontWeight:
-                                                              FontWeight.w500,
+                                                                  FontWeight
+                                                                      .w500,
                                                               fontSize: 16,
-                                                              fontFamily: 'Mulish'
-                                                          ),
+                                                              fontFamily:
+                                                                  'Mulish'),
                                                         )
                                                       ],
                                                     ),
@@ -511,12 +506,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         const Text(
                                                           'Gallery',
                                                           style: TextStyle(
-                                                            color: Colors.grey,
-                                                            fontWeight:
-                                                            FontWeight.w500,
-                                                            fontSize: 16,
-                                                            fontFamily: 'Mulish'
-                                                          ),
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontSize: 16,
+                                                              fontFamily:
+                                                                  'Mulish'),
                                                         ),
                                                       ],
                                                     )
@@ -549,33 +546,37 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                       ),
                     ),
                     //UNIT SELECTOR
-                    GroupButton(
-                        options: GroupButtonOptions(
-                          //design
-                          unselectedBorderColor: Colors.grey.shade300,
-                          selectedBorderColor: Colors.orange,
-                          borderRadius: BorderRadius.circular(10.0),
-                          selectedShadow: [const BoxShadow()],
-                          unselectedShadow: [const BoxShadow()],
-                          selectedColor: Colors.orange,
-                          unselectedTextStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.sp,
-                              color: const Color(0xff8B8B8B)),
-                          buttonWidth: 69.sp,
-                          buttonHeight: 50.sp,
-                          selectedTextStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.sp,
-                              color: Colors.white),
-                        ),
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: GroupButton(
+                          options: GroupButtonOptions(
+                            //design
+                            unselectedBorderColor: Colors.grey.shade300,
+                            selectedBorderColor: Colors.orange,
+                            borderRadius: BorderRadius.circular(10.0),
+                            selectedShadow: [const BoxShadow()],
+                            unselectedShadow: [const BoxShadow()],
+                            selectedColor: Colors.orange,
+                            unselectedTextStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                                color: const Color(0xff8B8B8B)),
+                            buttonWidth: 69.sp,
+                            buttonHeight: 50.sp,
+                            selectedTextStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                                color: Colors.white),
+                          ),
 
-                        //function logic
-                        controller: _unitsController,
-                        buttons: item.unit,
-                        onSelected: (index, isSelected) {
-                          selectedUnit = item.unit[index];
-                        }),
+                          //function logic
+                          controller: _unitsController,
+                          buttons: item.unit,
+                          onSelected: (index, isSelected) {
+                            selectedUnit = item.unit[index];
+                          }),
+                    ),
 
                     Padding(
                       padding: EdgeInsets.only(
@@ -707,8 +708,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                     isProcessing = true;
                                   });
 
-                                  final itemUnit =
-                                      selectedUnit;
+                                  final itemUnit = selectedUnit;
                                   print('${_qtyController.text} $itemUnit');
 
                                   if (_formKey.currentState!.validate()) {
@@ -736,7 +736,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         'projects/santhe-425a8/databases/(default)/documents/category/',
                                                         '')))
                                                 ?.catName ??
-                                            'Error',
+                                            'Other',
                                         catId: int.parse(
                                           item.catId.replaceAll(
                                               'projects/santhe-425a8/databases/(default)/documents/category/',

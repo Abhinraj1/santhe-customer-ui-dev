@@ -1146,10 +1146,13 @@ class APIs extends GetxController {
   }
 
   Future<MerchantOfferResponse> getMerchantResponse(String listId) async {
+    print(listId);
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/$listId';
 
     var response = await http.get(Uri.parse(url));
+    print('here--->>>');
+    print(response.body);
     if (response.statusCode == 200) {
       MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;

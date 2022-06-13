@@ -37,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    print('in c' + widget.listEventId);
+    print('in c' + widget.listEventId.substring(0, 10));
     _chatController.inChatScreen = true;
     AppHelpers().getToken.then((value) => token = value);
     super.initState();
@@ -180,6 +180,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           }).then((value){
                             if(merchantToken.isNotEmpty){
                               sendNotification(message);
+                            }else{
+                              sendNotificationToAll(message);
                             }
                             _textEditingController.clear();
                             FocusScope.of(context).unfocus();
@@ -266,6 +268,38 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       ),
     );
+  }
+
+  void sendNotificationToAll(String content){
+    http.get(Uri.parse('https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getNotificationToken?userId=${widget.listEventId.substring(0, 10)}&userType=merchant')).then((value) async {
+      Map<dynamic, dynamic> _pairs = jsonDecode(value.body);
+      print(_pairs['data'].values);
+      var url = 'https://fcm.googleapis.com/fcm/send';
+      await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AAAAZ54wd8s:APA91bEsDji0lceBsyQ2Dm_c1eerM0N6-Vle3k83ZGH8Q8cKOY-0CGh7aJHC5iMrkxUVurSoUS_WAv4Qez9BHRSAHKgUcDeEuKVX5CevL03KAEpChNCgjz8-mInRCnQXJjORuMUZMbhF', // FCM Server key
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            "notification": <String, dynamic>{
+              "body": content,
+              "title": 'New message from customer',
+            },
+            'registration_ids': _pairs['data'].values.toList(), // Multiple id
+            //'to': merchantToken, // single id
+            "direct_boot_ok": true,
+            "data": {
+              "landingScreen": 'chat',
+              'chatId': widget.chatId,
+              'title': 'Offers: Rs ' + widget.title,
+              'listEventId': widget.listEventId,
+            }
+          },
+        ),
+      );
+    });
   }
 
   Widget _merchantChat(ChatModel chat) => Padding(

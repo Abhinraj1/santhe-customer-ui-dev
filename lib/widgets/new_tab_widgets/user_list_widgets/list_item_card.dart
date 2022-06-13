@@ -155,7 +155,7 @@ class ListItemCard extends StatelessWidget {
                               unit: listItem.possibleUnits,
                               dUnit: listItem.unit,
                               dBrandType: listItem.brandType,
-                              dQuantity: listItem.quantity.toInt(),
+                              dQuantity: listItem.quantity,
                               itemAlias: '',
                               itemImageId: listItem.itemImageId,
                               itemImageTn: '',

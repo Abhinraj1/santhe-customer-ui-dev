@@ -13,7 +13,7 @@ class Item {
   @HiveField(3)
   final String dItemNotes;
   @HiveField(4)
-  final int dQuantity;
+  final num dQuantity;
   @HiveField(5)
   final List<String> unit;
   @HiveField(6)
@@ -64,7 +64,7 @@ class Item {
       updateUser: int.parse(data['updateUser']['integerValue']),
       createUser: int.parse(data['createUser']['integerValue']),
       itemName: data['itemName']['stringValue'],
-      dQuantity: int.parse(data['dQuantity']['integerValue']),
+      dQuantity: double.parse(data['dQuantity']['integerValue']),
       dItemNotes: data['dItemNotes']['stringValue'],
       dBrandType: data['dBrandType']['stringValue'],
       itemImageId: data['itemImageId']['stringValue'],
@@ -90,7 +90,7 @@ class Item {
       updateUser: int.parse(data['updateUser'] ?? '404'),
       createUser: int.parse(data['createUser'] ?? '404'),
       itemName: data['itemName'],
-      dQuantity: int.parse('${data['dQuantity']}'),
+      dQuantity: double.parse('${data['dQuantity']}'),
       dItemNotes: data['dItemNotes'],
       dBrandType: data['dBrandType'],
       itemImageId: data['itemImageId'],

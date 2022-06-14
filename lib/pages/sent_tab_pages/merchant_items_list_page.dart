@@ -33,7 +33,7 @@ class MerchantItemsListPage extends StatelessWidget {
 
   Future<MerchantOfferResponse> getDetails() async {
     final apiController = Get.find<APIs>();
-    if (currentMerchantOffer == null || merchantResponse == null || archived!) {
+    if (currentMerchantOffer == null && archived!) {
       final data =
           await apiController.getAllMerchOfferByListId(userList.listId);
       currentMerchantOffer = data.firstWhere(
@@ -133,6 +133,7 @@ class MerchantItemsListPage extends StatelessWidget {
                 SizedBox(
                   height: 15.sp,
                 ),
+                if(isDone())
                 SizedBox(
                   width: screenSize.width,
                   height: screenSize.height / 3,
@@ -682,6 +683,8 @@ class MerchantItemsListPage extends StatelessWidget {
           }
 
           if (snapShot.hasError) {
+            print(snapShot);
+            print(snapShot.error);
             return const Center(
               child: Text('Error fetching merchant response'),
             );

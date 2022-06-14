@@ -597,11 +597,9 @@ class APIs extends GetxController {
 
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
-    var data = jsonDecode(response.body);
-    log(data);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
@@ -687,14 +685,14 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
 
       log('SUCCESS');
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       log('Error', error: response.reasonPhrase);
       Get.to(() => const ServerErrorPage());
       return 0;
@@ -716,12 +714,12 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       log('Error', error:response.reasonPhrase);
       Get.to(() => const ServerErrorPage());
       return 0;
@@ -742,12 +740,12 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       log('Error', error:response.reasonPhrase);
       Get.to(() => const ServerErrorPage());
       return 0;
@@ -944,7 +942,7 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       getCustomerInfo(custId);
 
       log('SUCCESS');
@@ -1032,7 +1030,7 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
@@ -1221,7 +1219,7 @@ class APIs extends GetxController {
         await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       log('Offer Accepted! ListEvent ID: $listEventId');
       return 1;
     } else {
@@ -1260,7 +1258,7 @@ class APIs extends GetxController {
     
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data);
+      log(data.toString());
       log('Offer Accepted! List ID: $listId');
       return 1;
     } else {

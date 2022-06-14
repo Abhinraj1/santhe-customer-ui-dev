@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -44,7 +45,7 @@ class APIs extends GetxController {
   //     for (int i = 0; i < jsonResponse['documents'].length; i++) {
   //       var data = jsonResponse['documents'][i]['fields'];
   //       Item item = Item.fromJson(data);
-  //       print('---->' + item.itemName);
+  //       log('---->' + item.itemName);
   //       Boxes.getItemsDB().put(item.itemId, item);
   //     }
   //   }
@@ -58,7 +59,7 @@ class APIs extends GetxController {
   //       pageToken = jsonResponse['nextPageToken'];
   //
   //       while (pageToken.isNotEmpty) {
-  //         print('#############################3');
+  //         log('#############################3');
   //         String url2 =
   //             'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item?pageSize=1000&pageToken=$pageToken';
   //         final response = await http.get(Uri.parse(url2));
@@ -73,13 +74,13 @@ class APIs extends GetxController {
   //       }
   //
   //       itemInit();
-  //       print('------- GOT ALL ITEMS------');
+  //       log('------- GOT ALL ITEMS------');
   //     } else {
   //       parseItems(jsonResponse);
   //       itemInit();
   //     }
   //   } else {
-  //     print('Request failed with status: ${response.statusCode}.');
+  //     log('Request failed with status: ${response.statusCode}.');
   //   }
   // }
 
@@ -92,7 +93,7 @@ class APIs extends GetxController {
   //     for (int i = 0; i < jsonResponse['documents'].length; i++) {
   //       var data = jsonResponse['documents'][i]['fields'];
   //       Item item = Item.fromFirebaseRestApi(data);
-  //       print('---->' + item.itemName);
+  //       log('---->' + item.itemName);
   //       if (item.status == 'active') {
   //         Boxes.getItemsDB().put(item.itemId, item);
   //       }
@@ -112,7 +113,7 @@ class APIs extends GetxController {
   //       parseItems(jsonResponse);
   //     }
   //   } else {
-  //     print('Request failed with status: ${response.statusCode}.');
+  //     log('Request failed with status: ${response.statusCode}.');
   //   }
   // }
 
@@ -266,15 +267,15 @@ class APIs extends GetxController {
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
-    print(jsonDecode(response.body));
+    log(jsonDecode(response.body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
-      print('Custom Item Created: $data');
+      log('Custom Item Created: $data');
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Reason: ${response.reasonPhrase}.');
+      log('Request failed with status: ${response.statusCode}.');
+      log('Reason: ${response.reasonPhrase}.');
       return 0;
     }
   }
@@ -287,12 +288,12 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body)['fields'];
-      print('===AboutUS: ${jsonResponse['catUpdate']['timestampValue']}');
+      log('===AboutUS: ${jsonResponse['catUpdate']['timestampValue']}');
       CacheRefresh cacheRefresh = CacheRefresh.fromJson(jsonResponse);
 
       return cacheRefresh;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage());
       throw 'error!';
     }
@@ -315,7 +316,8 @@ class APIs extends GetxController {
       }
       // initCategoriesDB(); //since its already in main no need for it here
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
+      log('Request failed with status: ${response.statusCode}.');
     }
   }
 
@@ -363,7 +365,7 @@ class APIs extends GetxController {
 
       for (UserList usrLst in Boxes.getUserListDB().values) {
         offlineCustLists.add(usrLst);
-        print(usrLst.listId);
+        log(usrLst.listId.toString());
       }
 
       if (data[0]['document'] != null &&
@@ -378,7 +380,7 @@ class APIs extends GetxController {
                 offlineCustLists
                     .firstWhereOrNull((e) => e.listId == onlineUserList.listId)
                     ?.listId) {
-              print(
+              log(
                   'Duplicate Found: ${onlineUserList.listId} and not added to local cache');
             } else {
               onlineCustLists.add(onlineUserList);
@@ -392,22 +394,22 @@ class APIs extends GetxController {
         userListsDB.addAll(offlineCustLists);
         Boxes.getContent().put('userListCount', '${data.length}');
         userListsCount = data.length;
-        print('List Count: $userListsCount');
+        log('List Count: $userListsCount');
         return userListsCount;
       } else if (data[0]['document'] != null && data[0]['document'] == null) {
         Boxes.getContent().put('userListCount', '0');
         userListsCount = 0;
-        print('List Count: $userListsCount');
+        log('List Count: $userListsCount');
         return userListsCount;
       }
 
-      userListsDB.forEach((element) {
-        print(element.listId);
-      });
+      for (var element in userListsDB) {
+        log(element.listId.toString());
+      }
 
       return userListsCount;
     } else {
-      print('Error Occured! ${response.statusCode}: ${response.body}');
+      log('Error Occured! ${response.statusCode}: ${response.body}');
       Get.to(() => const ServerErrorPage());
       return 9999999999;
     }
@@ -428,12 +430,12 @@ class APIs extends GetxController {
       for (int i = 0; i < data.length; i++) {
         Boxes.getFAQs().put(i, FAQ.fromJson(data[i]));
       }
-      // print(Boxes.getFAQs().get(1)?.quest ?? 'Error');
-      // print(Boxes.getFAQs().get(1)?.answ ?? 'Error');
+      // log(Boxes.getFAQs().get(1)?.quest ?? 'Error');
+      // log(Boxes.getFAQs().get(1)?.answ ?? 'Error');
 
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage());
       return 0;
     }
@@ -462,7 +464,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       Get.to(() => const ServerErrorPage());
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       return 0;
     }
   }
@@ -478,7 +480,7 @@ class APIs extends GetxController {
   //     var data = jsonResponse['fields'];
   //     return Category.fromJson(data);
   //   } else {
-  //     print('Request failed with status: ${response.statusCode}.');
+  //     log('Request failed with status: ${response.statusCode}.');
   //     throw 'Error!';
   //   }
   // }
@@ -520,7 +522,7 @@ class APIs extends GetxController {
         categoryItems
             .add(Item.fromFirebaseRestApi(data[i]['document']['fields']));
       }
-      print('#####Returning with cat items#######');
+      log('#####Returning with cat items#######');
       return categoryItems;
     } else {
       Get.to(() => const ServerErrorPage());
@@ -530,7 +532,7 @@ class APIs extends GetxController {
 
   Future<int> addCustomerList(
       UserList userList, int custId, String status) async {
-    print("================${userList.listId}======================");
+    log("================${userList.listId}======================");
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/?documentId=${userList.listId}';
     List items = [];
@@ -560,7 +562,7 @@ class APIs extends GetxController {
       });
       i++;
     }
-    // print(items);
+    // log(items);
 
     var body = {
       "fields": {
@@ -596,14 +598,14 @@ class APIs extends GetxController {
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     var data = jsonDecode(response.body);
-    print(data);
+    log(data);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      // print(data);
+      log(data);
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
-
+      log('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -646,7 +648,7 @@ class APIs extends GetxController {
       });
       i++;
     }
-    // print(items);
+    // log(items);
 
     final body = {
       "fields": {
@@ -681,19 +683,20 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.patch(Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
+      log(data);
 
-      print('SUCCCCCCCCCCCCCCCCCCCC');
+      log('SUCCESS');
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
-      print(data);
-      print(response.reasonPhrase);
+      log(data);
+      log('Error', error: response.reasonPhrase);
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -709,17 +712,18 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.patch(Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
+      log(data);
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
-      print(data);
-      print(response.reasonPhrase);
+      log(data);
+      log('Error', error:response.reasonPhrase);
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -734,17 +738,18 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.patch(Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
+      log(data);
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
-      print(data);
-      print(response.reasonPhrase);
+      log(data);
+      log('Error', error:response.reasonPhrase);
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -762,15 +767,16 @@ class APIs extends GetxController {
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
-    print(jsonDecode(response.body));
+    log(jsonDecode(response.body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       String sessionInfo = data['sessionInfo'] ?? 'Error';
-      print('----->SESSION ID: $sessionInfo');
+      log('----->SESSION ID: $sessionInfo');
       return sessionInfo;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Reason: ${response.reasonPhrase}.');
+      log('Request failed with status: ${response.statusCode}.');
+      log('Reason: ${response.reasonPhrase}.');
+      Get.to(() => const ServerErrorPage());
       throw 'Error!';
     }
   }
@@ -780,7 +786,7 @@ class APIs extends GetxController {
     const String url =
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key=$apiKey';
 
-    var body = {"sessionInfo": "$sessionInfo", "code": code};
+    var body = {"sessionInfo": sessionInfo, "code": code};
 
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
@@ -795,15 +801,15 @@ class APIs extends GetxController {
       // UserCredential? myUsr =
       //     Boxes.getUserCredentialsDB().get('currentUserCredentials');
 
-      // print(myUsr?.idToken);
-      // print(myUsr?.refreshToken);
-      // print(myUsr?.expiresIn);
-      // print(myUsr?.localId);
-      // print(myUsr?.isNewUser);
-      // print(myUsr?.phoneNumber);
+      // log(myUsr?.idToken);
+      // log(myUsr?.refreshToken);
+      // log(myUsr?.expiresIn);
+      // log(myUsr?.localId);
+      // log(myUsr?.isNewUser);
+      // log(myUsr?.phoneNumber);
       return true;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage());
       return false;
     }
@@ -859,16 +865,15 @@ class APIs extends GetxController {
 
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
-    var data = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-
-      print('user added');
+      // var data = jsonDecode(response.body);
+      log('user added');
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       throw 'Error!';
-      return 0;
+      // return 0;
     }
   }
 
@@ -891,11 +896,11 @@ class APIs extends GetxController {
 
         return 1;
       } else {
-        print('Request failed with status: ${response.statusCode}.');
+        log('Request failed with status: ${response.statusCode}.');
         return 0;
       }
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage());
       return 0;
     }
@@ -935,18 +940,18 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.patch(Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      // print(data);
+      log(data);
       getCustomerInfo(custId);
 
-      print('SUCCCCCCCCCCCCCCCCCCCC');
+      log('SUCCESS');
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print(response.reasonPhrase);
+      log('Request failed with status: ${response.statusCode}.');
+      log('Error', error:response.reasonPhrase);
       Get.to(() => const ServerErrorPage());
       return 0;
     }
@@ -995,17 +1000,17 @@ class APIs extends GetxController {
   //     }
   //
   //     Boxes.getContent().put('userListCount', '$custListNumber');
-  //     print('>>>>>>UserListNumber: $custListNumber');
+  //     log('>>>>>>UserListNumber: $custListNumber');
   //     return custListNumber;
   //   } else {
-  //     print('Request failed with status: ${response.statusCode}.');
+  //     log('Request failed with status: ${response.statusCode}.');
   //     return 9999999999;
   //   }
   // }
 
   //post
   Future contactUs(int custId, String message, double rating) async {
-    print('>>>>>>>>rating:$rating');
+    log('>>>>>>>>rating:$rating');
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/contactUs/?documentId=$custId${DateTime.now().day.toString().length == 1 ? '0' + DateTime.now().day.toString() : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0' + DateTime.now().month.toString() : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0' + DateTime.now().hour.toString() : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0' + DateTime.now().minute.toString() : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0' + DateTime.now().second.toString() : DateTime.now().second}';
 
@@ -1027,10 +1032,10 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
+      log(data);
       return 1;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage());
       return 0;
     }
@@ -1085,7 +1090,7 @@ class APIs extends GetxController {
       if (data[0]['document']['fields'] != null) {
         for (int i = 0; i < data.length; i++) {
           userLists.add(UserList.fromJson(data[i]['document']['fields']));
-          print('${userLists[i].listId}, ${userLists[i].processStatus}');
+          log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
         userLists
             .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
@@ -1101,7 +1106,7 @@ class APIs extends GetxController {
 
   //POST
   // Future<List<Offer>> getAllMerchOfferByListId(int listId) async {
-  //   print(listId);
+  //   log(listId);
   //   List<Offer> merchOffers = [];
   //   const String url =
   //       'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
@@ -1139,7 +1144,7 @@ class APIs extends GetxController {
   //       for (int i = 0; i < data.length; i++) {
   //         merchOffers
   //             .add(Offer.fromFirebaseRestApi(data[i]['document']['fields']));
-  //         print(merchOffers[i].merchId + merchOffers[i].listId);
+  //         log(merchOffers[i].merchId + merchOffers[i].listId);
   //       }
   //     } else {
   //       return merchOffers;
@@ -1180,7 +1185,7 @@ class APIs extends GetxController {
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/merchant/$merchId';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));
-    print(response.body);
+    log(response.body);
 
     if (response.statusCode == 200) {
       MerchantDetailsResponse resp =
@@ -1194,7 +1199,7 @@ class APIs extends GetxController {
 
   //patch
   Future<int> acceptOffer(String listEventId) async {
-    print('Offer Accepted! ListEvent ID: $listEventId');
+    log('Offer Accepted! ListEvent ID: $listEventId');
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/${BigInt.parse(listEventId)}?updateMask.fieldPaths=custOfferResponse';
 
@@ -1214,15 +1219,15 @@ class APIs extends GetxController {
 
     var response =
         await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
-    var data = jsonDecode(response.body);
-    print(data);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print('Offer Accepted! ListEvent ID: ${listEventId}');
+      log(data);
+      log('Offer Accepted! ListEvent ID: $listEventId');
       return 1;
     } else {
-      print(
+      log(
           'Request failed with status: ${response.statusCode}.Details? ${response.body}');
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -1236,12 +1241,13 @@ class APIs extends GetxController {
       MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;
     } else {
+      Get.to(() => const ServerErrorPage());
       throw 'Error retrieving merchant response';
     }
   }
 
   Future<int> processedStatusChange(int listId) async {
-    print('**********processedStatusChange***********');
+    log('**********processedStatusChange***********');
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
     var body = {
@@ -1250,17 +1256,17 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await http.patch(Uri.parse(url), body: jsonEncode(body));
-    var data = jsonDecode(response.body);
-    print(data);
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
-      print('Offer Accepted! List ID: ${listId}');
+      log(data);
+      log('Offer Accepted! List ID: $listId');
       return 1;
     } else {
-      print(
+      log(
           'Request failed with status: ${response.statusCode}.Details? ${response.body}');
+      Get.to(() => const ServerErrorPage());
       return 0;
     }
   }
@@ -1314,7 +1320,7 @@ class APIs extends GetxController {
       if (data[0]['document']['fields'] != null) {
         for (int i = 0; i < data.length; i++) {
           userLists.add(UserList.fromJson(data[i]['document']['fields']));
-          print('${userLists[i].listId}, ${userLists[i].processStatus}');
+          log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
         // userLists
         //     .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
@@ -1338,8 +1344,8 @@ class APIs extends GetxController {
     final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
-      print(searchQuery);
-      print(response.body);
+      log(searchQuery);
+      log(response.body);
       List jsonResponse = jsonDecode(response.body);
 
       for (int i = 0; i < jsonResponse.length; i++) {
@@ -1350,7 +1356,8 @@ class APIs extends GetxController {
 
       return searchResults;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      log('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage());
       throw 'error!';
     }
   }
@@ -1369,9 +1376,9 @@ class APIs extends GetxController {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      log(await response.stream.bytesToString());
     } else {
-      print(response.reasonPhrase);
+      log('Error', error:response.reasonPhrase);
     }
   }
 }

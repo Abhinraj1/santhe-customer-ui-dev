@@ -817,7 +817,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             '')))
                                                     ?.catName ??
                                                 'Others',
-                                            catId: int.parse(item.catId),
+                                            catId: int.parse(
+                                              item.catId.replaceAll(
+                                                  'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                  ''),
+                                            ),
                                           );
 
                                           if (widget.edit) {

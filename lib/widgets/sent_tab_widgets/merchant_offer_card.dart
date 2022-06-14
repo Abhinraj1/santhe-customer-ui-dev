@@ -52,6 +52,7 @@ class MerchantOfferCard extends StatelessWidget {
                   currentMerchantOffer: currentMerchantOffer,
                   userList: userList,
                   merchantResponse: merchantResponse,
+                  archived: false,
                 ));
           } else {
             errorMsg('Please wait till loading', '');

@@ -2,7 +2,6 @@
 //
 //     final merchantOfferResponse = merchantOfferResponseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MerchantOfferResponse merchantOfferResponseFromJson(String str) => MerchantOfferResponse.fromJson(json.decode(str));
@@ -39,61 +38,65 @@ class MerchantOfferResponse {
 
 class MerchantOfferResponseFields {
   MerchantOfferResponseFields({
-    required this.custId,
-    required this.merchResponse,
-    required this.listId,
-    required this.listEventId,
-    required this.chatEnabled,
     required this.custStatus,
+    required this.custId,
+    required this.custOfferResponse,
+    required this.listId,
     required this.custDistance,
     required this.merchId,
-    required this.items,
-    required this.custOfferResponse,
-    required this.eventExpiryTime,
     required this.contactEnabled,
+    required this.requestForDay,
+    required this.eventExpiryTime,
+    required this.chatEnabled,
+    required this.listEventId,
+    required this.merchResponse,
+    required this.items,
   });
 
-  Id custId;
-  MerchResponse merchResponse;
-  Id listId;
-  CustStatus listEventId;
-  ChatEnabled chatEnabled;
   CustStatus custStatus;
+  Id custId;
+  CustOfferResponse custOfferResponse;
+  Id listId;
   CustDistance custDistance;
   Id merchId;
-  Items items;
-  CustOfferResponse custOfferResponse;
-  Time eventExpiryTime;
   ChatEnabled contactEnabled;
+  CustDistance requestForDay;
+  Time eventExpiryTime;
+  ChatEnabled chatEnabled;
+  CustStatus listEventId;
+  MerchResponse merchResponse;
+  Items items;
 
   factory MerchantOfferResponseFields.fromJson(Map<String, dynamic> json) => MerchantOfferResponseFields(
-    custId: Id.fromJson(json["custId"]),
-    merchResponse: MerchResponse.fromJson(json["merchResponse"]),
-    listId: Id.fromJson(json["listId"]),
-    listEventId: CustStatus.fromJson(json["listEventId"]),
-    chatEnabled: ChatEnabled.fromJson(json["chatEnabled"]),
     custStatus: CustStatus.fromJson(json["custStatus"]),
+    custId: Id.fromJson(json["custId"]),
+    custOfferResponse: CustOfferResponse.fromJson(json["custOfferResponse"]),
+    listId: Id.fromJson(json["listId"]),
     custDistance: CustDistance.fromJson(json["custDistance"]),
     merchId: Id.fromJson(json["merchId"]),
-    items: Items.fromJson(json["items"]),
-    custOfferResponse: CustOfferResponse.fromJson(json["custOfferResponse"]),
-    eventExpiryTime: Time.fromJson(json["eventExpiryTime"]),
     contactEnabled: ChatEnabled.fromJson(json["contactEnabled"]),
+    requestForDay: CustDistance.fromJson(json["requestForDay"]),
+    eventExpiryTime: Time.fromJson(json["eventExpiryTime"]),
+    chatEnabled: ChatEnabled.fromJson(json["chatEnabled"]),
+    listEventId: CustStatus.fromJson(json["listEventId"]),
+    merchResponse: MerchResponse.fromJson(json["merchResponse"]),
+    items: Items.fromJson(json["items"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "custId": custId.toJson(),
-    "merchResponse": merchResponse.toJson(),
-    "listId": listId.toJson(),
-    "listEventId": listEventId.toJson(),
-    "chatEnabled": chatEnabled.toJson(),
     "custStatus": custStatus.toJson(),
+    "custId": custId.toJson(),
+    "custOfferResponse": custOfferResponse.toJson(),
+    "listId": listId.toJson(),
     "custDistance": custDistance.toJson(),
     "merchId": merchId.toJson(),
-    "items": items.toJson(),
-    "custOfferResponse": custOfferResponse.toJson(),
-    "eventExpiryTime": eventExpiryTime.toJson(),
     "contactEnabled": contactEnabled.toJson(),
+    "requestForDay": requestForDay.toJson(),
+    "eventExpiryTime": eventExpiryTime.toJson(),
+    "chatEnabled": chatEnabled.toJson(),
+    "listEventId": listEventId.toJson(),
+    "merchResponse": merchResponse.toJson(),
+    "items": items.toJson(),
   };
 }
 
@@ -299,61 +302,61 @@ class ValueMapValue {
 
 class FluffyFields {
   FluffyFields({
-    required this.merchNotes,
     required this.catName,
-    required this.unit,
-    required this.itemImageId,
-    required this.merchPrice,
+    required this.merchNotes,
+    required this.brandType,
+    required this.itemId,
+    required this.itemSeqNum,
     required this.quantity,
     required this.merchAvailability,
-    required this.itemSeqNum,
-    required this.itemId,
+    required this.itemImageId,
+    required this.unit,
+    required this.merchPrice,
     required this.itemName,
     required this.itemNotes,
-    required this.brandType,
   });
 
-  CustStatus merchNotes;
   CustStatus catName;
-  CustStatus unit;
-  CustStatus itemImageId;
-  CustStatus merchPrice;
+  CustStatus merchNotes;
+  CustStatus brandType;
+  Id itemId;
+  CustDistance itemSeqNum;
   CustStatus quantity;
   ChatEnabled merchAvailability;
-  CustDistance itemSeqNum;
-  Id itemId;
+  CustStatus itemImageId;
+  CustStatus unit;
+  CustStatus merchPrice;
   CustStatus itemName;
   CustStatus itemNotes;
-  CustStatus brandType;
 
   factory FluffyFields.fromJson(Map<String, dynamic> json) => FluffyFields(
-    merchNotes: CustStatus.fromJson(json["merchNotes"]),
     catName: CustStatus.fromJson(json["catName"]),
-    unit: CustStatus.fromJson(json["unit"]),
-    itemImageId: CustStatus.fromJson(json["itemImageId"]),
-    merchPrice: CustStatus.fromJson(json["merchPrice"]),
+    merchNotes: CustStatus.fromJson(json["merchNotes"]),
+    brandType: CustStatus.fromJson(json["brandType"]),
+    itemId: Id.fromJson(json["itemId"]),
+    itemSeqNum: CustDistance.fromJson(json["itemSeqNum"]),
     quantity: CustStatus.fromJson(json["quantity"]),
     merchAvailability: ChatEnabled.fromJson(json["merchAvailability"]),
-    itemSeqNum: CustDistance.fromJson(json["itemSeqNum"]),
-    itemId: Id.fromJson(json["itemId"]),
+    itemImageId: CustStatus.fromJson(json["itemImageId"]),
+    unit: CustStatus.fromJson(json["unit"]),
+    merchPrice: CustStatus.fromJson(json["merchPrice"]),
     itemName: CustStatus.fromJson(json["itemName"]),
     itemNotes: CustStatus.fromJson(json["itemNotes"]),
-    brandType: CustStatus.fromJson(json["brandType"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "merchNotes": merchNotes.toJson(),
     "catName": catName.toJson(),
-    "unit": unit.toJson(),
-    "itemImageId": itemImageId.toJson(),
-    "merchPrice": merchPrice.toJson(),
+    "merchNotes": merchNotes.toJson(),
+    "brandType": brandType.toJson(),
+    "itemId": itemId.toJson(),
+    "itemSeqNum": itemSeqNum.toJson(),
     "quantity": quantity.toJson(),
     "merchAvailability": merchAvailability.toJson(),
-    "itemSeqNum": itemSeqNum.toJson(),
-    "itemId": itemId.toJson(),
+    "itemImageId": itemImageId.toJson(),
+    "unit": unit.toJson(),
+    "merchPrice": merchPrice.toJson(),
     "itemName": itemName.toJson(),
     "itemNotes": itemNotes.toJson(),
-    "brandType": brandType.toJson(),
   };
 }
 
@@ -391,40 +394,40 @@ class MerchResponseMapValue {
 
 class TentacledFields {
   TentacledFields({
-    required this.merchOfferQuantity,
-    required this.merchTotalPrice,
-    required this.merchFulfillmentResponse,
-    required this.merchDelivery,
-    required this.merchUpdateTime,
     required this.merchResponseStatus,
+    required this.merchTotalPrice,
     required this.merchListStatus,
+    required this.merchFulfillmentResponse,
+    required this.merchOfferQuantity,
+    required this.merchUpdateTime,
+    required this.merchDelivery,
   });
 
-  CustDistance merchOfferQuantity;
-  CustStatus merchTotalPrice;
-  ChatEnabled merchFulfillmentResponse;
-  ChatEnabled merchDelivery;
-  Time merchUpdateTime;
   CustStatus merchResponseStatus;
+  CustStatus merchTotalPrice;
   CustStatus merchListStatus;
+  ChatEnabled merchFulfillmentResponse;
+  CustDistance merchOfferQuantity;
+  Time merchUpdateTime;
+  ChatEnabled merchDelivery;
 
   factory TentacledFields.fromJson(Map<String, dynamic> json) => TentacledFields(
-    merchOfferQuantity: CustDistance.fromJson(json["merchOfferQuantity"]),
-    merchTotalPrice: CustStatus.fromJson(json["merchTotalPrice"]),
-    merchFulfillmentResponse: ChatEnabled.fromJson(json["merchFulfillmentResponse"]),
-    merchDelivery: ChatEnabled.fromJson(json["merchDelivery"]),
-    merchUpdateTime: Time.fromJson(json["merchUpdateTime"]),
     merchResponseStatus: CustStatus.fromJson(json["merchResponseStatus"]),
+    merchTotalPrice: CustStatus.fromJson(json["merchTotalPrice"]),
     merchListStatus: CustStatus.fromJson(json["merchListStatus"]),
+    merchFulfillmentResponse: ChatEnabled.fromJson(json["merchFulfillmentResponse"]),
+    merchOfferQuantity: CustDistance.fromJson(json["merchOfferQuantity"]),
+    merchUpdateTime: Time.fromJson(json["merchUpdateTime"]),
+    merchDelivery: ChatEnabled.fromJson(json["merchDelivery"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "merchOfferQuantity": merchOfferQuantity.toJson(),
-    "merchTotalPrice": merchTotalPrice.toJson(),
-    "merchFulfillmentResponse": merchFulfillmentResponse.toJson(),
-    "merchDelivery": merchDelivery.toJson(),
-    "merchUpdateTime": merchUpdateTime.toJson(),
     "merchResponseStatus": merchResponseStatus.toJson(),
+    "merchTotalPrice": merchTotalPrice.toJson(),
     "merchListStatus": merchListStatus.toJson(),
+    "merchFulfillmentResponse": merchFulfillmentResponse.toJson(),
+    "merchOfferQuantity": merchOfferQuantity.toJson(),
+    "merchUpdateTime": merchUpdateTime.toJson(),
+    "merchDelivery": merchDelivery.toJson(),
   };
 }

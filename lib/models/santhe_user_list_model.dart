@@ -57,6 +57,8 @@ class UserList extends HiveObject {
       }
     }
 
+    print(data['listId']);
+
     return UserList(
       createListTime: DateTime.parse(data['createListTime']['timestampValue']),
       custId: int.parse(data['custId']['referenceValue'].toString().replaceAll(

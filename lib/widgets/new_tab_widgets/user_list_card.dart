@@ -1,16 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import 'package:santhe/REEEEEEEEEEE/api_test/test.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
-import '../../constants.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/api_service_controller.dart';
@@ -33,7 +30,6 @@ class UserListCard extends StatelessWidget {
     String imagePath = 'assets/basket0.png';
 
     //image logic
-    Color clr = Colors.orange;
     if (userList.items.isEmpty) {
       imagePath = 'assets/basket0.png';
     } else if (userList.items.length <= 10) {
@@ -112,12 +108,6 @@ class UserListCard extends StatelessWidget {
 
                       if (response == 1) {
                         box.add(newImportedList);
-                      } else {
-                        Get.dialog(const Card(
-                          child: Center(
-                            child: Text('Error!'),
-                          ),
-                        ));
                       }
                     },
                     backgroundColor: Colors.transparent,

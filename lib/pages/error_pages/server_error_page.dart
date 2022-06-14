@@ -20,7 +20,9 @@ class ServerErrorPage extends StatelessWidget{
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Padding(
+      body: Container(
+        height: screenSize.height,
+        width: screenSize.width,
         padding: EdgeInsets.all(15.sp),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

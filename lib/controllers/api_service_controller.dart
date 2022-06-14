@@ -187,7 +187,7 @@ class APIs extends GetxController {
       int nextItemCount = jsonResponse;
       return nextItemCount;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -294,7 +294,7 @@ class APIs extends GetxController {
       return cacheRefresh;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'error!';
     }
   }
@@ -316,7 +316,7 @@ class APIs extends GetxController {
       }
       // initCategoriesDB(); //since its already in main no need for it here
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       log('Request failed with status: ${response.statusCode}.');
     }
   }
@@ -410,7 +410,7 @@ class APIs extends GetxController {
       return userListsCount;
     } else {
       log('Error Occured! ${response.statusCode}: ${response.body}');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 9999999999;
     }
   }
@@ -436,7 +436,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -463,7 +463,7 @@ class APIs extends GetxController {
 
       return 1;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       log('Request failed with status: ${response.statusCode}.');
       return 0;
     }
@@ -525,7 +525,7 @@ class APIs extends GetxController {
       log('#####Returning with cat items#######');
       return categoryItems;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error, Category Does not Exist!';
     }
   }
@@ -602,8 +602,8 @@ class APIs extends GetxController {
       log(data.toString());
       return 1;
     } else {
-      log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      log('Request failed with status: ${response.reasonPhrase}.');
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -694,7 +694,7 @@ class APIs extends GetxController {
       var data = jsonDecode(response.body);
       log(data.toString());
       log('Error', error: response.reasonPhrase);
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -721,7 +721,7 @@ class APIs extends GetxController {
       var data = jsonDecode(response.body);
       log(data.toString());
       log('Error', error:response.reasonPhrase);
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -747,7 +747,7 @@ class APIs extends GetxController {
       var data = jsonDecode(response.body);
       log(data.toString());
       log('Error', error:response.reasonPhrase);
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -774,7 +774,7 @@ class APIs extends GetxController {
     } else {
       log('Request failed with status: ${response.statusCode}.');
       log('Reason: ${response.reasonPhrase}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error!';
     }
   }
@@ -808,7 +808,7 @@ class APIs extends GetxController {
       return true;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return false;
     }
   }
@@ -869,7 +869,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error!';
       // return 0;
     }
@@ -899,7 +899,7 @@ class APIs extends GetxController {
       }
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -950,7 +950,7 @@ class APIs extends GetxController {
     } else {
       log('Request failed with status: ${response.statusCode}.');
       log('Error', error:response.reasonPhrase);
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -1034,7 +1034,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -1097,7 +1097,7 @@ class APIs extends GetxController {
       }
       return userLists;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
     }
   }
@@ -1173,7 +1173,7 @@ class APIs extends GetxController {
       // }
       return resp;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
     }
   }
@@ -1190,7 +1190,7 @@ class APIs extends GetxController {
           merchantDetailsResponseFromJson(response.body);
       return resp;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving merchant details!';
     }
   }
@@ -1225,7 +1225,7 @@ class APIs extends GetxController {
     } else {
       log(
           'Request failed with status: ${response.statusCode}.Details? ${response.body}');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -1239,7 +1239,7 @@ class APIs extends GetxController {
       MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving merchant response';
     }
   }
@@ -1264,7 +1264,7 @@ class APIs extends GetxController {
     } else {
       log(
           'Request failed with status: ${response.statusCode}.Details? ${response.body}');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
@@ -1327,7 +1327,7 @@ class APIs extends GetxController {
       }
       return userLists;
     } else {
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
     }
   }
@@ -1355,7 +1355,7 @@ class APIs extends GetxController {
       return searchResults;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'error!';
     }
   }

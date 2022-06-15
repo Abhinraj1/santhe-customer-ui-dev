@@ -48,7 +48,7 @@ class OfferCard extends StatelessWidget {
         minTextAdapt: true,
         orientation: Orientation.portrait);
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(15.sp),
       child: GestureDetector(
         onTap: () {
           if (userList.processStatus == 'nomerchant' ||
@@ -141,77 +141,84 @@ class OfferCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(
                   top: 5.0, bottom: 10.0, left: 15.0, right: 15.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AutoSizeText(
-                              userList.listName,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  letterSpacing: 0.2,
-                                  fontSize: 21.sp,
-                                  color: Colors.orange,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 18.77.sp),
-                              child: AutoSizeText(
-                                '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
-                                style: TextStyle(
-                                    fontSize: 36.sp,
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.w700),
+              child: Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 10.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 15.sp),
+                                child: AutoSizeText(
+                                  userList.listName,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                      letterSpacing: 0.2,
+                                      fontSize: 21.sp,
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
-                              child: AutoSizeText(
-                                'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
-                                style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: Colors.transparent,
-                                    fontWeight: FontWeight.w400),
+                              Padding(
+                                padding: EdgeInsets.only(top: 18.77.sp),
+                                child: AutoSizeText(
+                                  '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
+                                  style: TextStyle(
+                                      fontSize: 36.sp,
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                                child: AutoSizeText(
+                                  'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.transparent,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Image.asset(
-                        imagePath,
-                        height: 139.2.sp,
-                        width: 139.2.sp,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AutoSizeText(
-                        'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            color: const Color(0xffBBBBBB),
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          right: 15.sp,
+                        Image.asset(
+                          imagePath,
+                          height: 139.2.sp,
+                          width: 139.2.sp,
                         ),
-                        child: OfferStatus(
-                          userList: userList,
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        AutoSizeText(
+                          'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              color: const Color(0xffBBBBBB),
+                              fontWeight: FontWeight.w400),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: 6.sp,
+                          ),
+                          child: OfferStatus(
+                            userList: userList,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

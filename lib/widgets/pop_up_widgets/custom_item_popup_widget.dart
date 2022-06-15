@@ -608,7 +608,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                     TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _customBrandController,
-                      maxLength: 45,
+                      maxLength: 30,
                       textAlignVertical: TextAlignVertical.center,
                       textInputAction: TextInputAction.next,
                       style: TextStyle(
@@ -665,7 +665,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                       keyboardType: TextInputType.text,
                       controller: _customNotesController,
                       textInputAction: TextInputAction.done,
-                      maxLength: 90,
+                      maxLength: 50,
                       textAlignVertical: TextAlignVertical.center,
                       maxLines: 3,
                       style: TextStyle(

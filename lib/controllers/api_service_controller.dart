@@ -267,7 +267,7 @@ class APIs extends GetxController {
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
-    log(jsonDecode(response.body));
+    log(jsonDecode(response.body).toString());
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -765,7 +765,7 @@ class APIs extends GetxController {
     var response =
         await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
 
-    log(jsonDecode(response.body));
+    log(jsonDecode(response.body).toString());
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       String sessionInfo = data['sessionInfo'] ?? 'Error';
@@ -1183,7 +1183,7 @@ class APIs extends GetxController {
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/merchant/$merchId';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));
-    log(response.body);
+    log(response.body.toString());
 
     if (response.statusCode == 200) {
       MerchantDetailsResponse resp =
@@ -1343,7 +1343,7 @@ class APIs extends GetxController {
 
     if (response.statusCode == 200) {
       log(searchQuery);
-      log(response.body);
+      log(response.body.toString());
       List jsonResponse = jsonDecode(response.body);
 
       for (int i = 0; i < jsonResponse.length; i++) {
@@ -1374,7 +1374,7 @@ class APIs extends GetxController {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      log(await response.stream.bytesToString());
+      log((await response.stream.bytesToString()).toString());
     } else {
       log('Error', error:response.reasonPhrase);
     }

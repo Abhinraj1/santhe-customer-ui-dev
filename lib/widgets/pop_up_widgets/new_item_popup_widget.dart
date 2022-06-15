@@ -38,9 +38,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   bool removeOverlay = false;
   bool isProcessing = false;
 
-  final brand = 'Your product type, brand or size goes here';
-  final notes = 'Mention type of package, number of packs, number of items in a pack etc here';
-
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   late final GroupButtonController _unitsController;
@@ -56,16 +53,18 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   @override
   void initState() {
-    // print(
+    // log(
     //     '${widget.item.unit.indexWhere((element) => element == widget.item.dUnit)}');
     _unitsController = GroupButtonController(
         selectedIndex: widget.item.unit.indexWhere((element) =>
             element.toLowerCase() == widget.item.dUnit.toLowerCase()));
-    // print('dUnit:${widget.item.dUnit}');
-    // print('Units:${widget.item.unit}');
+    // log('dUnit:${widget.item.dUnit}');
+    // log('Units:${widget.item.unit}');
     _qtyController = TextEditingController(text: '${widget.item.dQuantity}');
-    if(widget.item.dBrandType!=brand) _brandController.text = widget.item.dBrandType;
-    if(widget.item.dItemNotes!=notes) _notesController.text = widget.item.dItemNotes;
+    if(widget.edit){
+      _brandController.text = widget.item.dBrandType;
+      _notesController.text = widget.item.dItemNotes;
+    }
     imageController.editItemCustomImageUrl.value = '';
     imageController.editItemCustomImageItemId.value = '';
     imageController.addItemCustomImageUrl.value = '';
@@ -622,7 +621,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                     TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _brandController,
-                      maxLength: 45,
+                      maxLength: 30,
                       // maxLines: 2,
                       textAlignVertical: TextAlignVertical.center,
                       textInputAction: TextInputAction.next,
@@ -678,7 +677,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                     TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _notesController,
-                      maxLength: 90,
+                      maxLength: 50,
                       textAlignVertical: TextAlignVertical.center,
                       textInputAction: TextInputAction.done,
                       maxLines: 3,

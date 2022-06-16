@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:resize/resize.dart';
@@ -37,7 +38,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    print('in c' + widget.listEventId.substring(0, 10));
+    if(widget.fromNotification){
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarColor: Colors.orange));
+    }
     _chatController.inChatScreen = true;
     AppHelpers().getToken.then((value) => token = value);
     super.initState();

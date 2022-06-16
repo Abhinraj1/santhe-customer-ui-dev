@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
+import 'package:santhe/core/app_helpers.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -40,8 +41,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
+  late final TextEditingController _customItemNameController;
   late final GroupButtonController _unitsController;
   late final TextEditingController _qtyController;
+  final placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
   final apiController = Get.find<APIs>();
   int custPhone =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
@@ -61,14 +64,30 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
     // log('dUnit:${widget.item.dUnit}');
     // log('Units:${widget.item.unit}');
     _qtyController = TextEditingController(text: '${widget.item.dQuantity}');
-    if(widget.edit){
-      _brandController.text = widget.item.dBrandType;
-      _notesController.text = widget.item.dItemNotes;
+    _customItemNameController =
+        TextEditingController(text: widget.item.itemName);
+    if (widget.edit) {
+      if (!widget.item.dBrandType.contains(placeHolderIdentifier)) {
+        _brandController.text = widget.item.dBrandType;
+      }
+      if (!widget.item.dItemNotes.contains(placeHolderIdentifier)) {
+        _notesController.text = widget.item.dItemNotes;
+      }
     }
     imageController.editItemCustomImageUrl.value = '';
     imageController.editItemCustomImageItemId.value = '';
     imageController.addItemCustomImageUrl.value = '';
     super.initState();
+  }
+
+  bool customEdit(){
+    if(widget.edit){
+      if(item.catId=='4000'){
+        return true;
+      }
+    }
+
+    return false;
   }
 
   late final Item item = widget.item;
@@ -111,7 +130,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: AutoSizeText(
-                      item.itemName,
+                      item.catId=='4000'?
+                          'Custom Item'
+                          : item.itemName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.orange,
@@ -142,6 +163,62 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if(customEdit())
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 7.sp,
+                        // top: 21.sp,
+                      ),
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Name',
+                            style: kLabelTextStyle,
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 13.sp))
+                            ]),
+                      ),
+                    ),
+                    if(customEdit())
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: _customItemNameController,
+                      textInputAction: TextInputAction.next,
+                      maxLength: 30,
+                      // maxLines: 2,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: TextStyle(
+                          color: Colors.grey.shade500,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.0),
+                      onSaved: (value) {
+                        _customItemNameController.text = value!;
+                      },
+                      decoration: InputDecoration(
+                        counterStyle: const TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                              kTextFieldCircularBorderRadius),
+                          borderSide: const BorderSide(
+                              width: 1.0, color: kTextFieldGrey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                              kTextFieldCircularBorderRadius),
+                          borderSide: const BorderSide(
+                              width: 1.0, color: kTextFieldGrey),
+                        ),
+                        hintText: 'Enter product name here...',
+                        hintStyle: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey.shade500),
+                      ),
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.ideographic,
@@ -207,9 +284,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   controller: _qtyController,
                                   textInputAction: TextInputAction.next,
                                   textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 6,
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  maxLength: 4,
                                   textAlignVertical: TextAlignVertical.center,
+                                  inputFormatters: [DecimalTextInputFormatter(decimalRange: 1)],
                                   style: const TextStyle(
                                       color: Colors.orange,
                                       fontWeight: FontWeight.w700,
@@ -498,8 +576,8 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                                 : null;
                                                             url.isNotEmpty
                                                                 ? imageController
-                                                                .editItemCustomImageUrl
-                                                                .value = url
+                                                                    .editItemCustomImageUrl
+                                                                    .value = url
                                                                 : null;
                                                           },
                                                           child:
@@ -730,144 +808,200 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
                                   final itemUnit = selectedUnit;
 
-                                  if (_formKey.currentState!.validate()) {
-                                    //--------------------------Creating List Item from Item and new data gathered from user------------------------
-                                    if (imageController.editItemCustomImageUrl
-                                            .value.isEmpty ||
-                                        imageController
-                                                .editItemCustomImageUrl.value ==
-                                            '') {
-                                      final listItem = ListItem(
-                                        brandType: _brandController.text,
-                                        itemId: '${item.itemId}',
-                                        itemImageId: item.itemImageId,
-                                        itemName: item.itemName,
-                                        quantity:
-                                            double.parse(_qtyController.text),
-                                        notes: _notesController.text,
-                                        unit: itemUnit,
-                                        possibleUnits: item.unit,
-                                        catName: Boxes.getCategoriesDB()
-                                                .get(int.parse(item.catId
-                                                    .replaceAll(
-                                                        'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                        '')))
-                                                ?.catName ??
-                                            'Others',
-                                        catId: int.parse(
-                                          item.catId.replaceAll(
-                                              'projects/santhe-425a8/databases/(default)/documents/category/',
-                                              ''),
-                                        ),
-                                      );
-                                      if (widget.edit) {
-                                        currentUserList.items.removeWhere(
-                                            (element) =>
-                                                element.itemId ==
-                                                listItem.itemId);
-                                      }
-                                      currentUserList.items.add(listItem);
-                                      //make changes persistent
-                                      currentUserList.save();
-                                      Navigator.pop(context);
-                                    } else {
-                                      int itemCount =
-                                          await apiController.getItemsCount();
-
-                                      if (itemCount != 0) {
-                                        Item newCustomItem = Item(
-                                            dBrandType: _brandController.text,
-                                            dItemNotes: _notesController.text,
-                                            itemImageTn: imageController
-                                                .editItemCustomImageUrl.value,
-                                            catId: item.catId,
-                                            createUser: custPhone,
-                                            dQuantity: 1,
-                                            dUnit: selectedUnit,
-                                            itemAlias: item.itemName,
-                                            itemId: itemCount,
-                                            itemImageId: imageController
-                                                .editItemCustomImageUrl.value,
-                                            itemName: item.itemName,
-                                            status: 'active',
-                                            unit: [selectedUnit],
-                                            updateUser: custPhone);
-
-                                        int response = await apiController
-                                            .addItem(newCustomItem);
-
-                                        if (response == 1) {
-                                          final listItem = ListItem(
-                                            brandType: _brandController.text,
-                                            //item ref
-                                            itemId: '${item.itemId}',
-                                            itemImageId: imageController
-                                                .editItemCustomImageUrl.value,
-                                            itemName: item.itemName,
-                                            quantity: double.parse(
-                                                _qtyController.text),
-                                            notes: _notesController.text,
-                                            unit: itemUnit,
-                                            possibleUnits: item.unit,
-                                            catName: Boxes.getCategoriesDB()
-                                                    .get(int.parse(item.catId
-                                                        .replaceAll(
-                                                            'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                            '')))
-                                                    ?.catName ??
-                                                'Others',
-                                            catId: int.parse(
-                                              item.catId.replaceAll(
-                                                  'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                  ''),
-                                            ),
-                                          );
-
-                                          if (widget.edit) {
-                                            currentUserList.items.removeWhere(
-                                                (element) =>
-                                                    element.itemId ==
-                                                    '${item.itemId}');
-                                          }
-                                          currentUserList.items.add(listItem);
-                                          //make changes persistent
-                                          currentUserList.save();
-                                        } else {
-                                          Get.snackbar('Network Error',
-                                              'Error Adding item to the list!',
-                                              backgroundColor: Colors.white,
-                                              colorText: Colors.grey);
-                                        }
-                                        Navigator.pop(context);
-                                      } else {
-                                        Get.snackbar(
-                                          '',
-                                          '',
-                                          titleText: const Padding(
-                                            padding: EdgeInsets.only(left: 8.0),
-                                            child: Text('Enter Quantity'),
-                                          ),
-                                          messageText: const Padding(
-                                            padding: EdgeInsets.only(left: 8.0),
-                                            child: Text(
-                                                'Please enter some quantity to add...'),
-                                          ),
-                                          margin: const EdgeInsets.all(10.0),
-                                          padding: const EdgeInsets.all(8.0),
-                                          backgroundColor: Colors.white,
-                                          shouldIconPulse: true,
-                                          icon: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Icon(
-                                              CupertinoIcons
-                                                  .exclamationmark_triangle_fill,
-                                              color: Colors.yellow,
-                                              size: 45,
-                                            ),
+                                  if(_customItemNameController.text.isEmpty){
+                                    if (_formKey.currentState!.validate()) {
+                                      //--------------------------Creating List Item from Item and new data gathered from user------------------------
+                                      if (imageController.editItemCustomImageUrl
+                                              .value.isEmpty ||
+                                          imageController.editItemCustomImageUrl
+                                                  .value ==
+                                              '') {
+                                        final listItem = ListItem(
+                                          brandType:
+                                              _brandController.text.isEmpty
+                                                  ? item.dItemNotes +
+                                                      placeHolderIdentifier
+                                                  : _brandController.text,
+                                          itemId: '${item.itemId}',
+                                          itemImageId: item.itemImageId,
+                                          itemName: _customItemNameController.text,
+                                          quantity:
+                                              double.parse(_qtyController.text),
+                                          notes: _notesController.text.isEmpty
+                                              ? item.dItemNotes +
+                                                  placeHolderIdentifier
+                                              : _notesController.text,
+                                          unit: itemUnit,
+                                          possibleUnits: item.unit,
+                                          catName: Boxes.getCategoriesDB()
+                                                  .get(int.parse(item.catId
+                                                      .replaceAll(
+                                                          'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                          '')))
+                                                  ?.catName ??
+                                              'Others',
+                                          catId: int.parse(
+                                            item.catId.replaceAll(
+                                                'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                ''),
                                           ),
                                         );
+                                        if (widget.edit) {
+                                          currentUserList.items.removeWhere(
+                                              (element) =>
+                                                  element.itemId ==
+                                                  listItem.itemId);
+                                        }
+                                        currentUserList.items.add(listItem);
+                                        //make changes persistent
+                                        currentUserList.save();
+                                        Navigator.pop(context);
+                                      } else {
+                                        int itemCount =
+                                            await apiController.getItemsCount();
+
+                                        if (itemCount != 0) {
+                                          Item newCustomItem = Item(
+                                              dBrandType:
+                                                  _brandController.text.isEmpty
+                                                      ? item.dItemNotes +
+                                                          placeHolderIdentifier
+                                                      : _brandController.text,
+                                              dItemNotes:
+                                                  _notesController.text.isEmpty
+                                                      ? item.dItemNotes +
+                                                          placeHolderIdentifier
+                                                      : _notesController.text,
+                                              itemImageTn: imageController
+                                                  .editItemCustomImageUrl.value,
+                                              catId: item.catId,
+                                              createUser: custPhone,
+                                              dQuantity: 1,
+                                              dUnit: selectedUnit,
+                                              itemAlias: _customItemNameController.text,
+                                              itemId: itemCount,
+                                              itemImageId: imageController
+                                                  .editItemCustomImageUrl.value,
+                                              itemName: _customItemNameController.text,
+                                              status: item.catId=='4000'?'inactive':'active',
+                                              unit: [selectedUnit],
+                                              updateUser: custPhone);
+
+                                          int response = await apiController
+                                              .addItem(newCustomItem);
+
+                                          if (response == 1) {
+                                            final listItem = ListItem(
+                                              brandType:
+                                                  _brandController.text.isEmpty
+                                                      ? item.dItemNotes +
+                                                          placeHolderIdentifier
+                                                      : _brandController.text,
+                                              //item ref
+                                              itemId: '${item.itemId}',
+                                              itemImageId: imageController
+                                                  .editItemCustomImageUrl.value,
+                                              itemName: _customItemNameController.text,
+                                              quantity: double.parse(
+                                                  _qtyController.text),
+                                              notes:
+                                                  _notesController.text.isEmpty
+                                                      ? item.dItemNotes +
+                                                          placeHolderIdentifier
+                                                      : _notesController.text,
+                                              unit: itemUnit,
+                                              possibleUnits: item.unit,
+                                              catName: Boxes.getCategoriesDB()
+                                                      .get(int.parse(item.catId
+                                                          .replaceAll(
+                                                              'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                              '')))
+                                                      ?.catName ??
+                                                  'Others',
+                                              catId: int.parse(
+                                                item.catId.replaceAll(
+                                                    'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                    ''),
+                                              ),
+                                            );
+
+                                            if (widget.edit) {
+                                              currentUserList.items.removeWhere(
+                                                  (element) =>
+                                                      element.itemId ==
+                                                      '${item.itemId}');
+                                            }
+                                            currentUserList.items.add(listItem);
+                                            //make changes persistent
+                                            currentUserList.save();
+                                          } else {
+                                            Get.snackbar('Network Error',
+                                                'Error Adding item to the list!',
+                                                backgroundColor: Colors.white,
+                                                colorText: Colors.grey);
+                                          }
+                                          Navigator.pop(context);
+                                        } else {
+                                          Get.snackbar(
+                                            '',
+                                            '',
+                                            titleText: const Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 8.0),
+                                              child: Text('Enter Quantity'),
+                                            ),
+                                            messageText: const Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 8.0),
+                                              child: Text(
+                                                  'Please enter some quantity to add...'),
+                                            ),
+                                            margin: const EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.all(8.0),
+                                            backgroundColor: Colors.white,
+                                            shouldIconPulse: true,
+                                            icon: const Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Icon(
+                                                CupertinoIcons
+                                                    .exclamationmark_triangle_fill,
+                                                color: Colors.yellow,
+                                                size: 45,
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       }
                                     }
+                                  }else{
+                                    Get.snackbar(
+                                      '',
+                                      '',
+                                      titleText: const Padding(
+                                        padding:
+                                        EdgeInsets.only(left: 8.0),
+                                        child: Text('Enter Item Name'),
+                                      ),
+                                      messageText: const Padding(
+                                        padding:
+                                        EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                            'Item Name cannot be empty'),
+                                      ),
+                                      margin: const EdgeInsets.all(10.0),
+                                      padding: const EdgeInsets.all(8.0),
+                                      backgroundColor: Colors.white,
+                                      shouldIconPulse: true,
+                                      icon: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          CupertinoIcons
+                                              .exclamationmark_triangle_fill,
+                                          color: Colors.yellow,
+                                          size: 45,
+                                        ),
+                                      ),
+                                    );
                                   }
 
                                   setState(() {

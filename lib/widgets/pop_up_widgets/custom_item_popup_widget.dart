@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
+import 'package:santhe/core/app_helpers.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -36,8 +37,9 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   final TextEditingController _customNotesController = TextEditingController();
   late final TextEditingController _customItemNameController =
       TextEditingController(text: searchQuery);
+  final placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
   final _unitsController = GroupButtonController(selectedIndex: 0);
-  List<String> availableUnits = ['Kg', 'gms', 'L', 'ml', 'pack/s', 'Piece/s'];
+  List<String> availableUnits = ['Kg', 'gms', 'L', 'ml', 'pack/s', 'piece/s'];
   int customItemId = 4000;
   TextStyle kLabelTextStyle = const TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
@@ -239,8 +241,9 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                   controller: _customQtyController,
                                   textInputAction: TextInputAction.next,
                                   textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 6,
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  maxLength: 4,
+                                  inputFormatters: [DecimalTextInputFormatter(decimalRange: 1)],
                                   textAlignVertical: TextAlignVertical.center,
                                   style: const TextStyle(
                                       color: Colors.orange,
@@ -338,7 +341,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     CachedNetworkImage(
                                       imageUrl: imageController
                                               .addItemCustomImageUrl.isEmpty
-                                          ? 'https://icon-library.com/images/add-new-icon/add-new-icon-29.jpg'
+                                          ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
                                           : imageController
                                               .addItemCustomImageUrl.value,
                                       width: screenWidth * 25,
@@ -734,10 +737,16 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     if (itemCount != 0) {
                                       //todo add custom item to firebase
                                       Item newCustomItem = Item(
-                                          dBrandType:
-                                              _customBrandController.text,
-                                          dItemNotes:
-                                              _customNotesController.text,
+                                          dBrandType: _customBrandController
+                                                  .text.isEmpty
+                                              ? 'You can mention brand, type or size of the item here' +
+                                                  placeHolderIdentifier
+                                              : _customBrandController.text,
+                                          dItemNotes: _customNotesController
+                                                  .text.isEmpty
+                                              ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
+                                                  placeHolderIdentifier
+                                              : _customNotesController.text,
                                           itemImageTn: imageController
                                               .addItemCustomImageUrl.value,
                                           catId: '4000',
@@ -748,7 +757,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                               _customItemNameController.text,
                                           itemId: itemCount,
                                           itemImageId: image.isEmpty
-                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/default_placeholder.png?alt=media&token=5ffefd14-c31b-4016-88e6-3ae1ef08cf5e'
+                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
                                               : image,
                                           itemName:
                                               _customItemNameController.text,
@@ -766,20 +775,26 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                             .get(currentUserListDBKey)
                                             ?.items
                                             .add(ListItem(
-                                              brandType:
-                                                  _customBrandController.text,
+                                              brandType: _customBrandController
+                                                      .text.isEmpty
+                                                  ? 'You can mention brand, type or size of the item here' +
+                                                      placeHolderIdentifier
+                                                  : _customBrandController.text,
                                               //item ref
                                               itemId: '$itemCount',
                                               itemImageId: image.isEmpty
-                                                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/default_placeholder.png?alt=media&token=5ffefd14-c31b-4016-88e6-3ae1ef08cf5e'
+                                                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
                                                   : image,
                                               itemName:
                                                   _customItemNameController
                                                       .text,
                                               quantity: double.parse(
                                                   _customQtyController.text),
-                                              notes:
-                                                  _customNotesController.text,
+                                              notes: _customNotesController
+                                                      .text.isEmpty
+                                                  ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
+                                                      placeHolderIdentifier
+                                                  : _customNotesController.text,
                                               unit: itemUnit,
                                               possibleUnits: availableUnits,
                                               catName: 'Others',

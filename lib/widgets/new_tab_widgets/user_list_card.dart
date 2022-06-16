@@ -220,7 +220,7 @@ class UserListCard extends StatelessWidget {
                               padding: EdgeInsets.only(top: 18.77.sp),
                               child: AutoSizeText(
                                 userList.listName,
-                                maxLines: 2,
+                                maxLines: 1,
                                 style: TextStyle(
                                     letterSpacing: 0.2,
                                     fontSize: 21.sp,

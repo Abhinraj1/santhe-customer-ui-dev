@@ -2,27 +2,44 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 
-class NoInternetPage extends StatelessWidget {
+class NoInternetPage extends StatefulWidget {
   const NoInternetPage({Key? key}) : super(key: key);
+
+  @override
+  State<NoInternetPage> createState() => _NoInternetPageState();
+}
+
+class _NoInternetPageState extends State<NoInternetPage> {
+  late Timer timer;
 
   void checkInternet(BuildContext context) async{
     final hasConnection = await AppHelpers.checkConnection();
     if (hasConnection) {
-      Get.back();
+      timer.cancel();
+      Navigator.of(context).pop();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    Timer.periodic(
-      const Duration(seconds: 2),
-      (_) => checkInternet(context),
-    );
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
+  @override
+  void initState() {
+    timer = Timer.periodic(
+      const Duration(seconds: 2),
+          (_) => checkInternet(context),
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,

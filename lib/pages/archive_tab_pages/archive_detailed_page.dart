@@ -8,11 +8,19 @@ import 'package:santhe/core/app_theme.dart';
 
 import '../../models/santhe_list_item_model.dart';
 import '../../models/santhe_user_list_model.dart';
-import '../../widgets/new_tab_widgets/user_list_widgets/list_item_card.dart';
 
 class ArchiveDetailedPage extends StatelessWidget {
   final UserList userList;
+  final String placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
+
   const ArchiveDetailedPage({Key? key, required this.userList}) : super(key: key);
+
+  String checkPlaceHolder(String data) {
+    if (data.contains(placeHolderIdentifier)) {
+      return '';
+    }
+    return data;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,11 +150,11 @@ class ArchiveDetailedPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(element.itemName),
-                                  element.brandType.isEmpty
+                                  checkPlaceHolder(element.brandType).isEmpty
                                       ? Text(
-                                    element.notes.isEmpty
+                                    checkPlaceHolder(element.notes).isEmpty
                                         ? '${element.quantity} ${element.unit}'
-                                        : '${element.quantity} ${element.unit},\n${element.notes}',
+                                        : '${element.quantity} ${element.unit},\n${checkPlaceHolder(element.notes)}',
                                     // softWrap: false,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -155,7 +163,7 @@ class ArchiveDetailedPage extends StatelessWidget {
                                     ),
                                   )
                                       : Text(
-                                    '''${element.quantity} ${element.unit}, ${element.notes.isEmpty ? element.brandType : '${element.brandType},\n${element.notes}'}''',
+                                    '''${element.quantity} ${element.unit}, ${checkPlaceHolder(element.notes).isEmpty ? checkPlaceHolder(element.brandType) : '${checkPlaceHolder(element.brandType)},\n${checkPlaceHolder(element.notes)}'}''',
                                     textAlign: TextAlign.start,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,

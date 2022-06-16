@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 
 enum Status {
@@ -87,7 +88,7 @@ class OfferStatus extends StatelessWidget {
             '${userList.listOfferCounter} Offers Available',
             style: TextStyle(
                 fontSize: 14.sp,
-                color: Colors.green,
+                color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
         }
@@ -107,7 +108,7 @@ class OfferStatus extends StatelessWidget {
             '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
             style: TextStyle(
                 fontSize: 14.sp,
-                color: const Color(0xffFFC300),
+                color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
         }
@@ -142,9 +143,9 @@ class OfferStatus extends StatelessWidget {
         }
       case Status.maxOffer:
         {
-          return const Icon(
-            CupertinoIcons.hand_thumbsup_fill,
-            color: Colors.deepPurple,
+          return Icon(
+            CupertinoIcons.hand_thumbsup,
+            color: AppColors().brandDark,
           );
         }
       case Status.noOffer:
@@ -165,16 +166,16 @@ class OfferStatus extends StatelessWidget {
 
       case Status.waiting:
         {
-          return const Icon(
+          return Icon(
             Icons.hourglass_bottom_rounded,
-            color: Colors.orangeAccent,
+            color: AppColors().brandDark,
           );
         }
       case Status.minOffer:
         {
-          return const Icon(
+          return Icon(
             CupertinoIcons.hand_thumbsup,
-            color: Colors.orangeAccent,
+            color: AppColors().brandDark,
           );
         }
       case Status.expired:

@@ -155,7 +155,7 @@ class OfferCard extends StatelessWidget {
                               padding: EdgeInsets.only(top: 18.77.sp),
                               child: AutoSizeText(
                                 userList.listName,
-                                maxLines: 2,
+                                maxLines: 1,
                                 style: TextStyle(
                                     letterSpacing: 0.2,
                                     fontSize: 21.sp,
@@ -195,7 +195,7 @@ class OfferCard extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          right: 6.sp,
+                          right: 10.sp,
                         ),
                         child: OfferStatus(
                           userList: userList,

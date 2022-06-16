@@ -4,39 +4,36 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 
 class MerchantItemCard extends StatelessWidget {
   final OfferItem merchantItem;
+  final String placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
 
   const MerchantItemCard({required this.merchantItem, Key? key})
       : super(key: key);
 
+  String checkPlaceHolder(String data) {
+    log('${data.contains(placeHolderIdentifier)}');
+    if (data.contains(placeHolderIdentifier)) {
+      return '';
+    }
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width / 100;
-    final screenSize = MediaQuery
-        .of(context)
-        .size;
+    double screenWidth = MediaQuery.of(context).size.width / 100;
+    final screenSize = MediaQuery.of(context).size;
     String removeDecimalZeroFormat(double n) {
       return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
 
     ScreenUtil.init(
         BoxConstraints(
-            maxWidth: MediaQuery
-                .of(context)
-                .size
-                .width,
-            maxHeight: MediaQuery
-                .of(context)
-                .size
-                .height),
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
         designSize: const Size(390, 844),
         context: context,
         minTextAdapt: true,
@@ -50,12 +47,11 @@ class MerchantItemCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: CachedNetworkImage(
               imageUrl: int.parse(merchantItem.itemId.replaceAll(
-                  'projects/santhe-425a8/databases/(default)/documents/item/',
-                  '')) <
-                  4000
-                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${merchantItem
-                  .itemImageId}'
-                  : merchantItem.itemImageId,
+                          'projects/santhe-425a8/databases/(default)/documents/item/',
+                          '')) <
+                      4000
+                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${merchantItem.itemImageId}'
+                  : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/'+merchantItem.itemImageId,
               width: 65.sp,
               height: 65.sp,
               fit: BoxFit.cover,
@@ -87,36 +83,29 @@ class MerchantItemCard extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                merchantItem.brandType.isEmpty
+                checkPlaceHolder(merchantItem.brandType).isEmpty
                     ? Text(
-                  merchantItem.itemNotes.isEmpty
-                      ? '${removeDecimalZeroFormat(
-                      merchantItem.quantity)} ${merchantItem.unit}'
-                      : '${removeDecimalZeroFormat(
-                      merchantItem.quantity)} ${merchantItem
-                      .unit}, ${merchantItem.itemNotes}',
-                  // softWrap: false,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 18.sp,
-                  ),
-                )
+                        checkPlaceHolder(merchantItem.itemNotes).isEmpty
+                            ? '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}'
+                            : '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${checkPlaceHolder(merchantItem.itemNotes)}',
+                        // softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 18.sp,
+                        ),
+                      )
                     : Text(
-                  '${removeDecimalZeroFormat(
-                      merchantItem.quantity)} ${merchantItem
-                      .unit}, ${merchantItem.itemNotes.isEmpty ? merchantItem
-                      .brandType : '${merchantItem.brandType}, ${merchantItem
-                      .itemNotes}'}',
-                  // softWrap: true,
-                  maxLines: 2,
-                  // minFontSize: 10,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 18.sp,
-                  ),
-                ),
+                        '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${checkPlaceHolder(merchantItem.itemNotes).isEmpty ? checkPlaceHolder(merchantItem.brandType) : '${checkPlaceHolder(merchantItem.brandType)}, ${checkPlaceHolder(merchantItem.itemNotes)}'}',
+                        // softWrap: true,
+                        maxLines: 2,
+                        // minFontSize: 10,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 18.sp,
+                        ),
+                      ),
               ],
             ),
           ),
@@ -128,7 +117,7 @@ class MerchantItemCard extends StatelessWidget {
                   ? CupertinoIcons.checkmark_circle_fill
                   : CupertinoIcons.xmark_circle_fill,
               color:
-              merchantItem.merchAvailability ? Colors.green : Colors.red),
+                  merchantItem.merchAvailability ? Colors.green : Colors.red),
           const SizedBox(width: 10.0),
           Expanded(
             child: Text(

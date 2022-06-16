@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 
 class AppHelpers {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -48,5 +50,42 @@ Get it for free at https://santhe.in''';
       hasConnection = false;
     }
     return hasConnection;
+  }
+}
+
+class DecimalTextInputFormatter extends TextInputFormatter {
+  DecimalTextInputFormatter({required this.decimalRange})
+      : assert(decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, // unused.
+      TextEditingValue newValue,
+      ) {
+    TextSelection newSelection = newValue.selection;
+    String truncated = newValue.text;
+
+    String value = newValue.text;
+
+    if (value.contains(".") &&
+        value.substring(value.indexOf(".") + 1).length > decimalRange) {
+      truncated = oldValue.text;
+      newSelection = oldValue.selection;
+    } else if (value == ".") {
+      truncated = "0.";
+
+      newSelection = newValue.selection.copyWith(
+        baseOffset: min(truncated.length, truncated.length + 1),
+        extentOffset: min(truncated.length, truncated.length + 1),
+      );
+    }
+
+    return TextEditingValue(
+      text: truncated,
+      selection: newSelection,
+      composing: TextRange.empty,
+    );
   }
 }

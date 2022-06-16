@@ -6,12 +6,10 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/core/app_shared_preference.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart' as uc;
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
-import '../../models/santhe_user_list_model.dart';
 import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 import '../customer_registration_pages/customer_registration.dart';
@@ -120,7 +118,7 @@ class _OtpScreenState extends State<OtpScreen> {
             Padding(
               padding: EdgeInsets.only(top: 34.h),
               child: Text(
-                _otp.length == 0
+                _otp.isEmpty
                     ? 'Enter OTP to verify'
                     : _otp.length < 6 && _isSubmitted
                         ? 'Invalid OTP'
@@ -338,7 +336,7 @@ class _OtpScreenState extends State<OtpScreen> {
         Boxes.getUserPrefs().put('isLoggedIn', true);
         Boxes.getUserPrefs().put('showHome', true);
         Boxes.getUserPrefs().put('isRegistered', true);
-        Get.off(() => const HomePage(), transition: Transition.fadeIn);
+        Get.offAll(() => const HomePage(), transition: Transition.fadeIn);
       }
     }
   }

@@ -5,22 +5,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
-import 'package:santhe/widgets/restart_widget.dart';
 
 class NoInternetPage extends StatelessWidget {
-  NoInternetPage({Key? key, this.fromException = false}) : super(key: key);
-  bool fromException;
+  const NoInternetPage({Key? key}) : super(key: key);
+
+  void checkInternet(BuildContext context) async{
+    final hasConnection = await AppHelpers.checkConnection();
+    if (hasConnection) {
+      Get.back();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Timer.periodic(
       const Duration(seconds: 2),
-      (_) async {
-        final hasConnection = await AppHelpers.checkConnection();
-        if (hasConnection) {
-          fromException ? RestartWidget.restartApp(context) : Get.back();
-        }
-      },
+      (_) => checkInternet(context),
     );
 
     ScreenUtil.init(
@@ -76,6 +76,30 @@ class NoInternetPage extends StatelessWidget {
                     fontFamily: 'Mulish',
                     color: AppColors().grey100,
                     fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 40.sp,
+              ),
+              InkWell(
+                onTap: () => checkInternet(context),
+                child: Container(
+                  height: 50.sp,
+                  width: screenSize.width/3,
+                  decoration: BoxDecoration(
+                    color: AppColors().brandDark,
+                    borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Try Again',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: AppColors().white100,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Mulish'
+                    ),
                   ),
                 ),
               ),

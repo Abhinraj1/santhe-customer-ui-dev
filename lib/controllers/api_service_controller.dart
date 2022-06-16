@@ -129,13 +129,11 @@ class APIs extends GetxController {
             return await http.get(url);
           } on SocketException {
             Get.to(
-              () => NoInternetPage(
-                fromException: true,
-              ),
+              () => const NoInternetPage(),
               transition: Transition.fade,
             );
           }
-          break;
+          throw NoInternetError();
         }
 
       case 2:
@@ -144,13 +142,11 @@ class APIs extends GetxController {
             return await http.post(url, body: body!);
           } on SocketException {
             Get.to(
-              () => NoInternetPage(
-                fromException: true,
-              ),
+              () => const NoInternetPage(),
               transition: Transition.fade,
             );
           }
-          break;
+          throw NoInternetError();
         }
 
       case 3:
@@ -159,19 +155,16 @@ class APIs extends GetxController {
             return await http.patch(url, body: body!);
           } on SocketException {
             Get.to(
-              () => NoInternetPage(
-                fromException: true,
-              ),
+              () => const NoInternetPage(),
               transition: Transition.fade,
             );
           }
-          break;
+          throw NoInternetError();
         }
 
       default:
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
-    throw NoInternetError;
   }
 
   //get

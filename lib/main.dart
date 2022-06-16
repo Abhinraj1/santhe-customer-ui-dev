@@ -14,7 +14,6 @@ import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/pages/customer_registration_pages/customer_registration.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/pages/splash_to_onboarding.dart';
-import 'package:santhe/widgets/restart_widget.dart';
 import 'controllers/boxes_controller.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'controllers/chat_controller.dart';
@@ -81,12 +80,10 @@ void main() async {
   Notifications().fcmInit();
 
   runApp(
-    RestartWidget(
-      child: MyApp(
-        showHome: showHome,
-        isRegistered: isRegistered,
-        isLoggedIn: isLoggedIn,
-      ),
+    MyApp(
+      showHome: showHome,
+      isRegistered: isRegistered,
+      isLoggedIn: isLoggedIn,
     ),
   );
 }

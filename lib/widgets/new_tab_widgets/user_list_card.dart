@@ -49,14 +49,14 @@ class UserListCard extends StatelessWidget {
         minTextAdapt: true,
         orientation: Orientation.portrait);
     return Padding(
-      padding: EdgeInsets.all(15.sp),
+      padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
           //print(userList.items.first.quantity);
           Get.to(() => UserListPage(userList: userList, userKey: userKey));
         },
         child: Container(
-          // padding: const EdgeInsets.symmetric(vertical: 5.0),
+          // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.0),
@@ -85,7 +85,7 @@ class UserListCard extends StatelessWidget {
                   child: SlidableAction(
                     onPressed: (context) async {
                       int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      await apiController.getAllCustomerLists(custId);
                       UserList oldUserList = Boxes.getUserListDB()
                           .values
                           .firstWhere(
@@ -154,15 +154,15 @@ class UserListCard extends StatelessWidget {
                           Get.closeCurrentSnackbar();
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
-                                () async {
-                              int response = await apiController
-                                  .undoDeleteUserList(userList.listId, "new");
-                              if (response == 1) {
-                                Boxes.getUserListDB().add(userList);
-                              } else {
-                                errorMsg('Unable to undo the list', '');
-                              }
-                            });
+                                    () async {
+                                  int response = await apiController
+                                      .undoDeleteUserList(userList.listId, "new");
+                                  if (response == 1) {
+                                    Boxes.getUserListDB().add(userList);
+                                  } else {
+                                    errorMsg('Unable to undo the list', '');
+                                  }
+                                });
                           }
                           pressCount++;
                           if (box.length >= 2) {
@@ -183,7 +183,7 @@ class UserListCard extends StatelessWidget {
                       apiController.deletedUserLists.add(userList);
 
                       int response =
-                          await apiController.deleteUserList(userList.listId);
+                      await apiController.deleteUserList(userList.listId);
 
                       if (response == 1) {
                         apiController.deletedUserLists.remove(userList);
@@ -204,8 +204,8 @@ class UserListCard extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+              padding: const EdgeInsets.only(
+                  top: 5.0, bottom: 10.0, left: 15.0, right: 15.0),
               child: Column(
                 children: [
                   Row(
@@ -216,17 +216,14 @@ class UserListCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 18.77.sp),
-                              child: AutoSizeText(
-                                userList.listName,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    letterSpacing: 0.2,
-                                    fontSize: 21.sp,
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.w400),
-                              ),
+                            AutoSizeText(
+                              userList.listName,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  letterSpacing: 0.2,
+                                  fontSize: 21.sp,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w400),
                             ),
                             Padding(
                               padding: EdgeInsets.only(top: 18.77.sp),
@@ -238,6 +235,17 @@ class UserListCard extends StatelessWidget {
                                     fontWeight: FontWeight.w700),
                               ),
                             ),
+                            Padding(
+                              padding:
+                              EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                              child: AutoSizeText(
+                                'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.transparent,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -245,24 +253,21 @@ class UserListCard extends StatelessWidget {
                         imagePath,
                         height: 139.2.sp,
                         width: 139.2.sp,
-                      )
+                      ),
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.sp),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.topLeft,
-                      child: AutoSizeText(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AutoSizeText(
                         'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
-                        textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 14.sp,
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
                       ),
-                    ),
-                  ),
+                    ],
+                  )
                 ],
               ),
             ),

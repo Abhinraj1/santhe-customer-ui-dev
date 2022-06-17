@@ -118,38 +118,35 @@ class _SplashToHomeState extends State<SplashToHome> {
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.dark,
     ));
-
     checkNet();
-
+    timer = Timer.periodic(const Duration(seconds: 4), (_) => checkNet());
     super.initState();
   }
 
   void checkNet() async {
     final hasNet = await AppHelpers.checkConnection();
     if (hasNet) {
+      timer.cancel();
       bootHome();
       init();
     } else {
       Get.to(
-            () => NoInternetPage(),
+            () => const NoInternetPage(),
         transition: Transition.fade,
       );
     }
   }
 
-  Timer? timer;
+  late final Timer timer;
 
   @override
   void dispose() {
-    if(timer!=null) {
-      timer!.cancel();
-    }
+    timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    timer = Timer.periodic(const Duration(seconds: 4), (_) => checkNet());
     return Container(
       color: Colors.orange,
       width: double.infinity,

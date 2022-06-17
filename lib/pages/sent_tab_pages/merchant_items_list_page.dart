@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,19 +23,19 @@ class MerchantItemsListPage extends StatelessWidget {
   CustomerOfferResponse? currentMerchantOffer;
   final UserList userList;
   MerchantDetailsResponse? merchantResponse;
-  bool? archived = false;
+  bool archived;
 
   MerchantItemsListPage(
       {this.currentMerchantOffer,
       Key? key,
       required this.userList,
       this.merchantResponse,
-      this.archived})
+      this.archived = false})
       : super(key: key);
 
   Future<MerchantOfferResponse> getDetails() async {
     final apiController = Get.find<APIs>();
-    if (currentMerchantOffer == null && archived!) {
+    if (archived) {
       final data =
           await apiController.getAllMerchOfferByListId(userList.listId);
       currentMerchantOffer = data.firstWhere(
@@ -63,54 +65,56 @@ class MerchantItemsListPage extends StatelessWidget {
         context: context,
         minTextAdapt: true,
         orientation: Orientation.portrait);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        toolbarHeight: screenHeight * 5.5,
-        leading: IconButton(
-          splashRadius: 0.1,
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            size: 13.sp,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Offer Rs. ${currentMerchantOffer!.merchResponse.merchTotalPrice}',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-            fontSize: 18.sp,
-          ),
-        ),
-      ),
-      body: FutureBuilder<MerchantOfferResponse>(
-        future: getDetails(),
-        builder: (builder, snapShot) {
-          if (snapShot.hasData) {
-            List<OfferItem> _items = [];
-            for (var element in snapShot.data!.fields.items.arrayValue.values) {
-              _items.add(OfferItem(
-                  brandType: element.mapValue.fields.brandType.stringValue,
-                  catName: element.mapValue.fields.catName.stringValue,
-                  itemId: element.mapValue.fields.itemId.referenceValue,
-                  itemImageId: element.mapValue.fields.itemImageId.stringValue,
-                  itemName: element.mapValue.fields.itemName.stringValue,
-                  itemNotes: element.mapValue.fields.itemNotes.stringValue,
-                  itemSeqNum: int.parse(
-                      element.mapValue.fields.itemSeqNum.integerValue),
-                  merchAvailability:
-                      element.mapValue.fields.merchAvailability.booleanValue,
-                  merchNotes: element.mapValue.fields.merchNotes.stringValue,
-                  merchPrice: double.parse(
-                      element.mapValue.fields.merchPrice.stringValue),
-                  quantity: double.parse(
-                      element.mapValue.fields.quantity.stringValue),
-                  unit: element.mapValue.fields.unit.stringValue));
-            }
-            return Column(
+    return FutureBuilder<MerchantOfferResponse>(
+      future: getDetails(),
+      builder: (context, snapShot) {
+        if (snapShot.data != null &&
+            snapShot.connectionState == ConnectionState.done) {
+          List<OfferItem> _items = [];
+          for (var element in snapShot.data!.fields.items.arrayValue.values) {
+            _items.add(OfferItem(
+                brandType: element.mapValue.fields.brandType.stringValue,
+                catName: element.mapValue.fields.catName.stringValue,
+                itemId: element.mapValue.fields.itemId.referenceValue,
+                itemImageId: element.mapValue.fields.itemImageId.stringValue,
+                itemName: element.mapValue.fields.itemName.stringValue,
+                itemNotes: element.mapValue.fields.itemNotes.stringValue,
+                itemSeqNum:
+                    int.parse(element.mapValue.fields.itemSeqNum.integerValue),
+                merchAvailability:
+                    element.mapValue.fields.merchAvailability.booleanValue,
+                merchNotes: element.mapValue.fields.merchNotes.stringValue,
+                merchPrice: double.parse(
+                    element.mapValue.fields.merchPrice.stringValue),
+                quantity:
+                    double.parse(element.mapValue.fields.quantity.stringValue),
+                unit: element.mapValue.fields.unit.stringValue));
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0.0,
+              toolbarHeight: screenHeight * 5.5,
+              leading: IconButton(
+                splashRadius: 0.1,
+                icon: Icon(
+                  Icons.arrow_back_ios_rounded,
+                  size: 13.sp,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              title: Text(
+                'Offer Rs. ${currentMerchantOffer!.merchResponse.merchTotalPrice}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
+                ),
+              ),
+            ),
+            body: Column(
               children: [
                 Container(
                   color: AppColors().white100,
@@ -133,180 +137,184 @@ class MerchantItemsListPage extends StatelessWidget {
                 SizedBox(
                   height: 15.sp,
                 ),
-                if(isDone())
-                SizedBox(
-                  width: screenSize.width,
-                  height: screenSize.height / 3,
-                  child: Stack(
-                    children: [
-                      isDone()
-                          ? Container(
-                              padding: const EdgeInsets.all(10),
-                              color: AppColors().white100,
-                              width: screenSize.width,
-                              alignment: Alignment.center,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 30.w,
-                                  ),
-                                  Image.asset(
-                                    'assets/offers/store_icon.png',
-                                    height: 75.h,
-                                  ),
-                                  SizedBox(
-                                    width: 19.w,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          merchantResponse!
-                                              .fields.merchName.stringValue,
-                                          style: AppTheme().bold700(24,
-                                              color: AppColors().grey100),
-                                        ),
-                                        SizedBox(
-                                          height: 9.h,
-                                        ),
-                                        Text(
-                                          merchantResponse!
-                                              .fields
-                                              .contact
-                                              .mapValue
-                                              .fields
-                                              .address
-                                              .stringValue,
-                                          style: AppTheme().normal400(13,
-                                              color: AppColors().grey100),
-                                        ),
-                                        SizedBox(
-                                          height: 9.h,
-                                        ),
-                                        //contact number
-                                        Row(
-                                          children: [
-                                            //phone icon
-                                            Container(
-                                              height: 24.h,
-                                              width: 24.h,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors().brandDark,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          60)),
-                                              child: Center(
-                                                child: Icon(
-                                                  Icons.phone,
-                                                  color: AppColors().white100,
-                                                  size: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 9.w,
-                                            ),
-                                            //phone number
-                                            Text(
-                                              '+91-' +
-                                                  merchantResponse!
-                                                      .fields
-                                                      .contact
-                                                      .mapValue
-                                                      .fields
-                                                      .phoneNumber
-                                                      .integerValue,
-                                              style: AppTheme().bold700(16,
-                                                  color: AppColors().brandDark),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 20.h,
-                                        ),
-                                        //chat button
-                                        SizedBox(
-                                          height: 32.h,
-                                          width: 92.w,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              print(merchantResponse!.fields
-                                                      .merchId.integerValue +
-                                                  userList.listId.toString());
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChatScreen(
-                                                    chatId: userList.listId
-                                                        .toString(),
-                                                    title: currentMerchantOffer!
-                                                        .merchResponse
-                                                        .merchTotalPrice,
-                                                    fromNotification: false,
-                                                    listEventId:
-                                                        merchantResponse!
-                                                                .fields
-                                                                .merchId
-                                                                .integerValue +
-                                                            userList.listId
-                                                                .toString(),
+                if (isDone())
+                  SizedBox(
+                    width: screenSize.width,
+                    height: screenSize.height / 3,
+                    child: Stack(
+                      children: [
+                        isDone()
+                            ? Container(
+                                padding: const EdgeInsets.all(10),
+                                color: AppColors().white100,
+                                width: screenSize.width,
+                                alignment: Alignment.center,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 30.w,
+                                    ),
+                                    Image.asset(
+                                      'assets/offers/store_icon.png',
+                                      height: 75.h,
+                                    ),
+                                    SizedBox(
+                                      width: 19.w,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            merchantResponse!
+                                                .fields.merchName.stringValue,
+                                            style: AppTheme().bold700(24,
+                                                color: AppColors().grey100),
+                                          ),
+                                          SizedBox(
+                                            height: 9.h,
+                                          ),
+                                          Text(
+                                            merchantResponse!
+                                                .fields
+                                                .contact
+                                                .mapValue
+                                                .fields
+                                                .address
+                                                .stringValue,
+                                            style: AppTheme().normal400(13,
+                                                color: AppColors().grey100),
+                                          ),
+                                          SizedBox(
+                                            height: 9.h,
+                                          ),
+                                          //contact number
+                                          Row(
+                                            children: [
+                                              //phone icon
+                                              Container(
+                                                height: 24.h,
+                                                width: 24.h,
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        AppColors().brandDark,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            60)),
+                                                child: Center(
+                                                  child: Icon(
+                                                    Icons.phone,
+                                                    color: AppColors().white100,
+                                                    size: 15,
                                                   ),
                                                 ),
-                                              );
-                                            },
-                                            child: Text(
-                                              'Chat',
-                                              style: AppTheme().bold700(16,
-                                                  color: AppColors().white100),
+                                              ),
+                                              SizedBox(
+                                                width: 9.w,
+                                              ),
+                                              //phone number
+                                              Text(
+                                                '+91-' +
+                                                    merchantResponse!
+                                                        .fields
+                                                        .contact
+                                                        .mapValue
+                                                        .fields
+                                                        .phoneNumber
+                                                        .integerValue,
+                                                style: AppTheme().bold700(16,
+                                                    color:
+                                                        AppColors().brandDark),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20.h,
+                                          ),
+                                          //chat button
+                                          SizedBox(
+                                            height: 32.h,
+                                            width: 92.w,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                log(merchantResponse!.fields
+                                                        .merchId.integerValue +
+                                                    userList.listId.toString());
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatScreen(
+                                                      chatId: userList.listId
+                                                          .toString(),
+                                                      title:
+                                                          currentMerchantOffer!
+                                                              .merchResponse
+                                                              .merchTotalPrice,
+                                                      fromNotification: false,
+                                                      listEventId:
+                                                          merchantResponse!
+                                                                  .fields
+                                                                  .merchId
+                                                                  .integerValue +
+                                                              userList.listId
+                                                                  .toString(),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Text(
+                                                'Chat',
+                                                style: AppTheme().bold700(16,
+                                                    color:
+                                                        AppColors().white100),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        archived
+                            ? Center(
+                                child: ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 20, sigmaY: 20),
+                                    child: SizedBox(
+                                      height: screenSize.height / 3,
+                                      width: screenSize.width,
                                     ),
-                                  )
-                                ],
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                      archived!
-                          ? Center(
-                              child: ClipRect(
-                                child: BackdropFilter(
-                                  filter:
-                                      ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                                  child: SizedBox(
-                                    height: screenSize.height / 3,
-                                    width: screenSize.width,
                                   ),
                                 ),
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                      archived!
-                          ? Center(
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                alignment: Alignment.center,
-                                height: screenSize.height / 2,
-                                width: screenSize.width,
-                                child: Text(
-                                  'Merchant information will be available only upto 72 hours since the list was sent to shops.',
-                                  softWrap: true,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 18.sp,
-                                      color: AppColors().grey100,
-                                      fontWeight: FontWeight.w400),
+                              )
+                            : const SizedBox.shrink(),
+                        archived
+                            ? Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  alignment: Alignment.center,
+                                  height: screenSize.height / 2,
+                                  width: screenSize.width,
+                                  child: Text(
+                                    'Merchant information will be available only upto 72 hours since the list was sent to shops.',
+                                    softWrap: true,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        color: AppColors().grey100,
+                                        fontWeight: FontWeight.w400),
+                                  ),
                                 ),
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ],
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
-                ),
                 SizedBox(
                   height: 15.sp,
                 ),
@@ -679,19 +687,24 @@ class MerchantItemsListPage extends StatelessWidget {
                     ),
                   ),
               ],
-            );
-          }
+            ),
+          );
+        }
 
-          if (snapShot.hasError) {
-            print(snapShot);
-            print(snapShot.error);
-            return const Center(
-              child: Text('Error fetching merchant response'),
-            );
-          }
-          return const Center(child: CircularProgressIndicator.adaptive());
-        },
-      ),
+        if (snapShot.hasError) {
+          log(snapShot.toString());
+          log(snapShot.error.toString());
+          return const Center(
+            child: Text('Error fetching merchant response'),
+          );
+        }
+
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+        );
+      },
     );
   }
 

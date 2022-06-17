@@ -14,3 +14,5 @@ class WrongModePassedForAPICall implements Exception {
 }
 
 class NoInternetError implements Exception{}
+
+class ServerError implements Exception{}

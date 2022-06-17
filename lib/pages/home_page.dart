@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import 'package:santhe/constants.dart';
+import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
@@ -31,6 +32,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   final apiController = Get.find<APIs>();
+
+  void checkSubPlan() async{
+
+  }
 
   @override
   void initState() {

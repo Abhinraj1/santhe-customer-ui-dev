@@ -39,7 +39,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
       TextEditingController(text: searchQuery);
   final placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
   final _unitsController = GroupButtonController(selectedIndex: 0);
-  List<String> availableUnits = ['Kg', 'gms', 'L', 'ml', 'pack/s', 'piece/s'];
+  List<String> availableUnits = ['kg', 'gms', 'l', 'ml', 'pack/s', 'piece/s'];
   int customItemId = 4000;
   TextStyle kLabelTextStyle = const TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
@@ -84,36 +84,38 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              //title: item name
-              Stack(children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: AutoSizeText(
-                      'Custom Item',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w700,
-                          fontSize: screenWidth * 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: AutoSizeText(
+                        'Custom Item',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth * 6),
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.close_rounded,
-                      color: Color(0xffD1D1D1),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        color: Color(0xffD1D1D1),
+                      ),
+                      splashRadius: 0.1,
+                      splashColor: Colors.transparent,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
-                    splashRadius: 0.1,
-                    splashColor: Colors.transparent,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
                   ),
-                ),
-              ]),
+                ],
+              ),
               // const SizedBox(height: 10.0),
               Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -241,9 +243,13 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                   controller: _customQtyController,
                                   textInputAction: TextInputAction.next,
                                   textAlign: TextAlign.center,
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  maxLength: 4,
-                                  inputFormatters: [DecimalTextInputFormatter(decimalRange: 1)],
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
+                                  maxLength: 5,
+                                  inputFormatters: [
+                                    DecimalTextInputFormatter(decimalRange: 1)
+                                  ],
                                   textAlignVertical: TextAlignVertical.center,
                                   style: const TextStyle(
                                       color: Colors.orange,

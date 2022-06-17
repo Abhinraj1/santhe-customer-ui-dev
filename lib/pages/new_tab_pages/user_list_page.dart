@@ -96,6 +96,9 @@ class _UserListPageState extends State<UserListPage>
 
   @override
   Widget build(BuildContext context) {
+
+    final buildContext = context;
+
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     final UserList userList = widget.userList;
@@ -1096,7 +1099,7 @@ class _UserListPageState extends State<UserListPage>
                                                         .instance.primaryFocus
                                                         ?.unfocus();
                                                     showDialog(
-                                                        context: context,
+                                                        context: buildContext,
                                                         barrierColor:
                                                             const Color
                                                                     .fromARGB(
@@ -1137,7 +1140,7 @@ class _UserListPageState extends State<UserListPage>
                                                           .instance.primaryFocus
                                                           ?.unfocus();
                                                       showDialog(
-                                                          context: context,
+                                                          context: buildContext,
                                                           barrierColor:
                                                               const Color
                                                                       .fromARGB(
@@ -1173,7 +1176,7 @@ class _UserListPageState extends State<UserListPage>
                                                     .instance.primaryFocus
                                                     ?.unfocus();
                                                 showDialog(
-                                                    context: context,
+                                                    context: buildContext,
                                                     barrierColor:
                                                         const Color.fromARGB(
                                                             165, 241, 241, 241),

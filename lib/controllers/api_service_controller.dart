@@ -167,6 +167,22 @@ class APIs extends GetxController {
     }
   }
 
+  Future<int> getSubscriptionLimit(String plan) async{
+    String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/config/control';
+    if(plan=='default'){
+      plan='planA';
+    }
+    var response = await callApi(mode: 1, url: Uri.parse(url));
+    var jsonResponse = jsonDecode(response.body);
+    if(jsonResponse!=null && response.statusCode==200){
+      return int.parse(jsonResponse['subscription']['custSubscription'][plan]);
+    }else{
+      Get.to(()=>const ServerErrorPage());
+      throw ServerError;
+    }
+    return 0;
+  }
+
   //get
   Future<int> getItemsCount() async {
     // Boxes.getItemsDB().clear();
@@ -1201,10 +1217,13 @@ class APIs extends GetxController {
             "fields": {
               "custDeal": {"stringValue": "best1"},
               "custOfferStatus": {"stringValue": "accepted"},
-              "custUpdateTime": {"timestampValue": "2022-05-03T08:50:12Z"}
+              // "custUpdateTime": {"timestampValue": "2022-05-03T08:50:12Z"}
             }
           }
         },
+        "merchResponse":{
+          "merchUpdateTime": DateTime.now().toUtc().toString().replaceAll(' ', 'T'),
+        }
       }
     };
 

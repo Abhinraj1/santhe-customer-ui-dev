@@ -1,10 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import 'package:get/get.dart';
 import 'package:santhe/controllers/registrationController.dart';
@@ -140,7 +138,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     final hasNet = await AppHelpers.checkConnection();
     if (!hasNet) {
       Get.to(
-        () => NoInternetPage(),
+        () => const NoInternetPage(),
         transition: Transition.fade,
       );
     }
@@ -610,7 +608,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                           custStatus: 'active',
                                           howToReach: registrationController
                                               .howToReach.value,
-                                          custPlan: 'default',
+                                          custPlan: 'planA',
                                           custLoginTime: DateTime.now());
 
                                       //todo add to firebase

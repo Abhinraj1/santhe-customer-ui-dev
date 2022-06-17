@@ -110,11 +110,12 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
   void checkNet() async {
     final hasNet = await AppHelpers.checkConnection();
     if (hasNet) {
+      timer.cancel();
       bootHome();
       init();
     } else {
       Get.to(
-        () => NoInternetPage(),
+        () => const NoInternetPage(),
         transition: Transition.fade,
       );
     }
@@ -129,24 +130,22 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
       statusBarBrightness: Brightness.dark,
     ));
 
+    timer = Timer.periodic(const Duration(seconds: 4), (_) => checkNet());
     checkNet();
 
     super.initState();
   }
 
-  Timer? timer;
+  late final Timer timer;
 
   @override
   void dispose() {
-    if(timer!=null) {
-      timer!.cancel();
-    }
+    timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    timer = Timer.periodic(const Duration(seconds: 4), (_) => checkNet());
     return Container(
       color: Colors.orange,
       width: double.infinity,

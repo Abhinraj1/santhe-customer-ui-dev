@@ -185,6 +185,12 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                     ),
                     if(customEdit())
                     TextFormField(
+                      validator: (value) {
+                        if(value!.isEmpty){
+                          return 'Please enter item name.';
+                        }
+                        return null;
+                      },
                       keyboardType: TextInputType.text,
                       controller: _customItemNameController,
                       textInputAction: TextInputAction.next,
@@ -285,7 +291,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   textInputAction: TextInputAction.next,
                                   textAlign: TextAlign.center,
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  maxLength: 4,
+                                  maxLength: 5,
                                   textAlignVertical: TextAlignVertical.center,
                                   inputFormatters: [DecimalTextInputFormatter(decimalRange: 1)],
                                   style: const TextStyle(
@@ -808,200 +814,169 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
                                   final itemUnit = selectedUnit;
 
-                                  if(_customItemNameController.text.isEmpty){
-                                    if (_formKey.currentState!.validate()) {
-                                      //--------------------------Creating List Item from Item and new data gathered from user------------------------
-                                      if (imageController.editItemCustomImageUrl
-                                              .value.isEmpty ||
-                                          imageController.editItemCustomImageUrl
-                                                  .value ==
-                                              '') {
-                                        final listItem = ListItem(
-                                          brandType:
-                                              _brandController.text.isEmpty
-                                                  ? item.dItemNotes +
-                                                      placeHolderIdentifier
-                                                  : _brandController.text,
-                                          itemId: '${item.itemId}',
-                                          itemImageId: item.itemImageId,
-                                          itemName: _customItemNameController.text,
-                                          quantity:
-                                              double.parse(_qtyController.text),
-                                          notes: _notesController.text.isEmpty
-                                              ? item.dItemNotes +
-                                                  placeHolderIdentifier
-                                              : _notesController.text,
-                                          unit: itemUnit,
-                                          possibleUnits: item.unit,
-                                          catName: Boxes.getCategoriesDB()
-                                                  .get(int.parse(item.catId
-                                                      .replaceAll(
-                                                          'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                          '')))
-                                                  ?.catName ??
-                                              'Others',
-                                          catId: int.parse(
-                                            item.catId.replaceAll(
+                                  if (_formKey.currentState!.validate()) {
+                                    //--------------------------Creating List Item from Item and new data gathered from user------------------------
+                                    if (imageController.editItemCustomImageUrl
+                                        .value.isEmpty ||
+                                        imageController.editItemCustomImageUrl
+                                            .value ==
+                                            '') {
+                                      final listItem = ListItem(
+                                        brandType:
+                                        _brandController.text.isEmpty
+                                            ? item.dItemNotes +
+                                            placeHolderIdentifier
+                                            : _brandController.text,
+                                        itemId: '${item.itemId}',
+                                        itemImageId: item.itemImageId,
+                                        itemName: _customItemNameController.text,
+                                        quantity:
+                                        double.parse(_qtyController.text),
+                                        notes: _notesController.text.isEmpty
+                                            ? item.dItemNotes +
+                                            placeHolderIdentifier
+                                            : _notesController.text,
+                                        unit: itemUnit,
+                                        possibleUnits: item.unit,
+                                        catName: Boxes.getCategoriesDB()
+                                            .get(int.parse(item.catId
+                                            .replaceAll(
+                                            'projects/santhe-425a8/databases/(default)/documents/category/',
+                                            '')))
+                                            ?.catName ??
+                                            'Others',
+                                        catId: int.parse(
+                                          item.catId.replaceAll(
+                                              'projects/santhe-425a8/databases/(default)/documents/category/',
+                                              ''),
+                                        ),
+                                      );
+                                      if (widget.edit) {
+                                        currentUserList.items.removeWhere(
+                                                (element) =>
+                                            element.itemId ==
+                                                listItem.itemId);
+                                      }
+                                      currentUserList.items.add(listItem);
+                                      //make changes persistent
+                                      currentUserList.save();
+                                      Navigator.pop(context);
+                                    } else {
+                                      int itemCount =
+                                      await apiController.getItemsCount();
+
+                                      if (itemCount != 0) {
+                                        Item newCustomItem = Item(
+                                            dBrandType:
+                                            _brandController.text.isEmpty
+                                                ? item.dItemNotes +
+                                                placeHolderIdentifier
+                                                : _brandController.text,
+                                            dItemNotes:
+                                            _notesController.text.isEmpty
+                                                ? item.dItemNotes +
+                                                placeHolderIdentifier
+                                                : _notesController.text,
+                                            itemImageTn: imageController
+                                                .editItemCustomImageUrl.value,
+                                            catId: item.catId,
+                                            createUser: custPhone,
+                                            dQuantity: 1,
+                                            dUnit: selectedUnit,
+                                            itemAlias: _customItemNameController.text,
+                                            itemId: itemCount,
+                                            itemImageId: imageController
+                                                .editItemCustomImageUrl.value,
+                                            itemName: _customItemNameController.text,
+                                            status: item.catId=='4000'?'inactive':'active',
+                                            unit: [selectedUnit],
+                                            updateUser: custPhone);
+
+                                        int response = await apiController
+                                            .addItem(newCustomItem);
+
+                                        if (response == 1) {
+                                          final listItem = ListItem(
+                                            brandType:
+                                            _brandController.text.isEmpty
+                                                ? item.dItemNotes +
+                                                placeHolderIdentifier
+                                                : _brandController.text,
+                                            //item ref
+                                            itemId: '${item.itemId}',
+                                            itemImageId: imageController
+                                                .editItemCustomImageUrl.value,
+                                            itemName: _customItemNameController.text,
+                                            quantity: double.parse(
+                                                _qtyController.text),
+                                            notes:
+                                            _notesController.text.isEmpty
+                                                ? item.dItemNotes +
+                                                placeHolderIdentifier
+                                                : _notesController.text,
+                                            unit: itemUnit,
+                                            possibleUnits: item.unit,
+                                            catName: Boxes.getCategoriesDB()
+                                                .get(int.parse(item.catId
+                                                .replaceAll(
                                                 'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                ''),
-                                          ),
-                                        );
-                                        if (widget.edit) {
-                                          currentUserList.items.removeWhere(
-                                              (element) =>
-                                                  element.itemId ==
-                                                  listItem.itemId);
-                                        }
-                                        currentUserList.items.add(listItem);
-                                        //make changes persistent
-                                        currentUserList.save();
-                                        Navigator.pop(context);
-                                      } else {
-                                        int itemCount =
-                                            await apiController.getItemsCount();
-
-                                        if (itemCount != 0) {
-                                          Item newCustomItem = Item(
-                                              dBrandType:
-                                                  _brandController.text.isEmpty
-                                                      ? item.dItemNotes +
-                                                          placeHolderIdentifier
-                                                      : _brandController.text,
-                                              dItemNotes:
-                                                  _notesController.text.isEmpty
-                                                      ? item.dItemNotes +
-                                                          placeHolderIdentifier
-                                                      : _notesController.text,
-                                              itemImageTn: imageController
-                                                  .editItemCustomImageUrl.value,
-                                              catId: item.catId,
-                                              createUser: custPhone,
-                                              dQuantity: 1,
-                                              dUnit: selectedUnit,
-                                              itemAlias: _customItemNameController.text,
-                                              itemId: itemCount,
-                                              itemImageId: imageController
-                                                  .editItemCustomImageUrl.value,
-                                              itemName: _customItemNameController.text,
-                                              status: item.catId=='4000'?'inactive':'active',
-                                              unit: [selectedUnit],
-                                              updateUser: custPhone);
-
-                                          int response = await apiController
-                                              .addItem(newCustomItem);
-
-                                          if (response == 1) {
-                                            final listItem = ListItem(
-                                              brandType:
-                                                  _brandController.text.isEmpty
-                                                      ? item.dItemNotes +
-                                                          placeHolderIdentifier
-                                                      : _brandController.text,
-                                              //item ref
-                                              itemId: '${item.itemId}',
-                                              itemImageId: imageController
-                                                  .editItemCustomImageUrl.value,
-                                              itemName: _customItemNameController.text,
-                                              quantity: double.parse(
-                                                  _qtyController.text),
-                                              notes:
-                                                  _notesController.text.isEmpty
-                                                      ? item.dItemNotes +
-                                                          placeHolderIdentifier
-                                                      : _notesController.text,
-                                              unit: itemUnit,
-                                              possibleUnits: item.unit,
-                                              catName: Boxes.getCategoriesDB()
-                                                      .get(int.parse(item.catId
-                                                          .replaceAll(
-                                                              'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                              '')))
-                                                      ?.catName ??
-                                                  'Others',
-                                              catId: int.parse(
-                                                item.catId.replaceAll(
-                                                    'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                    ''),
-                                              ),
-                                            );
-
-                                            if (widget.edit) {
-                                              currentUserList.items.removeWhere(
-                                                  (element) =>
-                                                      element.itemId ==
-                                                      '${item.itemId}');
-                                            }
-                                            currentUserList.items.add(listItem);
-                                            //make changes persistent
-                                            currentUserList.save();
-                                          } else {
-                                            Get.snackbar('Network Error',
-                                                'Error Adding item to the list!',
-                                                backgroundColor: Colors.white,
-                                                colorText: Colors.grey);
-                                          }
-                                          Navigator.pop(context);
-                                        } else {
-                                          Get.snackbar(
-                                            '',
-                                            '',
-                                            titleText: const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 8.0),
-                                              child: Text('Enter Quantity'),
-                                            ),
-                                            messageText: const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 8.0),
-                                              child: Text(
-                                                  'Please enter some quantity to add...'),
-                                            ),
-                                            margin: const EdgeInsets.all(10.0),
-                                            padding: const EdgeInsets.all(8.0),
-                                            backgroundColor: Colors.white,
-                                            shouldIconPulse: true,
-                                            icon: const Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                CupertinoIcons
-                                                    .exclamationmark_triangle_fill,
-                                                color: Colors.yellow,
-                                                size: 45,
-                                              ),
+                                                '')))
+                                                ?.catName ??
+                                                'Others',
+                                            catId: int.parse(
+                                              item.catId.replaceAll(
+                                                  'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                  ''),
                                             ),
                                           );
+
+                                          if (widget.edit) {
+                                            currentUserList.items.removeWhere(
+                                                    (element) =>
+                                                element.itemId ==
+                                                    '${item.itemId}');
+                                          }
+                                          currentUserList.items.add(listItem);
+                                          //make changes persistent
+                                          currentUserList.save();
+                                        } else {
+                                          Get.snackbar('Network Error',
+                                              'Error Adding item to the list!',
+                                              backgroundColor: Colors.white,
+                                              colorText: Colors.grey);
                                         }
+                                        Navigator.pop(context);
+                                      } else {
+                                        Get.snackbar(
+                                          '',
+                                          '',
+                                          titleText: const Padding(
+                                            padding:
+                                            EdgeInsets.only(left: 8.0),
+                                            child: Text('Enter Quantity'),
+                                          ),
+                                          messageText: const Padding(
+                                            padding:
+                                            EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                                'Please enter some quantity to add...'),
+                                          ),
+                                          margin: const EdgeInsets.all(10.0),
+                                          padding: const EdgeInsets.all(8.0),
+                                          backgroundColor: Colors.white,
+                                          shouldIconPulse: true,
+                                          icon: const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              CupertinoIcons
+                                                  .exclamationmark_triangle_fill,
+                                              color: Colors.yellow,
+                                              size: 45,
+                                            ),
+                                          ),
+                                        );
                                       }
                                     }
-                                  }else{
-                                    Get.snackbar(
-                                      '',
-                                      '',
-                                      titleText: const Padding(
-                                        padding:
-                                        EdgeInsets.only(left: 8.0),
-                                        child: Text('Enter Item Name'),
-                                      ),
-                                      messageText: const Padding(
-                                        padding:
-                                        EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                            'Item Name cannot be empty'),
-                                      ),
-                                      margin: const EdgeInsets.all(10.0),
-                                      padding: const EdgeInsets.all(8.0),
-                                      backgroundColor: Colors.white,
-                                      shouldIconPulse: true,
-                                      icon: const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          CupertinoIcons
-                                              .exclamationmark_triangle_fill,
-                                          color: Colors.yellow,
-                                          size: 45,
-                                        ),
-                                      ),
-                                    );
                                   }
 
                                   setState(() {

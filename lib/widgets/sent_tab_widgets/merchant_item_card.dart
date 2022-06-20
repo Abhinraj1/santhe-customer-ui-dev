@@ -15,7 +15,6 @@ class MerchantItemCard extends StatelessWidget {
       : super(key: key);
 
   String checkPlaceHolder(String data) {
-    log('${data.contains(placeHolderIdentifier)}');
     if (data.contains(placeHolderIdentifier)) {
       return '';
     }
@@ -68,13 +67,14 @@ class MerchantItemCard extends StatelessWidget {
           const SizedBox(
             width: 12.0,
           ),
-          SizedBox(
-            width: screenSize.width / 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: screenSize.width * 2/5 - 40,
+                child: Text(
                   merchantItem.itemName,
+                  maxLines: 2,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -83,31 +83,31 @@ class MerchantItemCard extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                checkPlaceHolder(merchantItem.brandType).isEmpty
-                    ? Text(
-                        checkPlaceHolder(merchantItem.itemNotes).isEmpty
-                            ? '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}'
-                            : '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${checkPlaceHolder(merchantItem.itemNotes)}',
-                        // softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontSize: 18.sp,
-                        ),
-                      )
-                    : Text(
-                        '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${checkPlaceHolder(merchantItem.itemNotes).isEmpty ? checkPlaceHolder(merchantItem.brandType) : '${checkPlaceHolder(merchantItem.brandType)}, ${checkPlaceHolder(merchantItem.itemNotes)}'}',
-                        // softWrap: true,
-                        maxLines: 2,
-                        // minFontSize: 10,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontSize: 18.sp,
-                        ),
+              ),
+              checkPlaceHolder(merchantItem.brandType).isEmpty
+                  ? Text(
+                      checkPlaceHolder(merchantItem.itemNotes).isEmpty
+                          ? '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}'
+                          : '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${checkPlaceHolder(merchantItem.itemNotes)}',
+                      // softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 18.sp,
                       ),
-              ],
-            ),
+                    )
+                  : Text(
+                      '${removeDecimalZeroFormat(merchantItem.quantity)} ${merchantItem.unit}, ${checkPlaceHolder(merchantItem.itemNotes).isEmpty ? checkPlaceHolder(merchantItem.brandType) : '${checkPlaceHolder(merchantItem.brandType)}, ${checkPlaceHolder(merchantItem.itemNotes)}'}',
+                      softWrap: true,
+                      maxLines: 2,
+                      // minFontSize: 10,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+            ],
           ),
           SizedBox(
             width: screenSize.width / 10,
@@ -119,12 +119,13 @@ class MerchantItemCard extends StatelessWidget {
               color:
                   merchantItem.merchAvailability ? Colors.green : Colors.red),
           const SizedBox(width: 10.0),
-          Expanded(
+          SizedBox(
+            width: screenSize.width * 1/5,
             child: Text(
               '₹ ${merchantItem.merchPrice}',
               style: TextStyle(
                 color: Colors.orange,
-                fontSize: 17.sp,
+                fontSize: 19.sp,
                 fontWeight: FontWeight.w500,
               ),
               overflow: TextOverflow.fade,

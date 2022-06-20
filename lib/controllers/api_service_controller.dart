@@ -180,7 +180,6 @@ class APIs extends GetxController {
       Get.to(()=>const ServerErrorPage());
       throw ServerError;
     }
-    return 0;
   }
 
   //get
@@ -1208,7 +1207,7 @@ class APIs extends GetxController {
   Future<int> acceptOffer(String listEventId) async {
     log('Offer Accepted! ListEvent ID: $listEventId');
     final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/${BigInt.parse(listEventId)}?updateMask.fieldPaths=custOfferResponse';
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/${BigInt.parse(listEventId)}?updateMask.fieldPaths=custOfferResponse.custDeal&updateMask.fieldPaths=custOfferResponse.custOfferStatus&updateMask.fieldPaths=merchResponse.merchUpdateTime';
 
     var body = {
       "fields": {
@@ -1222,7 +1221,14 @@ class APIs extends GetxController {
           }
         },
         "merchResponse":{
-          "merchUpdateTime": DateTime.now().toUtc().toString().replaceAll(' ', 'T'),
+          "mapValue":{
+            "fields": {
+              "merchUpdateTime": {
+                "timestampValue":
+                DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+              }
+            }
+          }
         }
       }
     };

@@ -117,30 +117,25 @@ class MerchantItemsListPage extends StatelessWidget {
             body: Column(
               children: [
                 Container(
-                  color: AppColors().white100,
+                  color: Colors.transparent,
                   width: double.infinity,
                   height: 60.sp,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Center(
-                      child: Text(
-                        isDone() ? 'Offer Accepted' : 'Items and Price',
-                        style: TextStyle(
-                            color:
-                                isDone() ? AppColors().green100 : Colors.orange,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.sp),
-                      ),
+                  child: Center(
+                    child: Text(
+                      isDone() ? 'Offer Accepted' : 'Items and Price',
+                      style: TextStyle(
+                          fontFamily: 'Mulish',
+                          color:
+                              isDone() ? AppColors().green100 : Colors.orange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.sp),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 15.sp,
                 ),
                 if (isDone())
                   SizedBox(
                     width: screenSize.width,
-                    height: screenSize.height / 3,
+                    height: screenSize.height / 3 + 10,
                     child: Stack(
                       children: [
                         isDone()
@@ -166,52 +161,55 @@ class MerchantItemsListPage extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          SizedBox(
+                                            height: 10.sp,
+                                          ),
                                           Text(
                                             merchantResponse!
                                                 .fields.merchName.stringValue,
-                                            style: AppTheme().bold700(24,
-                                                color: AppColors().grey100),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 29.sp,
+                                            ),
                                           ),
                                           SizedBox(
-                                            height: 9.h,
-                                          ),
-                                          Text(
-                                            merchantResponse!
-                                                .fields
-                                                .contact
-                                                .mapValue
-                                                .fields
-                                                .address
-                                                .stringValue,
-                                            style: AppTheme().normal400(13,
-                                                color: AppColors().grey100),
+                                            height: 10.sp,
                                           ),
                                           SizedBox(
-                                            height: 9.h,
+                                            width: 240.w,
+                                            child: Text(
+                                              merchantResponse!
+                                                  .fields
+                                                  .contact
+                                                  .mapValue
+                                                  .fields
+                                                  .address
+                                                  .stringValue,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 18.sp,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10.sp,
                                           ),
                                           //contact number
                                           Row(
                                             children: [
                                               //phone icon
-                                              Container(
-                                                height: 24.h,
-                                                width: 24.h,
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        AppColors().brandDark,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            60)),
-                                                child: Center(
-                                                  child: Icon(
-                                                    Icons.phone,
-                                                    color: AppColors().white100,
-                                                    size: 15,
-                                                  ),
+                                              CircleAvatar(
+                                                radius: 18.sp,
+                                                backgroundColor:
+                                                    AppColors().brandDark,
+                                                child: Icon(
+                                                  Icons.phone,
+                                                  color: AppColors().white100,
+                                                  size: 15.sp,
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: 9.w,
+                                                width: 10.sp,
                                               ),
                                               //phone number
                                               Text(
@@ -232,43 +230,50 @@ class MerchantItemsListPage extends StatelessWidget {
                                           SizedBox(
                                             height: 20.h,
                                           ),
-                                          //chat button
-                                          SizedBox(
-                                            height: 32.h,
-                                            width: 92.w,
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                log(merchantResponse!.fields
-                                                        .merchId.integerValue +
-                                                    userList.listId.toString());
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChatScreen(
-                                                      chatId: userList.listId
-                                                          .toString(),
-                                                      title:
-                                                          currentMerchantOffer!
-                                                              .merchResponse
-                                                              .merchTotalPrice,
-                                                      fromNotification: false,
-                                                      listEventId:
-                                                          merchantResponse!
-                                                                  .fields
-                                                                  .merchId
-                                                                  .integerValue +
-                                                              userList.listId
-                                                                  .toString(),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
+                                          InkWell(
+                                            onTap: () {
+                                              log(merchantResponse!.fields
+                                                  .merchId.integerValue +
+                                                  userList.listId.toString());
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                        chatId: userList.listId
+                                                            .toString(),
+                                                        title:
+                                                        currentMerchantOffer!
+                                                            .merchResponse
+                                                            .merchTotalPrice,
+                                                        fromNotification: false,
+                                                        listEventId:
+                                                        merchantResponse!
+                                                            .fields
+                                                            .merchId
+                                                            .integerValue +
+                                                            userList.listId
+                                                                .toString(),
+                                                      ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 23.sp,
+                                                  vertical: 8.sp),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              10.sp)),
+                                                  color: AppColors().brandDark),
                                               child: Text(
-                                                'Chat',
-                                                style: AppTheme().bold700(16,
-                                                    color:
-                                                        AppColors().white100),
+                                                "Chat",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18.sp),
                                               ),
                                             ),
                                           ),
@@ -286,7 +291,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                     filter: ImageFilter.blur(
                                         sigmaX: 20, sigmaY: 20),
                                     child: SizedBox(
-                                      height: screenSize.height / 3,
+                                      height: screenSize.height / 3 + 10,
                                       width: screenSize.width,
                                     ),
                                   ),
@@ -298,7 +303,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(20),
                                   alignment: Alignment.center,
-                                  height: screenSize.height / 2,
+                                  height: screenSize.height / 3 + 10,
                                   width: screenSize.width,
                                   child: Text(
                                     'Merchant information will be available only upto 72 hours since the list was sent to shops.',
@@ -315,9 +320,6 @@ class MerchantItemsListPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                SizedBox(
-                  height: 15.sp,
-                ),
                 Container(
                   height: 50.sp,
                   width: screenSize.width,
@@ -327,7 +329,7 @@ class MerchantItemsListPage extends StatelessWidget {
                     '${_items.length} Items',
                     style: TextStyle(
                       fontSize: 20.sp,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -352,7 +354,7 @@ class MerchantItemsListPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: 15.h,
+                              height: 10.h,
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(
@@ -367,7 +369,7 @@ class MerchantItemsListPage extends StatelessWidget {
                                     style: TextStyle(
                                       color: const Color(0xff8B8B8B),
                                       fontSize: 20.sp,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
@@ -375,16 +377,19 @@ class MerchantItemsListPage extends StatelessWidget {
                                     style: TextStyle(
                                       color: AppColors().brandDark,
                                       fontSize: 22.sp,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+                            SizedBox(
+                              height: 3.sp,
+                            ),
                             const Divider(
                               color: Colors.grey,
                               thickness: 1,
-                            )
+                            ),
                           ],
                         );
                       },
@@ -407,7 +412,7 @@ class MerchantItemsListPage extends StatelessWidget {
                           width: screenSize.width,
                           color: AppColors().white100,
                           padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 40.0),
+                              vertical: 5.0, horizontal: 40.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

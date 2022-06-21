@@ -45,8 +45,6 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    double screenWidth = MediaQuery.of(context).size.width / 100;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
 
     ScreenUtil.init(
         BoxConstraints(
@@ -64,56 +62,61 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
             return const Center(child: CircularProgressIndicator.adaptive());
           }
           if (controller.archivedList.isEmpty) {
-            return SizedBox(
-              height: double.infinity,
-              width: double.infinity,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                width: MediaQuery.of(context).size.width,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // SizedBox(height: screenHeight * 23),
                     SizedBox(
-                      height: screenWidth * 100,
-                      width: screenWidth * 100,
+                      height: 39.62.h,
+                    ),
+                    SizedBox(
+                      height: 372.02.h,
+                      width: 372.65.w,
                       child: SvgPicture.asset(
                         'assets/archive_tab_image.svg',
+                        fit: BoxFit.fill,
                       ),
                     ),
-
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: 28.sp, left: 23.sp, right: 23.sp),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
                           text:
                               'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
                           style: TextStyle(
-                              color: kTextGrey,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16.sp),
+                            color: kTextGrey,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18.sp,
+                            height: 2.sp,
+                          ),
                           children: <TextSpan>[
                             TextSpan(
                               text: '\nNew ',
                               style: TextStyle(
-                                  color: kTextGrey,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 16.sp),
+                                color: kTextGrey,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 18.sp,
+                                height: 2.sp,
+                              ),
                             ),
                             TextSpan(
-                              text:
-                                  'tab to create and send your shopping lists',
+                              text: 'tab to create and send your shopping lists',
                               style: TextStyle(
-                                  color: kTextGrey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16.sp),
+                                color: kTextGrey,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 18.sp,
+                                height: 2.sp,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

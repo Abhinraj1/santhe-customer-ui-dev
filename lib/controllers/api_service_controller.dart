@@ -1337,8 +1337,8 @@ class APIs extends GetxController {
           userLists.add(UserList.fromJson(data[i]['document']['fields']));
           log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
-        // userLists
-        //     .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
+        userLists
+            .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
       } else {
         return userLists;
       }

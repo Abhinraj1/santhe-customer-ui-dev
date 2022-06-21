@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:santhe/controllers/error_user_fallback.dart';
 import 'package:santhe/pages/nav_bar_pages/edit_profile_customer.dart';
@@ -25,7 +24,6 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     return Drawer(
       elevation: 2.0,
       // shape: const RoundedRectangleBorder(
@@ -108,7 +106,7 @@ class NavigationDrawer extends StatelessWidget {
                           currentUser.custName,
                           maxLines: 2,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 24.0, fontWeight: FontWeight.w300),
                         ),
                       );
@@ -131,7 +129,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
               Text(
                 '+91 ${Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 'X'}',
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.orange,
                     fontWeight: FontWeight.w700),

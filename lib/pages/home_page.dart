@@ -71,28 +71,24 @@ class _HomePageState extends State<HomePage> {
         key: _key,
         drawer: const NavigationDrawer(),
         appBar: AppBar(
-          toolbarHeight: screenHeight * 10,
-          leading: Padding(
-            padding: const EdgeInsets.all(9.0),
-            child: IconButton(
-              onPressed: () {
-                _key.currentState!.openDrawer();
-              },
-              splashRadius: 25.0,
-              icon: SvgPicture.asset(
-                'assets/drawer_icon.svg',
-                color: Colors.white,
-              ),
+          leading: IconButton(
+            onPressed: () {
+              _key.currentState!.openDrawer();
+            },
+            splashRadius: 25.0,
+            icon: SvgPicture.asset(
+              'assets/drawer_icon.svg',
+              color: Colors.white,
             ),
           ),
           shadowColor: Colors.orange.withOpacity(0.5),
           elevation: 10.0,
-          title: AutoSizeText(
+          title: const AutoSizeText(
             kAppName,
             style: TextStyle(
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w800,
                 color: Colors.white,
-                fontSize: 26.sp),
+                fontSize: 24),
           ),
           actions: [
             Padding(

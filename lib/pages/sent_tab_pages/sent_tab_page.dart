@@ -77,11 +77,11 @@ class _OfferTabPageState extends State<OfferTabPage> {
                       width: screenWidth * 100,
                       child: SvgPicture.asset(
                         'assets/sent_tab_image.svg',
+                        fit: BoxFit.fill,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: 42.sp, left: 23.sp, right: 23.sp),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
@@ -90,14 +90,16 @@ class _OfferTabPageState extends State<OfferTabPage> {
                               style: TextStyle(
                                   color: kTextGrey,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 16.sp),
+                                  fontSize: 18.sp,
+                              height: 2.sp,),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: '\nNew ',
                                   style: TextStyle(
                                       color: kTextGrey,
                                       fontWeight: FontWeight.w900,
-                                      fontSize: 16.sp),
+                                      fontSize: 18.sp,
+                                  height: 2.sp,),
                                 ),
                                 TextSpan(
                                   text:
@@ -105,10 +107,12 @@ class _OfferTabPageState extends State<OfferTabPage> {
                                   style: TextStyle(
                                       color: kTextGrey,
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 16.sp),
+                                      fontSize: 18.sp,
+                                    height: 2.sp
+                                  ),
                                 ),
-                              ])),
-                    )
+                              ],),),
+                    ),
                   ],
                 ),
               ),
@@ -123,22 +127,23 @@ class _OfferTabPageState extends State<OfferTabPage> {
                 ),
                 SizedBox(
                   width: screenWidth * 60,
+                  height: screenHeight * 30,
                   child: SvgPicture.asset(
                     'assets/onboarding_sentPage_arrow.svg',
                     color: Colors.orange,
-                    height: screenHeight * 30,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 10.0, left: 20.0, right: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
                       'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
-                          fontSize: 16.sp,
+                          fontSize: 18.sp,
+                          height: 2.sp,
                           color: Colors.grey),
                     ),
                   ),

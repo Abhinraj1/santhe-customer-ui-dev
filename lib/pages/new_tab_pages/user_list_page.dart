@@ -77,7 +77,7 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
   void initState() {
     searchQueryController.addListener(_latestSearchQuery);
     searchedItemsResult = Future.value([]);
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
@@ -89,20 +89,21 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
     super.dispose();
   }
 
+
+  late final UserList userList = widget.userList;
+  final TextStyle popupTextStyle = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 13.sp,
+    color: const Color(0xffB0B0B0),
+  );
+
+  late UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
+  final FocusNode _searchNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    final UserList userList = widget.userList;
-    final TextStyle popupTextStyle = TextStyle(
-      fontWeight: FontWeight.w400,
-      fontSize: screenWidth * 3.5,
-      color: const Color(0xffB0B0B0),
-    );
-
-    UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
-    FocusNode _searchNode = FocusNode();
-
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
@@ -263,9 +264,9 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            //search text field
             TextFormField(
               controller: searchQueryController,
-              focusNode: _searchNode,
               textAlignVertical: TextAlignVertical.center,
               textAlign: TextAlign.left,
               textInputAction: TextInputAction.done,
@@ -1026,8 +1027,8 @@ class _UserListPageState extends State<UserListPage> with WidgetsBindingObserver
                                   return ListView.builder(
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                                     itemCount: snapshot.data?.length,
+                                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                     itemBuilder: (context, index) {
                                       ScreenUtil.init(
                                           BoxConstraints(

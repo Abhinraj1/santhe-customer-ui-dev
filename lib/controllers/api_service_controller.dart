@@ -589,6 +589,8 @@ class APIs extends GetxController {
           "timestampValue":
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
+        "updateListTime": {"timestampValue":
+        userList.createListTime.toUtc().toString().replaceAll(' ', 'T')},
         'notificationProcess': {'stringValue': 'reminder'},
         'dealProcess': {'booleanValue': false},
         "custOfferWaitTime": {
@@ -1098,7 +1100,7 @@ class APIs extends GetxController {
           log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
         userLists
-            .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
+            .sort((a, b) => b.updateListTime!.compareTo(a.updateListTime!));
       } else {
         return userLists;
       }
@@ -1338,7 +1340,7 @@ class APIs extends GetxController {
           log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
         userLists
-            .sort((a, b) => b.custListSentTime.compareTo(a.custListSentTime));
+            .sort((a, b) => b.updateListTime!.compareTo(a.updateListTime!));
       } else {
         return userLists;
       }

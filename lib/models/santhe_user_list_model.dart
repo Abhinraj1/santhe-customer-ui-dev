@@ -35,6 +35,9 @@ class UserList extends HiveObject {
   @HiveField(9)
   final DateTime custOfferWaitTime;
 
+  @HiveField(10)
+  final DateTime? updateListTime;
+
   UserList({
     required this.createListTime,
     required this.custId,
@@ -46,6 +49,7 @@ class UserList extends HiveObject {
     required this.listOfferCounter,
     required this.processStatus,
     required this.custOfferWaitTime,
+    this.updateListTime,
   });
 
   factory UserList.fromJson(data) {
@@ -56,50 +60,79 @@ class UserList extends HiveObject {
       }
     }
 
-    return UserList(
-      createListTime: DateTime.parse(data['createListTime']['timestampValue']),
-      custId: int.parse(data['custId']['referenceValue'].toString().replaceAll(
-          'projects/santhe-425a8/databases/(default)/documents/customer/', '')),
-      items: listItems,
-      listId: int.parse(data['listId']['integerValue']),
-      listName: data['listName']['stringValue'],
-      custListSentTime:
-          DateTime.parse(data['custListSentTime']['timestampValue']),
-      custListStatus: data['custListStatus']['stringValue'],
-      listOfferCounter: int.parse(data['listOfferCounter']['integerValue']),
-      processStatus: data['processStatus']['stringValue'],
-      custOfferWaitTime:
-          DateTime.parse(data['custOfferWaitTime']['timestampValue']),
-    );
+    try {
+      return UserList(
+        createListTime:
+            DateTime.parse(data['createListTime']['timestampValue']),
+        custId: int.parse(data['custId']['referenceValue']
+            .toString()
+            .replaceAll(
+                'projects/santhe-425a8/databases/(default)/documents/customer/',
+                '')),
+        items: listItems,
+        listId: int.parse(data['listId']['integerValue']),
+        listName: data['listName']['stringValue'],
+        custListSentTime:
+            DateTime.parse(data['custListSentTime']['timestampValue']),
+        custListStatus: data['custListStatus']['stringValue'],
+        listOfferCounter: int.parse(data['listOfferCounter']['integerValue']),
+        processStatus: data['processStatus']['stringValue'],
+        custOfferWaitTime:
+            DateTime.parse(data['custOfferWaitTime']['timestampValue']),
+        updateListTime:
+            DateTime.parse(data['updateListTime']['timestampValue']),
+      );
+    } catch (e) {
+      return UserList(
+        createListTime:
+            DateTime.parse(data['createListTime']['timestampValue']),
+        custId: int.parse(data['custId']['referenceValue']
+            .toString()
+            .replaceAll(
+                'projects/santhe-425a8/databases/(default)/documents/customer/',
+                '')),
+        items: listItems,
+        listId: int.parse(data['listId']['integerValue']),
+        listName: data['listName']['stringValue'],
+        custListSentTime:
+            DateTime.parse(data['custListSentTime']['timestampValue']),
+        custListStatus: data['custListStatus']['stringValue'],
+        listOfferCounter: int.parse(data['listOfferCounter']['integerValue']),
+        processStatus: data['processStatus']['stringValue'],
+        custOfferWaitTime:
+            DateTime.parse(data['custOfferWaitTime']['timestampValue']),
+        updateListTime: DateTime.parse(data['custListSentTime']['timestampValue']),
+      );
+    }
   }
 
-  // factory UserList.fromFirestore(data) {
-  //   List<ListItem> listItems = [];
-  //   for (ListItem item in data['items']) {
-  //     listItems.add(ListItem.fromFirebase(item));
-  //   }
-  //
-  //   return UserList(
-  //       createListTime: data['createListTime'],
-  //       custId: data['custId'],
-  //       items: listItems,
-  //       listId: int.parse(data['listId']),
-  //       listName: data['listName'],
-  //       custListSentTime: DateTime.parse(data['custListSentTime']),
-  //       custListStatus: data['custListStatus'],
-  //       listOfferCounter: int.parse(data['listOfferCounter']),
-  //       processStatus: data['processStatus']);
-  // }
-  //
-  // Map<String, dynamic> toJson() => {
-  //       'createListTime': createListTime,
-  //       'custId': custId,
-  //       'items': items,
-  //       'listId': listId,
-  //       'listName': listName,
-  //       'custListSentTime': custListSentTime,
-  //       'custListStatus': custListStatus,
-  //       'listOfferCounter': listOfferCounter,
-  //       'processStatus': processStatus,
-  //     };
+// factory UserList.fromFirestore(data) {
+//   List<ListItem> listItems = [];
+//   for (ListItem item in data['items']) {
+//     listItems.add(ListItem.fromFirebase(item));
+//   }
+//
+//   return UserList(
+//       createListTime: data['createListTime'],
+//       custId: data['custId'],
+//       items: listItems,
+//       listId: int.parse(data['listId']),
+//       listName: data['listName'],
+//       custListSentTime: DateTime.parse(data['custListSentTime']),
+//       custListStatus: data['custListStatus'],
+//       listOfferCounter: int.parse(data['listOfferCounter']),
+//       processStatus: data['processStatus']);
+// }
+//
+// Map<String, dynamic> toJson() => {
+//       'createListTime': createListTime,
+//       'custId': custId,
+//       'items': items,
+//       'listId': listId,
+//       'listName': listName,
+//       'custListSentTime': custListSentTime,
+//       'custListStatus': custListStatus,
+//       'listOfferCounter': listOfferCounter,
+//       'processStatus': processStatus,
+//     };
 }

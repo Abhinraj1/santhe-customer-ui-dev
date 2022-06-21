@@ -28,10 +28,17 @@ class NewTabPage extends StatefulWidget {
 
 enum NewListType { startFromNew, importFromOld }
 
-class _NewTabPageState extends State<NewTabPage> {
+class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
   NewListType? _type = NewListType.startFromNew;
   final apiController = Get.find<APIs>();
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state==AppLifecycleState.resumed){
+      setState(() {});
+    }
+    super.didChangeAppLifecycleState(state);
+  }
   String listName = '';
   int totalCustList = 0;
   int custId =

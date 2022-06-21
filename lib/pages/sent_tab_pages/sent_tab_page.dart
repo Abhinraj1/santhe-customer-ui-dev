@@ -1,13 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
-import 'package:http/testing.dart';
 import 'package:santhe/constants.dart';
-import 'package:santhe/firebase/firebase_helper.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../models/santhe_user_list_model.dart';
@@ -33,12 +28,6 @@ class _OfferTabPageState extends State<OfferTabPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final offerResponse = 'my stream';
-    double screenWidth = MediaQuery.of(context).size.width / 100;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
-    print('-->PHONE: $custPhone');
-    // FirebaseHelper().offerStream();
-
     return Scaffold(
       body: FutureBuilder<List<UserList>>(
         future: userSentListsData,

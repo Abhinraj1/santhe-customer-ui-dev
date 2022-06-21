@@ -9,11 +9,10 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../core/app_theme.dart';
 import '../../models/offer/customer_offer_response.dart';
-import '../../models/offer/offer_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/merchant_items_list_page.dart';
 
-class MerchantOfferCard extends StatelessWidget {
+class MerchantOfferCard extends StatefulWidget {
   final UserList userList;
   final CustomerOfferResponse currentMerchantOffer;
 
@@ -22,13 +21,29 @@ class MerchantOfferCard extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<MerchantOfferCard> createState() => _MerchantOfferCardState();
+}
+
+class _MerchantOfferCardState extends State<MerchantOfferCard> {
+  bool overrideData = false;
+  late UserList userList;
+
+  @override
+  void initState() {
+    userList = widget.userList;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     String imagePath = 'assets/sent_tab/0star.png';
-    if (currentMerchantOffer.custOfferResponse.custDeal == 'best1') {
+    if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best1') {
       imagePath = 'assets/sent_tab/3star.png';
-    } else if (currentMerchantOffer.custOfferResponse.custDeal == 'best2') {
+    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal ==
+        'best2') {
       imagePath = 'assets/sent_tab/2star.png';
-    } else if (currentMerchantOffer.custOfferResponse.custDeal == 'best3') {
+    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal ==
+        'best3') {
       imagePath = 'assets/sent_tab/1star.png';
     } else {
       imagePath = 'assets/sent_tab/0star.png';
@@ -49,11 +64,19 @@ class MerchantOfferCard extends StatelessWidget {
         onTap: () {
           if (merchantResponse != null || !isDone()) {
             Get.to(() => MerchantItemsListPage(
-                  currentMerchantOffer: currentMerchantOffer,
+                  currentMerchantOffer: widget.currentMerchantOffer,
                   userList: userList,
                   merchantResponse: merchantResponse,
                   archived: false,
-                ));
+                ))?.then((value) {
+              if (value != null) {
+                setState(() {
+                  if(value==true){
+                    overrideData = value;
+                  }
+                });
+              }
+            });
           } else {
             errorMsg('Please wait till loading', '');
           }
@@ -99,7 +122,7 @@ class MerchantOfferCard extends StatelessWidget {
                                 children: [
                                   TextSpan(
                                     text:
-                                        'Rs ${currentMerchantOffer.merchResponse.merchTotalPrice}',
+                                        'Rs ${widget.currentMerchantOffer.merchResponse.merchTotalPrice}',
                                     style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w700,
@@ -111,7 +134,7 @@ class MerchantOfferCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 12.0),
                             child: Text(
-                              '${currentMerchantOffer.merchResponse.merchOfferQuantity} of ${userList.items.length} items\navailable',
+                              '${widget.currentMerchantOffer.merchResponse.merchOfferQuantity} of ${userList.items.length} items\navailable',
                               style: TextStyle(
                                 color: Colors.orange,
                                 fontSize: 24.sp,
@@ -124,7 +147,7 @@ class MerchantOfferCard extends StatelessWidget {
                             child: RichText(
                               text: TextSpan(
                                   text:
-                                      'Merchant is ${currentMerchantOffer.custDistance} ${currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
+                                      'Merchant is ${widget.currentMerchantOffer.custDistance} ${widget.currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w400,
@@ -132,7 +155,7 @@ class MerchantOfferCard extends StatelessWidget {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: currentMerchantOffer
+                                      text: widget.currentMerchantOffer
                                               .merchResponse.merchDelivery
                                           ? 'Does home delivery'
                                           : 'No home delivery',
@@ -173,7 +196,7 @@ class MerchantOfferCard extends StatelessWidget {
                               height: 150.sp,
                               child: CircularProgressIndicator(
                                 value: double.parse(
-                                  '${currentMerchantOffer.merchResponse.merchOfferQuantity / userList.items.length}',
+                                  '${widget.currentMerchantOffer.merchResponse.merchOfferQuantity / userList.items.length}',
                                 ),
                                 strokeWidth: 9.0,
                                 color: AppColors().brandDark,
@@ -214,9 +237,12 @@ class MerchantOfferCard extends StatelessWidget {
                           ),
                           Expanded(
                             child: FutureBuilder<MerchantDetailsResponse>(
-                              future: APIs().getMerchantDetails(
-                                  currentMerchantOffer
-                                      .merchId.path.segments.last),
+                              future: APIs().getMerchantDetails(widget
+                                  .currentMerchantOffer
+                                  .merchId
+                                  .path
+                                  .segments
+                                  .last),
                               builder: (builder, snapShot) {
                                 if (snapShot.connectionState ==
                                     ConnectionState.waiting) {
@@ -301,17 +327,19 @@ class MerchantOfferCard extends StatelessWidget {
                                         width: 92.w,
                                         child: ElevatedButton(
                                             onPressed: () {
-                                              print(merchantResponse!.fields
-                                                      .merchId.integerValue +
-                                                  userList.listId.toString());
+                                              // print(merchantResponse!.fields
+                                              //         .merchId.integerValue +
+                                              //     userList.listId.toString());
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ChatScreen(
-                                                    chatId: userList.listId
+                                                    chatId: widget
+                                                        .userList.listId
                                                         .toString(),
-                                                    title: currentMerchantOffer
+                                                    title: widget
+                                                        .currentMerchantOffer
                                                         .merchResponse
                                                         .merchTotalPrice,
                                                     fromNotification: false,
@@ -320,7 +348,8 @@ class MerchantOfferCard extends StatelessWidget {
                                                                 .fields
                                                                 .merchId
                                                                 .integerValue +
-                                                            userList.listId
+                                                            widget
+                                                                .userList.listId
                                                                 .toString(),
                                                   ),
                                                 ),
@@ -349,9 +378,11 @@ class MerchantOfferCard extends StatelessWidget {
   }
 
   bool isDone() {
-    return userList.processStatus == 'accepted' ||
-            userList.processStatus == 'processed'
+    return overrideData
         ? true
-        : false;
+        : userList.processStatus == 'accepted' ||
+                userList.processStatus == 'processed'
+            ? true
+            : false;
   }
 }

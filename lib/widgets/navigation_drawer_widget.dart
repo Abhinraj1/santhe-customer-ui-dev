@@ -151,37 +151,13 @@ class NavigationDrawer extends StatelessWidget {
               onPress: () {
                 // Navigator.pop(context);
                 Get.to(() => const FAQPage());
-              }),
-          NavigationDrawerTile(
-            icon: Icons.people,
-            tileText: 'About Us',
-            onPress: () {
-              // Navigator.pop(context);
-              Get.to(() => const AboutUsPage());
-            },
-          ),
-          NavigationDrawerTile(
-            icon: CupertinoIcons.checkmark_shield_fill,
-            tileText: 'Terms & Conditions',
-            onPress: () {
-              // Navigator.pop(context);
-              Get.to(() => const TermsAndConditionsPage());
-            },
-          ),
+              },),
           NavigationDrawerTile(
             icon: CupertinoIcons.phone_fill,
             tileText: 'Contact Us/Feedback',
             onPress: () {
               // Navigator.pop(context);
               Get.to(() => const ContactUsPage());
-            },
-          ),
-          NavigationDrawerTile(
-            icon: CupertinoIcons.lock_shield_fill,
-            tileText: 'Privacy Policy',
-            onPress: () {
-              // Navigator.pop(context);
-              Get.to(() => const PrivacyPolicyPage());
             },
           ),
           NavigationDrawerTile(
@@ -207,6 +183,30 @@ class NavigationDrawer extends StatelessWidget {
                     snackPosition: SnackPosition.BOTTOM);
                 launch('https://www.google.com');
               }
+            },
+          ),
+          NavigationDrawerTile(
+            icon: Icons.people,
+            tileText: 'About Us',
+            onPress: () {
+              // Navigator.pop(context);
+              Get.to(() => const AboutUsPage());
+            },
+          ),
+          NavigationDrawerTile(
+            icon: CupertinoIcons.checkmark_shield_fill,
+            tileText: 'Terms & Conditions',
+            onPress: () {
+              // Navigator.pop(context);
+              Get.to(() => const TermsAndConditionsPage());
+            },
+          ),
+          NavigationDrawerTile(
+            icon: CupertinoIcons.lock_shield_fill,
+            tileText: 'Privacy Policy',
+            onPress: () {
+              // Navigator.pop(context);
+              Get.to(() => const PrivacyPolicyPage());
             },
           ),
         ],

@@ -18,7 +18,9 @@ import '../../controllers/boxes_controller.dart';
 import '../../core/app_colors.dart';
 
 class NewTabPage extends StatefulWidget {
-  const NewTabPage({Key? key}) : super(key: key);
+  const NewTabPage({Key? key, this.limit = 3}) : super(key: key);
+
+  final int limit;
 
   @override
   _NewTabPageState createState() => _NewTabPageState();
@@ -89,9 +91,9 @@ class _NewTabPageState extends State<NewTabPage> {
       resizeToAvoidBottomInset: false,
       floatingActionButton: ValueListenableBuilder<Box<UserList>>(
           valueListenable: Boxes.getUserListDB().listenable(),
-          builder: (context, box, widget) {
+          builder: (context, box, w) {
             var userLists = box.values.toList().cast<UserList>();
-            return userLists.length < 3
+            return userLists.length < widget.limit
                 ? FloatingActionButton(
                     elevation: 0.0,
                     onPressed: () async {

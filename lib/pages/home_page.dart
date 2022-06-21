@@ -1,14 +1,11 @@
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
@@ -23,6 +20,7 @@ import '../widgets/navigation_drawer_widget.dart';
 
 class HomePage extends StatefulWidget {
   final int pageIndex;
+
   const HomePage({this.pageIndex = 0, Key? key}) : super(key: key);
 
   @override
@@ -30,11 +28,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final apiController = Get.find<APIs>();
 
-  void checkSubPlan() async{
-
+  Future<int> checkSubPlan() async {
+    final data = await apiController
+        .getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
+    return data;
   }
 
   @override
@@ -50,13 +49,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final int pageIndex = widget.pageIndex;
-    final apiController = Get.find<APIs>();
-
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    double screenWidth = MediaQuery.of(context).size.width / 100;
 
     ScreenUtil.init(
         BoxConstraints(
@@ -158,14 +155,26 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: const TabBarView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            NewTabPage(),
-            OfferTabPage(),
-            ArchiveTabPage(),
-          ],
-        ),
+        body: FutureBuilder(
+            future: checkSubPlan(),
+            builder: (c, s) {
+              if (s.connectionState == ConnectionState.done) {
+                return TabBarView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    NewTabPage(
+                      limit: s.data == null ? 3 : s.data! as int,
+                    ),
+                    const OfferTabPage(),
+                    const ArchiveTabPage(),
+                  ],
+                );
+              }
+
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }),
       ),
     );
   }

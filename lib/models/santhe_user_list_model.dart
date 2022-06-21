@@ -1,4 +1,3 @@
-import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
 import 'package:hive/hive.dart';
 
@@ -31,7 +30,7 @@ class UserList extends HiveObject {
   final int listOfferCounter;
 
   @HiveField(8)
-  final String processStatus;
+  String processStatus;
 
   @HiveField(9)
   final DateTime custOfferWaitTime;
@@ -56,8 +55,6 @@ class UserList extends HiveObject {
         listItems.add(ListItem.fromJson(map['mapValue']['fields']));
       }
     }
-
-    print(data['listId']);
 
     return UserList(
       createListTime: DateTime.parse(data['createListTime']['timestampValue']),
@@ -105,16 +102,4 @@ class UserList extends HiveObject {
   //       'listOfferCounter': listOfferCounter,
   //       'processStatus': processStatus,
   //     };
-
-  @override
-  Future<void> delete() {
-    // TODO: implement delete
-    return super.delete();
-  }
-
-  @override
-  Future<void> save() {
-    // TODO: implement save
-    return super.save();
-  }
 }

@@ -177,8 +177,7 @@ class APIs extends GetxController {
     if(jsonResponse!=null && response.statusCode==200){
       return int.parse(jsonResponse['subscription']['custSubscription'][plan]);
     }else{
-      Get.to(()=>const ServerErrorPage());
-      throw ServerError;
+      return 3;
     }
   }
 

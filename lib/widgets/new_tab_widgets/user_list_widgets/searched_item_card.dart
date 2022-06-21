@@ -28,44 +28,6 @@ class SearchedItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
-
-    //for quantity field validation
-    final GlobalKey<FormState> _formKey = GlobalKey();
-
-    final TextEditingController _qtyController =
-        TextEditingController(text: '${item.dQuantity}');
-    final TextEditingController _brandController = TextEditingController();
-    final TextEditingController _notesController = TextEditingController();
-    final _unitsController = GroupButtonController(
-        selectedIndex: item.unit.indexWhere(
-            (element) => element.toLowerCase() == item.dUnit.toLowerCase()));
-    String selectedUnit = item.unit[item.unit.indexWhere(
-        (element) => element.toLowerCase() == item.dUnit.toLowerCase())];
-
-    print(item.dUnit);
-    print(item.unit);
-
-    final apiController = Get.find<APIs>();
-    final imageController2 =
-        Get.find<CustomImageController>().editItemCustomImageUrl.value = '';
-
-    const TextStyle kLabelTextStyle = TextStyle(
-        color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
-
-    final imageController = Get.find<CustomImageController>();
-
-    String removeDecimalZeroFormat(double n) {
-      return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
-    }
-
-    UserList currentUserList =
-        Boxes.getUserListDB().get(currentUserListDBKey) ??
-            fallBack_error_userList;
-    int custPhone = Boxes.getUserCredentialsDB()
-            .get('currentUserCredentials')
-            ?.phoneNumber ??
-        404;
 
     ScreenUtil.init(
         BoxConstraints(
@@ -118,7 +80,7 @@ class SearchedItemCard extends StatelessWidget {
                               color: Colors.grey.shade700),
                         ),
                         Text(
-                          item.catId == '999' ? 'Custom Category' : _categoryList.firstWhere((element) => element.catId == int.parse(item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', ''))).catName,
+                          item.catId == '999' ? 'Custom Category' : getCategoryName(_categoryList),
                           style: const TextStyle(
                             color: Colors.orange,
                           ),
@@ -135,5 +97,14 @@ class SearchedItemCard extends StatelessWidget {
             ),
           ],
         ));
+  }
+
+  String getCategoryName(List<Category> categoryList){
+    List<Category> temp = categoryList.where((element) => element.catId == int.parse(item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', ''))).toList();
+    if(temp.isEmpty) {
+      return 'Custom Category';
+    } else {
+      return temp.first.catName;
+    }
   }
 }

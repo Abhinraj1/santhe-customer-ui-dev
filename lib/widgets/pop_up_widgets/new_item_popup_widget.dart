@@ -2,9 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
+import 'package:resize/resize.dart';
 import 'package:santhe/core/app_helpers.dart';
 
 import '../../constants.dart';
@@ -108,29 +108,37 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   static const TextStyle kLabelTextStyle = TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
+  double top = 10.vh, right = 10.vw;
+  double animatedHeight = 150.h, animatedWidth = 150.h;
+  bool startAnimation = false;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    return Dialog(
-      elevation: 8.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        // padding: const EdgeInsets.all(1.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              //title: item name
-              Stack(children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: AutoSizeText(
-                      item.catId=='4000'?
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Dialog(
+            elevation: 8.0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              // padding: const EdgeInsets.all(1.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //title: item name
+                    Stack(children: [
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: AutoSizeText(
+                            item.catId=='4000'?
                           'Custom Item'
                           : item.itemName,
                       textAlign: TextAlign.center,
@@ -291,113 +299,113 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   textInputAction: TextInputAction.next,
                                   textAlign: TextAlign.center,
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  maxLength: 5,
+                                        maxLength: 5,
                                   textAlignVertical: TextAlignVertical.center,
                                   inputFormatters: [DecimalTextInputFormatter(decimalRange: 1)],
-                                  style: const TextStyle(
-                                      color: Colors.orange,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16.0),
-                                  onSaved: (value) {
-                                    _qtyController.text = value!;
-                                  },
-                                  decoration: InputDecoration(
-                                    counterText: '',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          kTextFieldCircularBorderRadius),
-                                      borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          kTextFieldCircularBorderRadius),
-                                      borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
-                                    ),
-                                    prefix: GestureDetector(
-                                      onTap: () {
-                                        WidgetsBinding
-                                            .instance.focusManager.primaryFocus
-                                            ?.unfocus();
-                                        if (_qtyController.text.isEmpty) {
-                                          _qtyController.text = 0.toString();
-                                        }
-                                        double i =
-                                            double.parse(_qtyController.text);
-                                        if (i > 0) {
-                                          i--;
-                                          _qtyController.text =
-                                              removeDecimalZeroFormat(i);
-                                        }
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(right: 5.0),
-                                        child: Icon(
-                                          CupertinoIcons.minus,
-                                          color: Color(0xff8B8B8B),
-                                          size: 15.0,
-                                        ),
-                                      ),
-                                    ),
-                                    suffix: GestureDetector(
-                                      onTap: () {
-                                        WidgetsBinding
-                                            .instance.focusManager.primaryFocus
-                                            ?.unfocus();
-                                        if (_qtyController.text.isEmpty) {
-                                          _qtyController.text = 0.toString();
-                                        }
-
-                                        double i =
-                                            double.parse(_qtyController.text);
-
-                                        i++;
-                                        _qtyController.text =
-                                            removeDecimalZeroFormat(i);
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Icon(
-                                          CupertinoIcons.add,
-                                          color: Color(0xff8B8B8B),
-                                          size: 15.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                            ),
-                          ],
-                        ),
-                        Stack(children: [
-                          Container(
-                            color: Colors.transparent,
-                            height: screenWidth * 30,
-                            width: screenWidth * 30,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(10.sp),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (imageController.editItemCustomImageUrl
-                                          .value.isNotEmpty &&
-                                      imageController.editItemCustomImageItemId
-                                              .value ==
-                                          item.itemId.toString()) {
-                                    Get.to(
-                                        () => ImageViewerPage(
-                                              itemImageUrl: imageController
-                                                  .editItemCustomImageUrl.value,
-                                              showCustomImage: true,
+                                        style: const TextStyle(
+                                            color: Colors.orange,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16.0),
+                                        onSaved: (value) {
+                                          _qtyController.text = value!;
+                                        },
+                                        decoration: InputDecoration(
+                                          counterText: '',
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                kTextFieldCircularBorderRadius),
+                                            borderSide: const BorderSide(
+                                                width: 1.0, color: kTextFieldGrey),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                kTextFieldCircularBorderRadius),
+                                            borderSide: const BorderSide(
+                                                width: 1.0, color: kTextFieldGrey),
+                                          ),
+                                          prefix: GestureDetector(
+                                            onTap: () {
+                                              WidgetsBinding
+                                                  .instance.focusManager.primaryFocus
+                                                  ?.unfocus();
+                                              if (_qtyController.text.isEmpty) {
+                                                _qtyController.text = 0.toString();
+                                              }
+                                              double i =
+                                              double.parse(_qtyController.text);
+                                              if (i > 0) {
+                                                i--;
+                                                _qtyController.text =
+                                                    removeDecimalZeroFormat(i);
+                                              }
+                                            },
+                                            child: const Padding(
+                                              padding: EdgeInsets.only(right: 5.0),
+                                              child: Icon(
+                                                CupertinoIcons.minus,
+                                                color: Color(0xff8B8B8B),
+                                                size: 15.0,
+                                              ),
                                             ),
-                                        transition: Transition.fadeIn,
-                                        opaque: false);
-                                  } else {
-                                    Get.to(
+                                          ),
+                                          suffix: GestureDetector(
+                                            onTap: () {
+                                              WidgetsBinding
+                                                  .instance.focusManager.primaryFocus
+                                                  ?.unfocus();
+                                              if (_qtyController.text.isEmpty) {
+                                                _qtyController.text = 0.toString();
+                                              }
+
+                                              double i =
+                                              double.parse(_qtyController.text);
+
+                                              i++;
+                                              _qtyController.text =
+                                                  removeDecimalZeroFormat(i);
+                                            },
+                                            child: const Padding(
+                                              padding: EdgeInsets.only(left: 5.0),
+                                              child: Icon(
+                                                CupertinoIcons.add,
+                                                color: Color(0xff8B8B8B),
+                                                size: 15.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                              Stack(children: [
+                                Container(
+                                  color: Colors.transparent,
+                                  height: screenWidth * 30,
+                                  width: screenWidth * 30,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10.sp),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        if (imageController.editItemCustomImageUrl
+                                            .value.isNotEmpty &&
+                                            imageController.editItemCustomImageItemId
+                                                .value ==
+                                                item.itemId.toString()) {
+                                          Get.to(
+                                                  () => ImageViewerPage(
+                                                itemImageUrl: imageController
+                                                    .editItemCustomImageUrl.value,
+                                                showCustomImage: true,
+                                              ),
+                                              transition: Transition.fadeIn,
+                                              opaque: false);
+                                        } else {
+                                          Get.to(
                                         () => ImageViewerPage(
                                             itemImageUrl: item.itemImageId,
                                             showCustomImage: false),
@@ -417,47 +425,47 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                     children: [
                                       CachedNetworkImage(
                                         imageUrl: imageController
-                                                .editItemCustomImageUrl.isEmpty
-                                            ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img'
+                                                  .editItemCustomImageUrl.isEmpty
+                                                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img'
                                             : imageController
                                                 .editItemCustomImageUrl.value,
-                                        width: screenWidth * 25,
-                                        height: screenWidth * 25,
-                                        useOldImageOnUrlChange: true,
-                                        fit: BoxFit.cover,
-                                        errorWidget: (context, url, error) {
-                                          return Container(
-                                            color: Colors.red,
-                                            width: screenWidth * 25,
-                                            height: screenWidth * 25,
-                                          );
-                                        },
-                                      ),
-                                      Positioned(
-                                        top: 10,
-                                        bottom: 10,
-                                        left: 10,
-                                        right: 10,
-                                        child: CircularProgressIndicator(
-                                          value: imageController
-                                                  .imageUploadProgress
-                                                  .value
-                                                  .isNotEmpty
-                                              ? double.parse(imageController
-                                                  .imageUploadProgress.value)
-                                              : 0.0,
-                                          strokeWidth: 5.0,
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                }),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: -1.0,
-                            right: -1.0,
+                                              width: screenWidth * 25,
+                                              height: screenWidth * 25,
+                                              useOldImageOnUrlChange: true,
+                                              fit: BoxFit.cover,
+                                              errorWidget: (context, url, error) {
+                                                return Container(
+                                                  color: Colors.red,
+                                                  width: screenWidth * 25,
+                                                  height: screenWidth * 25,
+                                                );
+                                              },
+                                            ),
+                                            Positioned(
+                                              top: 10,
+                                              bottom: 10,
+                                              left: 10,
+                                              right: 10,
+                                              child: CircularProgressIndicator(
+                                                value: imageController
+                                                    .imageUploadProgress
+                                                    .value
+                                                    .isNotEmpty
+                                                    ? double.parse(imageController
+                                                    .imageUploadProgress.value)
+                                                    : 0.0,
+                                                strokeWidth: 5.0,
+                                              ),
+                                            )
+                                          ],
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -1.0,
+                                  right: -1.0,
                             child: GestureDetector(
                               onTap: () {
                                 showModalBottomSheet<void>(
@@ -561,7 +569,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         )
                                                       ],
                                                     ),
-                                                    Column(
+                                                          Column(
                                                       children: [
                                                         GestureDetector(
                                                           onTap: () async {
@@ -628,7 +636,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       );
                                     });
                               },
-                              child: const Icon(
+                                    child: const Icon(
                                 CupertinoIcons.pencil_circle_fill,
                                 color: Colors.orange,
                                 size: 24.0,
@@ -706,9 +714,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                       keyboardType: TextInputType.text,
                       controller: _brandController,
                       maxLength: 30,
-                      // maxLines: 2,
-                      textAlignVertical: TextAlignVertical.center,
-                      textInputAction: TextInputAction.next,
+                            // maxLines: 2,
+                            textAlignVertical: TextAlignVertical.center,
+                            textInputAction: TextInputAction.next,
                       style: TextStyle(
                           color: Colors.grey.shade500,
                           fontWeight: FontWeight.w400,
@@ -753,64 +761,66 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       color: const Color(0xffFFBE74),
                                       fontWeight: FontWeight.w300,
                                       fontSize: 13.sp))
-                            ]),
-                      ),
-                    ),
 
-                    //Notes
-                    TextFormField(
-                      keyboardType: TextInputType.text,
-                      controller: _notesController,
-                      maxLength: 50,
+                                  ]),
+                            ),
+                          ),
+                          //Notes
+                          TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller: _notesController,
+                            maxLength: 50,
                       textAlignVertical: TextAlignVertical.center,
                       textInputAction: TextInputAction.done,
-                      maxLines: 3,
-                      style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16.0),
-                      onSaved: (value) {
-                        _notesController.text = value!;
-                      },
-                      decoration: InputDecoration(
-                        counterStyle: const TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              kTextFieldCircularBorderRadius),
-                          borderSide: const BorderSide(
-                              width: 1.0, color: kTextFieldGrey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              kTextFieldCircularBorderRadius),
-                          borderSide: const BorderSide(
-                              width: 1.0, color: kTextFieldGrey),
-                        ),
-                        hintText: item.dItemNotes,
-                        hintStyle: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.grey.shade500),
-                      ),
-                    ),
-                    SizedBox(height: 30.sp),
-                    //-----------------ADD BUTTON---------------
-                    Center(
-                      child: SizedBox(
-                        width: isProcessing ? 30 : screenWidth * 45,
-                        height: isProcessing ? 30 : 50,
-                        child: isProcessing
-                            ? const CircularProgressIndicator()
-                            : MaterialButton(
+                            maxLines: 3,
+                            style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16.0),
+                            onSaved: (value) {
+                              _notesController.text = value!;
+                            },
+                            decoration: InputDecoration(
+                              counterStyle: const TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    kTextFieldCircularBorderRadius),
+                                borderSide: const BorderSide(
+                                    width: 1.0, color: kTextFieldGrey),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    kTextFieldCircularBorderRadius),
+                                borderSide: const BorderSide(
+                                    width: 1.0, color: kTextFieldGrey),
+                              ),
+                              hintText: item.dItemNotes,
+                              hintStyle: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.grey.shade500),
+                            ),
+                          ),
+                          SizedBox(height: 30.sp),
+                          //-----------------ADD BUTTON---------------
+                          Center(
+                            child: SizedBox(
+                              width: isProcessing ? 30 : screenWidth * 45,
+                              height: isProcessing ? 30 : 50,
+                              child: isProcessing
+                                  ? const CircularProgressIndicator()
+                                  : MaterialButton(
                                 elevation: 0.0,
                                 highlightElevation: 0.0,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
                                 onPressed: () async {
-                                  setState(() {
-                                    isProcessing = true;
-                                  });
+                                  if(!widget.edit)animateAdd(MediaQuery.of(context).size.width / 100);
+                                  Future.delayed(Duration(milliseconds: widget.edit ? 0 : 400), () async {
+                                    setState(() {
+                                      isProcessing = true;
+                                    });
 
                                   final itemUnit = selectedUnit;
 
@@ -827,9 +837,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             ? item.dItemNotes +
                                             placeHolderIdentifier
                                             : _brandController.text,
-                                        itemId: '${item.itemId}',
-                                        itemImageId: item.itemImageId,
-                                        itemName: _customItemNameController.text,
+                                          itemId: '${item.itemId}',
+                                          itemImageId: item.itemImageId,
+                                          itemName: _customItemNameController.text,
                                         quantity:
                                         double.parse(_qtyController.text),
                                         notes: _notesController.text.isEmpty
@@ -865,7 +875,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       int itemCount =
                                       await apiController.getItemsCount();
 
-                                      if (itemCount != 0) {
+                                        if (itemCount != 0) {
                                         Item newCustomItem = Item(
                                             dBrandType:
                                             _brandController.text.isEmpty
@@ -877,23 +887,23 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                 ? item.dItemNotes +
                                                 placeHolderIdentifier
                                                 : _notesController.text,
-                                            itemImageTn: imageController
-                                                .editItemCustomImageUrl.value,
-                                            catId: item.catId,
-                                            createUser: custPhone,
-                                            dQuantity: 1,
-                                            dUnit: selectedUnit,
-                                            itemAlias: _customItemNameController.text,
-                                            itemId: itemCount,
-                                            itemImageId: imageController
-                                                .editItemCustomImageUrl.value,
-                                            itemName: _customItemNameController.text,
-                                            status: item.catId=='4000'?'inactive':'active',
-                                            unit: [selectedUnit],
-                                            updateUser: custPhone);
+                                              itemImageTn: imageController
+                                                  .editItemCustomImageUrl.value,
+                                              catId: item.catId,
+                                              createUser: custPhone,
+                                              dQuantity: 1,
+                                              dUnit: selectedUnit,
+                                              itemAlias: _customItemNameController.text,
+                                              itemId: itemCount,
+                                              itemImageId: imageController
+                                                  .editItemCustomImageUrl.value,
+                                              itemName: _customItemNameController.text,
+                                              status: item.catId=='4000'?'inactive':'active',
+                                              unit: [selectedUnit],
+                                              updateUser: custPhone);
 
-                                        int response = await apiController
-                                            .addItem(newCustomItem);
+                                          int response = await apiController
+                                              .addItem(newCustomItem);
 
                                         if (response == 1) {
                                           final listItem = ListItem(
@@ -904,9 +914,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                 : _brandController.text,
                                             //item ref
                                             itemId: '${item.itemId}',
-                                            itemImageId: imageController
-                                                .editItemCustomImageUrl.value,
-                                            itemName: _customItemNameController.text,
+                                              itemImageId: imageController
+                                                  .editItemCustomImageUrl.value,
+                                              itemName: _customItemNameController.text,
                                             quantity: double.parse(
                                                 _qtyController.text),
                                             notes:
@@ -928,7 +938,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                   'projects/santhe-425a8/databases/(default)/documents/category/',
                                                   ''),
                                             ),
-                                          );
+                                            );
 
                                           if (widget.edit) {
                                             currentUserList.items.removeWhere(
@@ -979,8 +989,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                     }
                                   }
 
-                                  setState(() {
-                                    isProcessing = false;
+                                    setState(() {
+                                      isProcessing = false;
+                                    });
                                   });
                                 },
                                 child: AutoSizeText(
@@ -992,15 +1003,94 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   ),
                                 ),
                               ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    )
                   ],
                 ),
-              )
-            ],
+              ),
+            ),
           ),
-        ),
+          //animation widget
+          if(startAnimation)AnimatedPositioned(
+            top: top,
+            right: right,
+            duration: const Duration(milliseconds: 300),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: AnimatedContainer(
+                height: animatedHeight,
+                width: animatedWidth,
+                duration: const Duration(milliseconds: 200),
+                child: Obx(
+                  //todo fix error due to builder logic issue move logic elsewhere
+                      () => Stack(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: imageController
+                            .editItemCustomImageUrl
+                            .value
+                            .isNotEmpty &&
+                            imageController
+                                .editItemCustomImageItemId
+                                .value ==
+                                item.itemId.toString()
+                            ? imageController
+                            .editItemCustomImageUrl.value
+                            : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId}',
+                        width: screenWidth * 25,
+                        height: screenWidth * 25,
+                        useOldImageOnUrlChange: true,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) {
+                          print(error);
+                          return Container(
+                            color: Colors.red,
+                            width: screenWidth * 25,
+                            height: screenWidth * 25,
+                          );
+                        },
+                      ),
+                      Positioned(
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                        child: CircularProgressIndicator(
+                          value: imageController
+                              .imageUploadProgress
+                              .value
+                              .isNotEmpty
+                              ? double.parse(imageController
+                              .imageUploadProgress.value)
+                              : 0.0,
+                          strokeWidth: 5.0,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  void animateAdd(double value){
+    setState(() => startAnimation = true);
+    Future.delayed(const Duration(milliseconds: 50), (){
+      setState((){
+        animatedWidth = 50.w;
+        animatedHeight = 50.w;
+        top = 81.vh;
+        right = 10.vw;
+      });
+    });
+    Future.delayed(const Duration(milliseconds: 400), () => setState(() => startAnimation = false));
+    top = 20.vh; right = 20.vw;
   }
 }

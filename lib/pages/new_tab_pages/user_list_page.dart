@@ -94,6 +94,17 @@ class _UserListPageState extends State<UserListPage>
     super.dispose();
   }
 
+
+  late final UserList userList = widget.userList;
+  final TextStyle popupTextStyle = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 13.sp,
+    color: const Color(0xffB0B0B0),
+  );
+
+  late UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
+  final FocusNode _searchNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
 
@@ -277,7 +288,7 @@ class _UserListPageState extends State<UserListPage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextFormField(
+              //search text fieldTextFormField(
                 controller: searchQueryController,
                 textAlignVertical: TextAlignVertical.center,
                 textAlign: TextAlign.left,
@@ -1069,10 +1080,8 @@ class _UserListPageState extends State<UserListPage>
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 8.0, horizontal: 8.0),
-                                        physics: const BouncingScrollPhysics(
-                                            parent:
-                                                AlwaysScrollableScrollPhysics()),
-                                        itemCount: snapshot.data?.length,
+
+                                        itemCount: snapshot.data?.length,keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                         itemBuilder: (context, index) {
                                           ScreenUtil.init(
                                               BoxConstraints(

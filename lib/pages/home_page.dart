@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
-    apiController.searchedItemResult('potato');
+    // apiController.searchedItemResult('potato');
     super.initState();
   }
 
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final int pageIndex = widget.pageIndex;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
+    // double screenHeight = MediaQuery.of(context).size.height / 100;
 
     ScreenUtil.init(
         BoxConstraints(

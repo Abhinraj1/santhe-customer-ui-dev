@@ -42,7 +42,7 @@ class MerchantItemsListPage extends StatefulWidget {
 class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
   Future<MerchantOfferResponse> getDetails() async {
     final apiController = Get.find<APIs>();
-    if (widget.archived) {
+    if (widget.archived || widget.overrideData) {
       final data =
           await apiController.getAllMerchOfferByListId(widget.userList.listId);
       widget.currentMerchantOffer = data.firstWhere(
@@ -643,6 +643,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                           .segments
                                                                           .last));
                                                           // int response = 1;
+                                                          // int response2 = 1;
                                                           if (response == 1 &&
                                                               response2 == 1) {
                                                             //todo refresh and send to sent page

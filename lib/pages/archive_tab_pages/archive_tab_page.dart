@@ -31,7 +31,6 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
     _archivedController.isDataLoading = true;
     _archivedController.update();
     apiController.getArchivedCust(custId).then((value) {
-      print(value);
       _archivedController.archivedList = value;
       _archivedController.isDataLoading = false;
       _archivedController.update();
@@ -45,16 +44,6 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
-
     return Scaffold(
       body: GetBuilder<ArchivedController>(
         builder: (controller) {
@@ -68,14 +57,11 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                 height: MediaQuery.of(context).size.height * 0.8,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 39.62.h,
-                    ),
-                    SizedBox(
-                      height: 372.02.h,
-                      width: 372.65.w,
+                      height: 268.h,
+                      width: 368.w,
                       child: SvgPicture.asset(
                         'assets/archive_tab_image.svg',
                         fit: BoxFit.fill,
@@ -91,16 +77,16 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                           style: TextStyle(
                             color: kTextGrey,
                             fontWeight: FontWeight.w400,
-                            fontSize: 18.sp,
+                            fontSize: 24.sp,
                             height: 2.sp,
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: '\nNew ',
+                              text: ' New ',
                               style: TextStyle(
                                 color: kTextGrey,
                                 fontWeight: FontWeight.w900,
-                                fontSize: 18.sp,
+                                fontSize: 24.sp,
                                 height: 2.sp,
                               ),
                             ),
@@ -109,7 +95,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                               style: TextStyle(
                                 color: kTextGrey,
                                 fontWeight: FontWeight.w400,
-                                fontSize: 18.sp,
+                                fontSize: 24.sp,
                                 height: 2.sp,
                               ),
                             ),
@@ -128,7 +114,6 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                 //future builder will take care of future value so no need to mark this function async
                 userArchivedListsData = apiController.getArchivedCust(custId);
                 apiController.getArchivedCust(custId).then((value) {
-                  print(value);
                   _archivedController.archivedList = value;
                   _archivedController.isDataLoading = false;
                   _archivedController.update();

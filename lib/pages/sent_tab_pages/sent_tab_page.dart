@@ -39,29 +39,11 @@ class _OfferTabPageState extends State<OfferTabPage> {
     print('-->PHONE: $custPhone');
     // FirebaseHelper().offerStream();
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Scaffold(
       body: FutureBuilder<List<UserList>>(
         future: userSentListsData,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            //todo show proper error screen
-            // return Center(child: Text('${snapshot.error}'));
-            ScreenUtil.init(
-                BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width,
-                    maxHeight: MediaQuery.of(context).size.height),
-                designSize: const Size(390, 844),
-                context: context,
-                minTextAdapt: true,
-                orientation: Orientation.portrait);
             return SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -69,12 +51,14 @@ class _OfferTabPageState extends State<OfferTabPage> {
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // SizedBox(height: screenHeight * 23),
                     SizedBox(
-                      height: screenWidth * 100,
-                      width: screenWidth * 100,
+                      height: 89.62.h,
+                    ),
+                    SizedBox(
+                      height: 372.02.h,
+                      width: 312.65.w,
                       child: SvgPicture.asset(
                         'assets/sent_tab_image.svg',
                         fit: BoxFit.fill,
@@ -83,35 +67,36 @@ class _OfferTabPageState extends State<OfferTabPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text:
+                              'All your shopping lists that you have sent to Shops in last 72 hours will appear here. Go to',
+                          style: TextStyle(
+                            color: kTextGrey,
+                            fontSize: 24.sp,
+                            height: 2.sp,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' New ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kTextGrey,
+                                fontSize: 24.sp,
+                                height: 2.sp,
+                              ),
+                            ),
+                            TextSpan(
                               text:
-                                  'All your shopping lists that you have sent to\nShops in last 72 hours will appear here. Go to',
+                                  'tab to create and send your shopping lists.',
                               style: TextStyle(
                                   color: kTextGrey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18.sp,
-                              height: 2.sp,),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: '\nNew ',
-                                  style: TextStyle(
-                                      color: kTextGrey,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 18.sp,
-                                  height: 2.sp,),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'tab to create and send your shopping lists',
-                                  style: TextStyle(
-                                      color: kTextGrey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18.sp,
-                                    height: 2.sp
-                                  ),
-                                ),
-                              ],),),
+                                  fontSize: 24.sp,
+                                  height: 2.sp),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -122,12 +107,12 @@ class _OfferTabPageState extends State<OfferTabPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 25.0,
+                SizedBox(
+                  height: 89.62.h,
                 ),
                 SizedBox(
-                  width: screenWidth * 60,
-                  height: screenHeight * 30,
+                  height: 372.02.h,
+                  width: 312.65.w,
                   child: SvgPicture.asset(
                     'assets/onboarding_sentPage_arrow.svg',
                     color: Colors.orange,
@@ -141,8 +126,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                       'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18.sp,
+                          fontSize: 24.sp,
                           height: 2.sp,
                           color: Colors.grey),
                     ),
@@ -168,14 +152,6 @@ class _OfferTabPageState extends State<OfferTabPage> {
                     parent: AlwaysScrollableScrollPhysics()),
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  ScreenUtil.init(
-                      BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width,
-                          maxHeight: MediaQuery.of(context).size.height),
-                      designSize: const Size(390, 844),
-                      context: context,
-                      minTextAdapt: true,
-                      orientation: Orientation.portrait);
                   return OfferCard(userList: snapshot.data![index]);
                 },
               ),

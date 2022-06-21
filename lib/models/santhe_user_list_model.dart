@@ -36,8 +36,8 @@ class UserList extends HiveObject {
   final DateTime custOfferWaitTime;
 
   @HiveField(10)
-  final DateTime? updateListTime;
-
+  final DateTime updateListTime;
+  
   UserList({
     required this.createListTime,
     required this.custId,
@@ -49,8 +49,8 @@ class UserList extends HiveObject {
     required this.listOfferCounter,
     required this.processStatus,
     required this.custOfferWaitTime,
-    this.updateListTime,
-  });
+    DateTime? updateListTime,
+  }): updateListTime = updateListTime??DateTime.now();
 
   factory UserList.fromJson(data) {
     List<ListItem> listItems = [];

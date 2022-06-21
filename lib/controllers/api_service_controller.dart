@@ -1100,11 +1100,11 @@ class APIs extends GetxController {
           log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
         userLists
-            .sort((a, b) => b.updateListTime!.compareTo(a.updateListTime!));
+            .sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
       } else {
         return userLists;
       }
-      return userLists;
+      return userLists.reversed.toList();
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
@@ -1340,11 +1340,11 @@ class APIs extends GetxController {
           log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
         userLists
-            .sort((a, b) => b.updateListTime!.compareTo(a.updateListTime!));
+            .sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
       } else {
         return userLists;
       }
-      return userLists;
+      return userLists.reversed.toList();
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';

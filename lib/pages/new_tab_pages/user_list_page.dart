@@ -103,7 +103,6 @@ class _UserListPageState extends State<UserListPage>
   );
 
   late UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
-  final FocusNode _searchNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -288,7 +287,8 @@ class _UserListPageState extends State<UserListPage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              //search text fieldTextFormField(
+              //search text field
+            TextFormField(
                 controller: searchQueryController,
                 textAlignVertical: TextAlignVertical.center,
                 textAlign: TextAlign.left,

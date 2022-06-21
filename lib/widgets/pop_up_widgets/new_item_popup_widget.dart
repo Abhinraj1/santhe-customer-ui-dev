@@ -82,8 +82,8 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   static const TextStyle kLabelTextStyle = TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
-  double top = 10.vh, right = 20.vw;
-  double? animatedHeight, animatedWidth;
+  double top = 10.vh, right = 10.vw;
+  double animatedHeight = 150.h, animatedWidth = 150.h;
   bool startAnimation = false;
 
   @override
@@ -709,7 +709,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                 color: Colors.orange,
                                 onPressed: () async {
                                   if(!widget.edit)animateAdd(MediaQuery.of(context).size.width / 100);
-                                  Future.delayed(Duration(milliseconds: widget.edit ? 0 : 700), () async {
+                                  Future.delayed(Duration(milliseconds: widget.edit ? 0 : 400), () async {
                                     setState(() {
                                       isProcessing = true;
                                     });
@@ -897,13 +897,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
           if(startAnimation)AnimatedPositioned(
             top: top,
             right: right,
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 300),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: AnimatedContainer(
                 height: animatedHeight,
                 width: animatedWidth,
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 200),
                 child: Obx(
                   //todo fix error due to builder logic issue move logic elsewhere
                       () => Stack(
@@ -964,11 +964,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
     setState(() => startAnimation = true);
     Future.delayed(const Duration(milliseconds: 50), (){
       setState((){
-        top = 80.vh;
-        right = 70.vw;
+        animatedWidth = 50.w;
+        animatedHeight = 50.w;
+        top = 81.vh;
+        right = 10.vw;
       });
     });
-    Future.delayed(const Duration(milliseconds: 700), () => setState(() => startAnimation = false));
+    Future.delayed(const Duration(milliseconds: 400), () => setState(() => startAnimation = false));
     top = 20.vh; right = 20.vw;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
 import 'package:hive/hive.dart';
 
@@ -31,11 +30,14 @@ class UserList extends HiveObject {
   final int listOfferCounter;
 
   @HiveField(8)
-  final String processStatus;
+  String processStatus;
 
   @HiveField(9)
   final DateTime custOfferWaitTime;
 
+  @HiveField(10)
+  final DateTime updateListTime;
+  
   UserList({
     required this.createListTime,
     required this.custId,
@@ -47,7 +49,8 @@ class UserList extends HiveObject {
     required this.listOfferCounter,
     required this.processStatus,
     required this.custOfferWaitTime,
-  });
+    DateTime? updateListTime,
+  }): updateListTime = updateListTime??DateTime.now();
 
   factory UserList.fromJson(data) {
     List<ListItem> listItems = [];
@@ -57,64 +60,79 @@ class UserList extends HiveObject {
       }
     }
 
-    print(data['listId']);
-
-    return UserList(
-      createListTime: DateTime.parse(data['createListTime']['timestampValue']),
-      custId: int.parse(data['custId']['referenceValue'].toString().replaceAll(
-          'projects/santhe-425a8/databases/(default)/documents/customer/', '')),
-      items: listItems,
-      listId: int.parse(data['listId']['integerValue']),
-      listName: data['listName']['stringValue'],
-      custListSentTime:
-          DateTime.parse(data['custListSentTime']['timestampValue']),
-      custListStatus: data['custListStatus']['stringValue'],
-      listOfferCounter: int.parse(data['listOfferCounter']['integerValue']),
-      processStatus: data['processStatus']['stringValue'],
-      custOfferWaitTime:
-          DateTime.parse(data['custOfferWaitTime']['timestampValue']),
-    );
+    try {
+      return UserList(
+        createListTime:
+            DateTime.parse(data['createListTime']['timestampValue']),
+        custId: int.parse(data['custId']['referenceValue']
+            .toString()
+            .replaceAll(
+                'projects/santhe-425a8/databases/(default)/documents/customer/',
+                '')),
+        items: listItems,
+        listId: int.parse(data['listId']['integerValue']),
+        listName: data['listName']['stringValue'],
+        custListSentTime:
+            DateTime.parse(data['custListSentTime']['timestampValue']),
+        custListStatus: data['custListStatus']['stringValue'],
+        listOfferCounter: int.parse(data['listOfferCounter']['integerValue']),
+        processStatus: data['processStatus']['stringValue'],
+        custOfferWaitTime:
+            DateTime.parse(data['custOfferWaitTime']['timestampValue']),
+        updateListTime:
+            DateTime.parse(data['updateListTime']['timestampValue']),
+      );
+    } catch (e) {
+      return UserList(
+        createListTime:
+            DateTime.parse(data['createListTime']['timestampValue']),
+        custId: int.parse(data['custId']['referenceValue']
+            .toString()
+            .replaceAll(
+                'projects/santhe-425a8/databases/(default)/documents/customer/',
+                '')),
+        items: listItems,
+        listId: int.parse(data['listId']['integerValue']),
+        listName: data['listName']['stringValue'],
+        custListSentTime:
+            DateTime.parse(data['custListSentTime']['timestampValue']),
+        custListStatus: data['custListStatus']['stringValue'],
+        listOfferCounter: int.parse(data['listOfferCounter']['integerValue']),
+        processStatus: data['processStatus']['stringValue'],
+        custOfferWaitTime:
+            DateTime.parse(data['custOfferWaitTime']['timestampValue']),
+        updateListTime: DateTime.parse(data['custListSentTime']['timestampValue']),
+      );
+    }
   }
 
-  // factory UserList.fromFirestore(data) {
-  //   List<ListItem> listItems = [];
-  //   for (ListItem item in data['items']) {
-  //     listItems.add(ListItem.fromFirebase(item));
-  //   }
-  //
-  //   return UserList(
-  //       createListTime: data['createListTime'],
-  //       custId: data['custId'],
-  //       items: listItems,
-  //       listId: int.parse(data['listId']),
-  //       listName: data['listName'],
-  //       custListSentTime: DateTime.parse(data['custListSentTime']),
-  //       custListStatus: data['custListStatus'],
-  //       listOfferCounter: int.parse(data['listOfferCounter']),
-  //       processStatus: data['processStatus']);
-  // }
-  //
-  // Map<String, dynamic> toJson() => {
-  //       'createListTime': createListTime,
-  //       'custId': custId,
-  //       'items': items,
-  //       'listId': listId,
-  //       'listName': listName,
-  //       'custListSentTime': custListSentTime,
-  //       'custListStatus': custListStatus,
-  //       'listOfferCounter': listOfferCounter,
-  //       'processStatus': processStatus,
-  //     };
-
-  @override
-  Future<void> delete() {
-    // TODO: implement delete
-    return super.delete();
-  }
-
-  @override
-  Future<void> save() {
-    // TODO: implement save
-    return super.save();
-  }
+// factory UserList.fromFirestore(data) {
+//   List<ListItem> listItems = [];
+//   for (ListItem item in data['items']) {
+//     listItems.add(ListItem.fromFirebase(item));
+//   }
+//
+//   return UserList(
+//       createListTime: data['createListTime'],
+//       custId: data['custId'],
+//       items: listItems,
+//       listId: int.parse(data['listId']),
+//       listName: data['listName'],
+//       custListSentTime: DateTime.parse(data['custListSentTime']),
+//       custListStatus: data['custListStatus'],
+//       listOfferCounter: int.parse(data['listOfferCounter']),
+//       processStatus: data['processStatus']);
+// }
+//
+// Map<String, dynamic> toJson() => {
+//       'createListTime': createListTime,
+//       'custId': custId,
+//       'items': items,
+//       'listId': listId,
+//       'listName': listName,
+//       'custListSentTime': custListSentTime,
+//       'custListStatus': custListStatus,
+//       'listOfferCounter': listOfferCounter,
+//       'processStatus': processStatus,
+//     };
 }

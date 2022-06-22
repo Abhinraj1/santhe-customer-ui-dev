@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 
 enum Status {
@@ -21,21 +22,21 @@ class OfferStatus extends StatelessWidget {
   Status setStatus(String status) {
     if (_minOffer()) {
       return Status.minOffer;
-    }else if (status == 'maxoffer') {
+    } else if (status == 'maxoffer') {
       return Status.maxOffer;
-    }else if (status == 'nooffer' || status == 'nomerchant') {
+    } else if (status == 'nooffer' || status == 'nomerchant') {
       return Status.noOffer;
-    }else if (status=='missed') {
+    } else if (status == 'missed') {
       return Status.missed;
-    }else if (status == 'accepted' || status == 'processed') {
+    } else if (status == 'accepted' || status == 'processed') {
       return Status.accepted;
-    }else if (status == 'processing' ||
+    } else if (status == 'processing' ||
         status == 'waiting' ||
         status == 'draft') {
       return Status.waiting;
-    }else if (status == 'expired') {
+    } else if (status == 'expired') {
       return Status.expired;
-    }else{
+    } else {
       return Status.waiting;
     }
   }
@@ -60,15 +61,16 @@ class OfferStatus extends StatelessWidget {
           );
         }
 
-      case Status.missed:{
-        return AutoSizeText(
-          'Offers Missed',
-          style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.red,
-              fontWeight: FontWeight.w400),
-        );
-      }
+      case Status.missed:
+        {
+          return AutoSizeText(
+            'Offers Missed',
+            style: TextStyle(
+                fontSize: 14.sp,
+                color: Colors.red,
+                fontWeight: FontWeight.w400),
+          );
+        }
 
       case Status.accepted:
         {
@@ -86,7 +88,7 @@ class OfferStatus extends StatelessWidget {
             '${userList.listOfferCounter} Offers Available',
             style: TextStyle(
                 fontSize: 14.sp,
-                color: Colors.green,
+                color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
         }
@@ -106,7 +108,7 @@ class OfferStatus extends StatelessWidget {
             '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
             style: TextStyle(
                 fontSize: 14.sp,
-                color: const Color(0xffFFC300),
+                color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
         }
@@ -131,64 +133,62 @@ class OfferStatus extends StatelessWidget {
   }
 
   Widget getIcon(Status state) {
-    switch(state){
-      case Status.accepted:{
-        return Icon(
-          CupertinoIcons.checkmark_alt_circle_fill,
-          color: Colors.green,
-          size: 18.sp,
-        );
-      }
-      case Status.maxOffer: {
-        return Icon(
-          CupertinoIcons.hand_thumbsup_fill,
-          color: Colors.deepPurple,
-          size: 18.sp,
-        );
-      }
-      case Status.noOffer: {
-        return Icon(
-          CupertinoIcons.xmark_circle_fill,
-          color: Colors.red,
-          size: 18.sp,
-        );
-      }
+    switch (state) {
+      case Status.accepted:
+        {
+          return const Icon(
+            CupertinoIcons.checkmark_alt_circle_fill,
+            color: Colors.green,
+          );
+        }
+      case Status.maxOffer:
+        {
+          return Icon(
+            CupertinoIcons.hand_thumbsup,
+            color: AppColors().brandDark,
+          );
+        }
+      case Status.noOffer:
+        {
+          return const Icon(
+            CupertinoIcons.xmark_circle_fill,
+            color: Colors.red,
+          );
+        }
 
-      case Status.missed: {
-        return Icon(
-          CupertinoIcons.xmark_circle_fill,
-          color: Colors.red,
-          size: 18.sp,
-        );
-      }
+      case Status.missed:
+        {
+          return const Icon(
+            CupertinoIcons.xmark_circle_fill,
+            color: Colors.red,
+          );
+        }
 
-      case Status.waiting: {
-        return Icon(
-          Icons.hourglass_bottom_rounded,
-          color: Colors.orangeAccent,
-          size: 18.sp,
-        );
-      }
-      case Status.minOffer: {
-        return Icon(
-          CupertinoIcons.hand_thumbsup,
-          color: Colors.orangeAccent,
-          size: 18.sp,
-        );
-      }
-      case Status.expired: {
-        return Icon(
-          CupertinoIcons.exclamationmark_circle_fill,
-          color: Colors.grey,
-          size: 18.sp,
-        );
-      }
-      default: {
-        return const Visibility(
-            visible: false,
-            child: SizedBox()
-        );
-      }
+      case Status.waiting:
+        {
+          return Icon(
+            Icons.hourglass_bottom_rounded,
+            color: AppColors().brandDark,
+          );
+        }
+      case Status.minOffer:
+        {
+          return Icon(
+            CupertinoIcons.hand_thumbsup,
+            color: AppColors().brandDark,
+          );
+        }
+      case Status.expired:
+        {
+          return const Icon(
+            CupertinoIcons.exclamationmark_circle_fill,
+            color: Colors.grey,
+          );
+        }
+      default:
+        {
+          return const Visibility(visible: false, child: SizedBox());
+        }
     }
   }
 
@@ -196,11 +196,11 @@ class OfferStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        getText(setStatus(userList.processStatus)),
-        SizedBox(
-          width: 5.sp,
-        ),
         getIcon(setStatus(userList.processStatus)),
+        SizedBox(
+          width: 8.sp,
+        ),
+        getText(setStatus(userList.processStatus)),
       ],
     );
   }

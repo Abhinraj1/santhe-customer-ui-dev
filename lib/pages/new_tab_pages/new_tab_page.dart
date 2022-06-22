@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:santhe/constants.dart';
-import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
@@ -17,7 +18,9 @@ import '../../controllers/boxes_controller.dart';
 import '../../core/app_colors.dart';
 
 class NewTabPage extends StatefulWidget {
-  const NewTabPage({Key? key}) : super(key: key);
+  const NewTabPage({Key? key, this.limit = 3}) : super(key: key);
+
+  final int limit;
 
   @override
   _NewTabPageState createState() => _NewTabPageState();
@@ -25,10 +28,17 @@ class NewTabPage extends StatefulWidget {
 
 enum NewListType { startFromNew, importFromOld }
 
-class _NewTabPageState extends State<NewTabPage> {
+class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
   NewListType? _type = NewListType.startFromNew;
   final apiController = Get.find<APIs>();
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state==AppLifecycleState.resumed){
+      setState(() {});
+    }
+    super.didChangeAppLifecycleState(state);
+  }
   String listName = '';
   int totalCustList = 0;
   int custId =
@@ -49,9 +59,10 @@ class _NewTabPageState extends State<NewTabPage> {
               child: Text(
                 item.listName,
                 style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: Colors.grey,
-                    fontWeight: FontWeight.w400),
+                    fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),
@@ -87,9 +98,9 @@ class _NewTabPageState extends State<NewTabPage> {
       resizeToAvoidBottomInset: false,
       floatingActionButton: ValueListenableBuilder<Box<UserList>>(
           valueListenable: Boxes.getUserListDB().listenable(),
-          builder: (context, box, widget) {
+          builder: (context, box, w) {
             var userLists = box.values.toList().cast<UserList>();
-            return userLists.length < 3
+            return userLists.length < widget.limit
                 ? FloatingActionButton(
                     elevation: 0.0,
                     onPressed: () async {
@@ -112,20 +123,20 @@ class _NewTabPageState extends State<NewTabPage> {
                           barrierColor:
                               const Color.fromARGB(165, 241, 241, 241),
                           isScrollControlled: true,
-                          builder: (BuildContext context) {
+                          builder: (ctx) {
                             ScreenUtil.init(
                                 BoxConstraints(
-                                    maxWidth: MediaQuery.of(context).size.width,
+                                    maxWidth: MediaQuery.of(ctx).size.width,
                                     maxHeight:
-                                        MediaQuery.of(context).size.height),
+                                        MediaQuery.of(ctx).size.height),
                                 designSize: const Size(390, 844),
-                                context: context,
+                                context: ctx,
                                 minTextAdapt: true,
                                 orientation: Orientation.portrait);
                             return Padding(
                               padding: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).viewInsets.bottom),
+                                      MediaQuery.of(ctx).viewInsets.bottom),
                               child: Container(
                                 height: userListCount < 1
                                     ? screenHeight * 40
@@ -145,17 +156,17 @@ class _NewTabPageState extends State<NewTabPage> {
                                 ),
                                 //giving a new context so that modal sheet can also set state
                                 child: StatefulBuilder(
-                                  builder: (context, setState) {
+                                  builder: (c, setState) {
                                     ScreenUtil.init(
                                         BoxConstraints(
-                                            maxWidth: MediaQuery.of(context)
+                                            maxWidth: MediaQuery.of(c)
                                                 .size
                                                 .width,
-                                            maxHeight: MediaQuery.of(context)
+                                            maxHeight: MediaQuery.of(c)
                                                 .size
                                                 .height),
                                         designSize: const Size(390, 844),
-                                        context: context,
+                                        context: c,
                                         minTextAdapt: true,
                                         orientation: Orientation.portrait);
                                     return SingleChildScrollView(
@@ -200,7 +211,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                     ),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        Navigator.pop(context);
+                                                        Navigator.pop(c);
                                                       },
                                                       child: const Padding(
                                                         padding:
@@ -522,9 +533,9 @@ class _NewTabPageState extends State<NewTabPage> {
                                                           Get.offAll(() =>
                                                               const LoginScreen());
                                                         }
-                                                        print(
+                                                        log(
                                                             'TOTAL USER LIST NUMBER: $userListCount');
-                                                        print(
+                                                        log(
                                                             'New List Id: ${userListCount + 1}');
                                                         UserList newUserList =
                                                             UserList(
@@ -555,12 +566,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                         if (response == 1) {
                                                           box.add(newUserList);
                                                         } else {
-                                                          Get.dialog(const Card(
-                                                            child: Center(
-                                                              child: Text(
-                                                                  'Error!'),
-                                                            ),
-                                                          ));
+                                                          Get.dialog(const SizedBox.shrink());
                                                         }
 
                                                         //Dismiss the pop up
@@ -573,7 +579,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                                   .noTransition);
                                                         } else {
                                                           Navigator.pop(
-                                                              context);
+                                                              c);
                                                         }
                                                       }
                                                     } else if (listName
@@ -673,12 +679,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                           box.add(
                                                               newImportedList);
                                                         } else {
-                                                          Get.dialog(const Card(
-                                                            child: Center(
-                                                              child: Text(
-                                                                  'Error!'),
-                                                            ),
-                                                          ));
+                                                          Get.dialog(const SizedBox.shrink());
                                                         }
 
                                                         //Dismiss the pop up
@@ -691,7 +692,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                                   .noTransition);
                                                         } else {
                                                           Navigator.pop(
-                                                              context);
+                                                              c);
                                                         }
                                                       } else {
                                                         Get.snackbar(
@@ -737,7 +738,7 @@ class _NewTabPageState extends State<NewTabPage> {
                                                         );
                                                       }
                                                     } else {
-                                                      print(
+                                                      log(
                                                           'implement import feature');
                                                     }
                                                     await apiController
@@ -842,6 +843,7 @@ class _NewTabPageState extends State<NewTabPage> {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         return UserListCard(
+                          key: ObjectKey(_userListKeys[index].toString()),
                           userKey: _userListKeys[index],
                           userList: userLists[_userListKeys[index]]!,
                         );

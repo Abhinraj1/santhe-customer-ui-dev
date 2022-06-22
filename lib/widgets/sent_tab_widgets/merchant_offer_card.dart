@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
+import 'package:santhe/controllers/chat_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/merchant_details_response.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
@@ -9,11 +10,10 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../core/app_theme.dart';
 import '../../models/offer/customer_offer_response.dart';
-import '../../models/offer/offer_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/merchant_items_list_page.dart';
 
-class MerchantOfferCard extends StatelessWidget {
+class MerchantOfferCard extends StatefulWidget {
   final UserList userList;
   final CustomerOfferResponse currentMerchantOffer;
 
@@ -22,38 +22,27 @@ class MerchantOfferCard extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    String imagePath = 'assets/sent_tab/0star.png';
-    if (currentMerchantOffer.custOfferResponse.custDeal == 'best1') {
-      imagePath = 'assets/sent_tab/3star.png';
-    } else if (currentMerchantOffer.custOfferResponse.custDeal == 'best2') {
-      imagePath = 'assets/sent_tab/2star.png';
-    } else if (currentMerchantOffer.custOfferResponse.custDeal == 'best3') {
-      imagePath = 'assets/sent_tab/1star.png';
-    } else {
-      imagePath = 'assets/sent_tab/0star.png';
-    }
+  State<MerchantOfferCard> createState() => _MerchantOfferCardState();
+}
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
-    MerchantDetailsResponse? merchantResponse;
+class _MerchantOfferCardState extends State<MerchantOfferCard> {
+  final ChatController _chatController = Get.find();
+  MerchantDetailsResponse? merchantResponse;
+  String imagePath = 'assets/sent_tab/0star.png';
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
           if (merchantResponse != null || !isDone()) {
             Get.to(() => MerchantItemsListPage(
-                  currentMerchantOffer: currentMerchantOffer,
-                  userList: userList,
-                  merchantResponse: merchantResponse,
-                  archived: false,
-                ));
+              currentMerchantOffer: widget.currentMerchantOffer,
+              userList: widget.userList,
+              merchantResponse: merchantResponse,
+              archived: false,
+            ));
           } else {
             errorMsg('Please wait till loading', '');
           }
@@ -99,7 +88,7 @@ class MerchantOfferCard extends StatelessWidget {
                                 children: [
                                   TextSpan(
                                     text:
-                                        'Rs ${currentMerchantOffer.merchResponse.merchTotalPrice}',
+                                    'Rs ${widget.currentMerchantOffer.merchResponse.merchTotalPrice}',
                                     style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w700,
@@ -111,7 +100,7 @@ class MerchantOfferCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 12.0),
                             child: Text(
-                              '${currentMerchantOffer.merchResponse.merchOfferQuantity} of ${userList.items.length} items\navailable',
+                              '${widget.currentMerchantOffer.merchResponse.merchOfferQuantity} of ${widget.userList.items.length} items\navailable',
                               style: TextStyle(
                                 color: Colors.orange,
                                 fontSize: 24.sp,
@@ -124,7 +113,7 @@ class MerchantOfferCard extends StatelessWidget {
                             child: RichText(
                               text: TextSpan(
                                   text:
-                                      'Merchant is ${currentMerchantOffer.custDistance} ${currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
+                                  'Merchant is ${widget.currentMerchantOffer.custDistance} ${widget.currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w400,
@@ -132,8 +121,8 @@ class MerchantOfferCard extends StatelessWidget {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: currentMerchantOffer
-                                              .merchResponse.merchDelivery
+                                      text: widget.currentMerchantOffer
+                                      .merchResponse.merchDelivery
                                           ? 'Does home delivery'
                                           : 'No home delivery',
                                       style: TextStyle(
@@ -173,7 +162,7 @@ class MerchantOfferCard extends StatelessWidget {
                               height: 150.sp,
                               child: CircularProgressIndicator(
                                 value: double.parse(
-                                  '${currentMerchantOffer.merchResponse.merchOfferQuantity / userList.items.length}',
+                                  '${widget.currentMerchantOffer.merchResponse.merchOfferQuantity / widget.userList.items.length}',
                                 ),
                                 strokeWidth: 9.0,
                                 color: AppColors().brandDark,
@@ -215,8 +204,8 @@ class MerchantOfferCard extends StatelessWidget {
                           Expanded(
                             child: FutureBuilder<MerchantDetailsResponse>(
                               future: APIs().getMerchantDetails(
-                                  currentMerchantOffer
-                                      .merchId.path.segments.last),
+                                  widget.currentMerchantOffer
+                                  .merchId.path.segments.last),
                               builder: (builder, snapShot) {
                                 if (snapShot.connectionState ==
                                     ConnectionState.waiting) {
@@ -264,7 +253,7 @@ class MerchantOfferCard extends StatelessWidget {
                                           decoration: BoxDecoration(
                                               color: AppColors().brandDark,
                                               borderRadius:
-                                                  BorderRadius.circular(60)),
+                                              BorderRadius.circular(60)),
                                           child: Center(
                                             child: Icon(
                                               Icons.phone,
@@ -301,28 +290,27 @@ class MerchantOfferCard extends StatelessWidget {
                                         width: 92.w,
                                         child: ElevatedButton(
                                             onPressed: () {
-                                              print(merchantResponse!.fields
-                                                      .merchId.integerValue +
-                                                  userList.listId.toString());
+                                              // print(merchantResponse.fields
+                                              //         .merchId.integerValue +
+                                              //     userList.listId.toString());
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ChatScreen(
-                                                    chatId: userList.listId
-                                                        .toString(),
-                                                    title: currentMerchantOffer
+                                                        chatId: widget.userList.listId
+                                                            .toString(),
+                                                        title: widget.currentMerchantOffer
                                                         .merchResponse
-                                                        .merchTotalPrice,
-                                                    fromNotification: false,
-                                                    listEventId:
+                                                            .merchTotalPrice,
+                                                        listEventId:
                                                         merchantResponse!
-                                                                .fields
-                                                                .merchId
-                                                                .integerValue +
-                                                            userList.listId
+                                                            .fields
+                                                            .merchId
+                                                            .integerValue +
+                                                            widget.userList.listId
                                                                 .toString(),
-                                                  ),
+                                                      ),
                                                 ),
                                               );
                                             },
@@ -348,10 +336,28 @@ class MerchantOfferCard extends StatelessWidget {
     );
   }
 
+  void loadImage(){
+    if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best1') {
+      imagePath = 'assets/sent_tab/3star.png';
+    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best2') {
+      imagePath = 'assets/sent_tab/2star.png';
+    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best3') {
+      imagePath = 'assets/sent_tab/1star.png';
+    } else {
+      imagePath = 'assets/sent_tab/0star.png';
+    }
+  }
+
   bool isDone() {
-    return userList.processStatus == 'accepted' ||
-            userList.processStatus == 'processed'
+    return widget.userList.processStatus == 'accepted' ||
+            widget.userList.processStatus == 'processed'
         ? true
         : false;
+  }
+
+  @override
+  void dispose(){
+    _chatController.inOfferScreen = false;
+    super.dispose();
   }
 }

@@ -50,19 +50,19 @@ class OfferCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (userList.processStatus == 'nomerchant' ||
               userList.processStatus == 'nooffer' ||
               userList.processStatus == 'missed') {
             Get.to(
-              () => NoOfferPage(
+                  () => NoOfferPage(
                 userList: userList,
                 missed: userList.processStatus == 'missed',
               ),
             );
           } else {
             Get.to(
-              () => SentUserListDetailsPage(
+                  () => SentUserListDetailsPage(
                 userList: userList,
                 showOffers: _showOffer(),
               ),
@@ -88,37 +88,34 @@ class OfferCard extends StatelessWidget {
           ),
           child: Slidable(
             endActionPane: ActionPane(
-              // A motion is a widget used to control how the pane animates.
               motion: const ScrollMotion(),
-
-              // All actions are defined in the children parameter.
               children: [
-                //copy from old list
                 Visibility(
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
                       int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      await apiController.getAllCustomerLists(custId);
+                      UserList oldUserList = userList;
 
                       UserList newImportedList = UserList(
                           createListTime: DateTime.now(),
-                          custId: userList.custId,
-                          items: userList.items,
+                          custId: oldUserList.custId,
+                          items: oldUserList.items,
                           listId: int.parse('$custId${userListCount + 1}'),
-                          listName: '(COPY) ${userList.listName}',
-                          custListSentTime: userList.custListSentTime,
-                          custListStatus: userList.custListStatus,
-                          listOfferCounter: userList.listOfferCounter,
-                          processStatus: userList.processStatus,
-                          custOfferWaitTime: userList.custOfferWaitTime);
+                          listName: '(COPY) ${oldUserList.listName}',
+                          custListSentTime: oldUserList.custListSentTime,
+                          custListStatus: oldUserList.custListStatus,
+                          listOfferCounter: oldUserList.listOfferCounter,
+                          processStatus: oldUserList.processStatus,
+                          custOfferWaitTime: oldUserList.custOfferWaitTime);
 
                       int response = await apiController.addCustomerList(
                           newImportedList, custId, 'new');
 
                       if (response == 1) {
                         box.add(newImportedList);
-                        Get.to(const HomePage(
+                        Get.offAll(const HomePage(
                           pageIndex: 0,
                         ));
                       } else {
@@ -154,6 +151,8 @@ class OfferCard extends StatelessWidget {
                             AutoSizeText(
                               userList.listName,
                               maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
                               style: TextStyle(
                                   letterSpacing: 0.2,
                                   fontSize: 21.sp,
@@ -172,7 +171,7 @@ class OfferCard extends StatelessWidget {
                             ),
                             Padding(
                               padding:
-                                  EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                              EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
                               child: AutoSizeText(
                                 'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                                 style: TextStyle(

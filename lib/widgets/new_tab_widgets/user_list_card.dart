@@ -1,16 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import 'package:santhe/REEEEEEEEEEE/api_test/test.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
-import '../../constants.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/api_service_controller.dart';
@@ -33,7 +30,6 @@ class UserListCard extends StatelessWidget {
     String imagePath = 'assets/basket0.png';
 
     //image logic
-    Color clr = Colors.orange;
     if (userList.items.isEmpty) {
       imagePath = 'assets/basket0.png';
     } else if (userList.items.length <= 10) {
@@ -53,14 +49,14 @@ class UserListCard extends StatelessWidget {
         minTextAdapt: true,
         orientation: Orientation.portrait);
     return Padding(
-      padding: EdgeInsets.all(15.sp),
+      padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
           //print(userList.items.first.quantity);
           Get.to(() => UserListPage(userList: userList, userKey: userKey));
         },
         child: Container(
-          // padding: const EdgeInsets.symmetric(vertical: 5.0),
+          // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.0),
@@ -89,7 +85,7 @@ class UserListCard extends StatelessWidget {
                   child: SlidableAction(
                     onPressed: (context) async {
                       int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      await apiController.getAllCustomerLists(custId);
                       UserList oldUserList = Boxes.getUserListDB()
                           .values
                           .firstWhere(
@@ -112,12 +108,6 @@ class UserListCard extends StatelessWidget {
 
                       if (response == 1) {
                         box.add(newImportedList);
-                      } else {
-                        Get.dialog(const Card(
-                          child: Center(
-                            child: Text('Error!'),
-                          ),
-                        ));
                       }
                     },
                     backgroundColor: Colors.transparent,
@@ -164,15 +154,15 @@ class UserListCard extends StatelessWidget {
                           Get.closeCurrentSnackbar();
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
-                                () async {
-                              int response = await apiController
-                                  .undoDeleteUserList(userList.listId, "new");
-                              if (response == 1) {
-                                Boxes.getUserListDB().add(userList);
-                              } else {
-                                errorMsg('Unable to undo the list', '');
-                              }
-                            });
+                                    () async {
+                                  int response = await apiController
+                                      .undoDeleteUserList(userList.listId, "new");
+                                  if (response == 1) {
+                                    Boxes.getUserListDB().add(userList);
+                                  } else {
+                                    errorMsg('Unable to undo the list', '');
+                                  }
+                                });
                           }
                           pressCount++;
                           if (box.length >= 2) {
@@ -193,7 +183,7 @@ class UserListCard extends StatelessWidget {
                       apiController.deletedUserLists.add(userList);
 
                       int response =
-                          await apiController.deleteUserList(userList.listId);
+                      await apiController.deleteUserList(userList.listId);
 
                       if (response == 1) {
                         apiController.deletedUserLists.remove(userList);
@@ -214,56 +204,69 @@ class UserListCard extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.only(
+                  top: 5.0, bottom: 10.0, left: 15.0, right: 15.0),
+              child: Column(
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 18.77.sp),
-                          child: AutoSizeText(
-                            userList.listName,
-                            maxLines: 2,
-                            style: TextStyle(
-                                letterSpacing: 0.2,
-                                fontSize: 21.sp,
-                                color: Colors.orange,
-                                fontWeight: FontWeight.w400),
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AutoSizeText(
+                              userList.listName,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  letterSpacing: 0.2,
+                                  fontSize: 21.sp,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 18.77.sp),
+                              child: AutoSizeText(
+                                '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
+                                style: TextStyle(
+                                    fontSize: 36.sp,
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                              EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                              child: AutoSizeText(
+                                'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.transparent,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 18.77.sp),
-                          child: AutoSizeText(
-                            '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
-                            style: TextStyle(
-                                fontSize: 36.sp,
-                                color: Colors.orange,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(top: 28.53.sp, bottom: 16.32.sp),
-                          child: AutoSizeText(
-                            'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
-                            style: TextStyle(
-                                fontSize: 14.sp,
-                                color: const Color(0xffBBBBBB),
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      Image.asset(
+                        imagePath,
+                        height: 139.2.sp,
+                        width: 139.2.sp,
+                      ),
+                    ],
                   ),
-                  Image.asset(
-                    imagePath,
-                    height: 139.2.sp,
-                    width: 139.2.sp,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AutoSizeText(
+                        'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            color: const Color(0xffBBBBBB),
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
                   )
                 ],
               ),

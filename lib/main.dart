@@ -79,11 +79,13 @@ void main() async {
   Get.put(ChatController());
   Notifications().fcmInit();
 
-  runApp(MyApp(
-    showHome: showHome,
-    isRegistered: isRegistered,
-    isLoggedIn: isLoggedIn,
-  ));
+  runApp(
+    MyApp(
+      showHome: showHome,
+      isRegistered: isRegistered,
+      isLoggedIn: isLoggedIn,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -117,7 +119,6 @@ class MyApp extends StatelessWidget {
       showHome2 = false;
       Boxes.getUserPrefs().put('showHome', false);
     }
-    bool hasInternet = false;
 
     return Resize(
       builder: () => GetMaterialApp(
@@ -139,6 +140,7 @@ class MyApp extends StatelessWidget {
                 ? const SplashToHome()
                 : UserRegistrationPage(userPhoneNumber: userPhone)
             : const SplashToOnboarding(),
+        // home: const ServerErrorPage(),
       ),
       allowtextScaling: false,
       size: const Size(390, 844),

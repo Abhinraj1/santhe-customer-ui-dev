@@ -1,14 +1,14 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import 'package:get/get.dart';
 import 'package:santhe/controllers/registrationController.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_user_model.dart';
+import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/onboarding_page.dart';
 
@@ -24,6 +24,7 @@ import 'mapSearchScreen.dart';
 
 class UserRegistrationPage extends StatefulWidget {
   final int userPhoneNumber;
+
   const UserRegistrationPage({required this.userPhoneNumber, Key? key})
       : super(key: key);
 
@@ -40,7 +41,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   bool donePressed = false;
 
   Future init() async {
-    //OVOOVOVOOO
     CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
     var box = Boxes.getCacheRefreshInfo();
 
@@ -118,8 +118,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     }
 
     box.put('cacheRefresh', newCacheRefresh);
-
-//OVOVOVO
   }
 
   @override
@@ -130,7 +128,20 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
+
+    checkNet();
+
     super.initState();
+  }
+
+  void checkNet() async {
+    final hasNet = await AppHelpers.checkConnection();
+    if (!hasNet) {
+      Get.to(
+        () => const NoInternetPage(),
+        transition: Transition.fade,
+      );
+    }
   }
 
   @override
@@ -165,8 +176,10 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
-    final TextStyle kLabelStyle =
-        TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0);
+    final TextStyle kLabelStyle = TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 16.sp,
+    );
     final locationController = Get.find<LocationController>();
     return Scaffold(
       body: SingleChildScrollView(
@@ -595,7 +608,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                           custStatus: 'active',
                                           howToReach: registrationController
                                               .howToReach.value,
-                                          custPlan: 'default',
+                                          custPlan: 'planA',
                                           custLoginTime: DateTime.now());
 
                                       //todo add to firebase

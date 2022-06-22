@@ -1,14 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:santhe/pages/home_page.dart';
 
 import '../pages/chat/chat_screen.dart';
 import 'chat_controller.dart';
 
 class NotificationController extends GetxController {
   static NotificationController instance = Get.find();
-
+  bool fromNotification = false;
+  String landingScreen = 'new';
   Rx<RemoteMessage> notificationData = const RemoteMessage().obs;
 }
 
@@ -30,11 +31,8 @@ class Notifications {
         .getInitialMessage()
         .then((RemoteMessage? message) async {
       if (message != null) {
-        //new notification
-        if (message.data['notification_type'] != 'chat') {
-
-        }
         _notificationController.notificationData.value = message;
+        _notificationController.fromNotification = true;
         await navigateNotification(message);
       }
     });
@@ -150,6 +148,7 @@ class Notifications {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String? payload) async {
           if (payload != null) {
+            _notificationController.fromNotification = true;
             await navigateNotification(message);
           }
         });
@@ -157,7 +156,6 @@ class Notifications {
   }
 
   navigateNotification(RemoteMessage message) async {
-    print('notification data ${message.data}');
     NavigateNotifications().toScreen(message.data);
   }
 
@@ -166,11 +164,25 @@ class Notifications {
 }
 
 class NavigateNotifications {
+  final NotificationController _notificationController = NotificationController.instance;
   final ChatController _chatController = Get.find();
   void toScreen(Map<String, dynamic> data) {
+    if (data['screen'] == 'new'){
+      _notificationController.landingScreen = 'new';
+      if(!_notificationController.fromNotification){
+        Get.offAll(const HomePage(pageIndex: 0));
+      }
+    }
+    if (data['screen'] == 'answered'){
+      _notificationController.landingScreen = 'answered';
+      if(!_notificationController.fromNotification){
+        Get.offAll(const HomePage(pageIndex: 1));
+      }
+    }
     if(data['landingScreen'] == 'chat'){
-      if(!_chatController.inChatScreen) {
-        Get.to(ChatScreen(chatId: data['chatId'], title: data['title'], fromNotification: true, listEventId: data['listEventId'],));
+      _notificationController.landingScreen = 'chat';
+      if((!_chatController.inChatScreen && !_notificationController.fromNotification) || (_chatController.inOfferScreen && _notificationController.fromNotification)) {
+        Get.to(ChatScreen(chatId: data['chatId'], title: data['title'], listEventId: data['listEventId'],));
       }
     }
   }

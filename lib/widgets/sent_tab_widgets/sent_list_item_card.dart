@@ -12,6 +12,14 @@ class SentListItemCard extends StatelessWidget {
   final ListItem listItem;
   const SentListItemCard({required this.listItem, Key? key}) : super(key: key);
 
+  final String placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
+  String checkPlaceHolder(String data) {
+    if (data.contains(placeHolderIdentifier)) {
+      return '';
+    }
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
@@ -45,7 +53,7 @@ class SentListItemCard extends StatelessWidget {
                                   '')) <
                               4000
                           ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
-                          : listItem.itemImageId,
+                          : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/'+listItem.itemImageId,
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
@@ -67,19 +75,19 @@ class SentListItemCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(listItem.itemName),
-                        listItem.brandType.isEmpty
+                        checkPlaceHolder(listItem.brandType).isEmpty
                             ? AutoSizeText(
-                                listItem.notes.isEmpty
+                                checkPlaceHolder(listItem.notes).isEmpty
                                     ? '${listItem.quantity} ${listItem.unit}'
-                                    : '${listItem.quantity} ${listItem.unit}, ${listItem.notes}',
+                                    : '${listItem.quantity} ${listItem.unit}, ${checkPlaceHolder(listItem.notes)}',
                                 softWrap: false,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.orange,
                                 ),
                               )
                             : AutoSizeText(
-                                '${listItem.quantity} ${listItem.unit}, ${listItem.notes.isEmpty ? '${listItem.brandType}' : '${listItem.brandType}, ${listItem.notes}'}',
+                                '${listItem.quantity} ${listItem.unit}, ${checkPlaceHolder(listItem.notes).isEmpty ? checkPlaceHolder(listItem.brandType) : '${checkPlaceHolder(listItem.brandType)}, ${checkPlaceHolder(listItem.notes)}'}',
                                 softWrap: false,
                                 maxLines: 2,
                                 minFontSize: 10,

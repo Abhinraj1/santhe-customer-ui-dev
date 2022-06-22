@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:resize/resize.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 
 class MerchantItemCard extends StatefulWidget {
@@ -36,15 +35,6 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
     String removeDecimalZeroFormat(double n) {
       return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(

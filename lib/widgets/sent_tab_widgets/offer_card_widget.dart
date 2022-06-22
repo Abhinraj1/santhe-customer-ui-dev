@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
@@ -39,14 +39,6 @@ class OfferCard extends StatelessWidget {
       imagePath = 'assets/basket3.png';
     }
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
@@ -55,14 +47,14 @@ class OfferCard extends StatelessWidget {
               userList.processStatus == 'nooffer' ||
               userList.processStatus == 'missed') {
             Get.to(
-                  () => NoOfferPage(
+              () => NoOfferPage(
                 userList: userList,
                 missed: userList.processStatus == 'missed',
               ),
             );
           } else {
             Get.to(
-                  () => SentUserListDetailsPage(
+              () => SentUserListDetailsPage(
                 userList: userList,
                 showOffers: _showOffer(),
               ),
@@ -95,7 +87,7 @@ class OfferCard extends StatelessWidget {
                   child: SlidableAction(
                     onPressed: (context) async {
                       int userListCount =
-                      await apiController.getAllCustomerLists(custId);
+                          await apiController.getAllCustomerLists(custId);
                       UserList oldUserList = userList;
 
                       UserList newImportedList = UserList(
@@ -171,7 +163,7 @@ class OfferCard extends StatelessWidget {
                             ),
                             Padding(
                               padding:
-                              EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                                  EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
                               child: AutoSizeText(
                                 'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                                 style: TextStyle(

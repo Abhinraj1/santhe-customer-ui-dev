@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -1045,7 +1047,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                         useOldImageOnUrlChange: true,
                         fit: BoxFit.cover,
                         errorWidget: (context, url, error) {
-                          print(error);
+                          log(error);
                           return Container(
                             color: Colors.red,
                             width: screenWidth * 25,

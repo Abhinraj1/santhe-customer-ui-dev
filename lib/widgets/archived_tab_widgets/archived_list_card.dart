@@ -1,14 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:get/get.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/no_offer_page.dart';
@@ -17,7 +16,6 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
 import '../../controllers/archived_controller.dart';
-import '../../pages/archive_tab_pages/archive_detailed_page.dart';
 
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
@@ -33,7 +31,6 @@ class ArchivedUserListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ArchivedController _archivedController = Get.find();
-    final screenSize = MediaQuery.of(context).size;
     final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
 
@@ -48,14 +45,6 @@ class ArchivedUserListCard extends StatelessWidget {
       imagePath = 'assets/basket3.png';
     }
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(

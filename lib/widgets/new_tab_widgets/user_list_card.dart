@@ -1,15 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:get/get.dart';
-
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
@@ -18,6 +16,7 @@ class UserListCard extends StatelessWidget {
   final UserList userList;
   final box = Boxes.getUserListDB();
   final int userKey;
+
   UserListCard({required this.userList, Key? key, required this.userKey})
       : super(key: key);
   final int custId =
@@ -40,14 +39,6 @@ class UserListCard extends StatelessWidget {
       imagePath = 'assets/basket3.png';
     }
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
@@ -85,7 +76,7 @@ class UserListCard extends StatelessWidget {
                   child: SlidableAction(
                     onPressed: (context) async {
                       int userListCount =
-                      await apiController.getAllCustomerLists(custId);
+                          await apiController.getAllCustomerLists(custId);
                       UserList oldUserList = Boxes.getUserListDB()
                           .values
                           .firstWhere(
@@ -154,15 +145,15 @@ class UserListCard extends StatelessWidget {
                           Get.closeCurrentSnackbar();
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
-                                    () async {
-                                  int response = await apiController
-                                      .undoDeleteUserList(userList.listId, "new");
-                                  if (response == 1) {
-                                    Boxes.getUserListDB().add(userList);
-                                  } else {
-                                    errorMsg('Unable to undo the list', '');
-                                  }
-                                });
+                                () async {
+                              int response = await apiController
+                                  .undoDeleteUserList(userList.listId, "new");
+                              if (response == 1) {
+                                Boxes.getUserListDB().add(userList);
+                              } else {
+                                errorMsg('Unable to undo the list', '');
+                              }
+                            });
                           }
                           pressCount++;
                           if (box.length >= 2) {
@@ -183,7 +174,7 @@ class UserListCard extends StatelessWidget {
                       apiController.deletedUserLists.add(userList);
 
                       int response =
-                      await apiController.deleteUserList(userList.listId);
+                          await apiController.deleteUserList(userList.listId);
 
                       if (response == 1) {
                         apiController.deletedUserLists.remove(userList);
@@ -237,7 +228,7 @@ class UserListCard extends StatelessWidget {
                             ),
                             Padding(
                               padding:
-                              EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                                  EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
                               child: AutoSizeText(
                                 'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                                 style: TextStyle(

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 
 import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
@@ -35,15 +35,6 @@ class ListItemCard extends StatelessWidget {
         Boxes.getUserListDB().get(currentUserListDBKey) ??
             fallBack_error_userList;
 
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     String img = listItem.itemImageId.replaceAll(
         'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
         '');
@@ -118,15 +109,6 @@ class ListItemCard extends StatelessWidget {
                           barrierColor:
                               const Color.fromARGB(165, 241, 241, 241),
                           builder: (context) {
-                            ScreenUtil.init(
-                                BoxConstraints(
-                                    maxWidth: MediaQuery.of(context).size.width,
-                                    maxHeight:
-                                        MediaQuery.of(context).size.height),
-                                designSize: const Size(390, 844),
-                                context: context,
-                                minTextAdapt: true,
-                                orientation: Orientation.portrait);
                             return NewItemPopUpWidget(
                               item: Item(
                                 status: '',

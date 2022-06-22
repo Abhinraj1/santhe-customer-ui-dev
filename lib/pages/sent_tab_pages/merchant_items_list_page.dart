@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:santhe/core/app_colors.dart';
@@ -63,15 +63,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
     String removeDecimalZeroFormat(double n) {
       return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return FutureBuilder<MerchantOfferResponse>(
       future: getDetails(),
       builder: (context, snapShot) {
@@ -500,18 +491,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                         const Color.fromARGB(165, 241, 241, 241),
                                     isScrollControlled: true,
                                     builder: (BuildContext context) {
-                                      ScreenUtil.init(
-                                          BoxConstraints(
-                                              maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              maxHeight: MediaQuery.of(context)
-                                                  .size
-                                                  .height),
-                                          designSize: const Size(390, 844),
-                                          context: context,
-                                          minTextAdapt: true,
-                                          orientation: Orientation.portrait);
                                       return Padding(
                                         padding: EdgeInsets.only(
                                             bottom: MediaQuery.of(context)

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:santhe/controllers/chat_controller.dart';
 
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/widgets/sent_tab_widgets/merchant_offer_card.dart';
 
 import '../../controllers/api_service_controller.dart';
+import '../../models/answer_list_model.dart';
+import '../../models/item_model.dart';
 import '../../models/offer/customer_offer_response.dart';
+import '../../models/santhe_list_item_model.dart';
 import '../../models/santhe_user_list_model.dart';
 
 class OffersListPage extends StatefulWidget {
@@ -22,24 +26,19 @@ class OffersListPage extends StatefulWidget {
   State<OffersListPage> createState() => _OffersListPageState();
 }
 
-class _OffersListPageState extends State<OffersListPage> {
+class _OffersListPageState extends State<OffersListPage> with AutomaticKeepAliveClientMixin{
   late Future<List<CustomerOfferResponse>> listOffersData;
   final apiController = Get.find<APIs>();
 
   @override
   void initState() {
-    listOffersData =
-        apiController.getAllMerchOfferByListId(widget.userList.listId);
+    listOffersData = apiController.getAllMerchOfferByListId(widget.userList.listId);
     super.initState();
-  }
-
-  void refresh() {
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
@@ -50,8 +49,7 @@ class _OffersListPageState extends State<OffersListPage> {
         orientation: Orientation.portrait);
     return widget.showOffers
         ? FutureBuilder<List<CustomerOfferResponse>>(
-            future:
-                apiController.getAllMerchOfferByListId(widget.userList.listId),
+            future: listOffersData,
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data!.isEmpty ||
                   snapshot.hasError) {
@@ -62,8 +60,7 @@ class _OffersListPageState extends State<OffersListPage> {
                   onRefresh: () async {
                     setState(() {
                       //future builder will take care of future value so no need to mark this function async
-                      listOffersData = apiController
-                          .getAllMerchOfferByListId(widget.userList.listId);
+                      listOffersData = apiController.getAllMerchOfferByListId(widget.userList!.listId);
                     });
                     return;
                   },
@@ -129,7 +126,6 @@ class _OffersListPageState extends State<OffersListPage> {
                             MerchantOfferCard(
                               currentMerchantOffer: snapshot.data![index],
                               userList: widget.userList,
-                              refresh: refresh,
                             ),
                           ],
                         );
@@ -137,7 +133,6 @@ class _OffersListPageState extends State<OffersListPage> {
                         return MerchantOfferCard(
                           currentMerchantOffer: snapshot.data![index],
                           userList: widget.userList,
-                          refresh: refresh,
                         );
                       }
                     },
@@ -175,4 +170,8 @@ class _OffersListPageState extends State<OffersListPage> {
               ))
         ],
       );
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

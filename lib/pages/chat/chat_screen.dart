@@ -9,19 +9,24 @@ import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:santhe/models/offer/customer_offer_response.dart';
+import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/pages/sent_tab_pages/offers_list_page.dart';
 
 import '../../Models/chat_model.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/chat_controller.dart';
+import '../../controllers/notification_controller.dart';
 import '../../core/app_helpers.dart';
 import '../../models/santhe_user_model.dart';
+import '../../widgets/sent_tab_widgets/merchant_offer_card.dart';
+import '../sent_tab_pages/sent_list_detail_page.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
   final String title;
-  final bool fromNotification;
   final String listEventId;
-  const ChatScreen({Key? key, required this.chatId, required this.title, required this.fromNotification, required this.listEventId}) : super(key: key);
+  const ChatScreen({Key? key, required this.chatId, required this.title, required this.listEventId}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -38,119 +43,140 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    if(widget.fromNotification){
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors.white,
-          systemNavigationBarIconBrightness: Brightness.dark,
-          statusBarColor: Colors.orange));
-    }
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.orange));
     _chatController.inChatScreen = true;
     AppHelpers().getToken.then((value) => token = value);
     super.initState();
   }
 
+  final NotificationController _notificationController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          splashRadius: 0.1,
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 13.sp,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            if(!_chatController.inOfferScreen){
+              Get.off(() => SentUserListDetailsPage(
+                listEventId: widget.listEventId,
+                showOffers: true,
+                fromChat: true,
+                  ));
+            }
+            else{
+              Navigator.pop(context);
+            }
+          },
+        ),
         title: Text('Offers: Rs ' + widget.title),
       ),
-      body: Column(
-        children: [
-          //chat with customer header
-          Container(
-            height: 62.h,
-            width: 390.w,
-            color: AppColors().grey10,
-            child: Center(
-              child: Text('Chat with Merchant', style: AppTheme().bold700(16, color: AppColors().brandDark),),
-            ),
-          ),
-          //chat
-          Expanded(
-            child: GetBuilder<ChatController>(
-              id: 'chatList',
-              builder: (controller){
-                return StreamBuilder<DatabaseEvent>(
-                  stream: _reference.child(widget.chatId).onValue,
-                    builder: (builder, snapShot){
-                  if(snapShot.hasData){
-
-                    if(snapShot.data == null || snapShot.data?.snapshot.value == null){
-                      return const Center(
-                        child: Text('start a new chat'),
-                      );
-                    }
-
-                    List<ChatModel> _messages = [];
-                    Map<dynamic, dynamic> _data = snapShot.data!.snapshot.value  as Map<dynamic, dynamic>;
-                    _data.forEach((key, value) {
-                      _messages.add(
-                          ChatModel(message: value['message'], isCustomer: value['isCustomer'], messageTime: DateTime.fromMillisecondsSinceEpoch(int.parse(key)).toLocal(), name: value['name'], token: value['token'] ?? '')
-                      );
-                    });
-                    _messages.sort((a, b) => a.messageTime.compareTo(b.messageTime));
-                    _messages = _messages.reversed.toList();
-                    return ListView.builder(
-                      reverse: true,
-                        shrinkWrap: true,
-                        itemCount: _messages.length,
-                        padding: EdgeInsets.symmetric(horizontal: 23.w),
-                        itemBuilder: (itemBuilder, index){
-                          if(!_messages[(_messages.length - 1) - index].isCustomer){
-                            merchantToken = _messages[(_messages.length - 1) - index].token;
-                          }
-                          return _messages[index].isCustomer ? _customerChat(_messages[index]) : _merchantChat(_messages[index]);
-                        }
-                    );
-                  }
-
-                  if(snapShot.hasError){
-                    return const SizedBox();
-                  }
-
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
-                });
-              },
-            ),
-          ),
-          //chat text box
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //chat field
-              SizedBox(
-                width: 267.w,
-                child: TextFormField(
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    hintText: 'Message',
-                    hintStyle: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade500),
-                    focusedBorder: AppTheme().focusedBorderStyle,
-                    border: AppTheme().borderStyle,
-                    enabledBorder: AppTheme().enabledBorderStyle,
-                    errorBorder: AppTheme().errorBorderStyle,
-                  ),
-                  textInputAction: TextInputAction.done,
-                  onChanged: (String? val){
-                    message = val!;
-                    _chatController.messageIsEmpty.value = message.trim().isEmpty;
-                  },
-                ),
+      body: WillPopScope(
+        child: Column(
+          children: [
+            //chat with customer header
+            Container(
+              height: 62.h,
+              width: 390.w,
+              color: AppColors().grey10,
+              child: Center(
+                child: Text('Chat with Merchant', style: AppTheme().bold700(16, color: AppColors().brandDark),),
               ),
-              SizedBox(width: 10.w,),
-              //send button
-              SizedBox(
-                height: 55.h,
-                  width: 67.w,
-                  child: Obx(() => ElevatedButton(
-                      onPressed: _chatController.messageIsEmpty.value ? null : () async {
-                        /*var url = 'https://fcm.googleapis.com/fcm/send';
+            ),
+            //chat
+            Expanded(
+              child: GetBuilder<ChatController>(
+                id: 'chatList',
+                builder: (controller){
+                  return StreamBuilder<DatabaseEvent>(
+                      stream: _reference.child(widget.chatId).onValue,
+                      builder: (builder, snapShot){
+                        if(snapShot.hasData){
+
+                          if(snapShot.data == null || snapShot.data?.snapshot.value == null){
+                            return const Center(
+                              child: Text('start a new chat'),
+                            );
+                          }
+
+                          List<ChatModel> _messages = [];
+                          Map<dynamic, dynamic> _data = snapShot.data!.snapshot.value  as Map<dynamic, dynamic>;
+                          _data.forEach((key, value) {
+                            _messages.add(
+                                ChatModel(message: value['message'], isCustomer: value['isCustomer'], messageTime: DateTime.fromMillisecondsSinceEpoch(int.parse(key)).toLocal(), name: value['name'], token: value['token'] ?? '')
+                            );
+                          });
+                          _messages.sort((a, b) => a.messageTime.compareTo(b.messageTime));
+                          _messages = _messages.reversed.toList();
+                          return ListView.builder(
+                              reverse: true,
+                              shrinkWrap: true,
+                              itemCount: _messages.length,
+                              padding: EdgeInsets.symmetric(horizontal: 23.w),
+                              itemBuilder: (itemBuilder, index){
+                                if(!_messages[(_messages.length - 1) - index].isCustomer){
+                                  merchantToken = _messages[(_messages.length - 1) - index].token;
+                                }
+                                return _messages[index].isCustomer ? _customerChat(_messages[index]) : _merchantChat(_messages[index]);
+                              }
+                          );
+                        }
+
+                        if(snapShot.hasError){
+                          return const SizedBox();
+                        }
+
+                        return const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        );
+                      });
+                },
+              ),
+            ),
+            //chat text box
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //chat field
+                SizedBox(
+                  width: 267.w,
+                  child: TextFormField(
+                    controller: _textEditingController,
+                    decoration: InputDecoration(
+                      hintText: 'Message',
+                      hintStyle: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey.shade500),
+                      focusedBorder: AppTheme().focusedBorderStyle,
+                      border: AppTheme().borderStyle,
+                      enabledBorder: AppTheme().enabledBorderStyle,
+                      errorBorder: AppTheme().errorBorderStyle,
+                    ),
+                    textInputAction: TextInputAction.done,
+                    onChanged: (String? val){
+                      message = val!;
+                      _chatController.messageIsEmpty.value = message.trim().isEmpty;
+                    },
+                  ),
+                ),
+                SizedBox(width: 10.w,),
+                //send button
+                SizedBox(
+                    height: 55.h,
+                    width: 67.w,
+                    child: Obx(() => ElevatedButton(
+                        onPressed: _chatController.messageIsEmpty.value ? null : () async {
+                          /*var url = 'https://fcm.googleapis.com/fcm/send';
                         await http.post(
                           Uri.parse(url),
                           headers: <String, String>{
@@ -174,37 +200,51 @@ class _ChatScreenState extends State<ChatScreen> {
                             },
                           ),
                         );*/
-                        if(_sendMessage){
-                          _sendMessage = false;
-                          _reference.child(widget.chatId).update({
-                            DateTime.now().toUtc().millisecondsSinceEpoch.toString(): {
-                              'isCustomer' : true,
-                              'message' : message,
-                              'name' : currentUser.custName,
-                              'token' : token
-                            }
-                          }).then((value){
-                            if(merchantToken.isNotEmpty){
-                              sendNotification(message);
-                            }else{
-                              sendNotificationToAll(message);
-                            }
-                            _textEditingController.clear();
-                            FocusScope.of(context).unfocus();
-                            _chatController.messageIsEmpty.value = true;
-                            _sendMessage = true;
-                          }).catchError((e){
-                            _sendMessage = true;
-                          });
-                        }
-                      },
-                      child: Image.asset('assets/send_icon.png', height: 18.h,)
-                  ))
-              )
-            ],
-          ),
-          SizedBox(height: 20.h,)
-        ],
+                          if(_sendMessage){
+                            _sendMessage = false;
+                            _reference.child(widget.chatId).update({
+                              DateTime.now().toUtc().millisecondsSinceEpoch.toString(): {
+                                'isCustomer' : true,
+                                'message' : message,
+                                'name' : currentUser.custName,
+                                'token' : token
+                              }
+                            }).then((value){
+                              if(merchantToken.isNotEmpty){
+                                sendNotification(message);
+                              }else{
+                                sendNotificationToAll(message);
+                              }
+                              _textEditingController.clear();
+                              FocusScope.of(context).unfocus();
+                              _chatController.messageIsEmpty.value = true;
+                              _sendMessage = true;
+                            }).catchError((e){
+                              _sendMessage = true;
+                            });
+                          }
+                        },
+                        child: Image.asset('assets/send_icon.png', height: 18.h,)
+                    ))
+                )
+              ],
+            ),
+            SizedBox(height: 20.h,)
+          ],
+        ),
+        onWillPop: () async{
+          if(!_chatController.inOfferScreen){
+            Get.off(() => SentUserListDetailsPage(
+              listEventId: widget.listEventId,
+              showOffers: true,
+              fromChat: true,
+            ));
+          }
+          else{
+            Navigator.pop(context);
+          }
+          return false;
+        },
       ),
     );
   }
@@ -299,8 +339,9 @@ class _ChatScreenState extends State<ChatScreen> {
             "data": {
               "landingScreen": 'chat',
               'chatId': widget.chatId,
-              'title': 'Offers: Rs ' + widget.title,
+              'title': 'Request',
               'listEventId': widget.listEventId,
+              'customerTitle': 'Offers: Rs ' + widget.title
             }
           },
         ),

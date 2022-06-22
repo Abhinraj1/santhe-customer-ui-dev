@@ -257,7 +257,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                       title: widget.currentMerchantOffer!
                                                           .merchResponse
                                                           .merchTotalPrice,
-                                                      fromNotification: false,
                                                       listEventId:
                                                           widget.merchantResponse!
                                                                   .fields

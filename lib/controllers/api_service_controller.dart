@@ -14,6 +14,8 @@ import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
 import '../core/app_helpers.dart';
+import '../models/answer_list_model.dart';
+import '../models/item_model.dart';
 import '../models/santhe_faq_model.dart';
 import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
@@ -35,6 +37,54 @@ class APIs extends GetxController {
   var deletedUserLists = <UserList>[].obs;
 
   var itemsDB = <Item>[].obs;
+
+  Future<AnswerList?> getListByListEventId(String listEventId) async {
+    AnswerList? userList;
+    String url =
+        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getListEventByListId?listId=$listEventId';
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<ItemModel> listItems = [];
+      for (var map in data[0]['items']) {
+        listItems.add(ItemModel(
+          brandType: map['brandType'] ?? '',
+          itemId: map['itemId']['_path']['segments'][1],
+          // need to
+          itemNotes: map['itemNotes'] ?? '',
+          itemName: map['itemName'],
+          itemImageId: map['itemImageId'],
+          unit: map['unit'],
+          catName: map['catName'],
+          merchPrice: map['merchPrice'],
+          itemSeqNum: int.parse(map['itemSeqNum'].toString()),
+          merchAvailability: map['merchAvailability'],
+          quantity: map['quantity'].toString(),
+          merchNotes: map['merchNotes'] ?? '',
+        ));
+      }
+      userList = AnswerList(
+        date: data[0]['custOfferResponse']['custUpdateTime'],
+        custOfferStatus: data[0]['custOfferResponse']['custOfferStatus'],
+        custId: listEventId.substring(10, 20),
+        items: listItems,
+        listId: listEventId.substring(10, listEventId.length),
+        custStatus: data[0]['custStatus'],
+        merchId: listEventId.substring(0, 10),
+        custDistance: data[0]['custDistance'].toString(),
+        contactEnabled: data[0]['contactEnabled'],
+        chatEnabled: data[0]['chatEnabled'],
+        listEventId: listEventId,
+        merchUpdateTime: DateTime.parse(data[0]['merchResponse']['merchUpdateTime']),
+        custUpdateTime: DateTime.parse(data[0]['custOfferResponse']['custUpdateTime']),
+        requestForDay: data[0]['requestForDay'].toString(),
+      );
+      return userList;
+    } else {
+      Get.to(() => const ServerErrorPage());
+      throw ServerError();
+    }
+  }
 
   // Future getAllItems() async {
   //   String pageToken = '';
@@ -1172,14 +1222,6 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
-      // resp.sort((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice));
-      // resp.sort((a, b) => a.merchResponse.merchOfferQuantity.compareTo(b.merchResponse.merchOfferQuantity));
-      // resp[0].custOfferResponse.custDeal = 'best1';
-      // resp[1].custOfferResponse.custDeal = 'best2';
-      // resp[2].custOfferResponse.custDeal = 'best3';
-      // for(var i=3;i<resp.length;i++){
-      //   resp[i].custOfferResponse.custDeal = '';
-      // }
       return resp;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);

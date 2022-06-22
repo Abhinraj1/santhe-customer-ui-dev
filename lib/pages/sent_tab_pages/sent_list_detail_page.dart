@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:resize/resize.dart';
+import 'package:santhe/controllers/notification_controller.dart';
+import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/pages/home_page.dart';
 
 import 'package:santhe/pages/sent_tab_pages/user_list_item_page.dart';
 
+import '../../controllers/api_service_controller.dart';
 import '../../controllers/chat_controller.dart';
+import '../../models/answer_list_model.dart';
+import '../../models/item_model.dart';
+import '../../models/santhe_list_item_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import 'offers_list_page.dart';
 
 class SentUserListDetailsPage extends StatefulWidget {
-  final UserList userList;
+  UserList? userList;
   final bool showOffers;
-  const SentUserListDetailsPage({required this.userList, Key? key, required this.showOffers})
+  bool? fromChat;
+  String? listEventId;
+  SentUserListDetailsPage({this.userList, Key? key, required this.showOffers, this.fromChat, this.listEventId})
       : super(key: key);
 
   @override
@@ -20,27 +29,43 @@ class SentUserListDetailsPage extends StatefulWidget {
 
 class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
 
-  final ChatController _controller = Get.find();
+  final ChatController _chatController = Get.find();
+  final NotificationController _notificationController = Get.find();
+  final apiController = Get.find<APIs>();
+  bool isLoading = true;
 
   @override
   void initState(){
-    _controller.inOfferScreen = true;
+    _chatController.inOfferScreen = true;
+    if(widget.fromChat == true){
+      loadDetails();
+    }else{
+      setState(() => isLoading = false);
+    }
     super.initState();
+  }
+
+  Future<void> loadDetails() async {
+    AnswerList? data = await apiController.getListByListEventId(widget.listEventId!);
+    widget.userList = UserList(
+        createListTime: DateTime.parse(data!.date).toLocal(),
+        custId: int.parse(data.custId),
+        items: getList(data.items),
+        listId: int.parse(data.listId),
+        listName: 'Offer',
+        custListSentTime: data.custUpdateTime,
+        custListStatus: data.custStatus,
+        listOfferCounter: 0,
+        processStatus: data.custOfferStatus,
+        custOfferWaitTime: DateTime.now()
+    );
+    setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
 
     TabBar _tabBar = TabBar(
       indicator: const UnderlineTabIndicator(
@@ -72,7 +97,13 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
       ],
     );
 
-    return DefaultTabController(
+    return isLoading ? Container(
+      height: 100.vh,
+      width: 100.vw,
+      color: AppColors().white100,
+      child: Center(child: CircularProgressIndicator(color: AppColors().brandDark),),
+    ) :
+    DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -85,11 +116,16 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
               size: 13.sp,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              if(_notificationController.fromNotification){
+                _notificationController.fromNotification = false;
+                Get.offAll(() => const HomePage(pageIndex: 1), transition: Transition.leftToRight);
+              }else{
+                Navigator.pop(context);
+              }
             },
           ),
           title: Text(
-            widget.userList.listName,
+            widget.userList!.listName,
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
@@ -103,22 +139,51 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
             ),
           ),
         ),
-        body: TabBarView(
-          physics: const BouncingScrollPhysics(),
-          children: [
-            OffersListPage(userList: widget.userList, showOffers: widget.showOffers),
-            UserListItemDetailsPage(
-              userList: widget.userList,
-            ),
-          ],
+        body: WillPopScope(
+          child: TabBarView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              OffersListPage(userList: widget.userList!, showOffers: widget.showOffers),
+              UserListItemDetailsPage(
+                userList: widget.userList!,
+              ),
+            ],
+          ),
+          onWillPop: () async{
+            if(_notificationController.fromNotification){
+              _notificationController.fromNotification = false;
+              Get.offAll(() => const HomePage(pageIndex: 1), transition: Transition.leftToRight);
+            }else{
+              Navigator.pop(context);
+            }
+            return false;
+          },
         ),
       ),
     );
   }
 
+  List<ListItem> getList(List<ItemModel> item){
+    List<ListItem> list = [];
+    for (var element in item) {
+      list.add(ListItem(
+          brandType: element.brandType,
+          itemId: element.itemId,
+          notes: element.itemNotes,
+          quantity: num.parse(element.quantity),
+          itemName: element.itemName,
+          itemImageId: element.itemImageId,
+          unit: element.unit,
+          catName: element.catName,
+          catId: 0,
+          possibleUnits: []));
+    }
+    return list;
+  }
+
   @override
   void dispose(){
-    _controller.inOfferScreen = false;
+    _chatController.inOfferScreen = false;
     super.dispose();
   }
 }

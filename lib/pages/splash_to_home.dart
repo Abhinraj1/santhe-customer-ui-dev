@@ -9,7 +9,9 @@ import 'package:santhe/pages/error_pages/no_internet_page.dart';
 
 import '../controllers/api_service_controller.dart';
 import '../controllers/boxes_controller.dart';
+import '../controllers/notification_controller.dart';
 import '../models/santhe_cache_refresh.dart';
+import 'chat/chat_screen.dart';
 import 'home_page.dart';
 
 class SplashToHome extends StatefulWidget {
@@ -24,9 +26,27 @@ class _SplashToHomeState extends State<SplashToHome> {
 
   void bootHome() {
     Future.delayed(const Duration(milliseconds: 4000), () {
-      Get.off(() => const HomePage(), transition: Transition.fadeIn);
-      print('called!');
+      Get.off(() => getLandingScreen(), transition: Transition.fadeIn);
     });
+  }
+
+  Widget getLandingScreen(){
+    final NotificationController _notificationController = Get.find();
+    if(_notificationController.fromNotification){
+      //_notificationController.fromNotification = false;
+      if(_notificationController.landingScreen == 'new') {
+        return const HomePage(pageIndex: 0,);
+      } else if(_notificationController.landingScreen == 'answered'){
+        return const HomePage(pageIndex: 1,);
+      }else {
+        return ChatScreen(
+          chatId: _notificationController.notificationData.value.data['chatId'],
+          title: _notificationController.notificationData.value.data['title'],
+          listEventId: _notificationController.notificationData.value.data['listEventId'],
+        );
+      }
+    }
+    return const HomePage(pageIndex: 0,);
   }
 
   Future init() async {

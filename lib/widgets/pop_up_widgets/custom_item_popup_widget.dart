@@ -86,10 +86,11 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 20.0, left: 20),
                       child: AutoSizeText(
                         'Custom Item',
                         textAlign: TextAlign.center,
@@ -100,19 +101,16 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.close_rounded,
-                        color: Color(0xffD1D1D1),
-                      ),
-                      splashRadius: 0.1,
-                      splashColor: Colors.transparent,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                  IconButton(
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: Color(0xffD1D1D1),
                     ),
+                    splashRadius: 0.1,
+                    splashColor: Colors.transparent,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),

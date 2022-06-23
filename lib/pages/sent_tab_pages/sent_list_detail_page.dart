@@ -3,7 +3,6 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:santhe/models/item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
-import 'package:resize/resize.dart';
 import 'package:santhe/controllers/notification_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
@@ -60,7 +59,8 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
         custListStatus: data.custStatus,
         listOfferCounter: 0,
         processStatus: data.custOfferStatus,
-        custOfferWaitTime: DateTime.now()
+        custOfferWaitTime: DateTime.now(),
+        updateListTime: DateTime.now(),
     );
     setState(() => isLoading = false);
   }

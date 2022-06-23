@@ -1183,7 +1183,9 @@ class _UserListPageState extends State<UserListPage>
         listName: oldCurrentUserList.listName,
         createListTime: oldCurrentUserList.createListTime,
         processStatus: 'draft',
-        custOfferWaitTime: oldCurrentUserList.custOfferWaitTime);
+        custOfferWaitTime: oldCurrentUserList.custOfferWaitTime,
+        updateListTime: DateTime.now(),
+    );
 
     //todo send list to firebase (currentUserList)
     int custId = Boxes.getUserCredentialsDB()

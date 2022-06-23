@@ -61,7 +61,7 @@ class ArchivedUserListCard extends StatelessWidget {
           } else if (userList.processStatus == 'accepted' ||
               userList.processStatus == 'processed') {
             Get.to(
-                  () => MerchantItemsListPage(
+              () => MerchantItemsListPage(
                 userList: userList,
                 archived: true,
               ),
@@ -98,16 +98,18 @@ class ArchivedUserListCard extends StatelessWidget {
                       UserList oldUserList = userList;
 
                       UserList newImportedList = UserList(
-                          createListTime: DateTime.now(),
-                          custId: oldUserList.custId,
-                          items: oldUserList.items,
-                          listId: int.parse('$custId${userListCount + 1}'),
-                          listName: '(COPY) ${oldUserList.listName}',
-                          custListSentTime: oldUserList.custListSentTime,
-                          custListStatus: oldUserList.custListStatus,
-                          listOfferCounter: oldUserList.listOfferCounter,
-                          processStatus: oldUserList.processStatus,
-                          custOfferWaitTime: oldUserList.custOfferWaitTime);
+                        createListTime: DateTime.now(),
+                        custId: oldUserList.custId,
+                        items: oldUserList.items,
+                        listId: int.parse('$custId${userListCount + 1}'),
+                        listName: '(COPY) ${oldUserList.listName}',
+                        custListSentTime: oldUserList.custListSentTime,
+                        custListStatus: oldUserList.custListStatus,
+                        listOfferCounter: oldUserList.listOfferCounter,
+                        processStatus: oldUserList.processStatus,
+                        custOfferWaitTime: oldUserList.custOfferWaitTime,
+                        updateListTime: DateTime.now(),
+                      );
 
                       int response = await apiController.addCustomerList(
                           newImportedList, custId, 'new');

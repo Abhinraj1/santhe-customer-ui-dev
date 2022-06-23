@@ -27,6 +27,7 @@ class UserListAdapter extends TypeAdapter<UserList> {
       listOfferCounter: fields[7] as int,
       processStatus: fields[8] as String,
       custOfferWaitTime: fields[9] as DateTime,
+      updateListTime: fields[10] as DateTime,
     );
   }
 
@@ -53,7 +54,9 @@ class UserListAdapter extends TypeAdapter<UserList> {
       ..writeByte(8)
       ..write(obj.processStatus)
       ..writeByte(9)
-      ..write(obj.custOfferWaitTime);
+      ..write(obj.custOfferWaitTime)
+      ..writeByte(10)
+      ..write(obj.updateListTime);
   }
 
   @override

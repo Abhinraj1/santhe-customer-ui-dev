@@ -125,18 +125,19 @@ class NoOfferPage extends StatelessWidget {
                                     .getAllCustomerLists(custId);
 
                                 UserList newImportedList = UserList(
-                                    createListTime: DateTime.now(),
-                                    custId: userList.custId,
-                                    items: userList.items,
-                                    listId: int.parse(
-                                        '$custId${userListCount + 1}'),
-                                    listName: '(COPY) ${userList.listName}',
-                                    custListSentTime: userList.custListSentTime,
-                                    custListStatus: userList.custListStatus,
-                                    listOfferCounter: userList.listOfferCounter,
-                                    processStatus: userList.processStatus,
-                                    custOfferWaitTime:
-                                        userList.custOfferWaitTime);
+                                  createListTime: DateTime.now(),
+                                  custId: userList.custId,
+                                  items: userList.items,
+                                  listId:
+                                      int.parse('$custId${userListCount + 1}'),
+                                  listName: '(COPY) ${userList.listName}',
+                                  custListSentTime: userList.custListSentTime,
+                                  custListStatus: userList.custListStatus,
+                                  listOfferCounter: userList.listOfferCounter,
+                                  processStatus: userList.processStatus,
+                                  custOfferWaitTime: userList.custOfferWaitTime,
+                                  updateListTime: DateTime.now(),
+                                );
 
                                 int response =
                                     await apiController.addCustomerList(
@@ -186,7 +187,8 @@ class NoOfferPage extends StatelessWidget {
                               onTap: () async {
                                 int response = await apiController
                                     .updateUserList(custId, userList,
-                                        status: 'archived', processStatus: userList.processStatus);
+                                        status: 'archived',
+                                        processStatus: userList.processStatus);
                                 if (response == 1) {
                                   successMsg(
                                       'List Archived', 'List is archived.');

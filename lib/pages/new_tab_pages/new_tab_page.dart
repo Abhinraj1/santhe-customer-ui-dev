@@ -34,17 +34,19 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state==AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       setState(() {});
     }
     super.didChangeAppLifecycleState(state);
   }
+
   String listName = '';
   int totalCustList = 0;
   int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
   String? selectedValue;
+
   // List<UserList> items = Boxes.getUserListDB().values.map((e) => e).toList();
 
   List<DropdownMenuItem<String>> _addDividersAfterItems(List<UserList> items) {
@@ -59,9 +61,9 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
               child: Text(
                 item.listName,
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w400,
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
@@ -117,8 +119,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                           builder: (ctx) {
                             return Padding(
                               padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(ctx).viewInsets.bottom),
+                                  bottom: MediaQuery.of(ctx).viewInsets.bottom),
                               child: Container(
                                 height: userListCount < 1
                                     ? screenHeight * 40
@@ -503,10 +504,8 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                           Get.offAll(() =>
                                                               const LoginScreen());
                                                         }
-                                                        log(
-                                                            'TOTAL USER LIST NUMBER: $userListCount');
-                                                        log(
-                                                            'New List Id: ${userListCount + 1}');
+                                                        log('TOTAL USER LIST NUMBER: $userListCount');
+                                                        log('New List Id: ${userListCount + 1}');
                                                         UserList newUserList =
                                                             UserList(
                                                           createListTime:
@@ -524,6 +523,8 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                           listOfferCounter: 0,
                                                           custOfferWaitTime:
                                                               DateTime.now(),
+                                                          updateListTime:
+                                                              DateTime.now(),
                                                         );
                                                         //add to firebase
                                                         int response =
@@ -536,7 +537,9 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                         if (response == 1) {
                                                           box.add(newUserList);
                                                         } else {
-                                                          Get.dialog(const SizedBox.shrink());
+                                                          Get.dialog(
+                                                              const SizedBox
+                                                                  .shrink());
                                                         }
 
                                                         //Dismiss the pop up
@@ -548,8 +551,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                               transition: Transition
                                                                   .noTransition);
                                                         } else {
-                                                          Navigator.pop(
-                                                              c);
+                                                          Navigator.pop(c);
                                                         }
                                                       }
                                                     } else if (listName
@@ -611,32 +613,37 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                                     int.parse(
                                                                         selectedValue!));
 
-                                                        UserList newImportedList = UserList(
-                                                            createListTime:
-                                                                DateTime.now(),
-                                                            custId: oldUserList
-                                                                .custId,
-                                                            items: oldUserList
-                                                                .items,
-                                                            listId: int.parse(
-                                                                '$custId${userListCount + 1}'),
-                                                            listName:
-                                                                '(COPY) ${oldUserList.listName}',
-                                                            custListSentTime:
-                                                                oldUserList
-                                                                    .custListSentTime,
-                                                            custListStatus:
-                                                                oldUserList
-                                                                    .custListStatus,
-                                                            listOfferCounter:
-                                                                oldUserList
-                                                                    .listOfferCounter,
-                                                            processStatus:
-                                                                oldUserList
-                                                                    .processStatus,
-                                                            custOfferWaitTime:
-                                                                oldUserList
-                                                                    .custOfferWaitTime);
+                                                        UserList
+                                                            newImportedList =
+                                                            UserList(
+                                                          createListTime:
+                                                              DateTime.now(),
+                                                          custId: oldUserList
+                                                              .custId,
+                                                          items:
+                                                              oldUserList.items,
+                                                          listId: int.parse(
+                                                              '$custId${userListCount + 1}'),
+                                                          listName:
+                                                              '(COPY) ${oldUserList.listName}',
+                                                          custListSentTime:
+                                                              oldUserList
+                                                                  .custListSentTime,
+                                                          custListStatus:
+                                                              oldUserList
+                                                                  .custListStatus,
+                                                          listOfferCounter:
+                                                              oldUserList
+                                                                  .listOfferCounter,
+                                                          processStatus:
+                                                              oldUserList
+                                                                  .processStatus,
+                                                          custOfferWaitTime:
+                                                              oldUserList
+                                                                  .custOfferWaitTime,
+                                                          updateListTime:
+                                                              DateTime.now(),
+                                                        );
                                                         //add to firebase
                                                         int response =
                                                             await apiController
@@ -649,7 +656,9 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                           box.add(
                                                               newImportedList);
                                                         } else {
-                                                          Get.dialog(const SizedBox.shrink());
+                                                          Get.dialog(
+                                                              const SizedBox
+                                                                  .shrink());
                                                         }
 
                                                         //Dismiss the pop up
@@ -661,8 +670,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                               transition: Transition
                                                                   .noTransition);
                                                         } else {
-                                                          Navigator.pop(
-                                                              c);
+                                                          Navigator.pop(c);
                                                         }
                                                       } else {
                                                         Get.snackbar(
@@ -708,8 +716,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                         );
                                                       }
                                                     } else {
-                                                      log(
-                                                          'implement import feature');
+                                                      log('implement import feature');
                                                     }
                                                     await apiController
                                                         .getAllCustomerLists(

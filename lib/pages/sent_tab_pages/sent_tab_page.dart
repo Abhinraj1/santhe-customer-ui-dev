@@ -62,7 +62,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                               'All your shopping lists that you have sent to Shops in last 72 hours will appear here. Go to',
                           style: TextStyle(
                             color: kTextGrey,
-                            fontSize: 24.sp,
+                            fontSize: 16.sp,
                             height: 2.sp,
                           ),
                           children: <TextSpan>[
@@ -71,7 +71,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: kTextGrey,
-                                fontSize: 24.sp,
+                                fontSize: 16.sp,
                                 height: 2.sp,
                               ),
                             ),
@@ -80,7 +80,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                                   'tab to create and send your shopping lists.',
                               style: TextStyle(
                                   color: kTextGrey,
-                                  fontSize: 24.sp,
+                                  fontSize: 16.sp,
                                   height: 2.sp),
                             ),
                           ],
@@ -115,7 +115,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                       'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 24.sp,
+                          fontSize: 16.sp,
                           height: 2.sp,
                           color: Colors.grey),
                     ),

@@ -15,7 +15,9 @@ class NavigationDrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: onPress(),
+      onTap: () {
+        onPress();
+      },
       focusColor: Colors.orange,
       leading: CircleAvatar(
         radius: 18.0,

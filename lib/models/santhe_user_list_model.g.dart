@@ -34,7 +34,7 @@ class UserListAdapter extends TypeAdapter<UserList> {
   @override
   void write(BinaryWriter writer, UserList obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.createListTime)
       ..writeByte(1)

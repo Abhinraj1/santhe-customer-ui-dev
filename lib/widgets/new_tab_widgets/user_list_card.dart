@@ -203,6 +203,7 @@ class UserListCard extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Column(
@@ -214,16 +215,16 @@ class UserListCard extends StatelessWidget {
                               maxLines: 2,
                               style: TextStyle(
                                   letterSpacing: 0.2,
-                                  fontSize: 21.sp,
+                                  fontSize: 20.sp,
                                   color: Colors.orange,
                                   fontWeight: FontWeight.w400),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 18.77.sp),
+                              padding: EdgeInsets.only(top: 16.sp),
                               child: AutoSizeText(
                                 '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
                                 style: TextStyle(
-                                    fontSize: 36.sp,
+                                    fontSize: 30.sp,
                                     color: Colors.orange,
                                     fontWeight: FontWeight.w700),
                               ),
@@ -244,8 +245,8 @@ class UserListCard extends StatelessWidget {
                       ),
                       Image.asset(
                         imagePath,
-                        height: 139.2.sp,
-                        width: 139.2.sp,
+                        height: 129.sp,
+                        width: 129.sp,
                       ),
                     ],
                   ),
@@ -255,7 +256,7 @@ class UserListCard extends StatelessWidget {
                       AutoSizeText(
                         'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                         style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 12.sp,
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
                       ),

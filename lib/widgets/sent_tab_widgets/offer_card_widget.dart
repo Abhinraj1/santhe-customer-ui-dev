@@ -24,8 +24,6 @@ class OfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // double screenHeight = MediaQuery.of(context).size.height / 100;
-    // double screenWidth = MediaQuery.of(context).size.width / 100;
     String imagePath = 'assets/basket0.png';
 
     //image logic
@@ -136,6 +134,7 @@ class OfferCard extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Column(
@@ -149,16 +148,16 @@ class OfferCard extends StatelessWidget {
                               softWrap: true,
                               style: TextStyle(
                                   letterSpacing: 0.2,
-                                  fontSize: 21.sp,
+                                  fontSize: 20.sp,
                                   color: Colors.orange,
                                   fontWeight: FontWeight.w400),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 18.77.sp),
+                              padding: EdgeInsets.only(top: 16.sp),
                               child: AutoSizeText(
                                 '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
                                 style: TextStyle(
-                                    fontSize: 36.sp,
+                                    fontSize: 30.sp,
                                     color: Colors.orange,
                                     fontWeight: FontWeight.w700),
                               ),
@@ -169,7 +168,7 @@ class OfferCard extends StatelessWidget {
                               child: AutoSizeText(
                                 'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                                 style: TextStyle(
-                                    fontSize: 14.sp,
+                                    fontSize: 12.sp,
                                     color: Colors.transparent,
                                     fontWeight: FontWeight.w400),
                               ),
@@ -179,8 +178,8 @@ class OfferCard extends StatelessWidget {
                       ),
                       Image.asset(
                         imagePath,
-                        height: 139.2.sp,
-                        width: 139.2.sp,
+                        height: 129.sp,
+                        width: 129.sp,
                       ),
                     ],
                   ),
@@ -190,13 +189,13 @@ class OfferCard extends StatelessWidget {
                       AutoSizeText(
                         'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                         style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 12.sp,
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          right: 15.sp,
+                          right: 10.sp,
                         ),
                         child: OfferStatus(
                           userList: userList,

@@ -36,7 +36,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
       return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,15 +50,15 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                       4000
                   ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId}'
                   : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/'+widget.merchantItem.itemImageId,
-              width: 65.sp,
-              height: 65.sp,
+              width: 45.sp,
+              height: 45.sp,
               fit: BoxFit.cover,
               errorWidget: (context, url, error) {
                 log('$error');
                 return Container(
                   color: Colors.orange,
-                  width: screenWidth * 50,
-                  height: screenWidth * 50,
+                  width: screenWidth * 45,
+                  height: screenWidth * 45,
                 );
               },
             ),
@@ -78,7 +78,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: const Color(0xff8B8B8B),
-                    fontSize: 20.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -98,7 +98,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                     maxLines: 6,
                     style: TextStyle(
                       color: Colors.orange,
-                      fontSize: 18.sp,
+                      fontSize: 14.sp,
                     ),
                   )
                       : Text(
@@ -109,7 +109,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                     // maxLines: 2,
                     style: TextStyle(
                       color: Colors.orange,
-                      fontSize: 18.sp,
+                      fontSize: 14.sp,
                     ),
                   ),
                 ),
@@ -127,7 +127,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                     overflow: expanded?null:TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Colors.orange,
-                      fontSize: 18.sp,
+                      fontSize: 14.sp,
                     ),
                   ),
                 )
@@ -137,24 +137,29 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
           SizedBox(
             width: screenSize.width / 10,
           ),
-          Icon(
-              widget.merchantItem.merchAvailability
-                  ? CupertinoIcons.checkmark_circle_fill
-                  : CupertinoIcons.xmark_circle_fill,
-              color:
-                  widget.merchantItem.merchAvailability ? Colors.green : Colors.red),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Icon(
+                widget.merchantItem.merchAvailability
+                    ? CupertinoIcons.checkmark_circle_fill
+                    : CupertinoIcons.xmark_circle_fill,
+                color:
+                    widget.merchantItem.merchAvailability ? Colors.green : Colors.red),
+          ),
           const SizedBox(width: 10.0),
-          SizedBox(
-            width: screenSize.width * 1/5,
-            child: Text(
-              '₹ ${widget.merchantItem.merchPrice}',
-              style: TextStyle(
-                color: Colors.orange,
-                fontSize: 19.sp,
-                fontWeight: FontWeight.w500,
+          Expanded(
+            child: SizedBox(
+              width: screenSize.width * 1/5,
+              child: Text(
+                '₹ ${widget.merchantItem.merchPrice}',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.right,
               ),
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.right,
             ),
           ),
         ],

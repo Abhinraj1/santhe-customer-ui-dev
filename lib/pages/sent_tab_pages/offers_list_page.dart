@@ -13,23 +13,23 @@ import '../../models/santhe_user_list_model.dart';
 class OffersListPage extends StatefulWidget {
   final UserList userList;
   final bool showOffers;
+  final String merchTitle;
 
   const OffersListPage(
-      {required this.userList, Key? key, required this.showOffers})
+      {required this.userList, Key? key, required this.showOffers, required this.merchTitle})
       : super(key: key);
 
   @override
   State<OffersListPage> createState() => _OffersListPageState();
 }
 
-class _OffersListPageState extends State<OffersListPage> {
+class _OffersListPageState extends State<OffersListPage> with AutomaticKeepAliveClientMixin{
   late Future<List<CustomerOfferResponse>> listOffersData;
   final apiController = Get.find<APIs>();
 
   @override
   void initState() {
-    listOffersData =
-        apiController.getAllMerchOfferByListId(widget.userList.listId);
+    listOffersData = apiController.getAllMerchOfferByListId(widget.userList.listId);
     super.initState();
   }
 
@@ -39,10 +39,10 @@ class _OffersListPageState extends State<OffersListPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return widget.showOffers
         ? FutureBuilder<List<CustomerOfferResponse>>(
-            future:
-                apiController.getAllMerchOfferByListId(widget.userList.listId),
+            future: listOffersData,
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data!.isEmpty ||
                   snapshot.hasError) {
@@ -53,8 +53,7 @@ class _OffersListPageState extends State<OffersListPage> {
                   onRefresh: () async {
                     setState(() {
                       //future builder will take care of future value so no need to mark this function async
-                      listOffersData = apiController
-                          .getAllMerchOfferByListId(widget.userList.listId);
+                      listOffersData = apiController.getAllMerchOfferByListId(widget.userList.listId);
                     });
                     return;
                   },
@@ -158,4 +157,8 @@ class _OffersListPageState extends State<OffersListPage> {
               ))
         ],
       );
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -1049,6 +1049,7 @@ class _UserListPageState extends State<UserListPage>
                                                           return NewItemPopUpWidget(
                                                               item: snapshot
                                                                   .data![index],
+                                                              fromSearch: true,
                                                               currentUserListDBKey:
                                                                   widget
                                                                       .userKey);
@@ -1122,6 +1123,7 @@ class _UserListPageState extends State<UserListPage>
                                                       return NewItemPopUpWidget(
                                                           item: snapshot
                                                               .data![index],
+                                                          fromSearch: true,
                                                           currentUserListDBKey:
                                                               widget.userKey);
                                                     }).then((value) {

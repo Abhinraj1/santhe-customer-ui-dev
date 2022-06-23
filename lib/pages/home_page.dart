@@ -12,6 +12,7 @@ import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
+import '../controllers/notification_controller.dart';
 import '../core/app_helpers.dart';
 import 'new_tab_pages/new_tab_page.dart';
 import 'sent_tab_pages/sent_tab_page.dart';
@@ -36,6 +37,8 @@ class _HomePageState extends State<HomePage> {
     return data;
   }
 
+  final NotificationController _notificationController = Get.find();
+
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -45,6 +48,7 @@ class _HomePageState extends State<HomePage> {
       statusBarBrightness: Brightness.dark,
     ));
     // apiController.searchedItemResult('potato');
+    _notificationController.fromNotification = false;
     super.initState();
   }
 

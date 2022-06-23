@@ -17,9 +17,10 @@ import '../../models/santhe_user_list_model.dart';
 class OffersListPage extends StatefulWidget {
   final UserList userList;
   final bool showOffers;
+  final String merchTitle;
 
   const OffersListPage(
-      {required this.userList, Key? key, required this.showOffers})
+      {required this.userList, Key? key, required this.showOffers, required this.merchTitle})
       : super(key: key);
 
   @override

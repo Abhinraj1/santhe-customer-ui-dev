@@ -9,9 +9,6 @@ import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:http/http.dart' as http;
-import 'package:santhe/models/offer/customer_offer_response.dart';
-import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/pages/sent_tab_pages/offers_list_page.dart';
 
 import '../../Models/chat_model.dart';
 import '../../controllers/boxes_controller.dart';
@@ -19,14 +16,14 @@ import '../../controllers/chat_controller.dart';
 import '../../controllers/notification_controller.dart';
 import '../../core/app_helpers.dart';
 import '../../models/santhe_user_model.dart';
-import '../../widgets/sent_tab_widgets/merchant_offer_card.dart';
 import '../sent_tab_pages/sent_list_detail_page.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
-  final String title;
+  final String customerTitle;
+  final String merchantTitle;
   final String listEventId;
-  const ChatScreen({Key? key, required this.chatId, required this.title, required this.listEventId}) : super(key: key);
+  const ChatScreen({Key? key, required this.chatId, required this.customerTitle, required this.listEventId, required this.merchantTitle}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -78,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
             }
           },
         ),
-        title: Text('Offers: Rs ' + widget.title),
+        title: Text('Offer: Rs ' + widget.customerTitle),
       ),
       body: WillPopScope(
         child: Column(
@@ -308,7 +305,8 @@ class _ChatScreenState extends State<ChatScreen> {
           "data": {
             "landingScreen": 'chat',
             'chatId': widget.chatId,
-            'title': 'Offers: Rs ' + widget.title,
+            'customerTitle': 'Offer: Rs ' + widget.customerTitle,
+            'merchantTitle': widget.merchantTitle,
             'listEventId': widget.listEventId,
           }
         },
@@ -341,7 +339,8 @@ class _ChatScreenState extends State<ChatScreen> {
               'chatId': widget.chatId,
               'title': 'Request',
               'listEventId': widget.listEventId,
-              'customerTitle': 'Offers: Rs ' + widget.title
+              'customerTitle': 'Offer: Rs ' + widget.customerTitle,
+              'merchantTitle': widget.merchantTitle,
             }
           },
         ),

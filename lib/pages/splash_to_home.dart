@@ -41,7 +41,8 @@ class _SplashToHomeState extends State<SplashToHome> {
       }else {
         return ChatScreen(
           chatId: _notificationController.notificationData.value.data['chatId'],
-          title: _notificationController.notificationData.value.data['title'],
+          customerTitle: _notificationController.notificationData.value.data['customerTitle'],
+          merchantTitle: _notificationController.notificationData.value.data['merchantTitle'],
           listEventId: _notificationController.notificationData.value.data['listEventId'],
         );
       }

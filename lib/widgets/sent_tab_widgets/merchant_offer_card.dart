@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/chat_controller.dart';
@@ -203,15 +204,10 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                           ),
                           Expanded(
                             child: FutureBuilder<MerchantDetailsResponse>(
-                              future: APIs().getMerchantDetails(
-                                  widget.currentMerchantOffer
-                                  .merchId.path.segments.last),
+                              future: APIs().getMerchantDetails(widget.currentMerchantOffer.merchId.path.segments.last),
                               builder: (builder, snapShot) {
-                                if (snapShot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                    child: CircularProgressIndicator.adaptive(),
-                                  );
+                                if (snapShot.connectionState == ConnectionState.waiting) {
+                                  return const Center(child: CircularProgressIndicator.adaptive());
                                 }
 
                                 if (snapShot.hasError) {
@@ -300,9 +296,8 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                                       ChatScreen(
                                                         chatId: widget.userList.listId
                                                             .toString(),
-                                                        title: widget.currentMerchantOffer
-                                                        .merchResponse
-                                                            .merchTotalPrice,
+                                                        customerTitle: widget.currentMerchantOffer.merchResponse.merchTotalPrice,
+                                                        merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
                                                         listEventId:
                                                         merchantResponse!
                                                             .fields

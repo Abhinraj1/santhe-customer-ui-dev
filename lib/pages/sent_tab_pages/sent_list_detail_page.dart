@@ -76,11 +76,9 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
           color: Colors.orange,
         ),
       ),
-      unselectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w400, fontSize: 18.sp, color: Colors.grey),
+      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 18.sp, color: Colors.grey),
       labelColor: Colors.orange,
-      labelStyle: TextStyle(
-          fontSize: 18.sp, color: Colors.orange, fontWeight: FontWeight.w700),
+      labelStyle: TextStyle(fontSize: 18.sp, color: Colors.orange, fontWeight: FontWeight.w700),
       unselectedLabelColor: const Color(0xffBBBBBB),
       labelPadding: const EdgeInsets.all(4.0),
       tabs: const [
@@ -143,7 +141,7 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
           child: TabBarView(
             physics: const BouncingScrollPhysics(),
             children: [
-              OffersListPage(userList: widget.userList!, showOffers: widget.showOffers),
+              OffersListPage(userList: widget.userList!, showOffers: widget.showOffers, merchTitle: 'Request',),
               UserListItemDetailsPage(
                 userList: widget.userList!,
               ),

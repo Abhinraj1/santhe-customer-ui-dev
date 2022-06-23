@@ -5,6 +5,7 @@ import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
@@ -252,18 +253,10 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         ChatScreen(
-                                                      chatId: widget.userList.listId
-                                                          .toString(),
-                                                      title: widget.currentMerchantOffer!
-                                                          .merchResponse
-                                                          .merchTotalPrice,
-                                                      listEventId:
-                                                          widget.merchantResponse!
-                                                                  .fields
-                                                                  .merchId
-                                                                  .integerValue +
-                                                              widget.userList.listId
-                                                                  .toString(),
+                                                      chatId: widget.userList.listId.toString(),
+                                                      customerTitle: widget.currentMerchantOffer!.merchResponse.merchTotalPrice,
+                                                      listEventId: widget.merchantResponse!.fields.merchId.integerValue + widget.userList.listId.toString(),
+                                                          merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
                                                     ),
                                                   ),
                                                 );

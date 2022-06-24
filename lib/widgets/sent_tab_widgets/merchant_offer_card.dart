@@ -18,11 +18,13 @@ class MerchantOfferCard extends StatefulWidget {
   final UserList userList;
   final CustomerOfferResponse currentMerchantOffer;
   final Function refresh;
+  bool overrideData;
 
-  const MerchantOfferCard(
+  MerchantOfferCard(
       {required this.currentMerchantOffer,
       required this.userList,
       required this.refresh,
+      this.overrideData = false,
       Key? key})
       : super(key: key);
 
@@ -51,7 +53,11 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
               (value) {
                 if (value != null) {
                   if (value == true) {
-                    widget.refresh();
+                    setState(() {
+                      widget.overrideData = true;
+                      widget.userList.processStatus = 'accepted';
+                      widget.refresh(widget.overrideData);
+                    });
                   }
                 }
               },
@@ -101,7 +107,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                 children: [
                                   TextSpan(
                                     text:
-                                    'Rs ${widget.currentMerchantOffer.merchResponse.merchTotalPrice}',
+                                        'Rs ${widget.currentMerchantOffer.merchResponse.merchTotalPrice}',
                                     style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w700,
@@ -126,7 +132,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                             child: RichText(
                               text: TextSpan(
                                   text:
-                                  'Merchant is ${widget.currentMerchantOffer.custDistance} ${widget.currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
+                                      'Merchant is ${widget.currentMerchantOffer.custDistance} ${widget.currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w400,
@@ -135,7 +141,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                   children: [
                                     TextSpan(
                                       text: widget.currentMerchantOffer
-                                      .merchResponse.merchDelivery
+                                              .merchResponse.merchDelivery
                                           ? 'Does home delivery'
                                           : 'No home delivery',
                                       style: TextStyle(
@@ -163,7 +169,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image: AssetImage(imagePath),
+                                    image: AssetImage(loadImage()),
                                     fit: BoxFit.contain),
                               ),
                             ),
@@ -216,10 +222,18 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                           ),
                           Expanded(
                             child: FutureBuilder<MerchantDetailsResponse>(
-                              future: APIs().getMerchantDetails(widget.currentMerchantOffer.merchId.path.segments.last),
+                              future: APIs().getMerchantDetails(widget
+                                  .currentMerchantOffer
+                                  .merchId
+                                  .path
+                                  .segments
+                                  .last),
                               builder: (builder, snapShot) {
-                                if (snapShot.connectionState == ConnectionState.waiting) {
-                                  return const Center(child: CircularProgressIndicator.adaptive());
+                                if (snapShot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive());
                                 }
 
                                 if (snapShot.hasError) {
@@ -261,7 +275,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                           decoration: BoxDecoration(
                                               color: AppColors().brandDark,
                                               borderRadius:
-                                              BorderRadius.circular(60)),
+                                                  BorderRadius.circular(60)),
                                           child: Center(
                                             child: Icon(
                                               Icons.phone,
@@ -306,18 +320,24 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ChatScreen(
-                                                        chatId: widget.userList.listId
-                                                            .toString(),
-                                                        customerTitle: widget.currentMerchantOffer.merchResponse.merchTotalPrice,
-                                                        merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
-                                                        listEventId:
+                                                    chatId: widget
+                                                        .userList.listId
+                                                        .toString(),
+                                                    customerTitle: widget
+                                                        .currentMerchantOffer
+                                                        .merchResponse
+                                                        .merchTotalPrice,
+                                                    merchantTitle:
+                                                        'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+                                                    listEventId:
                                                         merchantResponse!
-                                                            .fields
-                                                            .merchId
-                                                            .integerValue +
-                                                            widget.userList.listId
+                                                                .fields
+                                                                .merchId
+                                                                .integerValue +
+                                                            widget
+                                                                .userList.listId
                                                                 .toString(),
-                                                      ),
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -343,27 +363,31 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
     );
   }
 
-  void loadImage(){
+  String loadImage() {
     if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best1') {
-      imagePath = 'assets/sent_tab/3star.png';
-    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best2') {
-      imagePath = 'assets/sent_tab/2star.png';
-    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best3') {
-      imagePath = 'assets/sent_tab/1star.png';
+      return 'assets/sent_tab/3star.png';
+    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal ==
+        'best2') {
+      return 'assets/sent_tab/2star.png';
+    } else if (widget.currentMerchantOffer.custOfferResponse.custDeal ==
+        'best3') {
+      return 'assets/sent_tab/1star.png';
     } else {
-      imagePath = 'assets/sent_tab/0star.png';
+      return 'assets/sent_tab/0star.png';
     }
   }
 
   bool isDone() {
-    return widget.userList.processStatus == 'accepted' ||
-            widget.userList.processStatus == 'processed'
+    return widget.overrideData
         ? true
-        : false;
+        : widget.userList.processStatus == 'accepted' ||
+                widget.userList.processStatus == 'processed'
+            ? true
+            : false;
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _chatController.inOfferScreen = false;
     super.dispose();
   }

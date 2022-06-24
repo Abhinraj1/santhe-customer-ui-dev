@@ -14,27 +14,43 @@ class OffersListPage extends StatefulWidget {
   final UserList userList;
   final bool showOffers;
   final String merchTitle;
+  final Function function;
+  bool overrideData;
 
-  const OffersListPage(
-      {required this.userList, Key? key, required this.showOffers, required this.merchTitle})
-      : super(key: key);
+  OffersListPage({
+    required this.userList,
+    Key? key,
+    required this.showOffers,
+    required this.merchTitle,
+    required this.function,
+    this.overrideData = false,
+  }) : super(key: key);
 
   @override
   State<OffersListPage> createState() => _OffersListPageState();
 }
 
-class _OffersListPageState extends State<OffersListPage> with AutomaticKeepAliveClientMixin{
+class _OffersListPageState extends State<OffersListPage>
+    with AutomaticKeepAliveClientMixin {
   late Future<List<CustomerOfferResponse>> listOffersData;
   final apiController = Get.find<APIs>();
 
   @override
   void initState() {
-    listOffersData = apiController.getAllMerchOfferByListId(widget.userList.listId);
+    listOffersData =
+        apiController.getAllMerchOfferByListId(widget.userList.listId);
     super.initState();
   }
 
-  void refresh() {
-    setState(() {});
+  void refresh(bool value) {
+    if(value == true) {
+      setState(() {
+        widget.overrideData=true;
+        widget.overrideData = true;
+        widget.userList.processStatus = 'accepted';
+      });
+      widget.function(widget.overrideData);
+    }
   }
 
   @override
@@ -53,7 +69,8 @@ class _OffersListPageState extends State<OffersListPage> with AutomaticKeepAlive
                   onRefresh: () async {
                     setState(() {
                       //future builder will take care of future value so no need to mark this function async
-                      listOffersData = apiController.getAllMerchOfferByListId(widget.userList.listId);
+                      listOffersData = apiController
+                          .getAllMerchOfferByListId(widget.userList.listId);
                     });
                     return;
                   },
@@ -87,26 +104,28 @@ class _OffersListPageState extends State<OffersListPage> with AutomaticKeepAlive
                                     )
                                   ],
                                 ),
-                                child: Stack(children: [
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'More offers awaited in next hours',
-                                      style: TextStyle(
-                                          color: const Color(0xffBBBBBB),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 13.sp),
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'More offers awaited in next hours',
+                                        style: TextStyle(
+                                            color: const Color(0xffBBBBBB),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 13.sp),
+                                      ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 15.0),
-                                      child: Container(),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: Container(),
+                                      ),
                                     ),
-                                  ),
-                                ]),
+                                  ],
+                                ),
                               ),
                             MerchantOfferCard(
                               currentMerchantOffer: snapshot.data![index],

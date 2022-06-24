@@ -26,6 +26,10 @@ class _OfferTabPageState extends State<OfferTabPage> {
     super.initState();
   }
 
+  void refresh(){
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,7 +145,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                     parent: AlwaysScrollableScrollPhysics()),
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  return OfferCard(userList: snapshot.data![index]);
+                  return OfferCard(userList: snapshot.data![index], function: refresh);
                 },
               ),
             );

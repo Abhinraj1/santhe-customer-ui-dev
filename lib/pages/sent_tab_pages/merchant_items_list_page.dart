@@ -62,7 +62,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
     final screenSize = MediaQuery.of(context).size;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     String removeDecimalZeroFormat(double n) {
-      return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
+      final itr = n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
+      return itr.replaceAll('.0', '');
     }
     return FutureBuilder<MerchantOfferResponse>(
       future: getDetails(),
@@ -567,7 +568,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                           children: [
                                                             TextSpan(
                                                               text:
-                                                                  ' can accept ',
+                                                                  ' only ONE ',
                                                               style: TextStyle(
                                                                   fontSize: 18.sp,
                                                                   color:
@@ -598,7 +599,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                       width: 234.sp,
                                                       child: MaterialButton(
                                                         onPressed: () async {
-                                                          //todo push acceptance changes to db
                                                           int response =
                                                               await apiController
                                                                   .acceptOffer(

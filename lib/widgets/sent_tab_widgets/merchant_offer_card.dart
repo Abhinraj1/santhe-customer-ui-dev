@@ -116,14 +116,20 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                   ),
                                 ]),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12.0),
-                            child: Text(
-                              '${widget.currentMerchantOffer.merchResponse.merchOfferQuantity} of ${widget.userList.items.length} items\navailable',
-                              style: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.w900,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width/3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0),
+                              child: Text(
+                                '${widget.currentMerchantOffer.merchResponse.merchOfferQuantity} of ${widget.userList.items.length} items available',
+                                softWrap: true,
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w900,
+                                ),
                               ),
                             ),
                           ),

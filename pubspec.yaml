@@ -22,7 +22,6 @@ dependencies:
   cached_network_image: ^3.2.0
   hive: ^2.0.6
   hive_flutter: ^1.1.0
-  flutter_screenutil: ^5.3.1
   pinput: 
   flutter_native_splash: ^2.0.5
   google_maps_flutter: ^2.1.2
@@ -53,6 +52,7 @@ dependencies:
   device_info_plus: ^3.2.3
   share_plus: ^4.0.4
   webview_flutter: ^2.0.4
+  page_transition: ^2.0.5
 
 dev_dependencies:
   flutter_test:

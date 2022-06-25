@@ -9,6 +9,7 @@ import 'package:santhe/pages/sent_tab_pages/user_list_item_page.dart';
 
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/chat_controller.dart';
+import '../../controllers/home_controller.dart';
 import '../../models/answer_list_model.dart';
 import '../../models/item_model.dart';
 import '../../models/santhe_list_item_model.dart';
@@ -61,6 +62,8 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
     );
     setState(() => isLoading = false);
   }
+
+  final HomeController _homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +121,9 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
                 _notificationController.fromNotification = false;
                 Get.offAll(() => const HomePage(pageIndex: 1), transition: Transition.leftToRight);
               }else{
+                if(_homeController.homeTabController.index != 1){
+                  _homeController.homeTabController.animateTo(1);
+                }
                 Navigator.pop(context);
               }
             },
@@ -152,6 +158,9 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
               _notificationController.fromNotification = false;
               Get.offAll(() => const HomePage(pageIndex: 1), transition: Transition.leftToRight);
             }else{
+              if(_homeController.homeTabController.index != 1){
+                _homeController.homeTabController.animateTo(1);
+              }
               Navigator.pop(context);
             }
             return false;

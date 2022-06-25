@@ -6,6 +6,7 @@ import 'package:resize/resize.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/archived_controller.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
+import 'package:santhe/controllers/home_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_colors.dart';
@@ -77,6 +78,7 @@ void main() async {
   Get.put(ArchivedController());
   Get.put(NotificationController());
   Get.put(ChatController());
+  Get.put(HomeController());
   Notifications().fcmInit();
 
   runApp(

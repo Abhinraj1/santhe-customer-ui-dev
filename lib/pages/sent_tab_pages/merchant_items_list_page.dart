@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
@@ -250,15 +251,12 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                     widget.userList.listId.toString());
                                                 Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChatScreen(
-                                                      chatId: widget.userList.listId.toString(),
-                                                      customerTitle: widget.currentMerchantOffer!.merchResponse.merchTotalPrice,
-                                                      listEventId: widget.merchantResponse!.fields.merchId.integerValue + widget.userList.listId.toString(),
-                                                          merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
-                                                    ),
-                                                  ),
+                                                  PageTransition(child: ChatScreen(
+                                                    chatId: widget.userList.listId.toString(),
+                                                    customerTitle: widget.currentMerchantOffer!.merchResponse.merchTotalPrice,
+                                                    listEventId: widget.merchantResponse!.fields.merchId.integerValue + widget.userList.listId.toString(),
+                                                    merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+                                                  ), type: PageTransitionType.rightToLeft),
                                                 );
                                               },
                                               child: Container(

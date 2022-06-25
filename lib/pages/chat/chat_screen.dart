@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 listEventId: widget.listEventId,
                 showOffers: true,
                 fromChat: true,
-                  ));
+                  ), transition: Transition.fade);
             }
             else{
               Navigator.pop(context);
@@ -305,9 +305,10 @@ class _ChatScreenState extends State<ChatScreen> {
           "data": {
             "landingScreen": 'chat',
             'chatId': widget.chatId,
+            'title': 'Request',
+            'listEventId': widget.listEventId,
             'customerTitle': 'Offer: Rs ' + widget.customerTitle,
             'merchantTitle': widget.merchantTitle,
-            'listEventId': widget.listEventId,
           }
         },
       ),
@@ -317,7 +318,6 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendNotificationToAll(String content){
     http.get(Uri.parse('https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getNotificationToken?userId=${widget.listEventId.substring(0, 10)}&userType=merchant')).then((value) async {
       Map<dynamic, dynamic> _pairs = jsonDecode(value.body);
-      print(_pairs['data'].values);
       var url = 'https://fcm.googleapis.com/fcm/send';
       await http.post(
         Uri.parse(url),

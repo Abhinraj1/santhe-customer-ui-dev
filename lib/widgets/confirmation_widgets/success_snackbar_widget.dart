@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 import '../../constants.dart';
 
 SnackbarController successMsg(String title, String body) {
@@ -12,23 +13,19 @@ SnackbarController successMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 16,
-          letterSpacing: 0.05,
-          color: Color(0xff38B000),
-        ),
+        style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            letterSpacing: 0.05,
+            color: const Color(0xff38B000)),
       ),
     ),
     messageText: Padding(
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         body,
-        style: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
-          color: kTextGrey,
-        ),
+        style: TextStyle(
+            fontWeight: FontWeight.w400, fontSize: 16, color: kTextGrey),
       ),
     ),
     margin: const EdgeInsets.all(10.0),

@@ -22,7 +22,7 @@ class ItemAdapter extends TypeAdapter<Item> {
       itemImageTn: fields[9] as String,
       catId: fields[0] as String,
       createUser: fields[1] as int,
-      dQuantity: fields[4] as num,
+      dQuantity: fields[4] as double,
       dUnit: fields[12] as String,
       itemAlias: fields[6] as String,
       itemId: fields[7] as int,

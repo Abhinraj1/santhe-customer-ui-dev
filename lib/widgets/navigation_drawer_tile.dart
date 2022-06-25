@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+
 class NavigationDrawerTile extends StatelessWidget {
   final String tileText;
   final IconData icon;
-  final Function onPress;
+  final onPress;
 
   const NavigationDrawerTile(
       {required this.tileText,
@@ -15,9 +16,7 @@ class NavigationDrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {
-        onPress();
-      },
+      onTap: onPress,
       focusColor: Colors.orange,
       leading: CircleAvatar(
         radius: 18.0,
@@ -31,12 +30,11 @@ class NavigationDrawerTile extends StatelessWidget {
       title: Text(
         tileText,
         style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: Colors.grey.shade600,
-        ),
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: Colors.grey.shade600),
       ),
-      trailing: const Icon(
+      trailing: Icon(
         Icons.arrow_forward_ios_rounded,
         size: 16.0,
       ),

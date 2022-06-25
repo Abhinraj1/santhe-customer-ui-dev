@@ -4,7 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 import 'package:santhe/core/app_helpers.dart';
@@ -55,13 +55,6 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
     return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
   }
 
-  String checkPlaceholder(String value){
-    if(value.contains(placeHolderIdentifier)){
-      return value.replaceAll(placeHolderIdentifier, '');
-    }
-    return '';
-  }
-
   late int currentUserListDBKey = widget.currentUserListDBKey;
   late String searchQuery = widget.searchQuery;
   late APIs apiController = Get.find<APIs>();
@@ -96,7 +89,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                 children: [
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0, left: 20.0),
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: AutoSizeText(
                         'Custom Item',
                         textAlign: TextAlign.center,

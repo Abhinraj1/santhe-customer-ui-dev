@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 
@@ -15,8 +13,8 @@ class AddressSearch extends SearchDelegate<Suggestion> {
       appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0.0),
       inputDecorationTheme: searchFieldDecorationTheme,
       textTheme: Theme.of(context).textTheme.copyWith(
-            headline6: const TextStyle(
-                color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w400,),
+            headline6: TextStyle(
+                color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w400),
           ),
     );
   }
@@ -79,7 +77,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                     ? ListView.builder(
                         itemBuilder: (context, index) => GestureDetector(
                             onTap: () async {
-                              log(snapshot.data[index].toString());
+                              print(snapshot.data[index]);
                               PlaceApiProvider placeApiProvider =
                                   PlaceApiProvider();
                               placeApiProvider.getPlaceDetailFromId(
@@ -100,7 +98,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                                   Column(
                                     children: [
                                       Wrap(children: [
-                                        SizedBox(
+                                        Container(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *

@@ -1154,7 +1154,7 @@ class APIs extends GetxController {
       } else {
         return userLists;
       }
-      return userLists;
+      return userLists.reversed.toList();
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
@@ -1386,7 +1386,7 @@ class APIs extends GetxController {
       } else {
         return userLists;
       }
-      return userLists;
+      return userLists.reversed.toList();
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
-import 'package:resize/resize.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
@@ -63,9 +63,17 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
     final screenSize = MediaQuery.of(context).size;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     String removeDecimalZeroFormat(double n) {
-      final itr = n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
-      return itr.replaceAll('.0', '');
+      return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
+
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: const Size(390, 844),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return FutureBuilder<MerchantOfferResponse>(
       future: getDetails(),
       builder: (context, snapShot) {
@@ -116,7 +124,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
+                    fontSize: 18.sp,
                   ),
                 ),
               ),
@@ -125,7 +133,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   Container(
                     color: Colors.transparent,
                     width: double.infinity,
-                    height: 40.sp,
+                    height: 60.sp,
                     child: Center(
                       child: Text(
                         isDone() ? 'Offer Accepted' : 'Items and Price',
@@ -134,14 +142,14 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                             color:
                                 isDone() ? AppColors().green100 : Colors.orange,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16.sp),
+                            fontSize: 18.sp),
                       ),
                     ),
                   ),
                   if (isDone())
                     SizedBox(
                       width: screenSize.width,
-                      height: screenSize.height / 3,
+                      height: screenSize.height / 3 + 10,
                       child: Stack(
                         children: [
                           isDone()
@@ -153,14 +161,14 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   child: Row(
                                     children: [
                                       SizedBox(
-                                        width: 20.w,
+                                        width: 30.w,
                                       ),
                                       Image.asset(
                                         'assets/offers/store_icon.png',
                                         height: 75.h,
                                       ),
                                       SizedBox(
-                                        width: 15.w,
+                                        width: 19.w,
                                       ),
                                       Expanded(
                                         child: Column(
@@ -168,18 +176,18 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: 8.sp,
+                                              height: 10.sp,
                                             ),
                                             Text(
                                               widget.merchantResponse!
                                                   .fields.merchName.stringValue,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 18.sp,
+                                                fontSize: 29.sp,
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 8.sp,
+                                              height: 10.sp,
                                             ),
                                             SizedBox(
                                               width: 240.w,
@@ -193,29 +201,29 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                     .stringValue,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize: 15.sp,
+                                                  fontSize: 18.sp,
                                                 ),
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 8.sp,
+                                              height: 10.sp,
                                             ),
                                             //contact number
                                             Row(
                                               children: [
                                                 //phone icon
                                                 CircleAvatar(
-                                                  radius: 15.sp,
+                                                  radius: 18.sp,
                                                   backgroundColor:
                                                       AppColors().brandDark,
                                                   child: Icon(
                                                     Icons.phone,
                                                     color: AppColors().white100,
-                                                    size: 13.sp,
+                                                    size: 15.sp,
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  width: 8.sp,
+                                                  width: 10.sp,
                                                 ),
                                                 //phone number
                                                 Text(
@@ -234,7 +242,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                               ],
                                             ),
                                             SizedBox(
-                                              height: 10.h,
+                                              height: 20.h,
                                             ),
                                             InkWell(
                                               onTap: () {
@@ -266,7 +274,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 16.sp),
+                                                      fontSize: 18.sp),
                                                 ),
                                               ),
                                             ),
@@ -284,7 +292,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       filter: ImageFilter.blur(
                                           sigmaX: 20, sigmaY: 20),
                                       child: SizedBox(
-                                        height: screenSize.height / 3,
+                                        height: screenSize.height / 3 + 10,
                                         width: screenSize.width,
                                       ),
                                     ),
@@ -296,14 +304,14 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   child: Container(
                                     padding: const EdgeInsets.all(20),
                                     alignment: Alignment.center,
-                                    height: screenSize.height / 3,
+                                    height: screenSize.height / 3 + 10,
                                     width: screenSize.width,
                                     child: Text(
                                       'Merchant information will be available only upto 72 hours since the list was sent to shops.',
                                       softWrap: true,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          fontSize: 16.sp,
+                                          fontSize: 18.sp,
                                           color: AppColors().grey100,
                                           fontWeight: FontWeight.w400),
                                     ),
@@ -347,7 +355,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: 8.h,
+                                height: 10.h,
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(
@@ -361,7 +369,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       value,
                                       style: TextStyle(
                                         color: const Color(0xff8B8B8B),
-                                        fontSize: 18.sp,
+                                        fontSize: 20.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -369,7 +377,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       'Price',
                                       style: TextStyle(
                                         color: AppColors().brandDark,
-                                        fontSize: 18.sp,
+                                        fontSize: 22.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -482,6 +490,18 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                         const Color.fromARGB(165, 241, 241, 241),
                                     isScrollControlled: true,
                                     builder: (BuildContext context) {
+                                      ScreenUtil.init(
+                                          BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              maxHeight: MediaQuery.of(context)
+                                                  .size
+                                                  .height),
+                                          designSize: const Size(390, 844),
+                                          context: context,
+                                          minTextAdapt: true,
+                                          orientation: Orientation.portrait);
                                       return Padding(
                                         padding: EdgeInsets.only(
                                             bottom: MediaQuery.of(context)
@@ -566,7 +586,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                           children: [
                                                             TextSpan(
                                                               text:
-                                                                  ' only ONE ',
+                                                                  ' can accept ',
                                                               style: TextStyle(
                                                                   fontSize: 18.sp,
                                                                   color:
@@ -597,6 +617,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                       width: 234.sp,
                                                       child: MaterialButton(
                                                         onPressed: () async {
+                                                          //todo push acceptance changes to db
                                                           int response =
                                                               await apiController
                                                                   .acceptOffer(

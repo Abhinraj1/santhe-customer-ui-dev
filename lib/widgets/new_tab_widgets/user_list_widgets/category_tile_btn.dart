@@ -15,6 +15,7 @@ class CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
+    double screenHeight = MediaQuery.of(context).size.height / 100;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(

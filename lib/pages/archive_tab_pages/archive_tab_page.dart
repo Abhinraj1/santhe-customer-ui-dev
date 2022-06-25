@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -64,10 +64,9 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                       width: 368.w,
                       child: SvgPicture.asset(
                         'assets/archive_tab_image.svg',
-                        fit: BoxFit.contain,
+                        fit: BoxFit.fill,
                       ),
                     ),
-                    SizedBox(height: 20.sp,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: RichText(
@@ -78,7 +77,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                           style: TextStyle(
                             color: kTextGrey,
                             fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
+                            fontSize: 24.sp,
                             height: 2.sp,
                           ),
                           children: <TextSpan>[
@@ -87,7 +86,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                               style: TextStyle(
                                 color: kTextGrey,
                                 fontWeight: FontWeight.w900,
-                                fontSize: 16.sp,
+                                fontSize: 24.sp,
                                 height: 2.sp,
                               ),
                             ),
@@ -96,7 +95,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                               style: TextStyle(
                                 color: kTextGrey,
                                 fontWeight: FontWeight.w400,
-                                fontSize: 16.sp,
+                                fontSize: 24.sp,
                                 height: 2.sp,
                               ),
                             ),
@@ -131,6 +130,14 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                   parent: AlwaysScrollableScrollPhysics()),
               itemCount: controller.archivedList.length,
               itemBuilder: (context, index) {
+                ScreenUtil.init(
+                    BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width,
+                        maxHeight: MediaQuery.of(context).size.height),
+                    designSize: const Size(390, 844),
+                    context: context,
+                    minTextAdapt: true,
+                    orientation: Orientation.portrait);
                 return ArchivedUserListCard(
                     userList: controller.archivedList[index], index: index);
               },

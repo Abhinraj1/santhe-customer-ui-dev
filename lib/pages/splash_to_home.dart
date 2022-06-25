@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,7 +69,7 @@ class _SplashToHomeState extends State<SplashToHome> {
       //items data for search
       // await apiController.getAllItems();
 
-      log('first cache load');
+      print('first cache load');
     }
 
     //catUpdate checking
@@ -79,11 +78,11 @@ class _SplashToHomeState extends State<SplashToHome> {
             ?.catUpdate
             .isBefore(newCacheRefresh.catUpdate) ??
         true) {
-      log(
+      print(
           '========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
 //calling api and saving to db (api code has db write code integrated)
       await apiController.getAllCategories();
-      log('>>>>>>>>>>>>>>fetching cat');
+      print('>>>>>>>>>>>>>>fetching cat');
     }
     // apiController.initCategoriesDB();
 
@@ -94,7 +93,7 @@ class _SplashToHomeState extends State<SplashToHome> {
             .isBefore(newCacheRefresh.custFaqUpdate) ??
         true) {
       //get & store faq data
-      log('-----------------Updating FAQ------------------');
+      print('-----------------Updating FAQ------------------');
       await apiController.getAllFAQs();
     }
 
@@ -104,14 +103,14 @@ class _SplashToHomeState extends State<SplashToHome> {
             ?.aboutUsUpdate
             .isBefore(newCacheRefresh.aboutUsUpdate) ??
         true) {
-      log('-----------------Updating About Us------------------');
+      print('-----------------Updating About Us------------------');
       await apiController.getCommonContent();
     } else if (box
             .get('cacheRefresh')
             ?.termsUpdate
             .isBefore(newCacheRefresh.termsUpdate) ??
         true) {
-      log('-----------------Updating Terms & Condition------------------');
+      print('-----------------Updating Terms & Condition------------------');
       await apiController.getCommonContent();
     }
 
@@ -121,7 +120,7 @@ class _SplashToHomeState extends State<SplashToHome> {
             ?.itemUpdate
             .isBefore(newCacheRefresh.itemUpdate) ??
         true) {
-      log('-----------------Refreshing Item Image------------------');
+      print('-----------------Refreshing Item Image------------------');
       // await apiController.getAllItems();
       //clearing image cache
       DefaultCacheManager manager = DefaultCacheManager();

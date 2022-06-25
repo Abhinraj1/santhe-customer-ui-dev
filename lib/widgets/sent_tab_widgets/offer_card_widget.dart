@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
@@ -12,71 +12,61 @@ import 'package:santhe/widgets/offer_status_widget.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/sent_list_detail_page.dart';
 
-class OfferCard extends StatefulWidget {
+class OfferCard extends StatelessWidget {
   final UserList userList;
-  final Function function;
 
-  const OfferCard({
-    required this.userList,
-    Key? key,
-    required this.function,
-  }) : super(key: key);
-
-  @override
-  State<OfferCard> createState() => _OfferCardState();
-}
-
-class _OfferCardState extends State<OfferCard> {
+  OfferCard({required this.userList, Key? key}) : super(key: key);
   final apiController = Get.find<APIs>();
-
   final int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;
-
   final box = Boxes.getUserListDB();
 
   @override
   Widget build(BuildContext context) {
+    // double screenHeight = MediaQuery.of(context).size.height / 100;
+    // double screenWidth = MediaQuery.of(context).size.width / 100;
     String imagePath = 'assets/basket0.png';
 
     //image logic
-    if (widget.userList.items.isEmpty) {
+    if (userList.items.isEmpty) {
       imagePath = 'assets/basket0.png';
-    } else if (widget.userList.items.length <= 10) {
+    } else if (userList.items.length <= 10) {
       imagePath = 'assets/basket1.png';
-    } else if (widget.userList.items.length <= 20) {
+    } else if (userList.items.length <= 20) {
       imagePath = 'assets/basket2.png';
     } else {
       imagePath = 'assets/basket3.png';
     }
 
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: const Size(390, 844),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () async {
-          if (widget.userList.processStatus == 'nomerchant' ||
-              widget.userList.processStatus == 'nooffer' ||
-              widget.userList.processStatus == 'missed') {
+          if (userList.processStatus == 'nomerchant' ||
+              userList.processStatus == 'nooffer' ||
+              userList.processStatus == 'missed') {
             Get.to(
-              () => NoOfferPage(
-                userList: widget.userList,
-                missed: widget.userList.processStatus == 'missed',
+                  () => NoOfferPage(
+                userList: userList,
+                missed: userList.processStatus == 'missed',
               ),
             );
           } else {
             Get.to(
-              () => SentUserListDetailsPage(
-                userList: widget.userList,
+                  () => SentUserListDetailsPage(
+                userList: userList,
                 showOffers: _showOffer(),
               ),
-            )?.then((value) {
-              if (value != null) {
-                if (value == true) {
-                  widget.userList.processStatus = 'accepted';
-                  widget.function();
-                }
-              }
-            });
+            );
           }
         },
         child: Container(
@@ -105,22 +95,20 @@ class _OfferCardState extends State<OfferCard> {
                   child: SlidableAction(
                     onPressed: (context) async {
                       int userListCount =
-                          await apiController.getAllCustomerLists(custId);
-                      UserList oldUserList = widget.userList;
+                      await apiController.getAllCustomerLists(custId);
+                      UserList oldUserList = userList;
 
                       UserList newImportedList = UserList(
-                        createListTime: DateTime.now(),
-                        custId: oldUserList.custId,
-                        items: oldUserList.items,
-                        listId: int.parse('$custId${userListCount + 1}'),
-                        listName: '(COPY) ${oldUserList.listName}',
-                        custListSentTime: oldUserList.custListSentTime,
-                        custListStatus: oldUserList.custListStatus,
-                        listOfferCounter: oldUserList.listOfferCounter,
-                        processStatus: oldUserList.processStatus,
-                        custOfferWaitTime: oldUserList.custOfferWaitTime,
-                        updateListTime: DateTime.now(),
-                      );
+                          createListTime: DateTime.now(),
+                          custId: oldUserList.custId,
+                          items: oldUserList.items,
+                          listId: int.parse('$custId${userListCount + 1}'),
+                          listName: '(COPY) ${oldUserList.listName}',
+                          custListSentTime: oldUserList.custListSentTime,
+                          custListStatus: oldUserList.custListStatus,
+                          listOfferCounter: oldUserList.listOfferCounter,
+                          processStatus: oldUserList.processStatus,
+                          custOfferWaitTime: oldUserList.custOfferWaitTime);
 
                       int response = await apiController.addCustomerList(
                           newImportedList, custId, 'new');
@@ -154,7 +142,6 @@ class _OfferCardState extends State<OfferCard> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Column(
@@ -162,33 +149,33 @@ class _OfferCardState extends State<OfferCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             AutoSizeText(
-                              widget.userList.listName,
+                              userList.listName,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               style: TextStyle(
                                   letterSpacing: 0.2,
-                                  fontSize: 20.sp,
+                                  fontSize: 21.sp,
                                   color: Colors.orange,
                                   fontWeight: FontWeight.w400),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 16.sp),
+                              padding: EdgeInsets.only(top: 18.77.sp),
                               child: AutoSizeText(
-                                '${widget.userList.items.length} ${widget.userList.items.length > 1 ? 'Items' : 'Item'}',
+                                '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
                                 style: TextStyle(
-                                    fontSize: 30.sp,
+                                    fontSize: 36.sp,
                                     color: Colors.orange,
                                     fontWeight: FontWeight.w700),
                               ),
                             ),
                             Padding(
                               padding:
-                                  EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                              EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
                               child: AutoSizeText(
-                                'Added on ${widget.userList.createListTime.day}/${widget.userList.createListTime.month}/${widget.userList.createListTime.year}',
+                                'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                                 style: TextStyle(
-                                    fontSize: 12.sp,
+                                    fontSize: 14.sp,
                                     color: Colors.transparent,
                                     fontWeight: FontWeight.w400),
                               ),
@@ -198,8 +185,8 @@ class _OfferCardState extends State<OfferCard> {
                       ),
                       Image.asset(
                         imagePath,
-                        height: 129.sp,
-                        width: 129.sp,
+                        height: 139.2.sp,
+                        width: 139.2.sp,
                       ),
                     ],
                   ),
@@ -207,18 +194,18 @@ class _OfferCardState extends State<OfferCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AutoSizeText(
-                        'Added on ${widget.userList.createListTime.day}/${widget.userList.createListTime.month}/${widget.userList.createListTime.year}',
+                        'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                         style: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          right: 10.sp,
+                          right: 15.sp,
                         ),
                         child: OfferStatus(
-                          userList: widget.userList,
+                          userList: userList,
                         ),
                       ),
                     ],
@@ -233,13 +220,13 @@ class _OfferCardState extends State<OfferCard> {
   }
 
   bool _showOffer() {
-    return (widget.userList.processStatus == 'minoffer' &&
-                widget.userList.custOfferWaitTime
+    return (userList.processStatus == 'minoffer' &&
+                userList.custOfferWaitTime
                     .toLocal()
                     .isBefore(DateTime.now())) ||
-            widget.userList.processStatus == 'maxoffer' ||
-            widget.userList.processStatus == 'accepted' ||
-            widget.userList.processStatus == 'processed'
+            userList.processStatus == 'maxoffer' ||
+            userList.processStatus == 'accepted' ||
+            userList.processStatus == 'processed'
         ? true
         : false;
   }

@@ -1,13 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:get/get.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/no_offer_page.dart';
@@ -16,6 +17,7 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
 import '../../controllers/archived_controller.dart';
+import '../../pages/archive_tab_pages/archive_detailed_page.dart';
 
 class ArchivedUserListCard extends StatelessWidget {
   final UserList userList;
@@ -31,6 +33,7 @@ class ArchivedUserListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ArchivedController _archivedController = Get.find();
+    final screenSize = MediaQuery.of(context).size;
     final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
 
@@ -45,6 +48,14 @@ class ArchivedUserListCard extends StatelessWidget {
       imagePath = 'assets/basket3.png';
     }
 
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: const Size(390, 844),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
@@ -61,7 +72,7 @@ class ArchivedUserListCard extends StatelessWidget {
           } else if (userList.processStatus == 'accepted' ||
               userList.processStatus == 'processed') {
             Get.to(
-              () => MerchantItemsListPage(
+                  () => MerchantItemsListPage(
                 userList: userList,
                 archived: true,
               ),
@@ -98,18 +109,16 @@ class ArchivedUserListCard extends StatelessWidget {
                       UserList oldUserList = userList;
 
                       UserList newImportedList = UserList(
-                        createListTime: DateTime.now(),
-                        custId: oldUserList.custId,
-                        items: oldUserList.items,
-                        listId: int.parse('$custId${userListCount + 1}'),
-                        listName: '(COPY) ${oldUserList.listName}',
-                        custListSentTime: oldUserList.custListSentTime,
-                        custListStatus: oldUserList.custListStatus,
-                        listOfferCounter: oldUserList.listOfferCounter,
-                        processStatus: oldUserList.processStatus,
-                        custOfferWaitTime: oldUserList.custOfferWaitTime,
-                        updateListTime: DateTime.now(),
-                      );
+                          createListTime: DateTime.now(),
+                          custId: oldUserList.custId,
+                          items: oldUserList.items,
+                          listId: int.parse('$custId${userListCount + 1}'),
+                          listName: '(COPY) ${oldUserList.listName}',
+                          custListSentTime: oldUserList.custListSentTime,
+                          custListStatus: oldUserList.custListStatus,
+                          listOfferCounter: oldUserList.listOfferCounter,
+                          processStatus: oldUserList.processStatus,
+                          custOfferWaitTime: oldUserList.custOfferWaitTime);
 
                       int response = await apiController.addCustomerList(
                           newImportedList, custId, 'new');
@@ -296,7 +305,6 @@ class ArchivedUserListCard extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Column(
@@ -308,16 +316,16 @@ class ArchivedUserListCard extends StatelessWidget {
                               maxLines: 2,
                               style: TextStyle(
                                   letterSpacing: 0.2,
-                                  fontSize: 20.sp,
+                                  fontSize: 21.sp,
                                   color: Colors.orange,
                                   fontWeight: FontWeight.w400),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 16.sp),
+                              padding: EdgeInsets.only(top: 18.77.sp),
                               child: AutoSizeText(
                                 '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
                                 style: TextStyle(
-                                    fontSize: 30.sp,
+                                    fontSize: 36.sp,
                                     color: Colors.orange,
                                     fontWeight: FontWeight.w700),
                               ),
@@ -328,7 +336,7 @@ class ArchivedUserListCard extends StatelessWidget {
                               child: AutoSizeText(
                                 'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                                 style: TextStyle(
-                                    fontSize: 12.sp,
+                                    fontSize: 14.sp,
                                     color: Colors.transparent,
                                     fontWeight: FontWeight.w400),
                               ),
@@ -338,8 +346,8 @@ class ArchivedUserListCard extends StatelessWidget {
                       ),
                       Image.asset(
                         imagePath,
-                        height: 129.sp,
-                        width: 129.sp,
+                        height: 139.2.sp,
+                        width: 139.2.sp,
                       ),
                     ],
                   ),
@@ -349,13 +357,13 @@ class ArchivedUserListCard extends StatelessWidget {
                       AutoSizeText(
                         'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
                         style: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          right: 10.sp,
+                          right: 15.sp,
                         ),
                         child: OfferStatus(
                           userList: userList,

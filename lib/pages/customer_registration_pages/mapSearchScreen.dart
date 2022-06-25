@@ -1,16 +1,18 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 
 import '../../API/addressSearchAPI.dart';
 import '../../constants.dart';
+import '../../controllers/location_controller.dart';
 import '../../controllers/registrationController.dart';
 import '../../core/app_colors.dart';
 import '../customer_registration_pages/MapAddressPicker.dart';
+import '../customer_registration_pages/addressSearchScreen.dart';
 
 class MapSearchScreen extends StatefulWidget {
   const MapSearchScreen({Key? key}) : super(key: key);
@@ -35,6 +37,15 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
+
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: const Size(390, 844),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -152,7 +163,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                           itemBuilder: (context, index) =>
                                               GestureDetector(
                                                   onTap: () async {
-                                                    log(snapshot.data[index].toString());
+                                                    print(snapshot.data[index]);
                                                     PlaceApiProvider
                                                         placeApiProvider =
                                                         PlaceApiProvider();
@@ -178,7 +189,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                                         Column(
                                                           children: [
                                                             Wrap(children: [
-                                                              SizedBox(
+                                                              Container(
                                                                   width: 234.w,
                                                                   child: Text(
                                                                     snapshot
@@ -203,7 +214,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                                   )),
                                           itemCount: snapshot.data.length,
                                         )
-                                      : const Text('Loading...')
+                                      : Container(
+                                          child: const Text('Loading...'))
                                   : Container()),
                     ),
                   ),
@@ -218,7 +230,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    Get.to(() => const MapAddressPicker());
+                    Get.to(() => MapAddressPicker());
                   },
                   child: Center(
                     child: Container(

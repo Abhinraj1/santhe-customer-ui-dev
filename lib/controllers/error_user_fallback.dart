@@ -46,13 +46,15 @@ Item fallBack_error_item = Item(
     updateUser: 404);
 
 UserList fallBack_error_userList = UserList(
-    createListTime: DateTime.now(),
-    custId: 404,
-    items: [],
-    listId: 404,
-    listName: 'error',
-    custListSentTime: DateTime.now(),
-    custListStatus: 'inactive',
-    listOfferCounter: 0,
-    processStatus: 'error',
-    custOfferWaitTime: DateTime.now());
+  createListTime: DateTime.now(),
+  custId: 404,
+  items: [],
+  listId: 404,
+  listName: 'error',
+  custListSentTime: DateTime.now(),
+  custListStatus: 'inactive',
+  listOfferCounter: 0,
+  processStatus: 'error',
+  custOfferWaitTime: DateTime.now(),
+  updateListTime: DateTime.now(),
+);

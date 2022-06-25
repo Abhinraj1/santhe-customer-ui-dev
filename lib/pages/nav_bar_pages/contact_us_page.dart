@@ -1,10 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/pages/home_page.dart';
 import 'package:get/get.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -35,7 +35,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
       TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
     final apiController = Get.find<APIs>();
     final TextStyle kHintStyle = TextStyle(
@@ -46,17 +45,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
-    final TextStyle kLabelStyle =
-        TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0);
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -438,7 +426,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         color: Colors.orange,
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            print('btn');
+                            log('btn');
                             int response = await apiController.contactUs(
                                 userPhoneNumber,
                                 _messageController.text,
@@ -453,7 +441,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                   'Success', 'We have received your message');
                               Navigator.pop(context);
                             } else {
-                              print('conact us faliled');
+                              log('conact us faliled');
                               errorMsg('Connectivity Error',
                                   'Some connectivity error has occurred, please try again later!');
                             }

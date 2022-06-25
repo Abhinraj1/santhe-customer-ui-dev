@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
 import 'package:santhe/controllers/registrationController.dart';
@@ -36,7 +38,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   final apiController = Get.find<APIs>();
   final _formKey = GlobalKey<FormState>();
   String userName = '', userEmail = '', userRefferal = '';
-  final TextEditingController _addressController = TextEditingController();
   bool mapSelected = false;
   bool donePressed = false;
 
@@ -59,7 +60,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       //items data for search
       // await apiController.getAllItems();
 
-      print('first cache load');
+      log('first cache load');
     }
 
     //catUpdate checking
@@ -68,11 +69,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             ?.catUpdate
             .isBefore(newCacheRefresh.catUpdate) ??
         true) {
-      print(
+      log(
           '========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
 //calling api and saving to db (api code has db write code integrated)
       await apiController.getAllCategories();
-      print('>>>>>>>>>>>>>>fetching cat');
+      log('>>>>>>>>>>>>>>fetching cat');
     }
     // apiController.initCategoriesDB();
 
@@ -83,7 +84,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             .isBefore(newCacheRefresh.custFaqUpdate) ??
         true) {
       //get & store faq data
-      print('-----------------Updating FAQ------------------');
+      log('-----------------Updating FAQ------------------');
       await apiController.getAllFAQs();
     }
 
@@ -93,14 +94,14 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             ?.aboutUsUpdate
             .isBefore(newCacheRefresh.aboutUsUpdate) ??
         true) {
-      print('-----------------Updating About Us------------------');
+      log('-----------------Updating About Us------------------');
       await apiController.getCommonContent();
     } else if (box
             .get('cacheRefresh')
             ?.termsUpdate
             .isBefore(newCacheRefresh.termsUpdate) ??
         true) {
-      print('-----------------Updating Terms & Condition------------------');
+      log('-----------------Updating Terms & Condition------------------');
       await apiController.getCommonContent();
     }
 
@@ -110,7 +111,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             ?.itemUpdate
             .isBefore(newCacheRefresh.itemUpdate) ??
         true) {
-      print('-----------------Refreshing Item Image------------------');
+      log('-----------------Refreshing Item Image------------------');
       // await apiController.getAllItems();
       //clearing image cache
       DefaultCacheManager manager = DefaultCacheManager();
@@ -156,18 +157,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       Boxes.getUserPrefs().put('isRegistered', false);
       Boxes.getUserPrefs().put('isLoggedIn', false);
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Get.offAll(() => LoginScreen(), transition: Transition.fadeIn);
+        Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
       });
     }
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -176,16 +168,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
-    final TextStyle kLabelStyle = TextStyle(
-      fontWeight: FontWeight.w500,
-      fontSize: 16.sp,
-    );
     final locationController = Get.find<LocationController>();
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SizedBox(
-          width: 1.sw,
+          width: 1.w,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -621,7 +609,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                         Get.offAll(() => const HomePage(),
                                             transition: Transition.fadeIn);
                                       } else {
-                                        print('error occurred');
+                                        log('error occurred');
                                         Get.offAll(
                                             () => const OnboardingPage());
                                       }
@@ -637,7 +625,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       //to not show start from odl lsit to new user
                                       Boxes.getContent()
                                           .put('userListCount', '0');
-                                      Get.offAll(() => LoginScreen(),
+                                      Get.offAll(() => const LoginScreen(),
                                           transition: Transition.fadeIn);
                                     }
                                   } else {

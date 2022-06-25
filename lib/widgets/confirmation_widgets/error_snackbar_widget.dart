@@ -1,12 +1,12 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 import '../../constants.dart';
 
 SnackbarController errorMsg(String title, String body) {
-  print(title);
+  log(title);
   return Get.snackbar(
     '',
     '',
@@ -14,7 +14,7 @@ SnackbarController errorMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
             fontWeight: FontWeight.w700,
             letterSpacing: 0.05,
             fontSize: 16,
@@ -25,13 +25,15 @@ SnackbarController errorMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         body,
-        style: TextStyle(
-            fontWeight: FontWeight.w400, fontSize: 16, color: kTextGrey),
+        style: const TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 16,
+          color: kTextGrey,
+        ),
       ),
     ),
     margin: const EdgeInsets.all(10.0),
     padding: const EdgeInsets.all(8.0),
-    //todo definitely remove once done
     duration: const Duration(milliseconds: 2100),
     backgroundColor: Colors.white,
     shouldIconPulse: true,

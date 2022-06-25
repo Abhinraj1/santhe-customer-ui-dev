@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 
@@ -55,7 +55,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'No Offers',
             style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: Colors.red,
                 fontWeight: FontWeight.w400),
           );
@@ -66,7 +66,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'Offers Missed',
             style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: Colors.red,
                 fontWeight: FontWeight.w400),
           );
@@ -77,7 +77,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'Accepted',
             style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: Colors.green,
                 fontWeight: FontWeight.w400),
           );
@@ -87,7 +87,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             '${userList.listOfferCounter} Offers Available',
             style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
@@ -107,7 +107,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
             style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
@@ -117,7 +117,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'Offers Expired',
             style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: Colors.grey,
                 fontWeight: FontWeight.w400),
           );

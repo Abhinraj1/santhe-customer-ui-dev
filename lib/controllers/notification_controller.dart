@@ -180,6 +180,7 @@ class NavigateNotifications {
       }
     }
     if(data['landingScreen'] == 'chat'){
+      print(data);
       _notificationController.landingScreen = 'chat';
       if((!_chatController.inChatScreen && !_notificationController.fromNotification) || (_chatController.inOfferScreen && _notificationController.fromNotification)) {
         Get.to(ChatScreen(chatId: data['chatId'], customerTitle: data['customerTitle'], listEventId: data['listEventId'], merchantTitle: data['merchantTitle'],));

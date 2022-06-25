@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/chat_controller.dart';
@@ -291,22 +292,19 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                               //     userList.listId.toString());
                                               Navigator.push(
                                                 context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChatScreen(
-                                                        chatId: widget.userList.listId
-                                                            .toString(),
-                                                        customerTitle: widget.currentMerchantOffer.merchResponse.merchTotalPrice,
-                                                        merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
-                                                        listEventId:
-                                                        merchantResponse!
-                                                            .fields
-                                                            .merchId
-                                                            .integerValue +
-                                                            widget.userList.listId
-                                                                .toString(),
-                                                      ),
-                                                ),
+                                                PageTransition(child: ChatScreen(
+                                                  chatId: widget.userList.listId
+                                                      .toString(),
+                                                  customerTitle: widget.currentMerchantOffer.merchResponse.merchTotalPrice,
+                                                  merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+                                                  listEventId:
+                                                  merchantResponse!
+                                                      .fields
+                                                      .merchId
+                                                      .integerValue +
+                                                      widget.userList.listId
+                                                          .toString(),
+                                                ), type: PageTransitionType.rightToLeft),
                                               );
                                             },
                                             child: Text(

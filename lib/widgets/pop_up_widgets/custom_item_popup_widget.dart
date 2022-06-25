@@ -4,7 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 import 'package:santhe/core/app_helpers.dart';

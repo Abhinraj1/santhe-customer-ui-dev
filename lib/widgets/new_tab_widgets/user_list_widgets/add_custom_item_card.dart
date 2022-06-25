@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
@@ -69,14 +69,7 @@ class _AddCustomItemCardState extends State<AddCustomItemCard> {
         TextEditingController(text: searchQuery);
     String selectedUnit = availableUnits[0];
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(

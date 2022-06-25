@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -93,14 +93,6 @@ class NavigationDrawer extends StatelessWidget {
                     builder: (context, box, widget) {
                       User currentUser =
                           box.get('currentUserDetails') ?? fallBack_error_user;
-                      ScreenUtil.init(
-                          BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width,
-                              maxHeight: MediaQuery.of(context).size.height),
-                          designSize: const Size(390, 844),
-                          context: context,
-                          minTextAdapt: true,
-                          orientation: Orientation.portrait);
                       return Expanded(
                         child: AutoSizeText(
                           currentUser.custName,

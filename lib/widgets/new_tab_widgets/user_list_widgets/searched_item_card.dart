@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 
 import 'package:group_button/group_button.dart';
@@ -29,14 +29,7 @@ class SearchedItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     List<Category> _categoryList = Boxes.getCategoriesDB().values.toList();
     return Padding(
         padding: const EdgeInsets.all(8.0),

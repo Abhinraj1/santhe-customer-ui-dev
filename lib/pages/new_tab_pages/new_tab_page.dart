@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -41,9 +41,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
   }
   String listName = '';
   int totalCustList = 0;
-  int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
+  int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
   String? selectedValue;
   // List<UserList> items = Boxes.getUserListDB().values.map((e) => e).toList();
 
@@ -85,14 +83,6 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     apiController.getAllCustomerLists(custId);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -124,15 +114,6 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                               const Color.fromARGB(165, 241, 241, 241),
                           isScrollControlled: true,
                           builder: (ctx) {
-                            ScreenUtil.init(
-                                BoxConstraints(
-                                    maxWidth: MediaQuery.of(ctx).size.width,
-                                    maxHeight:
-                                        MediaQuery.of(ctx).size.height),
-                                designSize: const Size(390, 844),
-                                context: ctx,
-                                minTextAdapt: true,
-                                orientation: Orientation.portrait);
                             return Padding(
                               padding: EdgeInsets.only(
                                   bottom:
@@ -157,18 +138,6 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                 //giving a new context so that modal sheet can also set state
                                 child: StatefulBuilder(
                                   builder: (c, setState) {
-                                    ScreenUtil.init(
-                                        BoxConstraints(
-                                            maxWidth: MediaQuery.of(c)
-                                                .size
-                                                .width,
-                                            maxHeight: MediaQuery.of(c)
-                                                .size
-                                                .height),
-                                        designSize: const Size(390, 844),
-                                        context: c,
-                                        minTextAdapt: true,
-                                        orientation: Orientation.portrait);
                                     return SingleChildScrollView(
                                       physics: const BouncingScrollPhysics(),
                                       child: Padding(
@@ -352,7 +321,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                       ),
                                                     ),
                                                     SizedBox(
-                                                      width: 90.sw,
+                                                      width: 90.vw,
                                                       height: 65.h,
                                                       child: Stack(
                                                         children: [
@@ -490,8 +459,8 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                             Container(
                                                               color: Colors
                                                                   .transparent,
-                                                              width: 100.sw,
-                                                              height: 100.sh,
+                                                              width: 100.vw,
+                                                              height: 100.vh,
                                                             )
                                                         ],
                                                       ),
@@ -781,14 +750,6 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
         builder: (context, box, widget) {
           Map<dynamic, UserList> userLists = box.toMap();
           List<dynamic> _userListKeys = userLists.keys.toList();
-          ScreenUtil.init(
-              BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width,
-                  maxHeight: MediaQuery.of(context).size.height),
-              designSize: const Size(390, 844),
-              context: context,
-              minTextAdapt: true,
-              orientation: Orientation.portrait);
           return RefreshIndicator(
               child: userLists.isEmpty
                   ? SizedBox(

@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
@@ -23,14 +23,6 @@ class CategoriesPage extends StatelessWidget {
         Boxes.getUserListDB().get(currentUserListDBKey) ??
             fallBack_error_userList;
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -107,14 +99,6 @@ class CategoriesPage extends StatelessWidget {
                               Boxes.getUserListDB().get(currentUserListDBKey) ??
                                   fallBack_error_userList;
 
-                          ScreenUtil.init(
-                              BoxConstraints(
-                                  maxWidth: MediaQuery.of(context).size.width,
-                                  maxHeight: MediaQuery.of(context).size.height),
-                              designSize: const Size(390, 844),
-                              context: context,
-                              minTextAdapt: true,
-                              orientation: Orientation.portrait);
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

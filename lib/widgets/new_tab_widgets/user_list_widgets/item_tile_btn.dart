@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 
 import 'package:group_button/group_button.dart';
@@ -40,14 +40,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
     final int currentUserListDBKey = widget.currentUserListDBKey;
     double screenWidth = MediaQuery.of(context).size.width / 100;
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(

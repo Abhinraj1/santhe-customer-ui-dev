@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:santhe/core/app_colors.dart';
@@ -40,14 +40,7 @@ class UserListCard extends StatelessWidget {
       imagePath = 'assets/basket3.png';
     }
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(

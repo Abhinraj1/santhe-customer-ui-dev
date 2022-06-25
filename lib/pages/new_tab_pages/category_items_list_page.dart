@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -37,14 +37,6 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -135,14 +127,6 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                               Boxes.getUserListDB().get(currentUserListDBKey) ??
                                   fallBack_error_userList;
 
-                          ScreenUtil.init(
-                              BoxConstraints(
-                                  maxWidth: MediaQuery.of(context).size.width,
-                                  maxHeight: MediaQuery.of(context).size.height),
-                              designSize: const Size(390, 844),
-                              context: context,
-                              minTextAdapt: true,
-                              orientation: Orientation.portrait);
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

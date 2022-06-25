@@ -3,16 +3,13 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
+import 'package:resize/resize.dart';
 
-import 'package:santhe/constants.dart';
-import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
-import 'package:santhe/pages/splash_to_home.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
 import '../controllers/boxes_controller.dart';
-import 'home_page.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -46,15 +43,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return Scaffold(
       body: Container(
         width: double.infinity,

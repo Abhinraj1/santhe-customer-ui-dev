@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
@@ -122,14 +122,7 @@ class _UserListPageState extends State<UserListPage>
         box.get(widget.userKey) ?? fallBack_error_userList;
     // FocusNode _searchNode = FocusNode();
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -383,16 +376,6 @@ class _UserListPageState extends State<UserListPage>
                               UserList currentUserList =
                                   box.get(widget.userKey) ??
                                       fallBack_error_userList;
-                              ScreenUtil.init(
-                                  BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width,
-                                      maxHeight:
-                                          MediaQuery.of(context).size.height),
-                                  designSize: const Size(390, 844),
-                                  context: context,
-                                  minTextAdapt: true,
-                                  orientation: Orientation.portrait);
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Text(
@@ -418,16 +401,6 @@ class _UserListPageState extends State<UserListPage>
                                 UserList currentUserList =
                                     box.get(widget.userKey) ??
                                         fallBack_error_userList;
-                                ScreenUtil.init(
-                                    BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width,
-                                        maxHeight:
-                                            MediaQuery.of(context).size.height),
-                                    designSize: const Size(390, 844),
-                                    context: context,
-                                    minTextAdapt: true,
-                                    orientation: Orientation.portrait);
                                 return currentUserList.items.isNotEmpty
                                     ? GroupedListView(
                                         physics: const BouncingScrollPhysics(),
@@ -525,15 +498,6 @@ class _UserListPageState extends State<UserListPage>
                             UserList currentUserList =
                                 box.get(widget.userKey) ??
                                     fallBack_error_userList;
-                            ScreenUtil.init(
-                                BoxConstraints(
-                                    maxWidth: MediaQuery.of(context).size.width,
-                                    maxHeight:
-                                        MediaQuery.of(context).size.height),
-                                designSize: const Size(390, 844),
-                                context: context,
-                                minTextAdapt: true,
-                                orientation: Orientation.portrait);
                             return currentUserList.items.length >= 2
                                 ? Row(
                                     mainAxisAlignment:
@@ -568,24 +532,6 @@ class _UserListPageState extends State<UserListPage>
                                                     165, 241, 241, 241),
                                                 isScrollControlled: true,
                                                 builder: (ctx) {
-                                                  ScreenUtil.init(
-                                                      BoxConstraints(
-                                                          maxWidth:
-                                                          MediaQuery.of(
-                                                              ctx)
-                                                              .size
-                                                              .width,
-                                                          maxHeight:
-                                                          MediaQuery
-                                                              .of(ctx)
-                                                              .size
-                                                              .height),
-                                                      designSize: const Size(
-                                                          390, 844),
-                                                      context: ctx,
-                                                      minTextAdapt: true,
-                                                      orientation: Orientation
-                                                          .portrait);
                                                   return Padding(
                                                     padding: EdgeInsets.only(
                                                         bottom:
@@ -998,18 +944,6 @@ class _UserListPageState extends State<UserListPage>
                                   future: searchedItemsResult,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<dynamic> snapshot) {
-                                    ScreenUtil.init(
-                                        BoxConstraints(
-                                            maxWidth: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            maxHeight: MediaQuery.of(context)
-                                                .size
-                                                .height),
-                                        designSize: const Size(390, 844),
-                                        context: context,
-                                        minTextAdapt: true,
-                                        orientation: Orientation.portrait);
                                     if (snapshot.hasError) {
                                       //todo show proper error screen
                                       return Text('${snapshot.error}');
@@ -1083,21 +1017,6 @@ class _UserListPageState extends State<UserListPage>
 
                                         itemCount: snapshot.data?.length,keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                         itemBuilder: (context, index) {
-                                          ScreenUtil.init(
-                                              BoxConstraints(
-                                                  maxWidth:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .width,
-                                                  maxHeight:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .height),
-                                              designSize: const Size(390, 844),
-                                              context: context,
-                                              minTextAdapt: true,
-                                              orientation:
-                                                  Orientation.portrait);
                                           if (index ==
                                               snapshot.data?.length - 1) {
                                             return Column(

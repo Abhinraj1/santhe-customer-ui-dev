@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AboutUsPage extends StatefulWidget {
@@ -16,14 +16,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -88,14 +88,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       Get.offAll(() => LoginScreen(), transition: Transition.fadeIn);
     }
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -132,7 +125,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SizedBox(
-          width: 1.sw,
+          width: 1.vw,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
@@ -49,14 +49,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
     final TextStyle kLabelStyle =
         TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0);
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

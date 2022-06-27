@@ -42,14 +42,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    _homeController.homeTabController = TabController(length: 3, vsync: this, initialIndex: widget.pageIndex ?? 0);
+    _homeController.homeTabController = TabController(length: 3, vsync: this, initialIndex: widget.pageIndex);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
-    // apiController.searchedItemResult('potato');
+    apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
     super.initState();
   }
@@ -59,116 +59,111 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    final int pageIndex = widget.pageIndex;
-    return DefaultTabController(
-      length: 3,
-      initialIndex: pageIndex,
-      child: Scaffold(
-        key: _key,
-        drawer: const NavigationDrawer(),
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              _key.currentState!.openDrawer();
-            },
-            splashRadius: 25.0,
-            icon: SvgPicture.asset(
-              'assets/drawer_icon.svg',
+    return Scaffold(
+      key: _key,
+      drawer: const NavigationDrawer(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          },
+          splashRadius: 25.0,
+          icon: SvgPicture.asset(
+            'assets/drawer_icon.svg',
+            color: Colors.white,
+          ),
+        ),
+        shadowColor: Colors.orange.withOpacity(0.5),
+        elevation: 10.0,
+        title: const AutoSizeText(
+          kAppName,
+          style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              fontSize: 24),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 4.5),
+            child: IconButton(
+              onPressed: () {
+                if (Platform.isIOS) {
+                  Share.share(
+                    AppHelpers().appStoreLink,
+                  );
+                } else {
+                  Share.share(
+                    AppHelpers().playStoreLink,
+                  );
+                }
+              },
+              splashRadius: 25.0,
+              icon: Icon(
+                Icons.adaptive.share,
+                color: Colors.white,
+                size: 27.0,
+              ),
+            ),
+          )
+        ],
+        bottom: TabBar(
+          controller: _homeController.homeTabController,
+          indicator: const UnderlineTabIndicator(
+            insets: EdgeInsets.symmetric(horizontal: 20.0),
+            borderSide: BorderSide(
+              width: 5.0,
               color: Colors.white,
             ),
           ),
-          shadowColor: Colors.orange.withOpacity(0.5),
-          elevation: 10.0,
-          title: const AutoSizeText(
-            kAppName,
-            style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                fontSize: 24),
+          unselectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 18.sp,
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4.5),
-              child: IconButton(
-                onPressed: () {
-                  if (Platform.isIOS) {
-                    Share.share(
-                      AppHelpers().appStoreLink,
-                    );
-                  } else {
-                    Share.share(
-                      AppHelpers().playStoreLink,
-                    );
-                  }
-                },
-                splashRadius: 25.0,
-                icon: Icon(
-                  Icons.adaptive.share,
-                  color: Colors.white,
-                  size: 27.0,
-                ),
-              ),
-            )
-          ],
-          bottom: TabBar(
-            controller: _homeController.homeTabController,
-            indicator: const UnderlineTabIndicator(
-              insets: EdgeInsets.symmetric(horizontal: 20.0),
-              borderSide: BorderSide(
-                width: 5.0,
-                color: Colors.white,
-              ),
-            ),
-            unselectedLabelStyle: TextStyle(
-              fontWeight: FontWeight.w400,
+          labelColor: Colors.white,
+          labelStyle: TextStyle(
               fontSize: 18.sp,
+              color: Colors.white,
+              fontWeight: FontWeight.w800),
+          unselectedLabelColor: Colors.white.withOpacity(0.8),
+          tabs: const [
+            Tab(
+              child: Text(
+                'New',
+              ),
             ),
-            labelColor: Colors.white,
-            labelStyle: TextStyle(
-                fontSize: 18.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.w800),
-            unselectedLabelColor: Colors.white.withOpacity(0.8),
-            tabs: const [
-              Tab(
-                child: Text(
-                  'New',
-                ),
+            Tab(
+              child: Text(
+                'Sent',
               ),
-              Tab(
-                child: Text(
-                  'Sent',
-                ),
+            ),
+            Tab(
+              child: Text(
+                'Archived',
               ),
-              Tab(
-                child: Text(
-                  'Archived',
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-        body: FutureBuilder(
-            future: checkSubPlan(),
-            builder: (c, s) {
-              if (s.connectionState == ConnectionState.done) {
-                return TabBarView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    NewTabPage(
-                      limit: s.data == null ? 3 : s.data! as int,
-                    ),
-                    const OfferTabPage(),
-                    const ArchiveTabPage(),
-                  ],
-                );
-              }
+      ),
+      body: FutureBuilder(
+          future: checkSubPlan(),
+          builder: (c, s) {
+            if (s.connectionState == ConnectionState.done) {
+              return TabBarView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  NewTabPage(
+                    limit: s.data == null ? 3 : s.data! as int,
+                  ),
+                  const OfferTabPage(),
+                  const ArchiveTabPage(),
+                ],
+              );
+            }
 
             return const Center(
               child: CircularProgressIndicator(),
             );
           }),
-      ),
     );
   }
 }

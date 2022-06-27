@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/nav_bar_pages/privacy_policy_page.dart';
 import 'package:santhe/pages/nav_bar_pages/terms_condition_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 import 'otpScreen.dart';
 

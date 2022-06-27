@@ -1,13 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:resize/resize.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
-//EditCustomerProfile
-import 'package:santhe/widgets/faq_drop_text_widget.dart';
 import 'package:get/get.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -19,9 +18,7 @@ import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
 import '../../models/santhe_user_model.dart';
 import '../customer_registration_pages/mapSearchScreen.dart';
-import '../home_page.dart';
 import '../login_pages/phone_number_login_page.dart';
-import '../onboarding_page.dart';
 
 class EditCustomerProfile extends StatefulWidget {
   const EditCustomerProfile({Key? key}) : super(key: key);
@@ -38,7 +35,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
           404;
   User? currentUser =
       Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
-  late final TextEditingController _addressController = TextEditingController();
   late final TextEditingController _userNameController =
       TextEditingController(text: currentUser?.custName ?? 'John Doe');
   late final TextEditingController _userEmailController =
@@ -85,17 +81,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       Boxes.getUserPrefs().put('showHome', false);
       Boxes.getUserPrefs().put('isRegistered', false);
       Boxes.getUserPrefs().put('isLoggedIn', false);
-      Get.offAll(() => LoginScreen(), transition: Transition.fadeIn);
+      Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
     }
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -104,8 +91,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
-    final TextStyle kLabelStyle =
-        TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0);
     final locationController = Get.find<LocationController>();
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +117,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SizedBox(
-          width: 1.sw,
+          width: 1.w,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -529,7 +514,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 child: Text(
                                   'Please Enter your Address',
                                   style: AppTheme().normal400(12).copyWith(
-                                      color: Color.fromARGB(255, 214, 77, 93)),
+                                      color: const Color.fromARGB(255, 214, 77, 93),),
                                 ),
                               ),
                             ],
@@ -575,7 +560,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         Get.off(() => const LoginScreen());
                                       }
 
-                                      print('------>>>>>>>>' +
+                                      log('------>>>>>>>>' +
                                           registrationController.pinCode.value);
                                       //todo add how to reach howToReach
                                       User updatedUser = User(
@@ -624,7 +609,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           .put('isRegistered', false);
                                       Boxes.getUserPrefs()
                                           .put('isLoggedIn', false);
-                                      Get.offAll(() => LoginScreen(),
+                                      Get.offAll(() => const LoginScreen(),
                                           transition: Transition.fadeIn);
                                     }
                                   }

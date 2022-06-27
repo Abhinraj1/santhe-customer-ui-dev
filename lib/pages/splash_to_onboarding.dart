@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +26,7 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
   void bootHome() {
     Future.delayed(const Duration(milliseconds: 4000), () {
       Get.off(() => const OnboardingPage(), transition: Transition.fadeIn);
-      print('called!');
+      log('called!');
     });
   }
 
@@ -55,11 +56,11 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
             ?.catUpdate
             .isBefore(newCacheRefresh.catUpdate) ??
         true) {
-      print(
+      log(
           '========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
 //calling api and saving to db (api code has db write code integrated)
       await apiController.getAllCategories();
-      print('>>>>>>>>>>>>>>fetching cat');
+      log('>>>>>>>>>>>>>>fetching cat');
     }
     // apiController.initCategoriesDB();
 
@@ -70,7 +71,7 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
             .isBefore(newCacheRefresh.custFaqUpdate) ??
         true) {
       //get & store faq data
-      print('-----------------Updating FAQ------------------');
+      log('-----------------Updating FAQ------------------');
       await apiController.getAllFAQs();
     }
 
@@ -80,14 +81,14 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
             ?.aboutUsUpdate
             .isBefore(newCacheRefresh.aboutUsUpdate) ??
         true) {
-      print('-----------------Updating About Us------------------');
+      log('-----------------Updating About Us------------------');
       await apiController.getCommonContent();
     } else if (box
             .get('cacheRefresh')
             ?.termsUpdate
             .isBefore(newCacheRefresh.termsUpdate) ??
         true) {
-      print('-----------------Updating Terms & Condition------------------');
+      log('-----------------Updating Terms & Condition------------------');
       await apiController.getCommonContent();
     }
 
@@ -97,7 +98,7 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
             ?.itemUpdate
             .isBefore(newCacheRefresh.itemUpdate) ??
         true) {
-      print('-----------------Refreshing Item Image------------------');
+      log('-----------------Refreshing Item Image------------------');
       // await apiController.getAllItems();
       //clearing image cache
       DefaultCacheManager manager = DefaultCacheManager();

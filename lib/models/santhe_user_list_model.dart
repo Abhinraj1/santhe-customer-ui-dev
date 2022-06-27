@@ -49,8 +49,8 @@ class UserList extends HiveObject {
     required this.listOfferCounter,
     required this.processStatus,
     required this.custOfferWaitTime,
-    DateTime? updateListTime,
-  }): updateListTime = updateListTime??DateTime.now();
+    required this.updateListTime,
+  });
 
   factory UserList.fromJson(data) {
     List<ListItem> listItems = [];

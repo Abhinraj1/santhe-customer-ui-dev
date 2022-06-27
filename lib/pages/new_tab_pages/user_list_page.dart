@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
@@ -94,7 +94,6 @@ class _UserListPageState extends State<UserListPage>
     super.dispose();
   }
 
-
   late final UserList userList = widget.userList;
   final TextStyle popupTextStyle = TextStyle(
     fontWeight: FontWeight.w400,
@@ -102,11 +101,11 @@ class _UserListPageState extends State<UserListPage>
     color: const Color(0xffB0B0B0),
   );
 
-  late UserList currentCustomerList = box.get(widget.userKey) ?? fallBack_error_userList;
+  late UserList currentCustomerList =
+      box.get(widget.userKey) ?? fallBack_error_userList;
 
   @override
   Widget build(BuildContext context) {
-
     final buildContext = context;
 
     double screenWidth = MediaQuery.of(context).size.width / 100;
@@ -122,14 +121,6 @@ class _UserListPageState extends State<UserListPage>
         box.get(widget.userKey) ?? fallBack_error_userList;
     // FocusNode _searchNode = FocusNode();
 
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -288,7 +279,7 @@ class _UserListPageState extends State<UserListPage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               //search text field
-            TextFormField(
+              TextFormField(
                 controller: searchQueryController,
                 textAlignVertical: TextAlignVertical.center,
                 textAlign: TextAlign.left,
@@ -383,16 +374,6 @@ class _UserListPageState extends State<UserListPage>
                               UserList currentUserList =
                                   box.get(widget.userKey) ??
                                       fallBack_error_userList;
-                              ScreenUtil.init(
-                                  BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width,
-                                      maxHeight:
-                                          MediaQuery.of(context).size.height),
-                                  designSize: const Size(390, 844),
-                                  context: context,
-                                  minTextAdapt: true,
-                                  orientation: Orientation.portrait);
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Text(
@@ -418,16 +399,6 @@ class _UserListPageState extends State<UserListPage>
                                 UserList currentUserList =
                                     box.get(widget.userKey) ??
                                         fallBack_error_userList;
-                                ScreenUtil.init(
-                                    BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width,
-                                        maxHeight:
-                                            MediaQuery.of(context).size.height),
-                                    designSize: const Size(390, 844),
-                                    context: context,
-                                    minTextAdapt: true,
-                                    orientation: Orientation.portrait);
                                 return currentUserList.items.isNotEmpty
                                     ? GroupedListView(
                                         physics: const BouncingScrollPhysics(),
@@ -513,7 +484,7 @@ class _UserListPageState extends State<UserListPage>
                                             ),
                                           ],
                                         ),
-                                      ); //todo here
+                                      );
                               },
                             ),
                           ),
@@ -525,21 +496,12 @@ class _UserListPageState extends State<UserListPage>
                             UserList currentUserList =
                                 box.get(widget.userKey) ??
                                     fallBack_error_userList;
-                            ScreenUtil.init(
-                                BoxConstraints(
-                                    maxWidth: MediaQuery.of(context).size.width,
-                                    maxHeight:
-                                        MediaQuery.of(context).size.height),
-                                designSize: const Size(390, 844),
-                                context: context,
-                                minTextAdapt: true,
-                                orientation: Orientation.portrait);
                             return currentUserList.items.length >= 2
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                       SizedBox(
+                                      SizedBox(
                                         height: 55,
                                         width: screenWidth * 65,
                                         child: MaterialButton(
@@ -561,76 +523,56 @@ class _UserListPageState extends State<UserListPage>
                                             //SEND TO SHOP BOTTOM SHEET
                                             showModalBottomSheet<void>(
                                                 backgroundColor:
-                                                Colors.transparent,
+                                                    Colors.transparent,
                                                 context: context,
                                                 barrierColor:
-                                                const Color.fromARGB(
-                                                    165, 241, 241, 241),
+                                                    const Color.fromARGB(
+                                                        165, 241, 241, 241),
                                                 isScrollControlled: true,
                                                 builder: (ctx) {
-                                                  ScreenUtil.init(
-                                                      BoxConstraints(
-                                                          maxWidth:
-                                                          MediaQuery.of(
-                                                              ctx)
-                                                              .size
-                                                              .width,
-                                                          maxHeight:
-                                                          MediaQuery
-                                                              .of(ctx)
-                                                              .size
-                                                              .height),
-                                                      designSize: const Size(
-                                                          390, 844),
-                                                      context: ctx,
-                                                      minTextAdapt: true,
-                                                      orientation: Orientation
-                                                          .portrait);
                                                   return Padding(
                                                     padding: EdgeInsets.only(
                                                         bottom:
-                                                        MediaQuery.of(ctx)
-                                                            .viewInsets
-                                                            .bottom),
+                                                            MediaQuery.of(ctx)
+                                                                .viewInsets
+                                                                .bottom),
                                                     child: Container(
-                                                      decoration:
-                                                      BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         borderRadius:
-                                                        BorderRadius.only(
+                                                            BorderRadius.only(
                                                           topRight:
-                                                          Radius.circular(
-                                                              30.r),
+                                                              Radius.circular(
+                                                                  30.r),
                                                           topLeft:
-                                                          Radius.circular(
-                                                              30.r),
+                                                              Radius.circular(
+                                                                  30.r),
                                                         ),
                                                         color: Colors.white,
                                                         boxShadow: [
                                                           BoxShadow(
-                                                            color: Colors.grey
-                                                                .shade300,
+                                                            color: Colors
+                                                                .grey.shade300,
                                                             blurRadius: 16.0,
                                                           ),
                                                         ],
                                                       ),
                                                       //giving a new context so that modal sheet can also set state
                                                       child:
-                                                      SingleChildScrollView(
+                                                          SingleChildScrollView(
                                                         physics:
-                                                        const BouncingScrollPhysics(),
+                                                            const BouncingScrollPhysics(),
                                                         child: Padding(
                                                           padding:
-                                                          EdgeInsets.all(
-                                                              23.sp),
+                                                              EdgeInsets.all(
+                                                                  23.sp),
                                                           child: Column(
                                                             crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
+                                                                CrossAxisAlignment
+                                                                    .center,
                                                             mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                            children: <
-                                                                Widget>[
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
+                                                            children: <Widget>[
                                                               Row(
                                                                 children: [
                                                                   Column(
@@ -639,27 +581,27 @@ class _UserListPageState extends State<UserListPage>
                                                                           Icons
                                                                               .close,
                                                                           color:
-                                                                          Colors.transparent),
+                                                                              Colors.transparent),
                                                                       SizedBox(
                                                                         height:
-                                                                        30.0,
+                                                                            30.0,
                                                                       ),
                                                                     ],
                                                                   ),
                                                                   Expanded(
-                                                                    child:
-                                                                    Text(
+                                                                    child: Text(
                                                                       'Send list to shops\nnear you',
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                          TextAlign
+                                                                              .center,
                                                                       style:
-                                                                      TextStyle(
-                                                                        color:
-                                                                        Colors.orange,
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .orange,
                                                                         fontWeight:
-                                                                        FontWeight.w700,
+                                                                            FontWeight.w700,
                                                                         fontSize:
-                                                                        24.sp,
+                                                                            24.sp,
                                                                       ),
                                                                     ),
                                                                   ),
@@ -668,15 +610,18 @@ class _UserListPageState extends State<UserListPage>
                                                                       GestureDetector(
                                                                         onTap:
                                                                             () {
-                                                                          Navigator.pop(ctx);
+                                                                          Navigator.pop(
+                                                                              ctx);
                                                                         },
                                                                         child: const Icon(
-                                                                            Icons.close,
-                                                                            color: kTextFieldGrey),
+                                                                            Icons
+                                                                                .close,
+                                                                            color:
+                                                                                kTextFieldGrey),
                                                                       ),
                                                                       const SizedBox(
                                                                         height:
-                                                                        30.0,
+                                                                            30.0,
                                                                       ),
                                                                     ],
                                                                   ),
@@ -684,143 +629,150 @@ class _UserListPageState extends State<UserListPage>
                                                               ),
                                                               Image.asset(
                                                                 'assets/send_to_shops.gif',
-                                                                height:
-                                                                235.sp,
+                                                                height: 235.sp,
                                                                 width: 344.sp,
                                                               ),
                                                               Column(
                                                                 crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
+                                                                    CrossAxisAlignment
+                                                                        .start,
                                                                 children: [
                                                                   Row(
                                                                     textBaseline:
-                                                                    TextBaseline
-                                                                        .ideographic,
+                                                                        TextBaseline
+                                                                            .ideographic,
                                                                     crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .baseline,
+                                                                        CrossAxisAlignment
+                                                                            .baseline,
                                                                     children: [
                                                                       Text(
                                                                         '1.',
                                                                         style:
-                                                                        popupTextStyle,
+                                                                            popupTextStyle,
                                                                       ),
                                                                       SizedBox(
                                                                           width:
-                                                                          12.36.sp),
+                                                                              12.36.sp),
                                                                       Expanded(
                                                                           child:
-                                                                          RichText(
-                                                                            text:
+                                                                              RichText(
+                                                                        text:
                                                                             TextSpan(
-                                                                              text:
+                                                                          text:
                                                                               'Your list will be sent to all the registered shops with in',
-                                                                              style:
+                                                                          style:
                                                                               popupTextStyle,
-                                                                              children: <TextSpan>[
-                                                                                TextSpan(text: ' 3 Km ', style: popupTextStyle.copyWith(fontWeight: FontWeight.w700)),
-                                                                                TextSpan(
-                                                                                  text: 'from your home address.',
-                                                                                  style: popupTextStyle,
-                                                                                ),
-                                                                              ],
+                                                                          children: <
+                                                                              TextSpan>[
+                                                                            TextSpan(
+                                                                                text: ' 3 Km ',
+                                                                                style: popupTextStyle.copyWith(fontWeight: FontWeight.w700)),
+                                                                            TextSpan(
+                                                                              text: 'from your home address.',
+                                                                              style: popupTextStyle,
                                                                             ),
-                                                                          )),
+                                                                          ],
+                                                                        ),
+                                                                      )),
                                                                     ],
                                                                   ),
                                                                   SizedBox(
-                                                                      height:
-                                                                      13.sp),
+                                                                      height: 13
+                                                                          .sp),
                                                                   Row(
                                                                     textBaseline:
-                                                                    TextBaseline
-                                                                        .ideographic,
+                                                                        TextBaseline
+                                                                            .ideographic,
                                                                     crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .baseline,
+                                                                        CrossAxisAlignment
+                                                                            .baseline,
                                                                     children: [
                                                                       Text(
                                                                         '2.',
                                                                         style:
-                                                                        popupTextStyle,
+                                                                            popupTextStyle,
                                                                       ),
                                                                       SizedBox(
                                                                           width:
-                                                                          12.36.sp),
+                                                                              12.36.sp),
                                                                       Expanded(
                                                                         child:
-                                                                        Text(
+                                                                            Text(
                                                                           'It will take anywhere between 3 to 12 hours before you get offers from shops.',
                                                                           style:
-                                                                          popupTextStyle,
+                                                                              popupTextStyle,
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
                                                                   SizedBox(
-                                                                      height:
-                                                                      13.sp),
+                                                                      height: 13
+                                                                          .sp),
                                                                   Row(
                                                                     textBaseline:
-                                                                    TextBaseline
-                                                                        .ideographic,
+                                                                        TextBaseline
+                                                                            .ideographic,
                                                                     crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .baseline,
+                                                                        CrossAxisAlignment
+                                                                            .baseline,
                                                                     children: [
                                                                       Text(
                                                                         '3.',
                                                                         style:
-                                                                        popupTextStyle,
+                                                                            popupTextStyle,
                                                                       ),
                                                                       SizedBox(
                                                                           width:
-                                                                          12.36.sp),
+                                                                              12.36.sp),
                                                                       Expanded(
                                                                         child:
-                                                                        Text(
+                                                                            Text(
                                                                           'Once sent, you cannot modify this list.',
                                                                           style:
-                                                                          popupTextStyle,
+                                                                              popupTextStyle,
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
                                                                   if (userList
-                                                                      .items
-                                                                      .length <=
+                                                                          .items
+                                                                          .length <=
                                                                       3)
                                                                     SizedBox(
                                                                         height:
-                                                                        13.sp),
+                                                                            13.sp),
                                                                   if (userList
-                                                                      .items
-                                                                      .length <=
+                                                                          .items
+                                                                          .length <=
                                                                       3)
                                                                     Row(
                                                                       textBaseline:
-                                                                      TextBaseline.ideographic,
+                                                                          TextBaseline
+                                                                              .ideographic,
                                                                       crossAxisAlignment:
-                                                                      CrossAxisAlignment.baseline,
+                                                                          CrossAxisAlignment
+                                                                              .baseline,
                                                                       children: [
                                                                         Text(
                                                                           '4.',
                                                                           style:
-                                                                          popupTextStyle,
+                                                                              popupTextStyle,
                                                                         ),
                                                                         SizedBox(
-                                                                            width: 12.36.sp),
+                                                                            width:
+                                                                                12.36.sp),
                                                                         Expanded(
                                                                           child:
-                                                                          Text(
+                                                                              Text(
                                                                             'Sending a list with few items may not get enough offers from shops.',
-                                                                            style: TextStyle(
+                                                                            style:
+                                                                                TextStyle(
                                                                               fontWeight: FontWeight.w800,
                                                                               fontSize: screenWidth * 3.5,
                                                                               color: const Color(0xffB0B0B0),
                                                                             ),
-                                                                            softWrap: true,
+                                                                            softWrap:
+                                                                                true,
                                                                           ),
                                                                         ),
                                                                       ],
@@ -829,17 +781,17 @@ class _UserListPageState extends State<UserListPage>
                                                               ),
                                                               SizedBox(
                                                                   height:
-                                                                  30.sp),
+                                                                      30.sp),
                                                               //send to shops button material
                                                               SizedBox(
                                                                 height: 50,
                                                                 width: 234.sp,
                                                                 child:
-                                                                MaterialButton(
+                                                                    MaterialButton(
                                                                   elevation:
-                                                                  0.0,
+                                                                      0.0,
                                                                   highlightElevation:
-                                                                  0.0,
+                                                                      0.0,
                                                                   color: Colors
                                                                       .orange,
                                                                   shape: RoundedRectangleBorder(
@@ -847,9 +799,10 @@ class _UserListPageState extends State<UserListPage>
                                                                           color: Colors
                                                                               .orange,
                                                                           width:
-                                                                          2.0),
+                                                                              2.0),
                                                                       borderRadius:
-                                                                      BorderRadius.circular(16.0)),
+                                                                          BorderRadius.circular(
+                                                                              16.0)),
                                                                   onPressed:
                                                                       () {
                                                                     sendList(
@@ -858,12 +811,13 @@ class _UserListPageState extends State<UserListPage>
                                                                   child: Text(
                                                                     'Send to Shops',
                                                                     style: TextStyle(
-                                                                        fontWeight: FontWeight
-                                                                            .w700,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
                                                                         color: Colors
                                                                             .white,
                                                                         fontSize:
-                                                                        18.sp),
+                                                                            18.sp),
                                                                   ),
                                                                 ),
                                                               ),
@@ -998,18 +952,6 @@ class _UserListPageState extends State<UserListPage>
                                   future: searchedItemsResult,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<dynamic> snapshot) {
-                                    ScreenUtil.init(
-                                        BoxConstraints(
-                                            maxWidth: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            maxHeight: MediaQuery.of(context)
-                                                .size
-                                                .height),
-                                        designSize: const Size(390, 844),
-                                        context: context,
-                                        minTextAdapt: true,
-                                        orientation: Orientation.portrait);
                                     if (snapshot.hasError) {
                                       //todo show proper error screen
                                       return Text('${snapshot.error}');
@@ -1080,24 +1022,11 @@ class _UserListPageState extends State<UserListPage>
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 8.0, horizontal: 8.0),
-
-                                        itemCount: snapshot.data?.length,keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                        itemCount: snapshot.data?.length,
+                                        keyboardDismissBehavior:
+                                            ScrollViewKeyboardDismissBehavior
+                                                .onDrag,
                                         itemBuilder: (context, index) {
-                                          ScreenUtil.init(
-                                              BoxConstraints(
-                                                  maxWidth:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .width,
-                                                  maxHeight:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .height),
-                                              designSize: const Size(390, 844),
-                                              context: context,
-                                              minTextAdapt: true,
-                                              orientation:
-                                                  Orientation.portrait);
                                           if (index ==
                                               snapshot.data?.length - 1) {
                                             return Column(
@@ -1256,7 +1185,9 @@ class _UserListPageState extends State<UserListPage>
         listName: oldCurrentUserList.listName,
         createListTime: oldCurrentUserList.createListTime,
         processStatus: 'draft',
-        custOfferWaitTime: oldCurrentUserList.custOfferWaitTime);
+        custOfferWaitTime: oldCurrentUserList.custOfferWaitTime,
+        updateListTime: DateTime.now(),
+    );
 
     //todo send list to firebase (currentUserList)
     int custId = Boxes.getUserCredentialsDB()

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -60,123 +60,115 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final int pageIndex = widget.pageIndex;
-    // double screenHeight = MediaQuery.of(context).size.height / 100;
-
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(390, 844),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
-
-    return Scaffold(
-      key: _key,
-      drawer: const NavigationDrawer(),
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            _key.currentState!.openDrawer();
-          },
-          splashRadius: 25.0,
-          icon: SvgPicture.asset(
-            'assets/drawer_icon.svg',
-            color: Colors.white,
-          ),
-        ),
-        shadowColor: Colors.orange.withOpacity(0.5),
-        elevation: 10.0,
-        title: const AutoSizeText(
-          kAppName,
-          style: TextStyle(
-              fontWeight: FontWeight.w800,
+    return DefaultTabController(
+      length: 3,
+      initialIndex: pageIndex,
+      child: Scaffold(
+        key: _key,
+        drawer: const NavigationDrawer(),
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              _key.currentState!.openDrawer();
+            },
+            splashRadius: 25.0,
+            icon: SvgPicture.asset(
+              'assets/drawer_icon.svg',
               color: Colors.white,
-              fontSize: 24),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 4.5),
-            child: IconButton(
-              onPressed: () {
-                if (Platform.isIOS) {
-                  Share.share(
-                    AppHelpers().appStoreLink,
-                  );
-                } else {
-                  Share.share(
-                    AppHelpers().playStoreLink,
-                  );
-                }
-              },
-              splashRadius: 25.0,
-              icon: Icon(
-                Icons.adaptive.share,
+            ),
+          ),
+          shadowColor: Colors.orange.withOpacity(0.5),
+          elevation: 10.0,
+          title: const AutoSizeText(
+            kAppName,
+            style: TextStyle(
+                fontWeight: FontWeight.w800,
                 color: Colors.white,
-                size: 27.0,
-              ),
-            ),
-          )
-        ],
-        bottom: TabBar(
-          controller: _homeController.homeTabController,
-          indicator: const UnderlineTabIndicator(
-            insets: EdgeInsets.symmetric(horizontal: 20.0),
-            borderSide: BorderSide(
-              width: 5.0,
-              color: Colors.white,
-            ),
+                fontSize: 24),
           ),
-          unselectedLabelStyle: TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 18.sp,
-          ),
-          labelColor: Colors.white,
-          labelStyle: TextStyle(
-              fontSize: 18.sp,
-              color: Colors.white,
-              fontWeight: FontWeight.w800),
-          unselectedLabelColor: Colors.white.withOpacity(0.8),
-          tabs: const [
-            Tab(
-              child: Text(
-                'New',
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 4.5),
+              child: IconButton(
+                onPressed: () {
+                  if (Platform.isIOS) {
+                    Share.share(
+                      AppHelpers().appStoreLink,
+                    );
+                  } else {
+                    Share.share(
+                      AppHelpers().playStoreLink,
+                    );
+                  }
+                },
+                splashRadius: 25.0,
+                icon: Icon(
+                  Icons.adaptive.share,
+                  color: Colors.white,
+                  size: 27.0,
+                ),
               ),
-            ),
-            Tab(
-              child: Text(
-                'Sent',
-              ),
-            ),
-            Tab(
-              child: Text(
-                'Archived',
-              ),
-            ),
+            )
           ],
+          bottom: TabBar(
+            controller: _homeController.homeTabController,
+            indicator: const UnderlineTabIndicator(
+              insets: EdgeInsets.symmetric(horizontal: 20.0),
+              borderSide: BorderSide(
+                width: 5.0,
+                color: Colors.white,
+              ),
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 18.sp,
+            ),
+            labelColor: Colors.white,
+            labelStyle: TextStyle(
+                fontSize: 18.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w800),
+            unselectedLabelColor: Colors.white.withOpacity(0.8),
+            tabs: const [
+              Tab(
+                child: Text(
+                  'New',
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Sent',
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Archived',
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      body: FutureBuilder(
-          future: checkSubPlan(),
-          builder: (c, s) {
-            if (s.connectionState == ConnectionState.done) {
-              return TabBarView(
-                controller: _homeController.homeTabController,
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  NewTabPage(
-                    limit: s.data == null ? 3 : s.data! as int,
-                  ),
-                  const OfferTabPage(),
-                  const ArchiveTabPage(),
-                ],
-              );
-            }
+        body: FutureBuilder(
+            future: checkSubPlan(),
+            builder: (c, s) {
+              if (s.connectionState == ConnectionState.done) {
+                return TabBarView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    NewTabPage(
+                      limit: s.data == null ? 3 : s.data! as int,
+                    ),
+                    const OfferTabPage(),
+                    const ArchiveTabPage(),
+                  ],
+                );
+              }
 
             return const Center(
               child: CircularProgressIndicator(),
             );
           }),
+      ),
     );
   }
 }

@@ -26,6 +26,10 @@ class _OfferTabPageState extends State<OfferTabPage> {
     super.initState();
   }
 
+  void refresh(){
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,80 +38,73 @@ class _OfferTabPageState extends State<OfferTabPage> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return SizedBox(
-              height: double.infinity,
               width: double.infinity,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 89.62.h,
+              height: MediaQuery.of(context).size.height - 80.sp,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width,
+                    child: SvgPicture.asset(
+                      'assets/sent_tab_image.svg',
+                      fit: BoxFit.fill,
                     ),
-                    SizedBox(
-                      height: 372.02.h,
-                      width: 312.65.w,
-                      child: SvgPicture.asset(
-                        'assets/sent_tab_image.svg',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          text:
-                              'All your shopping lists that you have sent to Shops in last 72 hours will appear here. Go to',
-                          style: TextStyle(
-                            color: kTextGrey,
-                            fontSize: 24.sp,
-                            height: 2.sp,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' New ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: kTextGrey,
-                                fontSize: 24.sp,
-                                height: 2.sp,
-                              ),
-                            ),
-                            TextSpan(
-                              text:
-                                  'tab to create and send your shopping lists.',
-                              style: TextStyle(
-                                  color: kTextGrey,
-                                  fontSize: 24.sp,
-                                  height: 2.sp),
-                            ),
-                          ],
+                  ),
+                  SizedBox(height: 20.sp,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text:
+                            'All your shopping lists that you have sent to Shops in last 72 hours will appear here. Go to',
+                        style: TextStyle(
+                          color: kTextGrey,
+                          fontSize: 16.sp,
+                          height: 2.sp,
                         ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' New ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: kTextGrey,
+                              fontSize: 16.sp,
+                              height: 2.sp,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                'tab to create and send your shopping lists.',
+                            style: TextStyle(
+                                color: kTextGrey,
+                                fontSize: 16.sp,
+                                height: 2.sp),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           } else if (snapshot.hasData && snapshot.data?.length == 0) {
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 89.62.h,
-                ),
-                SizedBox(
-                  height: 372.02.h,
-                  width: 312.65.w,
+                  height: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
                   child: SvgPicture.asset(
                     'assets/onboarding_sentPage_arrow.svg',
                     color: Colors.orange,
                     fit: BoxFit.fill,
                   ),
                 ),
+                SizedBox(height: 20.sp,),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -115,7 +112,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                       'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 24.sp,
+                          fontSize: 16.sp,
                           height: 2.sp,
                           color: Colors.grey),
                     ),
@@ -141,7 +138,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                     parent: AlwaysScrollableScrollPhysics()),
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  return OfferCard(userList: snapshot.data![index]);
+                  return OfferCard(userList: snapshot.data![index], function: refresh);
                 },
               ),
             );

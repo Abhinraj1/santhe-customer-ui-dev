@@ -602,7 +602,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                   if (_formKey.currentState!.validate() &&
                                       itemUnit.isNotEmpty &&
                                       _customItemNameController
-                                          .text.isNotEmpty) {
+                                          .text.trim().isNotEmpty) {
                                     int itemCount =
                                         await apiController.getItemsCount();
 
@@ -613,12 +613,12 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                       //todo add custom item to firebase
                                       Item newCustomItem = Item(
                                           dBrandType: _customBrandController
-                                                  .text.isEmpty
+                                                  .text.trim().isEmpty
                                               ? 'You can mention brand, type or size of the item here' +
                                                   placeHolderIdentifier
                                               : _customBrandController.text.trim(),
                                           dItemNotes: _customNotesController
-                                                  .text.isEmpty
+                                                  .text.trim().isEmpty
                                               ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
                                                   placeHolderIdentifier
                                               : _customNotesController.text.trim(),
@@ -651,7 +651,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                             ?.items
                                             .add(ListItem(
                                               brandType: _customBrandController
-                                                      .text.isEmpty
+                                                      .text.trim().isEmpty
                                                   ? 'You can mention brand, type or size of the item here' +
                                                       placeHolderIdentifier
                                                   : _customBrandController.text.trim(),
@@ -666,7 +666,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                               quantity: double.parse(
                                                   _customQtyController.text),
                                               notes: _customNotesController
-                                                      .text.isEmpty
+                                                      .text.trim().isEmpty
                                                   ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
                                                       placeHolderIdentifier
                                                   : _customNotesController.text.trim(),

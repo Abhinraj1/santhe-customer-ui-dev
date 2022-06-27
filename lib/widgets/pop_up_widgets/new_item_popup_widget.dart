@@ -72,7 +72,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   String placeHolderValidation(String value, TextEditingController controller) {
     if (widget.edit) {
-      if (controller.text.isEmpty) {
+      if (controller.text.trim().isEmpty) {
         if(value.contains(placeHolderIdentifier)){
           return value;
         }else{
@@ -82,7 +82,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
         return controller.text.trim();
       }
     } else {
-      if (controller.text.isEmpty) {
+      if (controller.text.trim().isEmpty) {
         return value + placeHolderIdentifier;
       } else {
         return controller.text.trim();

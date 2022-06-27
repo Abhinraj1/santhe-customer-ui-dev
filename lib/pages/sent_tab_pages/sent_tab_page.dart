@@ -132,8 +132,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
                 return;
               },
               child: ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
+                padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 itemCount: snapshot.data?.length,

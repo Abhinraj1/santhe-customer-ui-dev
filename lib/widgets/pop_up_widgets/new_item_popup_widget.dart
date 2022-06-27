@@ -902,7 +902,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           itemImageTn: imageController
                                                               .editItemCustomImageUrl
                                                               .value,
-                                                          catId: item.catId,
+                                                          catId: '4000',
                                                           createUser: custPhone,
                                                           dQuantity: 1,
                                                           dUnit: selectedUnit,
@@ -917,10 +917,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           itemName:
                                                               _customItemNameController
                                                                   .text,
-                                                          status: item.catId ==
-                                                                  '4000'
-                                                              ? 'inactive'
-                                                              : 'active',
+                                                          status: 'inactive',
                                                           unit: [selectedUnit],
                                                           updateUser:
                                                               custPhone);
@@ -935,11 +932,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             ListItem(
                                                           brandType:
                                                               placeHolderValidation(
-                                                                  item.dBrandType,
+                                                                  newCustomItem.dBrandType,
                                                                   _brandController),
                                                           //item ref
                                                           itemId:
-                                                              '${item.itemId}',
+                                                              '${newCustomItem.itemId}',
                                                           itemImageId:
                                                               imageController
                                                                   .editItemCustomImageUrl
@@ -952,25 +949,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                                   _qtyController
                                                                       .text),
                                                           notes: placeHolderValidation(
-                                                              item.dItemNotes,
+                                                              newCustomItem.dItemNotes,
                                                               _notesController),
                                                           unit: itemUnit,
                                                           possibleUnits:
-                                                              item.unit,
-                                                          catName: Boxes
-                                                                      .getCategoriesDB()
-                                                                  .get(int.parse(item
-                                                                      .catId
-                                                                      .replaceAll(
-                                                                          'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                                          '')))
-                                                                  ?.catName ??
-                                                              'Others',
-                                                          catId: int.parse(
-                                                            item.catId.replaceAll(
-                                                                'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                                ''),
-                                                          ),
+                                                          newCustomItem.unit,
+                                                          catName: 'Others',
+                                                          catId: 4000,
                                                         );
 
                                                         if (widget.edit) {

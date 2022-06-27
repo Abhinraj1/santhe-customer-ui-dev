@@ -48,8 +48,11 @@ class _OffersListPageState extends State<OffersListPage>
     if (value == true) {
       setState(() {
         widget.overrideData = true;
-        widget.overrideData = true;
         widget.userList.processStatus = 'accepted';
+        listOffersData = apiController.getAllMerchOfferByListId(
+          widget.userList.listId,
+          widget.userList.items.length,
+        );
       });
       widget.function(widget.overrideData);
     }

@@ -307,7 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
             'chatId': widget.chatId,
             'title': 'Request',
             'listEventId': widget.listEventId,
-            'customerTitle': 'Offer: Rs ' + widget.customerTitle,
+            'customerTitle': widget.customerTitle,
             'merchantTitle': widget.merchantTitle,
           }
         },
@@ -339,7 +339,7 @@ class _ChatScreenState extends State<ChatScreen> {
               'chatId': widget.chatId,
               'title': 'Request',
               'listEventId': widget.listEventId,
-              'customerTitle': 'Offer: Rs ' + widget.customerTitle,
+              'customerTitle': widget.customerTitle,
               'merchantTitle': widget.merchantTitle,
             }
           },

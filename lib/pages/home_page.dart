@@ -149,6 +149,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           builder: (c, s) {
             if (s.connectionState == ConnectionState.done) {
               return TabBarView(
+                controller: _homeController.homeTabController,
                 physics: const BouncingScrollPhysics(),
                 children: [
                   NewTabPage(

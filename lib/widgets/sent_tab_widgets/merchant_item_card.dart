@@ -30,11 +30,11 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     final screenSize = MediaQuery.of(context).size;
     String removeDecimalZeroFormat(double n) {
       return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
       child: Row(
@@ -49,16 +49,17 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                           '')) <
                       4000
                   ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId}'
-                  : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/'+widget.merchantItem.itemImageId,
-              width: 45.sp,
-              height: 45.sp,
+                  : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/' +
+                      widget.merchantItem.itemImageId,
+              width: 50.sp,
+              height: 50.sp,
               fit: BoxFit.cover,
               errorWidget: (context, url, error) {
                 log('$error');
                 return Container(
                   color: Colors.orange,
-                  width: screenWidth * 45,
-                  height: screenWidth * 45,
+                  width: 50.sp,
+                  height: 50.sp,
                 );
               },
             ),
@@ -66,100 +67,129 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
           const SizedBox(
             width: 12.0,
           ),
-          SizedBox(
-            width: screenSize.width * 2/5 - 40,
+          Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.merchantItem.itemName,
-                  maxLines: 2,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: const Color(0xff8B8B8B),
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: screenSize.width * 2 / 5 - 40,
+                      child: Text(
+                        widget.merchantItem.itemName,
+                        maxLines: 2,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: const Color(0xff8B8B8B),
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: screenSize.width / 10,
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        widget.merchantItem.merchAvailability
+                            ? CupertinoIcons.checkmark_circle_fill
+                            : CupertinoIcons.xmark_circle_fill,
+                        color: widget.merchantItem.merchAvailability
+                            ? Colors.green
+                            : Colors.red,
+                        size: 17.sp,
+                      ),
+                    ),
+                    const SizedBox(width: 10.0),
+                    Expanded(
+                      child: SizedBox(
+                        width: screenSize.width * 1 / 5,
+                        child: Text(
+                          '₹ ${widget.merchantItem.merchPrice}',
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.fade,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      expanded = !expanded;
-                    });
-                  },
-                  child: checkPlaceHolder(widget.merchantItem.brandType).isEmpty
-                      ? Text(
-                    checkPlaceHolder(widget.merchantItem.itemNotes).isEmpty
-                        ? '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}'
-                        : '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}',
-                    softWrap: true,
-                    overflow: expanded?null:TextOverflow.ellipsis,
-                    maxLines: 6,
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: 14.sp,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: screenSize.width * 2 / 5 - 40,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            expanded = !expanded;
+                          });
+                        },
+                        child: checkPlaceHolder(widget.merchantItem.brandType)
+                                .isEmpty
+                            ? Text(
+                                checkPlaceHolder(widget.merchantItem.itemNotes)
+                                        .isEmpty
+                                    ? '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}'
+                                    : '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}',
+                                softWrap: true,
+                                overflow:
+                                    expanded ? null : TextOverflow.ellipsis,
+                                maxLines: 6,
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 14.sp,
+                                ),
+                              )
+                            : Text(
+                                '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes).isEmpty ? checkPlaceHolder(widget.merchantItem.brandType) : '${checkPlaceHolder(widget.merchantItem.brandType)}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}'}',
+                                softWrap: true,
+                                // minFontSize: 10,
+                                overflow:
+                                    expanded ? null : TextOverflow.ellipsis,
+                                // maxLines: 2,
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                      ),
                     ),
-                  )
-                      : Text(
-                    '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes).isEmpty ? checkPlaceHolder(widget.merchantItem.brandType) : '${checkPlaceHolder(widget.merchantItem.brandType)}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}'}',
-                    softWrap: true,
-                    // minFontSize: 10,
-                    overflow: expanded?null:TextOverflow.ellipsis,
-                    // maxLines: 2,
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: 14.sp,
+                    SizedBox(
+                      width: screenSize.width * 2 / 5 - 40,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            expanded = !expanded;
+                          });
+                        },
+                        child: Text(
+                          widget.merchantItem.merchNotes,
+                          softWrap: true,
+                          textAlign: TextAlign.right,
+                          maxLines: 4,
+                          // minFontSize: 10,
+                          overflow: expanded ? null : TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      expanded = !expanded;
-                    });
-                  },
-                  child: Text(
-                    widget.merchantItem.merchNotes,
-                    softWrap: true,
-                    maxLines: 2,
-                    // minFontSize: 10,
-                    overflow: expanded?null:TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: 14.sp,
-                    ),
-                  ),
+                  ],
                 )
               ],
-            ),
-          ),
-          SizedBox(
-            width: screenSize.width / 10,
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Icon(
-                widget.merchantItem.merchAvailability
-                    ? CupertinoIcons.checkmark_circle_fill
-                    : CupertinoIcons.xmark_circle_fill,
-                color:
-                    widget.merchantItem.merchAvailability ? Colors.green : Colors.red),
-          ),
-          const SizedBox(width: 10.0),
-          Expanded(
-            child: SizedBox(
-              width: screenSize.width * 1/5,
-              child: Text(
-                '₹ ${widget.merchantItem.merchPrice}',
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                overflow: TextOverflow.fade,
-                textAlign: TextAlign.right,
-              ),
             ),
           ),
         ],

@@ -55,7 +55,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'No Offers',
             style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 14.sp,
                 color: Colors.red,
                 fontWeight: FontWeight.w400),
           );
@@ -66,7 +66,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'Offers Missed',
             style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 14.sp,
                 color: Colors.red,
                 fontWeight: FontWeight.w400),
           );
@@ -77,7 +77,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'Accepted',
             style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 14.sp,
                 color: Colors.green,
                 fontWeight: FontWeight.w400),
           );
@@ -87,7 +87,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             '${userList.listOfferCounter} Offers Available',
             style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 14.sp,
                 color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
@@ -107,7 +107,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
             style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 14.sp,
                 color: AppColors().brandLight,
                 fontWeight: FontWeight.w400),
           );
@@ -117,7 +117,7 @@ class OfferStatus extends StatelessWidget {
           return AutoSizeText(
             'Offers Expired',
             style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 14.sp,
                 color: Colors.grey,
                 fontWeight: FontWeight.w400),
           );

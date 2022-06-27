@@ -40,7 +40,6 @@ class _NoInternetPageState extends State<NoInternetPage> {
 
   @override
   Widget build(BuildContext context) {
-
     final screenSize = MediaQuery.of(context).size;
 
     return WillPopScope(

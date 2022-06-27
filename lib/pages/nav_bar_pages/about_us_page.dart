@@ -15,8 +15,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
-
-    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

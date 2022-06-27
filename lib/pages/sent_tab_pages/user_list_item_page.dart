@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
 import 'package:grouped_list/grouped_list.dart';
 
 import '../../models/santhe_list_item_model.dart';
@@ -13,7 +12,6 @@ class UserListItemDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Colors.white,
       body: GroupedListView(

@@ -8,6 +8,7 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -52,7 +53,8 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   final imageController = Get.find<CustomImageController>();
 
   String removeDecimalZeroFormat(double n) {
-    return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
+    final data = n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
+    return AppHelpers.replaceDecimalZero(data);
   }
 
   late int currentUserListDBKey = widget.currentUserListDBKey;
@@ -89,7 +91,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                 children: [
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 20.0, left: 20.0),
                       child: AutoSizeText(
                         'Custom Item',
                         textAlign: TextAlign.center,
@@ -196,138 +198,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                 style: kLabelTextStyle,
                               ),
                             ),
-                            SizedBox(
-                              width: 128.sp,
-                              height: 60.sp,
-                              //Quantity
-                              child: Stack(children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(16.0),
-                                      bottomLeft: Radius.circular(16.0),
-                                    ),
-                                    child: Container(
-                                      height: double.infinity,
-                                      width: 36.sp,
-                                      color: Colors.grey.shade200,
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(16.0),
-                                      bottomRight: Radius.circular(16.0),
-                                    ),
-                                    child: Container(
-                                      height: double.infinity,
-                                      width: 36.sp,
-                                      color: Colors.grey.shade200,
-                                    ),
-                                  ),
-                                ),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter quantity';
-                                    } else if (double.parse(value) == 0 ||
-                                        double.parse(value).isNegative ||
-                                        double.parse(value).isInfinite) {
-                                      return 'Enter a valid quantity';
-                                    }
-                                    return null;
-                                  },
-                                  controller: _customQtyController,
-                                  textInputAction: TextInputAction.next,
-                                  textAlign: TextAlign.center,
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true),
-                                  maxLength: 5,
-                                  inputFormatters: [
-                                    DecimalTextInputFormatter(decimalRange: 1)
-                                  ],
-                                  textAlignVertical: TextAlignVertical.center,
-                                  style: const TextStyle(
-                                      color: Colors.orange,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16.0),
-                                  onSaved: (value) {
-                                    _customQtyController.text = value!;
-                                  },
-                                  decoration: InputDecoration(
-                                    counterText: '',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          kTextFieldCircularBorderRadius),
-                                      borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          kTextFieldCircularBorderRadius),
-                                      borderSide: const BorderSide(
-                                          width: 1.0, color: kTextFieldGrey),
-                                    ),
-                                    prefix: GestureDetector(
-                                      onTap: () {
-                                        WidgetsBinding
-                                            .instance.focusManager.primaryFocus
-                                            ?.unfocus();
-                                        if (_customQtyController.text.isEmpty) {
-                                          _customQtyController.text =
-                                              0.toString();
-                                        }
-                                        double i = double.parse(
-                                            _customQtyController.text);
-                                        if (i > 0) {
-                                          i--;
-                                          _customQtyController.text =
-                                              removeDecimalZeroFormat(i);
-                                        }
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(right: 5.0),
-                                        child: Icon(
-                                          CupertinoIcons.minus,
-                                          color: Color(0xff8B8B8B),
-                                          size: 15.0,
-                                        ),
-                                      ),
-                                    ),
-                                    suffix: GestureDetector(
-                                      onTap: () {
-                                        WidgetsBinding
-                                            .instance.focusManager.primaryFocus
-                                            ?.unfocus();
-                                        if (_customQtyController.text.isEmpty) {
-                                          _customQtyController.text =
-                                              0.toString();
-                                        }
-
-                                        double i = double.parse(
-                                            _customQtyController.text);
-
-                                        i++;
-                                        _customQtyController.text =
-                                            removeDecimalZeroFormat(i);
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Icon(
-                                          CupertinoIcons.add,
-                                          color: Color(0xff8B8B8B),
-                                          size: 15.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                            ),
+                            QuantityWidget(qtyController: _customQtyController),
                           ],
                         ),
                         Stack(children: [
@@ -723,9 +594,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
                                 onPressed: () async {
-                                  //todo add list item to user list on firebase
                                   final itemUnit = selectedUnit;
-
                                   setState(() {
                                     isProcessing = true;
                                   });

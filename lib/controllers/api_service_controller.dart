@@ -75,8 +75,10 @@ class APIs extends GetxController {
         contactEnabled: data[0]['contactEnabled'],
         chatEnabled: data[0]['chatEnabled'],
         listEventId: listEventId,
-        merchUpdateTime: DateTime.parse(data[0]['merchResponse']['merchUpdateTime']),
-        custUpdateTime: DateTime.parse(data[0]['custOfferResponse']['custUpdateTime']),
+        merchUpdateTime:
+            DateTime.parse(data[0]['merchResponse']['merchUpdateTime']),
+        custUpdateTime:
+            DateTime.parse(data[0]['custOfferResponse']['custUpdateTime']),
         requestForDay: data[0]['requestForDay'].toString(),
       );
       return userList;
@@ -217,16 +219,17 @@ class APIs extends GetxController {
     }
   }
 
-  Future<int> getSubscriptionLimit(String plan) async{
-    String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/config/control';
-    if(plan=='default'){
-      plan='planA';
+  Future<int> getSubscriptionLimit(String plan) async {
+    String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/config/control';
+    if (plan == 'default') {
+      plan = 'planA';
     }
     var response = await callApi(mode: 1, url: Uri.parse(url));
     var jsonResponse = jsonDecode(response.body);
-    if(jsonResponse!=null && response.statusCode==200){
+    if (jsonResponse != null && response.statusCode == 200) {
       return int.parse(jsonResponse['subscription']['custSubscription'][plan]);
-    }else{
+    } else {
       return 3;
     }
   }
@@ -437,8 +440,7 @@ class APIs extends GetxController {
                 offlineCustLists
                     .firstWhereOrNull((e) => e.listId == onlineUserList.listId)
                     ?.listId) {
-              log(
-                  'Duplicate Found: ${onlineUserList.listId} and not added to local cache');
+              log('Duplicate Found: ${onlineUserList.listId} and not added to local cache');
             } else {
               onlineCustLists.add(onlineUserList);
               if (onlineUserList.custListStatus == 'new') {
@@ -639,8 +641,10 @@ class APIs extends GetxController {
           "timestampValue":
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
-        "updateListTime": {"timestampValue":
-        userList.createListTime.toUtc().toString().replaceAll(' ', 'T')},
+        "updateListTime": {
+          "timestampValue":
+              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+        },
         'notificationProcess': {'stringValue': 'reminder'},
         'dealProcess': {'booleanValue': false},
         "custOfferWaitTime": {
@@ -740,7 +744,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -769,7 +774,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -779,7 +785,7 @@ class APIs extends GetxController {
       log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
       log(data.toString());
-      log('Error', error:response.reasonPhrase);
+      log('Error', error: response.reasonPhrase);
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -795,7 +801,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -805,7 +812,7 @@ class APIs extends GetxController {
       log('Request failed with status: ${response.statusCode}.');
       var data = jsonDecode(response.body);
       log(data.toString());
-      log('Error', error:response.reasonPhrase);
+      log('Error', error: response.reasonPhrase);
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -997,7 +1004,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response =
+        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -1008,7 +1016,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      log('Error', error:response.reasonPhrase);
+      log('Error', error: response.reasonPhrase);
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -1149,12 +1157,11 @@ class APIs extends GetxController {
           userLists.add(UserList.fromJson(data[i]['document']['fields']));
           log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
-        userLists
-            .sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
+        userLists.sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
       } else {
         return userLists;
       }
-      return userLists.reversed.toList();
+      return userLists;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
@@ -1222,6 +1229,24 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
+
+      resp.sort((a, b) => a.merchResponse.merchTotalPrice
+          .compareTo(b.merchResponse.merchTotalPrice));
+      resp = resp.reversed.toList();
+      resp.sort((a, b) => a.merchResponse.merchOfferQuantity
+          .compareTo(b.merchResponse.merchOfferQuantity));
+      resp = resp.reversed.toList();
+
+
+      if(resp.isNotEmpty) resp[0].custOfferResponse.custDeal='best1';
+      if(resp.length>1) resp[1].custOfferResponse.custDeal='best2';
+      if(resp.length>2) resp[3].custOfferResponse.custDeal='best3';
+      if(resp.length>3) {
+        for (int i = 4; i < resp.length; i++) {
+          resp[i].custOfferResponse.custDeal = 'notBest';
+        }
+      }
+
       return resp;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
@@ -1263,12 +1288,12 @@ class APIs extends GetxController {
             }
           }
         },
-        "merchResponse":{
-          "mapValue":{
+        "merchResponse": {
+          "mapValue": {
             "fields": {
               "merchUpdateTime": {
                 "timestampValue":
-                DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+                    DateTime.now().toUtc().toString().replaceAll(' ', 'T')
               }
             }
           }
@@ -1284,8 +1309,7 @@ class APIs extends GetxController {
       log('Offer Accepted! ListEvent ID: $listEventId');
       return 1;
     } else {
-      log(
-          'Request failed with status: ${response.statusCode}.Details? ${response.body}');
+      log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -1315,16 +1339,16 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
-    
+    var response =
+        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
       log('Offer Accepted! List ID: $listId');
       return 1;
     } else {
-      log(
-          'Request failed with status: ${response.statusCode}.Details? ${response.body}');
+      log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -1381,12 +1405,11 @@ class APIs extends GetxController {
           userLists.add(UserList.fromJson(data[i]['document']['fields']));
           log('${userLists[i].listId}, ${userLists[i].processStatus}');
         }
-        userLists
-            .sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
+        userLists.sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
       } else {
         return userLists;
       }
-      return userLists.reversed.toList();
+      return userLists;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
@@ -1437,7 +1460,7 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       log((await response.stream.bytesToString()).toString());
     } else {
-      log('Error', error:response.reasonPhrase);
+      log('Error', error: response.reasonPhrase);
     }
   }
 }

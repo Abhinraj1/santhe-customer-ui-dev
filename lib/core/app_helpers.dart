@@ -51,6 +51,18 @@ Get it for free at https://santhe.in''';
     }
     return hasConnection;
   }
+
+  static String replaceDecimalZero(String value){
+    final data = value.split('.');
+    if(data.length>1){
+      if(data[1]!='0'){
+        return value;
+      }else{
+        return data[0];
+      }
+    }
+    return value;
+  }
 }
 
 class DecimalTextInputFormatter extends TextInputFormatter {

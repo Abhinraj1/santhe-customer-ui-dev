@@ -64,9 +64,10 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                       width: 368.w,
                       child: SvgPicture.asset(
                         'assets/archive_tab_image.svg',
-                        fit: BoxFit.fill,
+                        fit: BoxFit.contain,
                       ),
                     ),
+                    SizedBox(height: 20.sp,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: RichText(
@@ -86,7 +87,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                               style: TextStyle(
                                 color: kTextGrey,
                                 fontWeight: FontWeight.w900,
-                                fontSize: 24.sp,
+                                fontSize: 16.sp,
                                 height: 2.sp,
                               ),
                             ),
@@ -95,7 +96,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                               style: TextStyle(
                                 color: kTextGrey,
                                 fontWeight: FontWeight.w400,
-                                fontSize: 24.sp,
+                                fontSize: 16.sp,
                                 height: 2.sp,
                               ),
                             ),

@@ -34,15 +34,19 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state==AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       setState(() {});
     }
     super.didChangeAppLifecycleState(state);
   }
+
   String listName = '';
   int totalCustList = 0;
-  int custId = Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 404;
+  int custId =
+      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
+          404;
   String? selectedValue;
+
   // List<UserList> items = Boxes.getUserListDB().values.map((e) => e).toList();
 
   List<DropdownMenuItem<String>> _addDividersAfterItems(List<UserList> items) {
@@ -57,9 +61,9 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
               child: Text(
                 item.listName,
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w400,
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
@@ -82,7 +86,6 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-
     apiController.getAllCustomerLists(custId);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -116,8 +119,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                           builder: (ctx) {
                             return Padding(
                               padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(ctx).viewInsets.bottom),
+                                  bottom: MediaQuery.of(ctx).viewInsets.bottom),
                               child: Container(
                                 height: userListCount < 1
                                     ? screenHeight * 40
@@ -219,67 +221,70 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                   },
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: 314.w,
-                                                child: TextFormField(
-                                                  validator: (value) {
-                                                    if (value!.isEmpty) {
-                                                      return 'Please enter a list name';
-                                                    }
-                                                    return null;
-                                                  },
-                                                  enabled: _type ==
-                                                      NewListType.startFromNew,
-                                                  autofocus: true,
-                                                  maxLength: 30,
-                                                  onChanged: (value) {
-                                                    listName = value;
-                                                  },
-                                                  decoration: InputDecoration(
-                                                    hintText: 'Enter list Name',
-                                                    hintStyle: TextStyle(
-                                                        fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        color: Colors.grey),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              kTextFieldCircularBorderRadius),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              width: 1.0,
-                                                              color:
-                                                                  kTextFieldGrey),
+                                              Visibility(
+                                                visible: _type == NewListType.startFromNew,
+                                                child: SizedBox(
+                                                  width: 314.w,
+                                                  child: TextFormField(
+                                                    validator: (value) {
+                                                      if (value!.isEmpty) {
+                                                        return 'Please enter a list name';
+                                                      }
+                                                      return null;
+                                                    },
+                                                    enabled: _type ==
+                                                        NewListType.startFromNew,
+                                                    autofocus: true,
+                                                    maxLength: 30,
+                                                    onChanged: (value) {
+                                                      listName = value;
+                                                    },
+                                                    decoration: InputDecoration(
+                                                      hintText: 'Enter list Name',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          color: Colors.grey),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                kTextFieldCircularBorderRadius),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1.0,
+                                                                color:
+                                                                    kTextFieldGrey),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                kTextFieldCircularBorderRadius),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1.0,
+                                                                color:
+                                                                    kTextFieldGrey),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                kTextFieldCircularBorderRadius),
+                                                        borderSide: BorderSide(
+                                                            width: 1.0,
+                                                            color: AppColors()
+                                                                .brandDark),
+                                                      ),
                                                     ),
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              kTextFieldCircularBorderRadius),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              width: 1.0,
-                                                              color:
-                                                                  kTextFieldGrey),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.grey.shade600,
                                                     ),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              kTextFieldCircularBorderRadius),
-                                                      borderSide: BorderSide(
-                                                          width: 1.0,
-                                                          color: AppColors()
-                                                              .brandDark),
-                                                    ),
-                                                  ),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.grey.shade600,
                                                   ),
                                                 ),
                                               ),
@@ -320,149 +325,152 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                         },
                                                       ),
                                                     ),
-                                                    SizedBox(
-                                                      width: 90.vw,
-                                                      height: 65.h,
-                                                      child: Stack(
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topCenter,
-                                                            child: SizedBox(
-                                                              width: 314.w,
-                                                              height: 65.h,
-                                                              child:
-                                                                  DropdownButtonHideUnderline(
-                                                                      child:
-                                                                          DropdownButton2(
-                                                                isExpanded:
-                                                                    true,
-                                                                hint: Text(
-                                                                  'Select',
+                                                    Visibility(
+                                                      visible: _type == NewListType.importFromOld,
+                                                      child: SizedBox(
+                                                        width: 314.w,
+                                                        height: 65.h,
+                                                        child: Stack(
+                                                          children: [
+                                                            Align(
+                                                              alignment: Alignment
+                                                                  .topCenter,
+                                                              child: SizedBox(
+                                                                width: 314.w,
+                                                                height: 65.h,
+                                                                child:
+                                                                    DropdownButtonHideUnderline(
+                                                                        child:
+                                                                            DropdownButton2(
+                                                                  isExpanded:
+                                                                      true,
+                                                                  hint: Text(
+                                                                    'Select',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16.sp,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400,
+                                                                        fontStyle:
+                                                                            FontStyle
+                                                                                .italic,
+                                                                        color: Colors
+                                                                            .grey),
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                  items: _addDividersAfterItems(
+                                                                      top5UserList),
+                                                                  customItemsHeight:
+                                                                      4,
+                                                                  value:
+                                                                      selectedValue,
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    setState(() {
+                                                                      selectedValue =
+                                                                          value
+                                                                              as String;
+                                                                    });
+                                                                  },
+                                                                  icon:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .keyboard_arrow_up,
+                                                                  ),
+                                                                  iconSize: 14,
+                                                                  iconEnabledColor:
+                                                                      Colors.grey,
+                                                                  iconDisabledColor:
+                                                                      Colors.grey
+                                                                          .shade100,
+                                                                  buttonHeight:
+                                                                      50,
                                                                   style: TextStyle(
+                                                                      color: Colors
+                                                                          .grey,
                                                                       fontSize:
-                                                                          16.sp,
+                                                                          14.sp,
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .w400,
-                                                                      fontStyle:
-                                                                          FontStyle
-                                                                              .italic,
-                                                                      color: Colors
-                                                                          .grey),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ),
-                                                                items: _addDividersAfterItems(
-                                                                    top5UserList),
-                                                                customItemsHeight:
-                                                                    4,
-                                                                value:
-                                                                    selectedValue,
-                                                                onChanged:
-                                                                    (value) {
-                                                                  setState(() {
-                                                                    selectedValue =
-                                                                        value
-                                                                            as String;
-                                                                  });
-                                                                },
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .keyboard_arrow_up,
-                                                                ),
-                                                                iconSize: 14,
-                                                                iconEnabledColor:
-                                                                    Colors.grey,
-                                                                iconDisabledColor:
-                                                                    Colors.grey
-                                                                        .shade100,
-                                                                buttonHeight:
-                                                                    50,
-                                                                style: TextStyle(
+                                                                              .w400),
+                                                                  buttonWidth:
+                                                                      160,
+                                                                  buttonPadding:
+                                                                      const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              14,
+                                                                          right:
+                                                                              14),
+                                                                  buttonDecoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                kTextFieldCircularBorderRadius),
+                                                                    border: Border
+                                                                        .all(
+                                                                      color:
+                                                                          kTextFieldGrey,
+                                                                    ),
                                                                     color: Colors
-                                                                        .grey,
-                                                                    fontSize:
-                                                                        14.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400),
-                                                                buttonWidth:
-                                                                    160,
-                                                                buttonPadding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            14,
-                                                                        right:
-                                                                            14),
-                                                                buttonDecoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              kTextFieldCircularBorderRadius),
-                                                                  border: Border
-                                                                      .all(
-                                                                    color:
-                                                                        kTextFieldGrey,
+                                                                        .white,
                                                                   ),
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                                buttonElevation:
-                                                                    0,
-                                                                itemHeight: 40,
-                                                                itemPadding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            14,
-                                                                        right:
-                                                                            14),
-                                                                dropdownMaxHeight:
-                                                                    200,
-                                                                dropdownWidth:
-                                                                    314.sp,
-                                                                dropdownPadding:
-                                                                    null,
-                                                                dropdownDecoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              kTextFieldCircularBorderRadius),
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade100,
-                                                                ),
-                                                                dropdownElevation:
-                                                                    0,
-                                                                scrollbarRadius:
-                                                                    const Radius
-                                                                        .circular(40),
-                                                                scrollbarThickness:
-                                                                    6,
-                                                                scrollbarAlwaysShow:
-                                                                    true,
-                                                                offset:
-                                                                    const Offset(
-                                                                        0, 0),
-                                                              )),
+                                                                  buttonElevation:
+                                                                      0,
+                                                                  itemHeight: 40,
+                                                                  itemPadding:
+                                                                      const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              14,
+                                                                          right:
+                                                                              14),
+                                                                  dropdownMaxHeight:
+                                                                      200,
+                                                                  dropdownWidth:
+                                                                      314.sp,
+                                                                  dropdownPadding:
+                                                                      null,
+                                                                  dropdownDecoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                kTextFieldCircularBorderRadius),
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade100,
+                                                                  ),
+                                                                  dropdownElevation:
+                                                                      0,
+                                                                  scrollbarRadius:
+                                                                      const Radius
+                                                                          .circular(40),
+                                                                  scrollbarThickness:
+                                                                      6,
+                                                                  scrollbarAlwaysShow:
+                                                                      true,
+                                                                  offset:
+                                                                      const Offset(
+                                                                          0, 0),
+                                                                )),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          if (_type ==
-                                                              NewListType
-                                                                  .startFromNew)
-                                                            Container(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              width: 100.vw,
-                                                              height: 100.vh,
-                                                            )
-                                                        ],
+                                                            if (_type ==
+                                                                NewListType
+                                                                    .startFromNew)
+                                                              Container(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 100.w,
+                                                                height: 100.h,
+                                                              )
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -502,10 +510,8 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                           Get.offAll(() =>
                                                               const LoginScreen());
                                                         }
-                                                        log(
-                                                            'TOTAL USER LIST NUMBER: $userListCount');
-                                                        log(
-                                                            'New List Id: ${userListCount + 1}');
+                                                        log('TOTAL USER LIST NUMBER: $userListCount');
+                                                        log('New List Id: ${userListCount + 1}');
                                                         UserList newUserList =
                                                             UserList(
                                                           createListTime:
@@ -523,6 +529,8 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                           listOfferCounter: 0,
                                                           custOfferWaitTime:
                                                               DateTime.now(),
+                                                          updateListTime:
+                                                              DateTime.now(),
                                                         );
                                                         //add to firebase
                                                         int response =
@@ -535,7 +543,9 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                         if (response == 1) {
                                                           box.add(newUserList);
                                                         } else {
-                                                          Get.dialog(const SizedBox.shrink());
+                                                          Get.dialog(
+                                                              const SizedBox
+                                                                  .shrink());
                                                         }
 
                                                         //Dismiss the pop up
@@ -547,8 +557,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                               transition: Transition
                                                                   .noTransition);
                                                         } else {
-                                                          Navigator.pop(
-                                                              c);
+                                                          Navigator.pop(c);
                                                         }
                                                       }
                                                     } else if (listName
@@ -610,32 +619,37 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                                     int.parse(
                                                                         selectedValue!));
 
-                                                        UserList newImportedList = UserList(
-                                                            createListTime:
-                                                                DateTime.now(),
-                                                            custId: oldUserList
-                                                                .custId,
-                                                            items: oldUserList
-                                                                .items,
-                                                            listId: int.parse(
-                                                                '$custId${userListCount + 1}'),
-                                                            listName:
-                                                                '(COPY) ${oldUserList.listName}',
-                                                            custListSentTime:
-                                                                oldUserList
-                                                                    .custListSentTime,
-                                                            custListStatus:
-                                                                oldUserList
-                                                                    .custListStatus,
-                                                            listOfferCounter:
-                                                                oldUserList
-                                                                    .listOfferCounter,
-                                                            processStatus:
-                                                                oldUserList
-                                                                    .processStatus,
-                                                            custOfferWaitTime:
-                                                                oldUserList
-                                                                    .custOfferWaitTime);
+                                                        UserList
+                                                            newImportedList =
+                                                            UserList(
+                                                          createListTime:
+                                                              DateTime.now(),
+                                                          custId: oldUserList
+                                                              .custId,
+                                                          items:
+                                                              oldUserList.items,
+                                                          listId: int.parse(
+                                                              '$custId${userListCount + 1}'),
+                                                          listName:
+                                                              '(COPY) ${oldUserList.listName}',
+                                                          custListSentTime:
+                                                              oldUserList
+                                                                  .custListSentTime,
+                                                          custListStatus:
+                                                              oldUserList
+                                                                  .custListStatus,
+                                                          listOfferCounter:
+                                                              oldUserList
+                                                                  .listOfferCounter,
+                                                          processStatus:
+                                                              oldUserList
+                                                                  .processStatus,
+                                                          custOfferWaitTime:
+                                                              oldUserList
+                                                                  .custOfferWaitTime,
+                                                          updateListTime:
+                                                              DateTime.now(),
+                                                        );
                                                         //add to firebase
                                                         int response =
                                                             await apiController
@@ -648,7 +662,9 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                           box.add(
                                                               newImportedList);
                                                         } else {
-                                                          Get.dialog(const SizedBox.shrink());
+                                                          Get.dialog(
+                                                              const SizedBox
+                                                                  .shrink());
                                                         }
 
                                                         //Dismiss the pop up
@@ -660,8 +676,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                               transition: Transition
                                                                   .noTransition);
                                                         } else {
-                                                          Navigator.pop(
-                                                              c);
+                                                          Navigator.pop(c);
                                                         }
                                                       } else {
                                                         Get.snackbar(
@@ -707,8 +722,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                         );
                                                       }
                                                     } else {
-                                                      log(
-                                                          'implement import feature');
+                                                      log('implement import feature');
                                                     }
                                                     await apiController
                                                         .getAllCustomerLists(
@@ -753,35 +767,38 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
           return RefreshIndicator(
               child: userLists.isEmpty
                   ? SizedBox(
-                      height: double.infinity,
-                      width: double.infinity,
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // SizedBox(height: screenHeight * 23),
-                            SizedBox(
-                              height: screenWidth * 100,
-                              width: screenWidth * 100,
-                              child: SvgPicture.asset(
-                                'assets/new_tab_image.svg',
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 80.sp),
-                              child: Stack(
-                                children: [
-                                  Text(
-                                    'Get started by easily creating your\nshopping list',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16.sp,
-                                        color: kTextGrey),
-                                  ),
-                                  SizedBox(
+                    height: screenHeight*100 - 80.sp,
+                    width: screenWidth*100,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // SizedBox(height: screenHeight * 23),
+                        SizedBox(
+                          height: screenWidth * 100,
+                          width: screenWidth * 100,
+                          child: SvgPicture.asset(
+                            'assets/new_tab_image.svg',
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 40.sp, bottom: 20.sp),
+                            child: Stack(
+                              children: [
+                                Text(
+                                  'Get started by easily creating your\nshopping list',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16.sp,
+                                      height: 2.sp,
+                                      color: kTextGrey),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.sp),
+                                  child: SizedBox(
                                     height: screenWidth * 40,
                                     width: screenWidth * 50,
                                     child: SvgPicture.asset(
@@ -790,13 +807,14 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                       fit: BoxFit.contain,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    )
+                      ],
+                    ),
+                  )
                   : ListView.builder(
                       padding: const EdgeInsets.symmetric(
                           vertical: 18.0, horizontal: 3.0),

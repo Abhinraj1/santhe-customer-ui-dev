@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/core/app_helpers.dart';
 
 import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
@@ -35,8 +38,6 @@ class ListItemCard extends StatelessWidget {
         Boxes.getUserListDB().get(currentUserListDBKey) ??
             fallBack_error_userList;
 
-
-    
     String img = listItem.itemImageId.replaceAll(
         'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
         '');
@@ -77,8 +78,12 @@ class ListItemCard extends StatelessWidget {
                         checkPlaceHolder(listItem.brandType).isEmpty
                             ? Text(
                                 checkPlaceHolder(listItem.notes).isEmpty
-                                    ? '${listItem.quantity} ${listItem.unit}'
-                                    : '${listItem.quantity} ${listItem.unit},\n${checkPlaceHolder(listItem.notes)}',
+                                    ? AppHelpers.replaceDecimalZero(
+                                            '${listItem.quantity}') +
+                                        ' ${listItem.unit}'
+                                    : AppHelpers.replaceDecimalZero(
+                                            '${listItem.quantity}') +
+                                        ' ${listItem.unit},\n${checkPlaceHolder(listItem.notes)}',
                                 // softWrap: false,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -87,7 +92,10 @@ class ListItemCard extends StatelessWidget {
                                 ),
                               )
                             : Text(
-                                '''${listItem.quantity} ${listItem.unit}, ${checkPlaceHolder(listItem.notes).isEmpty ? checkPlaceHolder(listItem.brandType) : '${checkPlaceHolder(listItem.brandType)},\n${checkPlaceHolder(listItem.notes)}'}''',
+                                AppHelpers.replaceDecimalZero(
+                                        '${listItem.quantity}') +
+                                    '${listItem.unit}, ${checkPlaceHolder(listItem.notes).isEmpty ? checkPlaceHolder(listItem.brandType) : '${checkPlaceHolder(listItem.brandType)},\n${checkPlaceHolder(listItem.notes)}'}'
+                                        '',
                                 textAlign: TextAlign.start,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -111,18 +119,18 @@ class ListItemCard extends StatelessWidget {
                           barrierColor:
                               const Color.fromARGB(165, 241, 241, 241),
                           builder: (context) {
+                            log(listItem.notes);
                             return NewItemPopUpWidget(
                               item: Item(
                                 status: '',
                                 catId: listItem.catId.toString(),
-                                dItemNotes: checkPlaceHolder(listItem.notes),
+                                dItemNotes: listItem.notes,
                                 itemId: int.parse(listItem.itemId.replaceAll(
                                     'projects/santhe-425a8/databases/(default)/documents/item/',
                                     '')),
                                 unit: listItem.possibleUnits,
                                 dUnit: listItem.unit,
-                                dBrandType:
-                                    checkPlaceHolder(listItem.brandType),
+                                dBrandType: listItem.brandType,
                                 dQuantity: listItem.quantity,
                                 itemAlias: '',
                                 itemImageId: listItem.itemImageId,

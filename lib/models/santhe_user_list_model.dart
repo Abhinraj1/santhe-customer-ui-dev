@@ -49,8 +49,8 @@ class UserList extends HiveObject {
     required this.listOfferCounter,
     required this.processStatus,
     required this.custOfferWaitTime,
-    DateTime? updateListTime,
-  }): updateListTime = updateListTime??DateTime.now();
+    required this.updateListTime,
+  });
 
   factory UserList.fromJson(data) {
     List<ListItem> listItems = [];
@@ -105,4 +105,34 @@ class UserList extends HiveObject {
       );
     }
   }
+
+// factory UserList.fromFirestore(data) {
+//   List<ListItem> listItems = [];
+//   for (ListItem item in data['items']) {
+//     listItems.add(ListItem.fromFirebase(item));
+//   }
+//
+//   return UserList(
+//       createListTime: data['createListTime'],
+//       custId: data['custId'],
+//       items: listItems,
+//       listId: int.parse(data['listId']),
+//       listName: data['listName'],
+//       custListSentTime: DateTime.parse(data['custListSentTime']),
+//       custListStatus: data['custListStatus'],
+//       listOfferCounter: int.parse(data['listOfferCounter']),
+//       processStatus: data['processStatus']);
+// }
+//
+// Map<String, dynamic> toJson() => {
+//       'createListTime': createListTime,
+//       'custId': custId,
+//       'items': items,
+//       'listId': listId,
+//       'listName': listName,
+//       'custListSentTime': custListSentTime,
+//       'custListStatus': custListStatus,
+//       'listOfferCounter': listOfferCounter,
+//       'processStatus': processStatus,
+//     };
 }

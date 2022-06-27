@@ -21,9 +21,9 @@ import 'sent_tab_pages/sent_tab_page.dart';
 import '../widgets/navigation_drawer_widget.dart';
 
 class HomePage extends StatefulWidget {
-  final int? pageIndex;
+  final int pageIndex;
 
-  const HomePage({this.pageIndex, Key? key}) : super(key: key);
+  const HomePage({this.pageIndex = 0, Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    _homeController.homeTabController = TabController(length: 3, vsync: this, initialIndex: widget.pageIndex ?? 0);
+    _homeController.homeTabController = TabController(length: 3, vsync: this, initialIndex: widget.pageIndex);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
@@ -149,7 +149,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           builder: (c, s) {
             if (s.connectionState == ConnectionState.done) {
               return TabBarView(
-                controller: _homeController.homeTabController,
                 physics: const BouncingScrollPhysics(),
                 children: [
                   NewTabPage(

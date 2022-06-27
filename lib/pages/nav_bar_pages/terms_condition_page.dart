@@ -22,7 +22,6 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     double screenHeight = MediaQuery.of(context).size.height / 100;
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();

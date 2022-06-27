@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 
@@ -25,10 +24,7 @@ class _TextDropWidgetState extends State<TextDropWidget> {
     //getting constructor values
     final String question = widget.question;
     final String answer = widget.answer;
-    double screenWidth = MediaQuery.of(context).size.width / 100;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    
     return Padding(
       padding: const EdgeInsets.only(
         right: 15.0,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
@@ -34,9 +33,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
     final int catID = widget.catID;
     final int currentUserListDBKey = widget.currentUserListDBKey;
 
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -126,7 +123,6 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                           UserList currentUserList =
                               Boxes.getUserListDB().get(currentUserListDBKey) ??
                                   fallBack_error_userList;
-
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

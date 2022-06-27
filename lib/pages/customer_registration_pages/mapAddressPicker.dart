@@ -1,14 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_picker/map_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/API/addressSearchAPI.dart';
 import 'package:santhe/controllers/registrationController.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../constants.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/location_controller.dart';

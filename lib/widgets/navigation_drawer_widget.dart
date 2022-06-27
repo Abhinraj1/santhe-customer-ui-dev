@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +20,7 @@ import 'dart:io';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
@@ -136,12 +136,13 @@ class NavigationDrawer extends StatelessWidget {
           ),
           SizedBox(height: screenHeight * 3),
           NavigationDrawerTile(
-              icon: CupertinoIcons.question,
-              tileText: 'FAQ',
-              onPress: () {
-                // Navigator.pop(context);
-                Get.to(() => const FAQPage());
-              },),
+            icon: CupertinoIcons.question,
+            tileText: 'FAQ',
+            onPress: () {
+              // Navigator.pop(context);
+              Get.to(() => const FAQPage());
+            },
+          ),
           NavigationDrawerTile(
             icon: CupertinoIcons.phone_fill,
             tileText: 'Contact Us/Feedback',

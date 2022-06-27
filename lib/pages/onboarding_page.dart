@@ -39,7 +39,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -277,7 +277,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           Boxes.getUserPrefs().put('showHome', true);
 
                           //show login screen for onboarded user
-                          Get.off(() =>  const LoginScreen());
+                          Get.off(() => const LoginScreen());
                         },
                         color: Colors.white,
                         child: AutoSizeText(

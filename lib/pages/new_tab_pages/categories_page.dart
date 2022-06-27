@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:santhe/controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
 import '../../models/santhe_user_list_model.dart';
@@ -16,13 +15,7 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    final apiController = Get.find<APIs>();
-    UserList currentCustomerList =
-        Boxes.getUserListDB().get(currentUserListDBKey) ??
-            fallBack_error_userList;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -98,7 +91,6 @@ class CategoriesPage extends StatelessWidget {
                           UserList currentUserList =
                               Boxes.getUserListDB().get(currentUserListDBKey) ??
                                   fallBack_error_userList;
-
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

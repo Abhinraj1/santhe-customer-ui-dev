@@ -232,9 +232,11 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                           .phoneNumber
                                                           .integerValue,
                                                   style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors().brandDark,
-                                                    fontSize: 16.sp),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color:
+                                                          AppColors().brandDark,
+                                                      fontSize: 16.sp),
                                                 )
                                               ],
                                             ),
@@ -506,192 +508,222 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                         165, 241, 241, 241),
                                     isScrollControlled: true,
                                     builder: (BuildContext context) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topRight: Radius.circular(28.0),
-                                              topLeft: Radius.circular(28.0),
-                                            ),
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey.shade400,
-                                                blurRadius: 14.0,
+                                      bool accepting = false;
+                                      return StatefulBuilder(
+                                        builder: (ctx, ss) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context)
+                                                    .viewInsets
+                                                    .bottom),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(28.0),
+                                                  topLeft:
+                                                      Radius.circular(28.0),
+                                                ),
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey.shade400,
+                                                    blurRadius: 14.0,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          child: SingleChildScrollView(
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(10.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Stack(
-                                                    children: <Widget>[
-                                                      Center(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            'Are you sure?',
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              fontSize: 24.sp,
-                                                              color:
-                                                                  Colors.orange,
+                                              child: SingleChildScrollView(
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Stack(
+                                                        children: <Widget>[
+                                                          Center(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                'Are you sure?',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize:
+                                                                      24.sp,
+                                                                  color: Colors
+                                                                      .orange,
+                                                                ),
+                                                              ),
                                                             ),
+                                                          ),
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .topRight,
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: const Icon(
+                                                                Icons.close,
+                                                                color: Color(
+                                                                    0xffeaeaea),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          top: 18.sp,
+                                                          left: 45.sp,
+                                                          right: 45.sp,
+                                                        ),
+                                                        child: RichText(
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          text: TextSpan(
+                                                            text:
+                                                                'You can accept',
+                                                            style: TextStyle(
+                                                                fontSize: 18.sp,
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    ' only ONE ',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18.sp,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700),
+                                                              ),
+                                                              TextSpan(
+                                                                text:
+                                                                    'offer. If you accept this offer, all other offers will disappear',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18.sp,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ),
-                                                      Align(
-                                                        alignment:
-                                                            Alignment.topRight,
-                                                        child: GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: const Icon(
-                                                              Icons.close,
-                                                              color: Color(
-                                                                  0xffeaeaea),
-                                                            )),
-                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 25.sp),
+                                                        child: SizedBox(
+                                                          height: accepting
+                                                              ? 30.sp
+                                                              : 50.sp,
+                                                          width: accepting
+                                                              ? 30.sp
+                                                              : 234.sp,
+                                                          child: accepting
+                                                              ? const CircularProgressIndicator()
+                                                              : MaterialButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    ss(() {
+                                                                      accepting =
+                                                                          true;
+                                                                    });
+                                                                    int response =
+                                                                        await apiController.acceptOffer(widget
+                                                                            .currentMerchantOffer!
+                                                                            .listEventId);
+
+                                                                    int response2 = await apiController.processedStatusChange(int.parse(widget
+                                                                        .currentMerchantOffer!
+                                                                        .listId
+                                                                        .path
+                                                                        .segments
+                                                                        .last));
+                                                                    // int response = 1;
+                                                                    // int response2 = 1;
+                                                                    if (response ==
+                                                                            1 &&
+                                                                        response2 ==
+                                                                            1) {
+                                                                      //todo refresh and send to sent page
+                                                                      successMsg(
+                                                                          'Yay! Offer Accepted!',
+                                                                          'Hope you had a pleasant time using the app.');
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      setState(
+                                                                          () {
+                                                                        widget.overrideData =
+                                                                            true;
+                                                                      });
+                                                                    } else {
+                                                                      errorMsg(
+                                                                          'Connectivity Error',
+                                                                          'Some connectivity error has occurred, please try again later!');
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                    'Accept',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        fontSize:
+                                                                            18.sp),
+                                                                  ),
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  elevation:
+                                                                      0.0,
+                                                                  highlightElevation:
+                                                                      0.0,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            16.0),
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                      )
                                                     ],
                                                   ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                      top: 18.sp,
-                                                      left: 45.sp,
-                                                      right: 45.sp,
-                                                    ),
-                                                    child: RichText(
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      text: TextSpan(
-                                                          text:
-                                                              'You can accept',
-                                                          style: TextStyle(
-                                                              fontSize: 18.sp,
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                          children: [
-                                                            TextSpan(
-                                                              text:
-                                                                  ' only ONE ',
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      18.sp,
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
-                                                            ),
-                                                            TextSpan(
-                                                              text:
-                                                                  'offer. If you accept this offer, all other offers will disappear',
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      18.sp,
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            ),
-                                                          ]),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 25.sp),
-                                                    child: SizedBox(
-                                                      height: 50.sp,
-                                                      width: 234.sp,
-                                                      child: MaterialButton(
-                                                        onPressed: () async {
-                                                          int response = await apiController
-                                                              .acceptOffer(widget
-                                                                  .currentMerchantOffer!
-                                                                  .listEventId);
-
-                                                          int response2 = await apiController
-                                                              .processedStatusChange(
-                                                                  int.parse(widget
-                                                                      .currentMerchantOffer!
-                                                                      .listId
-                                                                      .path
-                                                                      .segments
-                                                                      .last));
-                                                          // int response = 1;
-                                                          // int response2 = 1;
-                                                          if (response == 1 &&
-                                                              response2 == 1) {
-                                                            //todo refresh and send to sent page
-                                                            successMsg(
-                                                                'Yay! Offer Accepted!',
-                                                                'Hope you had a pleasant time using the app.');
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            setState(() {
-                                                              widget.overrideData =
-                                                                  true;
-                                                            });
-                                                          } else {
-                                                            errorMsg(
-                                                                'Connectivity Error',
-                                                                'Some connectivity error has occurred, please try again later!');
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          'Accept',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              fontSize: 18.sp),
-                                                        ),
-                                                        color: Colors.orange,
-                                                        elevation: 0.0,
-                                                        highlightElevation: 0.0,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      16.0),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
+                                          );
+                                        },
                                       );
                                     },
                                   );

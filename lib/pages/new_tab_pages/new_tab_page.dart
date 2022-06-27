@@ -769,50 +769,52 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                   ? SizedBox(
                     height: screenHeight*100 - 80.sp,
                     width: screenWidth*100,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // SizedBox(height: screenHeight * 23),
-                        SizedBox(
-                          height: screenWidth * 100,
-                          width: screenWidth * 100,
-                          child: SvgPicture.asset(
-                            'assets/new_tab_image.svg',
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 40.sp, bottom: 20.sp),
-                            child: Stack(
-                              children: [
-                                Text(
-                                  'Get started by easily creating your\nshopping list',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16.sp,
-                                      height: 2.sp,
-                                      color: kTextGrey),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10.sp),
-                                  child: SizedBox(
-                                    height: screenWidth * 40,
-                                    width: screenWidth * 50,
-                                    child: SvgPicture.asset(
-                                      'assets/new_tab_arrow.svg',
-                                      color: Colors.orange,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // SizedBox(height: screenHeight * 23),
+                          SizedBox(
+                            height: screenWidth * 100,
+                            width: screenWidth * 100,
+                            child: SvgPicture.asset(
+                              'assets/new_tab_image.svg',
                             ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 40.sp, bottom: 20.sp),
+                              child: Stack(
+                                children: [
+                                  Text(
+                                    'Get started by easily creating your\nshopping list',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16.sp,
+                                        height: 2.sp,
+                                        color: kTextGrey),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 10.sp),
+                                    child: SizedBox(
+                                      height: screenWidth * 40,
+                                      width: screenWidth * 50,
+                                      child: SvgPicture.asset(
+                                        'assets/new_tab_arrow.svg',
+                                        color: Colors.orange,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                   : ListView.builder(

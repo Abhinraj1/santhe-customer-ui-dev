@@ -13,7 +13,6 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   get: ^4.6.1
-  url_launcher: ^6.0.20
   smooth_page_indicator: ^1.0.0+2
   auto_size_text: ^3.0.0
   flutter_slidable: ^1.2.0
@@ -53,6 +52,7 @@ dependencies:
   share_plus: ^4.0.4
   webview_flutter: ^2.0.4
   page_transition: ^2.0.5
+  url_launcher: ^6.1.4
 
 dev_dependencies:
   flutter_test:

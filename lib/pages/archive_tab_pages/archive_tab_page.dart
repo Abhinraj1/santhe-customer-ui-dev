@@ -77,7 +77,7 @@ class _ArchiveTabPageState extends State<ArchiveTabPage>
                           style: TextStyle(
                             color: kTextGrey,
                             fontWeight: FontWeight.w400,
-                            fontSize: 24.sp,
+                            fontSize: 16.sp,
                             height: 2.sp,
                           ),
                           children: <TextSpan>[

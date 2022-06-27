@@ -21,9 +21,9 @@ import 'sent_tab_pages/sent_tab_page.dart';
 import '../widgets/navigation_drawer_widget.dart';
 
 class HomePage extends StatefulWidget {
-  final int pageIndex;
+  final int? pageIndex;
 
-  const HomePage({this.pageIndex = 0, Key? key}) : super(key: key);
+  const HomePage({this.pageIndex, Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
-    // apiController.searchedItemResult('potato');
+    apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
     super.initState();
   }
@@ -59,11 +59,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    final int pageIndex = widget.pageIndex;
-    // double screenHeight = MediaQuery.of(context).size.height / 100;
-
-    
-
     return Scaffold(
       key: _key,
       drawer: const NavigationDrawer(),

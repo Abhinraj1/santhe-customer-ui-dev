@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/archived_controller.dart';
+import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:santhe/controllers/home_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
@@ -79,6 +80,7 @@ void main() async {
   Get.put(NotificationController());
   Get.put(ChatController());
   Get.put(HomeController());
+  Get.put(ConnectivityController());
   Notifications().fcmInit();
 
   runApp(

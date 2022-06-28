@@ -26,7 +26,7 @@
         android:label="Santhe"
         android:name="${applicationName}"
        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyBXrt8sl4Ejn0ZZBZiYbLi7BInj54UVlXQ"/>
         <activity

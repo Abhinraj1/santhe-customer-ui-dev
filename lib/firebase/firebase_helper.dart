@@ -37,7 +37,9 @@ class FirebaseHelper {
     final ImagePicker _picker = ImagePicker();
 
     XFile? image = await _picker.pickImage(
-        source: shootPic ? ImageSource.camera : ImageSource.gallery);
+        source: shootPic ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 50,
+    );
 
     FirebaseStorage storage = FirebaseStorage.instance;
 

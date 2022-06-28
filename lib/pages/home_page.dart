@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:resize/resize.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
+import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
@@ -39,6 +41,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   final NotificationController _notificationController = Get.find();
+  final ConnectivityController _connectivityController = Get.find();
 
   @override
   void initState() {
@@ -49,6 +52,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) => _connectivityController.listenConnectivity(result));
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
     super.initState();

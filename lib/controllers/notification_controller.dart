@@ -17,7 +17,7 @@ class Notifications {
   late AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    importance: Importance.high,
+    importance: Importance.max,
   );
 
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -52,7 +52,8 @@ class Notifications {
           NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
-                channel.name,
+                channel.name,// title
+                importance: Importance.max,
                 icon: '@mipmap/ic_launcher',
                 styleInformation: const BigTextStyleInformation(''),
               ),

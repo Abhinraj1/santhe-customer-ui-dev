@@ -514,11 +514,6 @@ class APIs extends GetxController {
         return 0;
       }
       var data = jsonResponse['fields'];
-      Boxes.getContent().put('aboutUs', data['aboutUsHtml']['stringValue']);
-      Boxes.getContent().put(
-          'termsAndConditions', data['termsConditionsHtml']['stringValue']);
-      Boxes.getContent()
-          .put('privacyPolicy', data['privacyPolicyHtml']['stringValue']);
 
       return 1;
     } else {
@@ -1221,9 +1216,9 @@ class APIs extends GetxController {
 
   //SENT TAB POST
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
-      int listId, int listQuantity) async {
-    String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
+      int listId) async {
+    print('get_here');
+    String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));
     if (response.statusCode == 200) {

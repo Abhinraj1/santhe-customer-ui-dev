@@ -319,9 +319,6 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                         width: 92.w,
                                         child: ElevatedButton(
                                             onPressed: () {
-                                              // print(merchantResponse!.fields
-                                              //         .merchId.integerValue +
-                                              //     userList.listId.toString());
                                               Navigator.push(
                                                 context,
                                                 PageTransition(child: ChatScreen(

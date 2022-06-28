@@ -19,6 +19,7 @@ import 'package:santhe/pages/splash_to_onboarding.dart';
 import 'controllers/boxes_controller.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'controllers/chat_controller.dart';
+import 'controllers/getx/new_list_controller.dart';
 import 'controllers/notification_controller.dart';
 import 'controllers/registrationController.dart';
 import 'controllers/search_query_controller.dart';
@@ -70,6 +71,7 @@ void main() async {
   final bool isRegistered =
       Boxes.getUserPrefs().get('isRegistered', defaultValue: false) ?? false;
 
+  Get.put(NewListController());
   Get.put(APIs());
   Get.put(LocationController());
   Get.put(RegistrationController());

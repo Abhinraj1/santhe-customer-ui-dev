@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -12,16 +13,14 @@ import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 
-class UserListCard extends StatelessWidget {
-  final UserList userList;
-  final box = Boxes.getUserListDB();
-  final int userKey;
+import '../../models/new_list/user_list_model.dart';
 
-  UserListCard({required this.userList, Key? key, required this.userKey})
+class UserListCard extends StatelessWidget {
+  final UserListModel userList;
+
+  UserListCard({Key? key, required this.userList})
       : super(key: key);
-  final int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
+  final int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class UserListCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           //print(userList.items.first.quantity);
-          Get.to(() => UserListPage(userList: userList, userKey: userKey));
+         // Get.to(() => UserListPage(userList: userList, userKey: userKey));
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -67,7 +66,6 @@ class UserListCard extends StatelessWidget {
             endActionPane: ActionPane(
               // A motion is a widget used to control how the pane animates.
               motion: const ScrollMotion(),
-
               // All actions are defined in the children parameter.
               children: [
                 //copy from old list
@@ -75,8 +73,7 @@ class UserListCard extends StatelessWidget {
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      /*int userListCount = 0;
                       UserList oldUserList = Boxes.getUserListDB()
                           .values
                           .firstWhere(
@@ -105,7 +102,7 @@ class UserListCard extends StatelessWidget {
                           userList: newImportedList,
                           userKey: userKey,
                         ));
-                      }
+                      }*/
                     },
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
@@ -117,7 +114,7 @@ class UserListCard extends StatelessWidget {
                 //delete list
                 SlidableAction(
                   onPressed: (context) async {
-                    int pressCount = 0;
+                    /*int pressCount = 0;
 
                     //delete userList from DB
                     final box = Boxes.getUserListDB();
@@ -191,7 +188,7 @@ class UserListCard extends StatelessWidget {
                     if (box.length >= 2) {
                       Get.offAll(() => const HomePage(),
                           transition: Transition.fadeIn);
-                    }
+                    }*/
                   },
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,

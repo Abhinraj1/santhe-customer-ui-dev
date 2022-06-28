@@ -16,6 +16,8 @@ class AppHelpers {
 
   String get getPhoneNumber => _firebaseAuth.currentUser?.phoneNumber ?? '';
 
+  String get getPhoneNumberWithoutCountryCode => getPhoneNumber.replaceAll('+91', '');
+
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';
 

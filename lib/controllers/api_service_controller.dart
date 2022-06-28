@@ -14,6 +14,9 @@ import 'package:santhe/pages/error_pages/server_error_page.dart';
 import '../core/app_helpers.dart';
 import '../models/answer_list_model.dart';
 import '../models/item_model.dart';
+import '../models/new_list/list_item_model.dart';
+import '../models/new_list/new_list_response_model.dart';
+import '../models/new_list/user_list_model.dart';
 import '../models/santhe_faq_model.dart';
 import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
@@ -86,89 +89,7 @@ class APIs extends GetxController {
     }
   }
 
-  // Future getAllItems() async {
-  //   String pageToken = '';
-  //   Boxes.getItemsDB().clear();
-  //   String url =
-  //       'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item?pageSize=1000';
-  //   void parseItems(jsonResponse) {
-  //     for (int i = 0; i < jsonResponse['documents'].length; i++) {
-  //       var data = jsonResponse['documents'][i]['fields'];
-  //       Item item = Item.fromJson(data);
-  //       log('---->' + item.itemName);
-  //       Boxes.getItemsDB().put(item.itemId, item);
-  //     }
-  //   }
-  //
-  //   final response = await http.get(Uri.parse(url));
-  //   var jsonResponse = jsonDecode(response.body);
-  //
-  //   if (response.statusCode == 200) {
-  //     if (jsonResponse['nextPageToken'] != null) {
-  //       parseItems(jsonResponse);
-  //       pageToken = jsonResponse['nextPageToken'];
-  //
-  //       while (pageToken.isNotEmpty) {
-  //         log('#############################3');
-  //         String url2 =
-  //             'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item?pageSize=1000&pageToken=$pageToken';
-  //         final response = await http.get(Uri.parse(url2));
-  //         var jsonResponse = jsonDecode(response.body);
-  //         parseItems(jsonResponse);
-  //
-  //         if (jsonResponse['nextPageToken'] != null) {
-  //           pageToken = jsonResponse['nextPageToken'];
-  //         } else {
-  //           pageToken = '';
-  //         }
-  //       }
-  //
-  //       itemInit();
-  //       log('------- GOT ALL ITEMS------');
-  //     } else {
-  //       parseItems(jsonResponse);
-  //       itemInit();
-  //     }
-  //   } else {
-  //     log('Request failed with status: ${response.statusCode}.');
-  //   }
-  // }
-
-  // Future getAllItems() async {
-  //   Boxes.getItemsDB().clear();
-  //   String url =
-  //       'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item?pageSize=1000';
-  //
-  //   void parseItems(jsonResponse) {
-  //     for (int i = 0; i < jsonResponse['documents'].length; i++) {
-  //       var data = jsonResponse['documents'][i]['fields'];
-  //       Item item = Item.fromFirebaseRestApi(data);
-  //       log('---->' + item.itemName);
-  //       if (item.status == 'active') {
-  //         Boxes.getItemsDB().put(item.itemId, item);
-  //       }
-  //     }
-  //   }
-  //
-  //   var response = await http.get(Uri.parse(url));
-  //   var jsonResponse = jsonDecode(response.body);
-  //
-  //   if (response.statusCode == 200) {
-  //     parseItems(jsonResponse);
-  //     while (jsonResponse['nextPageToken'] != null) {
-  //       url =
-  //           'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item?pageSize=1000&pageToken=${jsonResponse['nextPageToken']}';
-  //       response = await http.get(Uri.parse(url));
-  //       jsonResponse = jsonDecode(response.body);
-  //       parseItems(jsonResponse);
-  //     }
-  //   } else {
-  //     log('Request failed with status: ${response.statusCode}.');
-  //   }
-  // }
-
-  Future<http.Response> callApi(
-      {required int mode, required Uri url, String? body}) async {
+  Future<http.Response> callApi({required int mode, required Uri url, String? body}) async {
     // case 1: get
     // case 2: post
     // case 3: update
@@ -263,41 +184,6 @@ class APIs extends GetxController {
     }
   }
 
-  // void itemInit() {
-  //   itemsDB.clear();
-  //   for (Item item in Boxes.getItemsDB().values.toList()) {
-  //     itemsDB.add(item);
-  //   }
-  // }
-
-  //
-  // Future<Item> getItemsById(int id) async {
-  //   final String url =
-  //       'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item/$id';
-  //
-  //   final response = await http.get(Uri.parse(url));
-  //
-  //   if (response.statusCode == 200) {
-  //     var jsonResponse = jsonDecode(response.body);
-  //     var data = jsonResponse['fields'];
-  //
-  //     return Item.fromJson(data);
-  //   } else {
-  //     Future.error('Error: ${response.statusCode}');
-  //     throw 'Error: ${response.statusCode}';
-  //   }
-  // }
-  //
-
-  // void initCategoriesDB() {
-  //   var box = Boxes.getCategoriesDB();
-  //   categoriesDB.clear();
-  //   var a = box.values.toList();
-  //   for (int i = 0; i < a.length; i++) {
-  //     categoriesDB.add(a[i]);
-  //   }
-  // }
-  //add item post addItem
   Future<int> addItem(Item newCustomItem) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item/?documentId=${newCustomItem.itemId}';
@@ -392,16 +278,10 @@ class APIs extends GetxController {
     }
   }
 
-  //POST
   //Needed for import from old list feature & list count
-  Future<int> getAllCustomerLists(int custId) async {
-    userListsDB.clear();
-    onlineCustLists.clear();
-    offlineCustLists.clear();
-    int userListsCount = 0;
+  Future<List<NewListResponseModel>> getAllCustomerLists(int custId) async {
 
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    const String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
     var body = {
       "structuredQuery": {
         "from": [
@@ -419,7 +299,7 @@ class APIs extends GetxController {
                   "op": "EQUAL",
                   "value": {
                     "referenceValue":
-                        "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+                        "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
                   }
                 }
               }
@@ -429,59 +309,12 @@ class APIs extends GetxController {
         }
       }
     };
-    var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body);
-
-      for (UserList usrLst in Boxes.getUserListDB().values) {
-        offlineCustLists.add(usrLst);
-        log(usrLst.listId.toString());
-      }
-
-      if (data[0]['document'] != null &&
-          data[0]['document']['fields'] != null) {
-        for (int i = 0; i < data.length; i++) {
-          if (data[i]['document']['fields']['custListStatus']['stringValue'] !=
-              'deleted') {
-            UserList onlineUserList =
-                UserList.fromJson(data[i]['document']['fields']);
-            final box = Boxes.getUserListDB();
-            if (onlineUserList.listId ==
-                offlineCustLists
-                    .firstWhereOrNull((e) => e.listId == onlineUserList.listId)
-                    ?.listId) {
-              log('Duplicate Found: ${onlineUserList.listId} and not added to local cache');
-            } else {
-              onlineCustLists.add(onlineUserList);
-              if (onlineUserList.custListStatus == 'new') {
-                box.add(onlineUserList);
-              }
-            }
-          }
-        }
-        userListsDB.addAll(onlineCustLists);
-        userListsDB.addAll(offlineCustLists);
-        Boxes.getContent().put('userListCount', '${data.length}');
-        userListsCount = data.length;
-        log('List Count: $userListsCount');
-        return userListsCount;
-      } else if (data[0]['document'] != null && data[0]['document'] == null) {
-        Boxes.getContent().put('userListCount', '0');
-        userListsCount = 0;
-        log('List Count: $userListsCount');
-        return userListsCount;
-      }
-
-      for (var element in userListsDB) {
-        log(element.listId.toString());
-      }
-
-      return userListsCount;
+      return newListResponseModelFromJson(response.body);
     } else {
-      log('Error Occured! ${response.statusCode}: ${response.body}');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      return 9999999999;
+      throw ServerError();
     }
   }
 
@@ -511,7 +344,6 @@ class APIs extends GetxController {
     }
   }
 
-  //get
   //get and store common content like about us and terms & cond from backend
   Future<int> getCommonContent() async {
     const String url =
@@ -532,23 +364,6 @@ class APIs extends GetxController {
     }
   }
 
-  // Future<Category> getCategoryByID(int id) async {
-  //   final String url =
-  //       'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/category/$id';
-  //
-  //   final response = await http.get(Uri.parse(url));
-  //
-  //   if (response.statusCode == 200) {
-  //     var jsonResponse = jsonDecode(response.body);
-  //     var data = jsonResponse['fields'];
-  //     return Category.fromJson(data);
-  //   } else {
-  //     log('Request failed with status: ${response.statusCode}.');
-  //     throw 'Error!';
-  //   }
-  // }
-
-  //post
   Future<List<Item>> getCategoryItems(int id) async {
     List<Item> categoryItems = [];
     const String url =
@@ -593,8 +408,7 @@ class APIs extends GetxController {
     }
   }
 
-  Future<int> addCustomerList(
-      UserList userList, int custId, String status) async {
+  Future<int> addCustomerList(UserList userList, int custId, String status) async {
     log("================${userList.listId}======================");
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/?documentId=${userList.listId}';
@@ -675,11 +489,86 @@ class APIs extends GetxController {
     }
   }
 
+  Future<int> addNewList(UserListModel userList) async {
+    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/?documentId=${userList.listId}';
+    List items = [];
+    int i = 0;
+    for (ListItemModel item in userList.items) {
+      items.add({
+        "mapValue": {
+          "fields": {
+            "quantity": {"doubleValue": "${item.quantity}"},
+            "itemImageId": {"stringValue": item.itemImageId},
+            "unit": {"stringValue": item.unit},
+            "itemName": {"stringValue": item.itemName},
+            "catName": {"stringValue": item.catName},
+            "catId": {
+              "referenceValue":
+              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId}"
+            },
+            "itemSeqNum": {"integerValue": "$i"},
+            "brandType": {"stringValue": item.brandType},
+            "itemId": {
+              "referenceValue":
+              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId}"
+            },
+            "notes": {"stringValue": item.notes}
+          }
+        }
+      });
+      i++;
+    }
+    var body = {
+      "fields": {
+        "createListTime": {
+          "timestampValue":
+          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+        },
+        "items": {
+          "arrayValue": {"values": items}
+        },
+        "custListStatus": {"stringValue": 'new'},
+        "custId": {
+          "referenceValue":
+          "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+        },
+        "custListSentTime": {
+          "timestampValue":
+          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+        },
+        "updateListTime": {
+          "timestampValue":
+          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+        },
+        'notificationProcess': {'stringValue': 'reminder'},
+        'dealProcess': {'booleanValue': false},
+        "custOfferWaitTime": {
+          "timestampValue":
+          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+        },
+        "listOfferCounter": {"integerValue": "0"},
+        "processStatus": {"stringValue": "draft"},
+        "listId": {"integerValue": "${userList.listId}"},
+        "listName": {"stringValue": userList.listName}
+      }
+    };
+
+    var response = await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      log(data.toString());
+      return 1;
+    } else {
+      log('Request failed with status: ${response.reasonPhrase}.');
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return 0;
+    }
+  }
+
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList,
-      {String? status, String? processStatus}) async {
+  Future updateUserList(int custId, UserList userList, {String? status, String? processStatus}) async {
     final String url =
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
     List items = [];
@@ -1026,58 +915,6 @@ class APIs extends GetxController {
     }
   }
 
-  //post
-  // Future<int> getCustListNumber(int custId) async {
-  //   const String url =
-  //       'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
-  //
-  //   final body = {
-  //     "structuredQuery": {
-  //       "from": [
-  //         {"collectionId": "customerList"}
-  //       ],
-  //       "where": {
-  //         "compositeFilter": {
-  //           "filters": [
-  //             {
-  //               "fieldFilter": {
-  //                 "field": {"fieldPath": "custId"},
-  //                 "op": "EQUAL",
-  //                 "value": {
-  //                   "referenceValue":
-  //                       "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
-  //                 }
-  //               }
-  //             }
-  //           ],
-  //           "op": "AND"
-  //         }
-  //       }
-  //     }
-  //   };
-  //
-  //   var response = await http.post(Uri.parse(url), body: jsonEncode(body));
-  //
-  //   if (response.statusCode == 200) {
-  //     List data = jsonDecode(response.body);
-  //     int custListNumber = 0;
-  //     for (int i = 0; i < data.length; i++) {
-  //       custListNumber++;
-  //     }
-  //     if (custListNumber == 1 && data[0]['document'] == null) {
-  //       custListNumber = 0;
-  //     }
-  //
-  //     Boxes.getContent().put('userListCount', '$custListNumber');
-  //     log('>>>>>>UserListNumber: $custListNumber');
-  //     return custListNumber;
-  //   } else {
-  //     log('Request failed with status: ${response.statusCode}.');
-  //     return 9999999999;
-  //   }
-  // }
-
-  //post
   Future contactUs(int custId, String message, double rating) async {
     log('>>>>>>>>rating:$rating');
     final String url =
@@ -1111,6 +948,7 @@ class APIs extends GetxController {
   }
 
   //SENT TAB PAGE ----------------------------------------------------------------------
+
   //get sent user lists
   Future<List<UserList>> getCustListByStatus(int custId) async {
     List<UserList> userLists = [];
@@ -1172,58 +1010,6 @@ class APIs extends GetxController {
     }
   }
 
-  //POST
-  // Future<List<Offer>> getAllMerchOfferByListId(int listId) async {
-  //   log(listId);
-  //   List<Offer> merchOffers = [];
-  //   const String url =
-  //       'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
-  //   var body = {
-  //     "structuredQuery": {
-  //       "from": [
-  //         {"collectionId": "listEvent"}
-  //       ],
-  //       "where": {
-  //         "compositeFilter": {
-  //           "filters": [
-  //             {
-  //               "fieldFilter": {
-  //                 "field": {"fieldPath": "listId"},
-  //                 "op": "EQUAL",
-  //                 "value": {
-  //                   "referenceValue":
-  //                       "projects/santhe-425a8/databases/(default)/documents/customerList/$listId"
-  //                 }
-  //               }
-  //             }
-  //           ],
-  //           "op": "AND"
-  //         }
-  //       }
-  //     }
-  //   };
-  //
-  //   var response = await http.post(Uri.parse(url), body: jsonEncode(body));
-  //
-  //   if (response.statusCode == 200) {
-  //     var data = jsonDecode(response.body);
-  //
-  //     if (data[0]['document'] != null) {
-  //       for (int i = 0; i < data.length; i++) {
-  //         merchOffers
-  //             .add(Offer.fromFirebaseRestApi(data[i]['document']['fields']));
-  //         log(merchOffers[i].merchId + merchOffers[i].listId);
-  //       }
-  //     } else {
-  //       return merchOffers;
-  //     }
-  //     return merchOffers;
-  //   } else {
-  //     throw 'Error retrieving user lists!';
-  //   }
-  // }
-
-  //SENT TAB POST
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
       int listId) async {
     String url =
@@ -1233,42 +1019,6 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
-
-      // SORT OFFERS
-      // if (resp.isNotEmpty) {
-      //   resp.sort((a, b) => a.merchResponse.merchTotalPrice
-      //       .compareTo(b.merchResponse.merchTotalPrice));
-      //   resp = resp.reversed.toList();
-      //   resp.sort((a, b) => a.merchResponse.merchOfferQuantity
-      //       .compareTo(b.merchResponse.merchOfferQuantity));
-      //   resp = resp.reversed.toList();
-      //
-      //   final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
-      //
-      //   for (int i = 0; i < resp.length; i++) {
-      //     if (AppHelpers.isInBetween(
-      //           double.parse(resp[i].merchResponse.merchTotalPrice),
-      //           bestPrice,
-      //           bestPrice + 50,
-      //         ) &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best1';
-      //     } else if (AppHelpers.isInBetween(
-      //           double.parse(resp[i].merchResponse.merchTotalPrice),
-      //           bestPrice + 50,
-      //           bestPrice + 100,
-      //         ) &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best2';
-      //     } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
-      //             bestPrice + 100 &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity){
-      //       resp[i].custOfferResponse.custDeal = 'best3';
-      //     }else{
-      //       resp[i].custOfferResponse.custDeal = 'notBest';
-      //     }
-      //   }
-      // }
       resp.sort((a, b) =>
           a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
       return resp;

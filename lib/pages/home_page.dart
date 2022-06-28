@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             if (s.connectionState == ConnectionState.done) {
               return TabBarView(
                 controller: _homeController.homeTabController,
-                physics: const BouncingScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   NewTabPage(
                     limit: s.data == null ? 3 : s.data! as int,

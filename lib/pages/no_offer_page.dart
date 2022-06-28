@@ -121,8 +121,7 @@ class NoOfferPage extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () async {
-                                int userListCount = await apiController
-                                    .getAllCustomerLists(custId);
+                                int userListCount = 0;
 
                                 UserList newImportedList = UserList(
                                   createListTime: DateTime.now(),

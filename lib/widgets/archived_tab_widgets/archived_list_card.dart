@@ -94,8 +94,7 @@ class ArchivedUserListCard extends StatelessWidget {
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      int userListCount = 0;
                       UserList oldUserList = userList;
 
                       UserList newImportedList = UserList(

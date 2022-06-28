@@ -105,8 +105,7 @@ class _OfferCardState extends State<OfferCard> {
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount =
-                          await apiController.getAllCustomerLists(custId);
+                      int userListCount = 0;
                       UserList oldUserList = widget.userList;
 
                       UserList newImportedList = UserList(

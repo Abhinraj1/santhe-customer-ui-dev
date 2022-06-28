@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/error/exceptions.dart';
@@ -11,7 +10,6 @@ import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
-import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
 import '../core/app_helpers.dart';
 import '../models/answer_list_model.dart';
@@ -179,44 +177,57 @@ class APIs extends GetxController {
         {
           try {
             return await http.get(url);
-          } on SocketException {
-            Get.to(
-              () => const NoInternetPage(),
-              transition: Transition.fade,
-            );
+            // } on SocketException {
+            //   Get.to(
+            //     () => const NoInternetPage(),
+            //     transition: Transition.fade,
+            //   );
+            // }
+          } catch (e) {
+            log(e.toString());
           }
-          throw NoInternetError();
+          break;
+          // throw NoInternetError();
         }
 
       case 2:
         {
           try {
             return await http.post(url, body: body!);
-          } on SocketException {
-            Get.to(
-              () => const NoInternetPage(),
-              transition: Transition.fade,
-            );
+            // } on SocketException {
+            //   Get.to(
+            //     () => const NoInternetPage(),
+            //     transition: Transition.fade,
+            //   );
+            // }
+            // throw NoInternetError();
+          } catch (e) {
+            log(e.toString());
           }
-          throw NoInternetError();
+          break;
         }
 
       case 3:
         {
           try {
             return await http.patch(url, body: body!);
-          } on SocketException {
-            Get.to(
-              () => const NoInternetPage(),
-              transition: Transition.fade,
-            );
+            // } on SocketException {
+            //   Get.to(
+            //     () => const NoInternetPage(),
+            //     transition: Transition.fade,
+            //   );
+            // }
+            // throw NoInternetError();
+          } catch (e) {
+            log(e.toString());
           }
-          throw NoInternetError();
+          break;
         }
 
       default:
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
+    throw NoInternetError();
   }
 
   Future<int> getSubscriptionLimit(String plan) async {
@@ -1215,7 +1226,8 @@ class APIs extends GetxController {
   //SENT TAB POST
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
       int listId) async {
-    String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
+    String url =
+        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));
     if (response.statusCode == 200) {

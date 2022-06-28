@@ -11,6 +11,7 @@ import 'package:santhe/constants.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
+import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
 import 'package:santhe/widgets/new_tab_widgets/user_list_card.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../controllers/api_service_controller.dart';
@@ -542,23 +543,41 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
 
                                                         if (response == 1) {
                                                           box.add(newUserList);
+                                                          var key = -1;
+                                                          for (int i = 0; i < box.values.length; i++) {
+                                                            final data = box.values.toList()[i];
+                                                            if (data.listId == newUserList.listId) {
+                                                              key = box.keys.toList()[i];
+                                                            }
+                                                          }
+                                                          if (key != -1) {
+                                                            Get.to(() => UserListPage(
+                                                              userList: newUserList,
+                                                              userKey: key,
+                                                            ));
+                                                          } else {
+                                                            Get.offAll(const HomePage(
+                                                              pageIndex: 0,
+                                                            ));
+                                                          }
                                                         } else {
                                                           Get.dialog(
                                                               const SizedBox
                                                                   .shrink());
                                                         }
 
-                                                        //Dismiss the pop up
-                                                        if (box.values.length ==
-                                                            3) {
-                                                          Get.offAll(
-                                                              () =>
-                                                                  const HomePage(),
-                                                              transition: Transition
-                                                                  .noTransition);
-                                                        } else {
-                                                          Navigator.pop(c);
-                                                        }
+                                                        // //Dismiss the pop up
+                                                        // if (box.values.length ==
+                                                        //     3) {
+                                                        //   Get.offAll(
+                                                        //       () =>
+                                                        //           const HomePage(),
+                                                        //       transition: Transition
+                                                        //           .noTransition);
+                                                        // } else {
+                                                        //   Navigator.pop(c);
+                                                        // }
+                                                        Navigator.pop(c);
                                                       }
                                                     } else if (listName
                                                             .isEmpty &&
@@ -661,23 +680,42 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                                         if (response == 1) {
                                                           box.add(
                                                               newImportedList);
+                                                          var key = -1;
+                                                          for (int i = 0; i < box.values.length; i++) {
+                                                            final data = box.values.toList()[i];
+                                                            if (data.listId == newImportedList.listId) {
+                                                              key = box.keys.toList()[i];
+                                                            }
+                                                          }
+                                                          if (key != -1) {
+                                                            Get.to(() => UserListPage(
+                                                              userList: newImportedList,
+                                                              userKey: key,
+                                                            ));
+                                                          } else {
+                                                            Get.offAll(const HomePage(
+                                                              pageIndex: 0,
+                                                            ));
+                                                          }
                                                         } else {
                                                           Get.dialog(
                                                               const SizedBox
                                                                   .shrink());
                                                         }
 
-                                                        //Dismiss the pop up
-                                                        if (box.values.length ==
-                                                            3) {
-                                                          Get.offAll(
-                                                              () =>
-                                                                  const HomePage(),
-                                                              transition: Transition
-                                                                  .noTransition);
-                                                        } else {
-                                                          Navigator.pop(c);
-                                                        }
+                                                        // //Dismiss the pop up
+                                                        // if (box.values.length ==
+                                                        //     3) {
+                                                        //   Get.offAll(
+                                                        //       () =>
+                                                        //           const HomePage(),
+                                                        //       transition: Transition
+                                                        //           .noTransition);
+                                                        // } else {
+                                                        //   Navigator.pop(c);
+                                                        // }
+
+                                                        Navigator.pop(c);
                                                       } else {
                                                         Get.snackbar(
                                                           '',

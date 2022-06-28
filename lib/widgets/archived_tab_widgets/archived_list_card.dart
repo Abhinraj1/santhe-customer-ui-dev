@@ -10,6 +10,7 @@ import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
 import 'package:santhe/pages/no_offer_page.dart';
 import 'package:santhe/pages/sent_tab_pages/merchant_items_list_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -116,9 +117,23 @@ class ArchivedUserListCard extends StatelessWidget {
 
                       if (response == 1) {
                         box.add(newImportedList);
-                        Get.offAll(const HomePage(
-                          pageIndex: 0,
-                        ));
+                        var key = -1;
+                        for (int i = 0; i < box.values.length; i++) {
+                          final data = box.values.toList()[i];
+                          if (data.listId == newImportedList.listId) {
+                            key = box.keys.toList()[i];
+                          }
+                        }
+                        if (key != -1) {
+                          Get.to(() => UserListPage(
+                            userList: newImportedList,
+                            userKey: key,
+                          ));
+                        } else {
+                          Get.offAll(const HomePage(
+                            pageIndex: 0,
+                          ));
+                        }
                       } else {
                         Get.dialog(const Card(
                           child: Center(

@@ -602,7 +602,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                   if (_formKey.currentState!.validate() &&
                                       itemUnit.isNotEmpty &&
                                       _customItemNameController
-                                          .text.isNotEmpty) {
+                                          .text.trim().isNotEmpty) {
                                     int itemCount =
                                         await apiController.getItemsCount();
 
@@ -613,15 +613,15 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                       //todo add custom item to firebase
                                       Item newCustomItem = Item(
                                           dBrandType: _customBrandController
-                                                  .text.isEmpty
+                                                  .text.trim().isEmpty
                                               ? 'You can mention brand, type or size of the item here' +
                                                   placeHolderIdentifier
-                                              : _customBrandController.text,
+                                              : _customBrandController.text.trim(),
                                           dItemNotes: _customNotesController
-                                                  .text.isEmpty
+                                                  .text.trim().isEmpty
                                               ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
                                                   placeHolderIdentifier
-                                              : _customNotesController.text,
+                                              : _customNotesController.text.trim(),
                                           itemImageTn: imageController
                                               .addItemCustomImageUrl.value,
                                           catId: '4000',
@@ -635,7 +635,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                               ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
                                               : image,
                                           itemName:
-                                              _customItemNameController.text,
+                                              _customItemNameController.text.trim(),
                                           status: 'inactive',
                                           unit: [selectedUnit],
                                           updateUser: custPhone);
@@ -651,10 +651,10 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                             ?.items
                                             .add(ListItem(
                                               brandType: _customBrandController
-                                                      .text.isEmpty
+                                                      .text.trim().isEmpty
                                                   ? 'You can mention brand, type or size of the item here' +
                                                       placeHolderIdentifier
-                                                  : _customBrandController.text,
+                                                  : _customBrandController.text.trim(),
                                               //item ref
                                               itemId: '$itemCount',
                                               itemImageId: image.isEmpty
@@ -662,14 +662,14 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                   : image,
                                               itemName:
                                                   _customItemNameController
-                                                      .text,
+                                                      .text.trim(),
                                               quantity: double.parse(
                                                   _customQtyController.text),
                                               notes: _customNotesController
-                                                      .text.isEmpty
+                                                      .text.trim().isEmpty
                                                   ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
                                                       placeHolderIdentifier
-                                                  : _customNotesController.text,
+                                                  : _customNotesController.text.trim(),
                                               unit: itemUnit,
                                               possibleUnits: availableUnits,
                                               catName: 'Others',

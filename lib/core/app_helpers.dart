@@ -37,6 +37,13 @@ Get it for free at https://santhe.in''';
     }
   }
 
+  static bool isInBetween(num compare, num a, num b){
+    if(compare>=a && compare<b){
+      return true;
+    }
+    return false;
+  }
+
   static Future<bool> checkConnection() async {
     bool hasConnection = false;
     try {

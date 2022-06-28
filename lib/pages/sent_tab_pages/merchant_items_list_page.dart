@@ -14,7 +14,6 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
 import '../../controllers/api_service_controller.dart';
-import '../../core/app_theme.dart';
 import '../../models/merchant_details_response.dart';
 import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/merchant_offer_response.dart';
@@ -45,12 +44,14 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
   Future<MerchantOfferResponse> getDetails() async {
     final apiController = Get.find<APIs>();
     if (widget.archived || widget.overrideData) {
-      final data =
-          await apiController.getAllMerchOfferByListId(widget.userList.listId);
+      final data = await apiController.getAllMerchOfferByListId(
+        widget.userList.listId,
+        widget.userList.items.length,
+      );
       widget.currentMerchantOffer = data.firstWhere(
           (element) => element.custOfferResponse.custOfferStatus == 'accepted');
-      widget.merchantResponse = await apiController
-          .getMerchantDetails(widget.currentMerchantOffer!.merchId.path.segments.last);
+      widget.merchantResponse = await apiController.getMerchantDetails(
+          widget.currentMerchantOffer!.merchId.path.segments.last);
     }
 
     return await apiController
@@ -66,6 +67,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
       final itr = n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
       return itr.replaceAll('.0', '');
     }
+
     return FutureBuilder<MerchantOfferResponse>(
       future: getDetails(),
       builder: (context, snapShot) {
@@ -125,12 +127,11 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   Container(
                     color: Colors.transparent,
                     width: double.infinity,
-                    height: 40.sp,
+                    height: 60.sp,
                     child: Center(
                       child: Text(
                         isDone() ? 'Offer Accepted' : 'Items and Price',
                         style: TextStyle(
-                            fontFamily: 'Mulish',
                             color:
                                 isDone() ? AppColors().green100 : Colors.orange,
                             fontWeight: FontWeight.bold,
@@ -141,7 +142,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   if (isDone())
                     SizedBox(
                       width: screenSize.width,
-                      height: screenSize.height / 3,
+                      height: screenSize.height / 3 - 30.sp,
                       child: Stack(
                         children: [
                           isDone()
@@ -157,7 +158,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       ),
                                       Image.asset(
                                         'assets/offers/store_icon.png',
-                                        height: 75.h,
+                                        height: 60.h,
+                                        width: 60.w,
                                       ),
                                       SizedBox(
                                         width: 15.w,
@@ -168,23 +170,24 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: 8.sp,
+                                              height: 15.sp,
                                             ),
                                             Text(
-                                              widget.merchantResponse!
-                                                  .fields.merchName.stringValue,
+                                              widget.merchantResponse!.fields
+                                                  .merchName.stringValue,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 18.sp,
+                                                fontSize: 24.sp,
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 8.sp,
+                                              height: 10.sp,
                                             ),
                                             SizedBox(
                                               width: 240.w,
                                               child: Text(
-                                                widget.merchantResponse!
+                                                widget
+                                                    .merchantResponse!
                                                     .fields
                                                     .contact
                                                     .mapValue
@@ -193,79 +196,105 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                     .stringValue,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize: 15.sp,
+                                                  fontSize: 14.sp,
                                                 ),
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 8.sp,
+                                              height: 10.sp,
                                             ),
                                             //contact number
                                             Row(
                                               children: [
                                                 //phone icon
                                                 CircleAvatar(
-                                                  radius: 15.sp,
+                                                  radius: 14.sp,
                                                   backgroundColor:
                                                       AppColors().brandDark,
                                                   child: Icon(
                                                     Icons.phone,
                                                     color: AppColors().white100,
-                                                    size: 13.sp,
+                                                    size: 15.sp,
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  width: 8.sp,
+                                                  width: 10.sp,
                                                 ),
                                                 //phone number
                                                 Text(
                                                   '+91-' +
-                                                      widget.merchantResponse!
+                                                      widget
+                                                          .merchantResponse!
                                                           .fields
                                                           .contact
                                                           .mapValue
                                                           .fields
                                                           .phoneNumber
                                                           .integerValue,
-                                                  style: AppTheme().bold700(16,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color:
-                                                          AppColors().brandDark),
+                                                          AppColors().brandDark,
+                                                      fontSize: 16.sp),
                                                 )
                                               ],
                                             ),
                                             SizedBox(
-                                              height: 10.h,
+                                              height: 15.h,
                                             ),
                                             InkWell(
                                               onTap: () {
-                                                log(widget.merchantResponse!.fields
-                                                        .merchId.integerValue +
-                                                    widget.userList.listId.toString());
+                                                log(widget
+                                                        .merchantResponse!
+                                                        .fields
+                                                        .merchId
+                                                        .integerValue +
+                                                    widget.userList.listId
+                                                        .toString());
                                                 Navigator.push(
                                                   context,
-                                                  PageTransition(child: ChatScreen(
-                                                    chatId: widget.userList.listId.toString(),
-                                                    customerTitle: widget.currentMerchantOffer!.merchResponse.merchTotalPrice,
-                                                    listEventId: widget.merchantResponse!.fields.merchId.integerValue + widget.userList.listId.toString(),
-                                                    merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
-                                                  ), type: PageTransitionType.rightToLeft),
+                                                  PageTransition(
+                                                      child: ChatScreen(
+                                                        chatId: widget
+                                                            .userList.listId
+                                                            .toString(),
+                                                        customerTitle: widget
+                                                            .currentMerchantOffer!
+                                                            .merchResponse
+                                                            .merchTotalPrice,
+                                                        listEventId: widget
+                                                                .merchantResponse!
+                                                                .fields
+                                                                .merchId
+                                                                .integerValue +
+                                                            widget
+                                                                .userList.listId
+                                                                .toString(),
+                                                        merchantTitle:
+                                                            'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+                                                      ),
+                                                      type: PageTransitionType
+                                                          .rightToLeft),
                                                 );
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: 23.sp,
-                                                    vertical: 8.sp),
+                                                    vertical: 5.sp),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.all(
                                                             Radius.circular(
                                                                 10.sp)),
-                                                    color: AppColors().brandDark),
+                                                    color:
+                                                        AppColors().brandDark),
                                                 child: Text(
                                                   "Chat",
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 16.sp),
                                                 ),
                                               ),
@@ -284,7 +313,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       filter: ImageFilter.blur(
                                           sigmaX: 20, sigmaY: 20),
                                       child: SizedBox(
-                                        height: screenSize.height / 3,
+                                        height: screenSize.height / 3 - 30.sp,
                                         width: screenSize.width,
                                       ),
                                     ),
@@ -295,8 +324,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                               ? Center(
                                   child: Container(
                                     padding: const EdgeInsets.all(20),
-                                    alignment: Alignment.center,
-                                    height: screenSize.height / 3,
+                                    alignment: Alignment.bottomCenter,
+                                    height: screenSize.height / 3 - 30.sp,
                                     width: screenSize.width,
                                     child: Text(
                                       'Merchant information will be available only upto 72 hours since the list was sent to shops.',
@@ -321,7 +350,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                     child: Text(
                       '${_items.length} Items',
                       style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -395,9 +424,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10.sp,
-                  ),
                   isDone()
                       ? Align(
                           alignment: Alignment.bottomCenter,
@@ -413,14 +439,14 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   'Total:',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 24.sp,
+                                      fontSize: 20.sp,
                                       color: const Color(0xff8B8B8B)),
                                 ),
                                 Text(
                                   '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 24.sp,
+                                      fontSize: 20.sp,
                                       color: Colors.orange),
                                 ),
                               ],
@@ -452,14 +478,14 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   'Total:',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 24.sp,
+                                      fontSize: 20.sp,
                                       color: const Color(0xff8B8B8B)),
                                 ),
                                 Text(
                                   'Rs. ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 24.sp,
+                                      fontSize: 20.sp,
                                       color: Colors.orange),
                                 ),
                               ],
@@ -478,184 +504,226 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   showModalBottomSheet<void>(
                                     backgroundColor: Colors.transparent,
                                     context: context,
-                                    barrierColor:
-                                        const Color.fromARGB(165, 241, 241, 241),
+                                    barrierColor: const Color.fromARGB(
+                                        165, 241, 241, 241),
                                     isScrollControlled: true,
                                     builder: (BuildContext context) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.only(
-                                              topRight: Radius.circular(28.0),
-                                              topLeft: Radius.circular(28.0),
-                                            ),
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey.shade400,
-                                                blurRadius: 14.0,
+                                      bool accepting = false;
+                                      return StatefulBuilder(
+                                        builder: (ctx, ss) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context)
+                                                    .viewInsets
+                                                    .bottom),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(28.0),
+                                                  topLeft:
+                                                      Radius.circular(28.0),
+                                                ),
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey.shade400,
+                                                    blurRadius: 14.0,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          child: SingleChildScrollView(
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  Stack(
-                                                    children: <Widget>[
-                                                      Center(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            'Are you sure?',
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight.w700,
-                                                              fontSize: 24.sp,
-                                                              color:
-                                                                  Colors.orange,
+                                              child: SingleChildScrollView(
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Stack(
+                                                        children: <Widget>[
+                                                          Center(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                'Are you sure?',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize:
+                                                                      24.sp,
+                                                                  color: Colors
+                                                                      .orange,
+                                                                ),
+                                                              ),
                                                             ),
+                                                          ),
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .topRight,
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: const Icon(
+                                                                Icons.close,
+                                                                color: Color(
+                                                                    0xffeaeaea),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          top: 18.sp,
+                                                          left: 45.sp,
+                                                          right: 45.sp,
+                                                        ),
+                                                        child: RichText(
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          text: TextSpan(
+                                                            text:
+                                                                'You can accept',
+                                                            style: TextStyle(
+                                                                fontSize: 18.sp,
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    ' only ONE ',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18.sp,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700),
+                                                              ),
+                                                              TextSpan(
+                                                                text:
+                                                                    'offer. If you accept this offer, all other offers will disappear',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18.sp,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ),
-                                                      Align(
-                                                        alignment:
-                                                            Alignment.topRight,
-                                                        child: GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: const Icon(
-                                                              Icons.close,
-                                                              color: Color(
-                                                                  0xffeaeaea),
-                                                            )),
-                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 25.sp),
+                                                        child: SizedBox(
+                                                          height: accepting
+                                                              ? 30.sp
+                                                              : 50.sp,
+                                                          width: accepting
+                                                              ? 30.sp
+                                                              : 234.sp,
+                                                          child: accepting
+                                                              ? const CircularProgressIndicator()
+                                                              : MaterialButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    ss(() {
+                                                                      accepting =
+                                                                          true;
+                                                                    });
+                                                                    int response =
+                                                                        await apiController.acceptOffer(widget
+                                                                            .currentMerchantOffer!
+                                                                            .listEventId);
+
+                                                                    int response2 = await apiController.processedStatusChange(int.parse(widget
+                                                                        .currentMerchantOffer!
+                                                                        .listId
+                                                                        .path
+                                                                        .segments
+                                                                        .last));
+                                                                    // int response = 1;
+                                                                    // int response2 = 1;
+                                                                    if (response ==
+                                                                            1 &&
+                                                                        response2 ==
+                                                                            1) {
+                                                                      //todo refresh and send to sent page
+                                                                      successMsg(
+                                                                          'Yay! Offer Accepted!',
+                                                                          'Hope you had a pleasant time using the app.');
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      setState(
+                                                                          () {
+                                                                        widget.overrideData =
+                                                                            true;
+                                                                      });
+                                                                    } else {
+                                                                      errorMsg(
+                                                                          'Connectivity Error',
+                                                                          'Some connectivity error has occurred, please try again later!');
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                    'Accept',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        fontSize:
+                                                                            18.sp),
+                                                                  ),
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  elevation:
+                                                                      0.0,
+                                                                  highlightElevation:
+                                                                      0.0,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            16.0),
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                      )
                                                     ],
                                                   ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                      top: 18.sp,
-                                                      left: 45.sp,
-                                                      right: 45.sp,
-                                                    ),
-                                                    child: RichText(
-                                                      textAlign: TextAlign.center,
-                                                      text: TextSpan(
-                                                          text: 'You can accept',
-                                                          style: TextStyle(
-                                                              fontSize: 18.sp,
-                                                              color: Colors.grey,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                          children: [
-                                                            TextSpan(
-                                                              text:
-                                                                  ' only ONE ',
-                                                              style: TextStyle(
-                                                                  fontSize: 18.sp,
-                                                                  color:
-                                                                      Colors.grey,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
-                                                            ),
-                                                            TextSpan(
-                                                              text:
-                                                                  'offer. If you accept this offer, all other offers will disappear',
-                                                              style: TextStyle(
-                                                                  fontSize: 18.sp,
-                                                                  color:
-                                                                      Colors.grey,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            ),
-                                                          ]),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 25.sp),
-                                                    child: SizedBox(
-                                                      height: 50.sp,
-                                                      width: 234.sp,
-                                                      child: MaterialButton(
-                                                        onPressed: () async {
-                                                          int response =
-                                                              await apiController
-                                                                  .acceptOffer(
-                                                                      widget.currentMerchantOffer!
-                                                                          .listEventId);
-
-                                                          int response2 = await apiController
-                                                              .processedStatusChange(
-                                                                  int.parse(
-                                                                      widget.currentMerchantOffer!
-                                                                          .listId
-                                                                          .path
-                                                                          .segments
-                                                                          .last));
-                                                          // int response = 1;
-                                                          // int response2 = 1;
-                                                          if (response == 1 &&
-                                                              response2 == 1) {
-                                                            //todo refresh and send to sent page
-                                                            successMsg(
-                                                                'Yay! Offer Accepted!',
-                                                                'Hope you had a pleasant time using the app.');
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            setState(() {
-                                                              widget.overrideData = true;
-                                                            });
-                                                          } else {
-                                                            errorMsg(
-                                                                'Connectivity Error',
-                                                                'Some connectivity error has occurred, please try again later!');
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          'Accept',
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight.w700,
-                                                              fontSize: 18.sp),
-                                                        ),
-                                                        color: Colors.orange,
-                                                        elevation: 0.0,
-                                                        highlightElevation: 0.0,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(16.0),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
+                                          );
+                                        },
                                       );
                                     },
                                   );

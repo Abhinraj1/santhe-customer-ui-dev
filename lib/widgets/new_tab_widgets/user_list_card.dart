@@ -101,6 +101,10 @@ class UserListCard extends StatelessWidget {
 
                       if (response == 1) {
                         box.add(newImportedList);
+                        Get.to(() => UserListPage(
+                          userList: newImportedList,
+                          userKey: userKey,
+                        ));
                       }
                     },
                     backgroundColor: Colors.transparent,

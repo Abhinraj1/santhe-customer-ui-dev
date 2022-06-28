@@ -1217,31 +1217,51 @@ class APIs extends GetxController {
   //SENT TAB POST
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
       int listId) async {
-    String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
+    print('get_here');
+    String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
           customerOfferResponseFromJson(response.body);
 
-      resp.sort((a, b) => a.merchResponse.merchTotalPrice
-          .compareTo(b.merchResponse.merchTotalPrice));
-      resp = resp.reversed.toList();
-      resp.sort((a, b) => a.merchResponse.merchOfferQuantity
-          .compareTo(b.merchResponse.merchOfferQuantity));
-      resp = resp.reversed.toList();
-
-
-      if(resp.isNotEmpty) resp[0].custOfferResponse.custDeal='best1';
-      if(resp.length>1) resp[1].custOfferResponse.custDeal='best2';
-      if(resp.length>2) resp[3].custOfferResponse.custDeal='best3';
-      if(resp.length>3) {
-        for (int i = 4; i < resp.length; i++) {
-          resp[i].custOfferResponse.custDeal = 'notBest';
-        }
-      }
-
+      // SORT OFFERS
+      // if (resp.isNotEmpty) {
+      //   resp.sort((a, b) => a.merchResponse.merchTotalPrice
+      //       .compareTo(b.merchResponse.merchTotalPrice));
+      //   resp = resp.reversed.toList();
+      //   resp.sort((a, b) => a.merchResponse.merchOfferQuantity
+      //       .compareTo(b.merchResponse.merchOfferQuantity));
+      //   resp = resp.reversed.toList();
+      //
+      //   final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
+      //
+      //   for (int i = 0; i < resp.length; i++) {
+      //     if (AppHelpers.isInBetween(
+      //           double.parse(resp[i].merchResponse.merchTotalPrice),
+      //           bestPrice,
+      //           bestPrice + 50,
+      //         ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best1';
+      //     } else if (AppHelpers.isInBetween(
+      //           double.parse(resp[i].merchResponse.merchTotalPrice),
+      //           bestPrice + 50,
+      //           bestPrice + 100,
+      //         ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best2';
+      //     } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
+      //             bestPrice + 100 &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity){
+      //       resp[i].custOfferResponse.custDeal = 'best3';
+      //     }else{
+      //       resp[i].custOfferResponse.custDeal = 'notBest';
+      //     }
+      //   }
+      // }
+      resp.sort((a, b) =>
+          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
       return resp;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);

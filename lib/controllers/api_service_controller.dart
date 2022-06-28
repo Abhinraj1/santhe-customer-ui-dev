@@ -513,8 +513,6 @@ class APIs extends GetxController {
       if (jsonResponse['fields'] == null) {
         return 0;
       }
-      var data = jsonResponse['fields'];
-
       return 1;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
@@ -1217,7 +1215,6 @@ class APIs extends GetxController {
   //SENT TAB POST
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
       int listId) async {
-    print('get_here');
     String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));

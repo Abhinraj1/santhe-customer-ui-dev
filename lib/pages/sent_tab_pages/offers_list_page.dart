@@ -39,7 +39,7 @@ class _OffersListPageState extends State<OffersListPage>
   void initState() {
     listOffersData = apiController.getAllMerchOfferByListId(
       widget.userList.listId,
-      widget.userList.items.length,
+      // widget.userList.items.length,
     );
     super.initState();
   }
@@ -51,7 +51,7 @@ class _OffersListPageState extends State<OffersListPage>
         widget.userList.processStatus = 'accepted';
         listOffersData = apiController.getAllMerchOfferByListId(
           widget.userList.listId,
-          widget.userList.items.length,
+          // widget.userList.items.length,
         );
       });
       widget.function(widget.overrideData);
@@ -76,7 +76,7 @@ class _OffersListPageState extends State<OffersListPage>
                       //future builder will take care of future value so no need to mark this function async
                       listOffersData = apiController.getAllMerchOfferByListId(
                         widget.userList.listId,
-                        widget.userList.items.length,
+                        // widget.userList.items.length,
                       );
                     });
                     return;

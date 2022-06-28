@@ -565,6 +565,28 @@ class APIs extends GetxController {
     }
   }
 
+  Future removeNewList(String userListId) async {
+    final String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$userListId?updateMask.fieldPaths=custListStatus';
+
+    final body = {
+      "fields": {
+        "custListStatus": {"stringValue": "purged"}
+      }
+    };
+
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      log(data.toString());
+      return 1;
+    } else {
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return 0;
+    }
+  }
+
   //-------------------------------------User List--------------------------------------
 
   //patch
@@ -667,8 +689,7 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);

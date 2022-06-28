@@ -136,6 +136,25 @@ class NewListController extends GetxController{
     }
   }
 
+  Future<void> deleteListFromDB(String listId) async {
+    isProcessing.value = true;
+    int response = await APIs().removeNewList(listId);
+    isProcessing.value = false;
+    if (response == 1) {
+      for(int i = 0; i < allList.length; i++){
+        if(allList[i].listId == listId){
+          allList[i].custListStatus = 'purged';
+          break;
+        }
+      }
+      newList.remove(listId);
+      update(['list', 'fab']);
+      Get.back();
+    } else {
+      errorMsg('Error Occurred', 'Please try again');
+    }
+  }
+
   bool isListAlreadyExist(String listName){
     return allList.where((element) => element.listName == listName).toList().isNotEmpty;
   }

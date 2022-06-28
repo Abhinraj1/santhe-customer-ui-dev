@@ -52,6 +52,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
   void initState(){
     super.initState();
     _newListController.getAllList();
+    _newListController.lengthLimit = widget.limit;
   }
 
   String? selectedValue;
@@ -68,7 +69,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
       floatingActionButton: GetBuilder(
         init: _newListController,
         id: 'fab',
-        builder: (ctr) => _newListController.newList.length >= widget.limit || _newListController.isLoading ?
+        builder: (ctr) => _newListController.newList.length >= _newListController.lengthLimit || _newListController.isLoading ?
           const SizedBox() :
           FloatingActionButton(
           elevation: 0.0,

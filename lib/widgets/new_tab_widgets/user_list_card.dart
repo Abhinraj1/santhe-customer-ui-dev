@@ -3,16 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/controllers/getx/new_list_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
-import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
-import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:get/get.dart';
-import '../../controllers/api_service_controller.dart';
-import '../../controllers/boxes_controller.dart';
-import 'package:santhe/models/santhe_user_list_model.dart';
 
+import '../../core/app_colors.dart';
 import '../../models/new_list/user_list_model.dart';
 
 class UserListCard extends StatelessWidget {
@@ -21,10 +16,10 @@ class UserListCard extends StatelessWidget {
   UserListCard({Key? key, required this.userList})
       : super(key: key);
   final int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  final NewListController _newListController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
 
     //image logic
@@ -70,39 +65,10 @@ class UserListCard extends StatelessWidget {
               children: [
                 //copy from old list
                 Visibility(
-                  visible: Boxes.getUserListDB().values.length < 3,
+                  visible: _newListController.newList.length < _newListController.lengthLimit,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      /*int userListCount = 0;
-                      UserList oldUserList = Boxes.getUserListDB()
-                          .values
-                          .firstWhere(
-                              (element) => element.listId == userList.listId);
-
-                      UserList newImportedList = UserList(
-                        createListTime: DateTime.now(),
-                        custId: oldUserList.custId,
-                        items: oldUserList.items,
-                        listId: int.parse('$custId${userListCount + 1}'),
-                        listName: '(COPY) ${oldUserList.listName}',
-                        custListSentTime: oldUserList.custListSentTime,
-                        custListStatus: oldUserList.custListStatus,
-                        listOfferCounter: oldUserList.listOfferCounter,
-                        processStatus: oldUserList.processStatus,
-                        custOfferWaitTime: oldUserList.custOfferWaitTime,
-                        updateListTime: DateTime.now(),
-                      );
-
-                      int response = await apiController.addCustomerList(
-                          newImportedList, custId, 'new');
-
-                      if (response == 1) {
-                        box.add(newImportedList);
-                        Get.to(() => UserListPage(
-                          userList: newImportedList,
-                          userKey: userKey,
-                        ));
-                      }*/
+                      _newListController.addCopyListToDB(userList.listId);
                     },
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
@@ -114,14 +80,10 @@ class UserListCard extends StatelessWidget {
                 //delete list
                 SlidableAction(
                   onPressed: (context) async {
-                    /*int pressCount = 0;
-
-                    //delete userList from DB
-                    final box = Boxes.getUserListDB();
-                    userList.delete();
-
+                    int pressCount = 0;
+                    _newListController.deleteListFromDB(userList.listId);
                     //undo feature
-                    Get.snackbar(
+                    /*Get.snackbar(
                       '',
                       '',
                       duration: const Duration(milliseconds: 4000),
@@ -145,7 +107,7 @@ class UserListCard extends StatelessWidget {
                       ),
                       mainButton: TextButton(
                         onPressed: () async {
-                          Get.closeCurrentSnackbar();
+                          *//*Get.closeCurrentSnackbar();
                           if (pressCount < 1) {
                             Future.delayed(const Duration(seconds: 1),
                                 () async {
@@ -162,7 +124,7 @@ class UserListCard extends StatelessWidget {
                           if (box.length >= 2) {
                             Get.offAll(() => const HomePage(),
                                 transition: Transition.fadeIn);
-                          }
+                          }*//*
                         },
                         child: const Text(
                           'Undo',
@@ -172,23 +134,17 @@ class UserListCard extends StatelessWidget {
                               fontSize: 15),
                         ),
                       ),
-                    );
+                    );*/
                     if (pressCount == 0) {
-                      apiController.deletedUserLists.add(userList);
+                      /*apiController.deletedUserLists.add(userList);
 
                       int response =
                           await apiController.deleteUserList(userList.listId);
 
                       if (response == 1) {
                         apiController.deletedUserLists.remove(userList);
-                      }
+                      }*/
                     }
-
-                    //for bringing Floating Action Button
-                    if (box.length >= 2) {
-                      Get.offAll(() => const HomePage(),
-                          transition: Transition.fadeIn);
-                    }*/
                   },
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,

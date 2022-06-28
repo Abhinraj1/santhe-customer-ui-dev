@@ -50,7 +50,7 @@ class CustomerOfferResponse {
         listId: Id.fromJson(json["listId"]),
         merchId: Id.fromJson(json["merchId"]),
         merchResponse: MerchResponse.fromJson(json["merchResponse"]),
-        requestForDay: int.parse(json['requestForDay']),
+        requestForDay: json['requestForDay'],
         merchReqDate: DateTime.parse(json['merchReqDate']),
       );
 

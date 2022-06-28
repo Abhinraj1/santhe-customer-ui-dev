@@ -2,12 +2,14 @@
 //
 //     final customerOfferResponse = customerOfferResponseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<CustomerOfferResponse> customerOfferResponseFromJson(String str) => List<CustomerOfferResponse>.from(json.decode(str).map((x) => CustomerOfferResponse.fromJson(x)));
+List<CustomerOfferResponse> customerOfferResponseFromJson(String str) =>
+    List<CustomerOfferResponse>.from(
+        json.decode(str).map((x) => CustomerOfferResponse.fromJson(x)));
 
-String customerOfferResponseToJson(List<CustomerOfferResponse> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String customerOfferResponseToJson(List<CustomerOfferResponse> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class CustomerOfferResponse {
   CustomerOfferResponse({
@@ -15,50 +17,56 @@ class CustomerOfferResponse {
     required this.contactEnabled,
     required this.custDistance,
     required this.custOfferResponse,
-    required this.custStatus,
     required this.eventExpiryTime,
     required this.listEventId,
     required this.listId,
     required this.merchId,
     required this.merchResponse,
+    required this.requestForDay,
+    required this.merchReqDate,
   });
 
   bool chatEnabled;
   bool contactEnabled;
   int custDistance;
   CustOfferResponse custOfferResponse;
-  String custStatus;
   Time eventExpiryTime;
   String listEventId;
   Id listId;
   Id merchId;
   MerchResponse merchResponse;
+  int requestForDay;
+  DateTime merchReqDate;
 
-  factory CustomerOfferResponse.fromJson(Map<String, dynamic> json) => CustomerOfferResponse(
-    chatEnabled: json["chatEnabled"],
-    contactEnabled: json["contactEnabled"],
-    custDistance: json["custDistance"],
-    custOfferResponse: CustOfferResponse.fromJson(json["custOfferResponse"]),
-    custStatus: json["custStatus"],
-    eventExpiryTime: Time.fromJson(json["eventExpiryTime"]),
-    listEventId: json["listEventId"],
-    listId: Id.fromJson(json["listId"]),
-    merchId: Id.fromJson(json["merchId"]),
-    merchResponse: MerchResponse.fromJson(json["merchResponse"]),
-  );
+  factory CustomerOfferResponse.fromJson(Map<String, dynamic> json) =>
+      CustomerOfferResponse(
+        chatEnabled: json["chatEnabled"],
+        contactEnabled: json["contactEnabled"],
+        custDistance: json["custDistance"],
+        custOfferResponse:
+            CustOfferResponse.fromJson(json["custOfferResponse"]),
+        eventExpiryTime: Time.fromJson(json["eventExpiryTime"]),
+        listEventId: json["listEventId"],
+        listId: Id.fromJson(json["listId"]),
+        merchId: Id.fromJson(json["merchId"]),
+        merchResponse: MerchResponse.fromJson(json["merchResponse"]),
+        requestForDay: json['requestForDay'],
+        merchReqDate: DateTime.parse(json['merchReqDate']),
+      );
 
   Map<String, dynamic> toJson() => {
-    "chatEnabled": chatEnabled,
-    "contactEnabled": contactEnabled,
-    "custDistance": custDistance,
-    "custOfferResponse": custOfferResponse.toJson(),
-    "custStatus": custStatus,
-    "eventExpiryTime": eventExpiryTime.toJson(),
-    "listEventId": listEventId,
-    "listId": listId.toJson(),
-    "merchId": merchId.toJson(),
-    "merchResponse": merchResponse.toJson(),
-  };
+        "chatEnabled": chatEnabled,
+        "contactEnabled": contactEnabled,
+        "custDistance": custDistance,
+        "custOfferResponse": custOfferResponse.toJson(),
+        "eventExpiryTime": eventExpiryTime.toJson(),
+        "listEventId": listEventId,
+        "listId": listId.toJson(),
+        "merchId": merchId.toJson(),
+        "merchResponse": merchResponse.toJson(),
+        "requestForDay": requestForDay,
+        "merchReqDate": merchReqDate,
+      };
 }
 
 class CustOfferResponse {
@@ -72,17 +80,18 @@ class CustOfferResponse {
   String custOfferStatus;
   String custDeal;
 
-  factory CustOfferResponse.fromJson(Map<String, dynamic> json) => CustOfferResponse(
-    custUpdateTime: Time.fromJson(json["custUpdateTime"]),
-    custOfferStatus: json["custOfferStatus"],
-    custDeal: json["custDeal"],
-  );
+  factory CustOfferResponse.fromJson(Map<String, dynamic> json) =>
+      CustOfferResponse(
+        custUpdateTime: Time.fromJson(json["custUpdateTime"]),
+        custOfferStatus: json["custOfferStatus"],
+        custDeal: json["custDeal"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "custUpdateTime": custUpdateTime.toJson(),
-    "custOfferStatus": custOfferStatus,
-    "custDeal": custDeal,
-  };
+        "custUpdateTime": custUpdateTime.toJson(),
+        "custOfferStatus": custOfferStatus,
+        "custDeal": custDeal,
+      };
 }
 
 class Time {
@@ -95,14 +104,14 @@ class Time {
   int nanoseconds;
 
   factory Time.fromJson(Map<String, dynamic> json) => Time(
-    seconds: json["_seconds"],
-    nanoseconds: json["_nanoseconds"],
-  );
+        seconds: json["_seconds"],
+        nanoseconds: json["_nanoseconds"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_seconds": seconds,
-    "_nanoseconds": nanoseconds,
-  };
+        "_seconds": seconds,
+        "_nanoseconds": nanoseconds,
+      };
 }
 
 class Id {
@@ -117,26 +126,24 @@ class Id {
   Converter converter;
 
   factory Id.fromJson(Map<String, dynamic> json) => Id(
-    firestore: Firestore.fromJson(json["_firestore"]),
-    path: Path.fromJson(json["_path"]),
-    converter: Converter.fromJson(json["_converter"]),
-  );
+        firestore: Firestore.fromJson(json["_firestore"]),
+        path: Path.fromJson(json["_path"]),
+        converter: Converter.fromJson(json["_converter"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "_firestore": firestore.toJson(),
-    "_path": path.toJson(),
-    "_converter": converter.toJson(),
-  };
+        "_firestore": firestore.toJson(),
+        "_path": path.toJson(),
+        "_converter": converter.toJson(),
+      };
 }
 
 class Converter {
   Converter();
 
-  factory Converter.fromJson(Map<String, dynamic> json) => Converter(
-  );
+  factory Converter.fromJson(Map<String, dynamic> json) => Converter();
 
-  Map<String, dynamic> toJson() => {
-  };
+  Map<String, dynamic> toJson() => {};
 }
 
 class Firestore {
@@ -147,12 +154,12 @@ class Firestore {
   String projectId;
 
   factory Firestore.fromJson(Map<String, dynamic> json) => Firestore(
-    projectId: json["projectId"],
-  );
+        projectId: json["projectId"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "projectId": projectId,
-  };
+        "projectId": projectId,
+      };
 }
 
 class Path {
@@ -163,12 +170,12 @@ class Path {
   List<String> segments;
 
   factory Path.fromJson(Map<String, dynamic> json) => Path(
-    segments: List<String>.from(json["segments"].map((x) => x)),
-  );
+        segments: List<String>.from(json["segments"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "segments": List<dynamic>.from(segments.map((x) => x)),
-  };
+        "segments": List<dynamic>.from(segments.map((x) => x)),
+      };
 }
 
 class MerchResponse {
@@ -191,22 +198,22 @@ class MerchResponse {
   String merchTotalPrice;
 
   factory MerchResponse.fromJson(Map<String, dynamic> json) => MerchResponse(
-    merchResponseStatus: json["merchResponseStatus"],
-    merchListStatus: json["merchListStatus"],
-    merchDelivery: json["merchDelivery"],
-    merchUpdateTime: Time.fromJson(json["merchUpdateTime"]),
-    merchOfferQuantity: json["merchOfferQuantity"],
-    merchFulfillmentResponse: json["merchFulfillmentResponse"],
-    merchTotalPrice: json["merchTotalPrice"],
-  );
+        merchResponseStatus: json["merchResponseStatus"],
+        merchListStatus: json["merchListStatus"],
+        merchDelivery: json["merchDelivery"],
+        merchUpdateTime: Time.fromJson(json["merchUpdateTime"]),
+        merchOfferQuantity: json["merchOfferQuantity"],
+        merchFulfillmentResponse: json["merchFulfillmentResponse"],
+        merchTotalPrice: json["merchTotalPrice"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "merchResponseStatus": merchResponseStatus,
-    "merchListStatus": merchListStatus,
-    "merchDelivery": merchDelivery,
-    "merchUpdateTime": merchUpdateTime.toJson(),
-    "merchOfferQuantity": merchOfferQuantity,
-    "merchFulfillmentResponse": merchFulfillmentResponse,
-    "merchTotalPrice": merchTotalPrice,
-  };
+        "merchResponseStatus": merchResponseStatus,
+        "merchListStatus": merchListStatus,
+        "merchDelivery": merchDelivery,
+        "merchUpdateTime": merchUpdateTime.toJson(),
+        "merchOfferQuantity": merchOfferQuantity,
+        "merchFulfillmentResponse": merchFulfillmentResponse,
+        "merchTotalPrice": merchTotalPrice,
+      };
 }

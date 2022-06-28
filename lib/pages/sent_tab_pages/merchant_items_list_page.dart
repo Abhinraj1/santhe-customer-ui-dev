@@ -46,7 +46,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
     if (widget.archived || widget.overrideData) {
       final data = await apiController.getAllMerchOfferByListId(
         widget.userList.listId,
-        widget.userList.items.length,
+        // widget.userList.items.length,
       );
       widget.currentMerchantOffer = data.firstWhere(
           (element) => element.custOfferResponse.custOfferStatus == 'accepted');
@@ -272,7 +272,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                 .userList.listId
                                                                 .toString(),
                                                         merchantTitle:
-                                                            'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
                                                       ),
                                                       type: PageTransitionType
                                                           .rightToLeft),

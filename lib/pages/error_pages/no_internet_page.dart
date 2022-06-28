@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/core/app_helpers.dart';
 
 class NoInternetPage extends StatefulWidget {
   const NoInternetPage({Key? key}) : super(key: key);
@@ -13,30 +12,8 @@ class NoInternetPage extends StatefulWidget {
 }
 
 class _NoInternetPageState extends State<NoInternetPage> {
-  late Timer timer;
 
-  void checkInternet(BuildContext context) async{
-    final hasConnection = await AppHelpers.checkConnection();
-    if (hasConnection) {
-      timer.cancel();
-      Navigator.of(context).pop();
-    }
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    timer = Timer.periodic(
-      const Duration(seconds: 2),
-          (_) => checkInternet(context),
-    );
-    super.initState();
-  }
+  final ConnectivityController _connectivityController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +68,7 @@ class _NoInternetPageState extends State<NoInternetPage> {
                 height: 40.sp,
               ),
               InkWell(
-                onTap: () => checkInternet(context),
+                onTap: () => _connectivityController.checkConnectivity(),
                 child: Container(
                   height: 50.sp,
                   width: screenSize.width/3,

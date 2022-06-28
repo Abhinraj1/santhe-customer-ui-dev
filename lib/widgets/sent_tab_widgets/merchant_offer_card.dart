@@ -118,7 +118,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                 ]),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width/3,
+                            width: MediaQuery.of(context).size.width / 3,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 12.0),
                               child: Text(
@@ -282,7 +282,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                           decoration: BoxDecoration(
                                               color: AppColors().brandDark,
                                               borderRadius:
-                                              BorderRadius.circular(60)),
+                                                  BorderRadius.circular(60)),
                                           child: Center(
                                             child: Icon(
                                               Icons.phone,
@@ -315,32 +315,40 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                     ),
                                     //chat button
                                     SizedBox(
-                                        height: 32.h,
-                                        width: 92.w,
-                                        child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                PageTransition(child: ChatScreen(
+                                      height: 32.h,
+                                      width: 92.w,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                child: ChatScreen(
                                                   chatId: widget.userList.listId
                                                       .toString(),
-                                                  customerTitle: widget.currentMerchantOffer.merchResponse.merchTotalPrice,
-                                                  merchantTitle: 'Request 1 of ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
-                                                  listEventId:
-                                                  merchantResponse!
-                                                      .fields
-                                                      .merchId
-                                                      .integerValue +
+                                                  customerTitle: widget
+                                                      .currentMerchantOffer
+                                                      .merchResponse
+                                                      .merchTotalPrice,
+                                                  merchantTitle:
+                                                      'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
+                                                  listEventId: merchantResponse!
+                                                          .fields
+                                                          .merchId
+                                                          .integerValue +
                                                       widget.userList.listId
                                                           .toString(),
-                                                ), type: PageTransitionType.rightToLeft),
-                                              );
-                                            },
-                                            child: Text(
-                                              'Chat',
-                                              style: AppTheme().bold700(16,
-                                                  color: AppColors().white100),
-                                            ),),),
+                                                ),
+                                                type: PageTransitionType
+                                                    .rightToLeft),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Chat',
+                                          style: AppTheme().bold700(16,
+                                              color: AppColors().white100),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 );
                               },

@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/new_list_response_model.dart';
+import '../../network_call/network_call.dart';
 import '../boxes_controller.dart';
 
 class AllListController extends GetxController{
@@ -27,7 +27,7 @@ class AllListController extends GetxController{
   Map<String, UserListModel> newList = {};
 
   Future<void> getAllList() async {
-    var val = await APIs().getAllCustomerLists(0);
+    var val = await NetworkCall().getAllCustomerLists();
     for (var element in _toUserListModel(val)) {
       allListMap[element.listId] = element;
     }
@@ -116,7 +116,7 @@ class AllListController extends GetxController{
       updateListTime:
       DateTime.now(),
     );
-    int response = await APIs().addNewList(newUserList);
+    int response = await NetworkCall().addNewList(newUserList);
     isProcessing.value = false;
     if (response == 1) {
       allListMap[newUserList.listId] = newUserList;
@@ -131,7 +131,7 @@ class AllListController extends GetxController{
   Future<void> addCopyListToDB(String listId) async {
     isProcessing.value = true;
     var copyUserList = allList.where((element) => element.listId == listId).toList().first;
-    int response = await APIs().addNewList(
+    int response = await NetworkCall().addNewList(
         copyUserList..listName = 'COPY ${copyUserList.listName}'
           ..listId = AppHelpers().getPhoneNumberWithoutCountryCode + (allList.length + 1).toString());
     isProcessing.value = false;
@@ -147,7 +147,7 @@ class AllListController extends GetxController{
 
   Future<void> deleteListFromDB(String listId) async {
     isProcessing.value = true;
-    int response = await APIs().removeNewList(listId);
+    int response = await NetworkCall().removeNewList(listId);
     isProcessing.value = false;
     if (response == 1) {
       allListMap[listId]?.custListStatus = 'purged';
@@ -162,7 +162,7 @@ class AllListController extends GetxController{
   bool isListAlreadyExist(String listName) => allList.where((element) => element.listName == listName).toList().isNotEmpty;
 
   Future<void> checkSubPlan() async {
-    final data = await APIs().getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
+    final data = await NetworkCall().getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
     lengthLimit = data;
   }
 }

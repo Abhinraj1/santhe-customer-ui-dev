@@ -3,20 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:santhe/controllers/getx/new_list_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:get/get.dart';
 
 import '../../core/app_colors.dart';
 import '../../models/new_list/user_list_model.dart';
+import '../../pages/new_tab_pages/user_list_page.dart';
 
 class UserListCard extends StatelessWidget {
   final UserListModel userList;
 
   UserListCard({Key? key, required this.userList})
       : super(key: key);
-  final int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
-  final NewListController _newListController = Get.find();
+  final AllListController _allListController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,7 @@ class UserListCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () async {
-          //print(userList.items.first.quantity);
-         // Get.to(() => UserListPage(userList: userList, userKey: userKey));
+         Get.to(() => UserListPage(listId: userList.listId));
         },
         child: Container(
           // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -65,10 +64,10 @@ class UserListCard extends StatelessWidget {
               children: [
                 //copy from old list
                 Visibility(
-                  visible: _newListController.newList.length < _newListController.lengthLimit,
+                  visible: _allListController.newList.length < _allListController.lengthLimit,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      _newListController.addCopyListToDB(userList.listId);
+                      _allListController.addCopyListToDB(userList.listId);
                     },
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
@@ -81,7 +80,7 @@ class UserListCard extends StatelessWidget {
                 SlidableAction(
                   onPressed: (context) async {
                     int pressCount = 0;
-                    _newListController.deleteListFromDB(userList.listId);
+                    _allListController.deleteListFromDB(userList.listId);
                     //undo feature
                     /*Get.snackbar(
                       '',

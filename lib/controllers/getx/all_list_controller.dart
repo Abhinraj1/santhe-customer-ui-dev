@@ -6,8 +6,9 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/new_list_response_model.dart';
+import '../boxes_controller.dart';
 
-class NewListController extends GetxController{
+class AllListController extends GetxController{
 
   bool isLoading = true;
 
@@ -15,13 +16,21 @@ class NewListController extends GetxController{
 
   int lengthLimit = 3;
 
-  List<UserListModel> allList = [];
+  Map<String, UserListModel> allListMap = {};
+
+  List<UserListModel> get allList => allListMap.values.toList();
+
+  List<UserListModel> get sentList => allListMap.values.toList().where((element) => element.custListStatus == 'sent').toList();
+
+  List<UserListModel> get archivedList => allListMap.values.toList().where((element) => element.custListStatus == 'archived').toList();
 
   Map<String, UserListModel> newList = {};
 
   Future<void> getAllList() async {
     var val = await APIs().getAllCustomerLists(0);
-    allList = _toUserListModel(val);
+    for (var element in _toUserListModel(val)) {
+      allListMap[element.listId] = element;
+    }
     isLoading = false;
     newList.clear();
     for (var element in allList) {
@@ -29,7 +38,7 @@ class NewListController extends GetxController{
         newList[element.listId] = element;
       }
     }
-    update(['list', 'fab']);
+    update(['newList', 'fab', 'archivedList', 'sentList']);
   }
 
   List<UserListModel> _toUserListModel(List<NewListResponseModel> model){
@@ -110,7 +119,7 @@ class NewListController extends GetxController{
     int response = await APIs().addNewList(newUserList);
     isProcessing.value = false;
     if (response == 1) {
-      allList.add(newUserList);
+      allListMap[newUserList.listId] = newUserList;
       newList[newUserList.listId] = newUserList;
       update(['list', 'fab']);
       Get.back();
@@ -127,7 +136,7 @@ class NewListController extends GetxController{
           ..listId = AppHelpers().getPhoneNumberWithoutCountryCode + (allList.length + 1).toString());
     isProcessing.value = false;
     if (response == 1) {
-      allList.add(copyUserList);
+      allListMap[copyUserList.listId] = copyUserList;
       newList[copyUserList.listId] = copyUserList;
       update(['list', 'fab']);
       Get.back();
@@ -141,12 +150,7 @@ class NewListController extends GetxController{
     int response = await APIs().removeNewList(listId);
     isProcessing.value = false;
     if (response == 1) {
-      for(int i = 0; i < allList.length; i++){
-        if(allList[i].listId == listId){
-          allList[i].custListStatus = 'purged';
-          break;
-        }
-      }
+      allListMap[listId]?.custListStatus = 'purged';
       newList.remove(listId);
       update(['list', 'fab']);
       Get.back();
@@ -155,7 +159,10 @@ class NewListController extends GetxController{
     }
   }
 
-  bool isListAlreadyExist(String listName){
-    return allList.where((element) => element.listName == listName).toList().isNotEmpty;
+  bool isListAlreadyExist(String listName) => allList.where((element) => element.listName == listName).toList().isNotEmpty;
+
+  Future<void> checkSubPlan() async {
+    final data = await APIs().getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
+    lengthLimit = data;
   }
 }

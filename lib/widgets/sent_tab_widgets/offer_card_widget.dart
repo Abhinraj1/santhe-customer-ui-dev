@@ -136,8 +136,7 @@ class _OfferCardState extends State<OfferCard> {
                         }
                         if (key != -1) {
                           Get.to(() => UserListPage(
-                                userList: newImportedList,
-                                userKey: key,
+                                listId: newImportedList.listId.toString(),
                               ));
                         } else {
                           Get.offAll(const HomePage(

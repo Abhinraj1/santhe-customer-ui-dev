@@ -7,9 +7,9 @@ import '../../../pages/new_tab_pages/category_items_list_page.dart';
 
 class CategoryTile extends StatelessWidget {
   final Category category;
-  final int currentUserListDBKey;
+  final String listId;
   const CategoryTile(
-      {required this.category, required this.currentUserListDBKey, Key? key})
+      {required this.category, required this.listId, Key? key})
       : super(key: key);
 
   @override
@@ -19,10 +19,10 @@ class CategoryTile extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-          Get.to(() => CategoryItemsPage(
+          /*Get.to(() => CategoryItemsPage(
                 catID: category.catId,
                 currentUserListDBKey: currentUserListDBKey,
-              ));
+              ));*/
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

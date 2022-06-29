@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/new_list/list_item_model.dart';
 
 import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
@@ -14,11 +15,10 @@ import '../../../models/santhe_user_list_model.dart';
 import '../../pop_up_widgets/new_item_popup_widget.dart';
 
 class ListItemCard extends StatelessWidget {
-  final ListItem listItem;
-  final int currentUserListDBKey;
+  final ListItemModel listItem;
 
   const ListItemCard(
-      {required this.listItem, required this.currentUserListDBKey, Key? key})
+      {required this.listItem, Key? key})
       : super(key: key);
 
   @override
@@ -33,10 +33,6 @@ class ListItemCard extends StatelessWidget {
       }
       return data;
     }
-
-    UserList currentUserList =
-        Boxes.getUserListDB().get(currentUserListDBKey) ??
-            fallBack_error_userList;
 
     String img = listItem.itemImageId.replaceAll(
         'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
@@ -119,8 +115,9 @@ class ListItemCard extends StatelessWidget {
                           barrierColor:
                               const Color.fromARGB(165, 241, 241, 241),
                           builder: (context) {
-                            log(listItem.notes);
-                            return NewItemPopUpWidget(
+                            return SizedBox();
+
+                            /*return NewItemPopUpWidget(
                               item: Item(
                                 status: '',
                                 catId: listItem.catId.toString(),
@@ -141,7 +138,7 @@ class ListItemCard extends StatelessWidget {
                               ),
                               currentUserListDBKey: currentUserListDBKey,
                               edit: true,
-                            );
+                            );*/
                           });
                     },
                     splashRadius: 0.1,
@@ -151,16 +148,15 @@ class ListItemCard extends StatelessWidget {
                     )),
                 IconButton(
                     onPressed: () {
-                      //TODO implement delete feature
+                      /*//TODO implement delete feature
 
                       //deleting item
                       currentUserList.items.remove(listItem);
 
                       //make changes persistent
-                      currentUserList.save();
+                      currentUserList.save();*/
                     },
-                    icon: const Icon(Icons.delete_forever_outlined,
-                        color: Colors.orange)),
+                    icon: const Icon(Icons.delete_forever_outlined, color: Colors.orange)),
               ],
             ),
           ],

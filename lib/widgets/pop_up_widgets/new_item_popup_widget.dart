@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/new_list/list_item_model.dart';
+import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
 
 import '../../constants.dart';
@@ -24,14 +27,14 @@ import '../../pages/new_tab_pages/image_page.dart';
 
 class NewItemPopUpWidget extends StatefulWidget {
   final Item item;
-  final int currentUserListDBKey;
+  final String listId;
   final bool edit;
   final bool? fromSearch;
 
   const NewItemPopUpWidget(
       {Key? key,
       required this.item,
-      required this.currentUserListDBKey,
+      required this.listId,
       this.edit = false,
       this.fromSearch})
       : super(key: key);
@@ -137,7 +140,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   }
 
   late final Item item = widget.item;
-  late final int currentUserListDBKey = widget.currentUserListDBKey;
 
   late String selectedUnit = units[units.indexWhere(
       (element) => element.toLowerCase() == item.dUnit.toLowerCase())];
@@ -147,9 +149,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   late final imageController = Get.find<CustomImageController>();
 
-  late UserList currentUserList =
-      Boxes.getUserListDB().get(currentUserListDBKey) ??
-          fallBack_error_userList;
+  final AllListController _allListController = Get.find();
+
+  late UserListModel currentUserList = _allListController.allListMap[widget.listId]!;
 
   static const TextStyle kLabelTextStyle = TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
@@ -811,17 +813,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                 if (_formKey.currentState!
                                                     .validate()) {
                                                   //--------------------------Creating List Item from Item and new data gathered from user------------------------
-                                                  if (imageController
-                                                          .editItemCustomImageUrl
-                                                          .value
-                                                          .isEmpty ||
-                                                      imageController
-                                                              .editItemCustomImageUrl
-                                                              .value ==
-                                                          '') {
-                                                    final listItem = ListItem(
-                                                      brandType:
-                                                          placeHolderValidation(
+                                                  if (imageController.editItemCustomImageUrl.value.isEmpty || imageController.editItemCustomImageUrl.value == '') {
+                                                    final listItem = ListItemModel(
+                                                      brandType: placeHolderValidation(
                                                               item.dBrandType,
                                                               _brandController),
                                                       itemId: '${item.itemId}',
@@ -830,14 +824,12 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                       itemName:
                                                           _customItemNameController
                                                               .text,
-                                                      quantity: double.parse(
-                                                          _qtyController.text),
+                                                      quantity: _qtyController.text,
                                                       notes:
                                                           placeHolderValidation(
                                                               item.dItemNotes,
                                                               _notesController),
                                                       unit: itemUnit,
-                                                      possibleUnits: item.unit,
                                                       catName: Boxes
                                                                   .getCategoriesDB()
                                                               .get(int.parse(item
@@ -847,11 +839,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                                       '')))
                                                               ?.catName ??
                                                           'Others',
-                                                      catId: int.parse(
-                                                        item.catId.replaceAll(
-                                                            'projects/santhe-425a8/databases/(default)/documents/category/',
-                                                            ''),
-                                                      ),
+                                                      catId: item.catId.replaceAll(
+                                                          'projects/santhe-425a8/databases/(default)/documents/category/',
+                                                          ''),
                                                     );
                                                     if (widget.edit) {
                                                       currentUserList.items
@@ -862,10 +852,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                                   listItem
                                                                       .itemId);
                                                     }
-                                                    currentUserList.items
-                                                        .add(listItem);
+                                                    currentUserList.items.add(listItem);
                                                     //make changes persistent
-                                                    currentUserList.save();
+                                                    //currentUserList.save();
                                                     if (!widget.edit &&
                                                         widget.fromSearch !=
                                                             true) {
@@ -965,10 +954,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                                       .itemId ==
                                                                   '${item.itemId}');
                                                         }
-                                                        currentUserList.items
+                                                        /*currentUserList.items
                                                             .add(listItem);
                                                         //make changes persistent
-                                                        currentUserList.save();
+                                                        currentUserList.save();*/
                                                       } else {
                                                         Get.snackbar(
                                                             'Network Error',

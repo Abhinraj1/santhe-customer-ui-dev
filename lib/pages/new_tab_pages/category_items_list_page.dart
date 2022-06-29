@@ -4,6 +4,8 @@ import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/models/new_list/user_list_model.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
@@ -16,9 +18,9 @@ import '../../widgets/new_tab_widgets/user_list_widgets/item_tile_btn.dart';
 
 class CategoryItemsPage extends StatefulWidget {
   final int catID;
-  final int currentUserListDBKey;
+  final String listId;
   const CategoryItemsPage(
-      {required this.catID, required this.currentUserListDBKey, Key? key})
+      {required this.catID, required this.listId, Key? key})
       : super(key: key);
 
   @override
@@ -27,11 +29,12 @@ class CategoryItemsPage extends StatefulWidget {
 
 class _CategoryItemsPageState extends State<CategoryItemsPage> {
   final apiController = Get.find<APIs>();
+  final AllListController _allListController = Get.find();
+  late UserListModel currentUserList = _allListController.allListMap[widget.listId]!;
 
   @override
   Widget build(BuildContext context) {
     final int catID = widget.catID;
-    final int currentUserListDBKey = widget.currentUserListDBKey;
 
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Scaffold(
@@ -76,7 +79,7 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                   itemBuilder: (context, index) {
                     return ItemTileBtn(
                       item: snapshot.data![index],
-                      currentUserListDBKey: currentUserListDBKey,
+                      listId: widget.listId,
                     );
                   });
             } else {
@@ -117,53 +120,45 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 18.0, vertical: 10.0),
-                      child: ValueListenableBuilder<Box<UserList>>(
-                        valueListenable: Boxes.getUserListDB().listenable(),
-                        builder: (context, box, widget) {
-                          UserList currentUserList =
-                              Boxes.getUserListDB().get(currentUserListDBKey) ??
-                                  fallBack_error_userList;
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: AutoSizeText(
+                              currentUserList.listName,
+                              maxLines: 2,
+                              textAlign: TextAlign.left,
+                              minFontSize: 14,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: const Color(0xffB0B0B0),
+                                  fontSize: 18.sp),
+                            ),
+                          ),
+                          Column(
                             children: [
-                              Expanded(
-                                child: AutoSizeText(
-                                  currentUserList.listName,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.left,
-                                  minFontSize: 14,
+                              Flexible(
+                                child: Text(
+                                  '${currentUserList.items.length}',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xffB0B0B0),
-                                      fontSize: 18.sp),
+                                      fontSize: 21.sp,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.orange),
                                 ),
                               ),
-                              Column(
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      '${currentUserList.items.length}',
-                                      style: TextStyle(
-                                          fontSize: 21.sp,
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.orange),
-                                    ),
-                                  ),
-                                  Text(
-                                    currentUserList.items.length < 2
-                                        ? 'Item'
-                                        : 'Items',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14.sp,
-                                        color: Colors.orange),
-                                  )
-                                ],
-                              ),
+                              Text(
+                                currentUserList.items.length < 2
+                                    ? 'Item'
+                                    : 'Items',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.sp,
+                                    color: Colors.orange),
+                              )
                             ],
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ),
                   ),

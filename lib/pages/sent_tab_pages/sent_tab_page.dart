@@ -15,7 +15,7 @@ class OfferTabPage extends StatefulWidget {
   State<OfferTabPage> createState() => _OfferTabPageState();
 }
 
-class _OfferTabPageState extends State<OfferTabPage> {
+class _OfferTabPageState extends State<OfferTabPage>  with AutomaticKeepAliveClientMixin {
   int custPhone = Boxes.getUser().get('currentUserDetails')?.phoneNumber ?? 404;
   final apiController = Get.find<APIs>();
   late Future<List<UserList>> userSentListsData;
@@ -32,6 +32,7 @@ class _OfferTabPageState extends State<OfferTabPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: FutureBuilder<List<UserList>>(
         future: userSentListsData,
@@ -148,4 +149,8 @@ class _OfferTabPageState extends State<OfferTabPage> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

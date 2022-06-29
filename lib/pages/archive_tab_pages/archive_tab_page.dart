@@ -17,8 +17,7 @@ class ArchiveTabPage extends StatefulWidget {
   State<ArchiveTabPage> createState() => _ArchiveTabPageState();
 }
 
-class _ArchiveTabPageState extends State<ArchiveTabPage>
-    with AutomaticKeepAliveClientMixin {
+class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAliveClientMixin {
   int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
           404;

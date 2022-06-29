@@ -6,9 +6,9 @@ import '../../../models/santhe_item_model.dart';
 
 class ItemTileBtn extends StatefulWidget {
   final Item item;
-  final int currentUserListDBKey;
+  final String listId;
   const ItemTileBtn(
-      {required this.item, required this.currentUserListDBKey, Key? key})
+      {required this.item, required this.listId, Key? key})
       : super(key: key);
 
   @override
@@ -20,7 +20,6 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
   @override
   Widget build(BuildContext context) {
     final Item item = widget.item;
-    final int currentUserListDBKey = widget.currentUserListDBKey;
     double screenWidth = MediaQuery.of(context).size.width / 100;
 
     return Padding(
@@ -31,7 +30,7 @@ class _ItemTileBtnState extends State<ItemTileBtn> {
               context: context,
               barrierColor: const Color.fromARGB(165, 241, 241, 241),
               builder: (context) {
-                return NewItemPopUpWidget(item: item, currentUserListDBKey: currentUserListDBKey);
+                return NewItemPopUpWidget(item: item, listId: widget.listId);
               });
         },
         child: Column(

@@ -2,6 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/models/new_list/user_list_model.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
 import '../../models/santhe_user_list_model.dart';
@@ -9,9 +11,11 @@ import '../../widgets/new_tab_widgets/user_list_widgets/category_tile_btn.dart';
 import 'package:get/get.dart';
 
 class CategoriesPage extends StatelessWidget {
-  final int currentUserListDBKey;
-  const CategoriesPage({required this.currentUserListDBKey, Key? key})
+  final String listId;
+  CategoriesPage({required this.listId, Key? key})
       : super(key: key);
+
+  final AllListController _allListController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +51,8 @@ class CategoriesPage extends StatelessWidget {
             itemCount: Boxes.getCategoriesDB().keys.length,
             itemBuilder: (context, index) {
               return CategoryTile(
-                category: Boxes.getCategoriesDB().get(100 + index) ??
-                    fallBack_error_category,
-                currentUserListDBKey: currentUserListDBKey,
+                category: Boxes.getCategoriesDB().get(100 + index) ?? fallBack_error_category,
+                listId: listId,
               );
             }),
         Align(
@@ -88,9 +91,7 @@ class CategoriesPage extends StatelessWidget {
                       child: ValueListenableBuilder<Box<UserList>>(
                         valueListenable: Boxes.getUserListDB().listenable(),
                         builder: (context, box, widget) {
-                          UserList currentUserList =
-                              Boxes.getUserListDB().get(currentUserListDBKey) ??
-                                  fallBack_error_userList;
+                          UserListModel currentUserList = _allListController.allListMap[listId]!;
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

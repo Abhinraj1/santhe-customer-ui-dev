@@ -48,8 +48,8 @@ class _OfferTabPageState extends State<OfferTabPage>  with AutomaticKeepAliveCli
                   SizedBox(
                     height: MediaQuery.of(context).size.width,
                     width: MediaQuery.of(context).size.width,
-                    child: SvgPicture.asset(
-                      'assets/sent_tab_image.svg',
+                    child: Image.asset(
+                      'assets/sent_tab_image.png',
                       fit: BoxFit.fill,
                     ),
                   ),

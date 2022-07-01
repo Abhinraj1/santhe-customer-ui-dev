@@ -1,21 +1,21 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../controllers/boxes_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../controllers/sent_tab_offer_card_controller.dart';
-import '../models/santhe_user_list_model.dart';
 
 class FirebaseHelper {
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final sentUserListController = Get.find<SentUserListController>();
 
   offerStream() {
@@ -23,9 +23,9 @@ class FirebaseHelper {
         .collection('users')
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        print(doc["first_name"]);
-      });
+      for (var doc in querySnapshot.docs) {
+        log(doc["first_name"].toString());
+      }
     });
   }
 
@@ -36,9 +36,11 @@ class FirebaseHelper {
 
     final ImagePicker _picker = ImagePicker();
 
-    XFile? image = await _picker.pickImage(
-        source: shootPic ? ImageSource.camera : ImageSource.gallery,
-      imageQuality: 50,
+    var image = await _picker.pickImage(
+      source: shootPic ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 35,
+      maxHeight: 1080,
+      maxWidth: 1080,
     );
 
     FirebaseStorage storage = FirebaseStorage.instance;
@@ -48,22 +50,39 @@ class FirebaseHelper {
             ?.phoneNumber ??
         404;
     try {
+      File file;
+      if (image != null) {
+        Directory tempPath = await getTemporaryDirectory();
+        file = await File('${tempPath.path}/compressedImage.png').create();
+        var byteImg = await image.readAsBytes();
+        var compressedImage = await FlutterImageCompress.compressWithList(
+          byteImg,
+          format: CompressFormat.png,
+          quality: 50,
+          minHeight: 512,
+          minWidth: 512,
+        );
+        file.writeAsBytesSync(compressedImage);
+      } else {
+        file = File(image?.path ?? '/DCIM/Camera');
+      }
       Reference ref = storage.ref().child("customItem/$custPhone-$imageName");
-      File file = File(image?.path ?? '/DCIM/Camera');
       UploadTask uploadTask = ref.putFile(file);
       uploadTask.snapshotEvents.listen((event) {
         imageController.imageUploadProgress.value =
             '${event.bytesTransferred.toDouble() / event.totalBytes.toDouble()}';
       });
 
+
       final snapshot = await uploadTask.whenComplete(() => null);
       final urlDownload = await snapshot.ref.getDownloadURL();
+      file.delete();
       if (addNewItem) {
         imageController.addItemCustomImageUrl.value = urlDownload;
       } else {
         imageController.editItemCustomImageUrl.value = urlDownload;
       }
-      print('Download Url: $urlDownload');
+      log('Download Url: $urlDownload');
       imageController.imageUploadProgress.value = '';
       Get.snackbar(
         '',
@@ -89,7 +108,7 @@ class FirebaseHelper {
 
       return urlDownload;
     } on FirebaseException catch (e) {
-      print(e);
+      log(e.toString());
       return '';
     }
 

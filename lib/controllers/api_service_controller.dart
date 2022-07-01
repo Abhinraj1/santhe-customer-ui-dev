@@ -160,7 +160,7 @@ class APIs extends GetxController {
     var response = await callApi(mode: 1, url: Uri.parse(url));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
-      return int.parse(jsonResponse['subscription']['custSubscription'][plan]);
+      return int.parse(jsonResponse['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]);
     } else {
       return 3;
     }
@@ -497,7 +497,7 @@ class APIs extends GetxController {
       items.add({
         "mapValue": {
           "fields": {
-            "quantity": {"doubleValue": "${item.quantity}"},
+            "quantity": {"doubleValue": item.quantity},
             "itemImageId": {"stringValue": item.itemImageId},
             "unit": {"stringValue": item.unit},
             "itemName": {"stringValue": item.itemName},
@@ -548,7 +548,7 @@ class APIs extends GetxController {
         },
         "listOfferCounter": {"integerValue": "0"},
         "processStatus": {"stringValue": "draft"},
-        "listId": {"integerValue": "${userList.listId}"},
+        "listId": {"integerValue": userList.listId},
         "listName": {"stringValue": userList.listName}
       }
     };

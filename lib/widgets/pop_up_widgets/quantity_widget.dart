@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_colors.dart';
@@ -136,75 +135,5 @@ class QuantityWidget extends StatelessWidget {
         ],
       ),
     );
-
-    // return TextFormField(
-    //   validator: (value) {
-    //     if (value == null || value.isEmpty) {
-    //       return 'Please enter quantity';
-    //     } else if (double.parse(value) == 0 ||
-    //         double.parse(value).isNegative ||
-    //         double.parse(value).isInfinite) {
-    //       return 'Enter a valid quantity';
-    //     }
-    //     return null;
-    //   },
-    //   controller: qtyController,
-    //   textInputAction: TextInputAction.next,
-    //   textAlign: TextAlign.center,
-    //   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-    //   maxLength: 5,
-    //   textAlignVertical: TextAlignVertical.center,
-    //   inputFormatters: [DecimalTextInputFormatter(decimalRange: 1)],
-    //   style: const TextStyle(
-    //       color: Colors.orange, fontWeight: FontWeight.w700, fontSize: 16.0),
-    //   onSaved: (value) {
-    //     qtyController.text = value!;
-    //   },
-    //   decoration: InputDecoration(
-    //     counterText: '',
-    //     border: OutlineInputBorder(
-    //       borderRadius: BorderRadius.circular(kTextFieldCircularBorderRadius),
-    //       borderSide: const BorderSide(width: 1.0, color: kTextFieldGrey),
-    //     ),
-    //     enabledBorder: OutlineInputBorder(
-    //       borderRadius: BorderRadius.circular(kTextFieldCircularBorderRadius),
-    //       borderSide: const BorderSide(width: 1.0, color: kTextFieldGrey),
-    //     ),
-    //     prefix: GestureDetector(
-    //       onTap: () {
-    //         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-    //         if (qtyController.text.isEmpty) {
-    //           qtyController.text = 0.toString();
-    //         }
-    //         double i = double.parse(qtyController.text);
-    //         if (i > 0) {
-    //           i--;
-    //           qtyController.text = removeDecimalZeroFormat(i);
-    //         }
-    //       },
-    //       child: const Padding(
-    //         padding: EdgeInsets.only(right: 5.0),
-    //         child: Icon(
-    //           CupertinoIcons.minus,
-    //           color: Color(0xff8B8B8B),
-    //           size: 15.0,
-    //         ),
-    //       ),
-    //     ),
-    //     suffix: GestureDetector(
-    //       onTap: () {
-    //         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-    //       },
-    //       child: const Padding(
-    //         padding: EdgeInsets.only(left: 5.0),
-    //         child: Icon(
-    //           CupertinoIcons.add,
-    //           color: Color(0xff8B8B8B),
-    //           size: 15.0,
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

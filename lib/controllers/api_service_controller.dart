@@ -278,46 +278,6 @@ class APIs extends GetxController {
     }
   }
 
-  //Needed for import from old list feature & list count
-  Future<List<NewListResponseModel>> getAllCustomerLists(int custId) async {
-
-    const String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
-    var body = {
-      "structuredQuery": {
-        "from": [
-          {"collectionId": "customerList"}
-        ],
-        "orderBy": {
-          "field": {"fieldPath": "createListTime"}
-        },
-        "where": {
-          "compositeFilter": {
-            "filters": [
-              {
-                "fieldFilter": {
-                  "field": {"fieldPath": "custId"},
-                  "op": "EQUAL",
-                  "value": {
-                    "referenceValue":
-                        "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
-                  }
-                }
-              }
-            ],
-            "op": "AND"
-          }
-        }
-      }
-    };
-    var response = await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
-    if (response.statusCode == 200) {
-      return newListResponseModelFromJson(response.body);
-    } else {
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      throw ServerError();
-    }
-  }
-
   //get
   Future<int> getAllFAQs() async {
     const String url =
@@ -489,104 +449,6 @@ class APIs extends GetxController {
     }
   }
 
-  Future<int> addNewList(UserListModel userList) async {
-    final String url = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/?documentId=${userList.listId}';
-    List items = [];
-    int i = 0;
-    for (ListItemModel item in userList.items) {
-      items.add({
-        "mapValue": {
-          "fields": {
-            "quantity": {"doubleValue": item.quantity},
-            "itemImageId": {"stringValue": item.itemImageId},
-            "unit": {"stringValue": item.unit},
-            "itemName": {"stringValue": item.itemName},
-            "catName": {"stringValue": item.catName},
-            "catId": {
-              "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId}"
-            },
-            "itemSeqNum": {"integerValue": "$i"},
-            "brandType": {"stringValue": item.brandType},
-            "itemId": {
-              "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId}"
-            },
-            "notes": {"stringValue": item.notes}
-          }
-        }
-      });
-      i++;
-    }
-    var body = {
-      "fields": {
-        "createListTime": {
-          "timestampValue":
-          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
-        },
-        "items": {
-          "arrayValue": {"values": items}
-        },
-        "custListStatus": {"stringValue": 'new'},
-        "custId": {
-          "referenceValue":
-          "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
-        },
-        "custListSentTime": {
-          "timestampValue":
-          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
-        },
-        "updateListTime": {
-          "timestampValue":
-          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
-        },
-        'notificationProcess': {'stringValue': 'reminder'},
-        'dealProcess': {'booleanValue': false},
-        "custOfferWaitTime": {
-          "timestampValue":
-          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
-        },
-        "listOfferCounter": {"integerValue": "0"},
-        "processStatus": {"stringValue": "draft"},
-        "listId": {"integerValue": userList.listId},
-        "listName": {"stringValue": userList.listName}
-      }
-    };
-
-    var response = await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      return 1;
-    } else {
-      log('Request failed with status: ${response.reasonPhrase}.');
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      return 0;
-    }
-  }
-
-  Future removeNewList(String userListId) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$userListId?updateMask.fieldPaths=custListStatus';
-
-    final body = {
-      "fields": {
-        "custListStatus": {"stringValue": "purged"}
-      }
-    };
-
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      return 1;
-    } else {
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      return 0;
-    }
-  }
-
   //-------------------------------------User List--------------------------------------
 
   //patch
@@ -659,8 +521,7 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);

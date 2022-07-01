@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import '../../core/app_colors.dart';
 import '../../models/new_list/user_list_model.dart';
 
@@ -33,7 +34,6 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
   final _formKey = GlobalKey<FormState>();
 
   String listName = '';
-  int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
   @override
   Widget build(BuildContext context) {
@@ -68,20 +68,26 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
         child: GetBuilder(
           init: _allListController,
           id: 'newList',
-          builder: (ctr) => RefreshIndicator(
-              child: _allListController.isLoading ?
-              Center(child: CircularProgressIndicator(color: AppColors().brandDark),) :
-              _allListController.newList.isEmpty
-                  ? _emptyList()
-                  : ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
-                    itemCount: _allListController.newList.length,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) => _userListCard(_allListController.newList.values.elementAt(index)),
-              ),
-              onRefresh: () async {
-                await _allListController.getAllList();
-              }),
+          builder: (ctr){
+            print(_allListController.newList);
+            List<UserListModel> _userList = _allListController.newList;
+            _userList.sort((a, b) => a.createListTime.compareTo(b.createListTime));
+            _userList.forEach((element) {print(element.items.length);});
+            return RefreshIndicator(
+                child: _allListController.isLoading ?
+                Center(child: CircularProgressIndicator(color: AppColors().brandDark),) :
+                _allListController.newList.isEmpty
+                    ? _emptyList()
+                    : ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
+                  itemCount: _userList.length,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) => _userListCard(_userList[index]),
+                ),
+                onRefresh: () async {
+                  await _allListController.getAllList();
+                });
+          },
         ),
       ),
     );
@@ -583,10 +589,10 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () async {
-          //Get.to(() => UserListPage(listId: userList.listId));
+          print(userList.listId);
+          Get.to(() => UserListScreen(listId: userList.listId));
         },
         child: Container(
-          // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.0),
@@ -604,9 +610,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
           ),
           child: Slidable(
             endActionPane: ActionPane(
-              // A motion is a widget used to control how the pane animates.
               motion: const ScrollMotion(),
-              // All actions are defined in the children parameter.
               children: [
                 //copy from old list
                 Visibility(
@@ -633,8 +637,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 5.0, bottom: 10.0, left: 15.0, right: 15.0),
+              padding: const EdgeInsets.only(top: 5.0, bottom: 10.0, left: 15.0, right: 15.0),
               child: Column(
                 children: [
                   Row(

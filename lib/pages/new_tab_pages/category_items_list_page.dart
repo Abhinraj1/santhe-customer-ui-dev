@@ -1,41 +1,28 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
-import '../../controllers/error_user_fallback.dart';
 import '../../models/santhe_item_model.dart';
-import '../../models/santhe_user_list_model.dart';
-import '../../widgets/new_tab_widgets/user_list_widgets/item_tile_btn.dart';
+import '../../widgets/pop_up_widgets/new_item_popup_widget.dart';
 
-// final int catID;
-// final int currentUserListID;
 
-class CategoryItemsPage extends StatefulWidget {
+class CategoryItemsPage extends StatelessWidget {
   final int catID;
   final String listId;
-  const CategoryItemsPage(
-      {required this.catID, required this.listId, Key? key})
-      : super(key: key);
+  CategoryItemsPage({required this.catID, required this.listId, Key? key}) : super(key: key);
 
-  @override
-  State<CategoryItemsPage> createState() => _CategoryItemsPageState();
-}
-
-class _CategoryItemsPageState extends State<CategoryItemsPage> {
   final apiController = Get.find<APIs>();
   final AllListController _allListController = Get.find();
-  late UserListModel currentUserList = _allListController.allListMap[widget.listId]!;
+  late final UserListModel currentUserList = _allListController.allListMap[listId]!;
 
   @override
   Widget build(BuildContext context) {
-    final int catID = widget.catID;
-
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Scaffold(
       appBar: AppBar(
@@ -77,9 +64,46 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    return ItemTileBtn(
-                      item: snapshot.data![index],
-                      listId: widget.listId,
+                    Item item = snapshot.data![index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                              builder: (context) {
+                                return NewItemPopUpWidget(item: item, listId: listId);
+                              });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //main show
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId}',
+                                width: 20.vw,
+                                height: 20.vw,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: AutoSizeText(
+                                item.itemName,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                minFontSize: 10.0,
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   });
             } else {
@@ -135,28 +159,32 @@ class _CategoryItemsPageState extends State<CategoryItemsPage> {
                                   fontSize: 18.sp),
                             ),
                           ),
-                          Column(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  '${currentUserList.items.length}',
-                                  style: TextStyle(
-                                      fontSize: 21.sp,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.orange),
+                          GetBuilder(
+                            id: 'itemCount',
+                            init: _allListController,
+                            builder: (builder) => Column(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    '${currentUserList.items.length}',
+                                    style: TextStyle(
+                                        fontSize: 21.sp,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.orange),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                currentUserList.items.length < 2
-                                    ? 'Item'
-                                    : 'Items',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14.sp,
-                                    color: Colors.orange),
-                              )
-                            ],
+                                Text(
+                                  currentUserList.items.length < 2
+                                      ? 'Item'
+                                      : 'Items',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.sp,
+                                      color: Colors.orange),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),

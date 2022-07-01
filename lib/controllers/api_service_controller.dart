@@ -506,8 +506,7 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -1062,14 +1061,11 @@ class APIs extends GetxController {
 
   Future<List<Item>> searchedItemResult(String searchQuery) async {
     List<Item> searchResults = [];
-    final String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/search/items?searchCriteria=$searchQuery';
+    final String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/search/items?searchCriteria=$searchQuery';
 
     final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
-      log(searchQuery);
-      log(response.body.toString());
       List jsonResponse = jsonDecode(response.body);
 
       for (int i = 0; i < jsonResponse.length; i++) {
@@ -1077,7 +1073,6 @@ class APIs extends GetxController {
           searchResults.add(Item.fromJson(jsonResponse[i]));
         }
       }
-
       return searchResults;
     } else {
       log('Request failed with status: ${response.statusCode}.');

@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/new_list/search_item_response_model.dart';
+import 'package:santhe/models/user_profile/customer_response_model.dart';
 
 import '../core/app_helpers.dart';
 import '../core/error/exceptions.dart';
@@ -148,15 +150,104 @@ class NetworkCall{
   }
 
   Future<int> getSubscriptionLimit(String plan) async {
-    if (plan == 'default') {
-      plan = 'planA';
-    }
     var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.SUBSCRIPTION_PLAN));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
-      return int.parse(jsonResponse['subscription']['custSubscription'][plan]);
+      String? val = jsonResponse['fields']['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]['integerValue'];
+      return val == null ? 3 : int.parse(val);
     } else {
       return 3;
+    }
+  }
+
+  Future<CustomerResponseModel> getCustomerDetails() async {
+    var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(AppHelpers().getPhoneNumberWithoutCountryCode)));
+    var jsonResponse = jsonDecode(response.body);
+    if (jsonResponse != null && response.statusCode == 200) {
+      return customerResponseModelFromJson(response.body);
+    } else {
+      throw ServerError();
+    }
+  }
+
+  Future updateUserList(UserListModel userList, {String? status, String? processStatus}) async {
+    List items = [];
+    int i = 0;
+    for (ListItemModel item in userList.items) {
+      items.add({
+        "mapValue": {
+          "fields": {
+            "quantity": {"doubleValue": "${item.quantity}"},
+            "itemImageId": {
+              "stringValue": item.itemImageId.replaceAll(
+                  'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                  '')
+            },
+            "unit": {"stringValue": item.unit},
+            "itemName": {"stringValue": item.itemName},
+            "catName": {"stringValue": item.catName},
+            "catId": {
+              "referenceValue":
+              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId}"
+            },
+            "itemSeqNum": {"integerValue": "$i"},
+            "brandType": {"stringValue": item.brandType},
+            "itemId": {
+              "referenceValue":
+              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId}"
+            },
+            "notes": {"stringValue": item.notes}
+          }
+        }
+      });
+      i++;
+    }
+    // log(items);
+
+    final body = {
+      "fields": {
+        "custListSentTime": {
+          "timestampValue":
+          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+        },
+        "processStatus": {"stringValue": processStatus ?? "draft"},
+        "custOfferWaitTime": {
+          "timestampValue":
+          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+        },
+        "createListTime": {
+          "timestampValue":
+          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+        },
+        "custListStatus": {"stringValue": status ?? "sent"},
+        "custId": {
+          "referenceValue":
+          "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+        },
+        "listOfferCounter": {"integerValue": "0"},
+        "listName": {"stringValue": userList.listName},
+        "items": {
+          "arrayValue": {"values": items}
+        },
+        "listId": {"integerValue": userList.listId},
+        "updateListTime": {
+          "timestampValue":
+          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+        }
+      }
+    };
+
+    var response = await callApi(mode: REST.patch, url: Uri.parse(AppUrl.UPDATE_USER_LIST(userList.listId)), body: jsonEncode(body));
+
+    if (response.statusCode == 200) {
+      return 1;
+    } else {
+      log('Request failed with status: ${response.statusCode}.');
+      var data = jsonDecode(response.body);
+      log(data.toString());
+      log('Error', error: response.reasonPhrase);
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return 0;
     }
   }
 
@@ -197,4 +288,23 @@ class NetworkCall{
     }
     throw NoInternetError();
   }
+
+  /*Future<List<ListItemModel>> getSearchItemResult() async {
+    var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(AppHelpers().getPhoneNumberWithoutCountryCode)));
+    if (response.statusCode == 200) {
+      var item = searchItemResponseModelFromJson(response.body);
+      return ListItemModel(
+          brandType: item.,
+          itemId: itemId,
+          notes: notes,
+          quantity: quantity,
+          itemName: itemName,
+          itemImageId: itemImageId,
+          unit: unit,
+          catName: catName,
+          catId: catId);
+    } else {
+      throw ServerError();
+    }
+  }*/
 }

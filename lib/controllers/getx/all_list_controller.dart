@@ -1,18 +1,19 @@
 import 'package:get/get.dart';
-import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/new_list_response_model.dart';
+import '../../network_call/network_call.dart';
 import '../boxes_controller.dart';
 
 class AllListController extends GetxController{
 
   bool isLoading = true;
 
-  RxBool isProcessing = false.obs;
+  RxBool isProcessing = false.obs, isTitleEditable = false.obs;
 
   int lengthLimit = 3;
 
@@ -24,20 +25,15 @@ class AllListController extends GetxController{
 
   List<UserListModel> get archivedList => allListMap.values.toList().where((element) => element.custListStatus == 'archived').toList();
 
-  Map<String, UserListModel> newList = {};
+  List<UserListModel> get newList => allListMap.values.toList().where((element) => element.custListStatus == 'new').toList();
+
 
   Future<void> getAllList() async {
-    var val = await APIs().getAllCustomerLists(0);
+    var val = await NetworkCall().getAllCustomerLists();
     for (var element in _toUserListModel(val)) {
       allListMap[element.listId] = element;
     }
     isLoading = false;
-    newList.clear();
-    for (var element in allList) {
-      if(element.custListStatus == 'new'){
-        newList[element.listId] = element;
-      }
-    }
     update(['newList', 'fab', 'archivedList', 'sentList']);
   }
 
@@ -82,7 +78,7 @@ class AllListController extends GetxController{
           itemImageId: doc.itemImageId.stringValue,
           unit: doc.unit.stringValue,
           catName: doc.catName.stringValue,
-          catId: doc.catId.referenceValue,
+          catId: doc.catId.referenceValue, possibleUnits: [],
           )
       );
     }
@@ -116,12 +112,11 @@ class AllListController extends GetxController{
       updateListTime:
       DateTime.now(),
     );
-    int response = await APIs().addNewList(newUserList);
+    int response = await NetworkCall().addNewList(newUserList);
     isProcessing.value = false;
     if (response == 1) {
       allListMap[newUserList.listId] = newUserList;
-      newList[newUserList.listId] = newUserList;
-      update(['list', 'fab']);
+      update(['newList', 'fab']);
       Get.back();
     } else {
       errorMsg('Error Occurred', 'Please try again');
@@ -130,16 +125,25 @@ class AllListController extends GetxController{
 
   Future<void> addCopyListToDB(String listId) async {
     isProcessing.value = true;
+    String copyListId = AppHelpers().getPhoneNumberWithoutCountryCode + (allList.length + 1).toString();
     var copyUserList = allList.where((element) => element.listId == listId).toList().first;
-    int response = await APIs().addNewList(
-        copyUserList..listName = 'COPY ${copyUserList.listName}'
-          ..listId = AppHelpers().getPhoneNumberWithoutCountryCode + (allList.length + 1).toString());
+    UserListModel copyList = UserListModel(
+        createListTime: DateTime.now(),
+        custId: copyUserList.custId,
+        items: copyUserList.items,
+        listId: copyListId,
+        listName: 'COPY ' + copyUserList.listName,
+        custListSentTime: DateTime.now(),
+        custListStatus: 'new',
+        listOfferCounter: '0',
+        processStatus: 'draft',
+        custOfferWaitTime: copyUserList.custOfferWaitTime,
+        updateListTime: DateTime.now());
+    int response = await NetworkCall().addNewList(copyList);
     isProcessing.value = false;
     if (response == 1) {
-      allListMap[copyUserList.listId] = copyUserList;
-      newList[copyUserList.listId] = copyUserList;
-      update(['list', 'fab']);
-      Get.back();
+      allListMap[copyListId] = copyList;
+      Get.offAll(const HomePage(), transition: Transition.noTransition);
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }
@@ -147,12 +151,12 @@ class AllListController extends GetxController{
 
   Future<void> deleteListFromDB(String listId) async {
     isProcessing.value = true;
-    int response = await APIs().removeNewList(listId);
+    int response = await NetworkCall().removeNewList(listId);
     isProcessing.value = false;
     if (response == 1) {
       allListMap[listId]?.custListStatus = 'purged';
       newList.remove(listId);
-      update(['list', 'fab']);
+      update(['newList', 'fab']);
       Get.back();
     } else {
       errorMsg('Error Occurred', 'Please try again');
@@ -162,7 +166,7 @@ class AllListController extends GetxController{
   bool isListAlreadyExist(String listName) => allList.where((element) => element.listName == listName).toList().isNotEmpty;
 
   Future<void> checkSubPlan() async {
-    final data = await APIs().getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
+    final data = await NetworkCall().getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
     lengthLimit = data;
   }
 }

@@ -12,19 +12,11 @@ import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/pages/new_tab_pages/categories_page.dart';
-import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
-import 'package:santhe/widgets/new_tab_widgets/user_list_widgets/add_custom_item_card.dart';
-import 'package:santhe/widgets/pop_up_widgets/new_item_popup_widget.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../models/new_list/user_list_model.dart';
 import '../../models/santhe_item_model.dart';
-import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/new_tab_widgets/user_list_widgets/list_item_card.dart';
-import '../../widgets/new_tab_widgets/user_list_widgets/searched_item_card.dart';
-import '../../widgets/pop_up_widgets/custom_item_popup_widget.dart';
-import '../login_pages/phone_number_login_page.dart';
 
 class UserListPage extends StatefulWidget {
   final String listId;
@@ -375,7 +367,7 @@ searchQueryController.dispose();
                                     elements: currentList.items,
                                     groupBy: (ListItemModel element) => element.catName,
                                     indexedItemBuilder: (BuildContext context, dynamic element, int index) => ListItemCard(
-                                      listItem: currentList.items[index],
+                                      listItem: currentList.items[index], listId: '',
                                     ),
                                     groupSeparatorBuilder: (String value) {
                                       return Column(

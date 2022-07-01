@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
-import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
@@ -131,7 +130,7 @@ class AllListController extends GetxController{
     isProcessing.value = false;
     if (response == 1) {
       allListMap[copyListId] = copyUserList;
-      update(['newList', 'fab', 'sentList']);
+      update(['newList', 'fab']);
       Get.back();
     } else {
       errorMsg('Error Occurred', 'Please try again');

@@ -149,10 +149,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: TabBarView(
         controller: _homeController.homeTabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          NewTabPage(),
+        children: [
+          const NewTabPage(),
           OfferTabPage(),
-          ArchiveTabPage(),
+          ArchivedTabScreen(),
         ],
       ),
     );

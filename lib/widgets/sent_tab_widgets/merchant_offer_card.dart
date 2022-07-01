@@ -7,6 +7,7 @@ import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/chat_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/merchant_details_response.dart';
+import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
@@ -16,7 +17,7 @@ import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/merchant_items_list_page.dart';
 
 class MerchantOfferCard extends StatefulWidget {
-  final UserList userList;
+  final UserListModel userList;
   final CustomerOfferResponse currentMerchantOffer;
   final Function refresh;
   bool overrideData;

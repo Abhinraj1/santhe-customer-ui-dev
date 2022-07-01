@@ -5,6 +5,7 @@ import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -12,11 +13,13 @@ import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 import 'package:santhe/widgets/sent_tab_widgets/sent_list_item_card.dart';
 
+import '../models/new_list/user_list_model.dart';
+
 class NoOfferPage extends StatelessWidget {
   NoOfferPage({Key? key, required this.userList, required this.missed})
       : super(key: key);
   final bool missed;
-  final UserList userList;
+  final UserListModel userList;
   final apiController = Get.find<APIs>();
   final int custId =
       Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
@@ -121,14 +124,14 @@ class NoOfferPage extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () async {
-                                int userListCount = 0;
+                               /* int userListCount = 0;
 
-                                UserList newImportedList = UserList(
+                                UserListModel newImportedList = UserListModel(
                                   createListTime: DateTime.now(),
                                   custId: userList.custId,
                                   items: userList.items,
                                   listId:
-                                      int.parse('$custId${userListCount + 1}'),
+                                      '$custId${userListCount + 1}',
                                   listName: '(COPY) ${userList.listName}',
                                   custListSentTime: userList.custListSentTime,
                                   custListStatus: userList.custListStatus,
@@ -157,7 +160,7 @@ class NoOfferPage extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                }
+                                }*/
                               },
                               splashColor: AppColors().white100,
                               child: Container(
@@ -184,7 +187,7 @@ class NoOfferPage extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () async {
-                                int response = await apiController
+                                /*int response = await apiController
                                     .updateUserList(custId, userList,
                                         status: 'archived',
                                         processStatus: userList.processStatus);
@@ -219,7 +222,7 @@ class NoOfferPage extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                }
+                                }*/
                               },
                               splashColor: AppColors().white100,
                               child: Container(
@@ -258,7 +261,7 @@ class NoOfferPage extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       left: 18, right: 18, bottom: 10, top: 20),
                   elements: userList.items,
-                  groupBy: (ListItem element) => element.catName,
+                  groupBy: (ListItemModel element) => element.catName,
                   indexedItemBuilder:
                       (BuildContext context, dynamic element, int index) {
                     return SentListItemCard(

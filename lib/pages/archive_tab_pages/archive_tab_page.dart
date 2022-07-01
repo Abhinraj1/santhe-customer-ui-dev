@@ -1,137 +1,39 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:resize/resize.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:resize/resize.dart';
 
-import 'package:santhe/controllers/api_service_controller.dart';
-import 'package:santhe/controllers/archived_controller.dart';
-import 'package:santhe/controllers/boxes_controller.dart';
-import 'package:santhe/models/santhe_user_list_model.dart';
-import 'package:santhe/widgets/archived_tab_widgets/archived_list_card.dart';
-import '../../constants.dart';
+import '../../controllers/getx/all_list_controller.dart';
+import '../../models/new_list/user_list_model.dart';
+import '../../widgets/offer_status_widget.dart';
+import '../no_offer_page.dart';
+import '../sent_tab_pages/merchant_items_list_page.dart';
 
-class ArchiveTabPage extends StatefulWidget {
-  const ArchiveTabPage({Key? key}) : super(key: key);
+class ArchivedTabScreen extends StatelessWidget {
+  ArchivedTabScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ArchiveTabPage> createState() => _ArchiveTabPageState();
-}
-
-class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAliveClientMixin {
-  int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
-  final apiController = Get.find<APIs>();
-  late Future<List<UserList>> userArchivedListsData;
-  final ArchivedController _archivedController = Get.find();
-
-  @override
-  void initState() {
-    _archivedController.isDataLoading = true;
-    _archivedController.update();
-    apiController.getArchivedCust(custId).then((value) {
-      _archivedController.archivedList = value;
-      _archivedController.isDataLoading = false;
-      _archivedController.update();
-    }).catchError((e) {
-      _archivedController.isDataLoading = false;
-      _archivedController.update();
-    });
-    super.initState();
-  }
+  final AllListController _allListController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
-      body: GetBuilder<ArchivedController>(
-        builder: (controller) {
-          if (controller.isDataLoading) {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-          if (controller.archivedList.isEmpty) {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 268.h,
-                      width: 368.w,
-                      child: SvgPicture.asset(
-                        'assets/archive_tab_image.svg',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    SizedBox(height: 20.sp,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          text:
-                              'All your shopping lists that you have sent to Shops in more than 72 hours will appear here. Go to',
-                          style: TextStyle(
-                            color: kTextGrey,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
-                            height: 2.sp,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' New ',
-                              style: TextStyle(
-                                color: kTextGrey,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 16.sp,
-                                height: 2.sp,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'tab to create and send your shopping lists',
-                              style: TextStyle(
-                                color: kTextGrey,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16.sp,
-                                height: 2.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
+      body: GetBuilder(
+        init: _allListController,
+        id: 'archivedList',
+        builder: (builder){
+          List<UserListModel> archivedList = _allListController.archivedList;
+          archivedList.sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
           return RefreshIndicator(
             onRefresh: () async {
-              setState(() {
-                //future builder will take care of future value so no need to mark this function async
-                userArchivedListsData = apiController.getArchivedCust(custId);
-                apiController.getArchivedCust(custId).then((value) {
-                  _archivedController.archivedList = value;
-                  _archivedController.isDataLoading = false;
-                  _archivedController.update();
-                }).catchError((e) {
-                  _archivedController.isDataLoading = false;
-                  _archivedController.update();
-                });
-              });
+
             },
             child: ListView.builder(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
-              physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
-              itemCount: controller.archivedList.length,
+              padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              itemCount: archivedList.length,
               itemBuilder: (context, index) {
-                return ArchivedUserListCard(
-                    userList: controller.archivedList[index], index: index);
+                return _userListCard(archivedList[index]);
               },
             ),
           );
@@ -140,7 +42,165 @@ class _ArchiveTabPageState extends State<ArchiveTabPage> with AutomaticKeepAlive
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  Widget _userListCard(UserListModel userList){
+    String imagePath = 'assets/basket0.png';
+
+    //image logic
+    if (userList.items.isEmpty) {
+      imagePath = 'assets/basket0.png';
+    } else if (userList.items.length <= 10) {
+      imagePath = 'assets/basket1.png';
+    } else if (userList.items.length <= 20) {
+      imagePath = 'assets/basket2.png';
+    } else {
+      imagePath = 'assets/basket3.png';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: GestureDetector(
+        onTap: (){
+          if (userList.processStatus == 'nomerchant' ||
+              userList.processStatus == 'nooffer' ||
+              userList.processStatus == 'missed') {
+            Get.to(
+              () => NoOfferPage(
+                userList: userList,
+                missed: userList.processStatus == 'missed',
+              ),
+            );
+          } else if (userList.processStatus == 'accepted' ||
+              userList.processStatus == 'processed') {
+            Get.to(
+              () => MerchantItemsListPage(
+                userList: userList,
+                archived: true,
+              ),
+            );
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.21),
+                blurRadius: 15.0, // soften the shadow
+                spreadRadius: 3.6, //extend the shadow
+                offset: const Offset(
+                  0.0,
+                  0.0,
+                ),
+              )
+            ],
+          ),
+          child: Slidable(
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                //copy from old list
+                Visibility(
+                  visible: _allListController.newList.length < _allListController.lengthLimit,
+                  child: SlidableAction(
+                    onPressed: (context) async {
+                      _allListController.addCopyListToDB(userList.listId);
+                    },
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.orange,
+                    autoClose: true,
+                    icon: Icons.copy_rounded,
+                    label: 'Copy',
+                  ),
+                ),
+                //delete list
+                /*SlidableAction(
+                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId),
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.orange,
+                  icon: CupertinoIcons.delete_solid,
+                  label: 'Delete',
+                ),*/
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5.0, bottom: 10.0, left: 15.0, right: 15.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AutoSizeText(
+                              userList.listName,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  letterSpacing: 0.2,
+                                  fontSize: 20.sp,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 16.sp),
+                              child: AutoSizeText(
+                                '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
+                                style: TextStyle(
+                                    fontSize: 30.sp,
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                              child: AutoSizeText(
+                                'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                                style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: Colors.transparent,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Image.asset(
+                        imagePath,
+                        height: 129.sp,
+                        width: 129.sp,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AutoSizeText(
+                        'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            color: const Color(0xffBBBBBB),
+                            fontWeight: FontWeight.w400),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10.sp,
+                        ),
+                        child: OfferStatus(
+                          userList: userList,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

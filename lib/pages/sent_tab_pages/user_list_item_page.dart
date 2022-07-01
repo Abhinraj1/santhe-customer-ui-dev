@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:santhe/models/new_list/list_item_model.dart';
+import 'package:santhe/models/new_list/user_list_model.dart';
 
 import '../../models/santhe_list_item_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../widgets/sent_tab_widgets/sent_list_item_card.dart';
 
 class UserListItemDetailsPage extends StatelessWidget {
-  final UserList userList;
+  final UserListModel userList;
   const UserListItemDetailsPage({required this.userList, Key? key})
       : super(key: key);
 
@@ -19,7 +21,7 @@ class UserListItemDetailsPage extends StatelessWidget {
         padding:
             const EdgeInsets.only(left: 18, right: 18, bottom: 10, top: 20),
         elements: userList.items,
-        groupBy: (ListItem element) => element.catName,
+        groupBy: (ListItemModel element) => element.catName,
         indexedItemBuilder: (BuildContext context, dynamic element, int index) {
           return SentListItemCard(
             listItem: element,

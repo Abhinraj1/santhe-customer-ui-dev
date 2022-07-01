@@ -890,7 +890,7 @@ class APIs extends GetxController {
   }
 
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
-      int listId) async {
+      String listId) async {
     String url =
         'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 

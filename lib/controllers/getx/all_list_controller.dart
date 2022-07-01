@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
-import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
@@ -126,27 +125,51 @@ class AllListController extends GetxController{
   Future<void> addCopyListToDB(String listId) async {
     isProcessing.value = true;
     String copyListId = AppHelpers().getPhoneNumberWithoutCountryCode + (allList.length + 1).toString();
-    var copyUserList = allList.where((element) => element.listId == listId).toList().first;
+    UserListModel copyUserList = _copyModel(allList.where((element) => element.listId == listId).toList().first, copyListId);
+    int response = await NetworkCall().addNewList(copyUserList);
+    isProcessing.value = false;
+    if (response == 1) {
+      allListMap[copyListId] = copyUserList;
+      update(['newList', 'fab']);
+      Get.back();
+    } else {
+      errorMsg('Error Occurred', 'Please try again');
+    }
+  }
+
+  UserListModel _copyModel(UserListModel model, String copyListId){
     UserListModel copyList = UserListModel(
         createListTime: DateTime.now(),
-        custId: copyUserList.custId,
-        items: copyUserList.items,
+        custId: model.custId,
+        items: _copyList(model.items),
         listId: copyListId,
-        listName: 'COPY ' + copyUserList.listName,
+        listName: 'COPY ' + model.listName,
         custListSentTime: DateTime.now(),
         custListStatus: 'new',
         listOfferCounter: '0',
         processStatus: 'draft',
-        custOfferWaitTime: copyUserList.custOfferWaitTime,
+        custOfferWaitTime: model.custOfferWaitTime,
         updateListTime: DateTime.now());
-    int response = await NetworkCall().addNewList(copyList);
-    isProcessing.value = false;
-    if (response == 1) {
-      allListMap[copyListId] = copyList;
-      Get.offAll(const HomePage(), transition: Transition.noTransition);
-    } else {
-      errorMsg('Error Occurred', 'Please try again');
+    return copyList;
+  }
+
+  List<ListItemModel> _copyList(List<ListItemModel> item){
+    List<ListItemModel> _list = [];
+    for (var element in item) {
+      _list.add(ListItemModel(
+          brandType: element.brandType,
+          itemId: element.itemId,
+          notes: element.notes,
+          quantity: element.quantity,
+          itemName: element.itemName,
+          itemImageId: element.itemImageId,
+          unit: element.unit,
+          catName: element.catName,
+          catId: element.catId,
+          possibleUnits: element.possibleUnits)
+      );
     }
+    return _list;
   }
 
   Future<void> deleteListFromDB(String listId) async {

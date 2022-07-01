@@ -10,17 +10,17 @@ import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
 import 'package:santhe/pages/no_offer_page.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
+import '../../controllers/getx/all_list_controller.dart';
+import '../../models/new_list/user_list_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/sent_list_detail_page.dart';
 
 class OfferCard extends StatefulWidget {
-  final UserList userList;
-  final Function function;
+  final UserListModel userList;
 
   const OfferCard({
     required this.userList,
     Key? key,
-    required this.function,
   }) : super(key: key);
 
   @override
@@ -35,6 +35,8 @@ class _OfferCardState extends State<OfferCard> {
           404;
 
   final box = Boxes.getUserListDB();
+
+  final AllListController _allListController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,8 @@ class _OfferCardState extends State<OfferCard> {
               if (value != null) {
                 if (value == true) {
                   widget.userList.processStatus = 'accepted';
-                  widget.function();
+                  final AllListController _allListController = Get.find();
+                  _allListController.update(['sentList']);
                 }
               }
             });
@@ -105,7 +108,7 @@ class _OfferCardState extends State<OfferCard> {
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
                     onPressed: (context) async {
-                      int userListCount = 0;
+                      /*int userListCount = 0;
                       UserList oldUserList = widget.userList;
 
                       UserList newImportedList = UserList(
@@ -149,7 +152,7 @@ class _OfferCardState extends State<OfferCard> {
                             child: Text('Error!'),
                           ),
                         ));
-                      }
+                      }*/
                     },
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
@@ -226,14 +229,14 @@ class _OfferCardState extends State<OfferCard> {
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
                       ),
-                      Padding(
+                      /*Padding(
                         padding: EdgeInsets.only(
                           right: 10.sp,
                         ),
                         child: OfferStatus(
                           userList: widget.userList,
                         ),
-                      ),
+                      ),*/
                     ],
                   )
                 ],

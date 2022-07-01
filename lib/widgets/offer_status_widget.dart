@@ -5,6 +5,8 @@ import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 
+import '../models/new_list/user_list_model.dart';
+
 enum Status {
   accepted,
   maxOffer,
@@ -16,8 +18,8 @@ enum Status {
 }
 
 class OfferStatus extends StatelessWidget {
-  OfferStatus({Key? key, required this.userList}) : super(key: key);
-  final UserList userList;
+  const OfferStatus({Key? key, required this.userList}) : super(key: key);
+  final UserListModel userList;
 
   Status setStatus(String status) {
     if (_minOffer()) {
@@ -105,7 +107,7 @@ class OfferStatus extends StatelessWidget {
       case Status.minOffer:
         {
           return AutoSizeText(
-            '${userList.listOfferCounter} ${userList.listOfferCounter < 2 ? 'Offer Available' : 'Offers Available'} ',
+            '${userList.listOfferCounter} ${int.parse(userList.listOfferCounter) < 2 ? 'Offer Available' : 'Offers Available'} ',
             style: TextStyle(
                 fontSize: 14.sp,
                 color: AppColors().brandLight,

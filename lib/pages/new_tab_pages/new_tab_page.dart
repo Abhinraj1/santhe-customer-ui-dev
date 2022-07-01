@@ -69,19 +69,18 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
           init: _allListController,
           id: 'newList',
           builder: (ctr){
-            print(_allListController.newList);
             List<UserListModel> _userList = _allListController.newList;
-            _userList.sort((a, b) => a.createListTime.compareTo(b.createListTime));
-            _userList.forEach((element) {print(element.items.length);});
+            if(_allListController.isLoading){
+              return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
+            }
+            if(_allListController.newList.isEmpty) {
+              return _emptyList();
+            }
             return RefreshIndicator(
-                child: _allListController.isLoading ?
-                Center(child: CircularProgressIndicator(color: AppColors().brandDark),) :
-                _allListController.newList.isEmpty
-                    ? _emptyList()
-                    : ListView.builder(
+                child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
                   itemCount: _userList.length,
-                  physics: const BouncingScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) => _userListCard(_userList[index]),
                 ),
                 onRefresh: () async {
@@ -588,10 +587,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
-        onTap: () async {
-          print(userList.listId);
-          Get.to(() => UserListScreen(listId: userList.listId));
-        },
+        onTap: () async => Get.to(() => UserListScreen(listId: userList.listId)),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,

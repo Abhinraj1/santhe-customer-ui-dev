@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
+import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/widgets/sent_tab_widgets/merchant_offer_card.dart';
 
 import '../../controllers/api_service_controller.dart';
@@ -11,7 +12,7 @@ import '../../models/offer/customer_offer_response.dart';
 import '../../models/santhe_user_list_model.dart';
 
 class OffersListPage extends StatefulWidget {
-  final UserList userList;
+  final UserListModel userList;
   final bool showOffers;
   final String merchTitle;
   final Function function;

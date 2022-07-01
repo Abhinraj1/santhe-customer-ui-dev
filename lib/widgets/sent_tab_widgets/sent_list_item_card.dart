@@ -3,10 +3,11 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../models/new_list/list_item_model.dart';
 import '../../models/santhe_list_item_model.dart';
 
 class SentListItemCard extends StatelessWidget {
-  final ListItem listItem;
+  final ListItemModel listItem;
 
   const SentListItemCard({required this.listItem, Key? key}) : super(key: key);
 

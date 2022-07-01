@@ -17,12 +17,14 @@ import '../../controllers/chat_controller.dart';
 import '../../controllers/home_controller.dart';
 import '../../models/answer_list_model.dart';
 import '../../models/item_model.dart';
+import '../../models/new_list/list_item_model.dart';
+import '../../models/new_list/user_list_model.dart';
 import '../../models/santhe_list_item_model.dart';
 import '../../models/santhe_user_list_model.dart';
 import 'offers_list_page.dart';
 
 class SentUserListDetailsPage extends StatefulWidget {
-  UserList? userList;
+  UserListModel? userList;
   final bool showOffers;
   bool? fromChat;
   String? listEventId;
@@ -62,15 +64,15 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
   Future<void> loadDetails() async {
     AnswerList? data =
         await apiController.getListByListEventId(widget.listEventId!);
-    widget.userList = UserList(
+    widget.userList = UserListModel(
       createListTime: DateTime.parse(data!.date).toLocal(),
-      custId: int.parse(data.custId),
+      custId: data.custId,
       items: getList(data.items),
-      listId: int.parse(data.listId),
+      listId: data.listId,
       listName: 'Offer',
       custListSentTime: data.custUpdateTime,
       custListStatus: data.custStatus,
-      listOfferCounter: 0,
+      listOfferCounter: '0',
       processStatus: data.custOfferStatus,
       custOfferWaitTime: DateTime.now(),
       updateListTime: DateTime.now(),
@@ -206,19 +208,19 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
           );
   }
 
-  List<ListItem> getList(List<ItemModel> item) {
-    List<ListItem> list = [];
+  List<ListItemModel> getList(List<ItemModel> item) {
+    List<ListItemModel> list = [];
     for (var element in item) {
-      list.add(ListItem(
+      list.add(ListItemModel(
           brandType: element.brandType,
           itemId: element.itemId,
           notes: element.itemNotes,
-          quantity: num.parse(element.quantity),
+          quantity: element.quantity,
           itemName: element.itemName,
           itemImageId: element.itemImageId,
           unit: element.unit,
           catName: element.catName,
-          catId: 0,
+          catId: '0',
           possibleUnits: []));
     }
     return list;

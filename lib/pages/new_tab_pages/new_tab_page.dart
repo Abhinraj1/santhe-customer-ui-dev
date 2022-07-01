@@ -1,30 +1,21 @@
-import 'dart:developer';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:santhe/constants.dart';
-import 'package:santhe/controllers/getx/new_list_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
-import 'package:santhe/models/santhe_user_list_model.dart';
-import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
-import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
-import 'package:santhe/widgets/new_tab_widgets/user_list_card.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import '../../controllers/api_service_controller.dart';
-import '../../controllers/boxes_controller.dart';
+import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import '../../core/app_colors.dart';
 import '../../models/new_list/user_list_model.dart';
 
 class NewTabPage extends StatefulWidget {
-  const NewTabPage({Key? key, this.limit = 3}) : super(key: key);
-
-  final int limit;
+  const NewTabPage({Key? key}) : super(key: key);
 
   @override
   _NewTabPageState createState() => _NewTabPageState();
@@ -32,44 +23,27 @@ class NewTabPage extends StatefulWidget {
 
 enum NewListType { startFromNew, importFromOld }
 
-class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
+class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMixin {
 
   NewListType? _type = NewListType.startFromNew;
 
-  final apiController = Get.find<APIs>();
-
-  final NewListController _newListController = Get.find();
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-
-    }
-    super.didChangeAppLifecycleState(state);
-  }
-
-  @override
-  void initState(){
-    super.initState();
-    _newListController.getAllList();
-    _newListController.lengthLimit = widget.limit;
-  }
+  final AllListController _allListController = Get.find();
 
   String? selectedValue;
 
   final _formKey = GlobalKey<FormState>();
 
   String listName = '';
-  int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: GetBuilder(
-        init: _newListController,
+        init: _allListController,
         id: 'fab',
-        builder: (ctr) => _newListController.newList.length >= _newListController.lengthLimit || _newListController.isLoading ?
+        builder: (ctr) => _allListController.newList.length >= _allListController.lengthLimit || _allListController.isLoading ?
           const SizedBox() :
           FloatingActionButton(
           elevation: 0.0,
@@ -80,10 +54,10 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
               const Color.fromARGB(165, 241, 241, 241),
               isScrollControlled: true,
               builder: (ctx) => _bottomSheet(ctx)),
-          child: const Icon(
+          child: Icon(
             Icons.add,
             color: Colors.white,
-            size: 20,
+            size: 22.5.sp,
             semanticLabel: 'Click here to create a new order!',
           ),
         ),
@@ -92,22 +66,27 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
         height: 100.vh,
         width: 100.vw,
         child: GetBuilder(
-          init: _newListController,
-          id: 'list',
-          builder: (ctr) => RefreshIndicator(
-              child: _newListController.isLoading ?
-              Center(child: CircularProgressIndicator(color: AppColors().brandDark),) :
-              _newListController.newList.isEmpty
-                  ? _emptyList()
-                  : ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
-                    itemCount: _newListController.newList.length,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) => UserListCard(userList: _newListController.newList.values.elementAt(index)),
-              ),
-              onRefresh: () async {
-                await _newListController.getAllList();
-              }),
+          init: _allListController,
+          id: 'newList',
+          builder: (ctr){
+            List<UserListModel> _userList = _allListController.newList;
+            if(_allListController.isLoading){
+              return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
+            }
+            if(_allListController.newList.isEmpty) {
+              return _emptyList();
+            }
+            return RefreshIndicator(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
+                  itemCount: _userList.length,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) => _userListCard(_userList[index]),
+                ),
+                onRefresh: () async {
+                  await _allListController.getAllList();
+                });
+          },
         ),
       ),
     );
@@ -116,8 +95,8 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
   Widget _emptyList() => RefreshIndicator(child: Column(
     children: [
       SizedBox(height: 23.h),
-      SvgPicture.asset(
-        'assets/new_tab_image.svg',
+      Image.asset(
+        'assets/new_tab_image.png',
         height: 45.vh,
       ),
       Expanded(
@@ -150,7 +129,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
         ),
       ),
     ],
-  ), onRefresh: () async => await _newListController.getAllList());
+  ), onRefresh: () async => await _allListController.getAllList());
   
   Widget _bottomSheet(BuildContext context) => Padding(
     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -312,7 +291,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                     const SizedBox(height: 2.0),
                     // start from an old list
                     Visibility(
-                      visible: _newListController.getLatestList(5).isNotEmpty
+                      visible: _allListController.getLatestList(5).isNotEmpty
                           ? true
                           : false,
                       child: Column(
@@ -444,7 +423,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                       width: 221.sp,
                       height: 50.sp,
                       child: Obx(() =>
-                      _newListController.isProcessing.value ?
+                      _allListController.isProcessing.value ?
                       Center(child: CircularProgressIndicator(color: AppColors().brandDark,),) : MaterialButton(
                         elevation: 0.0,
                         highlightElevation: 0.0,
@@ -456,7 +435,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                         onPressed: () async {
                           if (listName.isNotEmpty && _type == NewListType.startFromNew) {
                             if (_formKey.currentState!.validate()) {
-                              if(_newListController.isListAlreadyExist(listName)){
+                              if(_allListController.isListAlreadyExist(listName)){
                                 Get.snackbar('', '',
                                   titleText: const Padding(
                                     padding: EdgeInsets.only(left: 8.0),
@@ -480,7 +459,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                                   ),
                                 );
                               }else{
-                                _newListController.addNewListToDB(listName);
+                                _allListController.addNewListToDB(listName);
                               }
                             }
                           }
@@ -510,7 +489,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
                           }
                           else if (_type == NewListType.importFromOld) {
                             if (selectedValue != null) {
-                              _newListController.addCopyListToDB(selectedValue!);
+                              _allListController.addCopyListToDB(selectedValue!);
                             }
                             else {
                               Get.snackbar('', '',
@@ -561,7 +540,7 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
   List<DropdownMenuItem<String>> _addDividersAfterItems() {
     int _maxLength = 5;
     List<DropdownMenuItem<String>> _menuItems = [];
-    List<UserListModel> _list = _newListController.getLatestList(_maxLength);
+    List<UserListModel> _list = _allListController.getLatestList(_maxLength);
     for (var element in _list) {
       _menuItems.addAll(
         [
@@ -590,4 +569,143 @@ class _NewTabPageState extends State<NewTabPage> with WidgetsBindingObserver {
     }
     return _menuItems;
   }
+
+  Widget _userListCard(UserListModel userList){
+    String imagePath = 'assets/basket0.png';
+
+    //image logic
+    if (userList.items.isEmpty) {
+      imagePath = 'assets/basket0.png';
+    } else if (userList.items.length <= 10) {
+      imagePath = 'assets/basket1.png';
+    } else if (userList.items.length <= 20) {
+      imagePath = 'assets/basket2.png';
+    } else {
+      imagePath = 'assets/basket3.png';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: GestureDetector(
+        onTap: () async => Get.to(() => UserListScreen(listId: userList.listId)),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.21),
+                blurRadius: 15.0, // soften the shadow
+                spreadRadius: 3.6, //extend the shadow
+                offset: const Offset(
+                  0.0,
+                  0.0,
+                ),
+              )
+            ],
+          ),
+          child: Slidable(
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                //copy from old list
+                Visibility(
+                  visible: _allListController.newList.length < _allListController.lengthLimit,
+                  child: SlidableAction(
+                    onPressed: (context) async {
+                      _allListController.addCopyListToDB(userList.listId);
+                    },
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.orange,
+                    autoClose: true,
+                    icon: Icons.copy_rounded,
+                    label: 'Copy',
+                  ),
+                ),
+                //delete list
+                SlidableAction(
+                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId),
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.orange,
+                  icon: CupertinoIcons.delete_solid,
+                  label: 'Delete',
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5.0, bottom: 10.0, left: 15.0, right: 15.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AutoSizeText(
+                              userList.listName,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  letterSpacing: 0.2,
+                                  fontSize: 20.sp,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 16.sp),
+                              child: AutoSizeText(
+                                '${userList.items.length} ${userList.items.length > 1 ? 'Items' : 'Item'}',
+                                style: TextStyle(
+                                    fontSize: 30.sp,
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                              EdgeInsets.only(top: 1.sp, bottom: 8.32.sp),
+                              child: AutoSizeText(
+                                'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.transparent,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Image.asset(
+                        imagePath,
+                        height: 129.sp,
+                        width: 129.sp,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AutoSizeText(
+                        'Added on ${userList.createListTime.day}/${userList.createListTime.month}/${userList.createListTime.year}',
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            color: const Color(0xffBBBBBB),
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

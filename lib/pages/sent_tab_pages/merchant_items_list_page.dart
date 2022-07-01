@@ -15,6 +15,7 @@ import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart
 
 import '../../controllers/api_service_controller.dart';
 import '../../models/merchant_details_response.dart';
+import '../../models/new_list/user_list_model.dart';
 import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/merchant_offer_response.dart';
 import '../../models/santhe_user_list_model.dart';
@@ -22,7 +23,7 @@ import '../../widgets/sent_tab_widgets/merchant_item_card.dart';
 
 class MerchantItemsListPage extends StatefulWidget {
   CustomerOfferResponse? currentMerchantOffer;
-  final UserList userList;
+  final UserListModel userList;
   MerchantDetailsResponse? merchantResponse;
   bool archived;
   bool overrideData;

@@ -10,6 +10,7 @@ class ListItemModel {
     required this.unit,
     required this.catName,
     required this.catId,
+    required this.possibleUnits
   });
 
   String brandType;
@@ -29,4 +30,6 @@ class ListItemModel {
   String unit;
 
   String catId;
+
+  List<String> possibleUnits;
 }

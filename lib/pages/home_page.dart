@@ -14,6 +14,7 @@ import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
+import '../controllers/getx/all_list_controller.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../core/app_helpers.dart';
@@ -34,14 +35,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
   final apiController = Get.find<APIs>();
 
-  Future<int> checkSubPlan() async {
-    final data = await apiController
-        .getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
-    return data;
-  }
-
   final NotificationController _notificationController = Get.find();
   final ConnectivityController _connectivityController = Get.find();
+  final AllListController _allListController = Get.find();
 
   @override
   void initState() {
@@ -52,6 +48,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
+    _allListController.getAllList();
+    _allListController.checkSubPlan();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) => _connectivityController.listenConnectivity(result));
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
@@ -148,27 +146,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
         ),
       ),
-      body: FutureBuilder(
-          future: checkSubPlan(),
-          builder: (c, s) {
-            if (s.connectionState == ConnectionState.done) {
-              return TabBarView(
-                controller: _homeController.homeTabController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  NewTabPage(
-                    limit: s.data == null ? 3 : s.data! as int,
-                  ),
-                  const OfferTabPage(),
-                  const ArchiveTabPage(),
-                ],
-              );
-            }
-
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
+      body: TabBarView(
+        controller: _homeController.homeTabController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          const NewTabPage(),
+          OfferTabPage(),
+          ArchivedTabScreen(),
+        ],
+      ),
     );
   }
 }

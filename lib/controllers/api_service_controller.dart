@@ -14,9 +14,6 @@ import 'package:santhe/pages/error_pages/server_error_page.dart';
 import '../core/app_helpers.dart';
 import '../models/answer_list_model.dart';
 import '../models/item_model.dart';
-import '../models/new_list/list_item_model.dart';
-import '../models/new_list/new_list_response_model.dart';
-import '../models/new_list/user_list_model.dart';
 import '../models/santhe_faq_model.dart';
 import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
@@ -149,6 +146,21 @@ class APIs extends GetxController {
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
     throw NoInternetError();
+  }
+
+  Future<int> getSubscriptionLimit(String plan) async {
+    String url =
+        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/config/control';
+    if (plan == 'default') {
+      plan = 'planA';
+    }
+    var response = await callApi(mode: 1, url: Uri.parse(url));
+    var jsonResponse = jsonDecode(response.body);
+    if (jsonResponse != null && response.statusCode == 200) {
+      return int.parse(jsonResponse['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]);
+    } else {
+      return 3;
+    }
   }
 
   //get
@@ -1061,11 +1073,14 @@ class APIs extends GetxController {
 
   Future<List<Item>> searchedItemResult(String searchQuery) async {
     List<Item> searchResults = [];
-    final String url = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/search/items?searchCriteria=$searchQuery';
+    final String url =
+        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/search/items?searchCriteria=$searchQuery';
 
     final response = await callApi(mode: 1, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
+      log(searchQuery);
+      log(response.body.toString());
       List jsonResponse = jsonDecode(response.body);
 
       for (int i = 0; i < jsonResponse.length; i++) {
@@ -1073,6 +1088,7 @@ class APIs extends GetxController {
           searchResults.add(Item.fromJson(jsonResponse[i]));
         }
       }
+
       return searchResults;
     } else {
       log('Request failed with status: ${response.statusCode}.');

@@ -96,8 +96,8 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
   Widget _emptyList() => RefreshIndicator(child: Column(
     children: [
       SizedBox(height: 23.h),
-      SvgPicture.asset(
-        'assets/new_tab_image.svg',
+      Image.asset(
+        'assets/new_tab_image.png',
         height: 45.vh,
       ),
       Expanded(

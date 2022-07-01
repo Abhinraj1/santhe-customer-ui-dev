@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/core/app_helpers.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -30,9 +31,10 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  int userPhoneNumber =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
+  int userPhoneNumber = int.parse(
+      AppHelpers().getPhoneNumberWithoutCountryCode.isEmpty
+          ? AppHelpers().getPhoneNumberWithoutCountryCode
+          : '404');
   User? currentUser =
       Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
   late final TextEditingController _userNameController =
@@ -117,7 +119,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SizedBox(
-          width: 1.w,
+          width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -143,7 +145,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                       ),
                     ),
                   ),
-                  Form( 
+                  Form(
                     key: _formKey,
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -514,7 +516,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 child: Text(
                                   'Please Enter your Address',
                                   style: AppTheme().normal400(12).copyWith(
-                                      color: const Color.fromARGB(255, 214, 77, 93),),
+                                        color: const Color.fromARGB(
+                                            255, 214, 77, 93),
+                                      ),
                                 ),
                               ),
                             ],

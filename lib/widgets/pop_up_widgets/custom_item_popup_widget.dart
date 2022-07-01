@@ -7,24 +7,28 @@ import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/new_list/list_item_model.dart';
+import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/pages/new_tab_pages/image_page.dart';
 import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
-import '../../controllers/boxes_controller.dart';
 import '../../controllers/custom_image_controller.dart';
 import '../../firebase/firebase_helper.dart';
 import '../../models/santhe_item_model.dart';
-import '../../models/santhe_list_item_model.dart';
 
 class CustomItemPopUpWidget extends StatefulWidget {
-  final int currentUserListDBKey;
+  final String listId;
   final String searchQuery;
 
-  const CustomItemPopUpWidget(
-      {Key? key, required this.currentUserListDBKey, required this.searchQuery})
-      : super(key: key);
+  const CustomItemPopUpWidget({
+    Key? key,
+    required this.listId,
+    required this.searchQuery,
+  }) : super(key: key);
 
   @override
   State<CustomItemPopUpWidget> createState() => _CustomItemPopUpWidgetState();
@@ -32,24 +36,35 @@ class CustomItemPopUpWidget extends StatefulWidget {
 
 class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+
   final TextEditingController _customQtyController =
       TextEditingController(text: '1');
+
   final TextEditingController _customBrandController = TextEditingController();
+
   final TextEditingController _customNotesController = TextEditingController();
+
   late final TextEditingController _customItemNameController =
       TextEditingController(text: searchQuery);
+
   final placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
+
   final _unitsController = GroupButtonController(selectedIndex: 0);
+
   List<String> availableUnits = ['kg', 'gms', 'l', 'ml', 'pack/s', 'piece/s'];
+
   int customItemId = 4000;
+
   TextStyle kLabelTextStyle = const TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
   //todo add login check
-  int custPhone =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
+  int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+
   bool isProcessing = false;
+
+  bool disable = false;
+
   final imageController = Get.find<CustomImageController>();
 
   String removeDecimalZeroFormat(double n) {
@@ -57,10 +72,16 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
     return AppHelpers.replaceDecimalZero(data);
   }
 
-  late int currentUserListDBKey = widget.currentUserListDBKey;
   late String searchQuery = widget.searchQuery;
+
   late APIs apiController = Get.find<APIs>();
+
   late String selectedUnit = availableUnits[0];
+
+  final AllListController _allListController = Get.find();
+
+  late UserListModel currentUserList =
+      _allListController.allListMap[widget.listId]!;
 
   @override
   void initState() {
@@ -73,7 +94,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width / 100;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
+
     return Dialog(
       elevation: 8.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
@@ -201,223 +222,100 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                             QuantityWidget(qtyController: _customQtyController),
                           ],
                         ),
-                        Stack(children: [
-                          Container(
-                            color: Colors.transparent,
-                            height: screenWidth * 30,
-                            width: screenWidth * 30,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 8.sp, left: 8.sp, right: 8.sp),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Obx(
-                                () => Stack(
-                                  children: [
-                                    CachedNetworkImage(
-                                      imageUrl: imageController
-                                              .addItemCustomImageUrl.isEmpty
-                                          ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
-                                          : imageController
-                                              .addItemCustomImageUrl.value,
-                                      width: screenWidth * 25,
-                                      height: screenWidth * 25,
-                                      useOldImageOnUrlChange: true,
-                                      fit: BoxFit.cover,
-                                      errorWidget: (context, url, error) {
-                                        return Container(
-                                          color: Colors.red,
+                        Stack(
+                          children: [
+                            Container(
+                              color: Colors.transparent,
+                              height: screenWidth * 30,
+                              width: screenWidth * 30,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 8.sp, left: 8.sp, right: 8.sp),
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (imageController.editItemCustomImageUrl
+                                      .value.isNotEmpty) {
+                                    Get.to(
+                                        () => ImageViewerPage(
+                                              itemImageUrl: imageController
+                                                  .editItemCustomImageUrl.value,
+                                              showCustomImage: true,
+                                            ),
+                                        transition: Transition.fadeIn,
+                                        opaque: false);
+                                  }
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Obx(
+                                    () => Stack(
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl: imageController
+                                                  .addItemCustomImageUrl.isEmpty
+                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
+                                              : imageController
+                                                  .addItemCustomImageUrl.value,
                                           width: screenWidth * 25,
                                           height: screenWidth * 25,
-                                        );
-                                      },
+                                          useOldImageOnUrlChange: true,
+                                          fit: BoxFit.cover,
+                                          errorWidget: (context, url, error) {
+                                            return Container(
+                                              color: Colors.red,
+                                              width: screenWidth * 25,
+                                              height: screenWidth * 25,
+                                            );
+                                          },
+                                        ),
+                                        Positioned(
+                                          top: 10,
+                                          bottom: 10,
+                                          left: 10,
+                                          right: 10,
+                                          child: CircularProgressIndicator(
+                                            value: imageController
+                                                    .imageUploadProgress
+                                                    .value
+                                                    .isNotEmpty
+                                                ? double.parse(imageController
+                                                    .imageUploadProgress.value)
+                                                : 0.0,
+                                            strokeWidth: 5.0,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    Positioned(
-                                      top: 10,
-                                      bottom: 10,
-                                      left: 10,
-                                      right: 10,
-                                      child: CircularProgressIndicator(
-                                        value: imageController
-                                                .imageUploadProgress
-                                                .value
-                                                .isNotEmpty
-                                            ? double.parse(imageController
-                                                .imageUploadProgress.value)
-                                            : 0.0,
-                                        strokeWidth: 5.0,
-                                      ),
-                                    )
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            //EDIT ICON IMAGE ADD NEW IMAGE
-                            top: 0.0,
-                            right: 10.0,
-                            child: GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet<void>(
-                                    backgroundColor: Colors.transparent,
-                                    context: context,
-                                    barrierColor: const Color.fromARGB(
-                                        165, 241, 241, 241),
-                                    isScrollControlled: true,
-                                    builder: (context) {
-                                      return Container(
-                                        height: screenHeight * 24,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.only(
-                                            topRight: Radius.circular(28.0),
-                                            topLeft: Radius.circular(28.0),
-                                          ),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey.shade400,
-                                              blurRadius: 14.0,
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'Add Custom Image',
-                                                style: TextStyle(
-                                                  color: Colors.orange,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 22.sp,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 12.0.h),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Column(
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: () async {
-                                                            Navigator.pop(
-                                                                context);
-                                                            FirebaseHelper()
-                                                                .addCustomItemImage(
-                                                                    DateTime.now()
-                                                                        .toUtc()
-                                                                        .toString()
-                                                                        .replaceAll(
-                                                                            ' ',
-                                                                            'T'),
-                                                                    true,
-                                                                    true)
-                                                                .toString();
-                                                          },
-                                                          child:
-                                                              const CircleAvatar(
-                                                            radius: 45,
-                                                            backgroundColor:
-                                                                Colors.grey,
-                                                            child: CircleAvatar(
-                                                              radius: 43,
-                                                              backgroundColor:
-                                                                  Colors.white,
-                                                              child: Icon(
-                                                                CupertinoIcons
-                                                                    .camera_fill,
-                                                                color: Colors
-                                                                    .orange,
-                                                                size: 45,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        const Text(
-                                                          'Camera',
-                                                          style: TextStyle(
-                                                            color: Colors.grey,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 16,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            //todo same as above
-                                                            Navigator.pop(
-                                                                context);
-                                                            FirebaseHelper()
-                                                                .addCustomItemImage(
-                                                                    DateTime.now()
-                                                                        .toUtc()
-                                                                        .toString()
-                                                                        .replaceAll(
-                                                                            ' ',
-                                                                            'T'),
-                                                                    false,
-                                                                    true)
-                                                                .toString();
-                                                          },
-                                                          child:
-                                                              const CircleAvatar(
-                                                            radius: 45,
-                                                            backgroundColor:
-                                                                Colors.grey,
-                                                            child: CircleAvatar(
-                                                              radius: 43,
-                                                              backgroundColor:
-                                                                  Colors.white,
-                                                              child: Icon(
-                                                                CupertinoIcons
-                                                                    .photo_fill_on_rectangle_fill,
-                                                                color: Colors
-                                                                    .orange,
-                                                                size: 45,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        const Text(
-                                                          'Gallery',
-                                                          style: TextStyle(
-                                                            color: Colors.grey,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 16,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: const Icon(
-                                CupertinoIcons.pencil_circle_fill,
-                                color: Colors.orange,
-                                size: 24.0,
+                            Positioned(
+                              //EDIT ICON IMAGE ADD NEW IMAGE
+                              top: 0.0,
+                              right: 10.0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    disable = true;
+                                  });
+
+                                  showImagePickerOptions(context);
+
+                                  setState(() {
+                                    disable = false;
+                                  });
+                                },
+                                child: const Icon(
+                                  CupertinoIcons.pencil_circle_fill,
+                                  color: Colors.orange,
+                                  size: 24.0,
+                                ),
                               ),
                             ),
-                          ),
-                        ]),
+                          ],
+                        ),
                       ],
                     ),
 
@@ -593,112 +491,129 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0)),
                                 color: Colors.orange,
-                                onPressed: () async {
-                                  final itemUnit = selectedUnit;
-                                  setState(() {
-                                    isProcessing = true;
-                                  });
+                                onPressed: disable
+                                    ? null
+                                    : () async {
+                                        final itemUnit = selectedUnit;
+                                        setState(() {
+                                          isProcessing = true;
+                                        });
 
-                                  if (_formKey.currentState!.validate() &&
-                                      itemUnit.isNotEmpty &&
-                                      _customItemNameController
-                                          .text.trim().isNotEmpty) {
-                                    int itemCount =
-                                        await apiController.getItemsCount();
+                                        if (_formKey.currentState!.validate() &&
+                                            itemUnit.isNotEmpty &&
+                                            _customItemNameController.text
+                                                .trim()
+                                                .isNotEmpty) {
+                                          int itemCount = await apiController
+                                              .getItemsCount();
 
-                                    String image = imageController
-                                        .addItemCustomImageUrl.value;
+                                          String image = imageController
+                                              .addItemCustomImageUrl.value;
 
-                                    if (itemCount != 0) {
-                                      //todo add custom item to firebase
-                                      Item newCustomItem = Item(
-                                          dBrandType: _customBrandController
-                                                  .text.trim().isEmpty
-                                              ? 'You can mention brand, type or size of the item here' +
-                                                  placeHolderIdentifier
-                                              : _customBrandController.text.trim(),
-                                          dItemNotes: _customNotesController
-                                                  .text.trim().isEmpty
-                                              ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
-                                                  placeHolderIdentifier
-                                              : _customNotesController.text.trim(),
-                                          itemImageTn: imageController
-                                              .addItemCustomImageUrl.value,
-                                          catId: '4000',
-                                          createUser: custPhone,
-                                          dQuantity: 1,
-                                          dUnit: selectedUnit,
-                                          itemAlias:
-                                              _customItemNameController.text,
-                                          itemId: itemCount,
-                                          itemImageId: image.isEmpty
-                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
-                                              : image,
-                                          itemName:
-                                              _customItemNameController.text.trim(),
-                                          status: 'inactive',
-                                          unit: [selectedUnit],
-                                          updateUser: custPhone);
+                                          if (itemCount != 0) {
+                                            //todo add custom item to firebase
+                                            Item newCustomItem = Item(
+                                                dBrandType: _customBrandController.text
+                                                        .trim()
+                                                        .isEmpty
+                                                    ? 'You can mention brand, type or size of the item here' +
+                                                        placeHolderIdentifier
+                                                    : _customBrandController.text
+                                                        .trim(),
+                                                dItemNotes: _customNotesController.text
+                                                        .trim()
+                                                        .isEmpty
+                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
+                                                        placeHolderIdentifier
+                                                    : _customNotesController.text
+                                                        .trim(),
+                                                itemImageTn:
+                                                    imageController
+                                                        .addItemCustomImageUrl
+                                                        .value,
+                                                catId: '4000',
+                                                createUser: custPhone,
+                                                dQuantity: 1,
+                                                dUnit: selectedUnit,
+                                                itemAlias: _customItemNameController
+                                                    .text,
+                                                itemId: itemCount,
+                                                itemImageId: image.isEmpty
+                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
+                                                    : image,
+                                                itemName:
+                                                    _customItemNameController
+                                                        .text
+                                                        .trim(),
+                                                status: 'inactive',
+                                                unit: [selectedUnit],
+                                                updateUser: custPhone);
 
-                                      int response = await apiController
-                                          .addItem(newCustomItem);
+                                            int response = await apiController
+                                                .addItem(newCustomItem);
 
-                                      if (response == 1) {
-                                        final box = Boxes.getUserListDB();
-                                        //adding item to user list
-                                        box
-                                            .get(currentUserListDBKey)
-                                            ?.items
-                                            .add(ListItem(
-                                              brandType: _customBrandController
-                                                      .text.trim().isEmpty
-                                                  ? 'You can mention brand, type or size of the item here' +
-                                                      placeHolderIdentifier
-                                                  : _customBrandController.text.trim(),
-                                              //item ref
-                                              itemId: '$itemCount',
-                                              itemImageId: image.isEmpty
-                                                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
-                                                  : image,
-                                              itemName:
-                                                  _customItemNameController
-                                                      .text.trim(),
-                                              quantity: double.parse(
-                                                  _customQtyController.text),
-                                              notes: _customNotesController
-                                                      .text.trim().isEmpty
-                                                  ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
-                                                      placeHolderIdentifier
-                                                  : _customNotesController.text.trim(),
-                                              unit: itemUnit,
-                                              possibleUnits: availableUnits,
-                                              catName: 'Others',
-                                              catId: 4000,
-                                            ));
+                                            if (response == 1) {
+                                              var listItem = ListItemModel(
+                                                brandType: _customBrandController
+                                                        .text
+                                                        .trim()
+                                                        .isEmpty
+                                                    ? 'You can mention brand, type or size of the item here' +
+                                                        placeHolderIdentifier
+                                                    : _customBrandController
+                                                        .text
+                                                        .trim(),
+                                                //item ref
+                                                itemId: '$itemCount',
+                                                itemImageId: image.isEmpty
+                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
+                                                    : image,
+                                                itemName:
+                                                    _customItemNameController
+                                                        .text
+                                                        .trim(),
+                                                quantity:
+                                                    _customQtyController.text,
+                                                notes: _customNotesController
+                                                        .text
+                                                        .trim()
+                                                        .isEmpty
+                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
+                                                        placeHolderIdentifier
+                                                    : _customNotesController
+                                                        .text
+                                                        .trim(),
+                                                unit: itemUnit,
+                                                possibleUnits: availableUnits,
+                                                catName: 'Others',
+                                                catId: '4000',
+                                              );
 
-                                        //make changes persistent
-                                        box.get(currentUserListDBKey)?.save();
-                                        Navigator.pop(context);
-                                      } else {
-                                        log('Error, action not completed!');
-                                      }
-                                    }
-                                  } else {
-                                    Get.snackbar(
-                                      'Please fill all required values',
-                                      'Please enter all the values for required fields...',
-                                      snackPosition: SnackPosition.TOP,
-                                      backgroundColor: Colors.white,
-                                      margin: const EdgeInsets.all(10.0),
-                                      padding: const EdgeInsets.all(15.0),
-                                      colorText: Colors.grey,
-                                    );
-                                  }
+                                              currentUserList.items
+                                                  .add(listItem);
+                                              saveListAndUpdate();
 
-                                  setState(() {
-                                    isProcessing = false;
-                                  });
-                                },
+                                              Navigator.pop(context);
+                                            } else {
+                                              log('Error, action not completed!');
+                                            }
+                                          }
+                                        } else {
+                                          Get.snackbar(
+                                            'Please fill all required values',
+                                            'Please enter all the values for required fields...',
+                                            snackPosition: SnackPosition.TOP,
+                                            backgroundColor: Colors.white,
+                                            margin: const EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.all(15.0),
+                                            colorText: Colors.grey,
+                                          );
+                                        }
+
+                                        setState(() {
+                                          isProcessing = false;
+                                        });
+                                      },
                                 child: AutoSizeText(
                                   'Add',
                                   style: TextStyle(
@@ -717,6 +632,142 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
           ),
         ),
       ),
+    );
+  }
+
+  void saveListAndUpdate() {
+    // print(_allListController.allListMap[widget.listId]?.listName);
+    _allListController.allListMap[widget.listId] = currentUserList;
+    _allListController.update(['addedItems', 'itemCount', 'newList']);
+  }
+
+  void showImagePickerOptions(BuildContext context) {
+    showModalBottomSheet<void>(
+      backgroundColor: Colors.transparent,
+      context: context,
+      barrierColor: const Color.fromARGB(165, 241, 241, 241),
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          height: (MediaQuery.of(context).size.height / 100) * 24,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(28.0),
+              topLeft: Radius.circular(28.0),
+            ),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade400,
+                blurRadius: 14.0,
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Add Custom Image',
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 22.sp,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 12.0.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              Navigator.pop(context);
+                              FirebaseHelper()
+                                  .addCustomItemImage(
+                                      DateTime.now()
+                                          .toUtc()
+                                          .toString()
+                                          .replaceAll(' ', 'T'),
+                                      true,
+                                      true)
+                                  .toString();
+                            },
+                            child: const CircleAvatar(
+                              radius: 45,
+                              backgroundColor: Colors.grey,
+                              child: CircleAvatar(
+                                radius: 43,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  CupertinoIcons.camera_fill,
+                                  color: Colors.orange,
+                                  size: 45,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            'Camera',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              //todo same as above
+                              Navigator.pop(context);
+                              FirebaseHelper()
+                                  .addCustomItemImage(
+                                      DateTime.now()
+                                          .toUtc()
+                                          .toString()
+                                          .replaceAll(' ', 'T'),
+                                      false,
+                                      true)
+                                  .toString();
+                            },
+                            child: const CircleAvatar(
+                              radius: 45,
+                              backgroundColor: Colors.grey,
+                              child: CircleAvatar(
+                                radius: 43,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  CupertinoIcons.photo_fill_on_rectangle_fill,
+                                  color: Colors.orange,
+                                  size: 45,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            'Gallery',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -11,6 +11,7 @@ import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
 
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/home_controller.dart';
@@ -25,6 +26,7 @@ import 'categories_page.dart';
 
 class UserListScreen extends StatefulWidget {
   final String listId;
+
   const UserListScreen({Key? key, required this.listId}) : super(key: key);
 
   @override
@@ -32,7 +34,6 @@ class UserListScreen extends StatefulWidget {
 }
 
 class _UserListScreenState extends State<UserListScreen> {
-
   final AllListController _allListController = Get.find();
 
   late UserListModel _userList = _allListController.allListMap[widget.listId]!;
@@ -86,10 +87,7 @@ class _UserListScreenState extends State<UserListScreen> {
                       decoration: InputDecoration(
                         isDense: true,
                         contentPadding: const EdgeInsets.only(
-                            top: 10.0,
-                            bottom: 10.0,
-                            right: 30.0,
-                            left: 30.0),
+                            top: 10.0, bottom: 10.0, right: 30.0, left: 30.0),
                         counterText: '',
 
                         // hintText: userList.listName,
@@ -138,16 +136,19 @@ class _UserListScreenState extends State<UserListScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8, bottom: 0),
-            child: Obx(() => _allListController.isTitleEditable.value ? const SizedBox() : IconButton(
-              splashRadius: 0.1,
-              icon: const Icon(
-                CupertinoIcons.pencil_circle_fill,
-                size: 24,
-              ),
-              onPressed: () {
-                _allListController.isTitleEditable.value = !_allListController.isTitleEditable.value;
-              },
-            )),
+            child: Obx(() => _allListController.isTitleEditable.value
+                ? const SizedBox()
+                : IconButton(
+                    splashRadius: 0.1,
+                    icon: const Icon(
+                      CupertinoIcons.pencil_circle_fill,
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      _allListController.isTitleEditable.value =
+                          !_allListController.isTitleEditable.value;
+                    },
+                  )),
           ),
         ],
       ),
@@ -162,85 +163,91 @@ class _UserListScreenState extends State<UserListScreen> {
                   init: _allListController,
                   id: 'searchField',
                   builder: (builder) => TextFormField(
-                    controller: searchQueryController,
-                    textAlignVertical: TextAlignVertical.center,
-                    textAlign: TextAlign.left,
-                    textInputAction: TextInputAction.done,
-                    onChanged: (value) {
-                      searchQuery = value;
-                      if (value.length > 2) {
-                        EasyDebounce.debounce('searchItem', const Duration(milliseconds: 500), () {
-                          searchedItemsResult = APIs().searchedItemResult(value);
-                          _allListController.update(['searchResults', 'searchField']);
-                        });
-                      }
-                    },
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xff8B8B8B),
-                        fontSize: 16.sp),
-                    decoration: InputDecoration(
-                        suffixIcon: Visibility(
-                          visible: searchQuery.isNotEmpty,
-                          child: IconButton(
-                            icon: const Icon(
-                              CupertinoIcons.xmark,
-                              color: Color(0xffE0E0E0),
-                              size: 21,
+                        controller: searchQueryController,
+                        textAlignVertical: TextAlignVertical.center,
+                        textAlign: TextAlign.left,
+                        textInputAction: TextInputAction.done,
+                        onChanged: (value) {
+                          searchQuery = value;
+                          if (value.length > 2) {
+                            EasyDebounce.debounce(
+                                'searchItem', const Duration(milliseconds: 500),
+                                () {
+                              searchedItemsResult =
+                                  APIs().searchedItemResult(value);
+                              _allListController
+                                  .update(['searchResults', 'searchField']);
+                            });
+                          }
+                        },
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff8B8B8B),
+                            fontSize: 16.sp),
+                        decoration: InputDecoration(
+                            suffixIcon: Visibility(
+                              visible: searchQuery.isNotEmpty,
+                              child: IconButton(
+                                icon: const Icon(
+                                  CupertinoIcons.xmark,
+                                  color: Color(0xffE0E0E0),
+                                  size: 21,
+                                ),
+                                onPressed: () {
+                                  searchQueryController.clear();
+                                  searchQuery = '';
+                                  FocusScope.of(context).unfocus();
+                                  _allListController
+                                      .update(['searchResults', 'searchField']);
+                                },
+                              ),
                             ),
-                            onPressed: () {
-                              searchQueryController.clear();
-                              searchQuery = '';
-                              FocusScope.of(context).unfocus();
-                              _allListController.update(['searchResults', 'searchField']);
-                            },
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 9.0),
-                        prefixIcon: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 9.0),
-                          child: Icon(
-                            CupertinoIcons.search_circle_fill,
-                            size: 32,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(16),
-                            topRight: const Radius.circular(16),
-                            bottomRight: searchQuery.length < 3
-                                ? const Radius.circular(16)
-                                : const Radius.circular(0),
-                            bottomLeft: searchQuery.length < 3
-                                ? const Radius.circular(16)
-                                : const Radius.circular(0),
-                          ),
-                          borderSide:
-                          BorderSide(width: 1.0, color: Colors.grey.shade400),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(16),
-                            topRight: const Radius.circular(16),
-                            bottomRight: searchQuery.length < 3
-                                ? const Radius.circular(16)
-                                : const Radius.circular(0),
-                            bottomLeft: searchQuery.length < 3
-                                ? const Radius.circular(16)
-                                : const Radius.circular(0),
-                          ),
-                          borderSide: BorderSide(
-                              width: searchQuery.length < 3 ? 1.0 : 2.0,
-                              color: Colors.grey.shade400),
-                        ),
-                        hintStyle: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 18.sp),
-                        hintText: 'Search and add products...'),
-                  )),
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 9.0),
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 9.0),
+                              child: Icon(
+                                CupertinoIcons.search_circle_fill,
+                                size: 32,
+                                color: Colors.orange,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(16),
+                                topRight: const Radius.circular(16),
+                                bottomRight: searchQuery.length < 3
+                                    ? const Radius.circular(16)
+                                    : const Radius.circular(0),
+                                bottomLeft: searchQuery.length < 3
+                                    ? const Radius.circular(16)
+                                    : const Radius.circular(0),
+                              ),
+                              borderSide: BorderSide(
+                                  width: 1.0, color: Colors.grey.shade400),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(16),
+                                topRight: const Radius.circular(16),
+                                bottomRight: searchQuery.length < 3
+                                    ? const Radius.circular(16)
+                                    : const Radius.circular(0),
+                                bottomLeft: searchQuery.length < 3
+                                    ? const Radius.circular(16)
+                                    : const Radius.circular(0),
+                              ),
+                              borderSide: BorderSide(
+                                  width: searchQuery.length < 3 ? 1.0 : 2.0,
+                                  color: Colors.grey.shade400),
+                            ),
+                            hintStyle: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey.shade500,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 18.sp),
+                            hintText: 'Search and add products...'),
+                      )),
               //top item counter widget
               Expanded(
                 child: Stack(
@@ -265,22 +272,25 @@ class _UserListScreenState extends State<UserListScreen> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                              child: _userList.items.isNotEmpty ? _groupedItemListView() : _emptyList(),
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8.0, bottom: 8.0),
+                              child: _userList.items.isNotEmpty
+                                  ? _groupedItemListView()
+                                  : _emptyList(),
                             ),
                           ),
                           //buttons
                           _userList.items.length >= 2
                               ? Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
-                            children: [
-                              //send to shops
-                              _sendToShopsButton(),
-                              //categories page
-                              _iconCategoryButton(),
-                            ],
-                          )
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    //send to shops
+                                    _sendToShopsButton(),
+                                    //categories page
+                                    _iconCategoryButton(),
+                                  ],
+                                )
                               : _fullCategoryButton(),
                         ],
                       ),
@@ -289,26 +299,27 @@ class _UserListScreenState extends State<UserListScreen> {
                     GetBuilder(
                         init: _allListController,
                         id: 'searchResults',
-                        builder: (builder) =>  searchQuery.length > 2 ? ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(16),
-                            bottomRight: Radius.circular(16),
-                          ),
-                          child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.97),
+                        builder: (builder) => searchQuery.length > 2
+                            ? ClipRRect(
                                 borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(16),
                                   bottomRight: Radius.circular(16),
                                 ),
-                                border: Border.all(
-                                    color: Colors.grey.shade300, width: 2),
-                              ),
-                              child: _loadSearchResult()
-                          ),
-                        ) : const SizedBox()
-                    )
+                                child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.97),
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(16),
+                                        bottomRight: Radius.circular(16),
+                                      ),
+                                      border: Border.all(
+                                          color: Colors.grey.shade300,
+                                          width: 2),
+                                    ),
+                                    child: _loadSearchResult()),
+                              )
+                            : const SizedBox())
                   ],
                 ),
               ),
@@ -323,19 +334,22 @@ class _UserListScreenState extends State<UserListScreen> {
     );
   }
 
-  void changeListName(){
-    if(_title == _allListController.allListMap[widget.listId]!.listName){
-      _allListController.isTitleEditable.value = !_allListController.isTitleEditable.value;
-    } else if(_allListController.isListAlreadyExist(_title)) {
+  void changeListName() {
+    if (_title == _allListController.allListMap[widget.listId]!.listName) {
+      _allListController.isTitleEditable.value =
+          !_allListController.isTitleEditable.value;
+    } else if (_allListController.isListAlreadyExist(_title)) {
       errorMsg('List name cannot be duplicated', 'Enter unique name');
-    } else if(_title.trim().isNotEmpty){
-        _allListController.allListMap[widget.listId]!.listName = _title;
-        _userList = _allListController.allListMap[widget.listId]!;
-        _allListController.isTitleEditable.value = !_allListController.isTitleEditable.value;
-        _allListController.update(['newList']);
-        _title = _allListController.allListMap[widget.listId]!.listName;
-    }else{
-      _allListController.isTitleEditable.value = !_allListController.isTitleEditable.value;
+    } else if (_title.trim().isNotEmpty) {
+      _allListController.allListMap[widget.listId]!.listName = _title;
+      _userList = _allListController.allListMap[widget.listId]!;
+      _allListController.isTitleEditable.value =
+          !_allListController.isTitleEditable.value;
+      _allListController.update(['newList']);
+      _title = _allListController.allListMap[widget.listId]!.listName;
+    } else {
+      _allListController.isTitleEditable.value =
+          !_allListController.isTitleEditable.value;
     }
   }
 
@@ -352,23 +366,24 @@ class _UserListScreenState extends State<UserListScreen> {
                   borderRadius: BorderRadius.circular(16),
                   child: isCustom
                       ? Icon(
-                        CupertinoIcons.news,
-                        color: Colors.orange,
-                        size: 40.0.sp,
-                      ) :
-                        CachedNetworkImage(
-                            imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item!.itemImageId}',
-                            width: 40.w,
-                            height: 40.w,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) {
-                              return Container(
-                                color: Colors.orange,
-                                width: 50.w,
-                                height: 50.w,
-                              );
-                            },
-                          ),
+                          CupertinoIcons.news,
+                          color: Colors.orange,
+                          size: 40.0.sp,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl:
+                              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item!.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
+                          width: 40.w,
+                          height: 40.w,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) {
+                            return Container(
+                              color: Colors.orange,
+                              width: 50.w,
+                              height: 50.w,
+                            );
+                          },
+                        ),
                 ),
                 const SizedBox(
                   width: 12.0,
@@ -386,7 +401,11 @@ class _UserListScreenState extends State<UserListScreen> {
                             color: Colors.grey.shade700),
                       ),
                       Text(
-                        isCustom ? 'Add a custom item' : (item!.catId == '999' ? 'Custom Category' : getCategoryName(item)),
+                        isCustom
+                            ? 'Add a custom item'
+                            : (item!.catId == '4000'
+                                ? 'Custom Category'
+                                : getCategoryName(item)),
                         style: const TextStyle(
                           color: Colors.orange,
                         ),
@@ -404,9 +423,15 @@ class _UserListScreenState extends State<UserListScreen> {
         ],
       ));
 
-  String getCategoryName(Item item){
-    List<Category> temp = _categoryList.where((element) => element.catId == int.parse(item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', ''))).toList();
-    if(temp.isEmpty) {
+  String getCategoryName(Item item) {
+    List<Category> temp = _categoryList
+        .where((element) =>
+            element.catId ==
+            int.parse(item.catId.replaceAll(
+                'projects/santhe-425a8/databases/(default)/documents/category/',
+                '')))
+        .toList();
+    if (temp.isEmpty) {
       return 'Custom Category';
     } else {
       return temp.first.catName;
@@ -414,411 +439,368 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 
   Widget _loadSearchResult() => FutureBuilder<List<Item>>(
-    future: searchedItemsResult,
-    builder: (BuildContext context, snapshot) {
-      if (snapshot.hasError) {
-        return Text('${snapshot.error}');
-      } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data!.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: SizedBox(
-            height: 10.vh,
-            child: Column(
-              crossAxisAlignment:
-              CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    /*FocusManager.instance.primaryFocus?.unfocus();
-                    showDialog(
-                        context: context,
-                        barrierColor: const Color.fromARGB(165, 241, 241, 241),
-                        builder: (context) {
-                          return CustomItemPopUpWidget(
-                              currentUserListDBKey:
-                              widget.userKey,
-                              searchQuery:
-                              searchQuery);
-                        }).then((value) {
-                      searchQueryController.clear();
-                      searchQuery = '';
-                      setState(() {});
-                    });*/
-                  },
-                  child: _itemName(true),
+        future: searchedItemsResult,
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          } else if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData &&
+              snapshot.data!.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                height: 10.vh,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        showDialog(
+                            context: context,
+                            barrierColor:
+                                const Color.fromARGB(165, 241, 241, 241),
+                            builder: (context) {
+                              return CustomItemPopUpWidget(
+                                listId: widget.listId,
+                                searchQuery: searchQuery,
+                              );
+                            }).then((value) {
+                          searchQueryController.clear();
+                          searchQuery = '';
+                          setState(() {});
+                        });
+                      },
+                      child: _itemName(true),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        'No Search Results Found...',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
                 ),
-                const Padding(
-                  padding:
-                  EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    'No Search Results Found...',
-                    style: TextStyle(
-                        fontStyle:
-                        FontStyle.italic),
+              ),
+            );
+          } else if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+              shrinkWrap: true,
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+              itemCount: snapshot.data!.length + 1,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              itemBuilder: (context, index) {
+                late Item item;
+                if (index < snapshot.data!.length) {
+                  item = snapshot.data![index];
+                }
+                return index == snapshot.data!.length
+                    ? InkWell(
+                        onTap: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          showDialog(
+                              context: context,
+                              barrierColor:
+                                  const Color.fromARGB(165, 241, 241, 241),
+                              builder: (context) {
+                                return CustomItemPopUpWidget(
+                                  listId: widget.listId,
+                                  searchQuery: searchQuery,
+                                );
+                              }).then((value) {
+                            searchQueryController.clear();
+                            searchQuery = '';
+                            setState(() {});
+                          });
+                        },
+                        child: _itemName(true))
+                    : InkWell(
+                        onTap: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          showDialog(
+                              context: context,
+                              barrierColor:
+                                  const Color.fromARGB(165, 241, 241, 241),
+                              builder: (context) {
+                                return NewItemPopUpWidget(
+                                  item: snapshot.data![index],
+                                  fromSearch: true,
+                                  listId: widget.listId,
+                                );
+                              }).then((value) {
+                            searchQueryController.clear();
+                            searchQuery = '';
+                          });
+                        },
+                        child: _itemName(false, item: item),
+                      );
+              },
+            );
+          } else {
+            return SizedBox(
+              height: 50.h,
+              width: 100.vh,
+              child: Center(
+                child: SizedBox(
+                  height: 10.h,
+                  width: 10.h,
+                  child: const CircularProgressIndicator(),
+                ),
+              ),
+            );
+          }
+        },
+      );
+
+  Widget _emptyList() => SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 20.vw),
+                  child: SizedBox(
+                    height: 24.vh,
+                    child: SvgPicture.asset(
+                      'assets/search_items_pointer_arrow.svg',
+                      width: 50.vw,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+                const Text(
+                  'Add your item by searching',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
             ),
-          ),
-        );
-      } else if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-        return ListView.builder(
-          shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-          itemCount: snapshot.data!.length + 1,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          itemBuilder: (context, index) {
-            late Item item;
-            if(index < snapshot.data!.length){
-              item = snapshot.data![index];
-            }
-            return index == snapshot.data!.length
-                ? InkWell(
-                onTap: () {
-                  /*FocusManager.instance.primaryFocus?.unfocus();
-                                                          showDialog(
-                                                              context: context,
-                                                              barrierColor:
-                                                              const Color.fromARGB(165, 241, 241, 241),
-                                                              builder: (context) {
-                                                                return CustomItemPopUpWidget(
-                                                                    currentUserListDBKey: widget.userKey,
-                                                                    searchQuery:
-                                                                    searchQuery);
-                                                              }).then((value) {
-                                                            searchQueryController
-                                                                .clear();
-                                                            searchQuery = '';
-                                                            setState(() {});
-                                                          });*/
-                },
-                child: _itemName(true)) :
-            InkWell(
-              onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                showDialog(
-                    context: context,
-                    barrierColor:
-                    const Color.fromARGB(165, 241, 241, 241),
-                    builder: (context) {
-                      return NewItemPopUpWidget(
-                          item: snapshot.data![index],
-                          fromSearch: true,
-                          listId: widget.listId,);
-                    }).then((value) {
-                  searchQueryController.clear();
-                  searchQuery = '';
-                });
-              },
-              child: _itemName(false, item: item),
-            );
-          },
-        );
-      } else {
-        return SizedBox(
-            height: 50.h,
-            width: 100.vh,
-            child: Center(
-                child: SizedBox(
-                    height: 10.h,
-                    width: 10.h,
-                    child: const CircularProgressIndicator())
-            )
-        );
-      }
-    },
-  );
-
-  Widget _emptyList() => SizedBox(
-    height: double.infinity,
-    width: double.infinity,
-    child: Column(
-      crossAxisAlignment:
-      CrossAxisAlignment.center,
-      mainAxisAlignment:
-      MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          children: [
-            Padding(padding: EdgeInsets.only(left: 20.vw),
-              child: SizedBox(
-                height: 24.vh,
-                child: SvgPicture.asset(
-                  'assets/search_items_pointer_arrow.svg',
-                  width: 50.vw,
-                  color: Colors.orange,
+            Column(
+              children: [
+                const Text(
+                  'Add your item from catalog',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-            ),
-            const Text(
-              'Add your item by searching',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            const Text(
-              'Add your item from catalog',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SizedBox(
-              height: 20.vh,
-              child: SvgPicture.asset(
-                'assets/item_catalog_arrow.svg',
-                width: 70.vw,
-                color: Colors.orange,
-              ),
+                SizedBox(
+                  height: 20.vh,
+                  child: SvgPicture.asset(
+                    'assets/item_catalog_arrow.svg',
+                    width: 70.vw,
+                    color: Colors.orange,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ],
-    ),
-  );
+      );
 
   Widget _fullCategoryButton() => SizedBox(
-    height: 50,
-    width: 325.sp,
-    child: MaterialButton(
-      elevation: 0.0,
-      highlightElevation: 0.0,
-      shape: RoundedRectangleBorder(
-          borderRadius:
-          BorderRadius.circular(16.0)),
-      color: Colors.orange,
-      onPressed: () {
-        Get.to(() => CategoriesPage(listId: widget.listId));
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 4.5.vw),
-        child: Row(
-          mainAxisAlignment:
-          MainAxisAlignment.spaceBetween,
-          crossAxisAlignment:
-          CrossAxisAlignment.center,
-          children: const [
-            Icon(
-              CupertinoIcons.square_grid_2x2,
-              color: Colors.white,
-              size: 28,
-            ),
-            Expanded(
-              child: Center(
-                child: AutoSizeText(
-                  'Item Catalog',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
+        height: 50,
+        width: 325.sp,
+        child: MaterialButton(
+          elevation: 0.0,
+          highlightElevation: 0.0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          color: Colors.orange,
+          onPressed: () {
+            Get.to(() => CategoriesPage(listId: widget.listId));
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4.5.vw),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Icon(
+                  CupertinoIcons.square_grid_2x2,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                Expanded(
+                  child: Center(
+                    child: AutoSizeText(
+                      'Item Catalog',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Icon(
+                  CupertinoIcons.square_grid_2x2,
+                  color: Colors.transparent,
+                ),
+              ],
             ),
-            Icon(
-              CupertinoIcons.square_grid_2x2,
-              color: Colors.transparent,
-            ),
-          ],
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   Widget _iconCategoryButton() => SizedBox(
-    height: 53,
-    width: 77.sp,
-    child: MaterialButton(
-      elevation: 0.0,
-      highlightElevation: 0.0,
-      splashColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-          side: const BorderSide(
-              color: Colors.orange,
-              width: 2.0),
-          borderRadius:
-          BorderRadius.circular(16.0)),
-      color: Colors.white,
-      onPressed: () {
-        Get.to(() => CategoriesPage(listId: widget.listId));
-      },
-      child: const Icon(
-        CupertinoIcons.square_grid_2x2,
-        color: Colors.orange,
-        size: 35,
-      ),
-    ),
-  );
+        height: 53,
+        width: 77.sp,
+        child: MaterialButton(
+          elevation: 0.0,
+          highlightElevation: 0.0,
+          splashColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+              side: const BorderSide(color: Colors.orange, width: 2.0),
+              borderRadius: BorderRadius.circular(16.0)),
+          color: Colors.white,
+          onPressed: () {
+            Get.to(() => CategoriesPage(listId: widget.listId));
+          },
+          child: const Icon(
+            CupertinoIcons.square_grid_2x2,
+            color: Colors.orange,
+            size: 35,
+          ),
+        ),
+      );
 
   Widget _sendToShopsButton() => SizedBox(
-    height: 55,
-    width: 65.vw,
-    child: MaterialButton(
-      elevation: 0.0,
-      highlightElevation: 0.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      color: _userList.items.length < 2 ? AppColors().grey40 : Colors.orange,
-      onPressed: () {
-        //SEND TO SHOP BOTTOM SHEET
-        showModalBottomSheet<void>(
-            backgroundColor:
-            Colors.transparent,
-            context: context,
-            barrierColor:
-            const Color.fromARGB(
-                165, 241, 241, 241),
-            isScrollControlled: true,
-            builder: (ctx) {
-              return Padding(
-                padding: EdgeInsets.only(
-                    bottom:
-                    MediaQuery.of(ctx)
-                        .viewInsets
-                        .bottom),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.only(
-                      topRight:
-                      Radius.circular(
-                          30.r),
-                      topLeft:
-                      Radius.circular(
-                          30.r),
-                    ),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors
-                            .grey.shade300,
-                        blurRadius: 16.0,
+        height: 55,
+        width: 65.vw,
+        child: MaterialButton(
+          elevation: 0.0,
+          highlightElevation: 0.0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          color:
+              _userList.items.length < 2 ? AppColors().grey40 : Colors.orange,
+          onPressed: () {
+            //SEND TO SHOP BOTTOM SHEET
+            showModalBottomSheet<void>(
+                backgroundColor: Colors.transparent,
+                context: context,
+                barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                isScrollControlled: true,
+                builder: (ctx) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(ctx).viewInsets.bottom),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30.r),
+                          topLeft: Radius.circular(30.r),
+                        ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            blurRadius: 16.0,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  //giving a new context so that modal sheet can also set state
-                  child:
-                  SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: EdgeInsets.all(23.sp),
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment
-                            .center,
-                        mainAxisAlignment:
-                        MainAxisAlignment
-                            .spaceEvenly,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Column(
-                                children: const [
-                                  Icon(
-                                      Icons
-                                          .close,
-                                      color:
-                                      Colors.transparent),
-                                  SizedBox(
-                                    height:
-                                    30.0,
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Send list to shops\nnear you',
-                                  textAlign:
-                                  TextAlign
-                                      .center,
-                                  style:
-                                  TextStyle(
-                                    color: Colors
-                                        .orange,
-                                    fontWeight:
-                                    FontWeight.w700,
-                                    fontSize:
-                                    24.sp,
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap:
-                                        () {
-                                      Navigator.pop(
-                                          ctx);
-                                    },
-                                    child:  Icon(
-                                        Icons
-                                            .close,
-                                        color: AppColors().grey60),
-                                  ),
-                                  const SizedBox(
-                                    height:
-                                    30.0,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Image.asset(
-                            'assets/send_to_shops.gif',
-                            height: 235.sp,
-                            width: 344.sp,
-                          ),
-                          Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
-                            children: [
+                      //giving a new context so that modal sheet can also set state
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: EdgeInsets.all(23.sp),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
                               Row(
-                                textBaseline:
-                                TextBaseline
-                                    .ideographic,
-                                crossAxisAlignment:
-                                CrossAxisAlignment
-                                    .baseline,
                                 children: [
-                                  Text(
-                                    '1.',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 15.sp,
-                                      color: const Color(0xffB0B0B0),
+                                  Column(
+                                    children: const [
+                                      Icon(Icons.close,
+                                          color: Colors.transparent),
+                                      SizedBox(
+                                        height: 30.0,
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      'Send list to shops\nnear you',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.orange,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 24.sp,
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(
-                                      width:
-                                      12.36.sp),
-                                  Expanded(
-                                      child:
-                                      RichText(
-                                        text:
-                                        TextSpan(
+                                  Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(ctx);
+                                        },
+                                        child: Icon(Icons.close,
+                                            color: AppColors().grey60),
+                                      ),
+                                      const SizedBox(
+                                        height: 30.0,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Image.asset(
+                                'assets/send_to_shops.gif',
+                                height: 235.sp,
+                                width: 344.sp,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    textBaseline: TextBaseline.ideographic,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    children: [
+                                      Text(
+                                        '1.',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.sp,
+                                          color: const Color(0xffB0B0B0),
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.36.sp),
+                                      Expanded(
+                                          child: RichText(
+                                        text: TextSpan(
                                           text:
-                                          'Your list will be sent to all the registered shops with in',
+                                              'Your list will be sent to all the registered shops with in',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 15.sp,
                                             color: const Color(0xffB0B0B0),
                                           ),
-                                          children: <
-                                              TextSpan>[
+                                          children: <TextSpan>[
                                             TextSpan(
                                                 text: ' 3 Km ',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 15.sp,
-                                                  color: const Color(0xffB0B0B0),
-                                                ).copyWith(fontWeight: FontWeight.w700)),
+                                                  color:
+                                                      const Color(0xffB0B0B0),
+                                                ).copyWith(
+                                                    fontWeight:
+                                                        FontWeight.w700)),
                                             TextSpan(
                                               text: 'from your home address.',
                                               style: TextStyle(
@@ -830,215 +812,169 @@ class _UserListScreenState extends State<UserListScreen> {
                                           ],
                                         ),
                                       )),
-                                ],
-                              ),
-                              SizedBox(
-                                  height: 13
-                                      .sp),
-                              Row(
-                                textBaseline:
-                                TextBaseline
-                                    .ideographic,
-                                crossAxisAlignment:
-                                CrossAxisAlignment
-                                    .baseline,
-                                children: [
-                                  Text(
-                                    '2.',
-                                    style:
-                                    TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 15.sp,
-                                      color: const Color(0xffB0B0B0),
-                                    ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                      width:
-                                      12.36.sp),
-                                  Expanded(
-                                    child:
-                                    Text(
-                                      'It will take anywhere between 3 to 12 hours before you get offers from shops.',
-                                      style:
-                                      TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15.sp,
-                                        color: const Color(0xffB0B0B0),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                  height: 13
-                                      .sp),
-                              Row(
-                                textBaseline:
-                                TextBaseline
-                                    .ideographic,
-                                crossAxisAlignment:
-                                CrossAxisAlignment
-                                    .baseline,
-                                children: [
-                                  Text(
-                                    '3.',
-                                    style:
-                                    TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 15.sp,
-                                      color: const Color(0xffB0B0B0),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      width:
-                                      12.36.sp),
-                                  Expanded(
-                                    child:
-                                    Text(
-                                      'Once sent, you cannot modify this list.',
-                                      style:
-                                      TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15.sp,
-                                        color: const Color(0xffB0B0B0),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              if (_userList
-                                  .items
-                                  .length <=
-                                  3)
-                                SizedBox(
-                                    height:
-                                    13.sp),
-                              if (_userList
-                                  .items
-                                  .length <=
-                                  3)
-                                Row(
-                                  textBaseline:
-                                  TextBaseline
-                                      .ideographic,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment
-                                      .baseline,
-                                  children: [
-                                    Text(
-                                      '4.',
-                                      style:
-                                      TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15.sp,
-                                        color: const Color(0xffB0B0B0),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        width:
-                                        12.36.sp),
-                                    Expanded(
-                                      child:
+                                  SizedBox(height: 13.sp),
+                                  Row(
+                                    textBaseline: TextBaseline.ideographic,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    children: [
                                       Text(
-                                        'Sending a list with few items may not get enough offers from shops.',
-                                        style:
-                                        TextStyle(
+                                        '2.',
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 15.sp,
                                           color: const Color(0xffB0B0B0),
                                         ),
-                                        softWrap:
-                                        true,
                                       ),
+                                      SizedBox(width: 12.36.sp),
+                                      Expanded(
+                                        child: Text(
+                                          'It will take anywhere between 3 to 12 hours before you get offers from shops.',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 15.sp,
+                                            color: const Color(0xffB0B0B0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 13.sp),
+                                  Row(
+                                    textBaseline: TextBaseline.ideographic,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    children: [
+                                      Text(
+                                        '3.',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.sp,
+                                          color: const Color(0xffB0B0B0),
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.36.sp),
+                                      Expanded(
+                                        child: Text(
+                                          'Once sent, you cannot modify this list.',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 15.sp,
+                                            color: const Color(0xffB0B0B0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (_userList.items.length <= 3)
+                                    SizedBox(height: 13.sp),
+                                  if (_userList.items.length <= 3)
+                                    Row(
+                                      textBaseline: TextBaseline.ideographic,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      children: [
+                                        Text(
+                                          '4.',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 15.sp,
+                                            color: const Color(0xffB0B0B0),
+                                          ),
+                                        ),
+                                        SizedBox(width: 12.36.sp),
+                                        Expanded(
+                                          child: Text(
+                                            'Sending a list with few items may not get enough offers from shops.',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15.sp,
+                                              color: const Color(0xffB0B0B0),
+                                            ),
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                ],
+                              ),
+                              SizedBox(height: 30.sp),
+                              //send to shops button material
+                              SizedBox(
+                                height: 50,
+                                width: 234.sp,
+                                child: MaterialButton(
+                                  elevation: 0.0,
+                                  highlightElevation: 0.0,
+                                  color: Colors.orange,
+                                  shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: Colors.orange, width: 2.0),
+                                      borderRadius:
+                                          BorderRadius.circular(16.0)),
+                                  onPressed: () {
+                                    sendList();
+                                  },
+                                  child: Text(
+                                    'Send to Shops',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                        fontSize: 18.sp),
+                                  ),
                                 ),
+                              ),
                             ],
                           ),
-                          SizedBox(
-                              height:
-                              30.sp),
-                          //send to shops button material
-                          SizedBox(
-                            height: 50,
-                            width: 234.sp,
-                            child:
-                            MaterialButton(
-                              elevation: 0.0,
-                              highlightElevation: 0.0,
-                              color: Colors.orange,
-                              shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      color: Colors
-                                          .orange,
-                                      width:
-                                      2.0),
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      16.0)),
-                              onPressed:
-                                  () {
-                                sendList();
-                              },
-                              child: Text(
-                                'Send to Shops',
-                                style: TextStyle(
-                                    fontWeight:
-                                    FontWeight
-                                        .w700,
-                                    color: Colors
-                                        .white,
-                                    fontSize:
-                                    18.sp),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            });
-      },
-      child: const Text(
-        'Send to Shops',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w700,
-          fontSize: 18,
+                  );
+                });
+          },
+          child: const Text(
+            'Send to Shops',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   Widget _groupedItemListView() => GroupedListView(
-    physics: const BouncingScrollPhysics(),
-    elements: _userList.items,
-    groupBy: (ListItemModel element) => element.catName,
-    indexedItemBuilder: (BuildContext context, dynamic element, int index) => ListItemCard(
-      listItem: _userList.items[index], listId: widget.listId,
-    ),
-    groupSeparatorBuilder: (String value) => Column(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-      children: [
-        Text(value),
-        const Divider(
-          color: Colors.grey,
-          thickness: 1,
-        )
-      ],
-    ),
-  );
+        physics: const BouncingScrollPhysics(),
+        elements: _userList.items,
+        groupBy: (ListItemModel element) => element.catName,
+        indexedItemBuilder:
+            (BuildContext context, dynamic element, int index) => ListItemCard(
+          listItem: _userList.items[index],
+          listId: widget.listId,
+        ),
+        groupSeparatorBuilder: (String value) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(value),
+            const Divider(
+              color: Colors.grey,
+              thickness: 1,
+            )
+          ],
+        ),
+      );
 
-  void saveList(){
-    NetworkCall().updateUserList(_userList, processStatus: 'draft', status: 'new');
+  void saveList() {
+    NetworkCall()
+        .updateUserList(_userList, processStatus: 'draft', status: 'new');
   }
 
-  void sendList(){
+  void sendList() {
     NetworkCall().updateUserList(_userList);
-    _allListController.allListMap[widget.listId] = _userList..custListStatus = 'sent';
+    _allListController.allListMap[widget.listId] = _userList
+      ..custListStatus = 'sent';
     _allListController.update(['newList', 'sentList']);
     _homeController.homeTabController.animateTo(1);
     Get.back();
@@ -1046,7 +982,7 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _allListController.isTitleEditable.value = false;
     super.dispose();
   }

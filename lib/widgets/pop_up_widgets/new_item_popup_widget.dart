@@ -20,7 +20,6 @@ import '../../controllers/boxes_controller.dart';
 import '../../controllers/custom_image_controller.dart';
 import '../../firebase/firebase_helper.dart';
 import '../../models/santhe_item_model.dart';
-import '../../models/santhe_list_item_model.dart';
 import '../../pages/new_tab_pages/image_page.dart';
 
 class NewItemPopUpWidget extends StatefulWidget {
@@ -317,6 +316,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       borderRadius: BorderRadius.circular(16),
                                       child: GestureDetector(
                                         onTap: () {
+                                          String img =
+                                          item.itemImageId.replaceAll(
+                                            'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                                            '',
+                                          );
                                           if (imageController
                                                   .editItemCustomImageUrl
                                                   .value
@@ -338,7 +342,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             Get.to(
                                                 () => ImageViewerPage(
                                                     itemImageUrl:
-                                                        item.itemImageId,
+                                                    'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
                                                     showCustomImage: false),
                                                 transition: Transition.fadeIn,
                                                 opaque: false);
@@ -848,7 +852,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           dBrandType: placeHolderValidation(item.dBrandType, _brandController),
                                                           dItemNotes: placeHolderValidation(item.dItemNotes, _notesController),
                                                           itemImageTn: imageController.editItemCustomImageUrl.value,
-                                                          catId: '4000',
+                                                          catId: item.catId,
                                                           createUser: custPhone,
                                                           dQuantity: 1,
                                                           dUnit: selectedUnit,
@@ -863,23 +867,24 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                       int response = await apiController.addItem(newCustomItem);
 
                                                       if (response == 1) {
-                                                        final listItem = ListItem(
+                                                        final listItem = ListItemModel(
                                                           brandType: placeHolderValidation(newCustomItem.dBrandType, _brandController),
                                                           //item ref
                                                           itemId: '${newCustomItem.itemId}',
                                                           itemImageId: imageController.editItemCustomImageUrl.value,
                                                           itemName: _customItemNameController.text,
-                                                          quantity: double.parse(_qtyController.text),
+                                                          quantity: _qtyController.text.toString(),
                                                           notes: placeHolderValidation(newCustomItem.dItemNotes, _notesController),
                                                           unit: itemUnit,
                                                           possibleUnits: newCustomItem.unit,
-                                                          catName: 'Others',
-                                                          catId: 4000,
+                                                          catName: Boxes.getCategoriesDB().get(int.parse(item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')))?.catName ?? 'Others',
+                                                          catId: item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', ''),
                                                         );
 
                                                         if (widget.edit) {
                                                           currentUserList.items.removeWhere((element) => element.itemId == '${item.itemId}');
                                                         }
+                                                        currentUserList.items.add(listItem);
                                                         saveListAndUpdate();
                                                       } else {
                                                         Get.snackbar(
@@ -1006,7 +1011,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   }
 
   void saveListAndUpdate(){
-    print(_allListController.allListMap[widget.listId]?.listName);
+    // print(_allListController.allListMap[widget.listId]?.listName);
     _allListController.allListMap[widget.listId] = currentUserList;
     _allListController.update(['addedItems', 'itemCount', 'newList']);
   }

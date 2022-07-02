@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
@@ -117,6 +118,7 @@ class AllListController extends GetxController{
       allListMap[newUserList.listId] = newUserList;
       update(['newList', 'fab']);
       Get.back();
+      Get.to(()=>UserListScreen(listId: newUserList.listId));
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }
@@ -132,6 +134,7 @@ class AllListController extends GetxController{
       allListMap[copyListId] = copyUserList;
       update(['newList', 'fab']);
       Get.back();
+      Get.to(()=>UserListScreen(listId: copyUserList.listId));
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }

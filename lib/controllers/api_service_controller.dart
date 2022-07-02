@@ -890,16 +890,54 @@ class APIs extends GetxController {
   }
 
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
-      String listId) async {
+      String listId, int listQuantity) async {
     String url =
         'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
-          customerOfferResponseFromJson(response.body);
+      customerOfferResponseFromJson(response.body);
       resp.sort((a, b) =>
           a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
+
+      // DO NOT DELETE THIS SORTING LOGIC
+      // if (resp.isNotEmpty) {
+      //   resp.sort((a, b) =>
+      //       a.merchResponse.merchTotalPrice
+      //           .compareTo(b.merchResponse.merchTotalPrice));
+      //   resp = resp.reversed.toList();
+      //   resp.sort((a, b) =>
+      //       a.merchResponse.merchOfferQuantity
+      //           .compareTo(b.merchResponse.merchOfferQuantity));
+      //   resp = resp.reversed.toList();
+      //
+      //   final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
+      //
+      //   for (int i = 0; i < resp.length; i++) {
+      //     if (AppHelpers.isInBetween(
+      //       double.parse(resp[i].merchResponse.merchTotalPrice),
+      //       bestPrice,
+      //       bestPrice + 50,
+      //     ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best1';
+      //     } else if (AppHelpers.isInBetween(
+      //       double.parse(resp[i].merchResponse.merchTotalPrice),
+      //       bestPrice + 50,
+      //       bestPrice + 100,
+      //     ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best2';
+      //     } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
+      //         bestPrice + 100 &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best3';
+      //     } else {
+      //       resp[i].custOfferResponse.custDeal = 'notBest';
+      //     }
+      //   }
+      // }
       return resp;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
@@ -912,7 +950,6 @@ class APIs extends GetxController {
         'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/merchant/$merchId';
 
     var response = await callApi(mode: 1, url: Uri.parse(url));
-    log(response.body.toString());
 
     if (response.statusCode == 200) {
       MerchantDetailsResponse resp =

@@ -50,8 +50,10 @@ class CustomerOfferResponse {
         listId: Id.fromJson(json["listId"]),
         merchId: Id.fromJson(json["merchId"]),
         merchResponse: MerchResponse.fromJson(json["merchResponse"]),
-        requestForDay: json['requestForDay'],
-        merchReqDate: DateTime.parse(json['merchReqDate']),
+        requestForDay: json['requestForDay'] ?? 1,
+        merchReqDate: json['merchReqDate'] == null
+            ? DateTime.now()
+            : DateTime.parse(json['merchReqDate']),
       );
 
   Map<String, dynamic> toJson() => {

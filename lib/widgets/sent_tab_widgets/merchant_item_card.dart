@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 
 class MerchantItemCard extends StatefulWidget {
@@ -36,7 +37,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,8 +65,8 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
               },
             ),
           ),
-          const SizedBox(
-            width: 12.0,
+          SizedBox(
+            width: 10.w,
           ),
           Expanded(
             child: Column(
@@ -77,14 +78,14 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: screenSize.width * 2 / 5 - 40,
+                      width: 121.w,
                       child: Text(
                         widget.merchantItem.itemName,
                         maxLines: 2,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: const Color(0xff8B8B8B),
+                          color: AppColors().grey20,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                         ),
@@ -117,7 +118,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                             fontWeight: FontWeight.w500,
                           ),
                           overflow: TextOverflow.fade,
-                          textAlign: TextAlign.right,
+                          textAlign: TextAlign.left,
                         ),
                       ),
                     ),
@@ -188,7 +189,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

@@ -7,13 +7,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
-import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/models/santhe_user_list_model.dart';
-import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
-import 'package:santhe/pages/no_offer_page.dart';
-import 'package:santhe/pages/sent_tab_pages/merchant_items_list_page.dart';
-import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
 import '../../controllers/archived_controller.dart';

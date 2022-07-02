@@ -4,15 +4,13 @@ import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
-import 'package:santhe/pages/home_page.dart';
 import 'package:get/get.dart';
-import 'package:santhe/pages/new_tab_pages/user_list_page.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/no_offer_page.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
 import '../../controllers/getx/all_list_controller.dart';
 import '../../models/new_list/user_list_model.dart';
-import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/sent_list_detail_page.dart';
 
 class OfferCard extends StatefulWidget {
@@ -30,11 +28,7 @@ class OfferCard extends StatefulWidget {
 class _OfferCardState extends State<OfferCard> {
   final apiController = Get.find<APIs>();
 
-  final int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
-
-  final box = Boxes.getUserListDB();
+  final int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
   final AllListController _allListController = Get.find();
 
@@ -107,53 +101,7 @@ class _OfferCardState extends State<OfferCard> {
                 Visibility(
                   visible: Boxes.getUserListDB().values.length < 3,
                   child: SlidableAction(
-                    onPressed: (context) async {
-                      /*int userListCount = 0;
-                      UserList oldUserList = widget.userList;
-
-                      UserList newImportedList = UserList(
-                        createListTime: DateTime.now(),
-                        custId: oldUserList.custId,
-                        items: oldUserList.items,
-                        listId: int.parse('$custId${userListCount + 1}'),
-                        listName: '(COPY) ${oldUserList.listName}',
-                        custListSentTime: oldUserList.custListSentTime,
-                        custListStatus: oldUserList.custListStatus,
-                        listOfferCounter: oldUserList.listOfferCounter,
-                        processStatus: oldUserList.processStatus,
-                        custOfferWaitTime: oldUserList.custOfferWaitTime,
-                        updateListTime: DateTime.now(),
-                      );
-
-                      int response = await apiController.addCustomerList(
-                          newImportedList, custId, 'new');
-
-                      if (response == 1) {
-                        box.add(newImportedList);
-                        var key = -1;
-                        for (int i = 0; i < box.values.length; i++) {
-                          final data = box.values.toList()[i];
-                          if (data.listId == newImportedList.listId) {
-                            key = box.keys.toList()[i];
-                          }
-                        }
-                        if (key != -1) {
-                          Get.to(() => UserListPage(
-                                listId: newImportedList.listId.toString(),
-                              ));
-                        } else {
-                          Get.offAll(const HomePage(
-                            pageIndex: 0,
-                          ));
-                        }
-                      } else {
-                        Get.dialog(const Card(
-                          child: Center(
-                            child: Text('Error!'),
-                          ),
-                        ));
-                      }*/
-                    },
+                    onPressed: (context) async => _allListController.addCopyListToDB(widget.userList.listId),
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
                     autoClose: true,
@@ -229,14 +177,14 @@ class _OfferCardState extends State<OfferCard> {
                             color: const Color(0xffBBBBBB),
                             fontWeight: FontWeight.w400),
                       ),
-                      /*Padding(
+                      Padding(
                         padding: EdgeInsets.only(
                           right: 10.sp,
                         ),
                         child: OfferStatus(
                           userList: widget.userList,
                         ),
-                      ),*/
+                      ),
                     ],
                   )
                 ],

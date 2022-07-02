@@ -38,7 +38,7 @@ class FirebaseHelper {
 
     var image = await _picker.pickImage(
       source: shootPic ? ImageSource.camera : ImageSource.gallery,
-      imageQuality: 35,
+      imageQuality: 25,
       maxHeight: 1080,
       maxWidth: 1080,
     );
@@ -58,7 +58,7 @@ class FirebaseHelper {
         var compressedImage = await FlutterImageCompress.compressWithList(
           byteImg,
           format: CompressFormat.png,
-          quality: 50,
+          quality: 25,
           minHeight: 512,
           minWidth: 512,
         );

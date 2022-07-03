@@ -624,7 +624,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
                 ),
                 //delete list
                 SlidableAction(
-                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId),
+                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId, 'new'),
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   icon: CupertinoIcons.delete_solid,

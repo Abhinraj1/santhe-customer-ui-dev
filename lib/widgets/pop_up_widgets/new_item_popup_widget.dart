@@ -90,22 +90,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   @override
   void initState() {
-    // log(
-    //     '${widget.item.unit.indexWhere((element) => element == widget.item.dUnit)}');
-
     units = widget.item.unit;
-
-    units.removeAt(widget.item.unit.indexWhere((element) =>
-    element.toLowerCase() == widget.item.dUnit.toLowerCase()));
-
+    units.remove(widget.item.dUnit);
     units.insert(0, widget.item.dUnit);
 
     _unitsController = GroupButtonController(
         selectedIndex: units.indexWhere((element) =>
         element.toLowerCase() == widget.item.dUnit.toLowerCase()));
 
-    // log('dUnit:${widget.item.dUnit}');
-    // log('Units:${widget.item.unit}');
     _qtyController = TextEditingController(
         text: AppHelpers.replaceDecimalZero('${widget.item.dQuantity}'));
     _customItemNameController =
@@ -342,7 +334,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             Get.to(
                                                 () => ImageViewerPage(
                                                     itemImageUrl:
-                                                    'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
+                                                    img,
                                                     showCustomImage: false),
                                                 transition: Transition.fadeIn,
                                                 opaque: false);
@@ -861,7 +853,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           itemImageId: imageController.editItemCustomImageUrl.value,
                                                           itemName: _customItemNameController.text,
                                                           status: 'inactive',
-                                                          unit: [selectedUnit],
+                                                          unit: units,
                                                           updateUser: custPhone);
 
                                                       int response = await apiController.addItem(newCustomItem);

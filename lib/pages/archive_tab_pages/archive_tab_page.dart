@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -25,9 +26,7 @@ class ArchivedTabScreen extends StatelessWidget {
           List<UserListModel> archivedList = _allListController.archivedList;
           archivedList.sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
           return RefreshIndicator(
-            onRefresh: () async {
-
-            },
+            onRefresh: () async => await _allListController.getAllList(),
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
               physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -114,13 +113,13 @@ class ArchivedTabScreen extends StatelessWidget {
                   ),
                 ),
                 //delete list
-                /*SlidableAction(
-                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId),
+                SlidableAction(
+                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId, 'archived'),
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   icon: CupertinoIcons.delete_solid,
                   label: 'Delete',
-                ),*/
+                ),
               ],
             ),
             child: Padding(

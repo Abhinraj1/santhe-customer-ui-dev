@@ -3,6 +3,7 @@ import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:santhe/widgets/confirmation_widgets/undo_delete_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/new_list_response_model.dart';
@@ -175,7 +176,7 @@ class AllListController extends GetxController{
     return _list;
   }
 
-  Future<void> deleteListFromDB(String listId) async {
+  Future<void> deleteListFromDB(String listId, String status) async {
     isProcessing.value = true;
     int response = await NetworkCall().removeNewList(listId);
     isProcessing.value = false;
@@ -183,6 +184,7 @@ class AllListController extends GetxController{
       allListMap[listId]?.custListStatus = 'purged';
       newList.remove(listId);
       update(['newList', 'fab']);
+      undoDelete(int.parse(listId), status);
       Get.back();
     } else {
       errorMsg('Error Occurred', 'Please try again');

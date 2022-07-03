@@ -31,10 +31,7 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  int userPhoneNumber = int.parse(
-      AppHelpers().getPhoneNumberWithoutCountryCode.isEmpty
-          ? AppHelpers().getPhoneNumberWithoutCountryCode
-          : '404');
+  int userPhoneNumber = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
   User? currentUser =
       Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
   late final TextEditingController _userNameController =

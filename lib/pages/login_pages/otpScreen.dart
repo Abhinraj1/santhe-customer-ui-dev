@@ -258,6 +258,7 @@ class _OtpScreenState extends State<OtpScreen> {
           codeSent: onCodeSent,
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
     } catch (e) {
+      print(e);
       errorMsg('Error Occurred', e.toString());
       if (_timer != null) _timer!.cancel();
     }
@@ -343,6 +344,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
     _auth.signInWithCredential(phoneAuthCredential).then((value) async {
+      print(value);
       if (_timer != null) _timer!.cancel();
       _nextStep();
     });

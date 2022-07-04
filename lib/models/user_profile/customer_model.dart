@@ -44,4 +44,29 @@ class CustomerModel{
   String customerReferral;
 
   String customerStatus;
+
+  factory CustomerModel.fromJson(Map json){
+    return CustomerModel(
+      address: json['contact']['mapValue']['fields']['address']['stringValue'],
+      emailId: json['contact']['mapValue']['fields']['emailId']['stringValue'],
+      lat: json['contact']['mapValue']['fields']['location']
+      ['mapValue']['fields']['lat']['doubleValue']
+          .toString(),
+      lng: json['contact']['mapValue']['fields']['location']
+      ['mapValue']['fields']['lng']['doubleValue']
+          .toString(),
+      pinCode: json['contact']['mapValue']['fields']['pincode']['integerValue'],
+      phoneNumber: json['contact']['mapValue']['fields']['phoneNumber']['integerValue'],
+      customerId: json['custId']['integerValue'],
+      customerName: json['custName']['stringValue'],
+      customerRatings: json['custRatings']['integerValue'] ??
+          json['custRatings']['doubleValue'].toString(),
+      customerReferral: json['custReferal']['integerValue'],
+      customerStatus: json['custStatus']['stringValue'],
+      customerPlan: json['custPlan']['stringValue'],
+      customerLoginTime: DateTime.parse(json['custLoginTime']['timestampValue']),
+      howToReach: json['contact']['mapValue']['fields']['howToReach']
+      ['stringValue'],
+    );
+  }
 }

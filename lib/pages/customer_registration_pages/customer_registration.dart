@@ -7,6 +7,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_user_model.dart';
@@ -149,13 +150,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   Widget build(BuildContext context) {
     int userPhoneNumber = widget.userPhoneNumber;
     final registrationController = Get.find<RegistrationController>();
+    final profileController = Get.find<ProfileController>();
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
           'Please Verify Your Phone Number before continuing...');
-      Boxes.getUserPrefs().put('showHome', false);
-      Boxes.getUserPrefs().put('isRegistered', false);
-      Boxes.getUserPrefs().put('isLoggedIn', false);
+      profileController.isLoggedIn = false;
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
       });

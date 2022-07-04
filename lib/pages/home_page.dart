@@ -48,8 +48,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
-
-    _allListController.initialiseUrlToken();
     _allListController.getAllList();
     _allListController.checkSubPlan();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) => _connectivityController.listenConnectivity(result));

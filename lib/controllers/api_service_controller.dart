@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/error/exceptions.dart';
 import 'package:santhe/models/merchant_details_response.dart';
@@ -12,6 +12,7 @@ import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
 import '../core/app_helpers.dart';
 import '../models/answer_list_model.dart';
@@ -41,8 +42,8 @@ class APIs extends GetxController {
   var itemsDB = <Item>[].obs;
 
   Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
-    final _allListController = Get.find<AllListController>();
-    final token = _allListController.urlToken;
+    final tokenHandler = Get.find<ProfileController>();
+    final token = tokenHandler.urlToken;
     final header = { "authorization": 'Bearer $token' };
     // case 1: get
     // case 2: post
@@ -716,6 +717,8 @@ class APIs extends GetxController {
         var box = Boxes.getUser();
         box.put('currentUserDetails', currentUser);
 
+        final profileController = Get.find<ProfileController>();
+        profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');
@@ -723,7 +726,7 @@ class APIs extends GetxController {
       }
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }

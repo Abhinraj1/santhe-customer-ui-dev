@@ -6,7 +6,6 @@ import 'package:resize/resize.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
-import '../controllers/boxes_controller.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -273,9 +272,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0)),
                         onPressed: () {
-                          //show home page directly from next time onwards
-                          Boxes.getUserPrefs().put('showHome', true);
-
                           //show login screen for onboarded user
                           Get.off(() => const LoginScreen());
                         },

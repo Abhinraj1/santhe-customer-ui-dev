@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 
@@ -133,7 +134,7 @@ class _SplashToHomeState extends State<SplashToHome> {
   }
 
   @override
-  void initState() {
+  void initState() async {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.orange,
       systemNavigationBarIconBrightness: Brightness.light,
@@ -149,8 +150,9 @@ class _SplashToHomeState extends State<SplashToHome> {
     final hasNet = await AppHelpers.checkConnection();
     if (hasNet) {
       timer.cancel();
+      final tokenGenerator = Get.find<ProfileController>();
       bootHome();
-      init();
+      if(tokenGenerator.urlToken != '') init();
     } else {
       Get.to(
             () => const NoInternetPage(),

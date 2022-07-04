@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -31,14 +33,12 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
+  final profileController = Get.find<ProfileController>();
   int userPhoneNumber =
       int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
-  User? currentUser =
-      Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
-  late final TextEditingController _userNameController =
-      TextEditingController(text: currentUser?.custName ?? 'John Doe');
-  late final TextEditingController _userEmailController =
-      TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+  late final CustomerModel? currentUser;
+  late final TextEditingController _userNameController;
+  late final TextEditingController _userEmailController;
   bool addressUpdateFlag = false;
   bool donePressed = false;
   bool mapSelected = false;
@@ -52,6 +52,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.light,
     ));
+    _userNameController =
+        TextEditingController(text: currentUser?.customerName ?? 'John Doe');
+    _userEmailController =
+        TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+    currentUser = profileController.customerDetails ?? fallback_error_customer;
     super.initState();
   }
 
@@ -68,20 +73,18 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     }
     if (registrationController.lat.value == 0.0 ||
         registrationController.lng.value == 0.0) {
-      registrationController.lat.value = currentUser?.lat ?? 0.0;
-      registrationController.lng.value = currentUser?.lng ?? 0.0;
+      registrationController.lat.value = double.parse(currentUser?.lat ?? '0.0');
+      registrationController.lng.value = double.parse(currentUser?.lng ?? '0.0');
     }
     if (registrationController.pinCode.value.isEmpty) {
       registrationController.pinCode.value =
-          currentUser?.pincode.toString() ?? '';
+          currentUser?.pinCode.toString() ?? '';
     }
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
           'Please Verify Your Phone Number before continuing...');
-      Boxes.getUserPrefs().put('showHome', false);
-      Boxes.getUserPrefs().put('isRegistered', false);
-      Boxes.getUserPrefs().put('isLoggedIn', false);
+      profileController.isLoggedIn = false;
       Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
     }
     final TextStyle kHintStyle = TextStyle(
@@ -227,7 +230,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             color: AppColors().brandDark),
                                       ),
                                       hintText:
-                                          '+91-${currentUser?.custId ?? '91-9876543210'}',
+                                          '+91-${currentUser?.customerId ?? '91-9876543210'}',
                                       hintStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 1.0,
@@ -542,29 +545,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           isProcessing = true;
                                         });
                                         if (_formKey.currentState!.validate()) {
-                                          //final otp check
-                                          bool isUserLoggedin =
-                                              Boxes.getUserPrefs().get(
-                                                      'isLoggedIn',
-                                                      defaultValue: false) ??
-                                                  false;
+                                          if (profileController.isLoggedIn) {
+                                            CustomerModel? currentUser = profileController.customerDetails ?? fallback_error_customer;
 
-                                          if (isUserLoggedin) {
-                                            Boxes.getUserPrefs()
-                                                .put('showHome', true);
-                                            Boxes.getUserPrefs()
-                                                .put('isRegistered', true);
-                                            User? currentUser = Boxes.getUser()
-                                                    .get(
-                                                        'currentUserDetails') ??
-                                                fallBack_error_user;
-
-                                            int userPhone = Boxes
-                                                        .getUserCredentialsDB()
-                                                    .get(
-                                                        'currentUserCredentials')
-                                                    ?.phoneNumber ??
-                                                404;
+                                            int userPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
                                             if (userPhone == 404) {
                                               Get.off(
@@ -592,7 +576,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                 custName:
                                                     _userNameController.text,
                                                 custRatings:
-                                                    currentUser.custRatings,
+                                                    double.parse(currentUser.customerRatings),
                                                 custReferal: 0000,
                                                 custStatus: 'active',
                                                 howToReach:
@@ -607,6 +591,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                     .updateCustomerInfo(
                                                         userPhone, updatedUser);
                                             if (userUpdated == 1) {
+                                              await profileController.getCustomerDetailsInit();
 //since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
                                               successMsg('Profile Updated',
                                                   'Your profile information was updated successfully.');
@@ -622,12 +607,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           } else {
                                             errorMsg('Verify Number First',
                                                 'Please Verify Your Phone Number before continuing...');
-                                            Boxes.getUserPrefs()
-                                                .put('showHome', false);
-                                            Boxes.getUserPrefs()
-                                                .put('isRegistered', false);
-                                            Boxes.getUserPrefs()
-                                                .put('isLoggedIn', false);
+                                            profileController.isRegistered = false;
+                                            profileController.isLoggedIn = false;
                                             Get.offAll(
                                                 () => const LoginScreen(),
                                                 transition: Transition.fadeIn);

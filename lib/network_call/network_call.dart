@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/models/user_profile/customer_response_model.dart';
 
 import '../core/app_helpers.dart';
@@ -160,11 +161,11 @@ class NetworkCall{
     }
   }
 
-  Future<CustomerResponseModel> getCustomerDetails() async {
+  Future<CustomerModel> getCustomerDetails() async {
     var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(AppHelpers().getPhoneNumberWithoutCountryCode)));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
-      return customerResponseModelFromJson(response.body);
+      return CustomerModel.fromJson(jsonResponse['fields']);
     } else {
       throw ServerError();
     }
@@ -252,8 +253,8 @@ class NetworkCall{
   }
 
   Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
-    final _allListController = Get.find<AllListController>();
-    final token = _allListController.urlToken;
+    final tokenHandler = Get.find<ProfileController>();
+    final token = tokenHandler.urlToken;
     final header = { "authorization": 'Bearer $token' };
     switch (mode) {
       case REST.get:

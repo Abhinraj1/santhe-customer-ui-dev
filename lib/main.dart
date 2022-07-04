@@ -7,12 +7,15 @@ import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/archived_controller.dart';
 import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/controllers/home_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
+import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/customer_registration_pages/customer_registration.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/pages/splash_to_onboarding.dart';
@@ -64,13 +67,6 @@ void main() async {
   await Hive.openBox<String>('contentDB');
   await Hive.openBox<UserList>('userListDB');
 
-  final bool showHome =
-      Boxes.getUserPrefs().get('showHome', defaultValue: false) ?? false;
-  final bool isLoggedIn =
-      Boxes.getUserPrefs().get('isLoggedIn', defaultValue: false) ?? false;
-  final bool isRegistered =
-      Boxes.getUserPrefs().get('isRegistered', defaultValue: false) ?? false;
-
   Get.put(AllListController());
   Get.put(APIs());
   Get.put(LocationController());
@@ -82,50 +78,22 @@ void main() async {
   Get.put(NotificationController());
   Get.put(ChatController());
   Get.put(HomeController());
+  Get.put(ProfileController());
   Get.put(ConnectivityController());
   Notifications().fcmInit();
 
-  runApp(
-    MyApp(
-      showHome: showHome,
-      isRegistered: isRegistered,
-      isLoggedIn: isLoggedIn,
-    ),
-  );
+  final profileController = Get.find<ProfileController>();
+  await profileController.initialise();
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final bool showHome;
-  final bool isRegistered;
-  final bool isLoggedIn;
 
-  const MyApp(
-      {required this.showHome,
-      required this.isRegistered,
-      required this.isLoggedIn,
-      Key? key})
-      : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool showHome2 = showHome;
-    bool isRegistered2 = isRegistered;
-    bool isLoggedIn2 = isLoggedIn;
-
-    int userPhone = Boxes.getUserCredentialsDB()
-            .get('currentUserCredentials')
-            ?.phoneNumber ??
-        404;
-
-    if (userPhone == 404) {
-      isLoggedIn2 = false;
-      Boxes.getUserPrefs().put('isLoggedIn', false);
-      isRegistered2 = false;
-      Boxes.getUserPrefs().put('isRegistered', false);
-      showHome2 = false;
-      Boxes.getUserPrefs().put('showHome', false);
-    }
-
     return Resize(
       builder: () => GetMaterialApp(
         defaultTransition: Transition.rightToLeft,
@@ -141,15 +109,20 @@ class MyApp extends StatelessWidget {
                 selectionHandleColor: Colors.transparent,
               ),
             ),
-        home: showHome2 && isLoggedIn2
-            ? isRegistered2
-                ? const SplashToHome()
-                : UserRegistrationPage(userPhoneNumber: userPhone)
-            : const SplashToOnboarding(),
-        // home: const ServerErrorPage(),
-      ),
+        home: starterWidget()),
       allowtextScaling: false,
       size: const Size(390, 844),
     );
   }
+
+  Widget starterWidget(){
+    final profileController = Get.find<ProfileController>();
+
+    return profileController.isLoggedIn
+        ? profileController.isRegistered
+        ? const SplashToHome()
+        : UserRegistrationPage(userPhoneNumber: int.parse(AppHelpers().getPhoneNumberWithoutCountryCode))
+        : const SplashToOnboarding();
+  }
+
 }

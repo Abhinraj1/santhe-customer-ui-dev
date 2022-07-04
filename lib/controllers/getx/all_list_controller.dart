@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
-import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/undo_delete_widget.dart';
@@ -10,12 +9,8 @@ import 'package:santhe/widgets/confirmation_widgets/undo_delete_widget.dart';
 import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/new_list_response_model.dart';
 import '../../network_call/network_call.dart';
-import '../boxes_controller.dart';
 
 class AllListController extends GetxController{
-
-  String? urlToken;
-
   bool isLoading = true;
 
   RxBool isProcessing = false.obs, isTitleEditable = false.obs;
@@ -32,20 +27,7 @@ class AllListController extends GetxController{
 
   List<UserListModel> get newList => allListMap.values.toList().where((element) => element.custListStatus == 'new').toList();
 
-  Future<void> initialiseUrlToken() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if(user!=null){
-      final tokenId = await user.getIdToken();
-      urlToken = tokenId;
-    }else{
-      Get.offAll(()=>const LoginScreen(), transition: Transition.fade);
-    }
-  }
-
   Future<void> getAllList() async {
-    if(urlToken==null){
-      await initialiseUrlToken();
-    }
     var val = await NetworkCall().getAllCustomerLists();
     for (var element in _toUserListModel(val)) {
       allListMap[element.listId] = element;
@@ -214,7 +196,8 @@ class AllListController extends GetxController{
   bool isListAlreadyExist(String listName) => allList.where((element) => element.listName == listName).toList().isNotEmpty;
 
   Future<void> checkSubPlan() async {
-    final data = await NetworkCall().getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
+    final profileController = Get.find<ProfileController>();
+    final data = await NetworkCall().getSubscriptionLimit(profileController.customerDetails!.customerPlan);
     lengthLimit = data;
   }
 }

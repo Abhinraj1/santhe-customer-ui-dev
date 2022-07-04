@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/onboarding_page.dart';
@@ -112,8 +114,9 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
     final hasNet = await AppHelpers.checkConnection();
     if (hasNet) {
       timer.cancel();
+      final tokenGenerator = Get.find<ProfileController>();
       bootHome();
-      init();
+      if(tokenGenerator.urlToken != '') init();
     } else {
       Get.to(
         () => const NoInternetPage(),

@@ -14,9 +14,12 @@ SnackbarController undoDelete(int userListId, String status) {
   return Get.snackbar(
     '',
     '',
+    titleText: const SizedBox.shrink(),
     messageText: Padding(
       padding: const EdgeInsets.only(left: 23.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'List has been deleted',
@@ -30,11 +33,12 @@ SnackbarController undoDelete(int userListId, String status) {
             onTap: () async{
               final result = await apiController.undoDeleteUserList(userListId, status);
               if(result==1){
+                Get.closeCurrentSnackbar();
                 _allListController.getAllList();
               }
             },
             child: Text(
-              'Undo',
+              ' Undo',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppColors().brandDark,
@@ -46,7 +50,7 @@ SnackbarController undoDelete(int userListId, String status) {
       ),
     ),
     margin: const EdgeInsets.all(10.0),
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.only(right: 15.0, top: 3.0, bottom: 3.0, left: 8.0,),
     //todo definitely remove once done
     duration: const Duration(milliseconds: 3000),
     backgroundColor: Colors.white,
@@ -70,5 +74,6 @@ SnackbarController undoDelete(int userListId, String status) {
         size: 45,
       ),
     ),
+    snackPosition: SnackPosition.BOTTOM,
   );
 }

@@ -69,12 +69,10 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
           id: 'newList',
           builder: (ctr){
             List<UserListModel> _userList = _allListController.newList;
-            if(_allListController.isLoading){
-              return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
-            }
-            if(_allListController.newList.isEmpty) {
-              return _emptyList();
-            }
+            if(_allListController.newList.isEmpty) return _emptyList();
+
+            if(_allListController.isLoading)return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
+
             return RefreshIndicator(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
@@ -624,7 +622,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
                 ),
                 //delete list
                 SlidableAction(
-                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId, 'new'),
+                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId, 'new', fromNew: true),
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   icon: CupertinoIcons.delete_solid,

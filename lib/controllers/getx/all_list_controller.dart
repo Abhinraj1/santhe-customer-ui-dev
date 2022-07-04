@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/undo_delete_widget.dart';
@@ -11,6 +13,8 @@ import '../../network_call/network_call.dart';
 import '../boxes_controller.dart';
 
 class AllListController extends GetxController{
+
+  String? urlToken;
 
   bool isLoading = true;
 
@@ -28,8 +32,20 @@ class AllListController extends GetxController{
 
   List<UserListModel> get newList => allListMap.values.toList().where((element) => element.custListStatus == 'new').toList();
 
+  Future<void> initialiseUrlToken() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if(user!=null){
+      final tokenId = await user.getIdToken();
+      urlToken = tokenId;
+    }else{
+      Get.offAll(()=>const LoginScreen(), transition: Transition.fade);
+    }
+  }
 
   Future<void> getAllList() async {
+    if(urlToken==null){
+      await initialiseUrlToken();
+    }
     var val = await NetworkCall().getAllCustomerLists();
     for (var element in _toUserListModel(val)) {
       allListMap[element.listId] = element;
@@ -135,7 +151,7 @@ class AllListController extends GetxController{
       allListMap[copyListId] = copyUserList;
       update(['newList', 'fab']);
       Get.back();
-      Get.to(()=>UserListScreen(listId: copyUserList.listId));
+      Get.to(()=>UserListScreen(listId: copyUserList.listId), transition: Transition.rightToLeft,);
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }
@@ -176,16 +192,20 @@ class AllListController extends GetxController{
     return _list;
   }
 
-  Future<void> deleteListFromDB(String listId, String status) async {
+  Future<void> deleteListFromDB(String listId, String status,
+      {bool fromNew = false}) async {
     isProcessing.value = true;
     int response = await NetworkCall().removeNewList(listId);
     isProcessing.value = false;
     if (response == 1) {
-      allListMap[listId]?.custListStatus = 'purged';
-      newList.remove(listId);
-      update(['newList', 'fab']);
+      allListMap[listId]?.custListStatus = 'deleted';
+      if(fromNew){
+        newList.remove(allListMap[listId]);
+      }else{
+        archivedList.remove(allListMap[listId]);
+      }
+      update(['newList', 'fab', 'archivedList']);
       undoDelete(int.parse(listId), status);
-      Get.back();
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }

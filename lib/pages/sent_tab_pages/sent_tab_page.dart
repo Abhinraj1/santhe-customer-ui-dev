@@ -20,6 +20,9 @@ class OfferTabPage extends StatelessWidget {
         builder: (builder) {
           List<UserListModel> _sentList = _allListController.sentList;
           if(_sentList.isEmpty) return _emptyList(context);
+
+          if(_allListController.isLoading) return const Center(child: CircularProgressIndicator(),);
+
           return RefreshIndicator(
             onRefresh: () async => await _allListController.getAllList(),
             child: ListView.builder(

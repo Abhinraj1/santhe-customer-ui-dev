@@ -2,8 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/core/app_colors.dart';
 
 import '../../controllers/getx/all_list_controller.dart';
 import '../../models/new_list/user_list_model.dart';
@@ -25,6 +27,10 @@ class ArchivedTabScreen extends StatelessWidget {
         builder: (builder){
           List<UserListModel> archivedList = _allListController.archivedList;
           archivedList.sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
+          if(_allListController.archivedList.isEmpty) return _emptyList(context);
+
+          if(_allListController.isLoading) return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
+
           return RefreshIndicator(
             onRefresh: () async => await _allListController.getAllList(),
             child: ListView.builder(
@@ -37,6 +43,57 @@ class ArchivedTabScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _emptyList(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async => await _allListController.getAllList(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(height: 23.h),
+          SvgPicture.asset(
+            'assets/archive_tab_image.svg',
+            height: 45.vh,
+          ),
+          SizedBox(
+            height: 20.sp,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text:
+                'All your shopping lists that you have sent to Shops in last 72 hours will appear here. Go to',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16.sp,
+                  height: 2.sp,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: ' New ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                      fontSize: 16.sp,
+                      height: 2.sp,
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'tab to create and send your shopping lists.',
+                    style: TextStyle(
+                        color: Colors.grey, fontSize: 16.sp, height: 2.sp),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

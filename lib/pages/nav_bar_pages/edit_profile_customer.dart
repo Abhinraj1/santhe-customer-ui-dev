@@ -31,7 +31,8 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  int userPhoneNumber = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  int userPhoneNumber =
+      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
   User? currentUser =
       Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
   late final TextEditingController _userNameController =
@@ -41,6 +42,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   bool addressUpdateFlag = false;
   bool donePressed = false;
   bool mapSelected = false;
+  bool isProcessing = false;
 
   @override
   void initState() {
@@ -523,110 +525,130 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                           Padding(
                             padding: EdgeInsets.only(top: 25.sp),
                             child: SizedBox(
-                              width: 244.sp,
+                              width: isProcessing ? 50.sp : 244.sp,
                               height: 50.sp,
-                              child: MaterialButton(
-                                elevation: 0.0,
-                                highlightElevation: 0.0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0)),
-                                color: Colors.orange,
-                                onPressed: () async {
-                                  setState(() {
-                                    donePressed = true;
-                                  });
-                                  if (_formKey.currentState!.validate()) {
-                                    //final otp check
-                                    bool isUserLoggedin = Boxes.getUserPrefs()
-                                            .get('isLoggedIn',
-                                                defaultValue: false) ??
-                                        false;
+                              child: isProcessing
+                                  ? const CircularProgressIndicator.adaptive()
+                                  : MaterialButton(
+                                      elevation: 0.0,
+                                      highlightElevation: 0.0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      color: Colors.orange,
+                                      onPressed: () async {
+                                        setState(() {
+                                          donePressed = true;
+                                          isProcessing = true;
+                                        });
+                                        if (_formKey.currentState!.validate()) {
+                                          //final otp check
+                                          bool isUserLoggedin =
+                                              Boxes.getUserPrefs().get(
+                                                      'isLoggedIn',
+                                                      defaultValue: false) ??
+                                                  false;
 
-                                    if (isUserLoggedin) {
-                                      Boxes.getUserPrefs()
-                                          .put('showHome', true);
-                                      Boxes.getUserPrefs()
-                                          .put('isRegistered', true);
-                                      User? currentUser = Boxes.getUser()
-                                              .get('currentUserDetails') ??
-                                          fallBack_error_user;
+                                          if (isUserLoggedin) {
+                                            Boxes.getUserPrefs()
+                                                .put('showHome', true);
+                                            Boxes.getUserPrefs()
+                                                .put('isRegistered', true);
+                                            User? currentUser = Boxes.getUser()
+                                                    .get(
+                                                        'currentUserDetails') ??
+                                                fallBack_error_user;
 
-                                      int userPhone =
-                                          Boxes.getUserCredentialsDB()
-                                                  .get('currentUserCredentials')
-                                                  ?.phoneNumber ??
-                                              404;
+                                            int userPhone = Boxes
+                                                        .getUserCredentialsDB()
+                                                    .get(
+                                                        'currentUserCredentials')
+                                                    ?.phoneNumber ??
+                                                404;
 
-                                      if (userPhone == 404) {
-                                        Get.off(() => const LoginScreen());
-                                      }
+                                            if (userPhone == 404) {
+                                              Get.off(
+                                                  () => const LoginScreen());
+                                            }
 
-                                      log('------>>>>>>>>' +
-                                          registrationController.pinCode.value);
-                                      //todo add how to reach howToReach
-                                      User updatedUser = User(
-                                          address: registrationController
-                                              .address.value,
-                                          emailId: _userEmailController.text,
-                                          lat: registrationController.lat.value,
-                                          lng: registrationController.lng.value,
-                                          pincode: int.parse(
-                                              registrationController
-                                                  .pinCode.value),
-                                          phoneNumber: userPhone,
-                                          custId: userPhone,
-                                          custName: _userNameController.text,
-                                          custRatings: currentUser.custRatings,
-                                          custReferal: 0000,
-                                          custStatus: 'active',
-                                          howToReach: registrationController
-                                              .howToReach.value,
-                                          custLoginTime: DateTime.now(),
-                                          custPlan: 'default');
+                                            log('------>>>>>>>>' +
+                                                registrationController
+                                                    .pinCode.value);
+                                            //todo add how to reach howToReach
+                                            User updatedUser = User(
+                                                address: registrationController
+                                                    .address.value,
+                                                emailId:
+                                                    _userEmailController.text,
+                                                lat: registrationController
+                                                    .lat.value,
+                                                lng: registrationController
+                                                    .lng.value,
+                                                pincode: int.parse(
+                                                    registrationController
+                                                        .pinCode.value),
+                                                phoneNumber: userPhone,
+                                                custId: userPhone,
+                                                custName:
+                                                    _userNameController.text,
+                                                custRatings:
+                                                    currentUser.custRatings,
+                                                custReferal: 0000,
+                                                custStatus: 'active',
+                                                howToReach:
+                                                    registrationController
+                                                        .howToReach.value,
+                                                custLoginTime: DateTime.now(),
+                                                custPlan: 'default');
 //todo add cust plan
-                                      //todo add to firebase
-                                      int userUpdated = await apiController
-                                          .updateCustomerInfo(
-                                              userPhone, updatedUser);
-                                      if (userUpdated == 1) {
+                                            //todo add to firebase
+                                            int userUpdated =
+                                                await apiController
+                                                    .updateCustomerInfo(
+                                                        userPhone, updatedUser);
+                                            if (userUpdated == 1) {
 //since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
-                                        successMsg('Profile Updated',
-                                            'Your profile information was updated successfully.');
+                                              successMsg('Profile Updated',
+                                                  'Your profile information was updated successfully.');
 
 //go back after successful user profile edit, Get.back() didn't work for some reason
-                                        Navigator.pop(context);
-                                      } else {
-                                        errorMsg('Connectivity Error',
-                                            'Some connectivity error has occurred, please try again later!');
-                                        // Get.offAll(
-                                        //     () => const OnboardingPage());
-                                      }
-                                    } else {
-                                      errorMsg('Verify Number First',
-                                          'Please Verify Your Phone Number before continuing...');
-                                      Boxes.getUserPrefs()
-                                          .put('showHome', false);
-                                      Boxes.getUserPrefs()
-                                          .put('isRegistered', false);
-                                      Boxes.getUserPrefs()
-                                          .put('isLoggedIn', false);
-                                      Get.offAll(() => const LoginScreen(),
-                                          transition: Transition.fadeIn);
-                                    }
-                                  }
-                                },
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    'Done',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18.sp,
+                                              Navigator.pop(context);
+                                            } else {
+                                              errorMsg('Connectivity Error',
+                                                  'Some connectivity error has occurred, please try again later!');
+                                              // Get.offAll(
+                                              //     () => const OnboardingPage());
+                                            }
+                                          } else {
+                                            errorMsg('Verify Number First',
+                                                'Please Verify Your Phone Number before continuing...');
+                                            Boxes.getUserPrefs()
+                                                .put('showHome', false);
+                                            Boxes.getUserPrefs()
+                                                .put('isRegistered', false);
+                                            Boxes.getUserPrefs()
+                                                .put('isLoggedIn', false);
+                                            Get.offAll(
+                                                () => const LoginScreen(),
+                                                transition: Transition.fadeIn);
+                                          }
+                                        }
+                                        setState(() {
+                                          isProcessing = false;
+                                        });
+                                      },
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          'Done',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18.sp,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
                         ],

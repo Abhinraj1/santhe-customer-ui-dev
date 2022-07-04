@@ -347,7 +347,7 @@ class _UserListScreenState extends State<UserListScreen> {
       _userList = _allListController.allListMap[widget.listId]!;
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
-      _allListController.update(['newList']);
+      _allListController.getAllList();
       _title = _allListController.allListMap[widget.listId]!.listName;
     } else {
       _allListController.isTitleEditable.value =

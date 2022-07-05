@@ -24,8 +24,8 @@ class LoginScreen extends StatelessWidget {
       statusBarColor: AppColors().white100,
       statusBarIconBrightness: Brightness.dark,
     ));
-    final GlobalKey<FormState> _key = GlobalKey();
-    String? _number;
+    final GlobalKey<FormState> key = GlobalKey();
+    String? number;
     return Scaffold(
       backgroundColor: AppColors().white100,
       body: SingleChildScrollView(
@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
             ),
             //mobile field
             Form(
-              key: _key,
+              key: key,
               child: SizedBox(
                 width: 276.w,
                 child: Row(
@@ -101,8 +101,8 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         validator: (String? val) {
-                          if (_number != null &&
-                              _number.toString().length == 10) {
+                          if (number != null &&
+                              number.toString().length == 10) {
                             return null;
                           }
                           return '';
@@ -140,7 +140,7 @@ class LoginScreen extends StatelessWidget {
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(10)
                         ],
-                        onChanged: (String? val) => _number = val!,
+                        onChanged: (String? val) => number = val!,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
@@ -205,9 +205,9 @@ class LoginScreen extends StatelessWidget {
             //next
             InkWell(
               onTap: () async {
-                if (_key.currentState!.validate()) {
+                if (key.currentState!.validate()) {
                   Get.to(
-                    OtpScreen(phoneNumber: _number!),
+                    OtpScreen(phoneNumber: number!),
                   );
                 }
               },

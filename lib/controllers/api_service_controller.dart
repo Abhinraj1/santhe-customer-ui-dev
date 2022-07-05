@@ -10,7 +10,6 @@ import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/offer/merchant_offer_response.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
-import 'package:santhe/models/santhe_user_credenetials_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
@@ -60,7 +59,7 @@ class APIs extends GetxController {
             //   );
             // }
           } catch (e) {
-            log(e.toString());
+            AppHelpers.crashlyticsLog(e.toString());
           }
           break;
           // throw NoInternetError();
@@ -78,7 +77,7 @@ class APIs extends GetxController {
             // }
             // throw NoInternetError();
           } catch (e) {
-            log(e.toString());
+            AppHelpers.crashlyticsLog(e.toString());
           }
           break;
         }
@@ -95,7 +94,7 @@ class APIs extends GetxController {
             // }
             // throw NoInternetError();
           } catch (e) {
-            log(e.toString());
+            AppHelpers.crashlyticsLog(e.toString());
           }
           break;
         }
@@ -150,6 +149,7 @@ class APIs extends GetxController {
       );
       return userList;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage());
       throw ServerError();
     }
@@ -165,6 +165,7 @@ class APIs extends GetxController {
     if (jsonResponse != null && response.statusCode == 200) {
       return int.parse(jsonResponse['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]);
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       return 3;
     }
   }
@@ -181,6 +182,7 @@ class APIs extends GetxController {
       int nextItemCount = jsonResponse;
       return nextItemCount;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -234,6 +236,7 @@ class APIs extends GetxController {
     } else {
       log('Request failed with status: ${response.statusCode}.');
       log('Reason: ${response.reasonPhrase}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
       return 0;
     }
   }
@@ -251,6 +254,7 @@ class APIs extends GetxController {
       return cacheRefresh;
     } else {
       log('Request failed with status: ${response.statusCode}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'error!';
     }
@@ -272,6 +276,7 @@ class APIs extends GetxController {
       }
       // initCategoriesDB(); //since its already in main no need for it here
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       log('Request failed with status: ${response.statusCode}.');
     }
@@ -296,6 +301,7 @@ class APIs extends GetxController {
 
       return 1;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
@@ -316,6 +322,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.');
       return 0;
     }
@@ -359,6 +366,7 @@ class APIs extends GetxController {
       log('#####Returning with cat items#######');
       return categoryItems;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error, Category Does not Exist!';
     }
@@ -438,6 +446,7 @@ class APIs extends GetxController {
       log(data.toString());
       return 1;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.reasonPhrase}.');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
@@ -525,9 +534,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Error', error: response.reasonPhrase);
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -551,9 +558,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Error', error: response.reasonPhrase);
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -577,9 +582,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Error', error: response.reasonPhrase);
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -602,6 +605,7 @@ class APIs extends GetxController {
     } else {
       log('Request failed with status: ${response.statusCode}.');
       log('Reason: ${response.reasonPhrase}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error!';
     }
@@ -635,6 +639,7 @@ class APIs extends GetxController {
       return true;
     } else {
       log('Request failed with status: ${response.statusCode}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return false;
     }
@@ -694,6 +699,7 @@ class APIs extends GetxController {
       log('user added');
       return 1;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error!';
@@ -719,6 +725,7 @@ class APIs extends GetxController {
         return 0;
       }
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.');
       // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
@@ -770,6 +777,7 @@ class APIs extends GetxController {
     } else {
       log('Request failed with status: ${response.statusCode}.');
       log('Error', error: response.reasonPhrase);
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -801,6 +809,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -863,6 +872,7 @@ class APIs extends GetxController {
       }
       return userLists;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
     }
@@ -920,6 +930,7 @@ class APIs extends GetxController {
       }
       return resp;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
     }
@@ -935,6 +946,7 @@ class APIs extends GetxController {
           merchantDetailsResponseFromJson(response.body);
       return resp;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving merchant details!';
     }
@@ -978,6 +990,7 @@ class APIs extends GetxController {
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -991,6 +1004,7 @@ class APIs extends GetxController {
       MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving merchant response';
     }
@@ -1014,6 +1028,7 @@ class APIs extends GetxController {
       log('Offer Accepted! List ID: $listId');
       return 1;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
@@ -1076,6 +1091,7 @@ class APIs extends GetxController {
       }
       return userLists;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error retrieving user lists!';
     }
@@ -1102,6 +1118,7 @@ class APIs extends GetxController {
 
       return searchResults;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'error!';
@@ -1123,6 +1140,7 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       log((await response.stream.bytesToString()).toString());
     } else {
+      AppHelpers.crashlyticsLog('update device token error');
       log('Error', error: response.reasonPhrase);
     }
   }

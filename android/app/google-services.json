@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "445035608011-bnajc3iifdsauqb53j0eduugf9p49s4v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.santhe",
+            "certificate_hash": "1227a4072fef31515b6942c3d4b3098ad278b3b6"
+          }
+        },
+        {
           "client_id": "445035608011-t12gdu0dth6gfd88sptb9sge6b0krj2h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -36,6 +44,74 @@
           "android_info": {
             "package_name": "com.example.santhe",
             "certificate_hash": "93d862b7592d5bfad753543da9d2fd4f6c735175"
+          }
+        },
+        {
+          "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBN76CGaZGMw_k4_TIXywX0FVWOWh4cwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.santhe.customer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445035608011:android:99d1664d9cac9c92d9684e",
+        "android_client_info": {
+          "package_name": "com.santhe.merchant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445035608011-b6dv8nq72c7jhhlgdhh6d87ehblr5a47.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.merchant",
+            "certificate_hash": "1227a4072fef31515b6942c3d4b3098ad278b3b6"
+          }
+        },
+        {
+          "client_id": "445035608011-jjp6ahghqphis0s7ck86tdqf6q838h64.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.merchant",
+            "certificate_hash": "d3154ca069a2ca4c4b5f77223e50376300504360"
+          }
+        },
+        {
+          "client_id": "445035608011-uvv97jtso5jsq3gmmp5vk3nv49s9jbcs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.merchant",
+            "certificate_hash": "93d862b7592d5bfad753543da9d2fd4f6c735175"
+          }
+        },
+        {
+          "client_id": "445035608011-vjq2fp2el8mqjarhplc84gif4eo5680t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.merchant",
+            "certificate_hash": "f2e8a9bec524cfe1bde017764d1d7d0a5557e310"
           }
         },
         {

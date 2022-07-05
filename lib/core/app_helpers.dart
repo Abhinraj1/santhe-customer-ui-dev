@@ -14,11 +14,9 @@ class AppHelpers {
   void updateEmail(String email) =>
       _firebaseAuth.currentUser!.updateEmail(email);
 
-  String getPhoneNumber(){
-    return _firebaseAuth.currentUser?.phoneNumber ?? '404';
-  }
+  String get getPhoneNumber => _firebaseAuth.currentUser?.phoneNumber ?? '404';
 
-  String get getPhoneNumberWithoutCountryCode => getPhoneNumber().replaceAll('+91', '');
+  String get getPhoneNumberWithoutCountryCode => getPhoneNumber.replaceAll('+91', '');
 
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';

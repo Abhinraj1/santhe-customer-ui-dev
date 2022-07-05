@@ -40,7 +40,10 @@ class SentListItemCard extends StatelessWidget {
                             4000
                         ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
                         : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/' +
-                            listItem.itemImageId,
+                            listItem.itemImageId.replaceAll(
+                              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                              '',
+                            ),
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,

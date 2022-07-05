@@ -5,28 +5,23 @@ import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:get/get.dart';
-import 'package:santhe/controllers/api_service_controller.dart';
-import 'package:santhe/controllers/boxes_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/pages/no_offer_page.dart';
+import 'package:santhe/pages/sent_tab_pages/merchant_items_list_page.dart';
 import 'package:santhe/widgets/offer_status_widget.dart';
 
-import '../../controllers/archived_controller.dart';
 import '../../models/new_list/user_list_model.dart';
 
 class ArchivedUserListCard extends StatelessWidget {
   final UserListModel userList;
 
-  ArchivedUserListCard({required this.userList, Key? key})
+  const ArchivedUserListCard({required this.userList, Key? key})
       : super(key: key);
-  final int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
-  final box = Boxes.getUserListDB();
 
   @override
   Widget build(BuildContext context) {
-    final ArchivedController _archivedController = Get.find();
-    final apiController = Get.find<APIs>();
     String imagePath = 'assets/basket0.png';
+    final AllListController _allListController = Get.find<AllListController>();
 
     //image logic
     if (userList.items.isEmpty) {
@@ -42,12 +37,12 @@ class ArchivedUserListCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
-        onTap: () async {
-          /*if (userList.processStatus == 'nomerchant' ||
+        onTap: (){
+          if (userList.processStatus == 'nomerchant' ||
               userList.processStatus == 'nooffer' ||
               userList.processStatus == 'missed') {
             Get.to(
-              () => NoOfferPage(
+                  () => NoOfferPage(
                 userList: userList,
                 missed: userList.processStatus == 'missed',
               ),
@@ -55,15 +50,14 @@ class ArchivedUserListCard extends StatelessWidget {
           } else if (userList.processStatus == 'accepted' ||
               userList.processStatus == 'processed') {
             Get.to(
-              () => MerchantItemsListPage(
+                  () => MerchantItemsListPage(
                 userList: userList,
                 archived: true,
               ),
             );
-          }*/
+          }
         },
         child: Container(
-          // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.0),
@@ -83,12 +77,11 @@ class ArchivedUserListCard extends StatelessWidget {
             endActionPane: ActionPane(
               motion: const ScrollMotion(),
               children: [
+                //copy from old list
                 Visibility(
-                  visible: Boxes.getUserListDB().values.length < 3,
+                  visible: _allListController.newList.length < _allListController.lengthLimit,
                   child: SlidableAction(
-                    onPressed: (context) async {
-
-                    },
+                    onPressed: (context) => _allListController.addCopyListToDB(userList.listId),
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
                     autoClose: true,
@@ -96,10 +89,9 @@ class ArchivedUserListCard extends StatelessWidget {
                     label: 'Copy',
                   ),
                 ),
+                //delete list
                 SlidableAction(
-                  onPressed: (context) async {
-
-                  },
+                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId, 'archived'),
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   icon: CupertinoIcons.delete_solid,

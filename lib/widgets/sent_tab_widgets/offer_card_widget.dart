@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
-import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/no_offer_page.dart';
@@ -99,7 +98,7 @@ class _OfferCardState extends State<OfferCard> {
               motion: const ScrollMotion(),
               children: [
                 Visibility(
-                  visible: Boxes.getUserListDB().values.length < 3,
+                  visible: _allListController.newList.length < _allListController.lengthLimit,
                   child: SlidableAction(
                     onPressed: (context) async => _allListController.addCopyListToDB(widget.userList.listId),
                     backgroundColor: Colors.transparent,

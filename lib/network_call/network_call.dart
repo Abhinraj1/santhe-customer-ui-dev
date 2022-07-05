@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/santhe_faq_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/models/user_profile/customer_response_model.dart';
 
@@ -249,6 +250,30 @@ class NetworkCall{
       log('Error', error: response.reasonPhrase);
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
+    }
+  }
+
+  Future getAllFAQs() async {
+    const String url = AppUrl.FAQURL;
+
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+
+      var data = jsonResponse['fields']['faq']['arrayValue']['values'];
+
+      final faqList = [];
+
+      for(int i=0;i<data.length;i++){
+        faqList.add(FAQ.fromJson(data[i]));
+      }
+
+      return faqList;
+    } else {
+      log('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return null;
     }
   }
 

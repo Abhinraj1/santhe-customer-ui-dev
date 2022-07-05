@@ -9,8 +9,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:santhe/core/app_helpers.dart';
 
-import '../controllers/boxes_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../controllers/sent_tab_offer_card_controller.dart';
@@ -45,10 +45,7 @@ class FirebaseHelper {
 
     FirebaseStorage storage = FirebaseStorage.instance;
 
-    int custPhone = Boxes.getUserCredentialsDB()
-            .get('currentUserCredentials')
-            ?.phoneNumber ??
-        404;
+    int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
     try {
       File file;
       if (image != null) {

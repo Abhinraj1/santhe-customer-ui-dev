@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/undo_delete_widget.dart';
@@ -191,6 +192,24 @@ class AllListController extends GetxController{
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }
+  }
+
+  Future<void> moveToArchive(UserListModel userList) async {
+    isProcessing.value = true;
+    int response = await NetworkCall().updateUserList(userList,
+        status: 'archived',
+        processStatus: userList.processStatus);
+    isProcessing.value = false;
+    if(response==1){
+      allListMap[userList.listId]?.custListStatus = 'archived';
+      sentList.remove(allListMap[userList.listId]);
+      archivedList.add(allListMap[userList.listId]!);
+      update(['sentList', 'archivedList']);
+      Get.offAll(()=>const HomePage(pageIndex: 2,), transition: Transition.fade);
+    }else{
+      errorMsg('Unexpected error occurred', 'Please try again');
+    }
+
   }
 
   bool isListAlreadyExist(String listName) => allList.where((element) => element.listName == listName).toList().isNotEmpty;

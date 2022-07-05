@@ -3,15 +3,16 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 
 import 'package:santhe/core/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:santhe/constants.dart';
+import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../controllers/api_service_controller.dart';
-import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
-import '../../models/santhe_user_model.dart';
 import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 
 class ContactUsPage extends StatefulWidget {
@@ -23,16 +24,26 @@ class ContactUsPage extends StatefulWidget {
 
 class _ContactUsPageState extends State<ContactUsPage> {
   final _formKey = GlobalKey<FormState>();
-  int userPhoneNumber =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
-  User? currentUser =
-      Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
+
+  int userPhoneNumber = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+
+  final profileController = Get.find<ProfileController>();
+
+  late final CustomerModel? currentUser;
   late final TextEditingController _messageController = TextEditingController();
-  late final TextEditingController _userNameController =
-      TextEditingController(text: currentUser?.custName ?? 'John Doe');
-  late final TextEditingController _userEmailController =
-      TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+  late final TextEditingController _userNameController;
+  late final TextEditingController _userEmailController;
+
+  @override
+  void initState() {
+    currentUser = profileController.customerDetails ?? fallback_error_customer;
+    _userNameController =
+        TextEditingController(text: currentUser?.customerName ?? 'John Doe');
+    _userEmailController =
+        TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
@@ -430,10 +441,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             int response = await apiController.contactUs(
                                 userPhoneNumber,
                                 _messageController.text,
-                                Boxes.getUser()
-                                        .get('currentUserDetails')
-                                        ?.custRatings ??
-                                    5.0);
+                               double.parse(profileController.customerDetails!.customerRatings));
 
                             //checking for API call's success | 1 = success
                             if (response == 1) {

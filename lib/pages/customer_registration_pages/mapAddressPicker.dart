@@ -4,12 +4,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_picker/map_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/API/addressSearchAPI.dart';
+import 'package:santhe/controllers/error_user_fallback.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 import '../../constants.dart';
-import '../../controllers/boxes_controller.dart';
 import '../../controllers/location_controller.dart';
 import '../../core/app_colors.dart';
-import '../../models/santhe_user_model.dart';
 import '../../widgets/registration_widgets/textFieldRegistration.dart';
 
 class MapAddressPicker extends StatefulWidget {
@@ -31,7 +32,8 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
   TextEditingController optionalAddController = TextEditingController();
   bool isVisible = false;
   final _formKey = GlobalKey<FormState>();
-  User? currentUser = Boxes.getUser().get('currentUserDetails');
+  final profileController = Get.find<ProfileController>();
+  CustomerModel? currentUser;
   PlaceApiProvider placeApiProvider = PlaceApiProvider();
   var textController = TextEditingController();
   GoogleMapController? _googleMapController;
@@ -41,9 +43,10 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
       lat = widget.lat!;
       lng = widget.lng!;
       initialCameraPosition = CameraPosition(target: LatLng(lat, lng), zoom: 18,);
+      currentUser = profileController.customerDetails ?? fallback_error_customer;
     }
     else{
-      initialCameraPosition = CameraPosition(target: LatLng(currentUser?.lat ?? 12.980143644412847, currentUser?.lng ?? 77.56857242435218), zoom: 18);
+      initialCameraPosition = CameraPosition(target: LatLng(double.parse(currentUser?.lat ?? '12.980143644412847'), double.parse(currentUser?.lng ?? '77.56857242435218')), zoom: 18);
       LocationController.getGeoLocationPosition().then((value) async {
         lat = value.latitude;
         lng = value.longitude;

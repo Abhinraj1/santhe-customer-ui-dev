@@ -617,11 +617,11 @@ class APIs extends GetxController {
         await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      UserCredential currentUserCredentials = UserCredential.fromJson(data);
+      // var data = jsonDecode(response.body);
+      // UserCredential currentUserCredentials = UserCredential.fromJson(data);
 
-      Boxes.getUserCredentialsDB()
-          .put('currentUserCredentials', currentUserCredentials);
+      // Boxes.getUserCredentialsDB()
+      //     .put('currentUserCredentials', currentUserCredentials);
 
       // UserCredential? myUsr =
       //     Boxes.getUserCredentialsDB().get('currentUserCredentials');
@@ -711,12 +711,6 @@ class APIs extends GetxController {
       var data = jsonDecode(response.body);
       if (data['fields'] != null) {
         var jsonData = data['fields'];
-
-        User currentUser = User.fromJson(jsonData);
-
-        var box = Boxes.getUser();
-        box.put('currentUserDetails', currentUser);
-
         final profileController = Get.find<ProfileController>();
         profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
         return 1;

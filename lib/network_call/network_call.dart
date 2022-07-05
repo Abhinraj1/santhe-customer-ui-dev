@@ -6,7 +6,6 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/santhe_faq_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
-import 'package:santhe/models/user_profile/customer_response_model.dart';
 
 import '../core/app_helpers.dart';
 import '../core/error/exceptions.dart';
@@ -19,6 +18,8 @@ import 'package:http/http.dart' as http;
 enum REST { get, post, put, delete, patch }
 
 class NetworkCall{
+
+  final profileController = Get.find<ProfileController>();
 
   Future<List<NewListResponseModel>> getAllCustomerLists() async {
     var body = {
@@ -52,6 +53,7 @@ class NetworkCall{
     if (response.statusCode == 200) {
       return newListResponseModelFromJson(response.body);
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw ServerError();
     }
@@ -126,7 +128,7 @@ class NetworkCall{
       log(data.toString());
       return 1;
     } else {
-      log('Request failed with status: ${response.reasonPhrase}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -146,6 +148,7 @@ class NetworkCall{
       log(data.toString());
       return 1;
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -158,6 +161,7 @@ class NetworkCall{
       String? val = jsonResponse['fields']['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]['integerValue'];
       return val == null ? 3 : int.parse(val);
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       return 3;
     }
   }
@@ -168,6 +172,7 @@ class NetworkCall{
     if (jsonResponse != null && response.statusCode == 200) {
       return CustomerModel.fromJson(jsonResponse['fields']);
     } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
       throw ServerError();
     }
   }
@@ -245,9 +250,7 @@ class NetworkCall{
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Error', error: response.reasonPhrase);
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
@@ -272,6 +275,7 @@ class NetworkCall{
       return faqList;
     } else {
       log('Request failed with status: ${response.statusCode}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return null;
     }
@@ -287,7 +291,7 @@ class NetworkCall{
           try {
             return await http.get(url, headers: header,);
           } catch (e) {
-            log(e.toString());
+            AppHelpers.crashlyticsLog(e.toString());
           }
           break;
         }
@@ -297,7 +301,7 @@ class NetworkCall{
           try {
             return await http.post(url, body: body!, headers: header,);
           } catch (e) {
-            log(e.toString());
+            AppHelpers.crashlyticsLog(e.toString());
           }
           break;
         }
@@ -307,7 +311,7 @@ class NetworkCall{
           try {
             return await http.patch(url, body: body!, headers: header,);
           } catch (e) {
-            log(e.toString());
+            AppHelpers.crashlyticsLog(e.toString());
           }
           break;
         }

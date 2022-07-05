@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 
 import 'package:geolocator/geolocator.dart';
@@ -11,9 +13,8 @@ class LocationController extends GetxController {
   updateLatLng(lat, lng) {
     this.lng.value = lng;
     this.lat.value = lat;
-    print(this.lat);
-    print(this.lng);
-    print("HElllo SKKSKSKSKS");
+    log(this.lat.toString());
+    log(this.lng.toString());
     update();
   }
 

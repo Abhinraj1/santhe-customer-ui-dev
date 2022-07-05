@@ -8,10 +8,8 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/models/santhe_user_credenetials_model.dart' as uc;
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
-import '../../controllers/boxes_controller.dart';
 import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 import '../customer_registration_pages/customer_registration.dart';
@@ -40,7 +38,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void initState() {
     super.initState();
-    verifyPhoneNumber('+91' + widget.phoneNumber, setData);
+    verifyPhoneNumber('+91${widget.phoneNumber}', setData);
     startTimer();
   }
 
@@ -191,7 +189,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       onTap: () {
                         if (start <= 0) {
                           verifyPhoneNumber(
-                              '+91' + widget.phoneNumber, setData);
+                              '+91${widget.phoneNumber}', setData);
                           start = 60;
                           startTimer();
                         } else {
@@ -200,7 +198,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       },
                       child: Text(
                         start > 0
-                            ? ' Request Again in'.tr + ' $start ' + 'secs'
+                            ? '${' Request Again in'.tr} $start secs'
                             : ' Request Again',
                         maxLines: 4,
                         textAlign: TextAlign.center,

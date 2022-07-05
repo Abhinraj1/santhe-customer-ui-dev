@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:developer' as dev;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 
 class AppHelpers {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -13,6 +16,13 @@ class AppHelpers {
 
   void updateEmail(String email) =>
       _firebaseAuth.currentUser!.updateEmail(email);
+
+  static void crashlyticsLog(String error){
+    final profileController = Get.find<ProfileController>();
+    dev.log(error);
+    final message = '$error\n Caused on customer id: ${profileController.customerDetails?.phoneNumber}';
+    FirebaseCrashlytics.instance.log(message);
+  }
 
   String get getPhoneNumber => _firebaseAuth.currentUser?.phoneNumber ?? '404';
 
@@ -29,14 +39,15 @@ Santhe Merchant App is an app built for supporting local economy. The app helps 
 Get it for free at https://santhe.in''';
 
   Future<String> getDeviceId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.toMap()['androidId'];
-    } else {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.toMap()['identifierForVendor'];
-    }
+    return FirebaseAuth.instance.currentUser!.uid;
+    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    // if (Platform.isAndroid) {
+    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    //   return androidInfo.toMap()['androidId'];
+    // } else {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   return iosInfo.toMap()['identifierForVendor'];
+    // }
   }
 
   static bool isInBetween(num compare, num a, num b){

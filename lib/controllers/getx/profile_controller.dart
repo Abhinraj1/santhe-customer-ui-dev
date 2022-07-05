@@ -39,8 +39,8 @@ class ProfileController extends GetxController{
 
   Future<void> initialise() async{
     await initialiseUrlToken(override: true);
-    await getCustomerDetailsInit();
-    await cacheRefresh();
+    if(isLoggedIn) await getCustomerDetailsInit();
+    if(isLoggedIn&&isRegistered) await cacheRefresh();
   }
 
   Future<void> getCustomerDetailsInit() async {

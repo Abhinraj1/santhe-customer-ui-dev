@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:santhe/SECRETKEY.dart';
@@ -72,7 +73,7 @@ class PlaceApiProvider {
             apiKey;
     final response = await client.get(Uri.parse(request));
     var res = json.decode(response.body);
-    print(res['results']);
+    log(res['results'].toString());
     return res['results'][0]["formatted_address"].toString();
   }
 }

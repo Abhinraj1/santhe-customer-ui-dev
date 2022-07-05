@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
@@ -413,11 +412,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     .trim() ==
                                     ''
                                     ? 'Select Address'
-                                    : registrationController
-                                    .address.value +
-                                    ' ' +
-                                    registrationController
-                                        .howToReach.value,
+                                    : '${registrationController
+                                    .address.value} ${registrationController
+                                        .howToReach.value}',
                                 style: registrationController
                                     .address.value
                                     .trim() ==
@@ -494,7 +491,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 .addCustomer(currentUser);
                             if (userAdded == 1) {
                               //add to Hive
-                              profileController.getCustomerDetailsInit();
+                              await profileController.getCustomerDetailsInit();
+                              await profileController.cacheRefresh();
                               Get.offAll(() => const HomePage(),
                                   transition: Transition.fadeIn);
                             } else {

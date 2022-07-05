@@ -10,6 +10,7 @@ import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/network_call/network_call.dart';
+import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
 
@@ -57,16 +58,16 @@ class _UserListScreenState extends State<UserListScreen> {
           splashRadius: 0.1,
           icon: Icon(
             Icons.arrow_back_ios_rounded,
-            size: 13.sp,
+            size: 16.sp,
           ),
           onPressed: () async {
             saveList();
-            Navigator.pop(context);
+            Get.offAll(()=>const HomePage(pageIndex: 0,));
           },
         ),
         title: Obx(() => _allListController.isTitleEditable.value
             ? Padding(
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10.vw),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10.vw),
                 child: Container(
                   height: 35.h,
                   decoration: BoxDecoration(
@@ -328,7 +329,8 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         onWillPop: () async {
           saveList();
-          return false;
+          Get.offAll(()=>const HomePage(pageIndex: 0,));
+          return true;
         },
       ),
     );
@@ -345,7 +347,7 @@ class _UserListScreenState extends State<UserListScreen> {
       _userList = _allListController.allListMap[widget.listId]!;
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
-      _allListController.update(['newList']);
+      _allListController.getAllList();
       _title = _allListController.allListMap[widget.listId]!.listName;
     } else {
       _allListController.isTitleEditable.value =
@@ -533,6 +535,7 @@ class _UserListScreenState extends State<UserListScreen> {
                               }).then((value) {
                             searchQueryController.clear();
                             searchQuery = '';
+                            setState(() {});
                           });
                         },
                         child: _itemName(false, item: item),

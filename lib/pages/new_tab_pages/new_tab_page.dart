@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
-import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import '../../core/app_colors.dart';
 import '../../models/new_list/user_list_model.dart';
@@ -70,12 +69,10 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
           id: 'newList',
           builder: (ctr){
             List<UserListModel> _userList = _allListController.newList;
-            if(_allListController.isLoading){
-              return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
-            }
-            if(_allListController.newList.isEmpty) {
-              return _emptyList();
-            }
+            if(_allListController.newList.isEmpty) return _emptyList();
+
+            if(_allListController.isLoading)return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
+
             return RefreshIndicator(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
@@ -93,6 +90,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
   }
 
   Widget _emptyList() => RefreshIndicator(child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       SizedBox(height: 23.h),
       Image.asset(
@@ -624,7 +622,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
                 ),
                 //delete list
                 SlidableAction(
-                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId),
+                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId, 'new', fromNew: true),
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   icon: CupertinoIcons.delete_solid,

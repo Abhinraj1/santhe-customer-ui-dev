@@ -13,7 +13,6 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 import '../../core/app_theme.dart';
 import '../../models/offer/customer_offer_response.dart';
-import '../../models/santhe_user_list_model.dart';
 import '../../pages/sent_tab_pages/merchant_items_list_page.dart';
 
 class MerchantOfferCard extends StatefulWidget {
@@ -85,8 +84,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 Row(
@@ -102,7 +100,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                             text: TextSpan(
                                 text: 'Offer Price: ',
                                 style: TextStyle(
-                                  fontSize: 18.sp,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.orange,
                                 ),
@@ -111,7 +109,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                     text:
                                         'Rs ${widget.currentMerchantOffer.merchResponse.merchTotalPrice}',
                                     style: TextStyle(
-                                      fontSize: 18.sp,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.orange,
                                     ),
@@ -129,7 +127,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.orange,
-                                  fontSize: 24.sp,
+                                  fontSize: 21.sp,
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
@@ -142,7 +140,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                   text:
                                       'Merchant is ${widget.currentMerchantOffer.custDistance} ${widget.currentMerchantOffer.custDistance > 1 ? 'Kms' : 'Km'} away,\n',
                                   style: TextStyle(
-                                    fontSize: 13.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xffBBBBBB),
                                   ),
@@ -153,7 +151,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                           ? 'Does home delivery'
                                           : 'No home delivery',
                                       style: TextStyle(
-                                        fontSize: 13.sp,
+                                        fontSize: 11.sp,
                                         fontWeight: FontWeight.w700,
                                         color: const Color(0xffBBBBBB),
                                       ),
@@ -368,13 +366,14 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
   }
 
   String loadImage() {
-    if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best1') {
+    if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best1' || widget.currentMerchantOffer.custOfferResponse.custDeal ==
+        'best2') {
       return 'assets/sent_tab/3star.png';
     } else if (widget.currentMerchantOffer.custOfferResponse.custDeal ==
-        'best2') {
+        'best3') {
       return 'assets/sent_tab/2star.png';
     } else if (widget.currentMerchantOffer.custOfferResponse.custDeal ==
-        'best3') {
+        'best4') {
       return 'assets/sent_tab/1star.png';
     } else {
       return 'assets/sent_tab/0star.png';

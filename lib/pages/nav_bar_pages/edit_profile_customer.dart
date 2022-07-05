@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -31,19 +33,16 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  int userPhoneNumber = int.parse(
-      AppHelpers().getPhoneNumberWithoutCountryCode.isEmpty
-          ? AppHelpers().getPhoneNumberWithoutCountryCode
-          : '404');
-  User? currentUser =
-      Boxes.getUser().get('currentUserDetails') ?? fallBack_error_user;
-  late final TextEditingController _userNameController =
-      TextEditingController(text: currentUser?.custName ?? 'John Doe');
-  late final TextEditingController _userEmailController =
-      TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+  final profileController = Get.find<ProfileController>();
+  int userPhoneNumber =
+      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  late final CustomerModel? currentUser;
+  late final TextEditingController _userNameController;
+  late final TextEditingController _userEmailController;
   bool addressUpdateFlag = false;
   bool donePressed = false;
   bool mapSelected = false;
+  bool isProcessing = false;
 
   @override
   void initState() {
@@ -53,6 +52,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.light,
     ));
+    _userNameController =
+        TextEditingController(text: currentUser?.customerName ?? 'John Doe');
+    _userEmailController =
+        TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+    currentUser = profileController.customerDetails ?? fallback_error_customer;
     super.initState();
   }
 
@@ -69,20 +73,18 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     }
     if (registrationController.lat.value == 0.0 ||
         registrationController.lng.value == 0.0) {
-      registrationController.lat.value = currentUser?.lat ?? 0.0;
-      registrationController.lng.value = currentUser?.lng ?? 0.0;
+      registrationController.lat.value = double.parse(currentUser?.lat ?? '0.0');
+      registrationController.lng.value = double.parse(currentUser?.lng ?? '0.0');
     }
     if (registrationController.pinCode.value.isEmpty) {
       registrationController.pinCode.value =
-          currentUser?.pincode.toString() ?? '';
+          currentUser?.pinCode.toString() ?? '';
     }
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
           'Please Verify Your Phone Number before continuing...');
-      Boxes.getUserPrefs().put('showHome', false);
-      Boxes.getUserPrefs().put('isRegistered', false);
-      Boxes.getUserPrefs().put('isLoggedIn', false);
+      profileController.isLoggedIn = false;
       Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
     }
     final TextStyle kHintStyle = TextStyle(
@@ -228,7 +230,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             color: AppColors().brandDark),
                                       ),
                                       hintText:
-                                          '+91-${currentUser?.custId ?? '91-9876543210'}',
+                                          '+91-${currentUser?.customerId ?? '91-9876543210'}',
                                       hintStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 1.0,
@@ -526,110 +528,108 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                           Padding(
                             padding: EdgeInsets.only(top: 25.sp),
                             child: SizedBox(
-                              width: 244.sp,
+                              width: isProcessing ? 50.sp : 244.sp,
                               height: 50.sp,
-                              child: MaterialButton(
-                                elevation: 0.0,
-                                highlightElevation: 0.0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0)),
-                                color: Colors.orange,
-                                onPressed: () async {
-                                  setState(() {
-                                    donePressed = true;
-                                  });
-                                  if (_formKey.currentState!.validate()) {
-                                    //final otp check
-                                    bool isUserLoggedin = Boxes.getUserPrefs()
-                                            .get('isLoggedIn',
-                                                defaultValue: false) ??
-                                        false;
+                              child: isProcessing
+                                  ? const CircularProgressIndicator.adaptive()
+                                  : MaterialButton(
+                                      elevation: 0.0,
+                                      highlightElevation: 0.0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      color: Colors.orange,
+                                      onPressed: () async {
+                                        setState(() {
+                                          donePressed = true;
+                                          isProcessing = true;
+                                        });
+                                        if (_formKey.currentState!.validate()) {
+                                          if (profileController.isLoggedIn) {
+                                            CustomerModel? currentUser = profileController.customerDetails ?? fallback_error_customer;
 
-                                    if (isUserLoggedin) {
-                                      Boxes.getUserPrefs()
-                                          .put('showHome', true);
-                                      Boxes.getUserPrefs()
-                                          .put('isRegistered', true);
-                                      User? currentUser = Boxes.getUser()
-                                              .get('currentUserDetails') ??
-                                          fallBack_error_user;
+                                            int userPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
-                                      int userPhone =
-                                          Boxes.getUserCredentialsDB()
-                                                  .get('currentUserCredentials')
-                                                  ?.phoneNumber ??
-                                              404;
+                                            if (userPhone == 404) {
+                                              Get.off(
+                                                  () => const LoginScreen());
+                                            }
 
-                                      if (userPhone == 404) {
-                                        Get.off(() => const LoginScreen());
-                                      }
-
-                                      log('------>>>>>>>>' +
-                                          registrationController.pinCode.value);
-                                      //todo add how to reach howToReach
-                                      User updatedUser = User(
-                                          address: registrationController
-                                              .address.value,
-                                          emailId: _userEmailController.text,
-                                          lat: registrationController.lat.value,
-                                          lng: registrationController.lng.value,
-                                          pincode: int.parse(
-                                              registrationController
-                                                  .pinCode.value),
-                                          phoneNumber: userPhone,
-                                          custId: userPhone,
-                                          custName: _userNameController.text,
-                                          custRatings: currentUser.custRatings,
-                                          custReferal: 0000,
-                                          custStatus: 'active',
-                                          howToReach: registrationController
-                                              .howToReach.value,
-                                          custLoginTime: DateTime.now(),
-                                          custPlan: 'default');
+                                            log('------>>>>>>>>' +
+                                                registrationController
+                                                    .pinCode.value);
+                                            //todo add how to reach howToReach
+                                            User updatedUser = User(
+                                                address: registrationController
+                                                    .address.value,
+                                                emailId:
+                                                    _userEmailController.text,
+                                                lat: registrationController
+                                                    .lat.value,
+                                                lng: registrationController
+                                                    .lng.value,
+                                                pincode: int.parse(
+                                                    registrationController
+                                                        .pinCode.value),
+                                                phoneNumber: userPhone,
+                                                custId: userPhone,
+                                                custName:
+                                                    _userNameController.text,
+                                                custRatings:
+                                                    double.parse(currentUser.customerRatings),
+                                                custReferal: 0000,
+                                                custStatus: 'active',
+                                                howToReach:
+                                                    registrationController
+                                                        .howToReach.value,
+                                                custLoginTime: DateTime.now(),
+                                                custPlan: 'default');
 //todo add cust plan
-                                      //todo add to firebase
-                                      int userUpdated = await apiController
-                                          .updateCustomerInfo(
-                                              userPhone, updatedUser);
-                                      if (userUpdated == 1) {
+                                            //todo add to firebase
+                                            int userUpdated =
+                                                await apiController
+                                                    .updateCustomerInfo(
+                                                        userPhone, updatedUser);
+                                            if (userUpdated == 1) {
+                                              await profileController.getCustomerDetailsInit();
 //since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
-                                        successMsg('Profile Updated',
-                                            'Your profile information was updated successfully.');
+                                              successMsg('Profile Updated',
+                                                  'Your profile information was updated successfully.');
 
 //go back after successful user profile edit, Get.back() didn't work for some reason
-                                        Navigator.pop(context);
-                                      } else {
-                                        errorMsg('Connectivity Error',
-                                            'Some connectivity error has occurred, please try again later!');
-                                        // Get.offAll(
-                                        //     () => const OnboardingPage());
-                                      }
-                                    } else {
-                                      errorMsg('Verify Number First',
-                                          'Please Verify Your Phone Number before continuing...');
-                                      Boxes.getUserPrefs()
-                                          .put('showHome', false);
-                                      Boxes.getUserPrefs()
-                                          .put('isRegistered', false);
-                                      Boxes.getUserPrefs()
-                                          .put('isLoggedIn', false);
-                                      Get.offAll(() => const LoginScreen(),
-                                          transition: Transition.fadeIn);
-                                    }
-                                  }
-                                },
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    'Done',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18.sp,
+                                              Navigator.pop(context);
+                                            } else {
+                                              errorMsg('Connectivity Error',
+                                                  'Some connectivity error has occurred, please try again later!');
+                                              // Get.offAll(
+                                              //     () => const OnboardingPage());
+                                            }
+                                          } else {
+                                            errorMsg('Verify Number First',
+                                                'Please Verify Your Phone Number before continuing...');
+                                            profileController.isRegistered = false;
+                                            profileController.isLoggedIn = false;
+                                            Get.offAll(
+                                                () => const LoginScreen(),
+                                                transition: Transition.fadeIn);
+                                          }
+                                        }
+                                        setState(() {
+                                          isProcessing = false;
+                                        });
+                                      },
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          'Done',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18.sp,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
                         ],

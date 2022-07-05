@@ -3,15 +3,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/onboarding_page.dart';
 
 import '../controllers/api_service_controller.dart';
-import '../controllers/boxes_controller.dart';
-import '../models/santhe_cache_refresh.dart';
 
 class SplashToOnboarding extends StatefulWidget {
   const SplashToOnboarding({Key? key}) : super(key: key);
@@ -30,90 +27,11 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
     });
   }
 
-  Future init() async {
-    CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
-    var box = Boxes.getCacheRefreshInfo();
-
-    //getting all content that's to be cached if not already done
-    if (!box.containsKey('cacheRefresh') || box.isEmpty) {
-      //cat data
-      await apiController.getAllCategories();
-      box.put('cacheRefresh', newCacheRefresh);
-
-      //faq data
-      await apiController.getAllFAQs();
-
-      //aboutUs & terms n condition data
-      await apiController.getCommonContent();
-
-      //items data for search
-      // await apiController.getAllItems();
-    }
-
-    //catUpdate checking
-    if (box
-            .get('cacheRefresh')
-            ?.catUpdate
-            .isBefore(newCacheRefresh.catUpdate) ??
-        true) {
-      log(
-          '========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
-//calling api and saving to db (api code has db write code integrated)
-      await apiController.getAllCategories();
-      log('>>>>>>>>>>>>>>fetching cat');
-    }
-    // apiController.initCategoriesDB();
-
-    //faq cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.custFaqUpdate
-            .isBefore(newCacheRefresh.custFaqUpdate) ??
-        true) {
-      //get & store faq data
-      log('-----------------Updating FAQ------------------');
-      await apiController.getAllFAQs();
-    }
-
-    // aboutUs cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.aboutUsUpdate
-            .isBefore(newCacheRefresh.aboutUsUpdate) ??
-        true) {
-      log('-----------------Updating About Us------------------');
-      await apiController.getCommonContent();
-    } else if (box
-            .get('cacheRefresh')
-            ?.termsUpdate
-            .isBefore(newCacheRefresh.termsUpdate) ??
-        true) {
-      log('-----------------Updating Terms & Condition------------------');
-      await apiController.getCommonContent();
-    }
-
-    //item cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.itemUpdate
-            .isBefore(newCacheRefresh.itemUpdate) ??
-        true) {
-      log('-----------------Refreshing Item Image------------------');
-      // await apiController.getAllItems();
-      //clearing image cache
-      DefaultCacheManager manager = DefaultCacheManager();
-      manager.emptyCache();
-    }
-
-    box.put('cacheRefresh', newCacheRefresh);
-  }
-
   void checkNet() async {
     final hasNet = await AppHelpers.checkConnection();
     if (hasNet) {
       timer.cancel();
       bootHome();
-      init();
     } else {
       Get.to(
         () => const NoInternetPage(),

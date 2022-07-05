@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/models/santhe_user_list_model.dart';
 
 import '../models/new_list/user_list_model.dart';
 

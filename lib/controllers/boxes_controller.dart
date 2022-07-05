@@ -9,23 +9,26 @@ import '../models/santhe_user_list_model.dart';
 import '../models/santhe_user_model.dart';
 
 class Boxes {
-  static Box<UserList> getUserListDB() => Hive.box('userListsDB');
-  static Box<UserCredential> getUserCredentialsDB() =>
-      Hive.box('userCredentialsDB'); //key: currentUserCredentials
-  static Box<User> getUser() => Hive.box('userDB'); //key: currentUserDetails
+  // static Box<UserList> getUserListDB() => Hive.box('userListsDB');
+  // static Box<UserCredential> getUserCredentialsDB() =>
+  //     Hive.box('userCredentialsDB'); //key: currentUserCredentials
+  // static Box<User> getUser() => Hive.box('userDB'); //key: currentUserDetails
+  //
+  // //key: isLoggedIn
+  // //key: showHome
+  // //key: isRegistered
+  // static Box<bool> getUserPrefs() => Hive.box('userPrefsDB');
 
-  //key: isLoggedIn
-  //key: showHome
-  //key: isRegistered
-  static Box<bool> getUserPrefs() => Hive.box('userPrefsDB');
-
+  //key: catId...
   static Box<Category> getCategoriesDB() =>
-      Hive.box('categoryDB'); //key: catId...
+      Hive.box('categoryDB');
 
+  //key: cacheRefresh
   static Box<CacheRefresh> getCacheRefreshInfo() =>
-      Hive.box('cacheRefreshDB'); //key: cacheRefresh
+      Hive.box('cacheRefreshDB');
 
-  static Box<FAQ> getFAQs() => Hive.box('faqDB'); //key: faq1, faq2,....
+  //key: faq1, faq2,....
+  static Box<FAQ> getFAQs() => Hive.box('faqDB');
 
   //key: aboutUs
   //key: termsAndConditions

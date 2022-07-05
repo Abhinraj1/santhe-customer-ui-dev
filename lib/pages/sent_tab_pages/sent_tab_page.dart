@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 
@@ -20,11 +19,12 @@ class OfferTabPage extends StatelessWidget {
         id: 'sentList',
         builder: (builder) {
           List<UserListModel> _sentList = _allListController.sentList;
-          if(_sentList.isEmpty) return _emptyList();
-          return RefreshIndicator(
-            onRefresh: () async {
+          if(_sentList.isEmpty) return _emptyList(context);
 
-            },
+          if(_allListController.isLoading) return const Center(child: CircularProgressIndicator(),);
+
+          return RefreshIndicator(
+            onRefresh: () async => await _allListController.getAllList(),
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
               physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -39,34 +39,55 @@ class OfferTabPage extends StatelessWidget {
     );
   }
 
-  Widget _emptyList() => Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      SizedBox(
-        height: 100.vw,
-        width: 100.vw,
-        child: SvgPicture.asset(
-          'assets/onboarding_sentPage_arrow.svg',
-          color: Colors.orange,
-          fit: BoxFit.fill,
-        ),
-      ),
-      SizedBox(height: 20.sp,),
-      Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            'All your shopping lists that you have sent to merchants in last 72 hours will appear here. Go to New tab to create your shopping lists',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 16.sp,
-                height: 2.sp,
-                color: Colors.grey),
+  Widget _emptyList(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async => await _allListController.getAllList(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(height: 23.h),
+          Image.asset(
+            'assets/sent_tab_image.png',
+            height: 45.vh,
           ),
-        ),
+          SizedBox(
+            height: 20.sp,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text:
+                'All your shopping lists that you have sent to Shops in last 72 hours will appear here. Go to',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16.sp,
+                  height: 2.sp,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: ' New ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                      fontSize: 16.sp,
+                      height: 2.sp,
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'tab to create and send your shopping lists.',
+                    style: TextStyle(
+                        color: Colors.grey, fontSize: 16.sp, height: 2.sp),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-    ],
-  );
+    );
+  }
 }
 

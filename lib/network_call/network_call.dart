@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
-import 'package:santhe/models/new_list/search_item_response_model.dart';
+import 'package:santhe/models/santhe_faq_model.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/models/user_profile/customer_response_model.dart';
 
 import '../core/app_helpers.dart';
@@ -62,7 +64,7 @@ class NetworkCall{
       items.add({
         "mapValue": {
           "fields": {
-            "quantity": {"doubleValue": "${item.quantity}"},
+            "quantity": {"doubleValue": item.quantity},
             "itemImageId": {"stringValue": item.itemImageId},
             "unit": {"stringValue": item.unit},
             "itemName": {"stringValue": item.itemName},
@@ -113,7 +115,7 @@ class NetworkCall{
         },
         "listOfferCounter": {"integerValue": "0"},
         "processStatus": {"stringValue": "draft"},
-        "listId": {"integerValue": "${userList.listId}"},
+        "listId": {"integerValue": userList.listId},
         "listName": {"stringValue": userList.listName}
       }
     };
@@ -133,7 +135,7 @@ class NetworkCall{
   Future removeNewList(String listId) async {
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": "purged"}
+        "custListStatus": {"stringValue": "deleted"}
       }
     };
 
@@ -160,11 +162,11 @@ class NetworkCall{
     }
   }
 
-  Future<CustomerResponseModel> getCustomerDetails() async {
+  Future<CustomerModel> getCustomerDetails() async {
     var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(AppHelpers().getPhoneNumberWithoutCountryCode)));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
-      return customerResponseModelFromJson(response.body);
+      return CustomerModel.fromJson(jsonResponse['fields']);
     } else {
       throw ServerError();
     }
@@ -177,7 +179,7 @@ class NetworkCall{
       items.add({
         "mapValue": {
           "fields": {
-            "quantity": {"doubleValue": "${item.quantity}"},
+            "quantity": {"doubleValue": item.quantity},
             "itemImageId": {
               "stringValue": item.itemImageId.replaceAll(
                   'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
@@ -251,12 +253,39 @@ class NetworkCall{
     }
   }
 
+  Future getAllFAQs() async {
+    const String url = AppUrl.FAQURL;
+
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+
+      var data = jsonResponse['fields']['faq']['arrayValue']['values'];
+
+      final faqList = [];
+
+      for(int i=0;i<data.length;i++){
+        faqList.add(FAQ.fromJson(data[i]));
+      }
+
+      return faqList;
+    } else {
+      log('Request failed with status: ${response.statusCode}.');
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return null;
+    }
+  }
+
   Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
+    final tokenHandler = Get.find<ProfileController>();
+    final token = tokenHandler.urlToken;
+    final header = { "authorization": 'Bearer $token' };
     switch (mode) {
       case REST.get:
         {
           try {
-            return await http.get(url);
+            return await http.get(url, headers: header,);
           } catch (e) {
             log(e.toString());
           }
@@ -266,7 +295,7 @@ class NetworkCall{
       case REST.post:
         {
           try {
-            return await http.post(url, body: body!);
+            return await http.post(url, body: body!, headers: header,);
           } catch (e) {
             log(e.toString());
           }
@@ -276,7 +305,7 @@ class NetworkCall{
       case REST.patch:
         {
           try {
-            return await http.patch(url, body: body!);
+            return await http.patch(url, body: body!, headers: header,);
           } catch (e) {
             log(e.toString());
           }

@@ -18,7 +18,6 @@ import '../../models/merchant_details_response.dart';
 import '../../models/new_list/user_list_model.dart';
 import '../../models/offer/customer_offer_response.dart';
 import '../../models/offer/merchant_offer_response.dart';
-import '../../models/santhe_user_list_model.dart';
 import '../../widgets/sent_tab_widgets/merchant_item_card.dart';
 
 class MerchantItemsListPage extends StatefulWidget {
@@ -47,7 +46,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
     if (widget.archived || widget.overrideData) {
       final data = await apiController.getAllMerchOfferByListId(
         widget.userList.listId,
-        // widget.userList.items.length,
+        widget.userList.items.length,
       );
       widget.currentMerchantOffer = data.firstWhere(
           (element) => element.custOfferResponse.custOfferStatus == 'accepted');
@@ -63,7 +62,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
   Widget build(BuildContext context) {
     final apiController = Get.find<APIs>();
     final screenSize = MediaQuery.of(context).size;
-    double screenHeight = MediaQuery.of(context).size.height / 100;
     String removeDecimalZeroFormat(double n) {
       final itr = n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
       return itr.replaceAll('.0', '');
@@ -95,6 +93,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                 unit: element.mapValue.fields.unit.stringValue));
           }
 
+          final firstCat = _items.first.catName;
+
           return WillPopScope(
             onWillPop: () async {
               Navigator.of(context).pop(widget.overrideData);
@@ -102,13 +102,13 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
             },
             child: Scaffold(
               appBar: AppBar(
+                centerTitle: true,
                 elevation: 0.0,
-                toolbarHeight: screenHeight * 5.5,
                 leading: IconButton(
                   splashRadius: 0.1,
                   icon: Icon(
                     Icons.arrow_back_ios_rounded,
-                    size: 13.sp,
+                    size: 20.sp,
                   ),
                   onPressed: () {
                     Navigator.of(context).pop(widget.overrideData);
@@ -116,11 +116,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                 ),
                 title: Text(
                   'Offer Rs. ${widget.currentMerchantOffer!.merchResponse.merchTotalPrice}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
-                  ),
                 ),
               ),
               body: Column(
@@ -128,13 +123,12 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   Container(
                     color: Colors.transparent,
                     width: double.infinity,
-                    height: 60.sp,
+                    height: 60.h,
                     child: Center(
                       child: Text(
                         isDone() ? 'Offer Accepted' : 'Items and Price',
                         style: TextStyle(
-                            color:
-                                isDone() ? AppColors().green100 : Colors.orange,
+                            color: AppColors().brandDark,
                             fontWeight: FontWeight.bold,
                             fontSize: 16.sp),
                       ),
@@ -273,7 +267,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                 .userList.listId
                                                                 .toString(),
                                                         merchantTitle:
-                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
+                                                            'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
                                                       ),
                                                       type: PageTransitionType
                                                           .rightToLeft),
@@ -322,17 +316,20 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                 )
                               : const SizedBox.shrink(),
                           widget.archived
-                              ? Center(
+                              ? Align(
+                                  alignment: Alignment.bottomCenter,
                                   child: Container(
                                     padding: const EdgeInsets.all(20),
-                                    alignment: Alignment.bottomCenter,
-                                    height: screenSize.height / 3 - 30.sp,
+                                    color: AppColors().white100,
+                                    alignment: Alignment.center,
+                                    height: 90.h,
                                     width: screenSize.width,
                                     child: Text(
                                       'Merchant information will be available only upto 72 hours since the list was sent to shops.',
                                       softWrap: true,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                          height: 1.5,
                                           fontSize: 16.sp,
                                           color: AppColors().grey100,
                                           fontWeight: FontWeight.w400),
@@ -341,6 +338,14 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                 )
                               : const SizedBox.shrink(),
                         ],
+                      ),
+                    ),
+                  if(isDone())
+                    Container(
+                      color: AppColors().white100,
+                      child: Divider(
+                        thickness: 2.sp,
+                        color: AppColors().grey20,
                       ),
                     ),
                   Container(
@@ -367,8 +372,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.only(
                           top: 8.0,
-                          left: 15.0,
-                          right: 15.0,
+                          left: 25.0,
+                          right: 25.0,
                         ),
                         elements: _items,
                         groupBy: (OfferItem offerItem) => offerItem.catName,
@@ -390,12 +395,13 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                     Text(
                                       value,
                                       style: TextStyle(
-                                        color: const Color(0xff8B8B8B),
+                                        color: AppColors().grey20,
                                         fontSize: 18.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text(
+                                    if(firstCat==value)
+                                      Text(
                                       'Price',
                                       style: TextStyle(
                                         color: AppColors().brandDark,
@@ -409,9 +415,10 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                               SizedBox(
                                 height: 3.sp,
                               ),
-                              const Divider(
-                                color: Colors.grey,
-                                thickness: 1,
+                              Divider(
+                                color: AppColors().grey20,
+                                thickness: 1.5,
+                                indent: 8.sp,
                               ),
                             ],
                           );
@@ -431,24 +438,35 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                           child: Container(
                             width: screenSize.width,
                             color: AppColors().white100,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5.0, horizontal: 40.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                  'Total:',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 20.sp,
-                                      color: const Color(0xff8B8B8B)),
+                                Divider(
+                                  thickness: 1.sp,
+                                  color: AppColors().grey20,
                                 ),
-                                Text(
-                                  '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 20.sp,
-                                      color: Colors.orange),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Total:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 24.sp,
+                                            color: const Color(0xff8B8B8B)),
+                                      ),
+                                      Text(
+                                        '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 24.sp,
+                                            color: Colors.orange),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

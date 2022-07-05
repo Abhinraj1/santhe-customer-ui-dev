@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart' as uc;
 import '../../constants.dart';
@@ -258,6 +260,7 @@ class _OtpScreenState extends State<OtpScreen> {
           codeSent: onCodeSent,
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
     } catch (e) {
+      log(e.toString());
       errorMsg('Error Occurred', e.toString());
       if (_timer != null) _timer!.cancel();
     }
@@ -297,52 +300,33 @@ class _OtpScreenState extends State<OtpScreen> {
   Future<void> _nextStep() async {
     final apiController = Get.find<APIs>();
 
-    Boxes.getUserCredentialsDB().put(
-        'currentUserCredentials',
-        uc.UserCredential(
-            idToken: 'idToken',
-            refreshToken: 'refreshToken',
-            expiresIn: 3,
-            localId: 'localId',
-            isNewUser: true,
-            phoneNumber: int.parse(widget.phoneNumber)));
+    // Boxes.getUserCredentialsDB().put(
+    //     'currentUserCredentials',
+    //     uc.UserCredential(
+    //         idToken: 'idToken',
+    //         refreshToken: 'refreshToken',
+    //         expiresIn: 3,
+    //         localId: 'localId',
+    //         isNewUser: true,
+    //         phoneNumber: int.parse(widget.phoneNumber)));
 
-    bool userVerified = true;
+    int userPhone = int.parse(widget.phoneNumber);
+    final profileController = Get.find<ProfileController>();
+    await profileController.initialise();
 
-    if (userVerified) {
-      Boxes.getUserPrefs().put('isLoggedIn', true);
-      Boxes.getUserPrefs().put('showHome', false);
-      Boxes.getUserPrefs().put('isRegistered', false);
-
-      //skipping check and sending existing user directly to HomePage
-      //                                 Boxes.getUserCredentialsDB()
-      //                                     .get('currentUserCredentials')
-      //                                     ?.isNewUser ??
-      //                                     false
-
-      int userPhone = int.parse(widget.phoneNumber);
-      int response = await apiController.getCustomerInfo(userPhone);
-
-      if (response == 0) {
-        if (userPhone == 404) return;
-        Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone),
-            transition: Transition.fadeIn);
-      } else {
-        //Send user to Home Page directly as they r pre existing
-        //take data from firebase & add
-        //response will auto add it to hive.
-
-        apiController.updateDeviceToken(widget.phoneNumber.toString());
-        Boxes.getUserPrefs().put('isLoggedIn', true);
-        Boxes.getUserPrefs().put('showHome', true);
-        Boxes.getUserPrefs().put('isRegistered', true);
-        Get.offAll(() => const HomePage(), transition: Transition.fadeIn);
-      }
+    if(!profileController.isRegistered){
+      if (userPhone == 404) return;
+      Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone),
+          transition: Transition.fadeIn);
+    }else{
+      apiController.updateDeviceToken(widget.phoneNumber.toString());
+      Get.offAll(() => const HomePage(), transition: Transition.fadeIn);
     }
   }
 
   onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
     _auth.signInWithCredential(phoneAuthCredential).then((value) async {
+      log(value.toString());
       if (_timer != null) _timer!.cancel();
       _nextStep();
     });

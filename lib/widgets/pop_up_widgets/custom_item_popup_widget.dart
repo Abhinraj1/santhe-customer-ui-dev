@@ -546,7 +546,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                         .text
                                                         .trim(),
                                                 status: 'inactive',
-                                                unit: [selectedUnit],
+                                                unit: availableUnits,
                                                 updateUser: custPhone);
 
                                             int response = await apiController

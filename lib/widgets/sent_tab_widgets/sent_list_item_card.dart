@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../models/new_list/list_item_model.dart';
-import '../../models/santhe_list_item_model.dart';
+import 'package:santhe/models/new_list/list_item_model.dart';
 
 class SentListItemCard extends StatelessWidget {
   final ListItemModel listItem;
@@ -41,7 +40,10 @@ class SentListItemCard extends StatelessWidget {
                             4000
                         ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
                         : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/' +
-                            listItem.itemImageId,
+                            listItem.itemImageId.replaceAll(
+                              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                              '',
+                            ),
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,

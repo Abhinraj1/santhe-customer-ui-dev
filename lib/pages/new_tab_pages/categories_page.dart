@@ -87,9 +87,10 @@ class CategoriesPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 18.0, vertical: 10.0),
-                      child: ValueListenableBuilder<Box<UserList>>(
-                        valueListenable: Boxes.getUserListDB().listenable(),
-                        builder: (context, box, widget) {
+                      child: GetBuilder(
+                        init: _allListController,
+                        id: 'newList',
+                        builder: (ctr){
                           UserListModel currentUserList = _allListController.allListMap[listId]!;
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

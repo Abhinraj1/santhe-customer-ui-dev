@@ -6,16 +6,16 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/controllers/error_user_fallback.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:santhe/models/user_profile/customer_model.dart';
 
 import '../../Models/chat_model.dart';
-import '../../controllers/boxes_controller.dart';
 import '../../controllers/chat_controller.dart';
-import '../../controllers/notification_controller.dart';
 import '../../core/app_helpers.dart';
-import '../../models/santhe_user_model.dart';
 import '../sent_tab_pages/sent_list_detail_page.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -33,7 +33,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   late final DatabaseReference _reference = FirebaseDatabase.instance.ref().child('chat');
   final ChatController _chatController = Get.find();
-  User currentUser = Boxes.getUser().get('currentUserDetails')!;
+  final profileController = Get.find<ProfileController>();
+  CustomerModel? currentUser;
   String message = '', token = '', merchantToken = '';
   bool _sendMessage = true;
   final TextEditingController _textEditingController = TextEditingController();
@@ -46,10 +47,11 @@ class _ChatScreenState extends State<ChatScreen> {
         statusBarColor: Colors.orange));
     _chatController.inChatScreen = true;
     AppHelpers().getToken.then((value) => token = value);
+    currentUser = profileController.customerDetails ?? fallback_error_customer;
     super.initState();
   }
 
-  final NotificationController _notificationController = Get.find();
+  // final NotificationController _notificationController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +205,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               DateTime.now().toUtc().millisecondsSinceEpoch.toString(): {
                                 'isCustomer' : true,
                                 'message' : message,
-                                'name' : currentUser.custName,
+                                'name' : currentUser!.customerName,
                                 'token' : token
                               }
                             }).then((value){

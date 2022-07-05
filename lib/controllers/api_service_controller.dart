@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/error/exceptions.dart';
 import 'package:santhe/models/merchant_details_response.dart';
 import 'package:santhe/models/offer/customer_offer_response.dart';
@@ -10,6 +12,7 @@ import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
 import '../core/app_helpers.dart';
 import '../models/answer_list_model.dart';
@@ -19,6 +22,8 @@ import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
 import '../models/santhe_user_model.dart';
 import 'boxes_controller.dart';
+
+enum REST { get, post, put, delete, patch, }
 
 class APIs extends GetxController {
   //Items & Category
@@ -36,11 +41,75 @@ class APIs extends GetxController {
 
   var itemsDB = <Item>[].obs;
 
+  Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
+    final tokenHandler = Get.find<ProfileController>();
+    final token = tokenHandler.urlToken;
+    final header = { "authorization": 'Bearer $token' };
+    // case 1: get
+    // case 2: post
+    // case 3: update
+    switch (mode) {
+      case REST.get:
+        {
+          try {
+            return await http.get(url, headers: header,);
+            // } on SocketException {
+            //   Get.to(
+            //     () => const NoInternetPage(),
+            //     transition: Transition.fade,
+            //   );
+            // }
+          } catch (e) {
+            log(e.toString());
+          }
+          break;
+          // throw NoInternetError();
+        }
+
+      case REST.post:
+        {
+          try {
+            return await http.post(url, body: body!, headers: header,);
+            // } on SocketException {
+            //   Get.to(
+            //     () => const NoInternetPage(),
+            //     transition: Transition.fade,
+            //   );
+            // }
+            // throw NoInternetError();
+          } catch (e) {
+            log(e.toString());
+          }
+          break;
+        }
+
+      case REST.patch:
+        {
+          try {
+            return await http.patch(url, body: body!, headers: header,);
+            // } on SocketException {
+            //   Get.to(
+            //     () => const NoInternetPage(),
+            //     transition: Transition.fade,
+            //   );
+            // }
+            // throw NoInternetError();
+          } catch (e) {
+            log(e.toString());
+          }
+          break;
+        }
+
+      default:
+        throw WrongModePassedForAPICall('Wrong mode passed for API call.');
+    }
+    throw NoInternetError();
+  }
+
   Future<AnswerList?> getListByListEventId(String listEventId) async {
     AnswerList? userList;
-    String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getListEventByListId?listId=$listEventId';
-    var response = await http.get(Uri.parse(url));
+    String url = AppUrl.LIST_BY_EVENT_ID(listEventId);
+    var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<ItemModel> listItems = [];
@@ -86,75 +155,12 @@ class APIs extends GetxController {
     }
   }
 
-  Future<http.Response> callApi({required int mode, required Uri url, String? body}) async {
-    // case 1: get
-    // case 2: post
-    // case 3: update
-    switch (mode) {
-      case 1:
-        {
-          try {
-            return await http.get(url);
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
-          } catch (e) {
-            log(e.toString());
-          }
-          break;
-          // throw NoInternetError();
-        }
-
-      case 2:
-        {
-          try {
-            return await http.post(url, body: body!);
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
-            // throw NoInternetError();
-          } catch (e) {
-            log(e.toString());
-          }
-          break;
-        }
-
-      case 3:
-        {
-          try {
-            return await http.patch(url, body: body!);
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
-            // throw NoInternetError();
-          } catch (e) {
-            log(e.toString());
-          }
-          break;
-        }
-
-      default:
-        throw WrongModePassedForAPICall('Wrong mode passed for API call.');
-    }
-    throw NoInternetError();
-  }
-
   Future<int> getSubscriptionLimit(String plan) async {
-    String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/config/control';
+    String url = AppUrl.SUBSCRIPTION_PLAN;
     if (plan == 'default') {
       plan = 'planA';
     }
-    var response = await callApi(mode: 1, url: Uri.parse(url));
+    var response = await callApi(mode: REST.get, url: Uri.parse(url));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
       return int.parse(jsonResponse['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]);
@@ -167,10 +173,9 @@ class APIs extends GetxController {
   Future<int> getItemsCount() async {
     // Boxes.getItemsDB().clear();
 
-    String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/items/next-id';
+    String url = AppUrl.GET_ITEM_COUNT;
 
-    var response = await callApi(mode: 1, url: Uri.parse(url));
+    var response = await callApi(mode: REST.get, url: Uri.parse(url));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null) {
       int nextItemCount = jsonResponse;
@@ -182,8 +187,7 @@ class APIs extends GetxController {
   }
 
   Future<int> addItem(Item newCustomItem) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/item/?documentId=${newCustomItem.itemId}';
+    final String url = AppUrl.ADD_ITEM(newCustomItem.itemId.toString());
 
     List units = [];
     for (int i = 0; i < newCustomItem.unit.length; i++) {
@@ -219,7 +223,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     log(jsonDecode(response.body).toString());
     if (response.statusCode == 200) {
@@ -235,10 +239,9 @@ class APIs extends GetxController {
   }
 
   Future<CacheRefresh> cacheRefreshInfo() async {
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/config/cacheRefresh/';
+    const String url = AppUrl.CACHE_REFRESH_TIME;
 
-    final response = await callApi(mode: 1, url: Uri.parse(url));
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body)['fields'];
@@ -254,10 +257,9 @@ class APIs extends GetxController {
   }
 
   Future getAllCategories() async {
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/category?pageSize=30';
+    const String url = AppUrl.GET_CATEGORIES;
 
-    final response = await callApi(mode: 1, url: Uri.parse(url));
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -277,10 +279,9 @@ class APIs extends GetxController {
 
   //get
   Future<int> getAllFAQs() async {
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/content/custContent';
+    const String url = AppUrl.FAQURL;
 
-    final response = await callApi(mode: 1, url: Uri.parse(url));
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -303,10 +304,9 @@ class APIs extends GetxController {
 
   //get and store common content like about us and terms & cond from backend
   Future<int> getCommonContent() async {
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/content/common/';
+    const String url = AppUrl.AboutUs;
 
-    final response = await callApi(mode: 1, url: Uri.parse(url));
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -323,8 +323,7 @@ class APIs extends GetxController {
 
   Future<List<Item>> getCategoryItems(int id) async {
     List<Item> categoryItems = [];
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    const String url = AppUrl.RUN_QUERY;
     var body = {
       "structuredQuery": {
         "from": [
@@ -350,7 +349,7 @@ class APIs extends GetxController {
       }
     };
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       for (int i = 0; i < data.length; i++) {
@@ -367,8 +366,7 @@ class APIs extends GetxController {
 
   Future<int> addCustomerList(UserList userList, int custId, String status) async {
     log("================${userList.listId}======================");
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/?documentId=${userList.listId}';
+    final String url = AppUrl.ADD_LIST(userList.listId.toString());
     List items = [];
     int i = 0;
     for (ListItem item in userList.items) {
@@ -434,7 +432,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
@@ -450,8 +448,7 @@ class APIs extends GetxController {
 
   //patch
   Future updateUserList(int custId, UserList userList, {String? status, String? processStatus}) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/${userList.listId}?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
+    final String url = AppUrl.UPDATE_USER_LIST(userList.listId.toString());
     List items = [];
     int i = 0;
     for (ListItem item in userList.items) {
@@ -518,7 +515,7 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -538,8 +535,7 @@ class APIs extends GetxController {
 
   //patch
   Future deleteUserList(int userListId) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$userListId?updateMask.fieldPaths=custListStatus';
+    final String url = AppUrl.PURGE_LIST(userListId.toString());
 
     final body = {
       "fields": {
@@ -547,7 +543,7 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -564,8 +560,7 @@ class APIs extends GetxController {
   }
 
   Future undoDeleteUserList(int userListId, String status) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$userListId?updateMask.fieldPaths=custListStatus';
+    final String url = AppUrl.PURGE_LIST(userListId.toString());
 
     final body = {
       "fields": {
@@ -574,7 +569,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -590,18 +585,13 @@ class APIs extends GetxController {
     }
   }
 
-  // LOGIN & USER
-  static const String apiKey = "AIzaSyCFS_yaSebSR9VZC7Qv3QCCC9DNoyTzJ48";
-
-  //post
   Future<String> getOTP(int phoneNumber) async {
-    const String url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key=$apiKey';
+    const String url = AppUrl.GET_OTP;
 
     var body = {"phoneNumber": "+91$phoneNumber"};
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     log(jsonDecode(response.body).toString());
     if (response.statusCode == 200) {
@@ -619,20 +609,19 @@ class APIs extends GetxController {
 
   //post
   Future<bool> verifyOTP(String sessionInfo, int code) async {
-    const String url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key=$apiKey';
+    const String url = AppUrl.VERIFY_OTP;
 
     var body = {"sessionInfo": sessionInfo, "code": code};
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      UserCredential currentUserCredentials = UserCredential.fromJson(data);
+      // var data = jsonDecode(response.body);
+      // UserCredential currentUserCredentials = UserCredential.fromJson(data);
 
-      Boxes.getUserCredentialsDB()
-          .put('currentUserCredentials', currentUserCredentials);
+      // Boxes.getUserCredentialsDB()
+      //     .put('currentUserCredentials', currentUserCredentials);
 
       // UserCredential? myUsr =
       //     Boxes.getUserCredentialsDB().get('currentUserCredentials');
@@ -653,8 +642,7 @@ class APIs extends GetxController {
 
   //post
   Future<int> addCustomer(User user) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/?documentId=${user.custId}';
+    final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
     String _token = await AppHelpers().getToken;
     String _uid = await AppHelpers().getDeviceId();
 
@@ -700,7 +688,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body);
       log('user added');
@@ -715,21 +703,16 @@ class APIs extends GetxController {
 
   //get
   Future<int> getCustomerInfo(int custId) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId';
+    final String url = AppUrl.GET_CUSTOMER_DETAILS(custId.toString());
 
-    var response = await callApi(mode: 1, url: Uri.parse(url));
+    var response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       if (data['fields'] != null) {
         var jsonData = data['fields'];
-
-        User currentUser = User.fromJson(jsonData);
-
-        var box = Boxes.getUser();
-        box.put('currentUserDetails', currentUser);
-
+        final profileController = Get.find<ProfileController>();
+        profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');
@@ -737,16 +720,14 @@ class APIs extends GetxController {
       }
     } else {
       log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       return 0;
     }
   }
 
   //patch
   Future updateCustomerInfo(int custId, User updatedUser) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customer/$custId?updateMask.fieldPaths=custName&updateMask.fieldPaths=custReferal&updateMask.fieldPaths=contact&updateMask.fieldPaths=custStatus&updateMask.fieldPaths=custRatings&updateMask.fieldPaths=custId';
-
+    final String url = AppUrl.UPDATE_CUSTOMER_DETAILS(custId.toString());
     final body = {
       "fields": {
         "custReferal": {"integerValue": "${updatedUser.custReferal}"},
@@ -777,7 +758,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -796,8 +777,7 @@ class APIs extends GetxController {
 
   Future contactUs(int custId, String message, double rating) async {
     log('>>>>>>>>rating:$rating');
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/contactUs/?documentId=$custId${DateTime.now().day.toString().length == 1 ? '0' + DateTime.now().day.toString() : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0' + DateTime.now().month.toString() : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0' + DateTime.now().hour.toString() : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0' + DateTime.now().minute.toString() : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0' + DateTime.now().second.toString() : DateTime.now().second}';
+    final String url = AppUrl.CONTACT_US('$custId${DateTime.now().day.toString().length == 1 ? '0' + DateTime.now().day.toString() : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0' + DateTime.now().month.toString() : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0' + DateTime.now().hour.toString() : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0' + DateTime.now().minute.toString() : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0' + DateTime.now().second.toString() : DateTime.now().second}');
 
     final body = {
       "fields": {
@@ -813,7 +793,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -831,8 +811,7 @@ class APIs extends GetxController {
   //get sent user lists
   Future<List<UserList>> getCustListByStatus(int custId) async {
     List<UserList> userLists = [];
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    const String url = AppUrl.RUN_QUERY;
     var body = {
       "structuredQuery": {
         "from": [
@@ -869,7 +848,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -890,16 +869,55 @@ class APIs extends GetxController {
   }
 
   Future<List<CustomerOfferResponse>> getAllMerchOfferByListId(
-      String listId) async {
-    String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/listevents/${listId.toString()}/offers';
+      String listId, int listQuantity) async {
+    String url = AppUrl.GET_MERCH_OFFER_BY_LIST_ID(listId);
 
-    var response = await callApi(mode: 1, url: Uri.parse(url));
+    var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
-          customerOfferResponseFromJson(response.body);
-      resp.sort((a, b) =>
-          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
+      customerOfferResponseFromJson(response.body);
+      // resp.sort((a, b) =>
+      //     a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
+
+      // DO NOT DELETE THIS SORTING LOGIC
+      if (resp.isNotEmpty) {
+        resp.sort((a, b) =>
+            a.merchResponse.merchTotalPrice
+                .compareTo(b.merchResponse.merchTotalPrice));
+        resp = resp.reversed.toList();
+        resp.sort((a, b) =>
+            a.merchResponse.merchOfferQuantity
+                .compareTo(b.merchResponse.merchOfferQuantity));
+        resp = resp.reversed.toList();
+
+        final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
+
+        resp[0].custOfferResponse.custDeal = 'best1';
+
+        for (int i = 1; i < resp.length; i++) {
+          if (AppHelpers.isInBetween(
+            double.parse(resp[i].merchResponse.merchTotalPrice),
+            bestPrice,
+            bestPrice + 50,
+          ) &&
+              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+            resp[i].custOfferResponse.custDeal = 'best2';
+          } else if (AppHelpers.isInBetween(
+            double.parse(resp[i].merchResponse.merchTotalPrice),
+            bestPrice + 50,
+            bestPrice + 100,
+          ) &&
+              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+            resp[i].custOfferResponse.custDeal = 'best3';
+          } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
+              bestPrice + 100 &&
+              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+            resp[i].custOfferResponse.custDeal = 'best4';
+          } else {
+            resp[i].custOfferResponse.custDeal = 'notBest';
+          }
+        }
+      }
       return resp;
     } else {
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
@@ -908,11 +926,9 @@ class APIs extends GetxController {
   }
 
   Future<MerchantDetailsResponse> getMerchantDetails(String merchId) async {
-    String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/merchant/$merchId';
+    String url = AppUrl.GET_MERCH_DETAILS(merchId);
 
-    var response = await callApi(mode: 1, url: Uri.parse(url));
-    log(response.body.toString());
+    var response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       MerchantDetailsResponse resp =
@@ -927,8 +943,7 @@ class APIs extends GetxController {
   //patch
   Future<int> acceptOffer(String listEventId) async {
     log('Offer Accepted! ListEvent ID: $listEventId');
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/${BigInt.parse(listEventId)}?updateMask.fieldPaths=custOfferResponse.custDeal&updateMask.fieldPaths=custOfferResponse.custOfferStatus&updateMask.fieldPaths=merchResponse.merchUpdateTime';
+    final String url = AppUrl.ACCEPT_OFFER(listEventId);
 
     var body = {
       "fields": {
@@ -955,7 +970,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
@@ -969,10 +984,9 @@ class APIs extends GetxController {
   }
 
   Future<MerchantOfferResponse> getMerchantResponse(String listId) async {
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/listEvent/$listId';
+    final String url = AppUrl.GET_MERCH_RESPONSE(listId);
 
-    var response = await callApi(mode: 1, url: Uri.parse(url));
+    var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
       MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;
@@ -984,8 +998,7 @@ class APIs extends GetxController {
 
   Future<int> processedStatusChange(int listId) async {
     log('**********processedStatusChange***********');
-    final String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents/customerList/$listId?updateMask.fieldPaths=processStatus';
+    final String url = AppUrl.PROCESS_STATUS(listId.toString());
     var body = {
       "fields": {
         "processStatus": {"stringValue": "accepted"}
@@ -993,7 +1006,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 3, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -1011,8 +1024,7 @@ class APIs extends GetxController {
   //POST
   Future<List<UserList>> getArchivedCust(int custId) async {
     List<UserList> userLists = [];
-    const String url =
-        'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents:runQuery';
+    const String url =AppUrl.RUN_QUERY;
     var body = {
       "structuredQuery": {
         "from": [
@@ -1049,7 +1061,7 @@ class APIs extends GetxController {
     };
 
     var response =
-        await callApi(mode: 2, url: Uri.parse(url), body: jsonEncode(body));
+        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -1073,10 +1085,9 @@ class APIs extends GetxController {
 
   Future<List<Item>> searchedItemResult(String searchQuery) async {
     List<Item> searchResults = [];
-    final String url =
-        'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/search/items?searchCriteria=$searchQuery';
+    final String url = AppUrl.SEARCH_QUERY(searchQuery);
 
-    final response = await callApi(mode: 1, url: Uri.parse(url));
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       log(searchQuery);
@@ -1103,8 +1114,7 @@ class APIs extends GetxController {
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request(
         'PUT',
-        Uri.parse(
-            'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/customers/$userId/deviceToken'));
+        Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
     request.body = json.encode({"deviceToken": _token, "deviceId": _uid});
     request.headers.addAll(headers);
 

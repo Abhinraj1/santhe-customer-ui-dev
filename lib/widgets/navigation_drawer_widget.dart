@@ -1,28 +1,30 @@
+import 'navigation_drawer_tile.dart';
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
-import 'package:hive_flutter/adapters.dart';
 import 'package:santhe/controllers/error_user_fallback.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/nav_bar_pages/edit_profile_customer.dart';
 import 'package:santhe/pages/nav_bar_pages/privacy_policy_page.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../controllers/boxes_controller.dart';
-import '../models/santhe_user_model.dart';
+
 import '../pages/nav_bar_pages/about_us_page.dart';
 import '../pages/nav_bar_pages/contact_us_page.dart';
 import '../pages/nav_bar_pages/faq_page.dart';
 import '../pages/nav_bar_pages/terms_condition_page.dart';
-import 'navigation_drawer_tile.dart';
-import 'dart:io';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final profileController = Get.find<ProfileController>();
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Drawer(
       elevation: 2.0,
@@ -88,14 +90,16 @@ class NavigationDrawer extends StatelessWidget {
                       color: Colors.transparent,
                     ),
                   ),
-                  ValueListenableBuilder<Box<User>>(
-                    valueListenable: Boxes.getUser().listenable(),
-                    builder: (context, box, widget) {
-                      User currentUser =
-                          box.get('currentUserDetails') ?? fallBack_error_user;
+                  GetBuilder(
+                    init: profileController,
+                    id: 'navDrawer',
+                    builder: (builder) {
+                      CustomerModel currentUser =
+                          profileController.customerDetails ??
+                              fallback_error_customer;
                       return Expanded(
                         child: AutoSizeText(
-                          currentUser.custName,
+                          currentUser.customerName,
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
@@ -120,7 +124,7 @@ class NavigationDrawer extends StatelessWidget {
                 ],
               ),
               Text(
-                '+91 ${Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ?? 'X'}',
+                '+91${AppHelpers().getPhoneNumber}',
                 style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.orange,
@@ -163,16 +167,16 @@ class NavigationDrawer extends StatelessWidget {
                   snackPosition: SnackPosition.BOTTOM,
                   backgroundColor: Colors.white,
                 );
-                launch('https://www.google.com');
+                launchUrl(Uri.parse('https://www.google.com'));
               } else if (Platform.isIOS) {
                 Get.snackbar('Opening AppStore Link', 'Please rate us fairly!',
                     snackPosition: SnackPosition.BOTTOM);
-                launch('https://www.youtube.com/');
+                launchUrl(Uri.parse('https://www.google.com'));
               } else {
                 Get.snackbar('Opening Store Link', 'Please rate us fairly!',
                     backgroundColor: Colors.orange,
                     snackPosition: SnackPosition.BOTTOM);
-                launch('https://www.google.com');
+                launchUrl(Uri.parse('https://www.google.com'));
               }
             },
           ),

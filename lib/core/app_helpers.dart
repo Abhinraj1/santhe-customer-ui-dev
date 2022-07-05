@@ -14,7 +14,7 @@ class AppHelpers {
   void updateEmail(String email) =>
       _firebaseAuth.currentUser!.updateEmail(email);
 
-  String get getPhoneNumber => _firebaseAuth.currentUser?.phoneNumber ?? '';
+  String get getPhoneNumber => _firebaseAuth.currentUser?.phoneNumber ?? '404';
 
   String get getPhoneNumberWithoutCountryCode => getPhoneNumber.replaceAll('+91', '');
 
@@ -40,7 +40,7 @@ Get it for free at https://santhe.in''';
   }
 
   static bool isInBetween(num compare, num a, num b){
-    if(compare>=a && compare<b){
+    if(compare>a && compare<=b){
       return true;
     }
     return false;

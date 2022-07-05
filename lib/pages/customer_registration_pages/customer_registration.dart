@@ -7,6 +7,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_user_model.dart';
@@ -17,10 +18,8 @@ import 'package:santhe/pages/onboarding_page.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/location_controller.dart';
-import '../../controllers/boxes_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
-import '../../models/santhe_cache_refresh.dart';
 import '../login_pages/phone_number_login_page.dart';
 import 'mapSearchScreen.dart';
 
@@ -40,86 +39,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   String userName = '', userEmail = '', userRefferal = '';
   bool mapSelected = false;
   bool donePressed = false;
-
-  Future init() async {
-    CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
-    var box = Boxes.getCacheRefreshInfo();
-
-    //getting all content that's to be cached if not already done
-    if (!box.containsKey('cacheRefresh') || box.isEmpty) {
-      //cat data
-      await apiController.getAllCategories();
-      box.put('cacheRefresh', newCacheRefresh);
-
-      //faq data
-      await apiController.getAllFAQs();
-
-      //aboutUs & terms n condition data
-      await apiController.getCommonContent();
-
-      //items data for search
-      // await apiController.getAllItems();
-
-      log('first cache load');
-    }
-
-    //catUpdate checking
-    if (box
-            .get('cacheRefresh')
-            ?.catUpdate
-            .isBefore(newCacheRefresh.catUpdate) ??
-        true) {
-      log(
-          '========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
-//calling api and saving to db (api code has db write code integrated)
-      await apiController.getAllCategories();
-      log('>>>>>>>>>>>>>>fetching cat');
-    }
-    // apiController.initCategoriesDB();
-
-    //faq cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.custFaqUpdate
-            .isBefore(newCacheRefresh.custFaqUpdate) ??
-        true) {
-      //get & store faq data
-      log('-----------------Updating FAQ------------------');
-      await apiController.getAllFAQs();
-    }
-
-    // aboutUs cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.aboutUsUpdate
-            .isBefore(newCacheRefresh.aboutUsUpdate) ??
-        true) {
-      log('-----------------Updating About Us------------------');
-      await apiController.getCommonContent();
-    } else if (box
-            .get('cacheRefresh')
-            ?.termsUpdate
-            .isBefore(newCacheRefresh.termsUpdate) ??
-        true) {
-      log('-----------------Updating Terms & Condition------------------');
-      await apiController.getCommonContent();
-    }
-
-    //item cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.itemUpdate
-            .isBefore(newCacheRefresh.itemUpdate) ??
-        true) {
-      log('-----------------Refreshing Item Image------------------');
-      // await apiController.getAllItems();
-      //clearing image cache
-      DefaultCacheManager manager = DefaultCacheManager();
-      manager.emptyCache();
-    }
-
-    box.put('cacheRefresh', newCacheRefresh);
-  }
 
   @override
   void initState() {
@@ -149,13 +68,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   Widget build(BuildContext context) {
     int userPhoneNumber = widget.userPhoneNumber;
     final registrationController = Get.find<RegistrationController>();
+    final profileController = Get.find<ProfileController>();
 
     if (userPhoneNumber == 404) {
       Get.snackbar('Verify Number First',
           'Please Verify Your Phone Number before continuing...');
-      Boxes.getUserPrefs().put('showHome', false);
-      Boxes.getUserPrefs().put('isRegistered', false);
-      Boxes.getUserPrefs().put('isLoggedIn', false);
+      profileController.isLoggedIn = false;
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
       });
@@ -545,22 +463,10 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                         });
                         if (_formKey.currentState!.validate()) {
                           //final otp check
-                          bool isUserLoggedin = Boxes.getUserPrefs()
-                              .get('isLoggedIn',
-                              defaultValue: false) ??
-                              false;
+                          bool isUserLoggedin = profileController.isLoggedIn;
 
                           if (isUserLoggedin) {
-                            Boxes.getUserPrefs()
-                                .put('showHome', true);
-                            Boxes.getUserPrefs()
-                                .put('isRegistered', true);
-
-                            int userPhone =
-                                Boxes.getUserCredentialsDB()
-                                    .get('currentUserCredentials')
-                                    ?.phoneNumber ??
-                                    404;
+                            int userPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
                             //todo add how to reach howToReach
                             User currentUser = User(
@@ -588,76 +494,17 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 .addCustomer(currentUser);
                             if (userAdded == 1) {
                               //add to Hive
-                              Boxes.getUser().put(
-                                  'currentUserDetails', currentUser);
+                              profileController.getCustomerDetailsInit();
                               Get.offAll(() => const HomePage(),
                                   transition: Transition.fadeIn);
                             } else {
                               log('error occurred');
-                              Get.offAll(
-                                      () => const OnboardingPage());
+                              Get.offAll(() => const OnboardingPage());
                             }
                           } else {
-                            // Get.snackbar('Verify Number First',
-                            //     'Please Verify Your Phone Number before continuing...');
-                            Boxes.getUserPrefs()
-                                .put('showHome', false);
-                            Boxes.getUserPrefs()
-                                .put('isRegistered', false);
-                            Boxes.getUserPrefs()
-                                .put('isLoggedIn', false);
-                            //to not show start from odl lsit to new user
-                            Boxes.getContent()
-                                .put('userListCount', '0');
                             Get.offAll(() => const LoginScreen(),
                                 transition: Transition.fadeIn);
                           }
-                        } else {
-                          // Get.snackbar('', '',
-                          //     titleText: Text(
-                          //       'Enter Values Properly',
-                          //       style: TextStyle(
-                          //           fontWeight: FontWeight.w700,
-                          //           color: Colors.orange,
-                          //           fontSize: 16.0),
-                          //     ),
-                          //     messageText: Text(
-                          //       'Please enter all the required values before continuing...',
-                          //       style: TextStyle(
-                          //           fontWeight: FontWeight.w500,
-                          //           color: const Color(0xff8B8B8B),
-                          //           fontSize: 13.0),
-                          //     ),
-                          //     padding: const EdgeInsets.only(
-                          //         top: 13.0,
-                          //         bottom: 13.0,
-                          //         left: 20.0,
-                          //         right: 13.0),
-                          //     margin: const EdgeInsets.symmetric(
-                          //         vertical: 13.0, horizontal: 10.0),
-                          //     icon: Icon(
-                          //       CupertinoIcons
-                          //           .exclamationmark_triangle_fill,
-                          //       size: 40,
-                          //       color: Colors.orange,
-                          //     ),
-                          //     shouldIconPulse: false,
-                          //     snackPosition: SnackPosition.TOP,
-                          //     boxShadows: [
-                          //       BoxShadow(
-                          //         color:
-                          //         Colors.grey.withOpacity(0.21),
-                          //         blurRadius:
-                          //         15.0, // soften the shadow
-                          //         spreadRadius:
-                          //         3.6, //extend the shadow
-                          //         offset: const Offset(
-                          //           0.0,
-                          //           0.0,
-                          //         ),
-                          //       )
-                          //     ],
-                          //     backgroundColor: Colors.white);
                         }
                       },
                       child: FittedBox(

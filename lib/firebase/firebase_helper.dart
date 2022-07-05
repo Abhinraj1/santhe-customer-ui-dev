@@ -9,8 +9,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:santhe/controllers/custom_image_controller.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:santhe/core/app_helpers.dart';
 
-import '../controllers/boxes_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../controllers/sent_tab_offer_card_controller.dart';
@@ -38,17 +38,14 @@ class FirebaseHelper {
 
     var image = await _picker.pickImage(
       source: shootPic ? ImageSource.camera : ImageSource.gallery,
-      imageQuality: 35,
+      imageQuality: 25,
       maxHeight: 1080,
       maxWidth: 1080,
     );
 
     FirebaseStorage storage = FirebaseStorage.instance;
 
-    int custPhone = Boxes.getUserCredentialsDB()
-            .get('currentUserCredentials')
-            ?.phoneNumber ??
-        404;
+    int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
     try {
       File file;
       if (image != null) {
@@ -58,7 +55,7 @@ class FirebaseHelper {
         var compressedImage = await FlutterImageCompress.compressWithList(
           byteImg,
           format: CompressFormat.png,
-          quality: 50,
+          quality: 25,
           minHeight: 512,
           minWidth: 512,
         );

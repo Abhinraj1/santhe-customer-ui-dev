@@ -3,8 +3,6 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 
-import '../../models/santhe_list_item_model.dart';
-import '../../models/santhe_user_list_model.dart';
 import '../../widgets/sent_tab_widgets/sent_list_item_card.dart';
 
 class UserListItemDetailsPage extends StatelessWidget {

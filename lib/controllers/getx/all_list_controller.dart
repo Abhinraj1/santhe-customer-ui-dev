@@ -1,15 +1,17 @@
 import 'package:get/get.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:santhe/widgets/confirmation_widgets/undo_delete_widget.dart';
 
 import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/new_list_response_model.dart';
 import '../../network_call/network_call.dart';
-import '../boxes_controller.dart';
 
 class AllListController extends GetxController{
-
   bool isLoading = true;
 
   RxBool isProcessing = false.obs, isTitleEditable = false.obs;
@@ -25,7 +27,6 @@ class AllListController extends GetxController{
   List<UserListModel> get archivedList => allListMap.values.toList().where((element) => element.custListStatus == 'archived').toList();
 
   List<UserListModel> get newList => allListMap.values.toList().where((element) => element.custListStatus == 'new').toList();
-
 
   Future<void> getAllList() async {
     var val = await NetworkCall().getAllCustomerLists();
@@ -117,6 +118,7 @@ class AllListController extends GetxController{
       allListMap[newUserList.listId] = newUserList;
       update(['newList', 'fab']);
       Get.back();
+      Get.to(()=>UserListScreen(listId: newUserList.listId));
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }
@@ -132,6 +134,7 @@ class AllListController extends GetxController{
       allListMap[copyListId] = copyUserList;
       update(['newList', 'fab']);
       Get.back();
+      Get.to(()=>UserListScreen(listId: copyUserList.listId), transition: Transition.rightToLeft,);
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }
@@ -172,24 +175,48 @@ class AllListController extends GetxController{
     return _list;
   }
 
-  Future<void> deleteListFromDB(String listId) async {
+  Future<void> deleteListFromDB(String listId, String status,
+      {bool fromNew = false}) async {
     isProcessing.value = true;
     int response = await NetworkCall().removeNewList(listId);
     isProcessing.value = false;
     if (response == 1) {
-      allListMap[listId]?.custListStatus = 'purged';
-      newList.remove(listId);
-      update(['newList', 'fab']);
-      Get.back();
+      allListMap[listId]?.custListStatus = 'deleted';
+      if(fromNew){
+        newList.remove(allListMap[listId]);
+      }else{
+        archivedList.remove(allListMap[listId]);
+      }
+      update(['newList', 'fab', 'archivedList']);
+      undoDelete(int.parse(listId), status);
     } else {
       errorMsg('Error Occurred', 'Please try again');
     }
   }
 
+  Future<void> moveToArchive(UserListModel userList) async {
+    isProcessing.value = true;
+    int response = await NetworkCall().updateUserList(userList,
+        status: 'archived',
+        processStatus: userList.processStatus);
+    isProcessing.value = false;
+    if(response==1){
+      allListMap[userList.listId]?.custListStatus = 'archived';
+      sentList.remove(allListMap[userList.listId]);
+      archivedList.add(allListMap[userList.listId]!);
+      update(['sentList', 'archivedList']);
+      Get.offAll(()=>const HomePage(pageIndex: 2,), transition: Transition.fade);
+    }else{
+      errorMsg('Unexpected error occurred', 'Please try again');
+    }
+
+  }
+
   bool isListAlreadyExist(String listName) => allList.where((element) => element.listName == listName).toList().isNotEmpty;
 
   Future<void> checkSubPlan() async {
-    final data = await NetworkCall().getSubscriptionLimit(Boxes.getUser().values.first.custPlan);
+    final profileController = Get.find<ProfileController>();
+    final data = await NetworkCall().getSubscriptionLimit(profileController.customerDetails!.customerPlan);
     lengthLimit = data;
   }
 }

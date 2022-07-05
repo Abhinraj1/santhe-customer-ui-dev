@@ -3,14 +3,11 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
-import 'package:santhe/controllers/boxes_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
-import 'package:santhe/models/santhe_list_item_model.dart';
-import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:santhe/pages/home_page.dart';
-import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 import 'package:santhe/widgets/sent_tab_widgets/sent_list_item_card.dart';
 
 import '../models/new_list/user_list_model.dart';
@@ -18,13 +15,16 @@ import '../models/new_list/user_list_model.dart';
 class NoOfferPage extends StatelessWidget {
   NoOfferPage({Key? key, required this.userList, required this.missed})
       : super(key: key);
+
   final bool missed;
+
   final UserListModel userList;
+
   final apiController = Get.find<APIs>();
-  final int custId =
-      Boxes.getUserCredentialsDB().get('currentUserCredentials')?.phoneNumber ??
-          404;
-  final box = Boxes.getUserListDB();
+
+  final AllListController _allListController = Get.find<AllListController>();
+
+  final int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
   @override
   Widget build(BuildContext context) {
@@ -123,45 +123,7 @@ class NoOfferPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: () async {
-                               /* int userListCount = 0;
-
-                                UserListModel newImportedList = UserListModel(
-                                  createListTime: DateTime.now(),
-                                  custId: userList.custId,
-                                  items: userList.items,
-                                  listId:
-                                      '$custId${userListCount + 1}',
-                                  listName: '(COPY) ${userList.listName}',
-                                  custListSentTime: userList.custListSentTime,
-                                  custListStatus: userList.custListStatus,
-                                  listOfferCounter: userList.listOfferCounter,
-                                  processStatus: userList.processStatus,
-                                  custOfferWaitTime: userList.custOfferWaitTime,
-                                  updateListTime: DateTime.now(),
-                                );
-
-                                int response =
-                                    await apiController.addCustomerList(
-                                        newImportedList, custId, 'new');
-
-                                if (response == 1) {
-                                  successMsg('List Copied',
-                                      'New list successfully created from current list');
-                                  box.add(newImportedList);
-                                  Get.to(const HomePage(
-                                    pageIndex: 0,
-                                  ));
-                                } else {
-                                  Get.dialog(
-                                    const Card(
-                                      child: Center(
-                                        child: Text('Error!'),
-                                      ),
-                                    ),
-                                  );
-                                }*/
-                              },
+                              onTap: () => _allListController.addCopyListToDB(userList.listId),
                               splashColor: AppColors().white100,
                               child: Container(
                                 height: 50,
@@ -186,44 +148,7 @@ class NoOfferPage extends StatelessWidget {
                               width: 20.sp,
                             ),
                             InkWell(
-                              onTap: () async {
-                                /*int response = await apiController
-                                    .updateUserList(custId, userList,
-                                        status: 'archived',
-                                        processStatus: userList.processStatus);
-                                if (response == 1) {
-                                  successMsg(
-                                      'List Archived', 'List is archived.');
-                                  // UserList updated = UserList(
-                                  //     createListTime: userList.createListTime,
-                                  //     custId: userList.custId,
-                                  //     items: userList.items,
-                                  //     listId: userList.listId,
-                                  //     listName: userList.listName,
-                                  //     custListSentTime: userList.custListSentTime,
-                                  //     custListStatus: 'archived',
-                                  //     listOfferCounter: userList.listOfferCounter,
-                                  //     processStatus: userList.processStatus,
-                                  //     custOfferWaitTime:
-                                  //     userList.custOfferWaitTime);
-                                  // await box.values.firstWhere((element) => element.listId == userList.listId).delete();
-                                  // box.add(updated);
-                                  Get.to(
-                                    const HomePage(
-                                      pageIndex: 2,
-                                    ),
-                                  );
-                                } else {
-                                  Get.dialog(
-                                    const Card(
-                                      child: Center(
-                                        child: Text(
-                                            'Some unexpected error occurred.'),
-                                      ),
-                                    ),
-                                  );
-                                }*/
-                              },
+                              onTap: () => _allListController.moveToArchive(userList),
                               splashColor: AppColors().white100,
                               child: Container(
                                 height: 50,

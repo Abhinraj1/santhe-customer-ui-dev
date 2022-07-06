@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,6 +21,8 @@ class ProfileController extends GetxController{
 
   String? _urlToken;
 
+  Timer? refreshToken;
+
   String get urlToken => _urlToken ?? '';
 
   Future<void> initialiseUrlToken({bool override = false}) async {
@@ -37,8 +40,12 @@ class ProfileController extends GetxController{
     }
   }
 
-  Future<void> initialise() async{
-    await initialiseUrlToken(override: true);
+  void startTimer(){
+    refreshToken = Timer.periodic(const Duration(minutes: 1), (_) => initialiseUrlToken());
+  }
+
+  Future<void> initialise({bool startApp = false}) async{
+    await initialiseUrlToken(override: startApp);
     if(isLoggedIn) await getCustomerDetailsInit();
     if(isLoggedIn&&isRegistered) await cacheRefresh();
   }

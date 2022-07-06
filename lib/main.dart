@@ -84,7 +84,7 @@ void main() async {
   Notifications().fcmInit();
 
   final profileController = Get.find<ProfileController>();
-  await profileController.initialise();
+  await profileController.initialise(startApp: true);
 
   runZonedGuarded<Future<void>>(
     () async {

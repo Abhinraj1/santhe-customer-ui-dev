@@ -43,6 +43,7 @@ class APIs extends GetxController {
   Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
     final tokenHandler = Get.find<ProfileController>();
     final token = tokenHandler.urlToken;
+    print(token);
     final header = { "authorization": 'Bearer $token' };
     // case 1: get
     // case 2: post

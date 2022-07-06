@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -27,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>app-1-445035608011-ios-3bceec5078ca20d3d9684e</string>
+				<string>app-1-445035608011-ios-01a228f61de66127d9684e</string>
 			</array>
 		</dict>
 	</array>
@@ -66,7 +68,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
 </dict>
 </plist>

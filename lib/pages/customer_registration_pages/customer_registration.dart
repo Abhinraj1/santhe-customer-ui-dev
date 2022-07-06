@@ -491,8 +491,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 .addCustomer(currentUser);
                             if (userAdded == 1) {
                               //add to Hive
-                              await profileController.getCustomerDetailsInit();
-                              await profileController.cacheRefresh();
+                              await profileController.initialise();
                               Get.offAll(() => const HomePage(),
                                   transition: Transition.fadeIn);
                             } else {

@@ -9,8 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:santhe/constants.dart';
-import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/controllers/connectivity_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
@@ -32,16 +32,19 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final apiController = Get.find<APIs>();
 
   final NotificationController _notificationController = Get.find();
   final ConnectivityController _connectivityController = Get.find();
   final AllListController _allListController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   @override
   void initState() {
-    _homeController.homeTabController = TabController(length: 3, vsync: this, initialIndex: widget.pageIndex);
+    _homeController.homeTabController =
+        TabController(length: 3, vsync: this, initialIndex: widget.pageIndex);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
@@ -50,7 +53,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     ));
     _allListController.getAllList();
     _allListController.checkSubPlan();
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) => _connectivityController.listenConnectivity(result));
+    if (_profileController.refreshToken == null) _profileController.startTimer();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
+        _connectivityController.listenConnectivity(result));
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
     super.initState();
@@ -80,9 +85,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         title: const AutoSizeText(
           kAppName,
           style: TextStyle(
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-              fontSize: 24),
+              fontWeight: FontWeight.w800, color: Colors.white, fontSize: 24),
         ),
         actions: [
           Padding(

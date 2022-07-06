@@ -688,8 +688,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                       successMsg(
                                                                           'Yay! Offer Accepted!',
                                                                           'Hope you had a pleasant time using the app.');
-                                                                      Navigator.of(
-                                                                              context)
+                                                                      Navigator.of(context)
                                                                           .pop();
                                                                       setState(
                                                                           () {
@@ -702,17 +701,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                           'Some connectivity error has occurred, please try again later!');
                                                                     }
                                                                   },
-                                                                  child: Text(
-                                                                    'Accept',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w700,
-                                                                        fontSize:
-                                                                            18.sp),
-                                                                  ),
                                                                   color: Colors
                                                                       .orange,
                                                                   elevation:
@@ -724,6 +712,17 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             16.0),
+                                                                  ),
+                                                                  child: Text(
+                                                                    'Accept',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        fontSize:
+                                                                            18.sp),
                                                                   ),
                                                                 ),
                                                         ),

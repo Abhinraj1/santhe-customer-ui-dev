@@ -45,13 +45,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: CachedNetworkImage(
-              imageUrl: int.parse(widget.merchantItem.itemId.replaceAll(
-                          'projects/santhe-425a8/databases/(default)/documents/item/',
-                          '')) <
-                      4000
-                  ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId}'
-                  : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/' +
-                      widget.merchantItem.itemImageId,
+              imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId}',
               width: 50.sp,
               height: 50.sp,
               fit: BoxFit.cover,

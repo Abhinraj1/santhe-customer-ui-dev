@@ -10,7 +10,6 @@ import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/network_call/network_call.dart';
-import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
 
@@ -62,7 +61,7 @@ class _UserListScreenState extends State<UserListScreen> {
           ),
           onPressed: () async {
             saveList();
-            _homeController.currentIndex = 0;
+            _homeController.homeTabController.animateTo(0);
             Get.back();
           },
         ),
@@ -330,7 +329,7 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         onWillPop: () async {
           saveList();
-          _homeController.currentIndex = 0;
+          _homeController.homeTabController.animateTo(0);
           Get.back();
           return true;
         },
@@ -974,6 +973,7 @@ class _UserListScreenState extends State<UserListScreen> {
   void saveList() {
     NetworkCall()
         .updateUserList(_userList, processStatus: 'draft', status: 'new');
+    _allListController.update(['newList', 'fab']);
   }
 
   void sendList() {

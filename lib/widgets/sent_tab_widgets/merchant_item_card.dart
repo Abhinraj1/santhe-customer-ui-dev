@@ -85,7 +85,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: AppColors().grey20,
+                          color: AppColors().grey80,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                         ),

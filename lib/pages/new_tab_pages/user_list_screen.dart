@@ -62,7 +62,8 @@ class _UserListScreenState extends State<UserListScreen> {
           ),
           onPressed: () async {
             saveList();
-            Get.offAll(()=>const HomePage(pageIndex: 0,));
+            _homeController.currentIndex = 0;
+            Get.back();
           },
         ),
         title: Obx(() => _allListController.isTitleEditable.value
@@ -329,7 +330,8 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         onWillPop: () async {
           saveList();
-          Get.offAll(()=>const HomePage(pageIndex: 0,));
+          _homeController.currentIndex = 0;
+          Get.back();
           return true;
         },
       ),

@@ -217,15 +217,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                 ),
                                                 //phone number
                                                 Text(
-                                                  '+91-' +
-                                                      widget
-                                                          .merchantResponse!
-                                                          .fields
-                                                          .contact
-                                                          .mapValue
-                                                          .fields
-                                                          .phoneNumber
-                                                          .integerValue,
+                                                  '+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -395,7 +387,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                     Text(
                                       value,
                                       style: TextStyle(
-                                        color: AppColors().grey20,
+                                        color: AppColors().grey80,
                                         fontSize: 18.sp,
                                         fontWeight: FontWeight.bold,
                                       ),

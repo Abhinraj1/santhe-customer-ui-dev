@@ -52,11 +52,12 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.light,
     ));
+
+    currentUser = profileController.customerDetails ?? fallback_error_customer;
     _userNameController =
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
     _userEmailController =
         TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
-    currentUser = profileController.customerDetails ?? fallback_error_customer;
     super.initState();
   }
 

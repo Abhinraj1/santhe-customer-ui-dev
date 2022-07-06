@@ -89,7 +89,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                 merchPrice: double.parse(
                     element.mapValue.fields.merchPrice.stringValue),
                 quantity:
-                    double.parse(element.mapValue.fields.quantity.stringValue),
+                    double.parse(element.mapValue.fields.quantity.integerValue),
                 unit: element.mapValue.fields.unit.stringValue));
           }
 

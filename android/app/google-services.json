@@ -67,7 +67,7 @@
               "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.santhe.customer"
+                "bundle_id": "com.santhe.www.santhe"
               }
             }
           ]
@@ -135,7 +135,7 @@
               "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.santhe.customer"
+                "bundle_id": "com.santhe.www.santhe"
               }
             }
           ]
@@ -195,7 +195,7 @@
               "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.santhe.customer"
+                "bundle_id": "com.santhe.www.santhe"
               }
             }
           ]

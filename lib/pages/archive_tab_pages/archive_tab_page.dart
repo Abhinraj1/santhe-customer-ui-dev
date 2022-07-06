@@ -1,7 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
@@ -10,9 +7,6 @@ import 'package:santhe/widgets/archived_tab_widgets/archived_list_card.dart';
 
 import '../../controllers/getx/all_list_controller.dart';
 import '../../models/new_list/user_list_model.dart';
-import '../../widgets/offer_status_widget.dart';
-import '../no_offer_page.dart';
-import '../sent_tab_pages/merchant_items_list_page.dart';
 
 class ArchivedTabScreen extends StatelessWidget {
   ArchivedTabScreen({Key? key}) : super(key: key);

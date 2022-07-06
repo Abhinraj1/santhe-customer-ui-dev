@@ -124,7 +124,7 @@ class NavigationDrawer extends StatelessWidget {
                 ],
               ),
               Text(
-                '+91${AppHelpers().getPhoneNumber}',
+                '+91 ${AppHelpers().getPhoneNumberWithoutCountryCode}',
                 style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.orange,

@@ -62,7 +62,7 @@ class _OffersListPageState extends State<OffersListPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return !widget.showOffers
+    return widget.showOffers
         ? FutureBuilder<List<CustomerOfferResponse>>(
             future: listOffersData,
             builder: (context, snapshot) {

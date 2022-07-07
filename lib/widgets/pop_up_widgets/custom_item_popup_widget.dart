@@ -58,7 +58,6 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   TextStyle kLabelTextStyle = const TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
-  //todo add login check
   int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
   bool isProcessing = false;

@@ -890,7 +890,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                       if (!widget.edit && widget.fromSearch != true) {
                                                         animateAdd(screenWidth / 100);
                                                       }
-                                                      Future.delayed(Duration(milliseconds: !widget.edit && widget.fromSearch != true ? 500 : 0), () async {
+                                                      Future.delayed(Duration(milliseconds: !widget.edit && widget.fromSearch != true ? 200 : 0), () async {
                                                         Navigator.pop(context);
                                                       });
                                                     } else {

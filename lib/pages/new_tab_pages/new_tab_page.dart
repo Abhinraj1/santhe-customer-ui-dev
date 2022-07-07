@@ -68,7 +68,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
           init: _allListController,
           id: 'newList',
           builder: (ctr){
-            List<UserListModel> _userList = _allListController.newList;
+            List<UserListModel> userList = _allListController.newList;
             if(_allListController.isLoading)return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
 
             if(_allListController.newList.isEmpty) return _emptyList();
@@ -76,9 +76,9 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
             return RefreshIndicator(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
-                  itemCount: _userList.length,
+                  itemCount: userList.length,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) => _userListCard(_userList[index]),
+                  itemBuilder: (BuildContext context, int index) => _userListCard(userList[index]),
                 ),
                 onRefresh: () async {
                   await _allListController.getAllList();
@@ -536,11 +536,11 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
   );
 
   List<DropdownMenuItem<String>> _addDividersAfterItems() {
-    int _maxLength = 5;
-    List<DropdownMenuItem<String>> _menuItems = [];
-    List<UserListModel> _list = _allListController.getLatestList(_maxLength);
-    for (var element in _list) {
-      _menuItems.addAll(
+    int maxLength = 5;
+    List<DropdownMenuItem<String>> menuItems = [];
+    List<UserListModel> list = _allListController.getLatestList(maxLength);
+    for (var element in list) {
+      menuItems.addAll(
         [
           DropdownMenuItem<String>(
             value: element.listId,
@@ -557,7 +557,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
             ),
           ),
           //If it's last item, remove divider.
-          if(element != _list[_maxLength - 1])
+          if(element != list[maxLength - 1])
           const DropdownMenuItem<String>(
             enabled: false,
             child: Divider(),
@@ -565,7 +565,7 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
         ],
       );
     }
-    return _menuItems;
+    return menuItems;
   }
 
   Widget _userListCard(UserListModel userList){

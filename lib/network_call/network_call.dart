@@ -73,13 +73,13 @@ class NetworkCall{
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId}"
+              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId}"
+              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -195,13 +195,13 @@ class NetworkCall{
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId}"
+              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId}"
+              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }

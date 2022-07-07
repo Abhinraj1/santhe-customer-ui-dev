@@ -648,8 +648,8 @@ class APIs extends GetxController {
   //post
   Future<int> addCustomer(User user) async {
     final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
-    String _token = await AppHelpers().getToken;
-    String _uid = await AppHelpers().getDeviceId();
+    String token = await AppHelpers().getToken;
+    String uid = await AppHelpers().getDeviceId();
 
     var body = {
       "fields": {
@@ -685,7 +685,7 @@ class APIs extends GetxController {
         "deviceMap": {
           "mapValue": {
             "fields": {
-              _uid: {"stringValue": _token}
+              uid: {"stringValue": token}
             }
           }
         }
@@ -785,7 +785,7 @@ class APIs extends GetxController {
 
   Future contactUs(int custId, String message, double rating) async {
     log('>>>>>>>>rating:$rating');
-    final String url = AppUrl.CONTACT_US('$custId${DateTime.now().day.toString().length == 1 ? '0' + DateTime.now().day.toString() : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0' + DateTime.now().month.toString() : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0' + DateTime.now().hour.toString() : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0' + DateTime.now().minute.toString() : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0' + DateTime.now().second.toString() : DateTime.now().second}');
+    final String url = AppUrl.CONTACT_US('$custId${DateTime.now().day.toString().length == 1 ? '0${DateTime.now().day}' : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0${DateTime.now().month}' : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0${DateTime.now().hour}' : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0${DateTime.now().minute}' : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0${DateTime.now().second}' : DateTime.now().second}');
 
     final body = {
       "fields": {
@@ -964,7 +964,6 @@ class APIs extends GetxController {
             "fields": {
               "custDeal": {"stringValue": "best1"},
               "custOfferStatus": {"stringValue": "accepted"},
-              // "custUpdateTime": {"timestampValue": "2022-05-03T08:50:12Z"}
             }
           }
         },
@@ -1001,7 +1000,7 @@ class APIs extends GetxController {
 
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
-      MerchantOfferResponse data = merchantOfferResponseFromJson(response.body).first;
+      MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
       return data;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
@@ -1126,13 +1125,13 @@ class APIs extends GetxController {
   }
 
   Future<void> updateDeviceToken(String userId) async {
-    final String _token = await AppHelpers().getToken;
-    String _uid = await AppHelpers().getDeviceId();
+    final String token = await AppHelpers().getToken;
+    String uid = await AppHelpers().getDeviceId();
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request(
         'PUT',
         Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
-    request.body = json.encode({"deviceToken": _token, "deviceId": _uid});
+    request.body = json.encode({"deviceToken": token, "deviceId": uid});
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();

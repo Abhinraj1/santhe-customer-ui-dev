@@ -18,8 +18,8 @@ class OfferTabPage extends StatelessWidget {
         init: _allListController,
         id: 'sentList',
         builder: (builder) {
-          List<UserListModel> _sentList = _allListController.sentList;
-          if(_sentList.isEmpty) return _emptyList(context);
+          List<UserListModel> sentList = _allListController.sentList;
+          if(sentList.isEmpty) return _emptyList(context);
 
           if(_allListController.isLoading) return const Center(child: CircularProgressIndicator(),);
 
@@ -28,9 +28,9 @@ class OfferTabPage extends StatelessWidget {
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 3.0),
               physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              itemCount: _sentList.length,
+              itemCount: sentList.length,
               itemBuilder: (context, index) {
-                return OfferCard(userList: _sentList[index]);
+                return OfferCard(userList: sentList[index]);
               },
             ),
           );

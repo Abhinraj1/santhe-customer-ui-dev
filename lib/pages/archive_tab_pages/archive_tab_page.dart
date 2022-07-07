@@ -22,9 +22,9 @@ class ArchivedTabScreen extends StatelessWidget {
         builder: (builder){
           List<UserListModel> archivedList = _allListController.archivedList;
           archivedList.sort((a, b) => b.updateListTime.compareTo(a.updateListTime));
-          if(_allListController.archivedList.isEmpty) return _emptyList(context);
-
           if(_allListController.isLoading) return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
+
+          if(_allListController.archivedList.isEmpty) return _emptyList(context);
 
           return RefreshIndicator(
             onRefresh: () async => await _allListController.getAllList(),

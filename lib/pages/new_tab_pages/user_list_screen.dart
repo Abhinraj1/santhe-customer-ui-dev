@@ -69,62 +69,64 @@ class _UserListScreenState extends State<UserListScreen> {
             ? Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10.vw),
                 child: Container(
-                  height: 35.sp,
+                  // height: 35.sp,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16.0)),
-                  child: Stack(children: [
-                    TextFormField(
-                      autofocus: true,
-                      initialValue: _userList.listName,
-                      // enableInteractiveSelection: false,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14.0,
-                      ),
-                      cursorHeight: 18.sp,
-                      maxLength: 30,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.only(
-                            top: 10.0, bottom: 10.0, right: 30.0, left: 30.0),
-                        counterText: '',
-
-                        // hintText: userList.listName,
-                        hintStyle: const TextStyle(
-                          fontWeight: FontWeight.w300,
+                  child: Stack(
+                    children: [
+                      TextFormField(
+                        autofocus: true,
+                        initialValue: _userList.listName,
+                        // enableInteractiveSelection: false,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
                           color: Colors.grey,
+                          fontSize: 14.0,
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(21),
-                          borderSide: const BorderSide(
-                              width: 0.0, color: Colors.transparent),
+                        cursorHeight: 18.sp,
+                        maxLength: 30,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.only(
+                              top: 10.0, bottom: 10.0, right: 30.0, left: 30.0),
+                          counterText: '',
+
+                          // hintText: userList.listName,
+                          hintStyle: const TextStyle(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(21),
+                            borderSide: const BorderSide(
+                                width: 0.0, color: Colors.transparent),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(21),
+                            borderSide: const BorderSide(
+                                width: 0.0, color: Colors.transparent),
+                          ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(21),
-                          borderSide: const BorderSide(
-                              width: 0.0, color: Colors.transparent),
-                        ),
+                        onChanged: (val) => _title = val,
+                        onFieldSubmitted: (val) => changeListName(),
                       ),
-                      onChanged: (val) => _title = val,
-                      onFieldSubmitted: (val) => changeListName(),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () => changeListName(),
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 3.0),
-                          child: Icon(
-                            CupertinoIcons.check_mark_circled_solid,
-                            color: Colors.orange,
-                            size: 26,
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () => changeListName(),
+                          child: const Padding(
+                            padding: EdgeInsets.only(right: 3.0, top: 6.0),
+                            child: Icon(
+                              CupertinoIcons.check_mark_circled_solid,
+                              color: Colors.orange,
+                              size: 26,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ]),
+                    ],
+                  ),
                 ),
               )
             : Text(
@@ -950,14 +952,15 @@ class _UserListScreenState extends State<UserListScreen> {
       );
 
   Widget _groupedItemListView() => GetBuilder(
-    init: _allListController,
-    id: 'newList',
-    builder: (ctr) => GroupedListView(
+        init: _allListController,
+        id: 'newList',
+        builder: (ctr) => GroupedListView(
           physics: const BouncingScrollPhysics(),
           elements: _userList.items,
           groupBy: (ListItemModel element) => element.catName,
           indexedItemBuilder:
-              (BuildContext context, dynamic element, int index) => ListItemCard(
+              (BuildContext context, dynamic element, int index) =>
+                  ListItemCard(
             listItem: _userList.items[index],
             listId: widget.listId,
           ),
@@ -972,7 +975,7 @@ class _UserListScreenState extends State<UserListScreen> {
             ],
           ),
         ),
-  );
+      );
 
   void saveList() {
     NetworkCall()

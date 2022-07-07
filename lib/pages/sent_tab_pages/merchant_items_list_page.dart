@@ -692,6 +692,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                           () {
                                                                         widget.overrideData =
                                                                             true;
+                                                                        Navigator.of(context).pop();
                                                                       });
                                                                     } else {
                                                                       errorMsg(

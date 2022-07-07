@@ -102,8 +102,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         if(snapShot.hasData){
 
                           if(snapShot.data == null || snapShot.data?.snapshot.value == null){
-                            return const Center(
-                              child: Text('start a new chat'),
+                            return Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 40.sp),
+                                  child: Image.asset('assets/chat_screen_start.png'),) ,
                             );
                           }
 

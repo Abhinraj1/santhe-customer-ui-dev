@@ -215,7 +215,7 @@ class CustOfferItem {
     merchNotes: json["merchNotes"],
     catName: json["catName"],
     unit: json["unit"],
-    quantity: json["quantity"],
+    quantity: json["quantity"].toString(),
     merchPrice: json["merchPrice"],
     itemSeqNum: json["itemSeqNum"],
   );

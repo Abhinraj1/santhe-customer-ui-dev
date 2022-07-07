@@ -163,7 +163,12 @@ class _OffersListPageState extends State<OffersListPage>
 
   Widget _waitingImage() => Column(
         children: [
-          Image.asset('assets/sent_tab/waiting_for_offer.png'),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40.sp, vertical: 30.sp),
+            child: Image.asset(
+              'assets/sent_tab/waiting_for_offer.png',
+            ),
+          ),
           SizedBox(
             height: 27.h,
           ),
@@ -177,7 +182,7 @@ class _OffersListPageState extends State<OffersListPage>
           SizedBox(
               width: 314.w,
               child: Text(
-                'The Merchants are working on your Shopping List. We will let you know as soon as there are offers',
+                'Shops are working on your Shopping List. We will let you know as soon offers are available.',
                 textAlign: TextAlign.center,
                 style: AppTheme()
                     .normal400(16, color: AppColors().grey100, height: 2.h),

@@ -69,9 +69,9 @@ class _NewTabPageState extends State<NewTabPage> with AutomaticKeepAliveClientMi
           id: 'newList',
           builder: (ctr){
             List<UserListModel> _userList = _allListController.newList;
-            if(_allListController.newList.isEmpty) return _emptyList();
-
             if(_allListController.isLoading)return Center(child: CircularProgressIndicator(color: AppColors().brandDark),);
+
+            if(_allListController.newList.isEmpty) return _emptyList();
 
             return RefreshIndicator(
                 child: ListView.builder(

@@ -69,6 +69,7 @@ class _UserListScreenState extends State<UserListScreen> {
             ? Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10.vw),
                 child: Container(
+                  height: 35.sp,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16.0)),

@@ -10,6 +10,7 @@ import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/offer/merchant_offer_response.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
+import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
@@ -17,7 +18,6 @@ import '../core/app_helpers.dart';
 import '../models/answer_list_model.dart';
 import '../models/item_model.dart';
 import '../models/santhe_faq_model.dart';
-import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
 import '../models/santhe_user_model.dart';
 import 'boxes_controller.dart';
@@ -997,11 +997,11 @@ class APIs extends GetxController {
   }
 
   Future<MerchantOfferResponse> getMerchantResponse(String listId) async {
-    final String url = AppUrl.GET_MERCH_RESPONSE(listId);
+    final String url = AppUrl.LIST_BY_EVENT_ID(listId);
 
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
-      MerchantOfferResponse data = merchantOfferResponseFromJson(response.body);
+      MerchantOfferResponse data = merchantOfferResponseFromJson(response.body).first;
       return data;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());

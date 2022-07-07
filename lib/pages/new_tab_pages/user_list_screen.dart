@@ -69,7 +69,6 @@ class _UserListScreenState extends State<UserListScreen> {
             ? Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10.vw),
                 child: Container(
-                  height: 35.h,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16.0)),
@@ -949,26 +948,30 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
       );
 
-  Widget _groupedItemListView() => GroupedListView(
-        physics: const BouncingScrollPhysics(),
-        elements: _userList.items,
-        groupBy: (ListItemModel element) => element.catName,
-        indexedItemBuilder:
-            (BuildContext context, dynamic element, int index) => ListItemCard(
-          listItem: _userList.items[index],
-          listId: widget.listId,
+  Widget _groupedItemListView() => GetBuilder(
+    init: _allListController,
+    id: 'newList',
+    builder: (ctr) => GroupedListView(
+          physics: const BouncingScrollPhysics(),
+          elements: _userList.items,
+          groupBy: (ListItemModel element) => element.catName,
+          indexedItemBuilder:
+              (BuildContext context, dynamic element, int index) => ListItemCard(
+            listItem: _userList.items[index],
+            listId: widget.listId,
+          ),
+          groupSeparatorBuilder: (String value) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(value),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+              )
+            ],
+          ),
         ),
-        groupSeparatorBuilder: (String value) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(value),
-            const Divider(
-              color: Colors.grey,
-              thickness: 1,
-            )
-          ],
-        ),
-      );
+  );
 
   void saveList() {
     NetworkCall()

@@ -5,7 +5,6 @@ import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
@@ -72,28 +71,27 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
       builder: (context, snapShot) {
         if (snapShot.data != null &&
             snapShot.connectionState == ConnectionState.done) {
-          List<OfferItem> _items = [];
-          for (var element in snapShot.data!.fields.items.arrayValue.values) {
-            _items.add(OfferItem(
-                brandType: element.mapValue.fields.brandType.stringValue,
-                catName: element.mapValue.fields.catName.stringValue,
-                itemId: element.mapValue.fields.itemId.referenceValue,
-                itemImageId: element.mapValue.fields.itemImageId.stringValue,
-                itemName: element.mapValue.fields.itemName.stringValue,
-                itemNotes: element.mapValue.fields.itemNotes.stringValue,
-                itemSeqNum:
-                    int.parse(element.mapValue.fields.itemSeqNum.integerValue),
+          List<OfferItem> items = [];
+          for (var element in snapShot.data!.items) {
+            items.add(OfferItem(
+                brandType: element.brandType,
+                catName: element.catName,
+                itemId: '1',
+                itemImageId: element.itemImageId,
+                itemName: element.itemName,
+                itemNotes: element.itemNotes,
+                itemSeqNum: element.itemSeqNum,
                 merchAvailability:
-                    element.mapValue.fields.merchAvailability.booleanValue,
-                merchNotes: element.mapValue.fields.merchNotes.stringValue,
+                    element.merchAvailability,
+                merchNotes: element.merchNotes,
                 merchPrice: double.parse(
-                    element.mapValue.fields.merchPrice.stringValue),
+                    element.merchPrice),
                 quantity:
-                    double.parse(element.mapValue.fields.quantity.integerValue),
-                unit: element.mapValue.fields.unit.stringValue));
+                    double.parse(element.quantity),
+                unit: element.unit));
           }
 
-          final firstCat = _items.first.catName;
+          final firstCat = items.first.catName;
 
           return WillPopScope(
             onWillPop: () async {
@@ -259,7 +257,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                 .userList.listId
                                                                 .toString(),
                                                         merchantTitle:
-                                                            'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
+                                                            // 'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
+                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateTime.now()}',
                                                       ),
                                                       type: PageTransitionType
                                                           .rightToLeft),
@@ -346,7 +345,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                     color: AppColors().white100,
                     alignment: Alignment.center,
                     child: Text(
-                      '${_items.length} Items',
+                      '${items.length} Items',
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
@@ -367,7 +366,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                           left: 25.0,
                           right: 25.0,
                         ),
-                        elements: _items,
+                        elements: items,
                         groupBy: (OfferItem offerItem) => offerItem.catName,
                         groupSeparatorBuilder: (String value) {
                           return Column(
@@ -418,7 +417,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                         indexedItemBuilder:
                             (BuildContext context, dynamic element, int index) {
                           return MerchantItemCard(
-                            merchantItem: _items[index],
+                            merchantItem: items[index],
                           );
                         },
                       ),
@@ -688,8 +687,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                       successMsg(
                                                                           'Yay! Offer Accepted!',
                                                                           'Hope you had a pleasant time using the app.');
-                                                                      Navigator.of(context)
-                                                                          .pop();
+                                                                      Get.back();
                                                                       setState(
                                                                           () {
                                                                         widget.overrideData =

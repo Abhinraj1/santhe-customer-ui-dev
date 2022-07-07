@@ -38,10 +38,10 @@ class AllListController extends GetxController{
   }
 
   List<UserListModel> _toUserListModel(List<NewListResponseModel> model){
-    List<UserListModel> _list = [];
+    List<UserListModel> list = [];
     for (var element in model) {
       DocumentFields doc = element.document.fields;
-      _list.add(
+      list.add(
           UserListModel(
           createListTime: doc.createListTime.timestampValue,
           custId: doc.custId.referenceValue.substring(
@@ -60,15 +60,15 @@ class AllListController extends GetxController{
               listUpdateTime: doc.listUpdateTime?.timestampValue
           ));
     }
-    return _list;
+    return list;
   }
 
   List<ListItemModel> _toUserItemModel(NewListResponseModel model){
-    List<ListItemModel> _list = [];
-    if(model.document.fields.items.arrayValue .values == null) return _list;
+    List<ListItemModel> list = [];
+    if(model.document.fields.items.arrayValue .values == null) return list;
     for (var element in model.document.fields.items.arrayValue.values!) {
       var doc = element.mapValue.fields;
-      _list.add(
+      list.add(
           ListItemModel(
           brandType: doc.brandType.stringValue,
           itemId: doc.itemId.referenceValue,
@@ -82,14 +82,14 @@ class AllListController extends GetxController{
           )
       );
     }
-    return _list;
+    return list;
   }
 
   List<UserListModel> getLatestList(int count){
-    List<UserListModel> _list = allList;
-    _list.sort((a, b) => b.createListTime.compareTo(a.createListTime));
-    if(_list.length <= count) return _list;
-    return _list.sublist(0, count);
+    List<UserListModel> list = allList;
+    list.sort((a, b) => b.createListTime.compareTo(a.createListTime));
+    if(list.length <= count) return list;
+    return list.sublist(0, count);
   }
 
   Future<void> addNewListToDB(String name) async {
@@ -146,7 +146,7 @@ class AllListController extends GetxController{
         custId: model.custId,
         items: _copyList(model.items),
         listId: copyListId,
-        listName: 'COPY ' + model.listName,
+        listName: 'COPY ${model.listName}',
         custListSentTime: DateTime.now(),
         custListStatus: 'new',
         listOfferCounter: '0',
@@ -157,9 +157,9 @@ class AllListController extends GetxController{
   }
 
   List<ListItemModel> _copyList(List<ListItemModel> item){
-    List<ListItemModel> _list = [];
+    List<ListItemModel> list = [];
     for (var element in item) {
-      _list.add(ListItemModel(
+      list.add(ListItemModel(
           brandType: element.brandType,
           itemId: element.itemId,
           notes: element.notes,
@@ -172,7 +172,7 @@ class AllListController extends GetxController{
           possibleUnits: element.possibleUnits)
       );
     }
-    return _list;
+    return list;
   }
 
   Future<void> deleteListFromDB(String listId, String status,

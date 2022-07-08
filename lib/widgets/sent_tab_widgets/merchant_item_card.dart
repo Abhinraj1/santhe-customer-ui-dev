@@ -7,6 +7,8 @@ import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 
+import '../protectedCachedNetworkImage.dart';
+
 class MerchantItemCard extends StatefulWidget {
   final OfferItem merchantItem;
 
@@ -44,19 +46,15 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-              imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId}',
-              width: 50.sp,
-              height: 50.sp,
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) {
-                log('$error');
-                return Container(
-                  color: Colors.orange,
-                  width: 50.sp,
-                  height: 50.sp,
-                );
-              },
+            child: ProtectedCachedNetworkImage(
+              imageUrl: int.parse(widget.merchantItem.itemId.replaceAll(
+                          'projects/santhe-425a8/databases/(default)/documents/item/',
+                          '')) <
+                      4000
+                  ? widget.merchantItem.itemImageId
+                  : widget.merchantItem.itemImageId,
+              height: 50.h,
+              width: 50.h,
             ),
           ),
           SizedBox(
@@ -79,7 +77,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: AppColors().grey80,
+                          color: AppColors().grey100,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                         ),

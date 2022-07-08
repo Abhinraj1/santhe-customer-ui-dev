@@ -31,7 +31,6 @@ class ProfileController extends GetxController{
       isLoggedIn = true;
       final tokenId = await user.getIdToken();
       _urlToken = tokenId;
-      log(tokenId);
     }else{
       isLoggedIn = false;
       if(!override){

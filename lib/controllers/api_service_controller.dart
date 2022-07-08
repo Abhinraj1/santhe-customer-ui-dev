@@ -10,6 +10,7 @@ import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/offer/merchant_offer_response.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
+import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
@@ -17,7 +18,6 @@ import '../core/app_helpers.dart';
 import '../models/answer_list_model.dart';
 import '../models/item_model.dart';
 import '../models/santhe_faq_model.dart';
-import '../models/santhe_item_model.dart';
 import '../models/santhe_list_item_model.dart';
 import '../models/santhe_user_model.dart';
 import 'boxes_controller.dart';
@@ -388,13 +388,13 @@ class APIs extends GetxController {
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/category/${item.catId}"
+                  "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.toString().replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId}"
+                  "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -475,13 +475,13 @@ class APIs extends GetxController {
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/category/${item.catId}"
+                  "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.toString().replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId}"
+                  "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -648,8 +648,8 @@ class APIs extends GetxController {
   //post
   Future<int> addCustomer(User user) async {
     final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
-    String _token = await AppHelpers().getToken;
-    String _uid = await AppHelpers().getDeviceId();
+    String token = await AppHelpers().getToken;
+    String uid = await AppHelpers().getDeviceId();
 
     var body = {
       "fields": {
@@ -685,7 +685,7 @@ class APIs extends GetxController {
         "deviceMap": {
           "mapValue": {
             "fields": {
-              _uid: {"stringValue": _token}
+              uid: {"stringValue": token}
             }
           }
         }
@@ -785,7 +785,7 @@ class APIs extends GetxController {
 
   Future contactUs(int custId, String message, double rating) async {
     log('>>>>>>>>rating:$rating');
-    final String url = AppUrl.CONTACT_US('$custId${DateTime.now().day.toString().length == 1 ? '0' + DateTime.now().day.toString() : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0' + DateTime.now().month.toString() : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0' + DateTime.now().hour.toString() : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0' + DateTime.now().minute.toString() : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0' + DateTime.now().second.toString() : DateTime.now().second}');
+    final String url = AppUrl.CONTACT_US('$custId${DateTime.now().day.toString().length == 1 ? '0${DateTime.now().day}' : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0${DateTime.now().month}' : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0${DateTime.now().hour}' : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0${DateTime.now().minute}' : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0${DateTime.now().second}' : DateTime.now().second}');
 
     final body = {
       "fields": {
@@ -964,7 +964,6 @@ class APIs extends GetxController {
             "fields": {
               "custDeal": {"stringValue": "best1"},
               "custOfferStatus": {"stringValue": "accepted"},
-              // "custUpdateTime": {"timestampValue": "2022-05-03T08:50:12Z"}
             }
           }
         },
@@ -997,7 +996,7 @@ class APIs extends GetxController {
   }
 
   Future<MerchantOfferResponse> getMerchantResponse(String listId) async {
-    final String url = AppUrl.GET_MERCH_RESPONSE(listId);
+    final String url = AppUrl.LIST_BY_EVENT_ID(listId);
 
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
@@ -1126,13 +1125,13 @@ class APIs extends GetxController {
   }
 
   Future<void> updateDeviceToken(String userId) async {
-    final String _token = await AppHelpers().getToken;
-    String _uid = await AppHelpers().getDeviceId();
+    final String token = await AppHelpers().getToken;
+    String uid = await AppHelpers().getDeviceId();
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request(
         'PUT',
         Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
-    request.body = json.encode({"deviceToken": _token, "deviceId": _uid});
+    request.body = json.encode({"deviceToken": token, "deviceId": uid});
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();

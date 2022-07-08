@@ -295,15 +295,14 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                         ),
                                         //phone number
                                         Text(
-                                          '+91-' +
-                                              snapShot
+                                          '+91-${snapShot
                                                   .data!
                                                   .fields
                                                   .contact
                                                   .mapValue
                                                   .fields
                                                   .phoneNumber
-                                                  .integerValue,
+                                                  .integerValue}',
                                           style: AppTheme().bold700(16,
                                               color: AppColors().brandDark),
                                         )
@@ -329,7 +328,8 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                                       .merchResponse
                                                       .merchTotalPrice,
                                                   merchantTitle:
-                                                      'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
+                                                      // 'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
+                                                  'Request ${widget.currentMerchantOffer.requestForDay} of ${DateTime.now()}',
                                                   listEventId: merchantResponse!
                                                           .fields
                                                           .merchId

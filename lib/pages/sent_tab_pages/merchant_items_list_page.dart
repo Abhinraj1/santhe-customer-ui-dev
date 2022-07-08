@@ -137,7 +137,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   if (isDone())
                     SizedBox(
                       width: screenSize.width,
-                      height: screenSize.height / 3 - 30.sp,
                       child: Stack(
                         children: [
                           isDone()
@@ -162,7 +161,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: 15.sp,
@@ -205,7 +204,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                 CircleAvatar(
                                                   radius: 14.sp,
                                                   backgroundColor:
-                                                      AppColors().brandDark,
+                                                  AppColors().brandDark,
                                                   child: Icon(
                                                     Icons.phone,
                                                     color: AppColors().white100,
@@ -228,9 +227,9 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                           .integerValue,
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       color:
-                                                          AppColors().brandDark,
+                                                      AppColors().brandDark,
                                                       fontSize: 16.sp),
                                                 )
                                               ],
@@ -240,13 +239,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                             ),
                                             InkWell(
                                               onTap: () {
-                                                log(widget
-                                                        .merchantResponse!
-                                                        .fields
-                                                        .merchId
-                                                        .integerValue +
-                                                    widget.userList.listId
-                                                        .toString());
                                                 Navigator.push(
                                                   context,
                                                   PageTransition(
@@ -259,15 +251,15 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                             .merchResponse
                                                             .merchTotalPrice,
                                                         listEventId: widget
-                                                                .merchantResponse!
-                                                                .fields
-                                                                .merchId
-                                                                .integerValue +
+                                                            .merchantResponse!
+                                                            .fields
+                                                            .merchId
+                                                            .integerValue +
                                                             widget
                                                                 .userList.listId
                                                                 .toString(),
                                                         merchantTitle:
-                                                            'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
+                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
                                                       ),
                                                       type: PageTransitionType
                                                           .rightToLeft),
@@ -279,17 +271,17 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                     vertical: 5.sp),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                10.sp)),
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            10.sp)),
                                                     color:
-                                                        AppColors().brandDark),
+                                                    AppColors().brandDark),
                                                 child: Text(
                                                   "Chat",
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 16.sp),
                                                 ),
                                               ),
@@ -395,7 +387,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                     Text(
                                       value,
                                       style: TextStyle(
-                                        color: AppColors().grey20,
+                                        color: AppColors().grey100,
                                         fontSize: 18.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -710,17 +702,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                           'Some connectivity error has occurred, please try again later!');
                                                                     }
                                                                   },
-                                                                  child: Text(
-                                                                    'Accept',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w700,
-                                                                        fontSize:
-                                                                            18.sp),
-                                                                  ),
                                                                   color: Colors
                                                                       .orange,
                                                                   elevation:
@@ -732,6 +713,17 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             16.0),
+                                                                  ),
+                                                                  child: Text(
+                                                                    'Accept',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        fontSize:
+                                                                            18.sp),
                                                                   ),
                                                                 ),
                                                         ),

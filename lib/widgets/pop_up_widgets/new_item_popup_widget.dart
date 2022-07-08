@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +10,7 @@ import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -351,7 +349,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                           );
                                           return Stack(
                                             children: [
-                                              CachedNetworkImage(
+                                              ProtectedCachedNetworkImage(
                                                 imageUrl: imageController
                                                         .editItemCustomImageUrl
                                                         .isEmpty
@@ -361,16 +359,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         .value,
                                                 width: screenWidth * 25,
                                                 height: screenWidth * 25,
-                                                useOldImageOnUrlChange: true,
-                                                fit: BoxFit.cover,
-                                                errorWidget:
-                                                    (context, url, error) {
-                                                  return Container(
-                                                    color: Colors.red,
-                                                    width: screenWidth * 25,
-                                                    height: screenWidth * 25,
-                                                  );
-                                                },
                                               ),
                                               Positioned(
                                                 top: 10,
@@ -957,7 +945,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                       //todo fix error due to builder logic issue move logic elsewhere
                       () => Stack(
                         children: [
-                          CachedNetworkImage(
+                          ProtectedCachedNetworkImage(
                             imageUrl: imageController.editItemCustomImageUrl
                                         .value.isNotEmpty &&
                                     imageController
@@ -967,16 +955,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                 : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId}',
                             width: screenWidth * 25,
                             height: screenWidth * 25,
-                            useOldImageOnUrlChange: true,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) {
-                              log(error);
-                              return Container(
-                                color: Colors.red,
-                                width: screenWidth * 25,
-                                height: screenWidth * 25,
-                              );
-                            },
                           ),
                           Positioned(
                             top: 10,

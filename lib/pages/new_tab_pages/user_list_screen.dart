@@ -11,6 +11,7 @@ import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
 
 import '../../controllers/boxes_controller.dart';
@@ -331,6 +332,7 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         onWillPop: () async {
           saveList();
+          _allListController.update(['newList', 'fab']);
           _homeController.homeTabController.animateTo(0);
           Get.back();
           return true;
@@ -350,7 +352,7 @@ class _UserListScreenState extends State<UserListScreen> {
       _userList = _allListController.allListMap[widget.listId]!;
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
-      _allListController.getAllList();
+      _allListController.update(['newList', 'fab']);
       _title = _allListController.allListMap[widget.listId]!.listName;
     } else {
       _allListController.isTitleEditable.value =
@@ -987,6 +989,7 @@ class _UserListScreenState extends State<UserListScreen> {
     NetworkCall().updateUserList(_userList);
     _allListController.allListMap[widget.listId] = _userList
       ..custListStatus = 'sent';
+    successMsg('Success', 'List sent successfully');
     _allListController.update(['newList', 'sentList']);
     _homeController.homeTabController.animateTo(1);
     Get.back();

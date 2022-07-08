@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
@@ -8,11 +5,8 @@ import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 
 import 'package:santhe/models/santhe_item_model.dart';
-import 'package:santhe/models/santhe_list_item_model.dart';
-import '../../../controllers/boxes_controller.dart';
-import '../../../controllers/error_user_fallback.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 import '../../../controllers/getx/all_list_controller.dart';
-import '../../../models/santhe_user_list_model.dart';
 
 import '../../pop_up_widgets/new_item_popup_widget.dart';
 
@@ -28,7 +22,6 @@ class ListItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     //for quantity field validation
 
     const String placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
@@ -53,19 +46,11 @@ class ListItemCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: CachedNetworkImage(
+                    child: ProtectedCachedNetworkImage(
                       imageUrl:
                           'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
                       width: 50,
                       height: 50,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) {
-                        return Container(
-                          color: Colors.orange,
-                          width: screenWidth * 50,
-                          height: screenWidth * 50,
-                        );
-                      },
                     ),
                   ),
                   const SizedBox(
@@ -79,12 +64,10 @@ class ListItemCard extends StatelessWidget {
                         checkPlaceHolder(listItem.brandType).isEmpty
                             ? Text(
                                 checkPlaceHolder(listItem.notes).isEmpty
-                                    ? AppHelpers.replaceDecimalZero(
-                                            listItem.quantity) +
-                                        ' ${listItem.unit}'
-                                    : AppHelpers.replaceDecimalZero(
-                                            listItem.quantity) +
-                                        ' ${listItem.unit},\n${checkPlaceHolder(listItem.notes)}',
+                                    ? '${AppHelpers.replaceDecimalZero(
+                                            listItem.quantity)} ${listItem.unit}'
+                                    : '${AppHelpers.replaceDecimalZero(
+                                            listItem.quantity)} ${listItem.unit},\n${checkPlaceHolder(listItem.notes)}',
                                 // softWrap: false,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -93,10 +76,8 @@ class ListItemCard extends StatelessWidget {
                                 ),
                               )
                             : Text(
-                                AppHelpers.replaceDecimalZero(
-                                        listItem.quantity) +
-                                    '${listItem.unit}, ${checkPlaceHolder(listItem.notes).isEmpty ? checkPlaceHolder(listItem.brandType) : '${checkPlaceHolder(listItem.brandType)},\n${checkPlaceHolder(listItem.notes)}'}'
-                                        '',
+                                '${AppHelpers.replaceDecimalZero(
+                                        listItem.quantity)}${listItem.unit}, ${checkPlaceHolder(listItem.notes).isEmpty ? checkPlaceHolder(listItem.brandType) : '${checkPlaceHolder(listItem.brandType)},\n${checkPlaceHolder(listItem.notes)}'}',
                                 textAlign: TextAlign.start,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

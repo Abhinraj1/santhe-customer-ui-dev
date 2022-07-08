@@ -81,17 +81,16 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                 itemName: element.itemName,
                 itemNotes: element.itemNotes,
                 itemSeqNum: element.itemSeqNum,
-                merchAvailability:
-                    element.merchAvailability,
+                merchAvailability: element.merchAvailability,
                 merchNotes: element.merchNotes,
-                merchPrice: double.parse(
-                    element.merchPrice),
-                quantity:
-                    double.parse(element.quantity),
+                merchPrice: double.parse(element.merchPrice),
+                quantity: double.parse(element.quantity),
                 unit: element.unit));
           }
 
-          final firstCat = items.first.catName;
+          final sortItems = items;
+          sortItems.sort((a, b) => a.catName.compareTo(b.catName));
+          final firstCat = sortItems.first.catName;
 
           return WillPopScope(
             onWillPop: () async {
@@ -126,7 +125,9 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       child: Text(
                         isDone() ? 'Offer Accepted' : 'Items and Price',
                         style: TextStyle(
-                            color: AppColors().brandDark,
+                            color: isDone()
+                                ? AppColors().green100
+                                : AppColors().brandDark,
                             fontWeight: FontWeight.bold,
                             fontSize: 16.sp),
                       ),
@@ -135,7 +136,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   if (isDone())
                     SizedBox(
                       width: screenSize.width,
-                      height: screenSize.height / 3 - 30.sp,
                       child: Stack(
                         children: [
                           isDone()
@@ -258,7 +258,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                 .toString(),
                                                         merchantTitle:
                                                             // 'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
-                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateTime.now()}',
+                                                            'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateTime.now()}',
                                                       ),
                                                       type: PageTransitionType
                                                           .rightToLeft),
@@ -299,7 +299,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       filter: ImageFilter.blur(
                                           sigmaX: 20, sigmaY: 20),
                                       child: SizedBox(
-                                        height: screenSize.height / 3 - 30.sp,
+                                        height: screenSize.height / 3 - 60.sp,
                                         width: screenSize.width,
                                       ),
                                     ),
@@ -331,14 +331,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                         ],
                       ),
                     ),
-                  if(isDone())
-                    Container(
-                      color: AppColors().white100,
-                      child: Divider(
-                        thickness: 2.sp,
-                        color: AppColors().grey20,
-                      ),
-                    ),
                   Container(
                     height: 50.sp,
                     width: screenSize.width,
@@ -352,47 +344,39 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.only(
-                        bottom: 10.sp,
-                      ),
-                      child: GroupedListView(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(
-                          top: 8.0,
-                          left: 25.0,
-                          right: 25.0,
-                        ),
-                        elements: items,
-                        groupBy: (OfferItem offerItem) => offerItem.catName,
-                        groupSeparatorBuilder: (String value) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 8.h,
+                  Container(
+                    color: Colors.white,
+                    child: GroupedListView(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      elements: items,
+                      groupBy: (OfferItem offerItem) => offerItem.catName,
+                      groupSeparatorBuilder: (String value) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 8.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.sp,
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8.sp,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      value,
-                                      style: TextStyle(
-                                        color: AppColors().grey80,
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    value,
+                                    style: TextStyle(
+                                      color: AppColors().grey100,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    if(firstCat==value)
-                                      Text(
+                                  ),
+                                  if (firstCat == value)
+                                    Text(
                                       'Price',
                                       style: TextStyle(
                                         color: AppColors().brandDark,
@@ -400,69 +384,67 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                ],
                               ),
-                              SizedBox(
-                                height: 3.sp,
-                              ),
-                              Divider(
-                                color: AppColors().grey20,
-                                thickness: 1.5,
-                                indent: 8.sp,
-                              ),
-                            ],
-                          );
-                        },
-                        indexedItemBuilder:
-                            (BuildContext context, dynamic element, int index) {
-                          return MerchantItemCard(
-                            merchantItem: items[index],
-                          );
-                        },
-                      ),
+                            ),
+                            SizedBox(
+                              height: 5.sp,
+                            ),
+                            Divider(
+                              color: AppColors().grey20,
+                              thickness: 1.5,
+                              indent: 8.sp,
+                            ),
+                          ],
+                        );
+                      },
+                      indexedItemBuilder:
+                          (BuildContext context, dynamic element, int index) {
+                        return MerchantItemCard(
+                          merchantItem: items[index],
+                        );
+                      },
                     ),
                   ),
                   isDone()
-                      ? Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            width: screenSize.width,
-                            color: AppColors().white100,
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Divider(
-                                  thickness: 1.sp,
-                                  color: AppColors().grey20,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Total:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 24.sp,
-                                            color: const Color(0xff8B8B8B)),
-                                      ),
-                                      Text(
-                                        '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 24.sp,
-                                            color: Colors.orange),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                      ? Container(
+                        width: screenSize.width,
+                        color: AppColors().white100,
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Divider(
+                              thickness: 1.sp,
+                              color: AppColors().grey20,
                             ),
-                          ),
-                        )
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Total:',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 24.sp,
+                                        color: const Color(0xff8B8B8B)),
+                                  ),
+                                  Text(
+                                    '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20.sp,
+                                        color: Colors.orange),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                       : const SizedBox.shrink(),
                   if (!isDone())
                     Container(
@@ -692,7 +674,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                           () {
                                                                         widget.overrideData =
                                                                             true;
-                                                                        Navigator.of(context).pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
                                                                       });
                                                                     } else {
                                                                       errorMsg(

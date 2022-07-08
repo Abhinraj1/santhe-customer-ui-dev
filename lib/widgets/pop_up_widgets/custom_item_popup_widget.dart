@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
@@ -13,6 +12,7 @@ import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/pages/new_tab_pages/image_page.dart';
 import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -250,7 +250,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                   child: Obx(
                                     () => Stack(
                                       children: [
-                                        CachedNetworkImage(
+                                        ProtectedCachedNetworkImage(
                                           imageUrl: imageController
                                                   .addItemCustomImageUrl.isEmpty
                                               ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
@@ -258,15 +258,6 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                   .addItemCustomImageUrl.value,
                                           width: screenWidth * 25,
                                           height: screenWidth * 25,
-                                          useOldImageOnUrlChange: true,
-                                          fit: BoxFit.cover,
-                                          errorWidget: (context, url, error) {
-                                            return Container(
-                                              color: Colors.red,
-                                              width: screenWidth * 25,
-                                              height: screenWidth * 25,
-                                            );
-                                          },
                                         ),
                                         Positioned(
                                           top: 10,

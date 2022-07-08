@@ -924,7 +924,7 @@ class APIs extends GetxController {
               resp[i].merchResponse.merchOfferQuantity == listQuantity) {
             resp[i].custOfferResponse.custDeal = 'best4';
           } else {
-            resp[i].custOfferResponse.custDeal = 'notBest';
+            resp[i].custOfferResponse.custDeal = 'noBest';
           }
         }
       }

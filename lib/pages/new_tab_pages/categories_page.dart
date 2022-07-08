@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../models/santhe_category_model.dart';
 import 'package:get/get.dart';
@@ -157,12 +158,11 @@ class CategoriesPage extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: CachedNetworkImage(
+            child: ProtectedCachedNetworkImage(
               imageUrl:
-              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${category.catImageId}',
+              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${category.catImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
               width: 20.vw,
               height: 20.vw,
-              fit: BoxFit.cover,
             ),
           ),
           Expanded(

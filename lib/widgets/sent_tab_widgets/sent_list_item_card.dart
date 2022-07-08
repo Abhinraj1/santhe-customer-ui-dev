@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 class SentListItemCard extends StatelessWidget {
   final ListItemModel listItem;
@@ -33,28 +31,13 @@ class SentListItemCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: CachedNetworkImage(
-                    imageUrl: int.parse(listItem.itemId.replaceAll(
-                                'projects/santhe-425a8/databases/(default)/documents/item/',
-                                '')) <
-                            4000
-                        ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId}'
-                        : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/' +
-                            listItem.itemImageId.replaceAll(
-                              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
-                              '',
-                            ),
+                  child: ProtectedCachedNetworkImage(
+                    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId.replaceAll(
+                      'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                      '',
+                    )}',
                     width: 50,
                     height: 50,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, url, error) {
-                      log('$error');
-                      return Container(
-                        color: Colors.orange,
-                        width: screenWidth * 50,
-                        height: screenWidth * 50,
-                      );
-                    },
                   ),
                 ),
                 const SizedBox(

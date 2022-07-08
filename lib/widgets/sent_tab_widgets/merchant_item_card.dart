@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
-
-import '../protectedCachedNetworkImage.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 class MerchantItemCard extends StatefulWidget {
   final OfferItem merchantItem;
@@ -39,7 +37,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,12 +45,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: ProtectedCachedNetworkImage(
-              imageUrl: int.parse(widget.merchantItem.itemId.replaceAll(
-                          'projects/santhe-425a8/databases/(default)/documents/item/',
-                          '')) <
-                      4000
-                  ? widget.merchantItem.itemImageId
-                  : widget.merchantItem.itemImageId,
+              imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
               height: 50.h,
               width: 50.h,
             ),
@@ -83,34 +76,28 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: screenSize.width / 10,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        widget.merchantItem.merchAvailability
-                            ? CupertinoIcons.checkmark_circle_fill
-                            : CupertinoIcons.xmark_circle_fill,
-                        color: widget.merchantItem.merchAvailability
-                            ? Colors.green
-                            : Colors.red,
-                        size: 17.sp,
-                      ),
+                    Icon(
+                      widget.merchantItem.merchAvailability
+                          ? CupertinoIcons.checkmark_circle_fill
+                          : CupertinoIcons.xmark_circle_fill,
+                      color: widget.merchantItem.merchAvailability
+                          ? Colors.green
+                          : Colors.red,
+                      size: 17.sp,
                     ),
                     const SizedBox(width: 10.0),
                     Expanded(
                       child: SizedBox(
                         width: screenSize.width * 1 / 5,
                         child: Text(
-                          '₹ ${widget.merchantItem.merchPrice}',
+                          '₹ ${AppHelpers.replaceDecimalZero(widget.merchantItem.merchPrice.toString())}',
                           style: TextStyle(
                             color: Colors.orange,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                           ),
                           overflow: TextOverflow.fade,
-                          textAlign: TextAlign.left,
+                          textAlign: TextAlign.right,
                         ),
                       ),
                     ),

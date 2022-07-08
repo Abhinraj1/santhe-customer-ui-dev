@@ -21,12 +21,12 @@ class ProtectedCachedNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl:
-          "https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$imageUrl",
+      imageUrl: imageUrl,
       httpHeaders: {"authorization": 'Bearer $token'},
       fit: BoxFit.cover,
       height: height,
       width: width,
+      useOldImageOnUrlChange: true,
     );
   }
 }

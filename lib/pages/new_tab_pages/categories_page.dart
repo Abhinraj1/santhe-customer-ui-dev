@@ -2,12 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../models/santhe_category_model.dart';
-import '../../models/santhe_user_list_model.dart';
 import 'package:get/get.dart';
 
 import 'category_items_list_page.dart';

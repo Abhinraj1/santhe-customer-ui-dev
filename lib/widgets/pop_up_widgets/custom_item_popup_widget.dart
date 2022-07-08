@@ -58,7 +58,6 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   TextStyle kLabelTextStyle = const TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
-  //todo add login check
   int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
 
   bool isProcessing = false;
@@ -516,15 +515,13 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                 dBrandType: _customBrandController.text
                                                         .trim()
                                                         .isEmpty
-                                                    ? 'You can mention brand, type or size of the item here' +
-                                                        placeHolderIdentifier
+                                                    ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
                                                     : _customBrandController.text
                                                         .trim(),
                                                 dItemNotes: _customNotesController.text
                                                         .trim()
                                                         .isEmpty
-                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
-                                                        placeHolderIdentifier
+                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
                                                     : _customNotesController.text
                                                         .trim(),
                                                 itemImageTn:
@@ -558,8 +555,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                         .text
                                                         .trim()
                                                         .isEmpty
-                                                    ? 'You can mention brand, type or size of the item here' +
-                                                        placeHolderIdentifier
+                                                    ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
                                                     : _customBrandController
                                                         .text
                                                         .trim(),
@@ -578,8 +574,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                         .text
                                                         .trim()
                                                         .isEmpty
-                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here' +
-                                                        placeHolderIdentifier
+                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
                                                     : _customNotesController
                                                         .text
                                                         .trim(),
@@ -593,7 +588,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                   .add(listItem);
                                               saveListAndUpdate();
 
-                                              Navigator.pop(context);
+                                              Get.back();
                                             } else {
                                               log('Error, action not completed!');
                                             }

@@ -1,433 +1,254 @@
-// To parse this JSON data, do
-//
-//     final merchantOfferResponse = merchantOfferResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 MerchantOfferResponse merchantOfferResponseFromJson(String str) => MerchantOfferResponse.fromJson(json.decode(str));
 
-String merchantOfferResponseToJson(MerchantOfferResponse data) => json.encode(data.toJson());
+String merchantOfferResponseToJson(List<MerchantOfferResponse> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class MerchantOfferResponse {
   MerchantOfferResponse({
-    required this.name,
-    required this.fields,
-    required this.createTime,
-    required this.updateTime,
+    required this.custDistance,
+    required this.eventExpiryTime,
+    required this.merchId,
+    required this.items,
+    required this.custId,
+    required this.requestForDay,
+    required this.listEventId,
+    required this.contactEnabled,
+    required this.custOfferResponse,
+    required this.chatEnabled,
+    required this.custStatus,
+    required this.merchResponse,
+    required this.listId,
   });
 
-  String name;
-  MerchantOfferResponseFields fields;
-  DateTime createTime;
-  DateTime updateTime;
+  EventExpiryTime eventExpiryTime;
+  List<CustOfferItem> items;
+  String custId;
+  int custDistance;
+  bool contactEnabled;
+  bool chatEnabled;
+  String listEventId;
+  MerchResponse merchResponse;
+  String custStatus;
+  CustOfferResponse custOfferResponse;
+  int requestForDay;
+  String listId;
+  String merchId;
 
   factory MerchantOfferResponse.fromJson(Map<String, dynamic> json) => MerchantOfferResponse(
-    name: json["name"],
-    fields: MerchantOfferResponseFields.fromJson(json["fields"]),
-    createTime: DateTime.parse(json["createTime"]),
-    updateTime: DateTime.parse(json["updateTime"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "fields": fields.toJson(),
-    "createTime": createTime.toIso8601String(),
-    "updateTime": updateTime.toIso8601String(),
-  };
-}
-
-class MerchantOfferResponseFields {
-  MerchantOfferResponseFields({
-    required this.custDistance,
-    required this.listId,
-    required this.eventExpiryTime,
-    required this.requestForDay,
-    required this.items,
-    required this.merchResponse,
-    required this.custStatus,
-    required this.chatEnabled,
-    required this.custId,
-    required this.contactEnabled,
-    required this.merchId,
-    required this.custOfferResponse,
-    required this.listEventId,
-  });
-
-  CustDistance custDistance;
-  Id listId;
-  Time eventExpiryTime;
-  CustDistance requestForDay;
-  Items items;
-  MerchResponse merchResponse;
-  CustStatus custStatus;
-  ChatEnabled chatEnabled;
-  Id custId;
-  ChatEnabled contactEnabled;
-  Id merchId;
-  CustOfferResponse custOfferResponse;
-  CustStatus listEventId;
-
-  factory MerchantOfferResponseFields.fromJson(Map<String, dynamic> json) => MerchantOfferResponseFields(
-    custDistance: CustDistance.fromJson(json["custDistance"]),
-    listId: Id.fromJson(json["listId"]),
-    eventExpiryTime: Time.fromJson(json["eventExpiryTime"]),
-    requestForDay: CustDistance.fromJson(json["requestForDay"]),
-    items: Items.fromJson(json["items"]),
+    eventExpiryTime: EventExpiryTime.fromJson(json["eventExpiryTime"]),
+    items: List<CustOfferItem>.from(json["items"].map((x) => CustOfferItem.fromJson(x))),
+    custId: json["custId"],
+    custDistance: json["custDistance"],
+    contactEnabled: json["contactEnabled"],
+    chatEnabled: json["chatEnabled"],
+    listEventId: json["listEventId"],
     merchResponse: MerchResponse.fromJson(json["merchResponse"]),
-    custStatus: CustStatus.fromJson(json["custStatus"]),
-    chatEnabled: ChatEnabled.fromJson(json["chatEnabled"]),
-    custId: Id.fromJson(json["custId"]),
-    contactEnabled: ChatEnabled.fromJson(json["contactEnabled"]),
-    merchId: Id.fromJson(json["merchId"]),
+    custStatus: json["custStatus"],
     custOfferResponse: CustOfferResponse.fromJson(json["custOfferResponse"]),
-    listEventId: CustStatus.fromJson(json["listEventId"]),
+    requestForDay: json["requestForDay"],
+    listId: json["listId"],
+    merchId: json["merchId"],
   );
 
   Map<String, dynamic> toJson() => {
-    "custDistance": custDistance.toJson(),
-    "listId": listId.toJson(),
     "eventExpiryTime": eventExpiryTime.toJson(),
-    "requestForDay": requestForDay.toJson(),
-    "items": items.toJson(),
+    "items": List<dynamic>.from(items.map((x) => x.toJson())),
+    "custId": custId,
+    "custDistance": custDistance,
+    "contactEnabled": contactEnabled,
+    "chatEnabled": chatEnabled,
+    "listEventId": listEventId,
     "merchResponse": merchResponse.toJson(),
-    "custStatus": custStatus.toJson(),
-    "chatEnabled": chatEnabled.toJson(),
-    "custId": custId.toJson(),
-    "contactEnabled": contactEnabled.toJson(),
-    "merchId": merchId.toJson(),
+    "custStatus": custStatus,
     "custOfferResponse": custOfferResponse.toJson(),
-    "listEventId": listEventId.toJson(),
+    "requestForDay": requestForDay,
+    "listId": listId,
+    "merchId": merchId,
   };
 }
 
-class ChatEnabled {
-  ChatEnabled({
-    required this.booleanValue,
+class Converter {
+  Converter();
+
+  factory Converter.fromJson(Map<String, dynamic> json) => Converter();
+
+  Map<String, dynamic> toJson() => {};
+}
+
+class Firestore {
+  Firestore({
+    required this.projectId,
   });
 
-  bool booleanValue;
+  String projectId;
 
-  factory ChatEnabled.fromJson(Map<String, dynamic> json) => ChatEnabled(
-    booleanValue: json["booleanValue"],
+  factory Firestore.fromJson(Map<String, dynamic> json) => Firestore(
+    projectId: json["projectId"],
   );
 
   Map<String, dynamic> toJson() => {
-    "booleanValue": booleanValue,
+    "projectId": projectId,
   };
 }
 
-class CustDistance {
-  CustDistance({
-    required this.integerValue,
+class Path {
+  Path({
+    required this.segments,
   });
 
-  String integerValue;
+  List<String> segments;
 
-  factory CustDistance.fromJson(Map<String, dynamic> json) => CustDistance(
-    integerValue: json["integerValue"],
+  factory Path.fromJson(Map<String, dynamic> json) => Path(
+    segments: List<String>.from(json["segments"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "integerValue": integerValue,
-  };
-}
-
-class Id {
-  Id({
-    required this.referenceValue,
-  });
-
-  String referenceValue;
-
-  factory Id.fromJson(Map<String, dynamic> json) => Id(
-    referenceValue: json["referenceValue"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "referenceValue": referenceValue,
+    "segments": List<dynamic>.from(segments.map((x) => x)),
   };
 }
 
 class CustOfferResponse {
   CustOfferResponse({
-    required this.mapValue,
-  });
-
-  CustOfferResponseMapValue mapValue;
-
-  factory CustOfferResponse.fromJson(Map<String, dynamic> json) => CustOfferResponse(
-    mapValue: CustOfferResponseMapValue.fromJson(json["mapValue"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "mapValue": mapValue.toJson(),
-  };
-}
-
-class CustOfferResponseMapValue {
-  CustOfferResponseMapValue({
-    required this.fields,
-  });
-
-  PurpleFields fields;
-
-  factory CustOfferResponseMapValue.fromJson(Map<String, dynamic> json) => CustOfferResponseMapValue(
-    fields: PurpleFields.fromJson(json["fields"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "fields": fields.toJson(),
-  };
-}
-
-class PurpleFields {
-  PurpleFields({
-    required this.custUpdateTime,
     required this.custDeal,
     required this.custOfferStatus,
+    required this.custUpdateTime,
   });
 
-  Time custUpdateTime;
-  CustStatus custDeal;
-  CustStatus custOfferStatus;
+  String custDeal;
+  String custOfferStatus;
+  DateTime custUpdateTime;
 
-  factory PurpleFields.fromJson(Map<String, dynamic> json) => PurpleFields(
-    custUpdateTime: Time.fromJson(json["custUpdateTime"]),
-    custDeal: CustStatus.fromJson(json["custDeal"]),
-    custOfferStatus: CustStatus.fromJson(json["custOfferStatus"]),
+  factory CustOfferResponse.fromJson(Map<String, dynamic> json) => CustOfferResponse(
+    custDeal: json["custDeal"],
+    custOfferStatus: json["custOfferStatus"],
+    custUpdateTime: DateTime.parse(json["custUpdateTime"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "custUpdateTime": custUpdateTime.toJson(),
-    "custDeal": custDeal.toJson(),
-    "custOfferStatus": custOfferStatus.toJson(),
+    "custDeal": custDeal,
+    "custOfferStatus": custOfferStatus,
+    "custUpdateTime": custUpdateTime.toIso8601String(),
   };
 }
 
-class CustStatus {
-  CustStatus({
-    required this.stringValue,
+class EventExpiryTime {
+  EventExpiryTime({
+    required this.seconds,
+    required this.nanoseconds,
   });
 
-  String stringValue;
+  int seconds;
+  int nanoseconds;
 
-  factory CustStatus.fromJson(Map<String, dynamic> json) => CustStatus(
-    stringValue: json["stringValue"],
+  factory EventExpiryTime.fromJson(Map<String, dynamic> json) => EventExpiryTime(
+    seconds: json["_seconds"],
+    nanoseconds: json["_nanoseconds"],
   );
 
   Map<String, dynamic> toJson() => {
-    "stringValue": stringValue,
+    "_seconds": seconds,
+    "_nanoseconds": nanoseconds,
   };
 }
 
-class Time {
-  Time({
-    required this.timestampValue,
-  });
-
-  DateTime timestampValue;
-
-  factory Time.fromJson(Map<String, dynamic> json) => Time(
-    timestampValue: DateTime.parse(json["timestampValue"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "timestampValue": timestampValue.toIso8601String(),
-  };
-}
-
-class Items {
-  Items({
-    required this.arrayValue,
-  });
-
-  ArrayValue arrayValue;
-
-  factory Items.fromJson(Map<String, dynamic> json) => Items(
-    arrayValue: ArrayValue.fromJson(json["arrayValue"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "arrayValue": arrayValue.toJson(),
-  };
-}
-
-class ArrayValue {
-  ArrayValue({
-    required this.values,
-  });
-
-  List<Value> values;
-
-  factory ArrayValue.fromJson(Map<String, dynamic> json) => ArrayValue(
-    values: List<Value>.from(json["values"].map((x) => Value.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "values": List<dynamic>.from(values.map((x) => x.toJson())),
-  };
-}
-
-class Value {
-  Value({
-    required this.mapValue,
-  });
-
-  ValueMapValue mapValue;
-
-  factory Value.fromJson(Map<String, dynamic> json) => Value(
-    mapValue: ValueMapValue.fromJson(json["mapValue"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "mapValue": mapValue.toJson(),
-  };
-}
-
-class ValueMapValue {
-  ValueMapValue({
-    required this.fields,
-  });
-
-  FluffyFields fields;
-
-  factory ValueMapValue.fromJson(Map<String, dynamic> json) => ValueMapValue(
-    fields: FluffyFields.fromJson(json["fields"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "fields": fields.toJson(),
-  };
-}
-
-class FluffyFields {
-  FluffyFields({
+class CustOfferItem {
+  CustOfferItem({
     required this.itemImageId,
-    required this.itemSeqNum,
-    required this.unit,
-    required this.merchPrice,
-    required this.itemNotes,
-    required this.catName,
-    required this.merchAvailability,
-    required this.quantity,
-    required this.merchNotes,
-    required this.brandType,
     required this.itemName,
+    required this.merchAvailability,
+    required this.itemNotes,
+    required this.brandType,
     required this.itemId,
+    required this.merchNotes,
+    required this.catName,
+    required this.unit,
+    required this.quantity,
+    required this.merchPrice,
+    required this.itemSeqNum,
   });
 
-  CustStatus itemImageId;
-  CustDistance itemSeqNum;
-  CustStatus unit;
-  CustStatus merchPrice;
-  CustStatus itemNotes;
-  CustStatus catName;
-  ChatEnabled merchAvailability;
-  CustDistance quantity;
-  CustStatus merchNotes;
-  CustStatus brandType;
-  CustStatus itemName;
-  Id itemId;
+  String itemName;
+  String itemImageId;
+  String unit;
+  String quantity;
+  String merchNotes;
+  String itemId;
+  String merchPrice;
+  String brandType;
+  bool merchAvailability;
+  String catName;
+  String itemNotes;
+  int itemSeqNum;
 
-  factory FluffyFields.fromJson(Map<String, dynamic> json) => FluffyFields(
-    itemImageId: CustStatus.fromJson(json["itemImageId"]),
-    itemSeqNum: CustDistance.fromJson(json["itemSeqNum"]),
-    unit: CustStatus.fromJson(json["unit"]),
-    merchPrice: CustStatus.fromJson(json["merchPrice"]),
-    itemNotes: CustStatus.fromJson(json["itemNotes"]),
-    catName: CustStatus.fromJson(json["catName"]),
-    merchAvailability: ChatEnabled.fromJson(json["merchAvailability"]),
-    quantity: CustDistance.fromJson(json["quantity"]),
-    merchNotes: CustStatus.fromJson(json["merchNotes"]),
-    brandType: CustStatus.fromJson(json["brandType"]),
-    itemName: CustStatus.fromJson(json["itemName"]),
-    itemId: Id.fromJson(json["itemId"]),
+  factory CustOfferItem.fromJson(Map<String, dynamic> json) => CustOfferItem(
+    itemName: json["itemName"],
+    itemImageId: json["itemImageId"],
+    unit: json["unit"],
+    quantity: json["quantity"].toString(),
+    merchNotes: json["merchNotes"],
+    itemId: json["itemId"],
+    merchPrice: json["merchPrice"],
+    brandType: json["brandType"],
+    merchAvailability: json["merchAvailability"],
+    catName: json["catName"],
+    itemNotes: json["itemNotes"],
+    itemSeqNum: json["itemSeqNum"],
   );
 
   Map<String, dynamic> toJson() => {
-    "itemImageId": itemImageId.toJson(),
-    "itemSeqNum": itemSeqNum.toJson(),
-    "unit": unit.toJson(),
-    "merchPrice": merchPrice.toJson(),
-    "itemNotes": itemNotes.toJson(),
-    "catName": catName.toJson(),
-    "merchAvailability": merchAvailability.toJson(),
-    "quantity": quantity.toJson(),
-    "merchNotes": merchNotes.toJson(),
-    "brandType": brandType.toJson(),
-    "itemName": itemName.toJson(),
-    "itemId": itemId.toJson(),
+    "itemName": itemName,
+    "itemImageId": itemImageId,
+    "unit": unit,
+    "quantity": quantity,
+    "merchNotes": merchNotes,
+    "itemId": itemId,
+    "merchPrice": merchPrice,
+    "brandType": brandType,
+    "merchAvailability": merchAvailability,
+    "catName": catName,
+    "itemNotes": itemNotes,
+    "itemSeqNum": itemSeqNum,
   };
 }
 
 class MerchResponse {
   MerchResponse({
-    required this.mapValue,
-  });
-
-  MerchResponseMapValue mapValue;
-
-  factory MerchResponse.fromJson(Map<String, dynamic> json) => MerchResponse(
-    mapValue: MerchResponseMapValue.fromJson(json["mapValue"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "mapValue": mapValue.toJson(),
-  };
-}
-
-class MerchResponseMapValue {
-  MerchResponseMapValue({
-    required this.fields,
-  });
-
-  TentacledFields fields;
-
-  factory MerchResponseMapValue.fromJson(Map<String, dynamic> json) => MerchResponseMapValue(
-    fields: TentacledFields.fromJson(json["fields"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "fields": fields.toJson(),
-  };
-}
-
-class TentacledFields {
-  TentacledFields({
-    required this.merchTotalPrice,
-    required this.merchListStatus,
-    required this.merchUpdateTime,
-    required this.merchDelivery,
     required this.merchFulfillmentResponse,
     required this.merchOfferQuantity,
+    required this.merchTotalPrice,
+    required this.merchUpdateTime,
+    required this.merchDelivery,
+    required this.merchListStatus,
     required this.merchResponseStatus,
   });
 
-  CustStatus merchTotalPrice;
-  CustStatus merchListStatus;
-  Time merchUpdateTime;
-  ChatEnabled merchDelivery;
-  ChatEnabled merchFulfillmentResponse;
-  CustDistance merchOfferQuantity;
-  CustStatus merchResponseStatus;
+  bool merchFulfillmentResponse;
+  int merchOfferQuantity;
+  String merchTotalPrice;
+  DateTime merchUpdateTime;
+  bool merchDelivery;
+  String merchListStatus;
+  String merchResponseStatus;
 
-  factory TentacledFields.fromJson(Map<String, dynamic> json) => TentacledFields(
-    merchTotalPrice: CustStatus.fromJson(json["merchTotalPrice"]),
-    merchListStatus: CustStatus.fromJson(json["merchListStatus"]),
-    merchUpdateTime: Time.fromJson(json["merchUpdateTime"]),
-    merchDelivery: ChatEnabled.fromJson(json["merchDelivery"]),
-    merchFulfillmentResponse: ChatEnabled.fromJson(json["merchFulfillmentResponse"]),
-    merchOfferQuantity: CustDistance.fromJson(json["merchOfferQuantity"]),
-    merchResponseStatus: CustStatus.fromJson(json["merchResponseStatus"]),
+  factory MerchResponse.fromJson(Map<String, dynamic> json) => MerchResponse(
+    merchFulfillmentResponse: json["merchFulfillmentResponse"],
+    merchOfferQuantity: json["merchOfferQuantity"],
+    merchTotalPrice: json["merchTotalPrice"],
+    merchUpdateTime: DateTime.parse(json["merchUpdateTime"]),
+    merchDelivery: json["merchDelivery"],
+    merchListStatus: json["merchListStatus"],
+    merchResponseStatus: json["merchResponseStatus"],
   );
 
   Map<String, dynamic> toJson() => {
-    "merchTotalPrice": merchTotalPrice.toJson(),
-    "merchListStatus": merchListStatus.toJson(),
-    "merchUpdateTime": merchUpdateTime.toJson(),
-    "merchDelivery": merchDelivery.toJson(),
-    "merchFulfillmentResponse": merchFulfillmentResponse.toJson(),
-    "merchOfferQuantity": merchOfferQuantity.toJson(),
-    "merchResponseStatus": merchResponseStatus.toJson(),
+    "merchFulfillmentResponse": merchFulfillmentResponse,
+    "merchOfferQuantity": merchOfferQuantity,
+    "merchTotalPrice": merchTotalPrice,
+    "merchUpdateTime": merchUpdateTime.toIso8601String(),
+    "merchDelivery": merchDelivery,
+    "merchListStatus": merchListStatus,
+    "merchResponseStatus": merchResponseStatus,
   };
 }
+

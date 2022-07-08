@@ -813,12 +813,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                       catId: item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', ''),
                                                       possibleUnits: item.unit,
                                                     );
-                                                    var _tmp = currentUserList.items.where((element) => element.itemName == listItem.itemName).toList();
+                                                    var tmp = currentUserList.items.where((element) => element.itemName == listItem.itemName).toList();
                                                     if (!widget.edit) {
-                                                      if(_tmp.isNotEmpty){
-                                                        _tmp.first.quantity = (double.parse(_tmp.first.quantity) + 1).toString();
+                                                      if(tmp.isNotEmpty){
+                                                        tmp.first.quantity = (double.parse(tmp.first.quantity) + 1).toString();
                                                       }else{
                                                         currentUserList.items.add(listItem);
+                                                        saveListAndUpdate();
                                                       }
                                                     }else{
                                                       for (int i = 0; i < currentUserList.items.length; i++) {
@@ -887,7 +888,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             colorText: Colors.grey);
                                                       }
                                                       if (!widget.edit && widget.fromSearch != true) {
-                                                        animateAdd(MediaQuery.of(context).size.width / 100);
+                                                        animateAdd(screenWidth / 100);
                                                       }
                                                       Future.delayed(Duration(milliseconds: !widget.edit && widget.fromSearch != true ? 500 : 0), () async {
                                                         Navigator.pop(context);

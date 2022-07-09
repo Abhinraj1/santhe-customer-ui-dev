@@ -72,7 +72,8 @@ class FirebaseHelper {
 
 
       final snapshot = await uploadTask.whenComplete(() => null);
-      final urlDownload = await snapshot.ref.getDownloadURL();
+      var urlDownloadWToken = await snapshot.ref.getDownloadURL();
+      var urlDownload = urlDownloadWToken.replaceAll(RegExp(r'&token=[^\]]*$'), '');
       file.delete();
       if (addNewItem) {
         imageController.addItemCustomImageUrl.value = urlDownload;

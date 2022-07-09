@@ -307,26 +307,28 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                 )
                               : const SizedBox.shrink(),
                           widget.archived
-                              ? Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(20),
-                                    color: AppColors().white100,
-                                    alignment: Alignment.center,
-                                    height: 90.h,
-                                    width: screenSize.width,
-                                    child: Text(
-                                      'Merchant information will be available only upto 72 hours since the list was sent to shops.',
-                                      softWrap: true,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          height: 1.5,
-                                          fontSize: 16.sp,
-                                          color: AppColors().grey100,
-                                          fontWeight: FontWeight.w400),
+                              ? Expanded(
+                                child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      color: AppColors().white100,
+                                      alignment: Alignment.center,
+                                      height: 90.h,
+                                      width: screenSize.width,
+                                      child: Text(
+                                        'Merchant information will be available only upto 72 hours since the list was sent to shops.',
+                                        softWrap: true,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            height: 1.5,
+                                            fontSize: 16.sp,
+                                            color: AppColors().grey100,
+                                            fontWeight: FontWeight.w400),
+                                      ),
                                     ),
                                   ),
-                                )
+                              )
                               : const SizedBox.shrink(),
                         ],
                       ),
@@ -344,66 +346,69 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       ),
                     ),
                   ),
-                  Container(
-                    color: Colors.white,
-                    child: GroupedListView(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      elements: items,
-                      groupBy: (OfferItem offerItem) => offerItem.catName,
-                      groupSeparatorBuilder: (String value) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 8.h,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8.sp,
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                      child: GroupedListView(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        elements: items,
+                        groupBy: (OfferItem offerItem) => offerItem.catName,
+                        groupSeparatorBuilder: (String value) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 8.h,
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    value,
-                                    style: TextStyle(
-                                      color: AppColors().grey100,
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  if (firstCat == value)
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.sp,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
                                     Text(
-                                      'Price',
+                                      value,
                                       style: TextStyle(
-                                        color: AppColors().brandDark,
+                                        color: AppColors().grey100,
                                         fontSize: 18.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                ],
+                                    if (firstCat == value)
+                                      Text(
+                                        'Price',
+                                        style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 5.sp,
-                            ),
-                            Divider(
-                              color: AppColors().grey20,
-                              thickness: 1.5,
-                              indent: 8.sp,
-                            ),
-                          ],
-                        );
-                      },
-                      indexedItemBuilder:
-                          (BuildContext context, dynamic element, int index) {
-                        return MerchantItemCard(
-                          merchantItem: items[index],
-                        );
-                      },
+                              SizedBox(
+                                height: 5.sp,
+                              ),
+                              Divider(
+                                color: AppColors().grey20,
+                                thickness: 1.5,
+                                indent: 8.sp,
+                              ),
+                            ],
+                          );
+                        },
+                        indexedItemBuilder:
+                            (BuildContext context, dynamic element, int index) {
+                          return MerchantItemCard(
+                            merchantItem: items[index],
+                          );
+                        },
+                      ),
                     ),
                   ),
                   isDone()

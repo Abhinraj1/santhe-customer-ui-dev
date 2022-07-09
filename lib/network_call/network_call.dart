@@ -178,9 +178,10 @@ class NetworkCall{
     }
   }
 
-  Future updateUserList(UserListModel userList, {String? status, String? processStatus}) async {
+  Future updateUserList(UserListModel userList, {String? status, String? processStatus, bool success = false}) async {
     List items = [];
     int i = 0;
+
     for (ListItemModel item in userList.items) {
       items.add({
         "mapValue": {
@@ -248,6 +249,7 @@ class NetworkCall{
     var response = await callApi(mode: REST.patch, url: Uri.parse(AppUrl.UPDATE_USER_LIST(userList.listId)), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
+      if(success) successMsg('Success', 'List sent successfully');
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');

@@ -253,7 +253,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                         ProtectedCachedNetworkImage(
                                           imageUrl: imageController
                                                   .addItemCustomImageUrl.isEmpty
-                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
+                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
                                               : imageController
                                                   .addItemCustomImageUrl.value,
                                           width: screenWidth * 25,
@@ -527,7 +527,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                     .text,
                                                 itemId: itemCount,
                                                 itemImageId: image.isEmpty
-                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
+                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
                                                     : image,
                                                 itemName:
                                                     _customItemNameController
@@ -553,7 +553,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                 //item ref
                                                 itemId: '$itemCount',
                                                 itemImageId: image.isEmpty
-                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
+                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
                                                     : image,
                                                 itemName:
                                                     _customItemNameController

@@ -546,7 +546,7 @@ class APIs extends GetxController {
 
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": "deleted"}
+        "custListStatus": {"stringValue": "purged"}
       }
     };
 
@@ -886,48 +886,48 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       List<CustomerOfferResponse> resp =
       customerOfferResponseFromJson(response.body);
-      // resp.sort((a, b) =>
-      //     a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
+      resp.sort((a, b) =>
+          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
 
-      // DO NOT DELETE THIS SORTING LOGIC
-      if (resp.isNotEmpty) {
-        resp.sort((a, b) =>
-            a.merchResponse.merchTotalPrice
-                .compareTo(b.merchResponse.merchTotalPrice));
-        resp = resp.reversed.toList();
-        resp.sort((a, b) =>
-            a.merchResponse.merchOfferQuantity
-                .compareTo(b.merchResponse.merchOfferQuantity));
-        resp = resp.reversed.toList();
-
-        final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
-
-        resp[0].custOfferResponse.custDeal = 'best1';
-
-        for (int i = 1; i < resp.length; i++) {
-          if (AppHelpers.isInBetween(
-            double.parse(resp[i].merchResponse.merchTotalPrice),
-            bestPrice,
-            bestPrice + 50,
-          ) &&
-              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-            resp[i].custOfferResponse.custDeal = 'best2';
-          } else if (AppHelpers.isInBetween(
-            double.parse(resp[i].merchResponse.merchTotalPrice),
-            bestPrice + 50,
-            bestPrice + 100,
-          ) &&
-              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-            resp[i].custOfferResponse.custDeal = 'best3';
-          } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
-              bestPrice + 100 &&
-              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-            resp[i].custOfferResponse.custDeal = 'best4';
-          } else {
-            resp[i].custOfferResponse.custDeal = 'noBest';
-          }
-        }
-      }
+      // // DO NOT DELETE THIS SORTING LOGIC
+      // if (resp.isNotEmpty) {
+      //   resp.sort((a, b) =>
+      //       a.merchResponse.merchTotalPrice
+      //           .compareTo(b.merchResponse.merchTotalPrice));
+      //   resp = resp.reversed.toList();
+      //   resp.sort((a, b) =>
+      //       a.merchResponse.merchOfferQuantity
+      //           .compareTo(b.merchResponse.merchOfferQuantity));
+      //   resp = resp.reversed.toList();
+      //
+      //   final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
+      //
+      //   resp[0].custOfferResponse.custDeal = 'best1';
+      //
+      //   for (int i = 1; i < resp.length; i++) {
+      //     if (AppHelpers.isInBetween(
+      //       double.parse(resp[i].merchResponse.merchTotalPrice),
+      //       bestPrice,
+      //       bestPrice + 50,
+      //     ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best2';
+      //     } else if (AppHelpers.isInBetween(
+      //       double.parse(resp[i].merchResponse.merchTotalPrice),
+      //       bestPrice + 50,
+      //       bestPrice + 100,
+      //     ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best3';
+      //     } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
+      //         bestPrice + 100 &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best4';
+      //     } else {
+      //       resp[i].custOfferResponse.custDeal = 'noBest';
+      //     }
+      //   }
+      // }
       return resp;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());

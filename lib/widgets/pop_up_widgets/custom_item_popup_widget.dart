@@ -10,6 +10,7 @@ import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/new_tab_pages/image_page.dart';
 import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
@@ -515,10 +516,10 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                     ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
                                                     : _customNotesController.text
                                                         .trim(),
-                                                itemImageTn:
-                                                    imageController
-                                                        .addItemCustomImageUrl
-                                                        .value,
+                                                itemImageTn: imageController
+                                                    .addItemCustomImageUrl.value
+                                                    .replaceAll(
+                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                 catId: '4000',
                                                 createUser: custPhone,
                                                 dQuantity: 1,
@@ -527,12 +528,11 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                     .text,
                                                 itemId: itemCount,
                                                 itemImageId: image.isEmpty
-                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
-                                                    : image,
+                                                    ? 'image%20placeholder.png?alt=media'
+                                                    : image.replaceAll(
+                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                 itemName:
-                                                    _customItemNameController
-                                                        .text
-                                                        .trim(),
+                                                    _customItemNameController.text.trim(),
                                                 status: 'inactive',
                                                 unit: availableUnits,
                                                 updateUser: custPhone);
@@ -553,8 +553,10 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                 //item ref
                                                 itemId: '$itemCount',
                                                 itemImageId: image.isEmpty
-                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
-                                                    : image,
+                                                    ? 'image%20placeholder.png?alt=media'
+                                                    : image.replaceAll(
+                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                                                        ''),
                                                 itemName:
                                                     _customItemNameController
                                                         .text
@@ -577,8 +579,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
 
                                               currentUserList.items
                                                   .add(listItem);
-                                              saveListAndUpdate();
-
+                                              await saveListAndUpdate();
                                               Get.back();
                                             } else {
                                               log('Error, action not completed!');
@@ -621,10 +622,13 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
     );
   }
 
-  void saveListAndUpdate() {
+  Future<void> saveListAndUpdate() async {
     // print(_allListController.allListMap[widget.listId]?.listName);
     _allListController.allListMap[widget.listId] = currentUserList;
     _allListController.update(['addedItems', 'itemCount', 'newList']);
+    await NetworkCall()
+        .updateUserList(currentUserList, processStatus: 'draft', status: 'new');
+    _allListController.update(['newList', 'fab']);
   }
 
   void showImagePickerOptions(BuildContext context) {

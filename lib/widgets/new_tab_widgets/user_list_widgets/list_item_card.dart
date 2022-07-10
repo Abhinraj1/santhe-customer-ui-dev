@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 
@@ -10,15 +11,21 @@ import '../../../controllers/getx/all_list_controller.dart';
 
 import '../../pop_up_widgets/new_item_popup_widget.dart';
 
-class ListItemCard extends StatelessWidget {
+class ListItemCard extends StatefulWidget {
   final ListItemModel listItem;
   final String listId;
 
-  ListItemCard(
-      {required this.listItem, Key? key, required this.listId})
+  const ListItemCard({required this.listItem, Key? key, required this.listId})
       : super(key: key);
 
+  @override
+  State<ListItemCard> createState() => _ListItemCardState();
+}
+
+class _ListItemCardState extends State<ListItemCard> {
   final AllListController _allListController = Get.find();
+
+  bool expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +39,9 @@ class ListItemCard extends StatelessWidget {
       return data;
     }
 
-    String img = listItem.itemImageId.replaceAll(
+    final screenSize = MediaQuery.of(context).size;
+
+    String img = widget.listItem.itemImageId.replaceAll(
         'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
         '');
     return Padding(
@@ -43,49 +52,69 @@ class ListItemCard extends StatelessWidget {
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: ProtectedCachedNetworkImage(
                       imageUrl:
                           'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
-                      width: 50,
-                      height: 50,
+                      width: 50.h,
+                      height: 50.h,
                     ),
                   ),
-                  const SizedBox(
-                    width: 12.0,
+                  SizedBox(
+                    width: 10.w,
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(listItem.itemName),
-                        checkPlaceHolder(listItem.brandType).isEmpty
-                            ? Text(
-                                checkPlaceHolder(listItem.notes).isEmpty
-                                    ? '${AppHelpers.replaceDecimalZero(
-                                            listItem.quantity)} ${listItem.unit}'
-                                    : '${AppHelpers.replaceDecimalZero(
-                                            listItem.quantity)} ${listItem.unit},\n${checkPlaceHolder(listItem.notes)}',
-                                // softWrap: false,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 16.sp,
-                                ),
-                              )
-                            : Text(
-                                '${AppHelpers.replaceDecimalZero(
-                                        listItem.quantity)}${listItem.unit}, ${checkPlaceHolder(listItem.notes).isEmpty ? checkPlaceHolder(listItem.brandType) : '${checkPlaceHolder(listItem.brandType)},\n${checkPlaceHolder(listItem.notes)}'}',
-                                textAlign: TextAlign.start,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
+                        Text(
+                          widget.listItem.itemName,
+                          style: TextStyle(
+                            color: AppColors().grey100,
+                            fontSize: 17.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => setState(() {
+                            expanded = !expanded;
+                          }),
+                          child: SizedBox(
+                            width: screenSize.width/3,
+                            child: checkPlaceHolder(widget.listItem.brandType)
+                                    .isEmpty
+                                ? Text(
+                                    checkPlaceHolder(widget.listItem.notes)
+                                            .isEmpty
+                                        ? '${AppHelpers.replaceDecimalZero(widget.listItem.quantity)} ${widget.listItem.unit}'
+                                        : '${AppHelpers.replaceDecimalZero(widget.listItem.quantity)} ${widget.listItem.unit},\n${checkPlaceHolder(widget.listItem.notes)}',
+                                    // softWrap: false,
+                                    overflow:
+                                        expanded ? null : TextOverflow.ellipsis,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      color: Colors.orange,
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  )
+                                : Text(
+                                    '${AppHelpers.replaceDecimalZero(widget.listItem.quantity)}${widget.listItem.unit},\n${checkPlaceHolder(widget.listItem.notes).isEmpty ? checkPlaceHolder(widget.listItem.brandType) : '${checkPlaceHolder(widget.listItem.brandType)}, ${checkPlaceHolder(widget.listItem.notes)}'}',
+                                    textAlign: TextAlign.start,
+                                    overflow:
+                                        expanded ? null : TextOverflow.ellipsis,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      color: Colors.orange,
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -104,24 +133,24 @@ class ListItemCard extends StatelessWidget {
                             return NewItemPopUpWidget(
                               item: Item(
                                 status: '',
-                                catId: listItem.catId.toString(),
-                                dItemNotes: listItem.notes,
-                                itemId: int.parse(listItem.itemId.replaceAll(
+                                catId: widget.listItem.catId.toString(),
+                                dItemNotes: widget.listItem.notes,
+                                itemId: int.parse(widget.listItem.itemId.replaceAll(
                                     'projects/santhe-425a8/databases/(default)/documents/item/',
                                     '')),
-                                unit: listItem.possibleUnits,
-                                dUnit: listItem.unit,
-                                dBrandType: listItem.brandType,
-                                dQuantity: num.parse(listItem.quantity),
+                                unit: widget.listItem.possibleUnits,
+                                dUnit: widget.listItem.unit,
+                                dBrandType: widget.listItem.brandType,
+                                dQuantity: num.parse(widget.listItem.quantity),
                                 itemAlias: '',
-                                itemImageId: listItem.itemImageId,
+                                itemImageId: widget.listItem.itemImageId,
                                 itemImageTn: '',
-                                itemName: listItem.itemName,
+                                itemName: widget.listItem.itemName,
                                 updateUser: 0,
                                 createUser: 0,
                               ),
                               edit: true,
-                              listId: listId,
+                              listId: widget.listId,
                             );
                           });
                     },
@@ -132,10 +161,14 @@ class ListItemCard extends StatelessWidget {
                     )),
                 IconButton(
                     onPressed: () {
-                      _allListController.allListMap[listId]!.items.removeWhere((element) => element.itemName == listItem.itemName);
-                      _allListController.update(['addedItems', 'itemCount', 'newList']);
+                      _allListController.allListMap[widget.listId]!.items
+                          .removeWhere((element) =>
+                              element.itemName == widget.listItem.itemName);
+                      _allListController
+                          .update(['addedItems', 'itemCount', 'newList']);
                     },
-                    icon: const Icon(Icons.delete_forever_outlined, color: Colors.orange)),
+                    icon: const Icon(Icons.delete_forever_outlined,
+                        color: Colors.orange)),
               ],
             ),
           ],

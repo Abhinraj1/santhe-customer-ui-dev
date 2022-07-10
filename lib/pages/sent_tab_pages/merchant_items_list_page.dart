@@ -297,7 +297,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   child: ClipRect(
                                     child: BackdropFilter(
                                       filter: ImageFilter.blur(
-                                          sigmaX: 20, sigmaY: 20),
+                                          sigmaX: 10, sigmaY: 10),
                                       child: SizedBox(
                                         height: screenSize.height / 3 - 60.sp,
                                         width: screenSize.width,
@@ -307,11 +307,17 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                 )
                               : const SizedBox.shrink(),
                           widget.archived
-                              ? Expanded(
-                                child: Align(
+                              ? SizedBox(
+                                  height: screenSize.height / 3 - 60.sp,
+                                  width: screenSize.width,
+                                  child: Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Container(
-                                      padding: const EdgeInsets.all(20),
+                                      padding: const EdgeInsets.only(
+                                        bottom: 20.0,
+                                        left: 20.0,
+                                        right: 20.0,
+                                      ),
                                       color: AppColors().white100,
                                       alignment: Alignment.center,
                                       height: 90.h,
@@ -328,9 +334,17 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       ),
                                     ),
                                   ),
-                              )
+                                )
                               : const SizedBox.shrink(),
                         ],
+                      ),
+                    ),
+                  if (widget.archived)
+                    Container(
+                      width: screenSize.width,
+                      color: AppColors().white100,
+                      child: Divider(
+                        thickness: 1.sp,
                       ),
                     ),
                   Container(
@@ -347,7 +361,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                     ),
                   ),
                   Expanded(
-                    flex: 1,
                     child: Container(
                       color: Colors.white,
                       child: GroupedListView(
@@ -375,7 +388,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                       value,
                                       style: TextStyle(
                                         color: AppColors().grey100,
-                                        fontSize: 18.sp,
+                                        fontSize: 17.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -384,7 +397,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                         'Price',
                                         style: TextStyle(
                                           color: AppColors().brandDark,
-                                          fontSize: 18.sp,
+                                          fontSize: 17.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -395,9 +408,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                 height: 5.sp,
                               ),
                               Divider(
-                                color: AppColors().grey20,
-                                thickness: 1.5,
-                                indent: 8.sp,
+                                thickness: 1.sp,
                               ),
                             ],
                           );
@@ -406,6 +417,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                             (BuildContext context, dynamic element, int index) {
                           return MerchantItemCard(
                             merchantItem: items[index],
+                            archived: widget.archived,
                           );
                         },
                       ),
@@ -413,52 +425,51 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   ),
                   isDone()
                       ? Container(
-                        width: screenSize.width,
-                        color: AppColors().white100,
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Divider(
-                              thickness: 1.sp,
-                              color: AppColors().grey20,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Total:',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 24.sp,
-                                        color: const Color(0xff8B8B8B)),
-                                  ),
-                                  Text(
-                                    '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 20.sp,
-                                        color: Colors.orange),
-                                  ),
-                                ],
+                          width: screenSize.width,
+                          color: AppColors().white100,
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Divider(
+                                thickness: 1.sp,
                               ),
-                            ),
-                          ],
-                        ),
-                      )
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Total:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 24.sp,
+                                          color: const Color(0xff8B8B8B)),
+                                    ),
+                                    Text(
+                                      '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 17.sp,
+                                          color: Colors.orange),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       : const SizedBox.shrink(),
                   if (!isDone())
                     Container(
                       width: double.infinity,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
                           top: BorderSide(
-                              color: Colors.grey,
+                              color: AppColors().grey40,
                               style: BorderStyle.solid,
                               width: 1.0),
                         ),
@@ -466,8 +477,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 40.0),
+                            padding: const EdgeInsets.only(
+                                top: 8.0, left: 40.0, right: 40.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -475,21 +486,21 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   'Total:',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 20.sp,
+                                      fontSize: 24.sp,
                                       color: const Color(0xff8B8B8B)),
                                 ),
                                 Text(
                                   'Rs. ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 20.sp,
+                                      fontSize: 17.sp,
                                       color: Colors.orange),
                                 ),
                               ],
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(right : 15.0, left: 15.0, bottom: 10.0, top: 8.0),
                             child: SizedBox(
                               width: 234.sp,
                               height: 50.sp,

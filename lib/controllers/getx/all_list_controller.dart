@@ -181,7 +181,7 @@ class AllListController extends GetxController{
     int response = await NetworkCall().removeNewList(listId);
     isProcessing.value = false;
     if (response == 1) {
-      allListMap[listId]?.custListStatus = 'deleted';
+      allListMap[listId]?.custListStatus = 'purged';
       if(fromNew){
         newList.remove(allListMap[listId]);
       }else{

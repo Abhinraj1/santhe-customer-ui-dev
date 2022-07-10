@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
@@ -9,8 +8,10 @@ import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 class MerchantItemCard extends StatefulWidget {
   final OfferItem merchantItem;
+  final bool archived;
 
-  const MerchantItemCard({required this.merchantItem, Key? key})
+  const MerchantItemCard(
+      {required this.merchantItem, required this.archived, Key? key})
       : super(key: key);
 
   @override
@@ -45,7 +46,8 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: ProtectedCachedNetworkImage(
-              imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
+              imageUrl:
+                  'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
               height: 50.h,
               width: 50.h,
             ),
@@ -103,72 +105,81 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: screenSize.width * 2 / 5 - 40,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            expanded = !expanded;
-                          });
-                        },
-                        child: checkPlaceHolder(widget.merchantItem.brandType)
-                                .isEmpty
-                            ? Text(
-                                checkPlaceHolder(widget.merchantItem.itemNotes)
-                                        .isEmpty
-                                    ? '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}'
-                                    : '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}',
-                                softWrap: true,
-                                overflow:
-                                    expanded ? null : TextOverflow.ellipsis,
-                                maxLines: 6,
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 14.sp,
+                Text(
+                    '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 13.sp,
+                  ),
+                ),
+                if (!widget.archived)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: screenSize.width * 2 / 5 - 40,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              expanded = !expanded;
+                            });
+                          },
+                          child: checkPlaceHolder(widget.merchantItem.brandType)
+                                  .isEmpty
+                              ? Text(
+                                  checkPlaceHolder(
+                                              widget.merchantItem.itemNotes)
+                                          .isEmpty
+                                      ? '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}'
+                                      : '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}',
+                                  softWrap: true,
+                                  overflow:
+                                      expanded ? null : TextOverflow.ellipsis,
+                                  maxLines: 6,
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 13.sp,
+                                  ),
+                                )
+                              : Text(
+                                  '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes).isEmpty ? checkPlaceHolder(widget.merchantItem.brandType) : '${checkPlaceHolder(widget.merchantItem.brandType)}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}'}',
+                                  softWrap: true,
+                                  // minFontSize: 10,
+                                  overflow:
+                                      expanded ? null : TextOverflow.ellipsis,
+                                  // maxLines: 2,
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 13.sp,
+                                  ),
                                 ),
-                              )
-                            : Text(
-                                '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}, ${checkPlaceHolder(widget.merchantItem.itemNotes).isEmpty ? checkPlaceHolder(widget.merchantItem.brandType) : '${checkPlaceHolder(widget.merchantItem.brandType)}, ${checkPlaceHolder(widget.merchantItem.itemNotes)}'}',
-                                softWrap: true,
-                                // minFontSize: 10,
-                                overflow:
-                                    expanded ? null : TextOverflow.ellipsis,
-                                // maxLines: 2,
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: screenSize.width * 2 / 5 - 40,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            expanded = !expanded;
-                          });
-                        },
-                        child: Text(
-                          widget.merchantItem.merchNotes,
-                          softWrap: true,
-                          textAlign: TextAlign.right,
-                          maxLines: 4,
-                          // minFontSize: 10,
-                          overflow: expanded ? null : TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.orange,
-                            fontSize: 14.sp,
+                      SizedBox(
+                        width: screenSize.width * 2 / 5 - 40,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              expanded = !expanded;
+                            });
+                          },
+                          child: Text(
+                            widget.merchantItem.merchNotes,
+                            softWrap: true,
+                            textAlign: TextAlign.right,
+                            // minFontSize: 10,
+                            overflow: expanded ? null : TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.orange,
+                              fontSize: 14.sp,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
           ),

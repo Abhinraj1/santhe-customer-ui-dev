@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+import 'package:resize/resize.dart';
 
 class SentListItemCard extends StatelessWidget {
   final ListItemModel listItem;
@@ -19,7 +21,6 @@ class SentListItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width / 100;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -36,18 +37,22 @@ class SentListItemCard extends StatelessWidget {
                       'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
                       '',
                     )}',
-                    width: 50,
-                    height: 50,
+                    width: 50.h,
+                    height: 50.h,
                   ),
                 ),
-                const SizedBox(
-                  width: 12.0,
+                SizedBox(
+                  width: 10.w,
                 ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(listItem.itemName),
+                      Text(listItem.itemName, style: TextStyle(
+                        color: AppColors().grey100,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),),
                       checkPlaceHolder(listItem.brandType).isEmpty
                           ? AutoSizeText(
                               checkPlaceHolder(listItem.notes).isEmpty
@@ -55,8 +60,9 @@ class SentListItemCard extends StatelessWidget {
                                   : '${listItem.quantity} ${listItem.unit}, ${checkPlaceHolder(listItem.notes)}',
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.orange,
+                                fontSize: 13.sp
                               ),
                             )
                           : AutoSizeText(
@@ -67,7 +73,7 @@ class SentListItemCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Colors.orange,
-                                fontSize: screenWidth * 4,
+                                fontSize: 13.sp,
                               ),
                             ),
                     ],

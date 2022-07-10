@@ -138,7 +138,7 @@ class NetworkCall{
   Future removeNewList(String listId) async {
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": "deleted"}
+        "custListStatus": {"stringValue": "purged"}
       }
     };
 

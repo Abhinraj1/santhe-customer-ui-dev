@@ -960,10 +960,16 @@ class _UserListScreenState extends State<UserListScreen> {
           groupSeparatorBuilder: (String value) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(value),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
+              Text(
+                value,
+                style: TextStyle(
+                  color: AppColors().grey100,
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Divider(
+                thickness: 1.sp,
               )
             ],
           ),

@@ -105,14 +105,15 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
                     ),
                   ],
                 ),
-                Text(
+                if (widget.archived)
+                  Text(
                     '${removeDecimalZeroFormat(widget.merchantItem.quantity)} ${widget.merchantItem.unit}',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 13.sp,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.orange,
+                      fontSize: 13.sp,
+                    ),
                   ),
-                ),
                 if (!widget.archived)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

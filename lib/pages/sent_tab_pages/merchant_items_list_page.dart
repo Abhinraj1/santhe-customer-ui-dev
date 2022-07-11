@@ -112,10 +112,13 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                   },
                 ),
                 title: Text(
-                  'Offer Rs. ${widget.currentMerchantOffer!.merchResponse.merchTotalPrice}',
+                  widget.archived
+                      ? widget.userList.listName
+                      : 'Offer Rs. ${widget.currentMerchantOffer!.merchResponse.merchTotalPrice}',
                 ),
               ),
               body: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     color: Colors.transparent,
@@ -138,204 +141,189 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       width: screenSize.width,
                       child: Stack(
                         children: [
-                          isDone()
-                              ? Container(
-                                  padding: const EdgeInsets.all(10),
-                                  color: AppColors().white100,
-                                  width: screenSize.width,
-                                  alignment: Alignment.center,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 20.w,
-                                      ),
-                                      Image.asset(
-                                        'assets/offers/store_icon.png',
-                                        height: 60.h,
-                                        width: 60.w,
-                                      ),
-                                      SizedBox(
-                                        width: 15.w,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                          if (isDone())
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              color: AppColors().white100,
+                              width: screenSize.width,
+                              alignment: Alignment.center,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                  Image.asset(
+                                    'assets/offers/store_icon.png',
+                                    height: 60.h,
+                                    width: 60.w,
+                                  ),
+                                  SizedBox(
+                                    width: 15.w,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (widget.archived)
+                                          SizedBox(
+                                            height: 15.sp,
+                                          ),
+                                        Text(
+                                          widget.merchantResponse!.fields
+                                              .merchName.stringValue,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize:
+                                                widget.archived ? 20.sp : 24.sp,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10.sp,
+                                        ),
+                                        SizedBox(
+                                          width: 240.w,
+                                          child: Text(
+                                            widget
+                                                .merchantResponse!
+                                                .fields
+                                                .contact
+                                                .mapValue
+                                                .fields
+                                                .address
+                                                .stringValue,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10.sp,
+                                        ),
+                                        //contact number
+                                        Row(
                                           children: [
-                                            SizedBox(
-                                              height: 15.sp,
+                                            //phone icon
+                                            CircleAvatar(
+                                              radius: 15.sp,
+                                              backgroundColor:
+                                                  AppColors().brandDark,
+                                              child: Icon(
+                                                Icons.phone,
+                                                color: AppColors().white100,
+                                                size: 16.sp,
+                                              ),
                                             ),
+                                            SizedBox(
+                                              width: 10.sp,
+                                            ),
+                                            //phone number
                                             Text(
-                                              widget.merchantResponse!.fields
-                                                  .merchName.stringValue,
+                                              '+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 24.sp,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10.sp,
-                                            ),
-                                            SizedBox(
-                                              width: 240.w,
-                                              child: Text(
-                                                widget
-                                                    .merchantResponse!
-                                                    .fields
-                                                    .contact
-                                                    .mapValue
-                                                    .fields
-                                                    .address
-                                                    .stringValue,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 14.sp,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10.sp,
-                                            ),
-                                            //contact number
-                                            Row(
-                                              children: [
-                                                //phone icon
-                                                CircleAvatar(
-                                                  radius: 14.sp,
-                                                  backgroundColor:
-                                                      AppColors().brandDark,
-                                                  child: Icon(
-                                                    Icons.phone,
-                                                    color: AppColors().white100,
-                                                    size: 15.sp,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10.sp,
-                                                ),
-                                                //phone number
-                                                Text(
-                                                  '+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color:
-                                                          AppColors().brandDark,
-                                                      fontSize: 16.sp),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 15.h,
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                log(widget
-                                                        .merchantResponse!
-                                                        .fields
-                                                        .merchId
-                                                        .integerValue +
-                                                    widget.userList.listId
-                                                        .toString());
-                                                Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                      child: ChatScreen(
-                                                        chatId: widget
-                                                            .userList.listId
-                                                            .toString(),
-                                                        customerTitle: widget
-                                                            .currentMerchantOffer!
-                                                            .merchResponse
-                                                            .merchTotalPrice,
-                                                        listEventId: widget
-                                                                .merchantResponse!
-                                                                .fields
-                                                                .merchId
-                                                                .integerValue +
-                                                            widget
-                                                                .userList.listId
-                                                                .toString(),
-                                                        merchantTitle:
-                                                            // 'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
-                                                            'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateTime.now()}',
-                                                      ),
-                                                      type: PageTransitionType
-                                                          .rightToLeft),
-                                                );
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 23.sp,
-                                                    vertical: 5.sp),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                10.sp)),
-                                                    color:
-                                                        AppColors().brandDark),
-                                                child: Text(
-                                                  "Chat",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16.sp),
-                                                ),
-                                              ),
-                                            ),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: AppColors().brandDark,
+                                                  fontSize: 16.sp),
+                                            )
                                           ],
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          widget.archived
-                              ? Center(
-                                  child: ClipRect(
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 10, sigmaY: 10),
-                                      child: SizedBox(
-                                        height: screenSize.height / 3 - 60.sp,
-                                        width: screenSize.width,
-                                      ),
+                                        SizedBox(
+                                          height: 15.h,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            log(widget.merchantResponse!.fields
+                                                    .merchId.integerValue +
+                                                widget.userList.listId
+                                                    .toString());
+                                            Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  child: ChatScreen(
+                                                    chatId: widget
+                                                        .userList.listId
+                                                        .toString(),
+                                                    customerTitle: widget
+                                                        .currentMerchantOffer!
+                                                        .merchResponse
+                                                        .merchTotalPrice,
+                                                    listEventId: widget
+                                                            .merchantResponse!
+                                                            .fields
+                                                            .merchId
+                                                            .integerValue +
+                                                        widget.userList.listId
+                                                            .toString(),
+                                                    merchantTitle:
+                                                        // 'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
+                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateTime.now()}',
+                                                  ),
+                                                  type: PageTransitionType
+                                                      .rightToLeft),
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 23.sp,
+                                                vertical: 5.sp),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.sp)),
+                                                color: AppColors().brandDark),
+                                            child: Text(
+                                              "Chat",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16.sp),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          if (widget.archived)
+                            Center(
+                              child: ClipRect(
+                                child: BackdropFilter(
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                                  child: SizedBox(
+                                    height: screenSize.height / 3 - 80.sp,
+                                    width: screenSize.width,
                                   ),
-                                )
-                              : const SizedBox.shrink(),
-                          widget.archived
-                              ? SizedBox(
-                                  height: screenSize.height / 3 - 60.sp,
+                                ),
+                              ),
+                            ),
+                          if (widget.archived)
+                            SizedBox(
+                              height: screenSize.height / 3 - 80.sp,
+                              width: screenSize.width,
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.w, vertical: 10.h),
+                                  color: AppColors().white100,
+                                  alignment: Alignment.center,
+                                  height: 65.h,
                                   width: screenSize.width,
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 20.0,
-                                        left: 20.0,
-                                        right: 20.0,
-                                      ),
-                                      color: AppColors().white100,
-                                      alignment: Alignment.center,
-                                      height: 90.h,
-                                      width: screenSize.width,
-                                      child: Text(
-                                        'Merchant information will be available only upto 72 hours since the list was sent to shops.',
-                                        softWrap: true,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            height: 1.5,
-                                            fontSize: 16.sp,
-                                            color: AppColors().grey100,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
+                                  child: Text(
+                                    'Merchant information will be available only upto 72 hours since the list was sent to shops.',
+                                    softWrap: true,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        height: 1.5,
+                                        fontSize: 15.sp,
+                                        color: AppColors().grey80),
                                   ),
-                                )
-                              : const SizedBox.shrink(),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -348,7 +336,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       ),
                     ),
                   Container(
-                    height: 50.sp,
                     width: screenSize.width,
                     color: AppColors().white100,
                     alignment: Alignment.center,
@@ -356,7 +343,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       '${items.length} Items',
                       style: TextStyle(
                         fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -366,7 +353,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       child: GroupedListView(
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         elements: items,
                         groupBy: (OfferItem offerItem) => offerItem.catName,
                         groupSeparatorBuilder: (String value) {
@@ -378,7 +365,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 8.sp,
+                                  horizontal: 5.sp,
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -436,7 +423,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 30.0),
+                                    horizontal: 20.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -478,7 +465,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 8.0, left: 40.0, right: 40.0),
+                                top: 8.0, left: 20.0, right: 20.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -500,7 +487,11 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right : 15.0, left: 15.0, bottom: 10.0, top: 8.0),
+                            padding: const EdgeInsets.only(
+                                right: 15.0,
+                                left: 15.0,
+                                bottom: 10.0,
+                                top: 8.0),
                             child: SizedBox(
                               width: 234.sp,
                               height: 50.sp,

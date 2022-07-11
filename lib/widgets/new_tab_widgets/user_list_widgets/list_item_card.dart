@@ -75,7 +75,7 @@ class _ListItemCardState extends State<ListItemCard> {
                           style: TextStyle(
                             color: AppColors().grey100,
                             fontSize: 17.sp,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         GestureDetector(

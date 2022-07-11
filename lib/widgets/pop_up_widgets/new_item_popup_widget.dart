@@ -805,7 +805,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                     var tmp = currentUserList.items.where((element) => element.itemName == listItem.itemName).toList();
                                                     if (!widget.edit) {
                                                       if(tmp.isNotEmpty){
-                                                        tmp.first.quantity = (double.parse(tmp.first.quantity) + 1).toString();
+                                                        if(tmp.first.compareTo(listItem)){
+                                                          tmp.first.quantity = (double.parse(tmp.first.quantity) + double.parse(listItem.quantity)).toString();
+                                                        }else{
+                                                          currentUserList.items.add(listItem);
+                                                        }
                                                       }else{
                                                         currentUserList.items.add(listItem);
                                                       }

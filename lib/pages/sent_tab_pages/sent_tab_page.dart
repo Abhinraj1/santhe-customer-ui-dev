@@ -19,6 +19,7 @@ class OfferTabPage extends StatelessWidget {
         id: 'sentList',
         builder: (builder) {
           List<UserListModel> sentList = _allListController.sentList;
+          sentList.sort((a, b) => a.updateListTime.compareTo(b.updateListTime));
           sentList = sentList.reversed.toList();
           if(sentList.isEmpty) return _emptyList(context);
 

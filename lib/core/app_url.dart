@@ -15,6 +15,8 @@ class AppUrl{
   static const String API_KEY = "AIzaSyCFS_yaSebSR9VZC7Qv3QCCC9DNoyTzJ48";
   static const String GET_OTP = 'https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key=$API_KEY';
   static const String VERIFY_OTP = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key=$API_KEY';
+  static const String SEARCH_API_KEY = 'ba0045efa2818ec596b013d1b5dbe461';
+  static const String SEARCH_APP_ID = '7565UIF34Z';
   static String PURGE_LIST(String listId) => '$_baseUrl/customerList/$listId?updateMask.fieldPaths=custListStatus';
   static String ADD_LIST(String listId) => '$_baseUrl/customerList/?documentId=$listId';
   static String GET_CUSTOMER_DETAILS(String customerId) => '$_baseUrl/customer/$customerId';

@@ -1129,38 +1129,42 @@ class APIs extends GetxController {
     List<Item> searchResults = [];
     final String url = AppUrl.SEARCH_QUERY(searchQuery);
 
-    // const Algolia algolia = Algolia.init(
-    //   applicationId: AppUrl.SEARCH_APP_ID,
-    //   apiKey: AppUrl.SEARCH_API_KEY,
-    // );
-    //
-    // final query = algolia.instance.index('santhe').query(searchQuery);
-    //
-    // final resp = await query.getObjects();
-    //
-    // for(var i in resp.hits){
-    //   print(i.data['path']);
-    // }
-    final response = await callApi(mode: REST.get, url: Uri.parse(url));
+    const Algolia algolia = Algolia.init(
+      applicationId: AppUrl.SEARCH_APP_ID,
+      apiKey: AppUrl.SEARCH_API_KEY,
+    );
 
-    if (response.statusCode == 200) {
-      log(searchQuery);
-      log(response.body.toString());
-      List jsonResponse = jsonDecode(response.body);
+    final query = algolia.instance.index('santhe').query(searchQuery).filters('status:active');
 
-      for (int i = 0; i < jsonResponse.length; i++) {
-        if (jsonResponse[i]['status'] == 'active') {
-          searchResults.add(Item.fromJson(jsonResponse[i]));
-        }
-      }
+    final resp = await query.getObjects();
 
-      return searchResults;
-    } else {
-      AppHelpers.crashlyticsLog(response.body.toString());
-      log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      throw 'error!';
+    for(var i in resp.hits){
+      searchResults.add(Item.fromJson(i.data));
+      // print(i.data);
     }
+
+    return searchResults;
+
+    // final response = await callApi(mode: REST.get, url: Uri.parse(url));
+    //
+    // if (response.statusCode == 200) {
+    //   log(searchQuery);
+    //   log(response.body.toString());
+    //   List jsonResponse = jsonDecode(response.body);
+    //
+    //   for (int i = 0; i < jsonResponse.length; i++) {
+    //     if (jsonResponse[i]['status'] == 'active') {
+    //       searchResults.add(Item.fromJson(jsonResponse[i]));
+    //     }
+    //   }
+    //
+    //   return searchResults;
+    // } else {
+    //   AppHelpers.crashlyticsLog(response.body.toString());
+    //   log('Request failed with status: ${response.statusCode}.');
+    //   Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+    //   throw 'error!';
+    // }
   }
 
   Future<void> updateDeviceToken(String userId) async {

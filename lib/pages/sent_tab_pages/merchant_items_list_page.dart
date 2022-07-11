@@ -293,7 +293,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   filter:
                                       ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                                   child: SizedBox(
-                                    height: screenSize.height / 3 - 80.sp,
+                                    height: screenSize.height / 3 - 60.sp,
                                     width: screenSize.width,
                                   ),
                                 ),
@@ -301,7 +301,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                             ),
                           if (widget.archived)
                             SizedBox(
-                              height: screenSize.height / 3 - 80.sp,
+                              height: screenSize.height / 3 - 60.sp,
                               width: screenSize.width,
                               child: Align(
                                 alignment: Alignment.bottomCenter,
@@ -414,7 +414,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                       ? Container(
                           width: screenSize.width,
                           color: AppColors().white100,
-                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          padding: EdgeInsets.symmetric(vertical: 5.sp),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -465,7 +465,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 8.0, left: 20.0, right: 20.0),
+                                top: 8.0, left: 25.0, right: 25.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

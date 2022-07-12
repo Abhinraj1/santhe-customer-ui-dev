@@ -294,7 +294,6 @@ class APIs extends GetxController {
           Boxes.getCategoriesDB().put(currentCategory.catId, currentCategory);
         }
       }
-      // initCategoriesDB(); //since its already in main no need for it here
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
@@ -316,8 +315,6 @@ class APIs extends GetxController {
       for (int i = 0; i < data.length; i++) {
         Boxes.getFAQs().put(i, FAQ.fromJson(data[i]));
       }
-      // log(Boxes.getFAQs().get(1)?.quest ?? 'Error');
-      // log(Boxes.getFAQs().get(1)?.answ ?? 'Error');
 
       return 1;
     } else {

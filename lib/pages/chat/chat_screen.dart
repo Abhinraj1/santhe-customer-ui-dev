@@ -32,7 +32,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
   final profileController = Get.find<ProfileController>();
-  late final DatabaseReference _reference = FirebaseDatabase.instance.ref().child('chat').child(profileController.uid);
+  late final DatabaseReference _reference = FirebaseDatabase.instance.ref().child('chat');
   CustomerModel? currentUser;
   String message = '', token = '', merchantToken = '';
   bool _sendMessage = true;

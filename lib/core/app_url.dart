@@ -1,8 +1,10 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
 class AppUrl{
-  static const String _baseUrl = 'https://firestore.googleapis.com/v1/projects/santhe-425a8/databases/(default)/documents';
-  static const String _baseCloudFunctions = 'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1';
+  static const String _environmentProd = 'santhe-prod';
+  static const String _environmentDev = 'santhe-425a8';
+  static const String _baseUrl = 'https://firestore.googleapis.com/v1/projects/$_environmentDev/databases/(default)/documents';
+  static const String _baseCloudFunctions = 'https://us-central1-$_environmentDev.cloudfunctions.net/apis/santhe/v1';
   static const String FAQURL = '$_baseUrl/content/custContent/';
   static const String AboutUs = '$_baseUrl/content/common/';
   static const String SignIn = '$_baseUrl/merchant/';

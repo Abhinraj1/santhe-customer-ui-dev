@@ -21,8 +21,6 @@ class ProfileController extends GetxController{
 
   String? _urlToken;
 
-  String? _uid;
-
   Timer? refreshToken;
 
   String get urlToken => _urlToken ?? '';
@@ -33,7 +31,6 @@ class ProfileController extends GetxController{
       isLoggedIn = true;
       final tokenId = await user.getIdToken();
       _urlToken = tokenId;
-      _uid = user.uid;
     }else{
       isLoggedIn = false;
       if(!override){
@@ -61,8 +58,6 @@ class ProfileController extends GetxController{
       isRegistered = true;
     }
   }
-
-  String get uid => _uid ?? '';
 
   set getCustomerDetails(CustomerModel customer){
     customerDetails = customer;

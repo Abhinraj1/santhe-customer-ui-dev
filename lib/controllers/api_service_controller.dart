@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:algolia/algolia.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/getx/profile_controller.dart';
@@ -22,7 +23,13 @@ import '../models/santhe_list_item_model.dart';
 import '../models/santhe_user_model.dart';
 import 'boxes_controller.dart';
 
-enum REST { get, post, put, delete, patch, }
+enum REST {
+  get,
+  post,
+  put,
+  delete,
+  patch,
+}
 
 class APIs extends GetxController {
   //Items & Category
@@ -40,10 +47,11 @@ class APIs extends GetxController {
 
   var itemsDB = <Item>[].obs;
 
-  Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
+  Future<http.Response> callApi(
+      {required REST mode, required Uri url, String? body}) async {
     final tokenHandler = Get.find<ProfileController>();
     final token = tokenHandler.urlToken;
-    final header = { "authorization": 'Bearer $token' };
+    final header = {"authorization": 'Bearer $token'};
     // case 1: get
     // case 2: post
     // case 3: update
@@ -51,7 +59,10 @@ class APIs extends GetxController {
       case REST.get:
         {
           try {
-            return await http.get(url, headers: header,);
+            return await http.get(
+              url,
+              headers: header,
+            );
             // } on SocketException {
             //   Get.to(
             //     () => const NoInternetPage(),
@@ -68,7 +79,11 @@ class APIs extends GetxController {
       case REST.post:
         {
           try {
-            return await http.post(url, body: body!, headers: header,);
+            return await http.post(
+              url,
+              body: body!,
+              headers: header,
+            );
             // } on SocketException {
             //   Get.to(
             //     () => const NoInternetPage(),
@@ -85,7 +100,11 @@ class APIs extends GetxController {
       case REST.patch:
         {
           try {
-            return await http.patch(url, body: body!, headers: header,);
+            return await http.patch(
+              url,
+              body: body!,
+              headers: header,
+            );
             // } on SocketException {
             //   Get.to(
             //     () => const NoInternetPage(),
@@ -163,7 +182,8 @@ class APIs extends GetxController {
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
-      return int.parse(jsonResponse['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]);
+      return int.parse(jsonResponse['subscription']['mapValue']['fields']
+          ['custSubscription']['mapValue']['fields'][plan]);
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       return 3;
@@ -224,8 +244,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     log(jsonDecode(response.body).toString());
     if (response.statusCode == 200) {
@@ -274,7 +294,6 @@ class APIs extends GetxController {
           Boxes.getCategoriesDB().put(currentCategory.catId, currentCategory);
         }
       }
-      // initCategoriesDB(); //since its already in main no need for it here
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
@@ -296,8 +315,6 @@ class APIs extends GetxController {
       for (int i = 0; i < data.length; i++) {
         Boxes.getFAQs().put(i, FAQ.fromJson(data[i]));
       }
-      // log(Boxes.getFAQs().get(1)?.quest ?? 'Error');
-      // log(Boxes.getFAQs().get(1)?.answ ?? 'Error');
 
       return 1;
     } else {
@@ -355,8 +372,8 @@ class APIs extends GetxController {
         }
       }
     };
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       for (int i = 0; i < data.length; i++) {
@@ -372,7 +389,8 @@ class APIs extends GetxController {
     }
   }
 
-  Future<int> addCustomerList(UserList userList, int custId, String status) async {
+  Future<int> addCustomerList(
+      UserList userList, int custId, String status) async {
     log("================${userList.listId}======================");
     final String url = AppUrl.ADD_LIST(userList.listId.toString());
     List items = [];
@@ -439,8 +457,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
@@ -456,7 +474,8 @@ class APIs extends GetxController {
   //-------------------------------------User List--------------------------------------
 
   //patch
-  Future updateUserList(int custId, UserList userList, {String? status, String? processStatus}) async {
+  Future updateUserList(int custId, UserList userList,
+      {String? status, String? processStatus}) async {
     final String url = AppUrl.UPDATE_USER_LIST(userList.listId.toString());
     List items = [];
     int i = 0;
@@ -524,7 +543,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response = await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -546,11 +566,12 @@ class APIs extends GetxController {
 
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": "deleted"}
+        "custListStatus": {"stringValue": "purged"}
       }
     };
 
-    var response = await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -573,8 +594,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -593,8 +614,8 @@ class APIs extends GetxController {
 
     var body = {"phoneNumber": "+91$phoneNumber"};
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     log(jsonDecode(response.body).toString());
     if (response.statusCode == 200) {
@@ -617,8 +638,8 @@ class APIs extends GetxController {
 
     var body = {"sessionInfo": sessionInfo, "code": code};
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body);
@@ -692,8 +713,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body);
       log('user added');
@@ -764,8 +785,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -785,7 +806,8 @@ class APIs extends GetxController {
 
   Future contactUs(int custId, String message, double rating) async {
     log('>>>>>>>>rating:$rating');
-    final String url = AppUrl.CONTACT_US('$custId${DateTime.now().day.toString().length == 1 ? '0${DateTime.now().day}' : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0${DateTime.now().month}' : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0${DateTime.now().hour}' : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0${DateTime.now().minute}' : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0${DateTime.now().second}' : DateTime.now().second}');
+    final String url = AppUrl.CONTACT_US(
+        '$custId${DateTime.now().day.toString().length == 1 ? '0${DateTime.now().day}' : DateTime.now().day}${DateTime.now().month.toString().length == 1 ? '0${DateTime.now().month}' : DateTime.now().month}${DateTime.now().year.toString().substring(2, 4)}${DateTime.now().hour.toString().length == 1 ? '0${DateTime.now().hour}' : DateTime.now().hour}${DateTime.now().minute.toString().length == 1 ? '0${DateTime.now().minute}' : DateTime.now().minute}${DateTime.now().second.toString().length == 1 ? '0${DateTime.now().second}' : DateTime.now().second}');
 
     final body = {
       "fields": {
@@ -800,8 +822,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -856,8 +878,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -884,50 +906,52 @@ class APIs extends GetxController {
 
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
-      List<CustomerOfferResponse> resp =
-      customerOfferResponseFromJson(response.body);
-      // resp.sort((a, b) =>
-      //     a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
+      List<CustomerOfferResponse> resp = customerOfferResponseFromJson(
+          json.decode(response.body) == "No offers for this customer list."
+              ? json.encode([]).toString()
+              : response.body);
+      resp.sort((a, b) =>
+          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
 
-      // DO NOT DELETE THIS SORTING LOGIC
-      if (resp.isNotEmpty) {
-        resp.sort((a, b) =>
-            a.merchResponse.merchTotalPrice
-                .compareTo(b.merchResponse.merchTotalPrice));
-        resp = resp.reversed.toList();
-        resp.sort((a, b) =>
-            a.merchResponse.merchOfferQuantity
-                .compareTo(b.merchResponse.merchOfferQuantity));
-        resp = resp.reversed.toList();
-
-        final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
-
-        resp[0].custOfferResponse.custDeal = 'best1';
-
-        for (int i = 1; i < resp.length; i++) {
-          if (AppHelpers.isInBetween(
-            double.parse(resp[i].merchResponse.merchTotalPrice),
-            bestPrice,
-            bestPrice + 50,
-          ) &&
-              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-            resp[i].custOfferResponse.custDeal = 'best2';
-          } else if (AppHelpers.isInBetween(
-            double.parse(resp[i].merchResponse.merchTotalPrice),
-            bestPrice + 50,
-            bestPrice + 100,
-          ) &&
-              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-            resp[i].custOfferResponse.custDeal = 'best3';
-          } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
-              bestPrice + 100 &&
-              resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-            resp[i].custOfferResponse.custDeal = 'best4';
-          } else {
-            resp[i].custOfferResponse.custDeal = 'notBest';
-          }
-        }
-      }
+      // // DO NOT DELETE THIS SORTING LOGIC
+      // if (resp.isNotEmpty) {
+      //   resp.sort((a, b) =>
+      //       a.merchResponse.merchTotalPrice
+      //           .compareTo(b.merchResponse.merchTotalPrice));
+      //   resp = resp.reversed.toList();
+      //   resp.sort((a, b) =>
+      //       a.merchResponse.merchOfferQuantity
+      //           .compareTo(b.merchResponse.merchOfferQuantity));
+      //   resp = resp.reversed.toList();
+      //
+      //   final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
+      //
+      //   resp[0].custOfferResponse.custDeal = 'best1';
+      //
+      //   for (int i = 1; i < resp.length; i++) {
+      //     if (AppHelpers.isInBetween(
+      //       double.parse(resp[i].merchResponse.merchTotalPrice),
+      //       bestPrice,
+      //       bestPrice + 50,
+      //     ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best2';
+      //     } else if (AppHelpers.isInBetween(
+      //       double.parse(resp[i].merchResponse.merchTotalPrice),
+      //       bestPrice + 50,
+      //       bestPrice + 100,
+      //     ) &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best3';
+      //     } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
+      //         bestPrice + 100 &&
+      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
+      //       resp[i].custOfferResponse.custDeal = 'best4';
+      //     } else {
+      //       resp[i].custOfferResponse.custDeal = 'noBest';
+      //     }
+      //   }
+      // }
       return resp;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
@@ -980,8 +1004,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
@@ -1018,8 +1042,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -1038,7 +1062,7 @@ class APIs extends GetxController {
   //POST
   Future<List<UserList>> getArchivedCust(int custId) async {
     List<UserList> userLists = [];
-    const String url =AppUrl.RUN_QUERY;
+    const String url = AppUrl.RUN_QUERY;
     var body = {
       "structuredQuery": {
         "from": [
@@ -1074,8 +1098,8 @@ class APIs extends GetxController {
       }
     };
 
-    var response =
-        await callApi(mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -1102,35 +1126,50 @@ class APIs extends GetxController {
     List<Item> searchResults = [];
     final String url = AppUrl.SEARCH_QUERY(searchQuery);
 
-    final response = await callApi(mode: REST.get, url: Uri.parse(url));
+    const Algolia algolia = Algolia.init(
+      applicationId: AppUrl.SEARCH_APP_ID,
+      apiKey: AppUrl.SEARCH_API_KEY,
+    );
 
-    if (response.statusCode == 200) {
-      log(searchQuery);
-      log(response.body.toString());
-      List jsonResponse = jsonDecode(response.body);
+    final query = algolia.instance.index('santhe').query(searchQuery).filters('status:active');
 
-      for (int i = 0; i < jsonResponse.length; i++) {
-        if (jsonResponse[i]['status'] == 'active') {
-          searchResults.add(Item.fromJson(jsonResponse[i]));
-        }
-      }
+    final resp = await query.getObjects();
 
-      return searchResults;
-    } else {
-      AppHelpers.crashlyticsLog(response.body.toString());
-      log('Request failed with status: ${response.statusCode}.');
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      throw 'error!';
+    for(var i in resp.hits){
+      searchResults.add(Item.fromJson(i.data));
+      // print(i.data);
     }
+
+    return searchResults;
+
+    // final response = await callApi(mode: REST.get, url: Uri.parse(url));
+    //
+    // if (response.statusCode == 200) {
+    //   log(searchQuery);
+    //   log(response.body.toString());
+    //   List jsonResponse = jsonDecode(response.body);
+    //
+    //   for (int i = 0; i < jsonResponse.length; i++) {
+    //     if (jsonResponse[i]['status'] == 'active') {
+    //       searchResults.add(Item.fromJson(jsonResponse[i]));
+    //     }
+    //   }
+    //
+    //   return searchResults;
+    // } else {
+    //   AppHelpers.crashlyticsLog(response.body.toString());
+    //   log('Request failed with status: ${response.statusCode}.');
+    //   Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+    //   throw 'error!';
+    // }
   }
 
   Future<void> updateDeviceToken(String userId) async {
     final String token = await AppHelpers().getToken;
     String uid = await AppHelpers().getDeviceId();
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-        'PUT',
-        Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
+    var request =
+        http.Request('PUT', Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
     request.body = json.encode({"deviceToken": token, "deviceId": uid});
     request.headers.addAll(headers);
 

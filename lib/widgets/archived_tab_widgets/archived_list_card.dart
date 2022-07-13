@@ -21,7 +21,7 @@ class ArchivedUserListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String imagePath = 'assets/basket0.png';
-    final AllListController _allListController = Get.find<AllListController>();
+    final AllListController allListController = Get.find<AllListController>();
 
     //image logic
     if (userList.items.isEmpty) {
@@ -79,9 +79,9 @@ class ArchivedUserListCard extends StatelessWidget {
               children: [
                 //copy from old list
                 Visibility(
-                  visible: _allListController.newList.length < _allListController.lengthLimit,
+                  visible: allListController.newList.length < allListController.lengthLimit,
                   child: SlidableAction(
-                    onPressed: (context) => _allListController.addCopyListToDB(userList.listId),
+                    onPressed: (context) => allListController.addCopyListToDB(userList.listId),
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
                     autoClose: true,
@@ -91,7 +91,7 @@ class ArchivedUserListCard extends StatelessWidget {
                 ),
                 //delete list
                 SlidableAction(
-                  onPressed: (context) => _allListController.deleteListFromDB(userList.listId, 'archived'),
+                  onPressed: (context) => allListController.deleteListFromDB(userList.listId, 'archived'),
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.orange,
                   icon: CupertinoIcons.delete_solid,

@@ -94,9 +94,10 @@ class NoOfferPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 20.sp,
-            ),
+            if (askToRetry)
+              SizedBox(
+                height: 10.sp,
+              ),
             askToRetry
                 ? Container(
                     width: screenSize.width,
@@ -123,7 +124,8 @@ class NoOfferPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: () => _allListController.addCopyListToDB(userList.listId),
+                              onTap: () => _allListController
+                                  .addCopyListToDB(userList.listId),
                               splashColor: AppColors().white100,
                               child: Container(
                                 height: 50,
@@ -148,7 +150,8 @@ class NoOfferPage extends StatelessWidget {
                               width: 20.sp,
                             ),
                             InkWell(
-                              onTap: () => _allListController.moveToArchive(userList),
+                              onTap: () =>
+                                  _allListController.moveToArchive(userList),
                               splashColor: AppColors().white100,
                               child: Container(
                                 height: 50,
@@ -176,7 +179,7 @@ class NoOfferPage extends StatelessWidget {
                   )
                 : const SizedBox.shrink(),
             SizedBox(
-              height: 20.sp,
+              height: 10.sp,
             ),
             Expanded(
               child: Container(
@@ -197,10 +200,16 @@ class NoOfferPage extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(value),
-                        const Divider(
-                          color: Colors.grey,
-                          thickness: 1,
+                        Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors().grey100,
+                            fontSize: 17.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Divider(
+                          thickness: 1.sp,
                         )
                       ],
                     );

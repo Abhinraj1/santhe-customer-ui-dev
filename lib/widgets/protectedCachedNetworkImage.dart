@@ -5,12 +5,9 @@ import 'package:get/get.dart';
 import '../controllers/getx/profile_controller.dart';
 
 class ProtectedCachedNetworkImage extends StatelessWidget {
-  ProtectedCachedNetworkImage({
-    Key? key,
-    required this.imageUrl,
-    this.width,
-    this.height
-  }) : super(key: key);
+  ProtectedCachedNetworkImage(
+      {Key? key, required this.imageUrl, this.width, this.height})
+      : super(key: key);
 
   final String imageUrl;
   double? height;
@@ -21,12 +18,18 @@ class ProtectedCachedNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl:
-          "https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$imageUrl",
+      imageUrl: imageUrl,
       httpHeaders: {"authorization": 'Bearer $token'},
       fit: BoxFit.cover,
-      height: height,
+      height: height ?? MediaQuery.of(context).size.height / 2,
       width: width,
+      useOldImageOnUrlChange: true,
+      errorWidget: (c, s, d) => ProtectedCachedNetworkImage(
+        imageUrl:
+            'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media',
+        width: width,
+        height: height,
+      ),
     );
   }
 }

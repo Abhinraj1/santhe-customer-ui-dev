@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
@@ -11,8 +10,10 @@ import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/new_tab_pages/image_page.dart';
 import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -250,23 +251,14 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                   child: Obx(
                                     () => Stack(
                                       children: [
-                                        CachedNetworkImage(
+                                        ProtectedCachedNetworkImage(
                                           imageUrl: imageController
                                                   .addItemCustomImageUrl.isEmpty
-                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
+                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
                                               : imageController
                                                   .addItemCustomImageUrl.value,
                                           width: screenWidth * 25,
                                           height: screenWidth * 25,
-                                          useOldImageOnUrlChange: true,
-                                          fit: BoxFit.cover,
-                                          errorWidget: (context, url, error) {
-                                            return Container(
-                                              color: Colors.red,
-                                              width: screenWidth * 25,
-                                              height: screenWidth * 25,
-                                            );
-                                          },
                                         ),
                                         Positioned(
                                           top: 10,
@@ -524,10 +516,10 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                     ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
                                                     : _customNotesController.text
                                                         .trim(),
-                                                itemImageTn:
-                                                    imageController
-                                                        .addItemCustomImageUrl
-                                                        .value,
+                                                itemImageTn: imageController
+                                                    .addItemCustomImageUrl.value
+                                                    .replaceAll(
+                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                 catId: '4000',
                                                 createUser: custPhone,
                                                 dQuantity: 1,
@@ -536,12 +528,11 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                     .text,
                                                 itemId: itemCount,
                                                 itemImageId: image.isEmpty
-                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
-                                                    : image,
+                                                    ? 'image%20placeholder.png?alt=media'
+                                                    : image.replaceAll(
+                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                 itemName:
-                                                    _customItemNameController
-                                                        .text
-                                                        .trim(),
+                                                    _customItemNameController.text.trim(),
                                                 status: 'inactive',
                                                 unit: availableUnits,
                                                 updateUser: custPhone);
@@ -562,8 +553,10 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                 //item ref
                                                 itemId: '$itemCount',
                                                 itemImageId: image.isEmpty
-                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media&token=12d69134-7791-471a-9f2f-3dae393f0780'
-                                                    : image,
+                                                    ? 'image%20placeholder.png?alt=media'
+                                                    : image.replaceAll(
+                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                                                        ''),
                                                 itemName:
                                                     _customItemNameController
                                                         .text
@@ -586,8 +579,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
 
                                               currentUserList.items
                                                   .add(listItem);
-                                              saveListAndUpdate();
-
+                                              await saveListAndUpdate();
                                               Get.back();
                                             } else {
                                               log('Error, action not completed!');
@@ -630,10 +622,13 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
     );
   }
 
-  void saveListAndUpdate() {
+  Future<void> saveListAndUpdate() async {
     // print(_allListController.allListMap[widget.listId]?.listName);
     _allListController.allListMap[widget.listId] = currentUserList;
     _allListController.update(['addedItems', 'itemCount', 'newList']);
+    await NetworkCall()
+        .updateUserList(currentUserList, processStatus: 'draft', status: 'new');
+    _allListController.update(['newList', 'fab']);
   }
 
   void showImagePickerOptions(BuildContext context) {

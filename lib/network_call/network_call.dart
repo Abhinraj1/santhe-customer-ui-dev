@@ -6,6 +6,7 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/santhe_faq_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
+import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
 import '../core/app_helpers.dart';
 import '../core/error/exceptions.dart';
@@ -51,7 +52,9 @@ class NetworkCall{
     };
     var response = await callApi(mode: REST.post, url: Uri.parse(AppUrl.RUN_QUERY), body: jsonEncode(body));
     if (response.statusCode == 200) {
-      return newListResponseModelFromJson(response.body);
+      final condition = json.decode(response.body)[0]['document'] == null;
+      final body = condition ? <NewListResponseModel>[] : newListResponseModelFromJson(response.body);
+      return body;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
@@ -137,7 +140,7 @@ class NetworkCall{
   Future removeNewList(String listId) async {
     final body = {
       "fields": {
-        "custListStatus": {"stringValue": "deleted"}
+        "custListStatus": {"stringValue": "purged"}
       }
     };
 
@@ -177,9 +180,10 @@ class NetworkCall{
     }
   }
 
-  Future updateUserList(UserListModel userList, {String? status, String? processStatus}) async {
+  Future updateUserList(UserListModel userList, {String? status, String? processStatus, bool success = false}) async {
     List items = [];
     int i = 0;
+
     for (ListItemModel item in userList.items) {
       items.add({
         "mapValue": {
@@ -247,6 +251,7 @@ class NetworkCall{
     var response = await callApi(mode: REST.patch, url: Uri.parse(AppUrl.UPDATE_USER_LIST(userList.listId)), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
+      if(success) successMsg('Success', 'List sent successfully');
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');

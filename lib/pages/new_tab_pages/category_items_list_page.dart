@@ -1,11 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../models/santhe_item_model.dart';
@@ -82,12 +82,11 @@ class CategoryItemsPage extends StatelessWidget {
                             //main show
                             ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: CachedNetworkImage(
+                              child: ProtectedCachedNetworkImage(
                                 imageUrl:
-                                'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId}',
+                                'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
                                 width: 20.vw,
                                 height: 20.vw,
-                                fit: BoxFit.cover,
                               ),
                             ),
                             Expanded(

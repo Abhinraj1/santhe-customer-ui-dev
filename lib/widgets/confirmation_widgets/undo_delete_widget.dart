@@ -9,7 +9,7 @@ import 'package:resize/resize.dart';
 SnackbarController undoDelete(int userListId, String status) {
 
   final APIs apiController = Get.find<APIs>();
-  final AllListController _allListController = Get.find<AllListController>();
+  final AllListController allListController = Get.find<AllListController>();
 
   return Get.snackbar(
     '',
@@ -34,15 +34,18 @@ SnackbarController undoDelete(int userListId, String status) {
               final result = await apiController.undoDeleteUserList(userListId, status);
               if(result==1){
                 Get.closeCurrentSnackbar();
-                _allListController.getAllList();
+                allListController.getAllList();
               }
             },
-            child: Text(
-              ' Undo',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: AppColors().brandDark,
-                fontSize: 17.sp,
+            child: SizedBox(
+              height: 40.sp,
+              child: Text(
+                'Undo',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors().brandDark,
+                  fontSize: 17.sp,
+                ),
               ),
             ),
           )
@@ -68,7 +71,8 @@ SnackbarController undoDelete(int userListId, String status) {
     ],
     icon:Padding(
       padding: EdgeInsets.all(18.sp),
-      child: Icon(
+      child:
+      Icon(
         CupertinoIcons.exclamationmark_circle_fill,
         color: AppColors().brandDark,
         size: 45,

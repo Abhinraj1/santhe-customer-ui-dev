@@ -30,10 +30,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
-  late final DatabaseReference _reference = FirebaseDatabase.instance.ref().child('chat');
   final ChatController _chatController = Get.find();
   final profileController = Get.find<ProfileController>();
+  late final DatabaseReference _reference = FirebaseDatabase.instance.ref().child('chat');
   CustomerModel? currentUser;
   String message = '', token = '', merchantToken = '';
   bool _sendMessage = true;
@@ -77,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
             }
           },
         ),
-        title: Text('Offer: Rs ' + widget.customerTitle),
+        title: Text('Offer: Rs ${widget.customerTitle}'),
       ),
       body: WillPopScope(
         child: Column(
@@ -109,31 +108,35 @@ class _ChatScreenState extends State<ChatScreen> {
                             );
                           }
 
-                          List<ChatModel> _messages = [];
-                          Map<dynamic, dynamic> _data = snapShot.data!.snapshot.value  as Map<dynamic, dynamic>;
-                          _data.forEach((key, value) {
-                            _messages.add(
+                          List<ChatModel> messages = [];
+                          Map<dynamic, dynamic> data = snapShot.data!.snapshot.value  as Map<dynamic, dynamic>;
+                          data.forEach((key, value) {
+                            messages.add(
                                 ChatModel(message: value['message'], isCustomer: value['isCustomer'], messageTime: DateTime.fromMillisecondsSinceEpoch(int.parse(key)).toLocal(), name: value['name'], token: value['token'] ?? '')
                             );
                           });
-                          _messages.sort((a, b) => a.messageTime.compareTo(b.messageTime));
-                          _messages = _messages.reversed.toList();
+                          messages.sort((a, b) => a.messageTime.compareTo(b.messageTime));
+                          messages = messages.reversed.toList();
                           return ListView.builder(
                               reverse: true,
                               shrinkWrap: true,
-                              itemCount: _messages.length,
+                              itemCount: messages.length,
                               padding: EdgeInsets.symmetric(horizontal: 23.w),
                               itemBuilder: (itemBuilder, index){
-                                if(!_messages[(_messages.length - 1) - index].isCustomer){
-                                  merchantToken = _messages[(_messages.length - 1) - index].token;
+                                if(!messages[(messages.length - 1) - index].isCustomer){
+                                  merchantToken = messages[(messages.length - 1) - index].token;
                                 }
-                                return _messages[index].isCustomer ? _customerChat(_messages[index]) : _merchantChat(_messages[index]);
+                                return messages[index].isCustomer ? _customerChat(messages[index]) : _merchantChat(messages[index]);
                               }
                           );
                         }
 
                         if(snapShot.hasError){
-                          return const SizedBox();
+                          return Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 40.sp),
+                              child: Image.asset('assets/chat_screen_start.png'),) ,
+                          );
                         }
 
                         return const Center(
@@ -279,7 +282,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Text(chat.message, style: AppTheme().normal400(13, color: AppColors().white100, height: 2.sp), ),
               ),
               SizedBox(height: 10.h,),
-              Text(DateFormat('jm').format(chat.messageTime) + '  ', style: AppTheme().bold600(9, color: AppColors().grey80),),
+              Text('${DateFormat('jm').format(chat.messageTime)}  ', style: AppTheme().bold600(9, color: AppColors().grey80),),
             ],
           ),
         ),
@@ -321,7 +324,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void sendNotificationToAll(String content){
     http.get(Uri.parse('https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getNotificationToken?userId=${widget.listEventId.substring(0, 10)}&userType=merchant')).then((value) async {
-      Map<dynamic, dynamic> _pairs = jsonDecode(value.body);
+      Map<dynamic, dynamic> pairs = jsonDecode(value.body);
       var url = 'https://fcm.googleapis.com/fcm/send';
       await http.post(
         Uri.parse(url),
@@ -335,7 +338,7 @@ class _ChatScreenState extends State<ChatScreen> {
               "body": content,
               "title": 'New message from customer',
             },
-            'registration_ids': _pairs['data'].values.toList(), // Multiple id
+            'registration_ids': pairs['data'].values.toList(), // Multiple id
             //'to': merchantToken, // single id
             "direct_boot_ok": true,
             "data": {
@@ -381,7 +384,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Text(chat.message, style: AppTheme().normal400(13, color: AppColors().grey100, height: 2.sp), ),
               ),
               SizedBox(height: 10.h,),
-              Text(DateFormat('jm').format(chat.messageTime) + '  ', style: AppTheme().bold600(9, color: AppColors().grey80),),
+              Text('${DateFormat('jm').format(chat.messageTime)}  ', style: AppTheme().bold600(9, color: AppColors().grey80),),
             ],
           ),
         ),

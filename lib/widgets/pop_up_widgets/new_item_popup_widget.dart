@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +9,9 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -351,7 +350,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                           );
                                           return Stack(
                                             children: [
-                                              CachedNetworkImage(
+                                              ProtectedCachedNetworkImage(
                                                 imageUrl: imageController
                                                         .editItemCustomImageUrl
                                                         .isEmpty
@@ -361,16 +360,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         .value,
                                                 width: screenWidth * 25,
                                                 height: screenWidth * 25,
-                                                useOldImageOnUrlChange: true,
-                                                fit: BoxFit.cover,
-                                                errorWidget:
-                                                    (context, url, error) {
-                                                  return Container(
-                                                    color: Colors.red,
-                                                    width: screenWidth * 25,
-                                                    height: screenWidth * 25,
-                                                  );
-                                                },
                                               ),
                                               Positioned(
                                                 top: 10,
@@ -804,7 +793,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                     ListItemModel listItem = ListItemModel(
                                                       brandType: placeHolderValidation(item.dBrandType, _brandController),
                                                       itemId: '${item.itemId}',
-                                                      itemImageId: item.itemImageId,
+                                                      itemImageId: item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                       itemName: _customItemNameController.text,
                                                       quantity: _qtyController.text,
                                                       notes: placeHolderValidation(item.dItemNotes, _notesController),
@@ -816,10 +805,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                     var tmp = currentUserList.items.where((element) => element.itemName == listItem.itemName).toList();
                                                     if (!widget.edit) {
                                                       if(tmp.isNotEmpty){
-                                                        tmp.first.quantity = (double.parse(tmp.first.quantity) + 1).toString();
+                                                        if(tmp.first.compareTo(listItem)){
+                                                          tmp.first.quantity = (double.parse(tmp.first.quantity) + double.parse(listItem.quantity)).toString();
+                                                        }else{
+                                                          currentUserList.items.add(listItem);
+                                                        }
                                                       }else{
                                                         currentUserList.items.add(listItem);
-                                                        saveListAndUpdate();
                                                       }
                                                     }else{
                                                       for (int i = 0; i < currentUserList.items.length; i++) {
@@ -832,9 +824,11 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                     if (!widget.edit && widget.fromSearch != true) {
                                                       animateAdd(MediaQuery.of(context).size.width / 100);
                                                     }
+
+                                                    await saveListAndUpdate();
+
                                                     Future.delayed(Duration(milliseconds: !widget.edit && widget.fromSearch != true ? 500 : 0), () async {
-                                                      saveListAndUpdate();
-                                                      Navigator.pop(context);
+                                                      Navigator.of(context).pop();
                                                     });
                                                   }
                                                   //new / edit custom item
@@ -845,14 +839,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                       Item newCustomItem = Item(
                                                           dBrandType: placeHolderValidation(item.dBrandType, _brandController),
                                                           dItemNotes: placeHolderValidation(item.dItemNotes, _notesController),
-                                                          itemImageTn: imageController.editItemCustomImageUrl.value,
+                                                          itemImageTn: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                           catId: item.catId,
                                                           createUser: custPhone,
                                                           dQuantity: 1,
                                                           dUnit: selectedUnit,
                                                           itemAlias: _customItemNameController.text,
                                                           itemId: itemCount,
-                                                          itemImageId: imageController.editItemCustomImageUrl.value,
+                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                           itemName: _customItemNameController.text,
                                                           status: 'inactive',
                                                           unit: units,
@@ -865,7 +859,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           brandType: placeHolderValidation(newCustomItem.dBrandType, _brandController),
                                                           //item ref
                                                           itemId: '${newCustomItem.itemId}',
-                                                          itemImageId: imageController.editItemCustomImageUrl.value,
+                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
                                                           itemName: _customItemNameController.text,
                                                           quantity: _qtyController.text.toString(),
                                                           notes: placeHolderValidation(newCustomItem.dItemNotes, _notesController),
@@ -879,7 +873,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           currentUserList.items.removeWhere((element) => element.itemId == '${item.itemId}');
                                                         }
                                                         currentUserList.items.add(listItem);
-                                                        saveListAndUpdate();
+                                                        await saveListAndUpdate();
                                                       } else {
                                                         Get.snackbar(
                                                             'Network Error',
@@ -957,7 +951,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                       //todo fix error due to builder logic issue move logic elsewhere
                       () => Stack(
                         children: [
-                          CachedNetworkImage(
+                          ProtectedCachedNetworkImage(
                             imageUrl: imageController.editItemCustomImageUrl
                                         .value.isNotEmpty &&
                                     imageController
@@ -967,16 +961,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                 : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId}',
                             width: screenWidth * 25,
                             height: screenWidth * 25,
-                            useOldImageOnUrlChange: true,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) {
-                              log(error);
-                              return Container(
-                                color: Colors.red,
-                                width: screenWidth * 25,
-                                height: screenWidth * 25,
-                              );
-                            },
                           ),
                           Positioned(
                             top: 10,
@@ -1004,10 +988,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
     );
   }
 
-  void saveListAndUpdate(){
+  Future<void> saveListAndUpdate() async {
     // print(_allListController.allListMap[widget.listId]?.listName);
     _allListController.allListMap[widget.listId] = currentUserList;
     _allListController.update(['addedItems', 'itemCount', 'newList']);
+    await NetworkCall()
+        .updateUserList(currentUserList, processStatus: 'draft', status: 'new');
+    _allListController.update(['newList', 'fab']);
   }
 
   void animateAdd(double value) {

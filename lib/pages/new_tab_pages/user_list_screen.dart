@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
+import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/home_controller.dart';
@@ -331,6 +331,7 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         onWillPop: () async {
           saveList();
+          _allListController.update(['newList', 'fab']);
           _homeController.homeTabController.animateTo(0);
           Get.back();
           return true;
@@ -350,7 +351,7 @@ class _UserListScreenState extends State<UserListScreen> {
       _userList = _allListController.allListMap[widget.listId]!;
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
-      _allListController.getAllList();
+      _allListController.update(['newList', 'fab']);
       _title = _allListController.allListMap[widget.listId]!.listName;
     } else {
       _allListController.isTitleEditable.value =
@@ -375,19 +376,11 @@ class _UserListScreenState extends State<UserListScreen> {
                           color: Colors.orange,
                           size: 40.0.sp,
                         )
-                      : CachedNetworkImage(
+                      : ProtectedCachedNetworkImage(
                           imageUrl:
                               'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item!.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
                           width: 40.w,
                           height: 40.w,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) {
-                            return Container(
-                              color: Colors.orange,
-                              width: 50.w,
-                              height: 50.w,
-                            );
-                          },
                         ),
                 ),
                 const SizedBox(
@@ -967,10 +960,16 @@ class _UserListScreenState extends State<UserListScreen> {
           groupSeparatorBuilder: (String value) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(value),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
+              Text(
+                value,
+                style: TextStyle(
+                  color: AppColors().grey100,
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Divider(
+                thickness: 1.sp,
               )
             ],
           ),
@@ -984,7 +983,7 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 
   void sendList() {
-    NetworkCall().updateUserList(_userList);
+    NetworkCall().updateUserList(_userList, success: true);
     _allListController.allListMap[widget.listId] = _userList
       ..custListStatus = 'sent';
     _allListController.update(['newList', 'sentList']);

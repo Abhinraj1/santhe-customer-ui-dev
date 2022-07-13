@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
+import 'package:resize/resize.dart';
 
 import '../../widgets/sent_tab_widgets/sent_list_item_card.dart';
 
 class UserListItemDetailsPage extends StatelessWidget {
   final UserListModel userList;
+
   const UserListItemDetailsPage({required this.userList, Key? key})
       : super(key: key);
 
@@ -29,10 +32,16 @@ class UserListItemDetailsPage extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(value),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
+              Text(
+                value,
+                style: TextStyle(
+                  color: AppColors().grey100,
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Divider(
+                thickness: 1.sp,
               )
             ],
           );

@@ -69,8 +69,8 @@ class _OfferCardState extends State<OfferCard> {
               if (value != null) {
                 if (value == true) {
                   widget.userList.processStatus = 'accepted';
-                  final AllListController _allListController = Get.find();
                   _allListController.update(['sentList']);
+                  _allListController.getAllList();
                 }
               }
             });

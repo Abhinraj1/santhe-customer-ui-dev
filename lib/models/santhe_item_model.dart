@@ -86,15 +86,15 @@ class Item {
     }
 
     return Item(
-      status: data['status'],
-      updateUser: int.parse(data['updateUser'] ?? '404'),
-      createUser: int.parse(data['createUser'] ?? '404'),
+      status: data['status'] ?? 'active',
+      updateUser: int.parse(data['updateUser'].toString() == 'null' ? '404': data['updateUser'].toString()),
+      createUser: int.parse(data['createUser'].toString() == 'null' ? '404': data['createUser'].toString()),
       itemName: data['itemName'],
       dQuantity: double.parse('${data['dQuantity']}'),
       dItemNotes: data['dItemNotes'],
       dBrandType: data['dBrandType'],
       itemImageId: data['itemImageId'],
-      catId: data['catId'],
+      catId: data['catId'].toString().replaceAll('category/', ''),
       dUnit: data['dUnit'],
       itemId: int.parse('${data['itemId']}'),
       unit: unit,

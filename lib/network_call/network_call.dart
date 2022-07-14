@@ -53,7 +53,7 @@ class NetworkCall{
     var response = await callApi(mode: REST.post, url: Uri.parse(AppUrl.RUN_QUERY), body: jsonEncode(body));
     if (response.statusCode == 200) {
       final condition = json.decode(response.body)[0]['document'] == null;
-      final body = condition ? <NewListResponseModel>[] : newListResponseModelFromJson(response.body);
+      final body = condition ? <NewListResponseModel>[] : newListResponseModelFromJson(response.body.toString());
       return body;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());

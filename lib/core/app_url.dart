@@ -31,7 +31,7 @@ class AppUrl{
   static String GET_MERCH_OFFER_BY_LIST_ID(String listId) => '$_baseCloudFunctions/listevents/$listId/offers';
   static String GET_MERCH_DETAILS(String merchId) => '$_baseUrl/merchant/$merchId';
   static String ACCEPT_OFFER(String listId) => '$_baseUrl/listEvent/$listId?updateMask.fieldPaths=custOfferResponse.custDeal&updateMask.fieldPaths=custOfferResponse.custOfferStatus&updateMask.fieldPaths=merchResponse.merchUpdateTime';
-  static String PROCESS_STATUS(String listId) => '$_baseUrl/customerList/$listId?updateMask.fieldPaths=processStatus';
+  static String PROCESS_STATUS(String listId) => '$_baseUrl/customerList/$listId?updateMask.fieldPaths=processStatus&updateMask.fieldPaths=updateListTime';
   static String SEARCH_QUERY(String searchQuery) => '$_baseCloudFunctions/search/items?searchCriteria=$searchQuery';
   static String UPDATE_DEVICE_TOKEN(String userId) => '$_baseCloudFunctions/customers/$userId/deviceToken';
 }

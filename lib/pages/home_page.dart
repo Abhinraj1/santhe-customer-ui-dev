@@ -151,6 +151,7 @@ class _HomePageState extends State<HomePage>
       ),
       body: TabBarView(
         controller: _homeController.homeTabController,
+        physics: const BouncingScrollPhysics(),
         children: [
           const NewTabPage(),
           OfferTabPage(),

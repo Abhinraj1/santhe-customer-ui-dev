@@ -88,8 +88,7 @@ class AllListController extends GetxController{
   List<UserListModel> getLatestList(int count){
     List<UserListModel> list = allList;
     list.sort((a, b) => b.createListTime.compareTo(a.createListTime));
-    if(list.length <= count) return list;
-    return list.sublist(0, count);
+    return list.take(count).toList();
   }
 
   Future<void> addNewListToDB(String name) async {

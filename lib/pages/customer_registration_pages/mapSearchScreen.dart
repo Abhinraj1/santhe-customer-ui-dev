@@ -130,6 +130,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                   ),
                 ),
                 Visibility(
+                  visible: _controller.text.isEmpty ? false : true,
                   child: Flexible(
                     child: Container(
                       decoration: BoxDecoration(
@@ -207,12 +208,11 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                   : Container()),
                     ),
                   ),
-                  visible: _controller.text.isEmpty ? false : true,
                 ),
                 SizedBox(
                   height: 15.h,
                 ),
-                Visibility(child: const SizedBox(width: double.maxFinite,child: Text("OR",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey),)),visible: _controller.text.isEmpty ? true : false,),
+                Visibility(visible: _controller.text.isEmpty ? true : false,child: const SizedBox(width: double.maxFinite,child: Text("OR",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey),)),),
                 SizedBox(
                   height: 15.h,
                 ),
@@ -253,6 +253,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                   height: 20.h,
                 ),
                 Visibility(
+                  visible: _controller.text.isEmpty ? true : false,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -270,10 +271,9 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                   fontSize: 17),
                             )),
                       ),
-                      Obx(() => Text(userInfoController.address.obs.string + '\n' + userInfoController.howToReach.value))
+                      Obx(() => Text('${userInfoController.address.obs.string}\n${userInfoController.howToReach.value}'))
                     ],
                   ),
-                  visible: _controller.text.isEmpty ? true : false,
                 ),
               ],
             ),

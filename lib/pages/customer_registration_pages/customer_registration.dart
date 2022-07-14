@@ -38,6 +38,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   String userName = '', userEmail = '', userRefferal = '';
   bool mapSelected = false;
   bool donePressed = false;
+  bool loading = false;
 
   @override
   void initState() {
@@ -92,13 +93,13 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: EdgeInsets.only(
-                top: 32.sp, left: 23.sp, right: 23.sp),
+            padding: EdgeInsets.only(top: 32.sp, left: 23.sp, right: 23.sp),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [SizedBox(
-                height: 20.sp + MediaQuery.of(context).padding.top,
-              ),
+              children: [
+                SizedBox(
+                  height: 20.sp + MediaQuery.of(context).padding.top,
+                ),
                 Text(
                   'Register',
                   style: TextStyle(
@@ -154,18 +155,14 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                           ),
                         ),
                         border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.circular(16.0),
+                          borderRadius: BorderRadius.circular(16.0),
                           borderSide: const BorderSide(
-                              width: 1.0,
-                              color: Color(0xffD1D1D1)),
+                              width: 1.0, color: Color(0xffD1D1D1)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.circular(16.0),
+                          borderRadius: BorderRadius.circular(16.0),
                           borderSide: const BorderSide(
-                              width: 1.0,
-                              color: Color(0xffD1D1D1)),
+                              width: 1.0, color: Color(0xffD1D1D1)),
                         ),
                         hintText: '+91-9090909090',
                         hintStyle: TextStyle(
@@ -236,8 +233,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             borderRadius: BorderRadius.circular(
                                 kTextFieldCircularBorderRadius),
                             borderSide: BorderSide(
-                                width: 1.0,
-                                color: AppColors().brandDark),
+                                width: 1.0, color: AppColors().brandDark),
                           ),
                           hintText: 'Your name',
                           hintStyle: kHintStyle,
@@ -268,8 +264,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                           userEmail = value;
                         },
                         validator: (value) {
-                          final RegExp emailRegExp = RegExp(
-                              r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                          final RegExp emailRegExp =
+                              RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                           if (value == null || value.isEmpty) {
                             return 'Please enter your e-mail here';
                           } else if (!emailRegExp.hasMatch(value)) {
@@ -309,8 +305,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             borderRadius: BorderRadius.circular(
                                 kTextFieldCircularBorderRadius),
                             borderSide: BorderSide(
-                                width: 1.0,
-                                color: AppColors().brandDark),
+                                width: 1.0, color: AppColors().brandDark),
                           ),
                           hintText: 'youremail@here.com',
                           hintStyle: kHintStyle,
@@ -337,12 +332,10 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                     GestureDetector(
                       onTap: () async {
                         //remove focus from text fields
-                        FocusScopeNode currentScope =
-                        FocusScope.of(context);
+                        FocusScopeNode currentScope = FocusScope.of(context);
                         if (!currentScope.hasPrimaryFocus &&
                             currentScope.hasFocus) {
-                          FocusManager.instance.primaryFocus
-                              ?.unfocus();
+                          FocusManager.instance.primaryFocus?.unfocus();
                         }
                         if (locationController.lng.value != 0.0 ||
                             locationController.lat.value != 0.0) {
@@ -350,10 +343,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             mapSelected = true;
                           });
                         }
-                        var res = await Get.to(
-                                () => const MapSearchScreen());
+                        var res = await Get.to(() => const MapSearchScreen());
                         if (res == 1) {
-                          setState(() {});
+                          setState(() {
+                            _formKey.currentState?.validate();
+                          });
                         }
                       },
                       child: Container(
@@ -361,9 +355,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                                color: registrationController
-                                    .address.isEmpty &&
-                                    donePressed
+                                color: registrationController.address.isEmpty &&
+                                        donePressed
                                     ? AppColors().red100
                                     : AppColors().grey40,
                                 width: 1.sp)),
@@ -373,26 +366,23 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                         //     right: 10.w,
                         //     bottom: 13.h),
                         child: Row(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             //icon
                             Padding(
-                              padding: registrationController
-                                  .address.value
-                                  .trim() ==
-                                  ''
-                                  ? const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 6)
-                                  : const EdgeInsets.symmetric(
-                                  vertical: 35.0, horizontal: 6),
+                              padding:
+                                  registrationController.address.value.trim() ==
+                                          ''
+                                      ? const EdgeInsets.symmetric(
+                                          vertical: 12.0, horizontal: 6)
+                                      : const EdgeInsets.symmetric(
+                                          vertical: 35.0, horizontal: 6),
                               child: Container(
                                   height: 40.w,
                                   width: 40.w,
                                   decoration: BoxDecoration(
                                       color: AppColors().brandDark,
-                                      borderRadius:
-                                      BorderRadius.circular(20)),
+                                      borderRadius: BorderRadius.circular(20)),
                                   child: Center(
                                     child: Icon(
                                       Icons.home,
@@ -407,21 +397,17 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             //text
                             Expanded(
                               child: Obx(() => Text(
-                                registrationController
-                                    .address.value
-                                    .trim() ==
-                                    ''
-                                    ? 'Select Address'
-                                    : '${registrationController
-                                    .address.value} ${registrationController
-                                        .howToReach.value}',
-                                style: registrationController
-                                    .address.value
-                                    .trim() ==
-                                    ''
-                                    ? kHintStyle
-                                    : kTextInputStyle,
-                              )),
+                                    registrationController.address.value
+                                                .trim() ==
+                                            ''
+                                        ? 'Select Address'
+                                        : '${registrationController.address.value} ${registrationController.howToReach.value}',
+                                    style: registrationController.address.value
+                                                .trim() ==
+                                            ''
+                                        ? kHintStyle
+                                        : kTextInputStyle,
+                                  )),
                             )
                           ],
                         ),
@@ -432,13 +418,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                     ),
                     Visibility(
                       visible:
-                      registrationController.address.isEmpty &&
-                          donePressed,
+                          registrationController.address.isEmpty && donePressed,
                       child: Text(
                         'Please Enter your Address',
                         style: AppTheme().normal400(12).copyWith(
-                            color: const Color.fromARGB(
-                                255, 214, 77, 93)),
+                            color: const Color.fromARGB(255, 214, 77, 93)),
                       ),
                     ),
                   ],
@@ -446,76 +430,84 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 Padding(
                   padding: EdgeInsets.only(top: 30.sp),
                   child: SizedBox(
-                    width: 244.sp,
-                    height: 50.sp,
-                    child: MaterialButton(
-                      elevation: 0.0,
-                      highlightElevation: 0.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0)),
-                      color: Colors.orange,
-                      onPressed: () async {
-                        setState(() {
-                          donePressed = true;
-                        });
-                        if (_formKey.currentState!.validate()) {
-                          //final otp check
-                          bool isUserLoggedin = profileController.isLoggedIn;
+                    width: loading ? 30.sp : 244.sp,
+                    height: loading ? 30.sp : 50.sp,
+                    child: loading
+                        ? const CircularProgressIndicator()
+                        : MaterialButton(
+                            elevation: 0.0,
+                            highlightElevation: 0.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0)),
+                            color: Colors.orange,
+                            onPressed: () async {
+                              setState(() {
+                                donePressed = true;
+                                loading = true;
+                              });
+                              if (_formKey.currentState!.validate()) {
+                                //final otp check
+                                bool isUserLoggedin =
+                                    profileController.isLoggedIn;
 
-                          if (isUserLoggedin) {
-                            int userPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+                                if (isUserLoggedin) {
+                                  int userPhone = int.parse(AppHelpers()
+                                      .getPhoneNumberWithoutCountryCode);
 
-                            //todo add how to reach howToReach
-                            User currentUser = User(
-                                address: registrationController
-                                    .address.value,
-                                emailId: userEmail,
-                                lat: registrationController.lat.value,
-                                lng: registrationController.lng.value,
-                                pincode: int.parse(
-                                    registrationController
-                                        .pinCode.value),
-                                phoneNumber: userPhone,
-                                custId: userPhone,
-                                custName: userName,
-                                custRatings: 5.0,
-                                custReferal: 0,
-                                custStatus: 'active',
-                                howToReach: registrationController
-                                    .howToReach.value,
-                                custPlan: 'planA',
-                                custLoginTime: DateTime.now());
+                                  //todo add how to reach howToReach
+                                  User currentUser = User(
+                                      address:
+                                          registrationController.address.value,
+                                      emailId: userEmail,
+                                      lat: registrationController.lat.value,
+                                      lng: registrationController.lng.value,
+                                      pincode: int.parse(
+                                          registrationController.pinCode.value),
+                                      phoneNumber: userPhone,
+                                      custId: userPhone,
+                                      custName: userName,
+                                      custRatings: 5.0,
+                                      custReferal: 0,
+                                      custStatus: 'active',
+                                      howToReach: registrationController
+                                          .howToReach.value,
+                                      custPlan: 'planA',
+                                      custLoginTime: DateTime.now());
 
-                            //todo add to firebase
-                            int userAdded = await apiController
-                                .addCustomer(currentUser);
-                            if (userAdded == 1) {
-                              //add to Hive
-                              await profileController.initialise();
-                              Get.offAll(() => const HomePage(),
-                                  transition: Transition.fadeIn);
-                            } else {
-                              log('error occurred');
-                              Get.offAll(() => const OnboardingPage());
-                            }
-                          } else {
-                            Get.offAll(() => const LoginScreen(),
-                                transition: Transition.fadeIn);
-                          }
-                        }
-                      },
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          'Done',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18.sp,
+                                  int userAdded = await apiController
+                                      .addCustomer(currentUser);
+
+                                  setState(() {
+                                    loading = false;
+                                  });
+
+                                  if (userAdded == 1) {
+                                    //add to Hive
+                                    await profileController.initialise();
+                                    Get.offAll(() => const HomePage(),
+                                        transition: Transition.fadeIn);
+                                  } else {
+                                    log('error occurred');
+                                    Get.offAll(() => const OnboardingPage());
+                                  }
+                                } else {
+                                  Get.offAll(() => const LoginScreen(),
+                                      transition: Transition.fadeIn);
+                                }
+                              }
+                            },
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'Done',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18.sp,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ),
                 ),
                 Padding(

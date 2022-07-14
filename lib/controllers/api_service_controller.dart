@@ -1038,7 +1038,11 @@ class APIs extends GetxController {
     final String url = AppUrl.PROCESS_STATUS(listId.toString());
     var body = {
       "fields": {
-        "processStatus": {"stringValue": "accepted"}
+        "processStatus": {"stringValue": "accepted"},
+        "updateListTime": {
+          "timestampValue":
+              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+        }
       }
     };
 
@@ -1131,11 +1135,14 @@ class APIs extends GetxController {
       apiKey: AppUrl.SEARCH_API_KEY,
     );
 
-    final query = algolia.instance.index('santhe').query(searchQuery).filters('status:active');
+    final query = algolia.instance
+        .index('santhe')
+        .query(searchQuery)
+        .filters('status:active');
 
     final resp = await query.getObjects();
 
-    for(var i in resp.hits){
+    for (var i in resp.hits) {
       searchResults.add(Item.fromJson(i.data));
       // print(i.data);
     }

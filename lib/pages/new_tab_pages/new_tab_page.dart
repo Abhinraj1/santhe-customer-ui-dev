@@ -390,7 +390,10 @@ class _NewTabPageState extends State<NewTabPage>
                             ],
                           ),
                         ),
-                        SizedBox(height: 30.sp),
+                        SizedBox(
+                            height: _type == NewListType.importFromOld
+                                ? 90.sp
+                                : 30.sp),
                         SizedBox(
                           width: 221.sp,
                           height: 50.sp,
@@ -551,7 +554,7 @@ class _NewTabPageState extends State<NewTabPage>
             ),
           ),
           //If it's last item, remove divider.
-          if (element != list[maxLength - 1])
+          if (element != list.last)
             const DropdownMenuItem<String>(
               enabled: false,
               child: Divider(),

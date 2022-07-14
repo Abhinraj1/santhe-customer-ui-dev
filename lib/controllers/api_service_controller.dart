@@ -130,11 +130,12 @@ class APIs extends GetxController {
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print(response.body);
       List<ItemModel> listItems = [];
-      for (var map in data[0]['items']) {
+      for (var map in data['items']) {
         listItems.add(ItemModel(
           brandType: map['brandType'] ?? '',
-          itemId: map['itemId']['_path']['segments'][1],
+          itemId: map['itemId'],
           // need to
           itemNotes: map['itemNotes'] ?? '',
           itemName: map['itemName'],
@@ -149,22 +150,22 @@ class APIs extends GetxController {
         ));
       }
       userList = AnswerList(
-        date: data[0]['custOfferResponse']['custUpdateTime'],
-        custOfferStatus: data[0]['custOfferResponse']['custOfferStatus'],
+        date: data['custOfferResponse']['custUpdateTime'],
+        custOfferStatus: data['custOfferResponse']['custOfferStatus'],
         custId: listEventId.substring(10, 20),
         items: listItems,
         listId: listEventId.substring(10, listEventId.length),
-        custStatus: data[0]['custStatus'],
+        custStatus: data['custStatus'],
         merchId: listEventId.substring(0, 10),
-        custDistance: data[0]['custDistance'].toString(),
-        contactEnabled: data[0]['contactEnabled'],
-        chatEnabled: data[0]['chatEnabled'],
+        custDistance: data['custDistance'].toString(),
+        contactEnabled: data['contactEnabled'],
+        chatEnabled: data['chatEnabled'],
         listEventId: listEventId,
         merchUpdateTime:
-            DateTime.parse(data[0]['merchResponse']['merchUpdateTime']),
+            DateTime.parse(data['merchResponse']['merchUpdateTime']),
         custUpdateTime:
-            DateTime.parse(data[0]['custOfferResponse']['custUpdateTime']),
-        requestForDay: data[0]['requestForDay'].toString(),
+            DateTime.parse(data['custOfferResponse']['custUpdateTime']),
+        requestForDay: data['requestForDay'].toString(),
       );
       return userList;
     } else {

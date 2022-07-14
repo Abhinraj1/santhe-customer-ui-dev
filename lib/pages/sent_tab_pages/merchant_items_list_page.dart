@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
+import 'package:intl/intl.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -257,7 +258,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                             .toString(),
                                                     merchantTitle:
                                                         // 'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
-                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateTime.now()}',
+                                                        'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
                                                   ),
                                                   type: PageTransitionType
                                                       .rightToLeft),

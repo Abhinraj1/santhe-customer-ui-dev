@@ -308,6 +308,7 @@ class _ChatScreenState extends State<ChatScreen> {
           "notification": <String, dynamic>{
             "body": content,
             "title": 'New message from customer',
+            "priority": "high",
           },
           //'registration_ids': ['token1', 'token2'], // Multiple id
           'to': merchantToken, // single id
@@ -342,6 +343,7 @@ class _ChatScreenState extends State<ChatScreen> {
             "notification": <String, dynamic>{
               "body": content,
               "title": 'New message from customer',
+              "priority": "high",
             },
             'registration_ids': pairs['data'].values.toList(), // Multiple id
             //'to': merchantToken, // single id

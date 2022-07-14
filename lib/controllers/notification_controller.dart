@@ -29,10 +29,9 @@ class Notifications {
       NotificationController.instance;
 
   fcmInit() async {
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) async {
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) async {
       if (message != null) {
+        //new notification
         _notificationController.notificationData.value = message;
         _notificationController.fromNotification = true;
         await navigateNotification(message);
@@ -54,9 +53,10 @@ class Notifications {
           NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
-                channel.name,// title
-                importance: Importance.max,
+                channel.name,
                 icon: '@mipmap/ic_launcher',
+                importance: Importance.max,
+                priority: Priority.max,
                 styleInformation: const BigTextStyleInformation(''),
               ),
               iOS: const IOSNotificationDetails()),
@@ -119,8 +119,7 @@ class Notifications {
         AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,

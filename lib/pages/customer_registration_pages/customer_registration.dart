@@ -477,10 +477,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                   int userAdded = await apiController
                                       .addCustomer(currentUser);
 
-                                  setState(() {
-                                    loading = false;
-                                  });
-
                                   if (userAdded == 1) {
                                     //add to Hive
                                     await profileController.initialise();
@@ -495,6 +491,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       transition: Transition.fadeIn);
                                 }
                               }
+                              setState(() {
+                                loading = false;
+                              });
                             },
                             child: FittedBox(
                               fit: BoxFit.scaleDown,

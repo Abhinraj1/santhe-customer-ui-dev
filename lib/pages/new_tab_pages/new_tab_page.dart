@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
 import '../../core/app_colors.dart';
 import '../../models/new_list/user_list_model.dart';
@@ -27,6 +28,7 @@ class _NewTabPageState extends State<NewTabPage>
   NewListType? _type = NewListType.startFromNew;
 
   final AllListController _allListController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   String? selectedValue;
 
@@ -96,47 +98,79 @@ class _NewTabPageState extends State<NewTabPage>
     );
   }
 
-  Widget _emptyList() => RefreshIndicator(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 23.h),
-            Image.asset(
-              'assets/new_tab_image.png',
-              height: 45.vh,
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                'Get started by easily creating your\nshopping list',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.sp,
-                    height: 2.sp,
-                    color: kTextGrey),
+  Widget _emptyList() => Obx(
+        () => RefreshIndicator(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 23.h),
+                  Image.asset(
+                    'assets/new_tab_image.png',
+                    height: 45.vh,
+                  ),
+                  _profileController.isOperational.value
+                      ? Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            'Get started by easily creating your\nshopping list',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16.sp,
+                                height: 2.sp,
+                                color: kTextGrey),
+                          ),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              'We don\'t serve in your location yet. As soon as we have active merchants in your locality, you will be able to send your lists to shop',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16.sp,
+                                  height: 2.sp,
+                                  color: kTextGrey),
+                            ),
+                          ),
+                        ),
+                  SizedBox(
+                    height:
+                        _profileController.isOperational.value ? 30.h : 20.h,
+                  ),
+                  if (!_profileController.isOperational.value)
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        'Create and manage your shopping list',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                            height: 2.sp,
+                            color: kTextGrey),
+                      ),
+                    ),
+                  Align(
+                    alignment: const Alignment(-0.2, 0.5),
+                    child: SizedBox(
+                      width: 50.vw,
+                      child: SvgPicture.asset(
+                        'assets/new_tab_arrow.svg',
+                        color: Colors.orange,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(
-              height: 30.h,
-            ),
-            Align(
-              alignment: const Alignment(-0.2, 0.5),
-              child: SizedBox(
-                width: 50.vw,
-                child: SvgPicture.asset(
-                  'assets/new_tab_arrow.svg',
-                  color: Colors.orange,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      onRefresh: () async => await _allListController.getAllList());
+            onRefresh: () async => await _allListController.getAllList()),
+      );
 
   Widget _bottomSheet(BuildContext context) => Padding(
         padding:

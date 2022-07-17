@@ -56,8 +56,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     currentUser = profileController.customerDetails ?? fallback_error_customer;
     _userNameController =
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
-    _userEmailController =
-        TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+    _userEmailController = TextEditingController(
+        text: currentUser?.emailId ?? 'johndoe@gmail.com');
     super.initState();
   }
 
@@ -74,8 +74,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     }
     if (registrationController.lat.value == 0.0 ||
         registrationController.lng.value == 0.0) {
-      registrationController.lat.value = double.parse(currentUser?.lat ?? '0.0');
-      registrationController.lng.value = double.parse(currentUser?.lng ?? '0.0');
+      registrationController.lat.value =
+          double.parse(currentUser?.lat ?? '0.0');
+      registrationController.lng.value =
+          double.parse(currentUser?.lng ?? '0.0');
     }
     if (registrationController.pinCode.value.isEmpty) {
       registrationController.pinCode.value =
@@ -547,9 +549,13 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         });
                                         if (_formKey.currentState!.validate()) {
                                           if (profileController.isLoggedIn) {
-                                            CustomerModel? currentUser = profileController.customerDetails ?? fallback_error_customer;
+                                            CustomerModel? currentUser =
+                                                profileController
+                                                        .customerDetails ??
+                                                    fallback_error_customer;
 
-                                            int userPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+                                            int userPhone = int.parse(AppHelpers()
+                                                .getPhoneNumberWithoutCountryCode);
 
                                             if (userPhone == 404) {
                                               Get.off(
@@ -576,8 +582,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                 custId: userPhone,
                                                 custName:
                                                     _userNameController.text,
-                                                custRatings:
-                                                    double.parse(currentUser.customerRatings),
+                                                custRatings: double.parse(
+                                                    currentUser
+                                                        .customerRatings),
                                                 custReferal: 0000,
                                                 custStatus: 'active',
                                                 howToReach:
@@ -592,10 +599,14 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                     .updateCustomerInfo(
                                                         userPhone, updatedUser);
                                             if (userUpdated == 1) {
-                                              await profileController.getCustomerDetailsInit();
+                                              await profileController
+                                                  .getCustomerDetailsInit();
 //since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
                                               successMsg('Profile Updated',
                                                   'Your profile information was updated successfully.');
+
+                                              await profileController
+                                                  .getOperationalStatus();
 
 //go back after successful user profile edit, Get.back() didn't work for some reason
                                               Navigator.pop(context);
@@ -608,8 +619,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           } else {
                                             errorMsg('Verify Number First',
                                                 'Please Verify Your Phone Number before continuing...');
-                                            profileController.isRegistered = false;
-                                            profileController.isLoggedIn = false;
+                                            profileController.isRegistered =
+                                                false;
+                                            profileController.isLoggedIn =
+                                                false;
                                             Get.offAll(
                                                 () => const LoginScreen(),
                                                 transition: Transition.fadeIn);

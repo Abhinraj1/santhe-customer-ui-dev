@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:get/get.dart';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
-
 class LocationController extends GetxController {
   RxDouble lat = 0.0.obs;
   RxDouble lng = 0.0.obs;
@@ -33,19 +31,24 @@ class LocationController extends GetxController {
     }
 
     permission = await Geolocator.checkPermission();
+
+    log(permission.toString());
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        Get.back();
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      Get.back();
     }
 
+    if(permission == LocationPermission.unableToDetermine){
+      Get.back();
+    }
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition(

@@ -329,7 +329,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                                       .merchTotalPrice,
                                                   merchantTitle:
                                                       // 'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
-                                                  'Request ${widget.currentMerchantOffer.requestForDay} of ${DateTime.now()}',
+                                                  'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
                                                   listEventId: merchantResponse!
                                                           .fields
                                                           .merchId

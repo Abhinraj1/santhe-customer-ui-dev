@@ -38,6 +38,9 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _sendMessage = true;
   final TextEditingController _textEditingController = TextEditingController();
 
+  final tokenHandler = Get.find<ProfileController>();
+  late final bearerToken = 'Bearer ${tokenHandler.urlToken}';
+
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -305,6 +308,7 @@ class _ChatScreenState extends State<ChatScreen> {
           "notification": <String, dynamic>{
             "body": content,
             "title": 'New message from customer',
+            "priority": "high",
           },
           //'registration_ids': ['token1', 'token2'], // Multiple id
           'to': merchantToken, // single id
@@ -323,7 +327,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendNotificationToAll(String content){
-    http.get(Uri.parse('https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getNotificationToken?userId=${widget.listEventId.substring(0, 10)}&userType=merchant')).then((value) async {
+    http.get(Uri.parse('https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getNotificationToken?userId=${widget.listEventId.substring(0, 10)}&userType=merchant'), headers: {
+      "authorization": bearerToken
+    }).then((value) async {
       Map<dynamic, dynamic> pairs = jsonDecode(value.body);
       var url = 'https://fcm.googleapis.com/fcm/send';
       await http.post(
@@ -337,6 +343,7 @@ class _ChatScreenState extends State<ChatScreen> {
             "notification": <String, dynamic>{
               "body": content,
               "title": 'New message from customer',
+              "priority": "high",
             },
             'registration_ids': pairs['data'].values.toList(), // Multiple id
             //'to': merchantToken, // single id

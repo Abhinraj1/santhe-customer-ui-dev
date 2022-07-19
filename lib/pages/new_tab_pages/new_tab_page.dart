@@ -140,7 +140,7 @@ class _NewTabPageState extends State<NewTabPage>
                         ),
                   SizedBox(
                     height:
-                        _profileController.isOperational.value ? 30.h : 50.h,
+                        _profileController.isOperational.value ? 30.h : 45.h,
                   ),
                   if (!_profileController.isOperational.value)
                     Align(

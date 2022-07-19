@@ -140,7 +140,7 @@ class _NewTabPageState extends State<NewTabPage>
                         ),
                   SizedBox(
                     height:
-                        _profileController.isOperational.value ? 30.h : 20.h,
+                        _profileController.isOperational.value ? 30.h : 50.h,
                   ),
                   if (!_profileController.isOperational.value)
                     Align(
@@ -160,7 +160,9 @@ class _NewTabPageState extends State<NewTabPage>
                     child: SizedBox(
                       width: 50.vw,
                       child: SvgPicture.asset(
-                        'assets/new_tab_arrow.svg',
+                        _profileController.isOperational.value
+                            ? 'assets/new_tab_arrow.svg'
+                            : 'assets/non_operational_arrow.svg',
                         color: Colors.orange,
                         fit: BoxFit.contain,
                       ),
@@ -447,7 +449,7 @@ class _NewTabPageState extends State<NewTabPage>
                                     if (listName.isNotEmpty &&
                                         _type == NewListType.startFromNew) {
                                       if (_formKey.currentState!.validate()) {
-                                        if (_allListController
+                                        if (await _allListController
                                             .isListAlreadyExist(listName)) {
                                           Get.snackbar(
                                             '',

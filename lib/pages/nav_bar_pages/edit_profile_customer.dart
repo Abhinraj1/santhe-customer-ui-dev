@@ -13,6 +13,7 @@ import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart
 import 'package:get/get.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
+import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
 import '../../controllers/location_controller.dart';
 import '../../controllers/registrationController.dart';
@@ -492,9 +493,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                             .trim() ==
                                                         ''
                                                     ? 'Select Address'
-                                                    : '${registrationController
-                                                            .address.value} ${registrationController
-                                                            .howToReach.value}',
+                                                    : registrationController
+                                                            .address.value +
+                                                        ' ' +
+                                                        registrationController
+                                                            .howToReach.value,
                                                 style: registrationController
                                                             .address.value
                                                             .trim() ==
@@ -555,8 +558,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                   () => const LoginScreen());
                                             }
 
-                                            log('------>>>>>>>>${registrationController
-                                                    .pinCode.value}');
+                                            log('------>>>>>>>>' +
+                                                registrationController
+                                                    .pinCode.value);
                                             //todo add how to reach howToReach
                                             User updatedUser = User(
                                                 address: registrationController
@@ -591,18 +595,28 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                         userPhone, updatedUser);
                                             if (userUpdated == 1) {
                                               await profileController.getCustomerDetailsInit();
+//since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
                                               successMsg('Profile Updated',
                                                   'Your profile information was updated successfully.');
+
+                                              await profileController
+                                                  .getOperationalStatus();
+
+//go back after successful user profile edit, Get.back() didn't work for some reason
                                               Navigator.pop(context);
                                             } else {
                                               errorMsg('Connectivity Error',
                                                   'Some connectivity error has occurred, please try again later!');
+                                              // Get.offAll(
+                                              //     () => const OnboardingPage());
                                             }
                                           } else {
                                             errorMsg('Verify Number First',
                                                 'Please Verify Your Phone Number before continuing...');
-                                            profileController.isRegistered = false;
-                                            profileController.isLoggedIn = false;
+                                            profileController.isRegistered =
+                                                false;
+                                            profileController.isLoggedIn =
+                                                false;
                                             Get.offAll(
                                                 () => const LoginScreen(),
                                                 transition: Transition.fadeIn);

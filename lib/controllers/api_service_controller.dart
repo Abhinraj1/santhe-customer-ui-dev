@@ -52,6 +52,7 @@ class APIs extends GetxController {
     final tokenHandler = Get.find<ProfileController>();
     final token = tokenHandler.urlToken;
     final header = {"authorization": 'Bearer $token'};
+    log(header.toString());
     // case 1: get
     // case 2: post
     // case 3: update
@@ -122,6 +123,34 @@ class APIs extends GetxController {
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
     throw NoInternetError();
+  }
+
+  //get
+  Future<void> getCheckRadius(int custId) async {
+    final String url = AppUrl.CHECK_RADIUS(custId.toString());
+
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      final merchCount = data['nearbyMerchants'];
+      final profileController = Get.find<ProfileController>();
+
+      if (merchCount > 0) {
+        profileController.isOperational.value = true;
+      } else {
+        profileController.isOperational.value = false;
+      }
+
+      // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
+      // return 1;
+    } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
+      log('Request failed with status: ${response.statusCode}.');
+      // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      // return 0;
+    }
   }
 
   Future<AnswerList?> getListByListEventId(String listEventId) async {

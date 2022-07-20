@@ -80,7 +80,7 @@ class UserList extends HiveObject {
         custOfferWaitTime:
             DateTime.parse(data['custOfferWaitTime']['timestampValue']),
         updateListTime:
-            DateTime.parse(data['updateListTime']['timestampValue']),
+            DateTime.parse(data['listUpdateTime']['timestampValue']),
       );
     } catch (e) {
       return UserList(

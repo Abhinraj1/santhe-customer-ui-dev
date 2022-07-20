@@ -8,11 +8,13 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
+import '../../constants.dart';
 import '../../controllers/boxes_controller.dart';
 import '../../controllers/home_controller.dart';
 import '../../core/app_colors.dart';
@@ -47,6 +49,7 @@ class _UserListScreenState extends State<UserListScreen> {
   final List<Category> _categoryList = Boxes.getCategoriesDB().values.toList();
 
   final HomeController _homeController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -264,13 +267,15 @@ class _UserListScreenState extends State<UserListScreen> {
                             padding: EdgeInsets.only(top: 15.sp, bottom: 0.0),
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                '${_userList.items.length} ${_userList.items.length < 2 ? 'Item' : 'Items'}',
-                                style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54),
-                              ),
+                              child: _profileController.isOperational.value
+                                  ? Text(
+                                      '${_userList.items.length} ${_userList.items.length < 2 ? 'Item' : 'Items'}',
+                                      style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black54),
+                                    )
+                                  : null,
                             ),
                           ),
                           Expanded(
@@ -289,9 +294,12 @@ class _UserListScreenState extends State<UserListScreen> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     //send to shops
-                                    _sendToShopsButton(),
+                                    if (_profileController.isOperational.value)
+                                      _sendToShopsButton(),
                                     //categories page
-                                    _iconCategoryButton(),
+                                    _profileController.isOperational.value
+                                        ? _iconCategoryButton()
+                                        : _fullCategoryButton(),
                                   ],
                                 )
                               : _fullCategoryButton(),
@@ -554,57 +562,72 @@ class _UserListScreenState extends State<UserListScreen> {
         },
       );
 
-  Widget _emptyList() => SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 20.vw),
-                  child: SizedBox(
-                    height: 24.vh,
+  Widget _emptyList() => Obx(
+        () => SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 20.vw),
+                    child: SizedBox(
+                      height: _profileController.isOperational.value
+                          ? 24.vh
+                          : 18.vh,
+                      child: SvgPicture.asset(
+                        'assets/search_items_pointer_arrow.svg',
+                        width: 50.vw,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'Add your item by searching',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              if (!_profileController.isOperational.value)
+                Text(
+                  'We don\'t serve in your location yet. As soon as we have active merchants in your locality, you will be able to send your lists to shops. For now, you can create and manage your shopping lists on Santhe',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16.sp,
+                      height: 2.sp,
+                      color: kTextGrey),
+                ),
+              Column(
+                children: [
+                  const Text(
+                    'Add your item from catalog',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(
+                    height:
+                        _profileController.isOperational.value ? 20.vh : 12.vh,
                     child: SvgPicture.asset(
-                      'assets/search_items_pointer_arrow.svg',
-                      width: 50.vw,
+                      'assets/item_catalog_arrow.svg',
+                      width: 70.vw,
                       color: Colors.orange,
                     ),
                   ),
-                ),
-                const Text(
-                  'Add your item by searching',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                const Text(
-                  'Add your item from catalog',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(
-                  height: 20.vh,
-                  child: SvgPicture.asset(
-                    'assets/item_catalog_arrow.svg',
-                    width: 70.vw,
-                    color: Colors.orange,
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       );
 

@@ -45,7 +45,7 @@ dependencies:
   easy_debounce: ^2.0.2+1
   flutter_local_notifications: ^9.4.0
   resize: ^1.0.0
-  firebase_auth: ^3.4.1
+  firebase_auth: ^3.4.2
   dartz: ^0.10.1
   equatable: ^2.0.3
   device_info_plus: ^4.0.0

@@ -13,7 +13,6 @@ import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart
 import 'package:get/get.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
-import '../../controllers/boxes_controller.dart';
 import '../../controllers/error_user_fallback.dart';
 import '../../controllers/location_controller.dart';
 import '../../controllers/registrationController.dart';
@@ -56,8 +55,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     currentUser = profileController.customerDetails ?? fallback_error_customer;
     _userNameController =
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
-    _userEmailController =
-        TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+    _userEmailController = TextEditingController(
+        text: currentUser?.emailId ?? 'johndoe@gmail.com');
     super.initState();
   }
 
@@ -74,8 +73,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     }
     if (registrationController.lat.value == 0.0 ||
         registrationController.lng.value == 0.0) {
-      registrationController.lat.value = double.parse(currentUser?.lat ?? '0.0');
-      registrationController.lng.value = double.parse(currentUser?.lng ?? '0.0');
+      registrationController.lat.value =
+          double.parse(currentUser?.lat ?? '0.0');
+      registrationController.lng.value =
+          double.parse(currentUser?.lng ?? '0.0');
     }
     if (registrationController.pinCode.value.isEmpty) {
       registrationController.pinCode.value =
@@ -493,11 +494,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                             .trim() ==
                                                         ''
                                                     ? 'Select Address'
-                                                    : registrationController
-                                                            .address.value +
-                                                        ' ' +
-                                                        registrationController
-                                                            .howToReach.value,
+                                                    : '${registrationController
+                                                            .address.value} ${registrationController
+                                                            .howToReach.value}',
                                                 style: registrationController
                                                             .address.value
                                                             .trim() ==
@@ -549,18 +548,21 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         });
                                         if (_formKey.currentState!.validate()) {
                                           if (profileController.isLoggedIn) {
-                                            CustomerModel? currentUser = profileController.customerDetails ?? fallback_error_customer;
+                                            CustomerModel? currentUser =
+                                                profileController
+                                                        .customerDetails ??
+                                                    fallback_error_customer;
 
-                                            int userPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+                                            int userPhone = int.parse(AppHelpers()
+                                                .getPhoneNumberWithoutCountryCode);
 
                                             if (userPhone == 404) {
                                               Get.off(
                                                   () => const LoginScreen());
                                             }
 
-                                            log('------>>>>>>>>' +
-                                                registrationController
-                                                    .pinCode.value);
+                                            log('------>>>>>>>>${registrationController
+                                                    .pinCode.value}');
                                             //todo add how to reach howToReach
                                             User updatedUser = User(
                                                 address: registrationController
@@ -578,8 +580,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                 custId: userPhone,
                                                 custName:
                                                     _userNameController.text,
-                                                custRatings:
-                                                    double.parse(currentUser.customerRatings),
+                                                custRatings: double.parse(
+                                                    currentUser
+                                                        .customerRatings),
                                                 custReferal: 0000,
                                                 custStatus: 'active',
                                                 howToReach:
@@ -594,8 +597,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                     .updateCustomerInfo(
                                                         userPhone, updatedUser);
                                             if (userUpdated == 1) {
-                                              await profileController.getCustomerDetailsInit();
-//since update user calls getCustomerInfo which auto adds to hive DB no need to add data to hive DB.
+                                              await profileController
+                                                  .getCustomerDetailsInit();
                                               successMsg('Profile Updated',
                                                   'Your profile information was updated successfully.');
 
@@ -607,8 +610,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             } else {
                                               errorMsg('Connectivity Error',
                                                   'Some connectivity error has occurred, please try again later!');
-                                              // Get.offAll(
-                                              //     () => const OnboardingPage());
                                             }
                                           } else {
                                             errorMsg('Verify Number First',

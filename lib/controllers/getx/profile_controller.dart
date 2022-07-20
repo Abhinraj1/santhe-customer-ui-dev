@@ -11,9 +11,10 @@ import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 
-class ProfileController extends GetxController{
-
+class ProfileController extends GetxController {
   CustomerModel? customerDetails;
+
+  RxBool isOperational = false.obs;
 
   bool isRegistered = false;
 
@@ -27,45 +28,54 @@ class ProfileController extends GetxController{
 
   Future<void> initialiseUrlToken({bool override = false}) async {
     final user = FirebaseAuth.instance.currentUser;
-    if(user!=null){
+    if (user != null) {
       isLoggedIn = true;
       final tokenId = await user.getIdToken();
       _urlToken = tokenId;
-    }else{
+    } else {
       isLoggedIn = false;
-      if(!override){
-        Get.offAll(()=>const LoginScreen());
+      if (!override) {
+        Get.offAll(() => const LoginScreen());
       }
     }
   }
 
-  void startTimer(){
-    refreshToken = Timer.periodic(const Duration(minutes: 1), (_) => initialiseUrlToken());
+  void startTimer() {
+    refreshToken =
+        Timer.periodic(const Duration(minutes: 1), (_) => initialiseUrlToken());
   }
 
-  Future<void> initialise({bool startApp = false}) async{
+  Future<void> initialise({bool startApp = false}) async {
     await initialiseUrlToken(override: startApp);
-    if(isLoggedIn) await getCustomerDetailsInit();
-    if(isLoggedIn&&isRegistered) await cacheRefresh();
+    if (isLoggedIn) await getCustomerDetailsInit();
+    if (isLoggedIn && isRegistered) await cacheRefresh();
+    if (isLoggedIn && isRegistered) await getOperationalStatus();
   }
 
   Future<void> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
-    final result = await apiController.getCustomerInfo(int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
-    if(result==0){
+    final result = await apiController.getCustomerInfo(
+        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+    if (result == 0) {
       isRegistered = false;
-    }else{
+    } else {
       isRegistered = true;
     }
   }
 
-  set getCustomerDetails(CustomerModel customer){
+  Future<void> getOperationalStatus() async {
+    final apiController = Get.find<APIs>();
+    await apiController.getCheckRadius(
+        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+    log("Is Operational: " + isOperational.toString());
+  }
+
+  set getCustomerDetails(CustomerModel customer) {
     customerDetails = customer;
     update(['navDrawer']);
   }
 
   Future<void> cacheRefresh() async {
-
     final apiController = Get.find<APIs>();
 
     CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
@@ -91,12 +101,11 @@ class ProfileController extends GetxController{
 
     //catUpdate checking
     if (box
-        .get('cacheRefresh')
-        ?.catUpdate
-        .isBefore(newCacheRefresh.catUpdate) ??
+            .get('cacheRefresh')
+            ?.catUpdate
+            .isBefore(newCacheRefresh.catUpdate) ??
         true) {
-      log(
-          '========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
+      log('========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
 //calling api and saving to db (api code has db write code integrated)
       await apiController.getAllCategories();
       log('>>>>>>>>>>>>>>fetching cat');
@@ -105,9 +114,9 @@ class ProfileController extends GetxController{
 
     //faq cache check and storing
     if (box
-        .get('cacheRefresh')
-        ?.custFaqUpdate
-        .isBefore(newCacheRefresh.custFaqUpdate) ??
+            .get('cacheRefresh')
+            ?.custFaqUpdate
+            .isBefore(newCacheRefresh.custFaqUpdate) ??
         true) {
       //get & store faq data
       log('-----------------Updating FAQ------------------');
@@ -116,16 +125,16 @@ class ProfileController extends GetxController{
 
     // aboutUs cache check and storing
     if (box
-        .get('cacheRefresh')
-        ?.aboutUsUpdate
-        .isBefore(newCacheRefresh.aboutUsUpdate) ??
+            .get('cacheRefresh')
+            ?.aboutUsUpdate
+            .isBefore(newCacheRefresh.aboutUsUpdate) ??
         true) {
       log('-----------------Updating About Us------------------');
       await apiController.getCommonContent();
     } else if (box
-        .get('cacheRefresh')
-        ?.termsUpdate
-        .isBefore(newCacheRefresh.termsUpdate) ??
+            .get('cacheRefresh')
+            ?.termsUpdate
+            .isBefore(newCacheRefresh.termsUpdate) ??
         true) {
       log('-----------------Updating Terms & Condition------------------');
       await apiController.getCommonContent();
@@ -133,9 +142,9 @@ class ProfileController extends GetxController{
 
     //item cache check and storing
     if (box
-        .get('cacheRefresh')
-        ?.itemUpdate
-        .isBefore(newCacheRefresh.itemUpdate) ??
+            .get('cacheRefresh')
+            ?.itemUpdate
+            .isBefore(newCacheRefresh.itemUpdate) ??
         true) {
       log('-----------------Refreshing Item Image------------------');
       // await apiController.getAllItems();

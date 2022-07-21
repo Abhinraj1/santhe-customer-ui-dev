@@ -202,6 +202,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             return null;
                           }
                         },
+                        maxLength: 45,
                         style: kTextInputStyle,
                         decoration: InputDecoration(
                           prefixIcon: Padding(
@@ -274,6 +275,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             return null;
                           }
                         },
+                        maxLength: 60,
                         style: kTextInputStyle,
                         decoration: InputDecoration(
                           prefixIcon: Padding(

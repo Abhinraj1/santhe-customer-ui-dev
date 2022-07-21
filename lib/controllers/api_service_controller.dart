@@ -485,9 +485,9 @@ class APIs extends GetxController {
           "timestampValue":
               userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
-        "updateListTime": {
+        "listUpdateTime": {
           "timestampValue":
-              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+             DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
         'notificationProcess': {'stringValue': 'reminder'},
         'dealProcess': {'booleanValue': false},
@@ -581,7 +581,7 @@ class APIs extends GetxController {
           "arrayValue": {"values": items}
         },
         "listId": {"integerValue": "${userList.listId}"},
-        "updateListTime": {
+        "listUpdateTime": {
           "timestampValue":
               DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         }
@@ -1084,7 +1084,7 @@ class APIs extends GetxController {
     var body = {
       "fields": {
         "processStatus": {"stringValue": "accepted"},
-        "updateListTime": {
+        "listUpdateTime": {
           "timestampValue":
               DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         }
@@ -1173,7 +1173,6 @@ class APIs extends GetxController {
 
   Future<List<Item>> searchedItemResult(String searchQuery) async {
     List<Item> searchResults = [];
-    final String url = AppUrl.SEARCH_QUERY(searchQuery);
 
     const Algolia algolia = Algolia.init(
       applicationId: AppUrl.SEARCH_APP_ID,

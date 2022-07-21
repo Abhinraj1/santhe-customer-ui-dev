@@ -34,7 +34,7 @@ class AppUrl {
   static String DUPLICATE_CHECK(String customerId, String listName) =>
       '$_baseCloudFunctions/app/customer/duplicateCheck?custId=$customerId&listName=$listName';
   static String UPDATE_USER_LIST(String listId) =>
-      '$_baseUrl/customerList/$listId?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=updateListTime&updateMask.fieldPaths=custOfferWaitTime';
+      '$_baseUrl/customerList/$listId?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=listUpdateTime&updateMask.fieldPaths=custOfferWaitTime';
   static String LIST_BY_EVENT_ID(String listEventId) =>
       '$_baseCloudFunctions/app/getListEventByListId?listId=$listEventId';
   static String ADD_ITEM(String itemId) => '$_baseUrl/item/?documentId=$itemId';
@@ -51,7 +51,7 @@ class AppUrl {
   static String ACCEPT_OFFER(String listId) =>
       '$_baseUrl/listEvent/$listId?updateMask.fieldPaths=custOfferResponse.custDeal&updateMask.fieldPaths=custOfferResponse.custOfferStatus&updateMask.fieldPaths=merchResponse.merchUpdateTime';
   static String PROCESS_STATUS(String listId) =>
-      '$_baseUrl/customerList/$listId?updateMask.fieldPaths=processStatus&updateMask.fieldPaths=updateListTime';
+      '$_baseUrl/customerList/$listId?updateMask.fieldPaths=processStatus&updateMask.fieldPaths=listUpdateTime';
   static String SEARCH_QUERY(String searchQuery) =>
       '$_baseCloudFunctions/search/items?searchCriteria=$searchQuery';
   static String UPDATE_DEVICE_TOKEN(String userId) =>

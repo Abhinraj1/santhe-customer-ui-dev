@@ -56,6 +56,7 @@ class APIs extends GetxController {
     await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
     final header = {"authorization": 'Bearer $token'};
+    log(header.toString());
     // case 1: get
     // case 2: post
     // case 3: update
@@ -132,22 +133,26 @@ class APIs extends GetxController {
   Future<void> getCheckRadius(int custId) async {
     final String url = AppUrl.CHECK_RADIUS(custId.toString());
 
-    final response = await callApi(mode: REST.get, url: Uri.parse(url));
+    try {
+      final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
 
-      final bool isInOperation = data['isInOperationalArea'];
-      final profileController = Get.find<ProfileController>();
-      profileController.isOperational.value = isInOperation;
+        final bool isInOperation = data['isInOperationalArea'];
+        final profileController = Get.find<ProfileController>();
+        profileController.isOperational.value = isInOperation;
 
-      // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
-      // return 1;
-    } else {
-      AppHelpers.crashlyticsLog(response.body.toString());
-      log('Request failed with status: ${response.statusCode}.');
-      // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      // return 0;
+        // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
+        // return 1;
+      } else {
+        AppHelpers.crashlyticsLog(response.body.toString());
+        log('Request failed with status: ${response.statusCode}.');
+        // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+        // return 0;
+      }
+    } on Exception catch (e) {
+      log(e.toString());
     }
   }
 

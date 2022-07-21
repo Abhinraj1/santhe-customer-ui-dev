@@ -22,11 +22,9 @@ class ProfileController extends GetxController {
 
   String? _urlToken;
 
-  Timer? refreshToken;
-
   String get urlToken => _urlToken ?? '';
 
-  Future<void> initialiseUrlToken({bool override = false}) async {
+  Future<void> generateUrlToken({bool override = false}) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       isLoggedIn = true;
@@ -40,13 +38,8 @@ class ProfileController extends GetxController {
     }
   }
 
-  void startTimer() {
-    refreshToken =
-        Timer.periodic(const Duration(minutes: 1), (_) => initialiseUrlToken());
-  }
-
   Future<void> initialise({bool startApp = false}) async {
-    await initialiseUrlToken(override: startApp);
+    await generateUrlToken(override: startApp);
     if (isLoggedIn) await getCustomerDetailsInit();
     if (isLoggedIn && isRegistered) await cacheRefresh();
     if (isLoggedIn && isRegistered) await getOperationalStatus();

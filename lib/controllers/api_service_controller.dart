@@ -47,12 +47,15 @@ class APIs extends GetxController {
 
   var itemsDB = <Item>[].obs;
 
-  Future<http.Response> callApi(
-      {required REST mode, required Uri url, String? body}) async {
+  Future<http.Response> callApi({
+    required REST mode,
+    required Uri url,
+    String? body,
+  }) async {
     final tokenHandler = Get.find<ProfileController>();
+    await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
     final header = {"authorization": 'Bearer $token'};
-    log(header.toString());
     // case 1: get
     // case 2: post
     // case 3: update
@@ -168,50 +171,64 @@ class APIs extends GetxController {
     return duplicatesFound;
   }
 
+  bool retry = true;
+
   Future<AnswerList?> getListByListEventId(String listEventId) async {
     AnswerList? userList;
     String url = AppUrl.LIST_BY_EVENT_ID(listEventId);
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      print(response.body);
-      List<ItemModel> listItems = [];
-      for (var map in data['items']) {
-        listItems.add(ItemModel(
-          brandType: map['brandType'] ?? '',
-          itemId: map['itemId'],
-          // need to
-          itemNotes: map['itemNotes'] ?? '',
-          itemName: map['itemName'],
-          itemImageId: map['itemImageId'],
-          unit: map['unit'],
-          catName: map['catName'],
-          merchPrice: map['merchPrice'],
-          itemSeqNum: int.parse(map['itemSeqNum'].toString()),
-          merchAvailability: map['merchAvailability'],
-          quantity: map['quantity'].toString(),
-          merchNotes: map['merchNotes'] ?? '',
-        ));
+      try {
+        var data = jsonDecode(response.body);
+        print(response.body);
+        List<ItemModel> listItems = [];
+        for (var map in data['items']) {
+          listItems.add(ItemModel(
+            brandType: map['brandType'] ?? '',
+            itemId: map['itemId'],
+            // need to
+            itemNotes: map['itemNotes'] ?? '',
+            itemName: map['itemName'],
+            itemImageId: map['itemImageId'],
+            unit: map['unit'],
+            catName: map['catName'],
+            merchPrice: map['merchPrice'],
+            itemSeqNum: int.parse(map['itemSeqNum'].toString()),
+            merchAvailability: map['merchAvailability'],
+            quantity: map['quantity'].toString(),
+            merchNotes: map['merchNotes'] ?? '',
+          ));
+        }
+        userList = AnswerList(
+          date: data['custOfferResponse']['custUpdateTime'],
+          custOfferStatus: data['custOfferResponse']['custOfferStatus'],
+          custId: listEventId.substring(10, 20),
+          items: listItems,
+          listId: listEventId.substring(10, listEventId.length),
+          custStatus: data['custStatus'],
+          merchId: listEventId.substring(0, 10),
+          custDistance: data['custDistance'].toString(),
+          contactEnabled: data['contactEnabled'],
+          chatEnabled: data['chatEnabled'],
+          listEventId: listEventId,
+          merchUpdateTime:
+              DateTime.parse(data['merchResponse']['merchUpdateTime']),
+          custUpdateTime:
+              DateTime.parse(data['custOfferResponse']['custUpdateTime']),
+          requestForDay: data['requestForDay'].toString(),
+        );
+        return userList;
+      } catch (e) {
+        if (retry) {
+          retry = false;
+          return await getListByListEventId(listEventId);
+        } else {
+          retry = true;
+          AppHelpers.crashlyticsLog(response.body.toString());
+          Get.to(() => const ServerErrorPage());
+          throw ServerError();
+        }
       }
-      userList = AnswerList(
-        date: data['custOfferResponse']['custUpdateTime'],
-        custOfferStatus: data['custOfferResponse']['custOfferStatus'],
-        custId: listEventId.substring(10, 20),
-        items: listItems,
-        listId: listEventId.substring(10, listEventId.length),
-        custStatus: data['custStatus'],
-        merchId: listEventId.substring(0, 10),
-        custDistance: data['custDistance'].toString(),
-        contactEnabled: data['contactEnabled'],
-        chatEnabled: data['chatEnabled'],
-        listEventId: listEventId,
-        merchUpdateTime:
-            DateTime.parse(data['merchResponse']['merchUpdateTime']),
-        custUpdateTime:
-            DateTime.parse(data['custOfferResponse']['custUpdateTime']),
-        requestForDay: data['requestForDay'].toString(),
-      );
-      return userList;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage());
@@ -487,7 +504,7 @@ class APIs extends GetxController {
         },
         "listUpdateTime": {
           "timestampValue":
-             DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
         'notificationProcess': {'stringValue': 'reminder'},
         'dealProcess': {'booleanValue': false},

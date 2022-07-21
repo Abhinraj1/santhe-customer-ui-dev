@@ -53,7 +53,6 @@ class _HomePageState extends State<HomePage>
     ));
     _allListController.getAllList();
     _allListController.checkSubPlan();
-    if (_profileController.refreshToken == null) _profileController.startTimer();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
         _connectivityController.listenConnectivity(result));
     apiController.searchedItemResult('potato');

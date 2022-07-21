@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
+import 'package:santhe/controllers/location_controller.dart';
 
 
 import '../../API/addressSearchAPI.dart';
@@ -218,7 +219,11 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    Get.to(() => const MapAddressPicker());
+                    final locationController = Get.find<LocationController>();
+                    final permission = await locationController.checkPermission();
+                    if(permission){
+                      Get.to(() => const MapAddressPicker());
+                    }
                   },
                   child: Center(
                     child: Container(

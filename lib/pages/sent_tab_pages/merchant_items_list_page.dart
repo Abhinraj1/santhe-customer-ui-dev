@@ -294,7 +294,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                   filter:
                                       ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                                   child: SizedBox(
-                                    height: screenSize.height / 3 - 60.sp,
+                                    height: screenSize.height / 3 - 40.sp,
                                     width: screenSize.width,
                                   ),
                                 ),
@@ -302,7 +302,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                             ),
                           if (widget.archived)
                             SizedBox(
-                              height: screenSize.height / 3 - 60.sp,
+                              height: screenSize.height / 3 - 40.sp,
                               width: screenSize.width,
                               child: Align(
                                 alignment: Alignment.bottomCenter,

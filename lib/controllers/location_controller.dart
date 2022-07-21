@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 
 class LocationController extends GetxController {
   RxDouble lat = 0.0.obs;
@@ -57,27 +58,21 @@ class LocationController extends GetxController {
     }
 
     permission = await Geolocator.checkPermission();
-
-    log(permission.toString());
-
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Get.back();
+      if (permission == LocationPermission.deniedForever) {
+        errorMsg('Permission Denied Forever',
+            'Please enable location services from settings.');
+      } else if (permission == LocationPermission.denied) {
+        errorMsg('Location Permission Denied',
+            'Please allow to use location permissions.');
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      Get.back();
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      return true;
     }
-
-    if (permission == LocationPermission.unableToDetermine) {
-      Get.back();
-    }
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    return false;
   }
 }

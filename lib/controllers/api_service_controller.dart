@@ -134,14 +134,9 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      final merchCount = data['nearbyMerchants'];
+      final bool isInOperation = data['isInOperationalArea'];
       final profileController = Get.find<ProfileController>();
-
-      if (merchCount > 0) {
-        profileController.isOperational.value = true;
-      } else {
-        profileController.isOperational.value = false;
-      }
+      profileController.isOperational.value = isInOperation;
 
       // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
       // return 1;
@@ -151,6 +146,26 @@ class APIs extends GetxController {
       // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       // return 0;
     }
+  }
+
+  //get
+  Future<bool> duplicateCheck(int custId, String listName) async {
+    final String url = AppUrl.DUPLICATE_CHECK(custId.toString(), listName);
+    bool duplicatesFound;
+
+    final response = await callApi(mode: REST.get, url: Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      duplicatesFound = data['duplicates_found'];
+      log(data.toString());
+    } else {
+      AppHelpers.crashlyticsLog(response.body.toString());
+      log('Request failed with status: ${response.statusCode}.');
+      return false;
+    }
+
+    return duplicatesFound;
   }
 
   Future<AnswerList?> getListByListEventId(String listEventId) async {

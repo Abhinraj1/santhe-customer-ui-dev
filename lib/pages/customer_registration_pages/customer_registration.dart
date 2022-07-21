@@ -447,7 +447,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 donePressed = true;
                                 loading = true;
                               });
-                              if (_formKey.currentState!.validate()) {
+                              if (_formKey.currentState!.validate() && registrationController.address.isNotEmpty) {
                                 //final otp check
                                 bool isUserLoggedin =
                                     profileController.isLoggedIn;

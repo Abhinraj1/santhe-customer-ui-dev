@@ -288,6 +288,7 @@ class NetworkCall{
 
   Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
     final tokenHandler = Get.find<ProfileController>();
+    await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
     final header = { "authorization": 'Bearer $token' };
     switch (mode) {

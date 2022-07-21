@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:santhe/SECRETKEY.dart';
@@ -45,10 +44,7 @@ class PlaceApiProvider {
 
   void getPlaceDetailFromId(String placeId) async {
     final request =
-        'https://maps.googleapis.com/maps/api/geocode/json?place_id=' +
-            placeId +
-            '&key=' +
-            apiKey;
+        'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=$apiKey';
     final response = await client.get(Uri.parse(request));
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
@@ -65,15 +61,9 @@ class PlaceApiProvider {
 
   Future<String> getAddressFromLatLong(String lat, String long) async {
     final request =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-            lat +
-            ',' +
-            long +
-            '&key=' +
-            apiKey;
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&key=$apiKey';
     final response = await client.get(Uri.parse(request));
     var res = json.decode(response.body);
-    log(res['results'].toString());
     return res['results'][0]["formatted_address"].toString();
   }
 }

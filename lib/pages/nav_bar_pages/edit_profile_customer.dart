@@ -546,7 +546,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           donePressed = true;
                                           isProcessing = true;
                                         });
-                                        if (_formKey.currentState!.validate()) {
+                                        if (_formKey.currentState!.validate() && registrationController.address.isNotEmpty) {
                                           if (profileController.isLoggedIn) {
                                             CustomerModel? currentUser =
                                                 profileController

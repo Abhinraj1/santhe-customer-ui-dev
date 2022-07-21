@@ -288,15 +288,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                               right: 10.0,
                               child: GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    disable = true;
-                                  });
-
                                   showImagePickerOptions(context);
-
-                                  setState(() {
-                                    disable = false;
-                                  });
                                 },
                                 child: const Icon(
                                   CupertinoIcons.pencil_circle_fill,
@@ -675,16 +667,24 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                         children: [
                           GestureDetector(
                             onTap: () async {
+
+                              setState(() {
+                                disable = true;
+                              });
+
                               Navigator.pop(context);
-                              FirebaseHelper()
+                              await FirebaseHelper()
                                   .addCustomItemImage(
                                       DateTime.now()
                                           .toUtc()
                                           .toString()
                                           .replaceAll(' ', 'T'),
                                       true,
-                                      true)
-                                  .toString();
+                                      true);
+
+                              setState(() {
+                                disable = false;
+                              });
                             },
                             child: const CircleAvatar(
                               radius: 45,

@@ -32,12 +32,6 @@ class LocationController extends GetxController {
     }
 
     permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      log(permission.toString());
-    }
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     if(permission == LocationPermission.whileInUse || permission == LocationPermission.always){
@@ -64,6 +58,11 @@ class LocationController extends GetxController {
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
+      if(permission == LocationPermission.deniedForever){
+        errorMsg('Permission Denied Forever', 'Please enable location services from settings.');
+      }else if(permission == LocationPermission.denied){
+        errorMsg('Location Permission Denied', 'Please allow to use location permissions.');
+      }
     }
 
     if(permission == LocationPermission.whileInUse || permission == LocationPermission.always){

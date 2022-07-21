@@ -306,6 +306,31 @@ class _UserListScreenState extends State<UserListScreen> {
                         ],
                       ),
                     ),
+
+                    if (_profileController.isOperational.value)
+                      GetBuilder(
+                        init: _allListController,
+                        id: 'addedItems',
+                        builder: (builder) {
+                          return _userList.items.length == 1 &&
+                                  _userList.items.isNotEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.sp),
+                                    child: Text(
+                                      'Psst! --> Add few more items to be able to send your list to shops',
+                                      style: TextStyle(
+                                        color: AppColors().brandDark,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink();
+                        },
+                      ),
                     //search results
                     GetBuilder(
                         init: _allListController,

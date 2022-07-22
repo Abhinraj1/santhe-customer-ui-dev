@@ -22,7 +22,6 @@ dependencies:
   hive: ^2.0.6
   hive_flutter: ^1.1.0
   pinput: 
-  flutter_native_splash: ^2.0.5
   google_maps_flutter: ^2.1.2
   map_picker: ^0.0.3
   geolocator: ^9.0.0
@@ -65,23 +64,9 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   hive_generator: ^1.1.2
   build_runner: ^2.1.7
-  flutter_launcher_icons: ^0.9.2
   change_app_package_name: ^1.1.0
 
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/app_icon/icon.png"
-  adaptive_icon_background: "#FFF89522"
-  remove_alpha_ios: true
 
-flutter_native_splash:
-  color: '#F89522'
-  image: assets/splash.png
-  banner: assets/banner.png
-  android: true
-  ios: true
-  web: false
 
 flutter:
 

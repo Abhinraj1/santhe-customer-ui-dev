@@ -35,18 +35,7 @@ enum REST {
 class APIs extends GetxController {
   //Items & Category
   // var categoriesDB = <Category>[].obs;
-  var userListsDB = <UserList>[].obs;
-
-  //needed so that concurrent modification does not occur while iterating.
-  var offlineCustLists = <UserList>[].obs;
-
-  //to split and only call online list when truly needed.
-  var onlineCustLists = <UserList>[].obs;
-
-  //deleted user list buffer
-  var deletedUserLists = <UserList>[].obs;
-
-  var itemsDB = <Item>[].obs;
+  // var itemsDB = <Item>[].obs;
 
   Future<http.Response> callApi({
     required REST mode,

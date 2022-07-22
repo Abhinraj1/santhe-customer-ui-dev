@@ -60,6 +60,7 @@ class APIs extends GetxController {
     // case 1: get
     // case 2: post
     // case 3: update
+    // case 4: put
     switch (mode) {
       case REST.get:
         {
@@ -68,17 +69,10 @@ class APIs extends GetxController {
               url,
               headers: header,
             );
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
           break;
-          // throw NoInternetError();
         }
 
       case REST.post:
@@ -89,13 +83,6 @@ class APIs extends GetxController {
               body: body!,
               headers: header,
             );
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
-            // throw NoInternetError();
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
@@ -110,19 +97,23 @@ class APIs extends GetxController {
               body: body!,
               headers: header,
             );
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
-            // throw NoInternetError();
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
           break;
         }
-
+      case REST.put:
+        {
+          try {
+            return await http.put(
+              url,
+              headers: header,
+            );
+          } catch (e) {
+            AppHelpers.crashlyticsLog(e.toString());
+          }
+          break;
+        }
       default:
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
@@ -972,17 +963,19 @@ class APIs extends GetxController {
           json.decode(response.body) == "No offers for this customer list."
               ? json.encode([]).toString()
               : response.body);
-      resp.sort((a, b) =>
-          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
+      // resp.sort((a, b) =>
+      //     a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
 
       // SORT LOGIC
-      final newMap = groupBy(resp, (CustomerOfferResponse c) => c.custOfferResponse.custDeal);
+      final newMap = groupBy(
+          resp, (CustomerOfferResponse c) => c.custOfferResponse.custDeal);
       final deals = newMap.keys.toList();
       deals.sort();
       final list = <CustomerOfferResponse>[];
-      for(var i in deals){
+      for (var i in deals) {
         var l = newMap[i]!.toList();
-        list.addAll(l.sorted((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice)));
+        list.addAll(l.sorted((a, b) => a.merchResponse.merchTotalPrice
+            .compareTo(b.merchResponse.merchTotalPrice)));
       }
       resp = list;
 
@@ -1010,46 +1003,19 @@ class APIs extends GetxController {
     }
   }
 
-  //patch
-  Future<int> acceptOffer(String listEventId) async {
-    log('Offer Accepted! ListEvent ID: $listEventId');
-    final String url = AppUrl.ACCEPT_OFFER(listEventId);
-
-    var body = {
-      "fields": {
-        "custOfferResponse": {
-          "mapValue": {
-            "fields": {
-              "custDeal": {"stringValue": "best1"},
-              "custOfferStatus": {"stringValue": "accepted"},
-            }
-          }
-        },
-        "merchResponse": {
-          "mapValue": {
-            "fields": {
-              "merchUpdateTime": {
-                "timestampValue":
-                    DateTime.now().toUtc().toString().replaceAll(' ', 'T')
-              }
-            }
-          }
-        }
-      }
-    };
+  Future<CustomerOfferResponse?> acceptOffer(String listId, String listEventId) async {
+    final String url = AppUrl.ACCEPT_OFFER_CUSTOM(listId, listEventId);
 
     var response = await callApi(
-        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+        mode: REST.put, url: Uri.parse(url),);
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Offer Accepted! ListEvent ID: $listEventId');
-      return 1;
+      CustomerOfferResponse resp = CustomerOfferResponse.fromJson(json.decode(response.body));
+      return resp;
     } else {
       log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
       AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      return 0;
+      return null;
     }
   }
 
@@ -1067,34 +1033,34 @@ class APIs extends GetxController {
     }
   }
 
-  Future<int> processedStatusChange(int listId) async {
-    log('**********processedStatusChange***********');
-    final String url = AppUrl.PROCESS_STATUS(listId.toString());
-    var body = {
-      "fields": {
-        "processStatus": {"stringValue": "accepted"},
-        "listUpdateTime": {
-          "timestampValue":
-              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
-        }
-      }
-    };
-
-    var response = await callApi(
-        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Offer Accepted! List ID: $listId');
-      return 1;
-    } else {
-      AppHelpers.crashlyticsLog(response.body.toString());
-      log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      return 0;
-    }
-  }
+  // Future<int> processedStatusChange(int listId) async {
+  //   log('**********processedStatusChange***********');
+  //   final String url = AppUrl.PROCESS_STATUS(listId.toString());
+  //   var body = {
+  //     "fields": {
+  //       "processStatus": {"stringValue": "accepted"},
+  //       "listUpdateTime": {
+  //         "timestampValue":
+  //             DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+  //       }
+  //     }
+  //   };
+  //
+  //   var response = await callApi(
+  //       mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+  //
+  //   if (response.statusCode == 200) {
+  //     var data = jsonDecode(response.body);
+  //     log(data.toString());
+  //     log('Offer Accepted! List ID: $listId');
+  //     return 1;
+  //   } else {
+  //     AppHelpers.crashlyticsLog(response.body.toString());
+  //     log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
+  //     Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+  //     return 0;
+  //   }
+  // }
 
   //Archived Tab APIs------------------------------------------------
   //POST

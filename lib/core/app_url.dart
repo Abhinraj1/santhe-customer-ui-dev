@@ -93,4 +93,6 @@ class AppUrl {
 
   static String UPDATE_DEVICE_TOKEN(String userId) =>
       '$_baseCloudFunctions/customers/$userId/deviceToken';
+
+  static String ACCEPT_OFFER_CUSTOM(String listId, String listEventId) => '$_baseCloudFunctions/offers/$listId/$listEventId/accept';
 }

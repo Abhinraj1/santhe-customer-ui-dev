@@ -14,7 +14,7 @@ import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 class ProfileController extends GetxController {
   CustomerModel? customerDetails;
 
-  RxBool isOperational = false.obs;
+  RxBool isOperational = true.obs;
 
   bool isRegistered = false;
 

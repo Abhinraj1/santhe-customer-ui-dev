@@ -133,34 +133,42 @@ class APIs extends GetxController {
   Future<void> getCheckRadius(int custId) async {
     final String url = AppUrl.CHECK_RADIUS(custId.toString());
 
+    try {
+      final response = await callApi(mode: REST.get, url: Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        final bool isInOperation = data['isInOperationalArea'];
+        final profileController = Get.find<ProfileController>();
+        profileController.isOperational.value = isInOperation;
+      } else {
+        AppHelpers.crashlyticsLog(response.body.toString());
+        log('Request failed with status: ${response.statusCode}.');
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
+  //get
+  Future<bool> duplicateCheck(int custId, String listName) async {
+    final String url = AppUrl.DUPLICATE_CHECK(custId.toString(), listName);
+    bool duplicatesFound;
+
     final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-
-      final merchCount = data['nearbyMerchants'];
-      final profileController = Get.find<ProfileController>();
-
-      if(merchCount==null){
-        profileController.isOperational.value = true;
-      }else{
-        if (merchCount > 0) {
-          profileController.isOperational.value = true;
-        } else {
-          profileController.isOperational.value = false;
-        }
-      }
-
-
-
-      // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
-      // return 1;
+      duplicatesFound = data['duplicates_found'];
+      log(data.toString());
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.');
-      // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      // return 0;
+      return false;
     }
+
+    return duplicatesFound;
   }
 
   bool retry = true;
@@ -964,6 +972,8 @@ class APIs extends GetxController {
           json.decode(response.body) == "No offers for this customer list."
               ? json.encode([]).toString()
               : response.body);
+      resp.sort((a, b) =>
+          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
 
       // SORT LOGIC
       final newMap = groupBy(resp, (CustomerOfferResponse c) => c.custOfferResponse.custDeal);

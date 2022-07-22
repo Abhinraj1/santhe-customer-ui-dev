@@ -1004,7 +1004,7 @@ class APIs extends GetxController {
   }
 
   Future<CustomerOfferResponse?> acceptOffer(String listId, String listEventId) async {
-    final String url = AppUrl.ACCEPT_OFFER_CUSTOM(listId, listEventId);
+    final String url = AppUrl.ACCEPT_OFFER(listId, listEventId);
 
     var response = await callApi(
         mode: REST.put, url: Uri.parse(url),);

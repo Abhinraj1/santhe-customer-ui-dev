@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:algolia/algolia.dart';
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/getx/profile_controller.dart';
@@ -140,11 +141,17 @@ class APIs extends GetxController {
       final merchCount = data['nearbyMerchants'];
       final profileController = Get.find<ProfileController>();
 
-      if (merchCount > 0) {
+      if(merchCount==null){
         profileController.isOperational.value = true;
-      } else {
-        profileController.isOperational.value = false;
+      }else{
+        if (merchCount > 0) {
+          profileController.isOperational.value = true;
+        } else {
+          profileController.isOperational.value = false;
+        }
       }
+
+
 
       // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
       // return 1;
@@ -957,48 +964,18 @@ class APIs extends GetxController {
           json.decode(response.body) == "No offers for this customer list."
               ? json.encode([]).toString()
               : response.body);
-      resp.sort((a, b) =>
-          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
 
-      // // DO NOT DELETE THIS SORTING LOGIC
-      // if (resp.isNotEmpty) {
-      //   resp.sort((a, b) =>
-      //       a.merchResponse.merchTotalPrice
-      //           .compareTo(b.merchResponse.merchTotalPrice));
-      //   resp = resp.reversed.toList();
-      //   resp.sort((a, b) =>
-      //       a.merchResponse.merchOfferQuantity
-      //           .compareTo(b.merchResponse.merchOfferQuantity));
-      //   resp = resp.reversed.toList();
-      //
-      //   final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
-      //
-      //   resp[0].custOfferResponse.custDeal = 'best1';
-      //
-      //   for (int i = 1; i < resp.length; i++) {
-      //     if (AppHelpers.isInBetween(
-      //       double.parse(resp[i].merchResponse.merchTotalPrice),
-      //       bestPrice,
-      //       bestPrice + 50,
-      //     ) &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best2';
-      //     } else if (AppHelpers.isInBetween(
-      //       double.parse(resp[i].merchResponse.merchTotalPrice),
-      //       bestPrice + 50,
-      //       bestPrice + 100,
-      //     ) &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best3';
-      //     } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
-      //         bestPrice + 100 &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best4';
-      //     } else {
-      //       resp[i].custOfferResponse.custDeal = 'noBest';
-      //     }
-      //   }
-      // }
+      // SORT LOGIC
+      final newMap = groupBy(resp, (CustomerOfferResponse c) => c.custOfferResponse.custDeal);
+      final deals = newMap.keys.toList();
+      deals.sort();
+      final list = <CustomerOfferResponse>[];
+      for(var i in deals){
+        var l = newMap[i]!.toList();
+        list.addAll(l.sorted((a, b) => a.merchResponse.merchTotalPrice.compareTo(b.merchResponse.merchTotalPrice)));
+      }
+      resp = list;
+
       return resp;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());

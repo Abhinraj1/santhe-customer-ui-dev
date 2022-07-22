@@ -9,7 +9,6 @@ import 'package:santhe/widgets/sent_tab_widgets/merchant_offer_card.dart';
 
 import '../../controllers/api_service_controller.dart';
 import '../../models/offer/customer_offer_response.dart';
-import '../../models/santhe_user_list_model.dart';
 
 class OffersListPage extends StatefulWidget {
   final UserListModel userList;

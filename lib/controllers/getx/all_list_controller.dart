@@ -224,7 +224,8 @@ class AllListController extends GetxController {
   Future<bool> isListAlreadyExist(String listName) async {
     final APIs api = Get.find();
     return await api.duplicateCheck(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode), listName);
+        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode),
+        listName.trim());
   }
 
   Future<void> checkSubPlan() async {

@@ -7,6 +7,7 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
@@ -677,6 +678,11 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                       successMsg(
                                                                           'Yay! Offer Accepted!',
                                                                           'Hope you had a pleasant time using the app.');
+                                                                      final allListController = Get.find<AllListController>();
+                                                                      allListController.allListMap[widget.userList.listId] = widget.userList
+                                                                        ..processStatus = "accepted"
+                                                                        ..listUpdateTime = DateTime.now();
+                                                                      allListController.update(['sentList']);
                                                                       Get.back();
                                                                       setState(
                                                                           () {

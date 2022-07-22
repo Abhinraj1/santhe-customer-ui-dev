@@ -912,8 +912,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                   }
                                                 }
                                                 setState(() {
-                                                  isProcessing = false;
-                                                  disable = false;
+                                                  if(widget.edit || widget.fromSearch == true) {
+                                                    isProcessing = false;
+                                                    disable = false;
+                                                  }
                                                 });
                                               },
                                         child: AutoSizeText(

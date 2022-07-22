@@ -1,11 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
-import 'package:get/get.dart';
 import 'package:santhe/models/item_model.dart';
-import 'package:santhe/models/santhe_list_item_model.dart';
 import 'package:santhe/controllers/notification_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/home_page.dart';
@@ -16,11 +12,8 @@ import '../../controllers/api_service_controller.dart';
 import '../../controllers/chat_controller.dart';
 import '../../controllers/home_controller.dart';
 import '../../models/answer_list_model.dart';
-import '../../models/item_model.dart';
 import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/user_list_model.dart';
-import '../../models/santhe_list_item_model.dart';
-import '../../models/santhe_user_list_model.dart';
 import 'offers_list_page.dart';
 
 class SentUserListDetailsPage extends StatefulWidget {
@@ -75,7 +68,7 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
       listOfferCounter: '0',
       processStatus: data.custOfferStatus,
       custOfferWaitTime: DateTime.now(),
-      updateListTime: DateTime.now(),
+      listUpdateTime: DateTime.now(),
     );
     setState(() => isLoading = false);
   }
@@ -92,7 +85,7 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
-    TabBar _tabBar = TabBar(
+    TabBar tabBar = TabBar(
       indicator: const UnderlineTabIndicator(
         insets: EdgeInsets.symmetric(horizontal: 30.0),
         borderSide: BorderSide(
@@ -166,10 +159,10 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
                       fontSize: 18.sp),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: _tabBar.preferredSize,
+                  preferredSize: tabBar.preferredSize,
                   child: ColoredBox(
                     color: Colors.grey.shade50,
-                    child: _tabBar,
+                    child: tabBar,
                   ),
                 ),
               ),

@@ -36,6 +36,8 @@ class _NewTabPageState extends State<NewTabPage>
 
   String listName = '';
 
+  bool disable = false;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -446,6 +448,9 @@ class _NewTabPageState extends State<NewTabPage>
                                       borderRadius: BorderRadius.circular(16)),
                                   color: Colors.orange,
                                   onPressed: () async {
+                                    setState(() {
+                                      disable = true;
+                                    });
                                     if (listName.isNotEmpty &&
                                         _type == NewListType.startFromNew) {
                                       if (_formKey.currentState!.validate()) {

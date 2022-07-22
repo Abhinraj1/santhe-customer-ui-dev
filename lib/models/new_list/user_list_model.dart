@@ -13,8 +13,7 @@ class UserListModel{
     required this.listOfferCounter,
     required this.processStatus,
     required this.custOfferWaitTime,
-    required this.updateListTime,
-    this.listUpdateTime
+    required this.listUpdateTime
   });
 
   DateTime createListTime;
@@ -27,6 +26,5 @@ class UserListModel{
   String listOfferCounter;
   String processStatus;
   DateTime custOfferWaitTime;
-  DateTime updateListTime;
-  DateTime? listUpdateTime;
+  DateTime listUpdateTime;
 }

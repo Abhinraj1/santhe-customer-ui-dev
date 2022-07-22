@@ -1033,7 +1033,8 @@ class _UserListScreenState extends State<UserListScreen> {
   void sendList() {
     NetworkCall().updateUserList(_userList, success: true);
     _allListController.allListMap[widget.listId] = _userList
-      ..custListStatus = 'sent';
+      ..custListStatus = 'sent'
+      ..listUpdateTime = DateTime.now();
     _allListController.update(['newList', 'sentList']);
     _homeController.homeTabController.animateTo(1);
     Get.back();

@@ -180,7 +180,7 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       try {
         var data = jsonDecode(response.body);
-        print(response.body);
+        // print(response.body);
         List<ItemModel> listItems = [];
         for (var map in data['items']) {
           listItems.add(ItemModel(

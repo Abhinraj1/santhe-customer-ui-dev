@@ -1,12 +1,15 @@
-// To parse this JSON data, do
-//
-//     final customerOfferResponse = customerOfferResponseFromJson(jsonString);
-
 import 'dart:convert';
 
-List<CustomerOfferResponse> customerOfferResponseFromJson(String str) =>
-    List<CustomerOfferResponse>.from(
-        json.decode(str).map((x) => CustomerOfferResponse.fromJson(x)));
+List<CustomerOfferResponse> customerOfferResponseFromJson(String str) {
+  final List temp = json.decode(str);
+  final List<CustomerOfferResponse> list = [];
+  for(var i in temp){
+    if(i.toString()!="null"){
+      list.add(CustomerOfferResponse.fromJson(i));
+    }
+  }
+  return list;
+}
 
 String customerOfferResponseToJson(List<CustomerOfferResponse> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

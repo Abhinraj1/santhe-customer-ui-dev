@@ -56,6 +56,8 @@ class AppUrl {
 
   static String CHECK_RADIUS(String customerId) =>
       '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
+  static String DUPLICATE_CHECK(String customerId, String listName) =>
+      '$_baseCloudFunctions/app/customer/duplicateCheck?custId=$customerId&listName=$listName';
 
   static String UPDATE_USER_LIST(String listId) =>
       '$_baseUrl/customerList/$listId?updateMask.fieldPaths=listName&updateMask.fieldPaths=custListSentTime&updateMask.fieldPaths=processStatus&updateMask.fieldPaths=createListTime&updateMask.fieldPaths=custListStatus&updateMask.fieldPaths=custId&updateMask.fieldPaths=listOfferCounter&updateMask.fieldPaths=items&updateMask.fieldPaths=listId&updateMask.fieldPaths=listUpdateTime&updateMask.fieldPaths=custOfferWaitTime';

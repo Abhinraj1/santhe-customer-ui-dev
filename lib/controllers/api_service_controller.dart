@@ -56,6 +56,7 @@ class APIs extends GetxController {
     await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
     final header = {"authorization": 'Bearer $token'};
+    log(header.toString());
     // case 1: get
     // case 2: post
     // case 3: update
@@ -132,28 +133,47 @@ class APIs extends GetxController {
   Future<void> getCheckRadius(int custId) async {
     final String url = AppUrl.CHECK_RADIUS(custId.toString());
 
+    try {
+      final response = await callApi(mode: REST.get, url: Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        final bool isInOperation = data['isInOperationalArea'];
+        final profileController = Get.find<ProfileController>();
+        profileController.isOperational.value = isInOperation;
+
+        // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
+        // return 1;
+      } else {
+        AppHelpers.crashlyticsLog(response.body.toString());
+        log('Request failed with status: ${response.statusCode}.');
+        // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+        // return 0;
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
+  //get
+  Future<bool> duplicateCheck(int custId, String listName) async {
+    final String url = AppUrl.DUPLICATE_CHECK(custId.toString(), listName);
+    bool duplicatesFound;
+
     final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-
-      final merchCount = data['nearbyMerchants'];
-      final profileController = Get.find<ProfileController>();
-
-      if (merchCount > 0) {
-        profileController.isOperational.value = true;
-      } else {
-        profileController.isOperational.value = false;
-      }
-
-      // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
-      // return 1;
+      duplicatesFound = data['duplicates_found'];
+      log(data.toString());
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       log('Request failed with status: ${response.statusCode}.');
-      // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      // return 0;
+      return false;
     }
+
+    return duplicatesFound;
   }
 
   bool retry = true;

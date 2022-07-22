@@ -373,11 +373,11 @@ class _UserListScreenState extends State<UserListScreen> {
     );
   }
 
-  void changeListName() {
+  void changeListName() async {
     if (_title == _allListController.allListMap[widget.listId]!.listName) {
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
-    } else if (_allListController.isListAlreadyExist(_title)) {
+    } else if (await _allListController.isListAlreadyExist(_title)) {
       errorMsg('List name cannot be duplicated', 'Enter unique name');
     } else if (_title.trim().isNotEmpty) {
       _allListController.allListMap[widget.listId]!.listName = _title;

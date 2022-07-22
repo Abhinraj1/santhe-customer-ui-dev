@@ -455,7 +455,7 @@ class _NewTabPageState extends State<NewTabPage>
                                         _type == NewListType.startFromNew) {
                                       if (_formKey.currentState!.validate()) {
                                         if (await _allListController
-                                            .isListAlreadyExist(listName)) {
+                                            .isListAlreadyExist(listName.trim())) {
                                           Get.snackbar(
                                             '',
                                             '',

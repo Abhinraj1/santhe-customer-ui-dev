@@ -180,7 +180,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                 'searchItem', const Duration(milliseconds: 500),
                                 () {
                               searchedItemsResult =
-                                  APIs().searchedItemResult(value);
+                                  APIs().searchedItemResult(value.trim());
                               _allListController
                                   .update(['searchResults', 'searchField']);
                             });
@@ -377,10 +377,10 @@ class _UserListScreenState extends State<UserListScreen> {
     if (_title == _allListController.allListMap[widget.listId]!.listName) {
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
-    } else if (await _allListController.isListAlreadyExist(_title)) {
+    } else if (await _allListController.isListAlreadyExist(_title.trim())) {
       errorMsg('List name cannot be duplicated', 'Enter unique name');
     } else if (_title.trim().isNotEmpty) {
-      _allListController.allListMap[widget.listId]!.listName = _title;
+      _allListController.allListMap[widget.listId]!.listName = _title.trim();
       _userList = _allListController.allListMap[widget.listId]!;
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
@@ -1035,7 +1035,7 @@ class _UserListScreenState extends State<UserListScreen> {
     _allListController.allListMap[widget.listId] = _userList
       ..custListStatus = 'sent'
       ..listUpdateTime = DateTime.now();
-    _allListController.update(['newList', 'sentList']);
+    _allListController.update(['newList', 'sentList', 'fab']);
     _homeController.homeTabController.animateTo(1);
     Get.back();
     Get.back();

@@ -91,7 +91,7 @@ class AllListController extends GetxController {
   }
 
   List<UserListModel> getLatestList(int count) {
-    List<UserListModel> list = allList.where((element) => element.custListStatus!='deleted'||element.custListStatus!='purged').toList();
+    List<UserListModel> list = allList.where((element) => element.custListStatus!='deleted' && element.custListStatus!='purged').toList();
     list.sort((a, b) => b.createListTime.compareTo(a.createListTime));
     return list.take(count).toList();
   }

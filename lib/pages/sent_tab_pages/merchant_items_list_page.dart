@@ -7,6 +7,7 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
@@ -43,7 +44,7 @@ class MerchantItemsListPage extends StatefulWidget {
 class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
   Future<MerchantOfferResponse> getDetails() async {
     final apiController = Get.find<APIs>();
-    if (widget.archived || widget.overrideData) {
+    if (widget.archived) {
       final data = await apiController.getAllMerchOfferByListId(
         widget.userList.listId,
         widget.userList.items.length,
@@ -656,27 +657,48 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
                                                                       accepting =
                                                                           true;
                                                                     });
-                                                                    int response =
-                                                                        await apiController.acceptOffer(widget
-                                                                            .currentMerchantOffer!
-                                                                            .listEventId);
+                                                                    final CustomerOfferResponse?
+                                                                        response =
+                                                                        await apiController
+                                                                            .acceptOffer(
+                                                                      widget
+                                                                          .userList
+                                                                          .listId,
+                                                                      widget
+                                                                          .currentMerchantOffer!
+                                                                          .listEventId,
+                                                                    );
 
-                                                                    int response2 = await apiController.processedStatusChange(int.parse(widget
-                                                                        .currentMerchantOffer!
-                                                                        .listId
-                                                                        .path
-                                                                        .segments
-                                                                        .last));
                                                                     // int response = 1;
                                                                     // int response2 = 1;
-                                                                    if (response ==
-                                                                            1 &&
-                                                                        response2 ==
-                                                                            1) {
-                                                                      //todo refresh and send to sent page
+                                                                    if (response!=null) {
+                                                                      widget.currentMerchantOffer = response;
+                                                                      widget.merchantResponse = await apiController.getMerchantDetails(widget
+                                                                          .currentMerchantOffer!
+                                                                          .merchId
+                                                                          .path
+                                                                          .segments
+                                                                          .last);
                                                                       successMsg(
                                                                           'Yay! Offer Accepted!',
                                                                           'Hope you had a pleasant time using the app.');
+                                                                      final allListController =
+                                                                          Get.find<
+                                                                              AllListController>();
+                                                                      allListController
+                                                                              .allListMap[
+                                                                          widget
+                                                                              .userList
+                                                                              .listId] = widget
+                                                                          .userList
+                                                                        ..processStatus =
+                                                                            "accepted"
+                                                                        ..listUpdateTime =
+                                                                            DateTime.now();
+                                                                      allListController
+                                                                          .update([
+                                                                        'sentList'
+                                                                      ]);
                                                                       Get.back();
                                                                       setState(
                                                                           () {

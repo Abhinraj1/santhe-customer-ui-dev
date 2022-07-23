@@ -108,7 +108,7 @@ class NetworkCall{
           "timestampValue":
           userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
-        "updateListTime": {
+        "listUpdateTime": {
           "timestampValue":
           userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
@@ -241,7 +241,7 @@ class NetworkCall{
           "arrayValue": {"values": items}
         },
         "listId": {"integerValue": userList.listId},
-        "updateListTime": {
+        "listUpdateTime": {
           "timestampValue":
           DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         }

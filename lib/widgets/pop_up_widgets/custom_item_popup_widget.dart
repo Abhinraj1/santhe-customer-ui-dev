@@ -7,6 +7,7 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
@@ -473,6 +474,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                 highlightElevation: 0.0,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0)),
+                                disabledColor: AppColors().grey80,
                                 color: Colors.orange,
                                 onPressed: disable
                                     ? null
@@ -713,18 +715,23 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                       Column(
                         children: [
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               //todo same as above
+                              setState(() {
+                                disable = true;
+                              });
                               Navigator.pop(context);
-                              FirebaseHelper()
+                              await FirebaseHelper()
                                   .addCustomItemImage(
                                       DateTime.now()
                                           .toUtc()
                                           .toString()
                                           .replaceAll(' ', 'T'),
                                       false,
-                                      true)
-                                  .toString();
+                                      true);
+                              setState(() {
+                                disable = false;
+                              });
                             },
                             child: const CircleAvatar(
                               radius: 45,

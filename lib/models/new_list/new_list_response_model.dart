@@ -49,7 +49,6 @@ class DocumentFields {
     required this.items,
     required this.custListStatus,
     required this.processStatus,
-    required this.updateListTime,
     required this.listOfferCounter,
     required this.listName,
     required this.custId,
@@ -65,7 +64,6 @@ class DocumentFields {
   Items items;
   CustListStatus custListStatus;
   CustListStatus processStatus;
-  Time updateListTime;
   ListId listOfferCounter;
   CustListStatus listName;
   Id custId;
@@ -73,7 +71,7 @@ class DocumentFields {
   DealProcess dealProcess;
   CustListStatus notificationProcess;
   Time createListTime;
-  Time? listUpdateTime;
+  Time listUpdateTime;
 
   factory DocumentFields.fromJson(Map<String, dynamic> json) => DocumentFields(
     custListSentTime: Time.fromJson(json["custListSentTime"]),
@@ -81,7 +79,6 @@ class DocumentFields {
     items: Items.fromJson(json["items"]),
     custListStatus: CustListStatus.fromJson(json["custListStatus"]),
     processStatus: CustListStatus.fromJson(json["processStatus"]),
-    updateListTime: Time.fromJson(json["updateListTime"]),
     listOfferCounter: ListId.fromJson(json["listOfferCounter"]),
     listName: CustListStatus.fromJson(json["listName"]),
     custId: Id.fromJson(json["custId"]),
@@ -89,7 +86,7 @@ class DocumentFields {
     dealProcess: DealProcess.fromJson(json["dealProcess"]),
     notificationProcess: CustListStatus.fromJson(json["notificationProcess"]),
     createListTime: Time.fromJson(json["createListTime"]),
-    listUpdateTime: json["listUpdateTime"] == null ? null : Time.fromJson(json["listUpdateTime"]),
+    listUpdateTime: Time.fromJson(json["listUpdateTime"]),
   );
 }
 

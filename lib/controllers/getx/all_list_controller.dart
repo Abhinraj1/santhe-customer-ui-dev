@@ -64,8 +64,7 @@ class AllListController extends GetxController {
           listOfferCounter: doc.listOfferCounter.integerValue,
           processStatus: doc.processStatus.stringValue,
           custOfferWaitTime: doc.custOfferWaitTime.timestampValue,
-          updateListTime: doc.updateListTime.timestampValue,
-          listUpdateTime: doc.listUpdateTime?.timestampValue));
+          listUpdateTime: doc.listUpdateTime.timestampValue));
     }
     return list;
   }
@@ -111,7 +110,7 @@ class AllListController extends GetxController {
       custListStatus: 'new',
       listOfferCounter: '0',
       custOfferWaitTime: DateTime.now(),
-      updateListTime: DateTime.now(),
+      listUpdateTime: DateTime.now(),
     );
     int response = await NetworkCall().addNewList(newUserList);
     isProcessing.value = false;
@@ -159,7 +158,7 @@ class AllListController extends GetxController {
         listOfferCounter: '0',
         processStatus: 'draft',
         custOfferWaitTime: model.custOfferWaitTime,
-        updateListTime: DateTime.now());
+        listUpdateTime: DateTime.now());
     return copyList;
   }
 
@@ -224,7 +223,7 @@ class AllListController extends GetxController {
   Future<bool> isListAlreadyExist(String listName) async {
     final APIs api = Get.find();
     return await api.duplicateCheck(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode), listName);
+        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode), listName.trim());
   }
 
   Future<void> checkSubPlan() async {

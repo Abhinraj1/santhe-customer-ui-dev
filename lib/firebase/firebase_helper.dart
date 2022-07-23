@@ -13,11 +13,7 @@ import 'package:santhe/core/app_helpers.dart';
 
 import 'package:flutter/material.dart';
 
-import '../controllers/sent_tab_offer_card_controller.dart';
-
 class FirebaseHelper {
-  final sentUserListController = Get.find<SentUserListController>();
-
   offerStream() {
     FirebaseFirestore.instance
         .collection('users')

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
 class ImageViewerPage extends StatelessWidget {
@@ -32,7 +33,7 @@ class ImageViewerPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 imageUrl: showCustomImage
                     ? itemImageUrl
-                    : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$itemImageUrl',
+                    : 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/$itemImageUrl',
               ),
             ),
           ),

@@ -9,6 +9,7 @@ import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
@@ -412,7 +413,7 @@ class _UserListScreenState extends State<UserListScreen> {
                         )
                       : ProtectedCachedNetworkImage(
                           imageUrl:
-                              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item!.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
+                              'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item!.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
                           width: 40.w,
                           height: 40.w,
                         ),
@@ -460,7 +461,7 @@ class _UserListScreenState extends State<UserListScreen> {
         .where((element) =>
             element.catId ==
             int.parse(item.catId.replaceAll(
-                'projects/santhe-425a8/databases/(default)/documents/category/',
+                'projects/${AppUrl.envType}/databases/(default)/documents/category/',
                 '')))
         .toList();
     if (temp.isEmpty) {

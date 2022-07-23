@@ -138,6 +138,8 @@ class APIs extends GetxController {
 
     final response = await callApi(mode: REST.get, url: Uri.parse(url));
 
+    log(response.body);
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       duplicatesFound = data['duplicates_found'];
@@ -263,7 +265,7 @@ class APIs extends GetxController {
         "dQuantity": {"integerValue": "${newCustomItem.dQuantity}"},
         "catId": {
           "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/category/4000"
+              "projects/${AppUrl.envType}/databases/(default)/documents/category/4000"
         },
         "itemImageIdTn": {"stringValue": newCustomItem.itemImageTn},
         "itemName": {"stringValue": newCustomItem.itemName},
@@ -404,7 +406,7 @@ class APIs extends GetxController {
                   "op": "EQUAL",
                   "value": {
                     "referenceValue":
-                        "projects/santhe-425a8/databases/(default)/documents/category/$id"
+                        "projects/${AppUrl.envType}/databases/(default)/documents/category/$id"
                   }
                 }
               }
@@ -448,13 +450,13 @@ class APIs extends GetxController {
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.toString().replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.toString().replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -476,7 +478,7 @@ class APIs extends GetxController {
         "custListStatus": {"stringValue": status},
         "custId": {
           "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+              "projects/${AppUrl.envType}/databases/(default)/documents/customer/$custId"
         },
         "custListSentTime": {
           "timestampValue":
@@ -528,7 +530,7 @@ class APIs extends GetxController {
             "quantity": {"doubleValue": "${item.quantity}"},
             "itemImageId": {
               "stringValue": item.itemImageId.replaceAll(
-                  'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                  'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
                   '')
             },
             "unit": {"stringValue": item.unit},
@@ -536,13 +538,13 @@ class APIs extends GetxController {
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.toString().replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.toString().replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-                  "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -570,7 +572,7 @@ class APIs extends GetxController {
         "custListStatus": {"stringValue": status ?? "sent"},
         "custId": {
           "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+              "projects/${AppUrl.envType}/databases/(default)/documents/customer/$custId"
         },
         "listOfferCounter": {"integerValue": "0"},
         "listName": {"stringValue": userList.listName},
@@ -858,7 +860,7 @@ class APIs extends GetxController {
         "toNotify": {"stringValue": "manjunath.munigowda@santhe.in"},
         "contact": {
           "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+              "projects/${AppUrl.envType}/databases/(default)/documents/customer/$custId"
         },
         "source": {"stringValue": "app"}
       }
@@ -909,7 +911,7 @@ class APIs extends GetxController {
                   "op": "EQUAL",
                   "value": {
                     "referenceValue":
-                        "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+                        "projects/${AppUrl.envType}/databases/(default)/documents/customer/$custId"
                   }
                 }
               }
@@ -1080,7 +1082,7 @@ class APIs extends GetxController {
                   "op": "EQUAL",
                   "value": {
                     "referenceValue":
-                        "projects/santhe-425a8/databases/(default)/documents/customer/$custId"
+                        "projects/${AppUrl.envType}/databases/(default)/documents/customer/$custId"
                   }
                 }
               }

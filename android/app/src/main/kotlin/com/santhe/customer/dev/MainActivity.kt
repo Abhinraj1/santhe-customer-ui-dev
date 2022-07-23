@@ -1,4 +1,4 @@
-package com.santhe.www.santhe
+package com.santhe.customer.dev
 
 import io.flutter.embedding.android.FlutterActivity
 

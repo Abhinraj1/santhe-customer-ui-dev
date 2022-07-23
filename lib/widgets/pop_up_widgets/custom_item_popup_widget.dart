@@ -9,6 +9,7 @@ import 'package:group_button/group_button.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/network_call/network_call.dart';
@@ -257,7 +258,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                         ProtectedCachedNetworkImage(
                                           imageUrl: imageController
                                                   .addItemCustomImageUrl.isEmpty
-                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
+                                              ? 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/image%20placeholder.png?alt=media'
                                               : imageController
                                                   .addItemCustomImageUrl.value,
                                           width: screenWidth * 25,
@@ -516,7 +517,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                   itemImageTn: imageController
                                                       .addItemCustomImageUrl.value
                                                       .replaceAll(
-                                                      'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
+                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
                                                   catId: '4000',
                                                   createUser: custPhone,
                                                   dQuantity: 1,
@@ -527,7 +528,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                   itemImageId: image.isEmpty
                                                       ? 'image%20placeholder.png?alt=media'
                                                       : image.replaceAll(
-                                                      'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
+                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
                                                   itemName:
                                                   _customItemNameController.text.trim(),
                                                   status: 'inactive',
@@ -552,7 +553,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                   itemImageId: image.isEmpty
                                                       ? 'image%20placeholder.png?alt=media'
                                                       : image.replaceAll(
-                                                      'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
                                                       ''),
                                                   itemName:
                                                   _customItemNameController

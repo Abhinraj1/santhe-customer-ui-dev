@@ -7,6 +7,7 @@ import 'package:resize/resize.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/network_call/network_call.dart';
@@ -309,7 +310,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                         onTap: () {
                                           String img =
                                           item.itemImageId.replaceAll(
-                                            'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                                            'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
                                             '',
                                           );
                                           if (imageController
@@ -345,7 +346,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             () {
                                           String img =
                                               item.itemImageId.replaceAll(
-                                            'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                                            'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
                                             '',
                                           );
                                           return Stack(
@@ -354,7 +355,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                 imageUrl: imageController
                                                         .editItemCustomImageUrl
                                                         .isEmpty
-                                                    ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img'
+                                                    ? 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/$img'
                                                     : imageController
                                                         .editItemCustomImageUrl
                                                         .value,
@@ -793,13 +794,13 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                     ListItemModel listItem = ListItemModel(
                                                       brandType: placeHolderValidation(item.dBrandType, _brandController),
                                                       itemId: '${item.itemId}',
-                                                      itemImageId: item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
+                                                      itemImageId: item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
                                                       itemName: _customItemNameController.text,
                                                       quantity: _qtyController.text,
                                                       notes: placeHolderValidation(item.dItemNotes, _notesController),
                                                       unit: itemUnit,
-                                                      catName: Boxes.getCategoriesDB().get(int.parse(item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')))?.catName ?? 'Others',
-                                                      catId: item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', ''),
+                                                      catName: Boxes.getCategoriesDB().get(int.parse(item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')))?.catName ?? 'Others',
+                                                      catId: item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', ''),
                                                       possibleUnits: item.unit,
                                                     );
                                                     var tmp = currentUserList.items.where((element) => element.itemName == listItem.itemName).toList();
@@ -839,14 +840,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                       Item newCustomItem = Item(
                                                           dBrandType: placeHolderValidation(item.dBrandType, _brandController),
                                                           dItemNotes: placeHolderValidation(item.dItemNotes, _notesController),
-                                                          itemImageTn: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
+                                                          itemImageTn: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
                                                           catId: item.catId,
                                                           createUser: custPhone,
                                                           dQuantity: 1,
                                                           dUnit: selectedUnit,
                                                           itemAlias: _customItemNameController.text,
                                                           itemId: itemCount,
-                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
+                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
                                                           itemName: _customItemNameController.text,
                                                           status: 'inactive',
                                                           unit: units,
@@ -859,14 +860,14 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           brandType: placeHolderValidation(newCustomItem.dBrandType, _brandController),
                                                           //item ref
                                                           itemId: '${newCustomItem.itemId}',
-                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
+                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
                                                           itemName: _customItemNameController.text,
                                                           quantity: _qtyController.text.toString(),
                                                           notes: placeHolderValidation(newCustomItem.dItemNotes, _notesController),
                                                           unit: itemUnit,
                                                           possibleUnits: newCustomItem.unit,
-                                                          catName: Boxes.getCategoriesDB().get(int.parse(item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')))?.catName ?? 'Others',
-                                                          catId: item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', ''),
+                                                          catName: Boxes.getCategoriesDB().get(int.parse(item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')))?.catName ?? 'Others',
+                                                          catId: item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', ''),
                                                         );
 
                                                         if (widget.edit) {
@@ -968,7 +969,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                             .editItemCustomImageItemId.value ==
                                         item.itemId.toString()
                                 ? imageController.editItemCustomImageUrl.value
-                                : 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId}',
+                                : 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item.itemImageId}',
                             width: screenWidth * 25,
                             height: screenWidth * 25,
                           ),

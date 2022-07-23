@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:santhe/core/app_url.dart';
 part 'santhe_list_item_model.g.dart';
 
 @HiveType(typeId: 0)
@@ -58,7 +59,7 @@ class ListItem {
       possibleUnits: [data['unit']['stringValue']],
       catName: data['catName']['stringValue'],
       catId: int.parse(data['catId']['referenceValue'].toString().replaceAll(
-          'projects/santhe-425a8/databases/(default)/documents/category/', '')),
+          'projects/${AppUrl.envType}/databases/(default)/documents/category/', '')),
     );
   }
 }

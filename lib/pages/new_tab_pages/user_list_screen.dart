@@ -71,7 +71,7 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         title: Obx(() => _allListController.isTitleEditable.value
             ? Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10.vw),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Container(
                   // height: 35.sp,
                   decoration: BoxDecoration(
@@ -1035,7 +1035,9 @@ class _UserListScreenState extends State<UserListScreen> {
     NetworkCall().updateUserList(_userList, success: true);
     _allListController.allListMap[widget.listId] = _userList
       ..custListStatus = 'sent'
-      ..listUpdateTime = DateTime.now();
+      ..listUpdateTime = DateTime.now()
+      ..custOfferWaitTime = DateTime.now();
+
     _allListController.update(['newList', 'sentList', 'fab']);
     _homeController.homeTabController.animateTo(1);
     Get.back();

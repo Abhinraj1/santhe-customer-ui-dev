@@ -19,36 +19,38 @@ class OfferTabPage extends StatelessWidget {
         id: 'sentList',
         builder: (builder) {
           List<UserListModel> sentList = _allListController.sentList;
-          sentList.sort((a, b) {
-            var tempDiff1 = a.listUpdateTime.difference(DateTime.now());
-            var tempDiff2 = a.custOfferWaitTime.difference(DateTime.now());
-            DateTime sortA;
-            if(tempDiff2.abs() > tempDiff1.abs()){
-              sortA = a.listUpdateTime;
-            }else{
-              sortA = a.custOfferWaitTime;
-            }
+          // sentList.sort((a, b) {
+          //   var tempDiff1 = a.listUpdateTime.difference(DateTime.now());
+          //   var tempDiff2 = a.custOfferWaitTime.difference(DateTime.now());
+          //   DateTime sortA;
+          //   if(tempDiff2.abs() > tempDiff1.abs()){
+          //     sortA = a.listUpdateTime;
+          //   }else{
+          //     sortA = a.custOfferWaitTime;
+          //   }
+          //
+          //   if(a.processStatus=="accepted"||a.processStatus=="processed"){
+          //     sortA = a.listUpdateTime;
+          //   }
+          //
+          //   tempDiff1 = b.listUpdateTime.difference(DateTime.now());
+          //   tempDiff2 = b.custOfferWaitTime.difference(DateTime.now());
+          //
+          //   DateTime sortB;
+          //   if(tempDiff2.abs() > tempDiff1.abs()){
+          //     sortB = b.listUpdateTime;
+          //   }else{
+          //     sortB = b.custOfferWaitTime;
+          //   }
+          //
+          //   if(b.processStatus=="accepted"||b.processStatus=="processed"){
+          //     sortB = b.listUpdateTime;
+          //   }
+          //
+          //   return sortA.compareTo(sortB);
+          // });
 
-            if(a.processStatus=="accepted"||a.processStatus=="processed"){
-              sortA = a.listUpdateTime;
-            }
-
-            tempDiff1 = b.listUpdateTime.difference(DateTime.now());
-            tempDiff2 = b.custOfferWaitTime.difference(DateTime.now());
-
-            DateTime sortB;
-            if(tempDiff2>tempDiff1){
-              sortB = b.listUpdateTime;
-            }else{
-              sortB = b.custOfferWaitTime;
-            }
-
-            if(b.processStatus=="accepted"||b.processStatus=="processed"){
-              sortB = b.listUpdateTime;
-            }
-
-            return sortA.compareTo(sortB);
-          });
+          sentList.sort((a, b) => a.listUpdateTime.compareTo(b.listUpdateTime));
 
           sentList = sentList.reversed.toList();
 

@@ -578,7 +578,8 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                     .add(listItem);
                                                 await saveListAndUpdate();
                                                 added = true;
-                                                Get.back();
+                                                // replaced Get.back() as it was not being invoked after pressed
+                                                Navigator.of(context).pop();
                                               } else {
                                                 log('Error, action not completed!');
                                               }

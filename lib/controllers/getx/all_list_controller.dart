@@ -136,7 +136,7 @@ class AllListController extends GetxController {
     if (response == 1) {
       allListMap[copyListId] = copyUserList;
       if(moveToArchived) {
-        moveToArchive(allListMap[listId]!, showArchivedList: false);
+        await moveToArchive(allListMap[listId]!, showArchivedList: false);
       }
       update(['newList', 'fab']);
       Get.back();

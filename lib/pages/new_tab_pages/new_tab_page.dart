@@ -457,9 +457,7 @@ class _NewTabPageState extends State<NewTabPage>
                                         if (await _allListController
                                             .isListAlreadyExist(listName.trim())) {
                                           errorMsg('List name is already taken', 'Enter unique name');
-                                          setState(() {
-                                            disable = false;
-                                          });
+                                          _allListController.isProcessing.value = false;
                                         } else {
                                           _allListController
                                               .addNewListToDB(listName);
@@ -493,6 +491,7 @@ class _NewTabPageState extends State<NewTabPage>
                                           ),
                                         ),
                                       );
+                                      _allListController.isProcessing.value = false;
                                     } else if (_type ==
                                         NewListType.importFromOld) {
                                       if (selectedValue != null) {
@@ -525,6 +524,7 @@ class _NewTabPageState extends State<NewTabPage>
                                             ),
                                           ),
                                         );
+                                        _allListController.isProcessing.value = false;
                                       }
                                     }
                                   },

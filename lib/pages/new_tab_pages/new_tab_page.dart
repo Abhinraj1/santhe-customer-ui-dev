@@ -11,6 +11,7 @@ import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../core/app_colors.dart';
 import '../../models/new_list/user_list_model.dart';
 
@@ -447,44 +448,18 @@ class _NewTabPageState extends State<NewTabPage>
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16)),
                                   color: Colors.orange,
+                                  disabledColor: AppColors().grey80,
                                   onPressed: () async {
-                                    setState(() {
-                                      disable = true;
-                                    });
+                                    _allListController.isProcessing.value = true;
                                     if (listName.isNotEmpty &&
                                         _type == NewListType.startFromNew) {
                                       if (_formKey.currentState!.validate()) {
                                         if (await _allListController
                                             .isListAlreadyExist(listName.trim())) {
-                                          Get.snackbar(
-                                            '',
-                                            '',
-                                            titleText: const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 8.0),
-                                              child: Text(
-                                                  'List name already exists'),
-                                            ),
-                                            messageText: const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 8.0),
-                                              child: Text(
-                                                  'Please enter a new name'),
-                                            ),
-                                            margin: const EdgeInsets.all(10.0),
-                                            padding: const EdgeInsets.all(8.0),
-                                            backgroundColor: Colors.white,
-                                            shouldIconPulse: true,
-                                            icon: const Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                CupertinoIcons
-                                                    .exclamationmark_triangle_fill,
-                                                color: Colors.orange,
-                                                size: 45,
-                                              ),
-                                            ),
-                                          );
+                                          errorMsg('List name is already taken', 'Enter unique name');
+                                          setState(() {
+                                            disable = false;
+                                          });
                                         } else {
                                           _allListController
                                               .addNewListToDB(listName);

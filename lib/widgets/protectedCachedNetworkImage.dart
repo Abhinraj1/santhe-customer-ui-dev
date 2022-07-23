@@ -24,6 +24,8 @@ class ProtectedCachedNetworkImage extends StatelessWidget {
       height: height ?? MediaQuery.of(context).size.height / 2,
       width: width,
       useOldImageOnUrlChange: true,
+      fadeInDuration: const Duration(milliseconds: 100),
+      fadeOutDuration: const Duration(milliseconds: 50),
       errorWidget: (c, s, d) => ProtectedCachedNetworkImage(
         imageUrl:
             'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media',

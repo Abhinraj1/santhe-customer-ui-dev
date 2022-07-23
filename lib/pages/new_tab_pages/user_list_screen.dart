@@ -56,6 +56,7 @@ class _UserListScreenState extends State<UserListScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
           splashRadius: 0.1,
           icon: Icon(
@@ -378,7 +379,7 @@ class _UserListScreenState extends State<UserListScreen> {
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
     } else if (await _allListController.isListAlreadyExist(_title.trim())) {
-      errorMsg('List name cannot be duplicated', 'Enter unique name');
+      errorMsg('List name is already taken', 'Enter unique name');
     } else if (_title.trim().isNotEmpty) {
       _allListController.allListMap[widget.listId]!.listName = _title.trim();
       _userList = _allListController.allListMap[widget.listId]!;

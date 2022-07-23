@@ -60,7 +60,7 @@ class ProfileController extends GetxController {
     final apiController = Get.find<APIs>();
     await apiController.getCheckRadius(
         int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
-    log("Is Operational: " + isOperational.toString());
+    log("Is Operational: $isOperational");
   }
 
   set getCustomerDetails(CustomerModel customer) {

@@ -27,7 +27,6 @@ import 'controllers/getx/all_list_controller.dart';
 import 'controllers/notification_controller.dart';
 import 'controllers/registrationController.dart';
 import 'controllers/search_query_controller.dart';
-import 'controllers/sent_tab_offer_card_controller.dart';
 import 'models/santhe_category_model.dart';
 import 'models/santhe_faq_model.dart';
 import 'models/santhe_item_model.dart';
@@ -57,23 +56,17 @@ void main() async {
   Hive.registerAdapter(ItemAdapter());
   await Hive.initFlutter();
 
-  await Hive.openBox<UserList>('userListsDB');
-  await Hive.openBox<User>('userDB');
-  await Hive.openBox<UserCredential>('userCredentialsDB');
-  await Hive.openBox<bool>('userPrefsDB');
   await Hive.openBox<Category>('categoryDB');
   await Hive.openBox<Item>('itemDB');
   await Hive.openBox<CacheRefresh>('cacheRefreshDB');
   await Hive.openBox<FAQ>('faqDB');
   await Hive.openBox<String>('contentDB');
-  await Hive.openBox<UserList>('userListDB');
 
   Get.put(AllListController());
   Get.put(APIs());
   Get.put(LocationController());
   Get.put(RegistrationController());
   Get.put(CustomImageController());
-  Get.put(SentUserListController());
   Get.put(SearchQueryController());
   Get.put(ArchivedController());
   Get.put(NotificationController());

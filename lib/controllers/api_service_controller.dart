@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:algolia/algolia.dart';
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/getx/profile_controller.dart';
@@ -34,18 +35,7 @@ enum REST {
 class APIs extends GetxController {
   //Items & Category
   // var categoriesDB = <Category>[].obs;
-  var userListsDB = <UserList>[].obs;
-
-  //needed so that concurrent modification does not occur while iterating.
-  var offlineCustLists = <UserList>[].obs;
-
-  //to split and only call online list when truly needed.
-  var onlineCustLists = <UserList>[].obs;
-
-  //deleted user list buffer
-  var deletedUserLists = <UserList>[].obs;
-
-  var itemsDB = <Item>[].obs;
+  // var itemsDB = <Item>[].obs;
 
   Future<http.Response> callApi({
     required REST mode,
@@ -56,10 +46,10 @@ class APIs extends GetxController {
     await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
     final header = {"authorization": 'Bearer $token'};
-    log(header.toString());
     // case 1: get
     // case 2: post
     // case 3: update
+    // case 4: put
     switch (mode) {
       case REST.get:
         {
@@ -68,17 +58,10 @@ class APIs extends GetxController {
               url,
               headers: header,
             );
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
           break;
-          // throw NoInternetError();
         }
 
       case REST.post:
@@ -89,13 +72,6 @@ class APIs extends GetxController {
               body: body!,
               headers: header,
             );
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
-            // throw NoInternetError();
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
@@ -110,19 +86,23 @@ class APIs extends GetxController {
               body: body!,
               headers: header,
             );
-            // } on SocketException {
-            //   Get.to(
-            //     () => const NoInternetPage(),
-            //     transition: Transition.fade,
-            //   );
-            // }
-            // throw NoInternetError();
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
           break;
         }
-
+      case REST.put:
+        {
+          try {
+            return await http.put(
+              url,
+              headers: header,
+            );
+          } catch (e) {
+            AppHelpers.crashlyticsLog(e.toString());
+          }
+          break;
+        }
       default:
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
@@ -142,14 +122,9 @@ class APIs extends GetxController {
         final bool isInOperation = data['isInOperationalArea'];
         final profileController = Get.find<ProfileController>();
         profileController.isOperational.value = isInOperation;
-
-        // profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
-        // return 1;
       } else {
         AppHelpers.crashlyticsLog(response.body.toString());
         log('Request failed with status: ${response.statusCode}.');
-        // Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-        // return 0;
       }
     } on Exception catch (e) {
       log(e.toString());
@@ -185,7 +160,7 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       try {
         var data = jsonDecode(response.body);
-        print(response.body);
+        // print(response.body);
         List<ItemModel> listItems = [];
         for (var map in data['items']) {
           listItems.add(ItemModel(
@@ -977,48 +952,22 @@ class APIs extends GetxController {
           json.decode(response.body) == "No offers for this customer list."
               ? json.encode([]).toString()
               : response.body);
-      resp.sort((a, b) =>
-          a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
+      // resp.sort((a, b) =>
+      //     a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
 
-      // // DO NOT DELETE THIS SORTING LOGIC
-      // if (resp.isNotEmpty) {
-      //   resp.sort((a, b) =>
-      //       a.merchResponse.merchTotalPrice
-      //           .compareTo(b.merchResponse.merchTotalPrice));
-      //   resp = resp.reversed.toList();
-      //   resp.sort((a, b) =>
-      //       a.merchResponse.merchOfferQuantity
-      //           .compareTo(b.merchResponse.merchOfferQuantity));
-      //   resp = resp.reversed.toList();
-      //
-      //   final bestPrice = double.parse(resp[0].merchResponse.merchTotalPrice);
-      //
-      //   resp[0].custOfferResponse.custDeal = 'best1';
-      //
-      //   for (int i = 1; i < resp.length; i++) {
-      //     if (AppHelpers.isInBetween(
-      //       double.parse(resp[i].merchResponse.merchTotalPrice),
-      //       bestPrice,
-      //       bestPrice + 50,
-      //     ) &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best2';
-      //     } else if (AppHelpers.isInBetween(
-      //       double.parse(resp[i].merchResponse.merchTotalPrice),
-      //       bestPrice + 50,
-      //       bestPrice + 100,
-      //     ) &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best3';
-      //     } else if (double.parse(resp[i].merchResponse.merchTotalPrice) >=
-      //         bestPrice + 100 &&
-      //         resp[i].merchResponse.merchOfferQuantity == listQuantity) {
-      //       resp[i].custOfferResponse.custDeal = 'best4';
-      //     } else {
-      //       resp[i].custOfferResponse.custDeal = 'noBest';
-      //     }
-      //   }
-      // }
+      // SORT LOGIC
+      final newMap = groupBy(
+          resp, (CustomerOfferResponse c) => c.custOfferResponse.custDeal);
+      final deals = newMap.keys.toList();
+      deals.sort();
+      final list = <CustomerOfferResponse>[];
+      for (var i in deals) {
+        var l = newMap[i]!.toList();
+        list.addAll(l.sorted((a, b) => a.merchResponse.merchTotalPrice
+            .compareTo(b.merchResponse.merchTotalPrice)));
+      }
+      resp = list;
+
       return resp;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
@@ -1043,46 +992,19 @@ class APIs extends GetxController {
     }
   }
 
-  //patch
-  Future<int> acceptOffer(String listEventId) async {
-    log('Offer Accepted! ListEvent ID: $listEventId');
-    final String url = AppUrl.ACCEPT_OFFER(listEventId);
-
-    var body = {
-      "fields": {
-        "custOfferResponse": {
-          "mapValue": {
-            "fields": {
-              "custDeal": {"stringValue": "best1"},
-              "custOfferStatus": {"stringValue": "accepted"},
-            }
-          }
-        },
-        "merchResponse": {
-          "mapValue": {
-            "fields": {
-              "merchUpdateTime": {
-                "timestampValue":
-                    DateTime.now().toUtc().toString().replaceAll(' ', 'T')
-              }
-            }
-          }
-        }
-      }
-    };
+  Future<CustomerOfferResponse?> acceptOffer(String listId, String listEventId) async {
+    final String url = AppUrl.ACCEPT_OFFER(listId, listEventId);
 
     var response = await callApi(
-        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+        mode: REST.put, url: Uri.parse(url),);
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Offer Accepted! ListEvent ID: $listEventId');
-      return 1;
+      CustomerOfferResponse resp = CustomerOfferResponse.fromJson(json.decode(response.body));
+      return resp;
     } else {
       log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
       AppHelpers.crashlyticsLog(response.body.toString());
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      return 0;
+      return null;
     }
   }
 
@@ -1100,34 +1022,34 @@ class APIs extends GetxController {
     }
   }
 
-  Future<int> processedStatusChange(int listId) async {
-    log('**********processedStatusChange***********');
-    final String url = AppUrl.PROCESS_STATUS(listId.toString());
-    var body = {
-      "fields": {
-        "processStatus": {"stringValue": "accepted"},
-        "listUpdateTime": {
-          "timestampValue":
-              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
-        }
-      }
-    };
-
-    var response = await callApi(
-        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      log(data.toString());
-      log('Offer Accepted! List ID: $listId');
-      return 1;
-    } else {
-      AppHelpers.crashlyticsLog(response.body.toString());
-      log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      return 0;
-    }
-  }
+  // Future<int> processedStatusChange(int listId) async {
+  //   log('**********processedStatusChange***********');
+  //   final String url = AppUrl.PROCESS_STATUS(listId.toString());
+  //   var body = {
+  //     "fields": {
+  //       "processStatus": {"stringValue": "accepted"},
+  //       "listUpdateTime": {
+  //         "timestampValue":
+  //             DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+  //       }
+  //     }
+  //   };
+  //
+  //   var response = await callApi(
+  //       mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+  //
+  //   if (response.statusCode == 200) {
+  //     var data = jsonDecode(response.body);
+  //     log(data.toString());
+  //     log('Offer Accepted! List ID: $listId');
+  //     return 1;
+  //   } else {
+  //     AppHelpers.crashlyticsLog(response.body.toString());
+  //     log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
+  //     Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+  //     return 0;
+  //   }
+  // }
 
   //Archived Tab APIs------------------------------------------------
   //POST

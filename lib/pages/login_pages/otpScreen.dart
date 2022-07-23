@@ -346,6 +346,6 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void showSnackBar(BuildContext context, String text) {
-    successMsg(text, '');
+    successMsg('',text, textColorGreen: true);
   }
 }

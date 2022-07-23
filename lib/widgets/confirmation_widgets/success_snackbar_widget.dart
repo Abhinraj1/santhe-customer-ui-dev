@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../constants.dart';
 
-SnackbarController successMsg(String title, String body) {
+SnackbarController successMsg(String title, String body, {bool textColorGreen = false}) {
   return Get.snackbar(
     '',
     '',
@@ -24,10 +24,10 @@ SnackbarController successMsg(String title, String body) {
       padding: const EdgeInsets.only(left: 23.0),
       child: Text(
         body,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16,
-          color: kTextGrey,
+          color: textColorGreen ? const Color(0xff38B000):kTextGrey,
         ),
       ),
     ),

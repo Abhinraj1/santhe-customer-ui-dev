@@ -880,6 +880,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                             'Error Adding item to the list!',
                                                             backgroundColor: Colors.white,
                                                             colorText: Colors.grey);
+                                                        setState(() {
+                                                          isProcessing = false;
+                                                          disable = false;
+                                                        });
                                                       }
                                                       if (!widget.edit && widget.fromSearch != true) {
                                                         animateAdd(screenWidth / 100);
@@ -908,12 +912,18 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                           child: Icon(CupertinoIcons.exclamationmark_triangle_fill, color: Colors.yellow, size: 45,),
                                                         ),
                                                       );
+                                                      setState(() {
+                                                        isProcessing = false;
+                                                        disable = false;
+                                                      });
                                                     }
                                                   }
                                                 }
                                                 setState(() {
-                                                  isProcessing = false;
-                                                  disable = false;
+                                                  if(widget.edit || widget.fromSearch == true) {
+                                                    isProcessing = false;
+                                                    disable = false;
+                                                  }
                                                 });
                                               },
                                         child: AutoSizeText(

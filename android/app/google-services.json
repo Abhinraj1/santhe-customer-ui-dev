@@ -161,66 +161,6 @@
           ]
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:445035608011:android:806ada98b1cacc09d9684e",
-        "android_client_info": {
-          "package_name": "com.santhe.www.santhe"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "445035608011-0uip5e2c94vm2cnj8j23lu3ahn777fqr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.santhe.www.santhe",
-            "certificate_hash": "1227a4072fef31515b6942c3d4b3098ad278b3b6"
-          }
-        },
-        {
-          "client_id": "445035608011-e6hq5fg64ivc2cjlb6i5eu0tvp7rkt9i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.santhe.www.santhe",
-            "certificate_hash": "38e7a9bf4537f4a0711284d036797ff171d9231b"
-          }
-        },
-        {
-          "client_id": "445035608011-sm66rqv9d96ncojpg9f816qd8213uat8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.santhe.www.santhe",
-            "certificate_hash": "3bb128f026fe9bcaabd873293b436d1cdc3bbb84"
-          }
-        },
-        {
-          "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBBN76CGaZGMw_k4_TIXywX0FVWOWh4cwI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.santhe.customer"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"

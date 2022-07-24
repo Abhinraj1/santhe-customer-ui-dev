@@ -5,7 +5,7 @@ class AppUrl {
 
   static const String _environmentDev = 'santhe-425a8';
 
-  static const bool _dev = true;
+  static const bool _dev = false;
 
   static const String envType = _dev ? _environmentDev : _environmentProd;
 
@@ -56,6 +56,7 @@ class AppUrl {
 
   static String CHECK_RADIUS(String customerId) =>
       '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
+
   static String DUPLICATE_CHECK(String customerId, String listName) =>
       '$_baseCloudFunctions/app/customer/duplicateCheck?custId=$customerId&listName=$listName';
 

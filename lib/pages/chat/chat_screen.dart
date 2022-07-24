@@ -11,6 +11,7 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 
 import '../../Models/chat_model.dart';
@@ -327,7 +328,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendNotificationToAll(String content){
-    http.get(Uri.parse('https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/getNotificationToken?userId=${widget.listEventId.substring(0, 10)}&userType=merchant'), headers: {
+    http.get(Uri.parse('https://us-central1-${AppUrl.envType}.cloudfunctions.net/apis/santhe/v1/app/getNotificationToken?userId=${widget.listEventId.substring(0, 10)}&userType=merchant'), headers: {
       "authorization": bearerToken
     }).then((value) async {
       Map<dynamic, dynamic> pairs = jsonDecode(value.body);

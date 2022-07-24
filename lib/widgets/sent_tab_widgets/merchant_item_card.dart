@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 
@@ -47,7 +48,7 @@ class _MerchantItemCardState extends State<MerchantItemCard> {
             borderRadius: BorderRadius.circular(12),
             child: ProtectedCachedNetworkImage(
               imageUrl:
-                  'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${widget.merchantItem.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
+                  'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${widget.merchantItem.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
               height: 50.h,
               width: 50.h,
             ),

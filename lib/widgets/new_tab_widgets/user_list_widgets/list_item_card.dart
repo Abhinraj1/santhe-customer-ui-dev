@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 
 import 'package:santhe/models/santhe_item_model.dart';
@@ -42,7 +43,7 @@ class _ListItemCardState extends State<ListItemCard> {
     final screenSize = MediaQuery.of(context).size;
 
     String img = widget.listItem.itemImageId.replaceAll(
-        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+        'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
         '');
     return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -58,7 +59,7 @@ class _ListItemCardState extends State<ListItemCard> {
                     borderRadius: BorderRadius.circular(12),
                     child: ProtectedCachedNetworkImage(
                       imageUrl:
-                          'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/$img',
+                          'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/$img',
                       width: 50.h,
                       height: 50.h,
                     ),
@@ -136,7 +137,7 @@ class _ListItemCardState extends State<ListItemCard> {
                                 catId: widget.listItem.catId.toString(),
                                 dItemNotes: widget.listItem.notes,
                                 itemId: int.parse(widget.listItem.itemId.replaceAll(
-                                    'projects/santhe-425a8/databases/(default)/documents/item/',
+                                    'projects/${AppUrl.envType}/databases/(default)/documents/item/',
                                     '')),
                                 unit: widget.listItem.possibleUnits,
                                 dUnit: widget.listItem.unit,

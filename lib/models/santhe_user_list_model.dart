@@ -1,3 +1,4 @@
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/santhe_list_item_model.dart';
 import 'package:hive/hive.dart';
 
@@ -67,7 +68,7 @@ class UserList extends HiveObject {
         custId: int.parse(data['custId']['referenceValue']
             .toString()
             .replaceAll(
-                'projects/santhe-425a8/databases/(default)/documents/customer/',
+                'projects/${AppUrl.envType}/databases/(default)/documents/customer/',
                 '')),
         items: listItems,
         listId: int.parse(data['listId']['integerValue']),
@@ -89,7 +90,7 @@ class UserList extends HiveObject {
         custId: int.parse(data['custId']['referenceValue']
             .toString()
             .replaceAll(
-                'projects/santhe-425a8/databases/(default)/documents/customer/',
+                'projects/${AppUrl.envType}/databases/(default)/documents/customer/',
                 '')),
         items: listItems,
         listId: int.parse(data['listId']['integerValue']),

@@ -91,7 +91,7 @@ class AllListController extends GetxController {
   }
 
   List<UserListModel> getLatestList(int count) {
-    List<UserListModel> list = allList;
+    List<UserListModel> list = allList.where((element) => element.custListStatus!='deleted' && element.custListStatus!='purged').toList();
     list.sort((a, b) => b.createListTime.compareTo(a.createListTime));
     return list.take(count).toList();
   }
@@ -124,7 +124,7 @@ class AllListController extends GetxController {
     }
   }
 
-  Future<void> addCopyListToDB(String listId) async {
+  Future<void> addCopyListToDB(String listId,{bool moveToArchived = false}) async {
     isProcessing.value = true;
     String copyListId = AppHelpers().getPhoneNumberWithoutCountryCode +
         (allList.length + 1).toString();
@@ -135,6 +135,9 @@ class AllListController extends GetxController {
     isProcessing.value = false;
     if (response == 1) {
       allListMap[copyListId] = copyUserList;
+      if(moveToArchived) {
+        await moveToArchive(allListMap[listId]!, showArchivedList: false);
+      }
       update(['newList', 'fab']);
       Get.back();
       Get.to(
@@ -199,7 +202,7 @@ class AllListController extends GetxController {
     }
   }
 
-  Future<void> moveToArchive(UserListModel userList) async {
+  Future<void> moveToArchive(UserListModel userList, {bool showArchivedList = true}) async {
     isProcessing.value = true;
     int response = await NetworkCall().updateUserList(userList,
         status: 'archived', processStatus: userList.processStatus);
@@ -209,11 +212,13 @@ class AllListController extends GetxController {
       sentList.remove(allListMap[userList.listId]);
       archivedList.add(allListMap[userList.listId]!);
       update(['sentList', 'archivedList']);
-      Get.offAll(
-          () => const HomePage(
-                pageIndex: 2,
-              ),
-          transition: Transition.fade);
+      if(showArchivedList){
+        Get.offAll(
+                () => const HomePage(
+              pageIndex: 2,
+            ),
+            transition: Transition.fade);
+      }
     } else {
       errorMsg('Unexpected error occurred', 'Please try again');
     }

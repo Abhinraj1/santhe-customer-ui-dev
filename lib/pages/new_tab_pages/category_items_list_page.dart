@@ -4,6 +4,7 @@ import 'package:resize/resize.dart';
 
 import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 import '../../controllers/api_service_controller.dart';
@@ -84,7 +85,7 @@ class CategoryItemsPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               child: ProtectedCachedNetworkImage(
                                 imageUrl:
-                                'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
+                                'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
                                 width: 20.vw,
                                 height: 20.vw,
                               ),

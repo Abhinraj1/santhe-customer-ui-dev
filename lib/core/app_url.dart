@@ -7,13 +7,13 @@ class AppUrl {
 
   static const bool _dev = true;
 
-  static const String _envType = _dev ? _environmentDev : _environmentProd;
+  static const String envType = _dev ? _environmentDev : _environmentProd;
 
   static const String _baseUrl =
-      'https://firestore.googleapis.com/v1/projects/$_envType/databases/(default)/documents';
+      'https://firestore.googleapis.com/v1/projects/$envType/databases/(default)/documents';
 
   static const String _baseCloudFunctions =
-      'https://us-central1-$_envType.cloudfunctions.net/apis/santhe/v1';
+      'https://us-central1-$envType.cloudfunctions.net/apis/santhe/v1';
 
   static const String FAQURL = '$_baseUrl/content/custContent/';
 

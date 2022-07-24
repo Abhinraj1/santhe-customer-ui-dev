@@ -9,6 +9,7 @@ import 'package:resize/resize.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
@@ -56,6 +57,7 @@ class _UserListScreenState extends State<UserListScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
           splashRadius: 0.1,
           icon: Icon(
@@ -70,7 +72,7 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         title: Obx(() => _allListController.isTitleEditable.value
             ? Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10.vw),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Container(
                   // height: 35.sp,
                   decoration: BoxDecoration(
@@ -378,7 +380,7 @@ class _UserListScreenState extends State<UserListScreen> {
       _allListController.isTitleEditable.value =
           !_allListController.isTitleEditable.value;
     } else if (await _allListController.isListAlreadyExist(_title.trim())) {
-      errorMsg('List name cannot be duplicated', 'Enter unique name');
+      errorMsg('List name is already taken', 'Enter unique name');
     } else if (_title.trim().isNotEmpty) {
       _allListController.allListMap[widget.listId]!.listName = _title.trim();
       _userList = _allListController.allListMap[widget.listId]!;
@@ -411,7 +413,7 @@ class _UserListScreenState extends State<UserListScreen> {
                         )
                       : ProtectedCachedNetworkImage(
                           imageUrl:
-                              'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${item!.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', '')}',
+                              'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item!.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
                           width: 40.w,
                           height: 40.w,
                         ),
@@ -459,7 +461,7 @@ class _UserListScreenState extends State<UserListScreen> {
         .where((element) =>
             element.catId ==
             int.parse(item.catId.replaceAll(
-                'projects/santhe-425a8/databases/(default)/documents/category/',
+                'projects/${AppUrl.envType}/databases/(default)/documents/category/',
                 '')))
         .toList();
     if (temp.isEmpty) {
@@ -1034,7 +1036,9 @@ class _UserListScreenState extends State<UserListScreen> {
     NetworkCall().updateUserList(_userList, success: true);
     _allListController.allListMap[widget.listId] = _userList
       ..custListStatus = 'sent'
-      ..listUpdateTime = DateTime.now();
+      ..listUpdateTime = DateTime.now()
+      ..custOfferWaitTime = DateTime.now();
+
     _allListController.update(['newList', 'sentList', 'fab']);
     _homeController.homeTabController.animateTo(1);
     Get.back();

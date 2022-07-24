@@ -9,6 +9,7 @@ import 'package:group_button/group_button.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/network_call/network_call.dart';
@@ -65,6 +66,8 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   bool isProcessing = false;
 
   bool disable = false;
+
+  bool added = false;
 
   final imageController = Get.find<CustomImageController>();
 
@@ -255,7 +258,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                         ProtectedCachedNetworkImage(
                                           imageUrl: imageController
                                                   .addItemCustomImageUrl.isEmpty
-                                              ? 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/image%20placeholder.png?alt=media'
+                                              ? 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/image%20placeholder.png?alt=media'
                                               : imageController
                                                   .addItemCustomImageUrl.value,
                                           width: screenWidth * 25,
@@ -484,111 +487,117 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                           isProcessing = true;
                                         });
 
-                                        if (_formKey.currentState!.validate() &&
-                                            itemUnit.isNotEmpty &&
-                                            _customItemNameController.text
-                                                .trim()
-                                                .isNotEmpty) {
-                                          int itemCount = await apiController
-                                              .getItemsCount();
+                                        if(!added){
+                                          if (_formKey.currentState!.validate() &&
+                                              itemUnit.isNotEmpty &&
+                                              _customItemNameController.text
+                                                  .trim()
+                                                  .isNotEmpty) {
+                                            int itemCount = await apiController
+                                                .getItemsCount();
 
-                                          String image = imageController
-                                              .addItemCustomImageUrl.value;
+                                            String image = imageController
+                                                .addItemCustomImageUrl.value;
 
-                                          if (itemCount != 0) {
-                                            //todo add custom item to firebase
-                                            Item newCustomItem = Item(
-                                                dBrandType: _customBrandController.text
-                                                        .trim()
-                                                        .isEmpty
-                                                    ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
-                                                    : _customBrandController.text
-                                                        .trim(),
-                                                dItemNotes: _customNotesController.text
-                                                        .trim()
-                                                        .isEmpty
-                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
-                                                    : _customNotesController.text
-                                                        .trim(),
-                                                itemImageTn: imageController
-                                                    .addItemCustomImageUrl.value
-                                                    .replaceAll(
-                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
-                                                catId: '4000',
-                                                createUser: custPhone,
-                                                dQuantity: 1,
-                                                dUnit: selectedUnit,
-                                                itemAlias: _customItemNameController
-                                                    .text,
-                                                itemId: itemCount,
-                                                itemImageId: image.isEmpty
-                                                    ? 'image%20placeholder.png?alt=media'
-                                                    : image.replaceAll(
-                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/', ''),
-                                                itemName:
-                                                    _customItemNameController.text.trim(),
-                                                status: 'inactive',
-                                                unit: availableUnits,
-                                                updateUser: custPhone);
+                                            if (itemCount != 0) {
+                                              //todo add custom item to firebase
+                                              Item newCustomItem = Item(
+                                                  dBrandType: _customBrandController.text
+                                                      .trim()
+                                                      .isEmpty
+                                                      ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
+                                                      : _customBrandController.text
+                                                      .trim(),
+                                                  dItemNotes: _customNotesController.text
+                                                      .trim()
+                                                      .isEmpty
+                                                      ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
+                                                      : _customNotesController.text
+                                                      .trim(),
+                                                  itemImageTn: imageController
+                                                      .addItemCustomImageUrl.value
+                                                      .replaceAll(
+                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
+                                                  catId: '4000',
+                                                  createUser: custPhone,
+                                                  dQuantity: 1,
+                                                  dUnit: selectedUnit,
+                                                  itemAlias: _customItemNameController
+                                                      .text,
+                                                  itemId: itemCount,
+                                                  itemImageId: image.isEmpty
+                                                      ? 'image%20placeholder.png?alt=media'
+                                                      : image.replaceAll(
+                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
+                                                  itemName:
+                                                  _customItemNameController.text.trim(),
+                                                  status: 'inactive',
+                                                  unit: availableUnits,
+                                                  updateUser: custPhone);
 
-                                            int response = await apiController
-                                                .addItem(newCustomItem);
+                                              int response = await apiController
+                                                  .addItem(newCustomItem);
 
-                                            if (response == 1) {
-                                              var listItem = ListItemModel(
-                                                brandType: _customBrandController
-                                                        .text
-                                                        .trim()
-                                                        .isEmpty
-                                                    ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
-                                                    : _customBrandController
-                                                        .text
-                                                        .trim(),
-                                                //item ref
-                                                itemId: '$itemCount',
-                                                itemImageId: image.isEmpty
-                                                    ? 'image%20placeholder.png?alt=media'
-                                                    : image.replaceAll(
-                                                        'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
-                                                        ''),
-                                                itemName:
-                                                    _customItemNameController
-                                                        .text
-                                                        .trim(),
-                                                quantity:
-                                                    _customQtyController.text,
-                                                notes: _customNotesController
-                                                        .text
-                                                        .trim()
-                                                        .isEmpty
-                                                    ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
-                                                    : _customNotesController
-                                                        .text
-                                                        .trim(),
-                                                unit: itemUnit,
-                                                possibleUnits: availableUnits,
-                                                catName: 'Others',
-                                                catId: '4000',
-                                              );
+                                              if (response == 1) {
+                                                var listItem = ListItemModel(
+                                                  brandType: _customBrandController
+                                                      .text
+                                                      .trim()
+                                                      .isEmpty
+                                                      ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
+                                                      : _customBrandController
+                                                      .text
+                                                      .trim(),
+                                                  //item ref
+                                                  itemId: '$itemCount',
+                                                  itemImageId: image.isEmpty
+                                                      ? 'image%20placeholder.png?alt=media'
+                                                      : image.replaceAll(
+                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
+                                                      ''),
+                                                  itemName:
+                                                  _customItemNameController
+                                                      .text
+                                                      .trim(),
+                                                  quantity:
+                                                  _customQtyController.text,
+                                                  notes: _customNotesController
+                                                      .text
+                                                      .trim()
+                                                      .isEmpty
+                                                      ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
+                                                      : _customNotesController
+                                                      .text
+                                                      .trim(),
+                                                  unit: itemUnit,
+                                                  possibleUnits: availableUnits,
+                                                  catName: 'Others',
+                                                  catId: '4000',
+                                                );
 
-                                              currentUserList.items
-                                                  .add(listItem);
-                                              await saveListAndUpdate();
-                                              Get.back();
-                                            } else {
-                                              log('Error, action not completed!');
+                                                currentUserList.items
+                                                    .add(listItem);
+                                                await saveListAndUpdate();
+                                                added = true;
+                                                // replaced Get.back() as it was not being invoked after pressed
+                                                Navigator.of(context).pop();
+                                              } else {
+                                                log('Error, action not completed!');
+                                              }
                                             }
+                                          } else {
+                                            Get.snackbar(
+                                              'Please fill all required values',
+                                              'Please enter all the values for required fields...',
+                                              snackPosition: SnackPosition.TOP,
+                                              backgroundColor: Colors.white,
+                                              margin: const EdgeInsets.all(10.0),
+                                              padding: const EdgeInsets.all(15.0),
+                                              colorText: Colors.grey,
+                                            );
                                           }
-                                        } else {
-                                          Get.snackbar(
-                                            'Please fill all required values',
-                                            'Please enter all the values for required fields...',
-                                            snackPosition: SnackPosition.TOP,
-                                            backgroundColor: Colors.white,
-                                            margin: const EdgeInsets.all(10.0),
-                                            padding: const EdgeInsets.all(15.0),
-                                            colorText: Colors.grey,
-                                          );
+                                        }else{
+                                          Get.back();
                                         }
 
                                         setState(() {

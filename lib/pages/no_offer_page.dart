@@ -124,8 +124,11 @@ class NoOfferPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: () => _allListController
-                                  .addCopyListToDB(userList.listId),
+                              onTap: () => _allListController.isProcessing.value
+                                  ? null
+                                  : _allListController.addCopyListToDB(
+                                      userList.listId,
+                                      moveToArchived: true),
                               splashColor: AppColors().white100,
                               child: Container(
                                 height: 50,
@@ -150,8 +153,9 @@ class NoOfferPage extends StatelessWidget {
                               width: 20.sp,
                             ),
                             InkWell(
-                              onTap: () =>
-                                  _allListController.moveToArchive(userList),
+                              onTap: () => _allListController.isProcessing.value
+                                  ? null
+                                  : _allListController.moveToArchive(userList),
                               splashColor: AppColors().white100,
                               child: Container(
                                 height: 50,
@@ -173,7 +177,7 @@ class NoOfferPage extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   )

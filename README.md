@@ -15,7 +15,7 @@ Next Update: **1.0.0+2**<br>
 1. Replace **google-services.json** in **android/app/google-services.json** with production firebase json.
 2. Replace _dev to false in **lib/core/app_url.dart**
 3. Change package name using:
-   <br> **flutter pub run change_app_package_name:main com.santhe.customer.prod** <br>
+   <br> **flutter pub run change_app_package_name:main com.santhe.customer** <br>
    in terminal.
 4. Build flutter apk using:
    <br> **flutter clean**

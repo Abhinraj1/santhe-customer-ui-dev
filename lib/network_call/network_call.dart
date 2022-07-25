@@ -40,7 +40,7 @@ class NetworkCall{
                   "op": "EQUAL",
                   "value": {
                     "referenceValue":
-                    "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+                    "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
                   }
                 }
               }
@@ -76,13 +76,13 @@ class NetworkCall{
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
+              "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
+              "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -102,7 +102,7 @@ class NetworkCall{
         "custListStatus": {"stringValue": 'new'},
         "custId": {
           "referenceValue":
-          "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+          "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
         },
         "custListSentTime": {
           "timestampValue":
@@ -161,6 +161,9 @@ class NetworkCall{
     var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.SUBSCRIPTION_PLAN));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
+      if(plan=='default'){
+        plan = "planA";
+      }
       String? val = jsonResponse['fields']['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]['integerValue'];
       return val == null ? 3 : int.parse(val);
     } else {
@@ -191,7 +194,7 @@ class NetworkCall{
             "quantity": {"doubleValue": item.quantity},
             "itemImageId": {
               "stringValue": item.itemImageId.replaceAll(
-                  'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                  'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
                   '')
             },
             "unit": {"stringValue": item.unit},
@@ -199,13 +202,13 @@ class NetworkCall{
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/category/${item.catId.replaceAll('projects/santhe-425a8/databases/(default)/documents/category/', '')}"
+              "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-              "projects/santhe-425a8/databases/(default)/documents/item/${item.itemId.replaceAll('projects/santhe-425a8/databases/(default)/documents/item/', '')}"
+              "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -233,7 +236,7 @@ class NetworkCall{
         "custListStatus": {"stringValue": status ?? "sent"},
         "custId": {
           "referenceValue":
-          "projects/santhe-425a8/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+          "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
         },
         "listOfferCounter": {"integerValue": "0"},
         "listName": {"stringValue": userList.listName},

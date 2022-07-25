@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
 import 'package:resize/resize.dart';
@@ -33,8 +34,8 @@ class SentListItemCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: ProtectedCachedNetworkImage(
-                    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/${listItem.itemImageId.replaceAll(
-                      'https://firebasestorage.googleapis.com/v0/b/santhe-425a8.appspot.com/o/',
+                    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${listItem.itemImageId.replaceAll(
+                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
                       '',
                     )}',
                     width: 50.h,

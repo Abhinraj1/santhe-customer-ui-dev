@@ -42,7 +42,7 @@ class ProfileController extends GetxController {
     await generateUrlToken(override: startApp);
     if (isLoggedIn) await getCustomerDetailsInit();
     if (isLoggedIn && isRegistered) await cacheRefresh();
-    if (isLoggedIn && isRegistered) await getOperationalStatus();
+    if (isLoggedIn && isRegistered && !customerDetails!.opStats) await getOperationalStatus();
   }
 
   Future<void> getCustomerDetailsInit() async {
@@ -59,7 +59,11 @@ class ProfileController extends GetxController {
   Future<void> getOperationalStatus() async {
     final apiController = Get.find<APIs>();
     await apiController.getCheckRadius(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode),
+      customerDetails!.lat.toString(),
+      customerDetails!.lng.toString(),
+      customerDetails!.pinCode.toString(),
+    );
     log("Is Operational: $isOperational");
   }
 

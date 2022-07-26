@@ -109,8 +109,8 @@ class APIs extends GetxController {
   }
 
   //get
-  Future<void> getCheckRadius(int custId) async {
-    final String url = AppUrl.CHECK_RADIUS(custId.toString());
+  Future<void> getCheckRadius(int custId, String lat, String long, String pinCode) async {
+    final String url = AppUrl.CHECK_RADIUS(custId.toString(), lat, long, pinCode);
 
     try {
       final response = await callApi(mode: REST.get, url: Uri.parse(url));
@@ -121,6 +121,7 @@ class APIs extends GetxController {
         final bool isInOperation = data['isInOperationalArea'] ?? true;
         final profileController = Get.find<ProfileController>();
         profileController.isOperational.value = isInOperation;
+        profileController.customerDetails!.opStats = isInOperation;
       } else {
         AppHelpers.crashlyticsLog(response.body.toString());
         log('Request failed with status: ${response.statusCode}.');
@@ -783,6 +784,7 @@ class APIs extends GetxController {
         var jsonData = data['fields'];
         final profileController = Get.find<ProfileController>();
         profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
+        print(profileController.customerDetails.toString());
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');
@@ -834,8 +836,7 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
-      getCustomerInfo(custId);
-
+      // getCustomerInfo(custId);
       log('SUCCESS');
       return 1;
     } else {

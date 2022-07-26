@@ -119,7 +119,7 @@ class APIs extends GetxController {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
-        final bool isInOperation = data['isInOperationalArea'];
+        final bool isInOperation = data['isInOperationalArea'] ?? true;
         final profileController = Get.find<ProfileController>();
         profileController.isOperational.value = isInOperation;
       } else {

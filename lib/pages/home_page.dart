@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -70,7 +71,8 @@ class _HomePageState extends State<HomePage>
       drawer: const NavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
+            log(await AppHelpers().getToken);
             _key.currentState!.openDrawer();
           },
           splashRadius: 25.0,

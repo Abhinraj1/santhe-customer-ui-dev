@@ -278,7 +278,7 @@ class _ChatScreenState extends State<ChatScreen> {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': 'key=${AppUrl.FCM_API_KEY}', // FCM Server key
+        'Authorization': 'key=${AppUrl.FCMKey}', // FCM Server key
       },
       body: jsonEncode(
         <String, dynamic>{
@@ -313,7 +313,7 @@ class _ChatScreenState extends State<ChatScreen> {
         Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'key=${AppUrl.FCM_API_KEY}', // FCM Server key
+          'Authorization': 'key=${AppUrl.FCMKey}', // FCM Server key
         },
         body: jsonEncode(
           <String, dynamic>{

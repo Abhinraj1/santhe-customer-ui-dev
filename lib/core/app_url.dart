@@ -15,6 +15,10 @@ class AppUrl {
 
   static const String envType = _dev ? _environmentDev : _environmentProd;
 
+  static const String SEARCH_API_KEY = 'ba0045efa2818ec596b013d1b5dbe461';
+
+  static const String SEARCH_APP_ID = '7565UIF34Z';
+
   static const String _baseUrl =
       'https://firestore.googleapis.com/v1/projects/$envType/databases/(default)/documents';
 
@@ -46,14 +50,6 @@ class AppUrl {
 
   static const String VERIFY_OTP =
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key=$API_KEY';
-
-  static const String SEARCH_API_KEY = 'ba0045efa2818ec596b013d1b5dbe461';
-
-  static const String FCM_API_KEY = _dev
-      ? 'AAAAZ54wd8s:APA91bEsDji0lceBsyQ2Dm_c1eerM0N6-Vle3k83ZGH8Q8cKOY-0CGh7aJHC5iMrkxUVurSoUS_WAv4Qez9BHRSAHKgUcDeEuKVX5CevL03KAEpChNCgjz8-mInRCnQXJjORuMUZMbhF'
-      : 'AAAAXnjll4s:APA91bEr3J8lWpZ4oFwV0tO8a-eu-JJSGknWM34Np0ANZusYb_hcpFawqfI4ZEOc13uYYLNqN2lyK_R7tpsqMjlyaI3TlXwIwikVtKKneaEc0zozu_j2QFRLSGm8vpW4QaKWurGfJBCl';
-
-  static const String SEARCH_APP_ID = '7565UIF34Z';
 
   static String PURGE_LIST(String listId) =>
       '$_baseUrl/customerList/$listId?updateMask.fieldPaths=custListStatus';

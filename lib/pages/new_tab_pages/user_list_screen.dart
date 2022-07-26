@@ -320,13 +320,32 @@ class _UserListScreenState extends State<UserListScreen> {
                                   child: Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.sp),
-                                    child: Text(
-                                      'Psst! --> Add few more items to be able to send your list to shops',
-                                      style: TextStyle(
-                                        color: AppColors().brandDark,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/cart.png',
+                                          fit: BoxFit.contain,
+                                          color: AppColors().brandLight,
+                                          width: 80.sp,
+                                          height: 80.sp,
+                                        ),
+                                        SizedBox(
+                                          height: 25.sp,
+                                        ),
+                                        Text(
+                                          'Psst!\nAdd few more items to be able to\nsend your list to shops',
+                                          style: TextStyle(
+                                            color: AppColors().brandLight,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 )

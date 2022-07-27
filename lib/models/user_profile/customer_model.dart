@@ -70,7 +70,7 @@ class CustomerModel {
             json['custLoginTime']['timestampValue']),
         howToReach: json['contact']['mapValue']['fields']['howToReach']
         ['stringValue'],
-        opStats: json['opStats']['booleanValue']
+        opStats: json['opStats']==null?false:json['opStats']['booleanValue']
     );
   }
 }

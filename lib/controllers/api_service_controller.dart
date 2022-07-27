@@ -109,8 +109,8 @@ class APIs extends GetxController {
   }
 
   //get
-  Future<void> getCheckRadius(int custId, String lat, String long, String pinCode) async {
-    final String url = AppUrl.CHECK_RADIUS(custId.toString(), lat, long, pinCode);
+  Future<void> getCheckRadius(int custId, String lat, String long) async {
+    final String url = AppUrl.CHECK_RADIUS(custId.toString(), lat, long);
 
     try {
       final response = await callApi(mode: REST.get, url: Uri.parse(url));

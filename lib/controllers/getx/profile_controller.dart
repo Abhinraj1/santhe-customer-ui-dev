@@ -62,7 +62,6 @@ class ProfileController extends GetxController {
       int.parse(AppHelpers().getPhoneNumberWithoutCountryCode),
       customerDetails!.lat.toString(),
       customerDetails!.lng.toString(),
-      customerDetails!.pinCode.toString(),
     );
     log("Is Operational: $isOperational");
   }
@@ -151,5 +150,13 @@ class ProfileController extends GetxController {
     }
 
     box.put('cacheRefresh', newCacheRefresh);
+  }
+
+  void deleteEverything(){
+    isLoggedIn = false;
+    isRegistered = false;
+    isOperational.value = false;
+    customerDetails = null;
+    _urlToken = null;
   }
 }

@@ -183,6 +183,21 @@ class NetworkCall{
     }
   }
 
+  Future<bool> deleteUser() async{
+    final url = AppUrl.DELETE_USER(profileController.customerDetails!.phoneNumber);
+
+    final response = await callApi(mode: REST.post, url: Uri.parse(url));
+
+    if(response.statusCode==200){
+      return true;
+    }else{
+      log('Request failed with status: ${response.statusCode}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return false;
+    }
+  }
+
   Future updateUserList(UserListModel userList, {String? status, String? processStatus, bool success = false}) async {
     List items = [];
     int i = 0;

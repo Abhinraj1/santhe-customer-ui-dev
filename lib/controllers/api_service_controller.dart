@@ -784,7 +784,7 @@ class APIs extends GetxController {
         var jsonData = data['fields'];
         final profileController = Get.find<ProfileController>();
         profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
-        print(profileController.customerDetails.toString());
+        profileController.isOperational.value = profileController.customerDetails!.opStats;
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');

@@ -184,30 +184,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     width: 67.w,
                     child: Obx(() => ElevatedButton(
                         onPressed: _chatController.messageIsEmpty.value ? null : () async {
-                          /*var url = 'https://fcm.googleapis.com/fcm/send';
-                        await http.post(
-                          Uri.parse(url),
-                          headers: <String, String>{
-                            'Content-Type': 'application/json',
-                            'Authorization': 'key=AAAAZ54wd8s:APA91bEsDji0lceBsyQ2Dm_c1eerM0N6-Vle3k83ZGH8Q8cKOY-0CGh7aJHC5iMrkxUVurSoUS_WAv4Qez9BHRSAHKgUcDeEuKVX5CevL03KAEpChNCgjz8-mInRCnQXJjORuMUZMbhF', // FCM Server key
-                          },
-                          body: jsonEncode(
-                            <String, dynamic>{
-                              "notification": <String, dynamic>{
-                                "body": 'title',
-                                "title": 'New message from customer',
-                              },
-                              //'registration_ids': ['token1', 'token2'], // Multiple id
-                              'to': 'cLL3-6Y9fEqwhbTum1Sxs3:APA91bEv37mliXz7H1n8R4q7_Bk3BUxBVtoo1Fj2Npc3u64IoKfN3u1n64kJcgfR7H0pi0nkC95ktaCtn7k3yiKls1uhSpjkw_eE2ZVbrqq_tN2qewAWDcPf_GECL6mXrU61k52Icmiz', // single id
-                              "direct_boot_ok": true,
-                              "data": {
-                                "landingScreen": 'chat',
-                                'chatId': widget.chatId,
-                                'title': 'Offers: Rs ' + widget.title// page navigation arguments
-                              }
-                            },
-                          ),
-                        );*/
                           if(_sendMessage){
                             _sendMessage = false;
                             _reference.child(widget.chatId).update({

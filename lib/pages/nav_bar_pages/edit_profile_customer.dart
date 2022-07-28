@@ -1,12 +1,15 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
+import 'package:santhe/pages/delete_account_page.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -326,7 +329,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(top: 23.sp, bottom: 5),
+                                padding: EdgeInsets.only(top: 8.sp, bottom: 5),
                                 child: Text(
                                   'Email Id *',
                                   textAlign: TextAlign.start,
@@ -408,7 +411,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(top: 23.sp, bottom: 5),
+                                padding: EdgeInsets.only(top: 8.sp, bottom: 5),
                                 child: Text(
                                   'Address *',
                                   textAlign: TextAlign.start,
@@ -494,9 +497,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                             .trim() ==
                                                         ''
                                                     ? 'Select Address'
-                                                    : '${registrationController
-                                                            .address.value} ${registrationController
-                                                            .howToReach.value}',
+                                                    : '${registrationController.address.value} ${registrationController.howToReach.value}',
                                                 style: registrationController
                                                             .address.value
                                                             .trim() ==
@@ -528,7 +529,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                             ],
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 25.sp),
+                            padding: EdgeInsets.only(top: 20.sp),
                             child: SizedBox(
                               width: isProcessing ? 50.sp : 244.sp,
                               height: 50.sp,
@@ -546,7 +547,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           donePressed = true;
                                           isProcessing = true;
                                         });
-                                        if (_formKey.currentState!.validate() && registrationController.address.isNotEmpty) {
+                                        if (_formKey.currentState!.validate() &&
+                                            registrationController
+                                                .address.isNotEmpty) {
                                           if (profileController.isLoggedIn) {
                                             CustomerModel? currentUser =
                                                 profileController
@@ -561,8 +564,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                   () => const LoginScreen());
                                             }
 
-                                            log('------>>>>>>>>${registrationController
-                                                    .pinCode.value}');
+                                            log('------>>>>>>>>${registrationController.pinCode.value}');
                                             //todo add how to reach howToReach
                                             User updatedUser = User(
                                                 address: registrationController
@@ -648,7 +650,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(top: 18.sp),
+                padding: EdgeInsets.only(top: 15.sp),
                 child: Text(
                   'We will use your Phone number and Email to send you important communications',
                   textAlign: TextAlign.center,
@@ -659,6 +661,34 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                   ),
                 ),
               ),
+              if (Platform.isIOS)
+                Padding(
+                  padding: EdgeInsets.only(top: 8.sp),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: 'If you wish to delete your account click here: ',
+                      style: TextStyle(
+                        color: const Color(0xff8B8B8B),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13.sp,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Delete Account',
+                          style: TextStyle(
+                            color: AppColors().brandDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13.sp,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap =
+                                () => Get.to(() => const DeleteAccountPage()),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

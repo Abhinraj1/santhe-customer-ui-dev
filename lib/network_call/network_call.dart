@@ -18,8 +18,7 @@ import 'package:http/http.dart' as http;
 
 enum REST { get, post, put, delete, patch }
 
-class NetworkCall{
-
+class NetworkCall {
   final profileController = Get.find<ProfileController>();
 
   Future<List<NewListResponseModel>> getAllCustomerLists() async {
@@ -40,7 +39,7 @@ class NetworkCall{
                   "op": "EQUAL",
                   "value": {
                     "referenceValue":
-                    "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+                        "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
                   }
                 }
               }
@@ -50,10 +49,15 @@ class NetworkCall{
         }
       }
     };
-    var response = await callApi(mode: REST.post, url: Uri.parse(AppUrl.RUN_QUERY), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post,
+        url: Uri.parse(AppUrl.RUN_QUERY),
+        body: jsonEncode(body));
     if (response.statusCode == 200) {
       final condition = json.decode(response.body)[0]['document'] == null;
-      final body = condition ? <NewListResponseModel>[] : newListResponseModelFromJson(response.body.toString());
+      final body = condition
+          ? <NewListResponseModel>[]
+          : newListResponseModelFromJson(response.body.toString());
       return body;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
@@ -76,13 +80,13 @@ class NetworkCall{
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-              "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-              "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -94,7 +98,7 @@ class NetworkCall{
       "fields": {
         "createListTime": {
           "timestampValue":
-          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
         "items": {
           "arrayValue": {"values": items}
@@ -102,21 +106,21 @@ class NetworkCall{
         "custListStatus": {"stringValue": 'new'},
         "custId": {
           "referenceValue":
-          "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+              "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
         },
         "custListSentTime": {
           "timestampValue":
-          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
         "listUpdateTime": {
           "timestampValue":
-          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
         'notificationProcess': {'stringValue': 'reminder'},
         'dealProcess': {'booleanValue': false},
         "custOfferWaitTime": {
           "timestampValue":
-          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
         "listOfferCounter": {"integerValue": "0"},
         "processStatus": {"stringValue": "draft"},
@@ -125,7 +129,10 @@ class NetworkCall{
       }
     };
 
-    var response = await callApi(mode: REST.post, url: Uri.parse(AppUrl.ADD_LIST(userList.listId)), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.post,
+        url: Uri.parse(AppUrl.ADD_LIST(userList.listId)),
+        body: jsonEncode(body));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
@@ -144,7 +151,10 @@ class NetworkCall{
       }
     };
 
-    var response = await callApi(mode: REST.patch, url: Uri.parse(AppUrl.PURGE_LIST(listId)), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch,
+        url: Uri.parse(AppUrl.PURGE_LIST(listId)),
+        body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -158,13 +168,15 @@ class NetworkCall{
   }
 
   Future<int> getSubscriptionLimit(String plan) async {
-    var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.SUBSCRIPTION_PLAN));
+    var response =
+        await callApi(mode: REST.get, url: Uri.parse(AppUrl.SUBSCRIPTION_PLAN));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
-      if(plan=='default'){
+      if (plan == 'default') {
         plan = "planA";
       }
-      String? val = jsonResponse['fields']['subscription']['mapValue']['fields']['custSubscription']['mapValue']['fields'][plan]['integerValue'];
+      String? val = jsonResponse['fields']['subscription']['mapValue']['fields']
+          ['custSubscription']['mapValue']['fields'][plan]['integerValue'];
       return val == null ? 3 : int.parse(val);
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
@@ -173,7 +185,10 @@ class NetworkCall{
   }
 
   Future<CustomerModel> getCustomerDetails() async {
-    var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(AppHelpers().getPhoneNumberWithoutCountryCode)));
+    var response = await callApi(
+        mode: REST.get,
+        url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(
+            AppHelpers().getPhoneNumberWithoutCountryCode)));
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse != null && response.statusCode == 200) {
       return CustomerModel.fromJson(jsonResponse['fields']);
@@ -183,7 +198,27 @@ class NetworkCall{
     }
   }
 
-  Future updateUserList(UserListModel userList, {String? status, String? processStatus, bool success = false}) async {
+  Future<bool> deleteUser() async {
+    final url =
+        AppUrl.DELETE_USER(profileController.customerDetails!.phoneNumber);
+
+    final response = await callApi(
+      mode: REST.delete,
+      url: Uri.parse(url),
+    );
+
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      log('Request failed with status: ${response.statusCode}.');
+      AppHelpers.crashlyticsLog(response.body.toString());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return false;
+    }
+  }
+
+  Future updateUserList(UserListModel userList,
+      {String? status, String? processStatus, bool success = false}) async {
     List items = [];
     int i = 0;
 
@@ -202,13 +237,13 @@ class NetworkCall{
             "catName": {"stringValue": item.catName},
             "catId": {
               "referenceValue":
-              "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/category/${item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')}"
             },
             "itemSeqNum": {"integerValue": "$i"},
             "brandType": {"stringValue": item.brandType},
             "itemId": {
               "referenceValue":
-              "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
+                  "projects/${AppUrl.envType}/databases/(default)/documents/item/${item.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '')}"
             },
             "notes": {"stringValue": item.notes}
           }
@@ -222,21 +257,21 @@ class NetworkCall{
       "fields": {
         "custListSentTime": {
           "timestampValue":
-          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
         "processStatus": {"stringValue": processStatus ?? "draft"},
         "custOfferWaitTime": {
           "timestampValue":
-          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         },
         "createListTime": {
           "timestampValue":
-          userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
+              userList.createListTime.toUtc().toString().replaceAll(' ', 'T')
         },
         "custListStatus": {"stringValue": status ?? "sent"},
         "custId": {
           "referenceValue":
-          "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+              "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
         },
         "listOfferCounter": {"integerValue": "0"},
         "listName": {"stringValue": userList.listName},
@@ -246,15 +281,18 @@ class NetworkCall{
         "listId": {"integerValue": userList.listId},
         "listUpdateTime": {
           "timestampValue":
-          DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
         }
       }
     };
 
-    var response = await callApi(mode: REST.patch, url: Uri.parse(AppUrl.UPDATE_USER_LIST(userList.listId)), body: jsonEncode(body));
+    var response = await callApi(
+        mode: REST.patch,
+        url: Uri.parse(AppUrl.UPDATE_USER_LIST(userList.listId)),
+        body: jsonEncode(body));
 
     if (response.statusCode == 200) {
-      if(success) successMsg('Success', 'List sent successfully');
+      if (success) successMsg('Success', 'List sent successfully');
       return 1;
     } else {
       log('Request failed with status: ${response.statusCode}.');
@@ -276,7 +314,7 @@ class NetworkCall{
 
       final faqList = [];
 
-      for(int i=0;i<data.length;i++){
+      for (int i = 0; i < data.length; i++) {
         faqList.add(FAQ.fromJson(data[i]));
       }
 
@@ -289,16 +327,20 @@ class NetworkCall{
     }
   }
 
-  Future<http.Response> callApi({required REST mode, required Uri url, String? body}) async {
+  Future<http.Response> callApi(
+      {required REST mode, required Uri url, String? body}) async {
     final tokenHandler = Get.find<ProfileController>();
     await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
-    final header = { "authorization": 'Bearer $token' };
+    final header = {"authorization": 'Bearer $token'};
     switch (mode) {
       case REST.get:
         {
           try {
-            return await http.get(url, headers: header,);
+            return await http.get(
+              url,
+              headers: header,
+            );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
@@ -308,7 +350,24 @@ class NetworkCall{
       case REST.post:
         {
           try {
-            return await http.post(url, body: body!, headers: header,);
+            return await http.post(
+              url,
+              body: body!,
+              headers: header,
+            );
+          } catch (e) {
+            AppHelpers.crashlyticsLog(e.toString());
+          }
+          break;
+        }
+
+      case REST.delete:
+        {
+          try {
+            return await http.delete(
+              url,
+              headers: header,
+            );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
@@ -318,7 +377,11 @@ class NetworkCall{
       case REST.patch:
         {
           try {
-            return await http.patch(url, body: body!, headers: header,);
+            return await http.patch(
+              url,
+              body: body!,
+              headers: header,
+            );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
           }
@@ -331,7 +394,7 @@ class NetworkCall{
     throw NoInternetError();
   }
 
-  /*Future<List<ListItemModel>> getSearchItemResult() async {
+/*Future<List<ListItemModel>> getSearchItemResult() async {
     var response = await callApi(mode: REST.get, url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(AppHelpers().getPhoneNumberWithoutCountryCode)));
     if (response.statusCode == 200) {
       var item = searchItemResponseModelFromJson(response.body);

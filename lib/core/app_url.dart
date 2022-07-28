@@ -7,13 +7,19 @@ class AppUrl {
 
   static const bool _dev = true;
 
-  static const String _FCMKeyDev = 'AAAAZ54wd8s:APA91bEsDji0lceBsyQ2Dm_c1eerM0N6-Vle3k83ZGH8Q8cKOY-0CGh7aJHC5iMrkxUVurSoUS_WAv4Qez9BHRSAHKgUcDeEuKVX5CevL03KAEpChNCgjz8-mInRCnQXJjORuMUZMbhF';
+  static const String _FCMKeyDev =
+      'AAAAZ54wd8s:APA91bEsDji0lceBsyQ2Dm_c1eerM0N6-Vle3k83ZGH8Q8cKOY-0CGh7aJHC5iMrkxUVurSoUS_WAv4Qez9BHRSAHKgUcDeEuKVX5CevL03KAEpChNCgjz8-mInRCnQXJjORuMUZMbhF';
 
-  static const String _FCMKeyProd = 'AAAAXnjll4s:APA91bEr3J8lWpZ4oFwV0tO8a-eu-JJSGknWM34Np0ANZusYb_hcpFawqfI4ZEOc13uYYLNqN2lyK_R7tpsqMjlyaI3TlXwIwikVtKKneaEc0zozu_j2QFRLSGm8vpW4QaKWurGfJBCl';
+  static const String _FCMKeyProd =
+      'AAAAXnjll4s:APA91bEr3J8lWpZ4oFwV0tO8a-eu-JJSGknWM34Np0ANZusYb_hcpFawqfI4ZEOc13uYYLNqN2lyK_R7tpsqMjlyaI3TlXwIwikVtKKneaEc0zozu_j2QFRLSGm8vpW4QaKWurGfJBCl';
 
   static const String FCMKey = _dev ? _FCMKeyDev : _FCMKeyProd;
 
   static const String envType = _dev ? _environmentDev : _environmentProd;
+
+  static const String SEARCH_API_KEY = 'ba0045efa2818ec596b013d1b5dbe461';
+
+  static const String SEARCH_APP_ID = '7565UIF34Z';
 
   static const String _baseUrl =
       'https://firestore.googleapis.com/v1/projects/$envType/databases/(default)/documents';
@@ -47,12 +53,11 @@ class AppUrl {
   static const String VERIFY_OTP =
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key=$API_KEY';
 
-  static const String SEARCH_API_KEY = 'ba0045efa2818ec596b013d1b5dbe461';
-
-  static const String SEARCH_APP_ID = '7565UIF34Z';
-
   static String PURGE_LIST(String listId) =>
       '$_baseUrl/customerList/$listId?updateMask.fieldPaths=custListStatus';
+
+  static String DELETE_USER(String phone) =>
+      '$_baseCloudFunctions/customers/$phone';
 
   static String ADD_LIST(String listId) =>
       '$_baseUrl/customerList/?documentId=$listId';
@@ -60,8 +65,11 @@ class AppUrl {
   static String GET_CUSTOMER_DETAILS(String customerId) =>
       '$_baseUrl/customer/$customerId';
 
-  static String CHECK_RADIUS(String customerId) =>
-      '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
+  static String CHECK_RADIUS(
+          String customerId, String lat, String long, String pinCode) =>
+      '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId&lat=$lat&lng=$long&pincode=$pinCode';
+      // '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
+
   static String DUPLICATE_CHECK(String customerId, String listName) =>
       '$_baseCloudFunctions/app/customer/duplicateCheck?custId=$customerId&listName=$listName';
 
@@ -94,5 +102,6 @@ class AppUrl {
   static String UPDATE_DEVICE_TOKEN(String userId) =>
       '$_baseCloudFunctions/customers/$userId/deviceToken';
 
-  static String ACCEPT_OFFER(String listId, String listEventId) => '$_baseCloudFunctions/offers/$listId/$listEventId/accept';
+  static String ACCEPT_OFFER(String listId, String listEventId) =>
+      '$_baseCloudFunctions/offers/$listId/$listEventId/accept';
 }

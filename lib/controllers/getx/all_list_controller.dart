@@ -224,7 +224,6 @@ class AllListController extends GetxController {
     }
   }
 
-  // bool isListAlreadyExist(String listName) => allList.where((element) => element.listName == listName).toList().isNotEmpty;
   Future<bool> isListAlreadyExist(String listName) async {
     final APIs api = Get.find();
     return await api.duplicateCheck(
@@ -237,5 +236,12 @@ class AllListController extends GetxController {
     final data = await NetworkCall()
         .getSubscriptionLimit(profileController.customerDetails!.customerPlan);
     lengthLimit = data;
+  }
+
+  void deleteEverything(){
+    allListMap.clear();
+    newList.clear();
+    sentList.clear();
+    archivedList.clear();
   }
 }

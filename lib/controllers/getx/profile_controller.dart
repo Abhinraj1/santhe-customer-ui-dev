@@ -4,10 +4,14 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
+import 'package:santhe/models/santhe_category_model.dart';
+import 'package:santhe/models/santhe_faq_model.dart';
+import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 
@@ -19,6 +23,8 @@ class ProfileController extends GetxController {
   bool isRegistered = false;
 
   bool isLoggedIn = false;
+
+  bool deletedNow = false;
 
   String? _urlToken;
 
@@ -42,7 +48,7 @@ class ProfileController extends GetxController {
     await generateUrlToken(override: startApp);
     if (isLoggedIn) await getCustomerDetailsInit();
     if (isLoggedIn && isRegistered) await cacheRefresh();
-    if (isLoggedIn && isRegistered) await getOperationalStatus();
+    if (isLoggedIn && isRegistered && !customerDetails!.opStats) await getOperationalStatus();
   }
 
   Future<void> getCustomerDetailsInit() async {
@@ -59,7 +65,11 @@ class ProfileController extends GetxController {
   Future<void> getOperationalStatus() async {
     final apiController = Get.find<APIs>();
     await apiController.getCheckRadius(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode),
+      customerDetails!.lat.toString(),
+      customerDetails!.lng.toString(),
+      customerDetails!.pinCode,
+    );
     log("Is Operational: $isOperational");
   }
 
@@ -73,6 +83,14 @@ class ProfileController extends GetxController {
 
     CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
     var box = Boxes.getCacheRefreshInfo();
+
+    if(deletedNow){
+      await Hive.openBox<Category>('categoryDB');
+      await Hive.openBox<Item>('itemDB');
+      await Hive.openBox<CacheRefresh>('cacheRefreshDB');
+      await Hive.openBox<FAQ>('faqDB');
+      await Hive.openBox<String>('contentDB');
+    }
 
     //getting all content that's to be cached if not already done
     if (!box.containsKey('cacheRefresh') || box.isEmpty) {
@@ -147,5 +165,14 @@ class ProfileController extends GetxController {
     }
 
     box.put('cacheRefresh', newCacheRefresh);
+  }
+
+  void deleteEverything(){
+    isLoggedIn = false;
+    isRegistered = false;
+    isOperational.value = false;
+    customerDetails = null;
+    _urlToken = null;
+    deletedNow = true;
   }
 }

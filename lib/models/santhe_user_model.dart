@@ -32,6 +32,8 @@ class User {
   @HiveField(13)
   final int pincode;
 
+  final bool opStats;
+
   User({
     required this.address,
     required this.emailId,
@@ -47,6 +49,7 @@ class User {
     required this.custLoginTime,
     required this.custPlan,
     required this.pincode,
+    this.opStats = false,
   });
 
   factory User.fromJson(Map json) {
@@ -73,6 +76,7 @@ class User {
       custLoginTime: DateTime.parse(json['custLoginTime']['timestampValue']),
       howToReach: json['contact']['mapValue']['fields']['howToReach']
           ['stringValue'],
+      opStats: json['opStats']['booleanValue']
     );
   }
 }

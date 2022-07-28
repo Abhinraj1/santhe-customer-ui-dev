@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:algolia/algolia.dart';
-import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/getx/profile_controller.dart';
@@ -110,8 +109,8 @@ class APIs extends GetxController {
   }
 
   //get
-  Future<void> getCheckRadius(int custId) async {
-    final String url = AppUrl.CHECK_RADIUS(custId.toString());
+  Future<void> getCheckRadius(int custId, String lat, String long, String pinCode) async {
+    final String url = AppUrl.CHECK_RADIUS(custId.toString(), lat, long, pinCode);
 
     try {
       final response = await callApi(mode: REST.get, url: Uri.parse(url));
@@ -122,6 +121,7 @@ class APIs extends GetxController {
         final bool isInOperation = data['isInOperationalArea'] ?? true;
         final profileController = Get.find<ProfileController>();
         profileController.isOperational.value = isInOperation;
+        profileController.customerDetails!.opStats = isInOperation;
       } else {
         AppHelpers.crashlyticsLog(response.body.toString());
         log('Request failed with status: ${response.statusCode}.');
@@ -784,6 +784,7 @@ class APIs extends GetxController {
         var jsonData = data['fields'];
         final profileController = Get.find<ProfileController>();
         profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
+        profileController.isOperational.value = profileController.customerDetails!.opStats;
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');
@@ -835,8 +836,7 @@ class APIs extends GetxController {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       log(data.toString());
-      getCustomerInfo(custId);
-
+      // getCustomerInfo(custId);
       log('SUCCESS');
       return 1;
     } else {
@@ -954,21 +954,6 @@ class APIs extends GetxController {
           json.decode(response.body) == "No offers for this customer list."
               ? json.encode([]).toString()
               : response.body);
-      // resp.sort((a, b) =>
-      //     a.custOfferResponse.custDeal.compareTo(b.custOfferResponse.custDeal));
-
-      // SORT LOGIC
-      final newMap = groupBy(
-          resp, (CustomerOfferResponse c) => c.custOfferResponse.custDeal);
-      final deals = newMap.keys.toList();
-      deals.sort();
-      final list = <CustomerOfferResponse>[];
-      for (var i in deals) {
-        var l = newMap[i]!.toList();
-        list.addAll(l.sorted((a, b) => a.merchResponse.merchTotalPrice
-            .compareTo(b.merchResponse.merchTotalPrice)));
-      }
-      resp = list;
 
       return resp;
     } else {

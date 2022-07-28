@@ -25,8 +25,8 @@ Next Update: **1.0.0+2**<br>
 
 **IMPORTANT**<br>
 Always update app version:<br>
-Current Version : **1.0.1+1**<br>
-Next Update: **1.0.1+2**<br>
+Current Version : **1.0.1+3**<br>
+Next Update: **1.0.1+4**<br>
 
 1. Replace **google-services.json** in **android/app/google-services.json** with development firebase json.
 2. Replace _dev to true in **lib/core/app_url.dart**

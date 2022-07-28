@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -660,33 +661,34 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 8.sp),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: 'If you wish to delete your account click here: ',
-                    style: TextStyle(
-                      color: const Color(0xff8B8B8B),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13.sp,
+              if (Platform.isIOS)
+                Padding(
+                  padding: EdgeInsets.only(top: 8.sp),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: 'If you wish to delete your account click here: ',
+                      style: TextStyle(
+                        color: const Color(0xff8B8B8B),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13.sp,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Delete Account',
+                          style: TextStyle(
+                            color: AppColors().brandDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13.sp,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap =
+                                () => Get.to(() => const DeleteAccountPage()),
+                        )
+                      ],
                     ),
-                    children: [
-                      TextSpan(
-                        text: 'Delete Account',
-                        style: TextStyle(
-                          color: AppColors().brandDark,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13.sp,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap =
-                              () => Get.to(() => const DeleteAccountPage()),
-                      )
-                    ],
                   ),
                 ),
-              ),
             ],
           ),
         ),

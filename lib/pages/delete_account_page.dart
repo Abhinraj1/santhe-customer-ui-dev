@@ -12,6 +12,7 @@ import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/nav_bar_pages/privacy_policy_page.dart';
 import 'package:santhe/pages/nav_bar_pages/terms_condition_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
 class DeleteAccountPage extends StatelessWidget {
   const DeleteAccountPage({Key? key}) : super(key: key);
@@ -140,41 +141,6 @@ class DeleteAccountPage extends StatelessWidget {
                     width: 8.sp,
                   ),
                   Expanded(
-                    child: Text(
-                      'If you wish to create a new account with the same phone number, you can do so after 48 hours.',
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
-                      style: TextStyle(
-                        color: const Color(0xff8B8B8B),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.sp,
-            ),
-            SizedBox(
-              width: screenSize.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '•',
-                    style: TextStyle(
-                      color: const Color(0xff8B8B8B),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.sp,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8.sp,
-                  ),
-                  Expanded(
                     child: RichText(
                       textAlign: TextAlign.left,
                       text: TextSpan(
@@ -219,6 +185,38 @@ class DeleteAccountPage extends StatelessWidget {
                               },
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: screenSize.width,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '•',
+                    style: TextStyle(
+                      color: const Color(0xff8B8B8B),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18.sp,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8.sp,
+                  ),
+                  Expanded(
+                    child: Text(
+                      'In case of any questions about your account, you can write to us at contact@santhe.in',
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                        color: const Color(0xff8B8B8B),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18.sp,
                       ),
                     ),
                   ),
@@ -424,6 +422,8 @@ class DeleteAccountPage extends StatelessWidget {
                                       profile.deleteEverything();
                                       final lists = Get.find<AllListController>();
                                       lists.deleteEverything();
+
+                                      successMsg('Success', 'Successfully deleted profile');
 
                                       Get.offAll(() => const LoginScreen());
                                     } else {

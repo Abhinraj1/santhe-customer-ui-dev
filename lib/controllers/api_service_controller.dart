@@ -1119,41 +1119,21 @@ class APIs extends GetxController {
 
     for (var i in resp.hits) {
       searchResults.add(Item.fromJson(i.data));
-      // print(i.data);
     }
 
     return searchResults;
-
-    // final response = await callApi(mode: REST.get, url: Uri.parse(url));
-    //
-    // if (response.statusCode == 200) {
-    //   log(searchQuery);
-    //   log(response.body.toString());
-    //   List jsonResponse = jsonDecode(response.body);
-    //
-    //   for (int i = 0; i < jsonResponse.length; i++) {
-    //     if (jsonResponse[i]['status'] == 'active') {
-    //       searchResults.add(Item.fromJson(jsonResponse[i]));
-    //     }
-    //   }
-    //
-    //   return searchResults;
-    // } else {
-    //   AppHelpers.crashlyticsLog(response.body.toString());
-    //   log('Request failed with status: ${response.statusCode}.');
-    //   Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-    //   throw 'error!';
-    // }
   }
 
   Future<void> updateDeviceToken(String userId) async {
     final String token = await AppHelpers().getToken;
     String uid = await AppHelpers().getDeviceId();
-    var headers = {'Content-Type': 'application/json'};
-    var request =
-        http.Request('PUT', Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
+    final header = {
+      "authorization": 'Bearer ${await AppHelpers().authToken}',
+      'Content-Type': 'application/json'
+    };
+    var request = http.Request('PUT', Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
     request.body = json.encode({"deviceToken": token, "deviceId": uid});
-    request.headers.addAll(headers);
+    request.headers.addAll(header);
 
     http.StreamedResponse response = await request.send();
 
@@ -1163,5 +1143,11 @@ class APIs extends GetxController {
       AppHelpers.crashlyticsLog('update device token error');
       log('Error', error: response.reasonPhrase);
     }
+  }
+
+  Future<bool> getLoginStatus(String userId) async {
+    var request = await http.get(Uri.parse(AppUrl.checkLogin + userId));
+    print(request.body);
+    return jsonDecode(request.body)['allow_login'] ?? true;
   }
 }

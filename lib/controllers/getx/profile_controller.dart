@@ -53,8 +53,7 @@ class ProfileController extends GetxController {
 
   Future<void> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
-    final result = await apiController.getCustomerInfo(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+    final result = await apiController.getCustomerInfo(int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
     if (result == 0) {
       isRegistered = false;
     } else {

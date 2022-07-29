@@ -6,15 +6,27 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter/material.dart';
+import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/nav_bar_pages/privacy_policy_page.dart';
 import 'package:santhe/pages/nav_bar_pages/terms_condition_page.dart';
+import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 import 'otpScreen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+
+  bool isLoading = false;
+  final GlobalKey<FormState> key = GlobalKey();
+  String? number;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +36,6 @@ class LoginScreen extends StatelessWidget {
       statusBarColor: AppColors().white100,
       statusBarIconBrightness: Brightness.dark,
     ));
-    final GlobalKey<FormState> key = GlobalKey();
-    String? number;
     return Scaffold(
       backgroundColor: AppColors().white100,
       body: SingleChildScrollView(
@@ -205,10 +215,18 @@ class LoginScreen extends StatelessWidget {
             //next
             InkWell(
               onTap: () async {
-                if (key.currentState!.validate()) {
-                  Get.to(
+                if (key.currentState!.validate() && !isLoading) {
+                  setState(() => isLoading = true);
+                  bool status = await APIs().getLoginStatus(number!);
+                  if(status){
+                    setState(() => isLoading = false);
+                    Get.to(
                     OtpScreen(phoneNumber: number!),
                   );
+                  }else{
+                    setState(() => isLoading = false);
+                    errorMsg('Login denied', '');
+                  }
                 }
               },
               child: Container(
@@ -223,7 +241,7 @@ class LoginScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 12.0, horizontal: 24),
-                    child: Text(
+                    child: isLoading ? SizedBox(height: 25.h, width: 25.h, child: CircularProgressIndicator(color: AppColors().white100,),) : Text(
                       "Next",
                       style: TextStyle(
                           color: Constant.white,

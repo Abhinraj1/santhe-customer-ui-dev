@@ -31,6 +31,8 @@ class AppHelpers {
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';
 
+  Future<String> get authToken async => await FirebaseAuth.instance.currentUser!.getIdToken();
+
   String get playStoreLink => appStoreLink;
   String get appStoreLink => '''Hey,
 

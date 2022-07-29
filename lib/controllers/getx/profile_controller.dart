@@ -24,8 +24,6 @@ class ProfileController extends GetxController {
 
   bool isLoggedIn = false;
 
-  bool deletedNow = false;
-
   String? _urlToken;
 
   String get urlToken => _urlToken ?? '';
@@ -53,8 +51,7 @@ class ProfileController extends GetxController {
 
   Future<void> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
-    final result = await apiController.getCustomerInfo(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+    final result = await apiController.getCustomerInfo(int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
     if (result == 0) {
       isRegistered = false;
     } else {
@@ -84,13 +81,11 @@ class ProfileController extends GetxController {
     CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
     var box = Boxes.getCacheRefreshInfo();
 
-    if(deletedNow){
-      await Hive.openBox<Category>('categoryDB');
-      await Hive.openBox<Item>('itemDB');
-      await Hive.openBox<CacheRefresh>('cacheRefreshDB');
-      await Hive.openBox<FAQ>('faqDB');
-      await Hive.openBox<String>('contentDB');
-    }
+    await Hive.openBox<Category>('categoryDB');
+    await Hive.openBox<Item>('itemDB');
+    await Hive.openBox<CacheRefresh>('cacheRefreshDB');
+    await Hive.openBox<FAQ>('faqDB');
+    await Hive.openBox<String>('contentDB');
 
     //getting all content that's to be cached if not already done
     if (!box.containsKey('cacheRefresh') || box.isEmpty) {
@@ -173,6 +168,5 @@ class ProfileController extends GetxController {
     isOperational.value = false;
     customerDetails = null;
     _urlToken = null;
-    deletedNow = true;
   }
 }

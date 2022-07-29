@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
+import 'package:santhe/core/app_helpers.dart';
+
 class AppUrl {
   static const String _environmentProd = 'santhe-prod';
 
@@ -28,6 +30,8 @@ class AppUrl {
       'https://us-central1-$envType.cloudfunctions.net/apis/santhe/v1';
 
   static const String FAQURL = '$_baseUrl/content/custContent/';
+
+  static String checkLogin = '$_baseCloudFunctions/customers/status/';
 
   static const String AboutUs = '$_baseUrl/content/common/';
 

@@ -5,18 +5,16 @@ import 'package:santhe/pages/error_pages/no_internet_page.dart';
 class ConnectivityController extends GetxController{
   bool hasInternet = true;
 
+  bool inInternetErrorScreen = false;
+
   ConnectivityResult connectivityResult = ConnectivityResult.none;
 
   void listenConnectivity(ConnectivityResult result){
     connectivityResult = result;
 
     if(result == ConnectivityResult.none){
-      Future.delayed(const Duration(seconds: 2), (){
-        if(result == ConnectivityResult.none){
-          hasInternet = false;
-          Get.to(() => const NoInternetPage(), transition: Transition.fade);
-        }
-      });
+      hasInternet = false;
+      Get.to(() => const NoInternetPage(), transition: Transition.fade);
     }
 
     if((result == ConnectivityResult.wifi || result == ConnectivityResult.mobile) && !hasInternet){

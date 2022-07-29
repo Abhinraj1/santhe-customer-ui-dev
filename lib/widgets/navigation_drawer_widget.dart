@@ -167,7 +167,8 @@ class NavigationDrawer extends StatelessWidget {
                   snackPosition: SnackPosition.BOTTOM,
                   backgroundColor: Colors.white,
                 );
-                launchUrl(Uri.parse('https://www.google.com'));
+                launchUrl(Uri.parse(
+                    'https://play.google.com/store/apps/details?id=com.santhe.customer'));
               } else if (Platform.isIOS) {
                 Get.snackbar('Opening AppStore Link', 'Please rate us fairly!',
                     snackPosition: SnackPosition.BOTTOM);

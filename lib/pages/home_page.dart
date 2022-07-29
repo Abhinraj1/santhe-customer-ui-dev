@@ -72,7 +72,8 @@ class _HomePageState extends State<HomePage>
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {
-            log(await AppHelpers().getToken);
+            //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
+            //log(await AppHelpers().getToken);
             _key.currentState!.openDrawer();
           },
           splashRadius: 25.0,

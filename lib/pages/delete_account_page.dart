@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
@@ -14,437 +15,255 @@ import 'package:santhe/pages/nav_bar_pages/terms_condition_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
+import '../core/app_theme.dart';
+
 class DeleteAccountPage extends StatelessWidget {
   const DeleteAccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height / 100;
-    final screenSize = MediaQuery.of(context).size;
+    bool isLoading = false;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         elevation: 0.0,
-        toolbarHeight: screenHeight * 5.5,
         leading: IconButton(
           splashRadius: 0.1,
           icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            size: 13.sp,
+            Icons.arrow_back_ios,
+            color: AppColors().white100,
+            size: 20.sp,
           ),
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
           },
         ),
         title: Text(
-          'Delete Account',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 18.sp),
+          "Delete Account",
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30.sp),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 40.sp),
-              width: screenSize.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/delete.png',
-                    width: 60.sp,
-                    height: 60.sp,
-                  ),
-                  SizedBox(
-                    width: 25.sp,
-                  ),
-                  Text(
-                    'Deleting your Account',
-                    style: TextStyle(
-                        color: const Color(0xFFF94943),
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ],
+      body: Column(
+        children: [
+          SizedBox(
+            height: 40.h,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60.h,
+                width: 60.h,
+                child: Image.asset('assets/delete.png'),
               ),
-            ),
-            SizedBox(
-              height: 30.sp,
-            ),
-            Text(
-              'Please be aware of the following, while deleting your account.',
-              style: TextStyle(
-                color: const Color(0xff8B8B8B),
-                fontWeight: FontWeight.w500,
-                fontSize: 18.sp,
-              ),
-            ),
-            SizedBox(
-              height: 20.sp,
-            ),
-            SizedBox(
-              width: screenSize.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '•',
-                    style: TextStyle(
-                      color: const Color(0xff8B8B8B),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.sp,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8.sp,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Your Account deletion cannot be reversed.',
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
-                      style: TextStyle(
-                        color: const Color(0xff8B8B8B),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.sp,
-            ),
-            SizedBox(
-              width: screenSize.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '•',
-                    style: TextStyle(
-                      color: const Color(0xff8B8B8B),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.sp,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8.sp,
-                  ),
-                  Expanded(
-                    child: RichText(
-                      textAlign: TextAlign.left,
-                      text: TextSpan(
-                        text:
-                            'To know more about data deletion please review our ',
-                        style: TextStyle(
-                          color: const Color(0xff8B8B8B),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18.sp,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Terms and Conditions ',
-                            style: TextStyle(
-                              color: const Color(0xffA187FD),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18.sp,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Get.to(() => const TermsAndConditionsPage());
-                              },
-                          ),
-                          TextSpan(
-                            text: 'and ',
-                            style: TextStyle(
-                              color: const Color(0xff8B8B8B),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18.sp,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: TextStyle(
-                              color: const Color(0xffA187FD),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18.sp,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Get.to(() => const PrivacyPolicyPage());
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: screenSize.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '•',
-                    style: TextStyle(
-                      color: const Color(0xff8B8B8B),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.sp,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8.sp,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'In case of any questions about your account, you can write to us at contact@santhe.in',
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
-                      style: TextStyle(
-                        color: const Color(0xff8B8B8B),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 30.sp,
-            ),
-            SizedBox(
-              width: screenSize.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MaterialButton(
-                    minWidth: screenSize.width / 3 + 10,
-                    height: 50.sp,
-                    elevation: 0.0,
-                    highlightElevation: 0.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    color: AppColors().brandDark,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Go Back',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18.sp,
-                        ),
-                      ),
-                    ),
-                    onPressed: () => Get.back(),
-                  ),
-                  MaterialButton(
-                    minWidth: screenSize.width / 3 + 10,
-                    height: 50.sp,
-                    elevation: 0.0,
-                    highlightElevation: 0.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    color: AppColors().grey80,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Delete',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18.sp,
-                        ),
-                      ),
-                    ),
-                    onPressed: () => _confirmDelete(context, screenSize),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future _confirmDelete(BuildContext context, Size screenSize) {
-    bool deleting = false;
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => WillPopScope(
-        onWillPop: () async => false,
-        child: StatefulBuilder(
-          builder: (ctx, setState) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(25.sp),
+              SizedBox(width: 17.w,),
+              Text(
+                'Deleting your Account',
+                style: AppTheme().bold700(18, color: AppColors().red100),
+              )
+            ],
+          ),
+          SizedBox(height: 28.h,),
+          //points
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 35.w),
+            child: Column(
+              children: [
+                Text(
+                  'Please be aware of the following, while deleting your account',
+                  style: AppTheme().normal400(18, color: AppColors().grey80),
                 ),
-              ),
-              content: deleting
-                  ? SizedBox(
-                      height: screenSize.height / 5 + 15,
-                      width: screenSize.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Deleting...',
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              color: AppColors().brandDark,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.sp,
-                          ),
-                          const CircularProgressIndicator.adaptive(),
-                        ],
+                SizedBox(height: 34.h,),
+                //points
+                //point 1
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '•',
+                      style: AppTheme().normal400(18, color: AppColors().grey80),
+                    ),
+                    SizedBox(width: 10.w,),
+                    Expanded(
+                      child: Text(
+                        'Your Account deletion cannot be reversed',
+                        style: AppTheme().normal400(18, color: AppColors().grey80),
                       ),
                     )
-                  : SizedBox(
-                      height: screenSize.height / 5 + 15,
-                      width: screenSize.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Are you sure?',
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              color: AppColors().brandDark,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.sp,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'We are Sorry to see your leave! If you change your mind, now is your chance.',
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                color: AppColors().grey80,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.sp,
-                          ),
-                          SizedBox(
-                            width: screenSize.width,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                MaterialButton(
-                                  minWidth: screenSize.width / 4 + 10,
-                                  height: 40.sp,
-                                  elevation: 0.0,
-                                  highlightElevation: 0.0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                  color: AppColors().brandDark,
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'Go Back',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () => Get.back(),
-                                ),
-                                MaterialButton(
-                                  minWidth: screenSize.width / 4 + 10,
-                                  height: 40.sp,
-                                  elevation: 0.0,
-                                  highlightElevation: 0.0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                  color: AppColors().grey80,
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'Delete',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    setState(() {
-                                      deleting = true;
-                                    });
-
-                                    final result =
-                                        await NetworkCall().deleteUser();
-                                    if (result) {
-                                      await FirebaseAuth.instance.signOut();
-                                      await Boxes.getItemsDB().deleteFromDisk();
-                                      await Boxes.getFAQs().deleteFromDisk();
-                                      await Boxes.getContent().deleteFromDisk();
-                                      await Boxes.getCacheRefreshInfo()
-                                          .deleteFromDisk();
-                                      await Boxes.getCategoriesDB()
-                                          .deleteFromDisk();
-                                      final  profile = Get.find<ProfileController>();
-                                      profile.deleteEverything();
-                                      final lists = Get.find<AllListController>();
-                                      lists.deleteEverything();
-
-                                      successMsg('Success', 'Successfully deleted profile');
-
-                                      Get.offAll(() => const LoginScreen());
-                                    } else {
-                                      setState(() {
-                                        deleting = false;
-                                      });
-                                      errorMsg(
-                                          'Failed', 'User deletion failed');
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                  ],
+                ),
+                SizedBox(height: 10.h,),
+                //point 2
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '•',
+                      style: AppTheme().normal400(18, color: AppColors().grey80),
                     ),
-              contentPadding: EdgeInsets.all(25.sp),
-            );
-          },
-        ),
+                    SizedBox(width: 10.w,),
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'To know more about data deletion please review our ',
+                                style: AppTheme().normal400(18, color: AppColors().grey80),
+                              ),
+                              TextSpan(
+                                  text: 'Terms and Conditions ',
+                                  style: AppTheme().normal400(18, color: AppColors().purple100),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: const TermsAndConditionsPage(),
+                                              type: PageTransitionType.rightToLeft));
+                                    }
+                              ),
+                              TextSpan(
+                                text: 'and ',
+                                style: AppTheme().normal400(18, color: AppColors().grey80),
+                              ),
+                              TextSpan(
+                                  text: 'Privacy Policy',
+                                  style: AppTheme().normal400(18, color: AppColors().purple100),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: const PrivacyPolicyPage(),
+                                              type: PageTransitionType.rightToLeft));
+                                    }
+                              )
+                            ]
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10.h,),
+                //point 3
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '•',
+                      style: AppTheme().normal400(18, color: AppColors().grey80),
+                    ),
+                    SizedBox(width: 10.w,),
+                    Expanded(
+                      child: Text(
+                        'Incase of any questions about your account, you can write to us at contact@santhe.in',
+                        style: AppTheme().normal400(18, color: AppColors().grey80),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 40.h,),
+                //buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        height: 50.h,
+                        width: 150.w,
+                        child: ElevatedButton(onPressed: () => Navigator.pop(context), child: Text('Go Back'))),
+                    SizedBox(
+                        height: 50.h,
+                        width: 150.w,
+                        child: ElevatedButton(
+                          onPressed: (){
+                            showDialog(context: context, builder: (builder) => StatefulBuilder(builder: (builder, setState) => Center(
+                              child: SizedBox(
+                                height: 280.h,
+                                width: 380.w,
+                                child: Card(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 15.h,),
+                                      Text(
+                                        'Are you sure?',
+                                        style: AppTheme().bold700(24, color: AppColors().brandDark),
+                                      ),
+                                      SizedBox(height: 18.h,),
+                                      Text(
+                                        'We are Sorry to see your leave!\nIf you change your\nmind, now is your chance',
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme().normal400(18, color: AppColors().grey80),
+                                      ),
+                                      SizedBox(
+                                        height: 37.h,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          SizedBox(
+                                              height: 55.h,
+                                              width: 145.w,
+                                              child: ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel'))),
+                                          SizedBox(
+                                              height: 55.h,
+                                              width: 145.w,
+                                              child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    if(!isLoading){
+                                                      setState(() {
+                                                        isLoading = true;
+                                                      });
+
+                                                      final result = await NetworkCall().deleteUser();
+                                                      if (result) {
+                                                        await FirebaseAuth.instance.signOut();
+                                                        final  profile = Get.find<ProfileController>();
+                                                        profile.deleteEverything();
+                                                        successMsg('Success', 'Successfully deleted account');
+                                                        Get.offAll(() => const LoginScreen());
+                                                      } else {
+                                                        setState(() {
+                                                          isLoading = false;
+                                                        });
+                                                        errorMsg('Failed', 'User deletion failed');
+                                                      }
+                                                    }
+                                                  },
+                                                  style: ButtonStyle(
+                                                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                          (Set<MaterialState> states) {
+                                                        if (states.contains(MaterialState.disabled)) {
+                                                          return AppColors().grey80;
+                                                        }
+                                                        return AppColors().grey80; // Use the component's default.
+                                                      },
+                                                    ),),
+                                                  child: isLoading ? SizedBox(height: 20.h, width: 20.h, child: CircularProgressIndicator(color: AppColors().white100,),) : Text('Yes, Delete')
+                                              ))
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )));
+                          },
+                          style:  ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return AppColors().grey80;
+                                }
+                                return AppColors().grey80; // Use the component's default.
+                              },
+                            ),),
+                          child: Text('Delete'),
+                        ))
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
@@ -661,34 +662,34 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                   ),
                 ),
               ),
-              if (Platform.isIOS)
-                Padding(
-                  padding: EdgeInsets.only(top: 8.sp),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: 'If you wish to delete your account click here: ',
-                      style: TextStyle(
-                        color: const Color(0xff8B8B8B),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13.sp,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Delete Account',
-                          style: TextStyle(
-                            color: AppColors().brandDark,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13.sp,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap =
-                                () => Get.to(() => const DeleteAccountPage()),
-                        )
-                      ],
+              SizedBox(height: 10.h,),
+              if(!Platform.isIOS)Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'If you wish to delete your account click here: ',
+                    style: AppTheme().bold700(12, color: AppColors().grey80),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: const DeleteAccountPage(),
+                              type: PageTransitionType.rightToLeft));
+                    },
+                    child: Text(
+                      'Delete Account',
+                      style: AppTheme().bold700(12,
+                          color: AppColors().grey80,
+                          textDecoration: TextDecoration.underline),
                     ),
                   ),
-                ),
+                ],
+              ),
+              if(!Platform.isIOS)SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),

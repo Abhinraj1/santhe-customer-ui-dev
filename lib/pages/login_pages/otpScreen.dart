@@ -298,24 +298,13 @@ class _OtpScreenState extends State<OtpScreen> {
   Future<void> _nextStep() async {
     final apiController = Get.find<APIs>();
 
-    // Boxes.getUserCredentialsDB().put(
-    //     'currentUserCredentials',
-    //     uc.UserCredential(
-    //         idToken: 'idToken',
-    //         refreshToken: 'refreshToken',
-    //         expiresIn: 3,
-    //         localId: 'localId',
-    //         isNewUser: true,
-    //         phoneNumber: int.parse(widget.phoneNumber)));
-
     int userPhone = int.parse(widget.phoneNumber);
     final profileController = Get.find<ProfileController>();
     await profileController.initialise();
 
     if(!profileController.isRegistered){
       if (userPhone == 404) return;
-      Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone),
-          transition: Transition.fadeIn);
+      Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone), transition: Transition.fadeIn);
     }else{
       apiController.updateDeviceToken(widget.phoneNumber.toString());
       Get.offAll(() => const HomePage(), transition: Transition.fadeIn);

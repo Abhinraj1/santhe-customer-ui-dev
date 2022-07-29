@@ -79,9 +79,10 @@ class AppTheme{
       fontWeight: FontWeight.w800,
       color: color ?? AppColors().grey100);
 
-  TextStyle bold700(double fontSize, {Color? color, double? height}) => TextStyle(
+  TextStyle bold700(double fontSize, {Color? color, double? height, TextDecoration? textDecoration}) => TextStyle(
       fontSize: fontSize.sp,
       height: height,
+      decoration: textDecoration,
       fontWeight: FontWeight.w700,
       color: color ?? AppColors().grey100);
 

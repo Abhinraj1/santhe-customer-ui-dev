@@ -225,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                   }else{
                     setState(() => isLoading = false);
-                    errorMsg('Login denied', '');
+                    errorMsg('Account Deleted', 'Please use different phone number');
                   }
                 }
               },

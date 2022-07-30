@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage>
         leading: IconButton(
           onPressed: () async {
             //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
-            //log(await AppHelpers().getToken);
+            log(await AppHelpers().getToken);
             _key.currentState!.openDrawer();
           },
           splashRadius: 25.0,

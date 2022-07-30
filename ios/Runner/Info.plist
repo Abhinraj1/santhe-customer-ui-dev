@@ -32,6 +32,14 @@
 				<string>app-1-445035608011-ios-01a228f61de66127d9684e</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-405755238283-ios-c54dce323b5998352a018e</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -49,6 +57,11 @@
 	<string>Need to access photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Need to access gallery in order to get image</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

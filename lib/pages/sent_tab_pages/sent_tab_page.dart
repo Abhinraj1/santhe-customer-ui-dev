@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
@@ -53,7 +55,7 @@ class OfferTabPage extends StatelessWidget {
         children: [
           SizedBox(height: 23.h),
           Image.asset(
-            'assets/sent_tab_image.png',
+            Platform.isIOS ? 'assets/sent_tab_image_ios.png' : 'assets/sent_tab_image.png',
             height: 45.vh,
           ),
           SizedBox(

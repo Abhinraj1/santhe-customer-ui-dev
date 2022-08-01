@@ -777,7 +777,6 @@ class APIs extends GetxController {
     final String url = AppUrl.GET_CUSTOMER_DETAILS(custId.toString());
 
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       if (data['fields'] != null) {

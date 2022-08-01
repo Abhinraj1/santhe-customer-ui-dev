@@ -10,6 +10,7 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
+import '../../core/app_shared_preference.dart';
 import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 import '../customer_registration_pages/customer_registration.dart';
@@ -300,13 +301,14 @@ class _OtpScreenState extends State<OtpScreen> {
 
     int userPhone = int.parse(widget.phoneNumber);
     final profileController = Get.find<ProfileController>();
-    await profileController.initialise();
+    await profileController.generateUrlToken();
 
-    if(!profileController.isRegistered){
-      if (userPhone == 404) return;
+    if(await profileController.getCustomerDetailsInit()){
       Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone), transition: Transition.fadeIn);
     }else{
+      AppSharedPreference().setLogin(true);
       apiController.updateDeviceToken(widget.phoneNumber.toString());
+      await profileController.initialise();
       Get.offAll(() => const HomePage(), transition: Transition.fadeIn);
     }
   }

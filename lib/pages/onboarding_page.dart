@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +8,8 @@ import 'package:resize/resize.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
+
+import '../core/app_shared_preference.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -79,7 +83,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 Column(
                   children: [
                     Image.asset(
-                      'assets/onboarding1.png',
+                      Platform.isIOS ?'assets/onboarding1_ios.png' : 'assets/onboarding1.png',
                       height: 344.sp,
                       width: 344.sp,
                     ),
@@ -151,7 +155,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 Column(
                   children: [
                     Image.asset(
-                      'assets/onboarding2.png',
+                      Platform.isIOS ?'assets/onboarding2_ios.png' : 'assets/onboarding2.png',
                       height: 344.sp,
                       width: 344.sp,
                     ),
@@ -227,7 +231,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 Column(
                   children: [
                     Image.asset(
-                      'assets/onboarding3.png',
+                      Platform.isIOS ?'assets/onboarding3_ios.png' : 'assets/onboarding3.png',
                       height: 344.sp,
                       width: 344.sp,
                     ),
@@ -273,6 +277,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             borderRadius: BorderRadius.circular(16.0)),
                         onPressed: () {
                           //show login screen for onboarded user
+                          AppSharedPreference().setFirstTimeCompleted(true);
                           Get.off(() => const LoginScreen());
                         },
                         color: Colors.white,

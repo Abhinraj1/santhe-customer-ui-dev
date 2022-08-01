@@ -159,25 +159,16 @@ class NavigationDrawer extends StatelessWidget {
             icon: Icons.star,
             tileText: 'Rate Us',
             onPress: () {
-              // Navigator.pop(context);
-              if (Platform.isAndroid) {
-                Get.snackbar(
-                  'Opening PlayStore Link',
-                  'Please rate us fairly!',
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.white,
+              if (Platform.isIOS) {
+                launchUrl(
+                  Uri.parse(
+                      'https://apps.apple.com/us/app/santhe-customer/id1637209002'),
                 );
-                launchUrl(Uri.parse(
-                    'https://play.google.com/store/apps/details?id=com.santhe.customer'));
-              } else if (Platform.isIOS) {
-                Get.snackbar('Opening AppStore Link', 'Please rate us fairly!',
-                    snackPosition: SnackPosition.BOTTOM);
-                launchUrl(Uri.parse('https://www.google.com'));
               } else {
-                Get.snackbar('Opening Store Link', 'Please rate us fairly!',
-                    backgroundColor: Colors.orange,
-                    snackPosition: SnackPosition.BOTTOM);
-                launchUrl(Uri.parse('https://www.google.com'));
+                launchUrl(
+                  Uri.parse(
+                      'https://play.google.com/store/apps/details?id=com.santhe.customer'),
+                );
               }
             },
           ),

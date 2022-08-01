@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
@@ -110,7 +112,7 @@ class _NewTabPageState extends State<NewTabPage>
                 children: [
                   SizedBox(height: 23.h),
                   Image.asset(
-                    'assets/new_tab_image.png',
+                    Platform.isIOS ? 'assets/new_tab_image_ios.png' : 'assets/new_tab_image.png',
                     height: 45.vh,
                   ),
                   _profileController.isOperational.value

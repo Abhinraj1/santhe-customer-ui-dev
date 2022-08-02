@@ -57,6 +57,7 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: version.txt
+      - run: flutter clean
       - run: flutter pub get
       - run: flutter build apk --release --split-per-abi
       - run: flutter build appbundle

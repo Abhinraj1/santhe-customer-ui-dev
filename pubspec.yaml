@@ -26,11 +26,13 @@ dependencies:
   map_picker: ^0.0.3
   geolocator: ^9.0.0
   shared_preferences: ^2.0.13
-  firebase_core: ^1.19.1
-  cloud_firestore: ^3.2.1
+  firebase_core: ^1.13.1
+  firebase_auth: ^3.4.2
+  firebase_database: ^9.0.15
   firebase_storage: ^10.3.1
-  firebase_database: ^9.0.18
-  firebase_messaging: ^11.4.4
+  cloud_firestore: ^3.1.10
+  firebase_crashlytics: ^2.8.4
+  firebase_messaging: ^11.2.13
   grouped_list: ^4.2.0
   group_button: ^4.6.0
   image_picker: ^0.8.4+11
@@ -44,7 +46,6 @@ dependencies:
   easy_debounce: ^2.0.2+1
   flutter_local_notifications: ^9.4.0
   resize: ^1.0.0
-  firebase_auth: ^3.4.2
   dartz: ^0.10.1
   equatable: ^2.0.3
   device_info_plus: ^4.0.0
@@ -54,7 +55,6 @@ dependencies:
   url_launcher: ^6.1.4
   flutter_image_compress: ^1.1.0
   path_provider: ^2.0.11
-  firebase_crashlytics: ^2.8.4
   algolia: ^1.1.1
 
 dev_dependencies:

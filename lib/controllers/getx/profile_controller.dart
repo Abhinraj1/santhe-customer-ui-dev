@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
@@ -20,10 +22,6 @@ class ProfileController extends GetxController {
 
   RxBool isOperational = true.obs;
 
-  bool isRegistered = false;
-
-  bool isLoggedIn = false;
-
   String? _urlToken;
 
   String get urlToken => _urlToken ?? '';
@@ -31,11 +29,9 @@ class ProfileController extends GetxController {
   Future<void> generateUrlToken({bool override = false}) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      isLoggedIn = true;
       final tokenId = await user.getIdToken();
       _urlToken = tokenId;
     } else {
-      isLoggedIn = false;
       if (!override) {
         Get.offAll(() => const LoginScreen());
       }
@@ -44,19 +40,15 @@ class ProfileController extends GetxController {
 
   Future<void> initialise({bool startApp = false}) async {
     await generateUrlToken(override: startApp);
-    if (isLoggedIn) await getCustomerDetailsInit();
-    if (isLoggedIn && isRegistered) await cacheRefresh();
-    if (isLoggedIn && isRegistered && !customerDetails!.opStats) await getOperationalStatus();
+    await getCustomerDetailsInit();
+    await cacheRefresh();
+    if (!customerDetails!.opStats) await getOperationalStatus();
   }
 
-  Future<void> getCustomerDetailsInit() async {
+  Future<bool> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
     final result = await apiController.getCustomerInfo(int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
-    if (result == 0) {
-      isRegistered = false;
-    } else {
-      isRegistered = true;
-    }
+    return result == 0;
   }
 
   Future<void> getOperationalStatus() async {
@@ -72,6 +64,11 @@ class ProfileController extends GetxController {
 
   set getCustomerDetails(CustomerModel customer) {
     customerDetails = customer;
+    RegistrationController registrationController = Get.find();
+    registrationController.address.value = customerDetails!.address;
+    registrationController.howToReach.value = customerDetails!.howToReach;
+    registrationController.lat.value = double.parse(customerDetails!.lat);
+    registrationController.lng.value = double.parse(customerDetails!.lng);
     update(['navDrawer']);
   }
 
@@ -163,8 +160,6 @@ class ProfileController extends GetxController {
   }
 
   void deleteEverything(){
-    isLoggedIn = false;
-    isRegistered = false;
     isOperational.value = false;
     customerDetails = null;
     _urlToken = null;

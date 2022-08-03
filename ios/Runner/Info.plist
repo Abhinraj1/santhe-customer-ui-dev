@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -32,23 +32,32 @@
 				<string>app-1-445035608011-ios-01a228f61de66127d9684e</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-405755238283-ios-c54dce323b5998352a018e</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Need to access camera in order to get image</string>
-	<key>NSContactsUsageDescription</key>
-	<string>This app requires contacts access to function properly.</string>
+	<string>Allow access to camera to take a photo and upload as your custom pictures for the products</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Application needs your location</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Need access for microphone</string>
+	<string>Your location will be used to find you on map so that you can share your shopping list with local retailers</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Need to access photo library</string>
+	<string>Allow access to photos to upload as your custom pictures for the products</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Need to access gallery in order to get image</string>
+	<string>Allow access to photos to upload as your custom pictures for the products</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

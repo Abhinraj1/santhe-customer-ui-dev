@@ -8,8 +8,12 @@ import 'package:santhe/pages/error_pages/no_internet_page.dart';
 
 import '../controllers/api_service_controller.dart';
 import '../controllers/notification_controller.dart';
+import '../core/app_initialisations.dart';
+import '../core/app_shared_preference.dart';
 import 'chat/chat_screen.dart';
 import 'home_page.dart';
+import 'login_pages/phone_number_login_page.dart';
+import 'onboarding_page.dart';
 
 class SplashToHome extends StatefulWidget {
   const SplashToHome({Key? key}) : super(key: key);
@@ -19,28 +23,34 @@ class SplashToHome extends StatefulWidget {
 }
 
 class _SplashToHomeState extends State<SplashToHome> {
-  final apiController = Get.find<APIs>();
 
-  void bootHome() {
-    Future.delayed(const Duration(milliseconds: 4000), () {
-      Get.off(() => getLandingScreen(), transition: Transition.fadeIn);
+  Future<void> bootHome() async {
+    await AppInitialisations().initialiseApplication();
+    await Notifications().fcmInit();
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      Widget screen = !AppSharedPreference().loadSignUpScreen
+          ? const OnboardingPage()
+          : AppSharedPreference().checkForLogin
+          ? getLandingScreen()
+          : const LoginScreen();
+      Get.offAll(() => screen, transition: Transition.fadeIn);
     });
   }
 
   Widget getLandingScreen(){
-    final NotificationController _notificationController = Get.find();
-    if(_notificationController.fromNotification){
+    final NotificationController notificationController = Get.find();
+    if(notificationController.fromNotification){
       //_notificationController.fromNotification = false;
-      if(_notificationController.landingScreen == 'new') {
+      if(notificationController.landingScreen == 'new') {
         return const HomePage(pageIndex: 0,);
-      } else if(_notificationController.landingScreen == 'answered'){
+      } else if(notificationController.landingScreen == 'answered'){
         return const HomePage(pageIndex: 1,);
       }else {
         return ChatScreen(
-          chatId: _notificationController.notificationData.value.data['chatId'],
-          customerTitle: _notificationController.notificationData.value.data['customerTitle'],
-          merchantTitle: _notificationController.notificationData.value.data['merchantTitle'],
-          listEventId: _notificationController.notificationData.value.data['listEventId'],
+          chatId: notificationController.notificationData.value.data['chatId'],
+          customerTitle: notificationController.notificationData.value.data['customerTitle'],
+          merchantTitle: notificationController.notificationData.value.data['merchantTitle'],
+          listEventId: notificationController.notificationData.value.data['listEventId'],
         );
       }
     }

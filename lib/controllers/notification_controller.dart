@@ -107,6 +107,8 @@ class Notifications {
       }
     });
 
+    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       _notificationController.notificationData.value = message;
       await navigateNotification(message);

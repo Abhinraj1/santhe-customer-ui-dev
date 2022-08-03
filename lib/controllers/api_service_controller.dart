@@ -779,6 +779,7 @@ class APIs extends GetxController {
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      log(response.body);
       if (data['fields'] != null) {
         var jsonData = data['fields'];
         final profileController = Get.find<ProfileController>();

@@ -109,8 +109,8 @@ class _HomePageState extends State<HomePage>
                 }
               },
               splashRadius: 25.0,
-              icon: Icon(
-                Icons.adaptive.share,
+              icon: const Icon(
+                Icons.share,
                 color: Colors.white,
                 size: 27.0,
               ),

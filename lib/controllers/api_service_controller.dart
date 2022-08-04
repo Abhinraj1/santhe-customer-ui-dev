@@ -59,6 +59,7 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
@@ -73,6 +74,7 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
@@ -87,6 +89,7 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
@@ -99,13 +102,13 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
       default:
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
-    throw NoInternetError();
   }
 
   //get

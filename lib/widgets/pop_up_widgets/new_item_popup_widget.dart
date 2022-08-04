@@ -871,9 +871,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                         );
 
                                                         if (widget.edit) {
-                                                          for (var element in currentUserList.items) {print(element.itemId);}
-                                                          currentUserList.items.removeWhere((element) => element.itemId == '${item.itemId}');
-                                                          for (var element in currentUserList.items) {print(element.itemId);}
+                                                          currentUserList.items.removeWhere((element) => element.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '') == '${item.itemId}');
                                                         }
                                                         currentUserList.items.add(listItem);
                                                         await saveListAndUpdate();

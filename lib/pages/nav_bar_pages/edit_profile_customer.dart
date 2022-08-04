@@ -86,13 +86,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       registrationController.pinCode.value =
           currentUser?.pinCode.toString() ?? '';
     }
-
-    if (userPhoneNumber == 404) {
-      Get.snackbar('Verify Number First',
-          'Please Verify Your Phone Number before continuing...');
-      profileController.isLoggedIn = false;
-      Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
-    }
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -551,79 +544,67 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         if (_formKey.currentState!.validate() &&
                                             registrationController
                                                 .address.isNotEmpty) {
-                                          if (profileController.isLoggedIn) {
-                                            CustomerModel? currentUser =
-                                                profileController
-                                                        .customerDetails ??
-                                                    fallback_error_customer;
+                                          CustomerModel? currentUser =
+                                              profileController
+                                                  .customerDetails ??
+                                                  fallback_error_customer;
 
-                                            int userPhone = int.parse(AppHelpers()
-                                                .getPhoneNumberWithoutCountryCode);
+                                          int userPhone = int.parse(AppHelpers()
+                                              .getPhoneNumberWithoutCountryCode);
 
-                                            if (userPhone == 404) {
-                                              Get.off(
-                                                  () => const LoginScreen());
-                                            }
+                                          if (userPhone == 404) {
+                                            Get.off(
+                                                    () => const LoginScreen());
+                                          }
 
-                                            log('------>>>>>>>>${registrationController.pinCode.value}');
-                                            //todo add how to reach howToReach
-                                            User updatedUser = User(
-                                                address: registrationController
-                                                    .address.value,
-                                                emailId:
-                                                    _userEmailController.text,
-                                                lat: registrationController
-                                                    .lat.value,
-                                                lng: registrationController
-                                                    .lng.value,
-                                                pincode: int.parse(
-                                                    registrationController
-                                                        .pinCode.value),
-                                                phoneNumber: userPhone,
-                                                custId: userPhone,
-                                                custName:
-                                                    _userNameController.text,
-                                                custRatings: double.parse(
-                                                    currentUser
-                                                        .customerRatings),
-                                                custReferal: 0000,
-                                                custStatus: 'active',
-                                                howToReach:
-                                                    registrationController
-                                                        .howToReach.value,
-                                                custLoginTime: DateTime.now(),
-                                                custPlan: 'default');
+                                          log('------>>>>>>>>${registrationController.pinCode.value}');
+                                          //todo add how to reach howToReach
+                                          User updatedUser = User(
+                                              address: registrationController
+                                                  .address.value,
+                                              emailId:
+                                              _userEmailController.text,
+                                              lat: registrationController
+                                                  .lat.value,
+                                              lng: registrationController
+                                                  .lng.value,
+                                              pincode: int.parse(
+                                                  registrationController
+                                                      .pinCode.value),
+                                              phoneNumber: userPhone,
+                                              custId: userPhone,
+                                              custName:
+                                              _userNameController.text,
+                                              custRatings: double.parse(
+                                                  currentUser
+                                                      .customerRatings),
+                                              custReferal: 0000,
+                                              custStatus: 'active',
+                                              howToReach:
+                                              registrationController
+                                                  .howToReach.value,
+                                              custLoginTime: DateTime.now(),
+                                              custPlan: 'default');
 //todo add cust plan
-                                            //todo add to firebase
-                                            int userUpdated =
-                                                await apiController
-                                                    .updateCustomerInfo(
-                                                        userPhone, updatedUser);
-                                            if (userUpdated == 1) {
-                                              await profileController
-                                                  .getCustomerDetailsInit();
-                                              successMsg('Profile Updated',
-                                                  'Your profile information was updated successfully.');
+                                          //todo add to firebase
+                                          int userUpdated =
+                                          await apiController
+                                              .updateCustomerInfo(
+                                              userPhone, updatedUser);
+                                          if (userUpdated == 1) {
+                                            await profileController
+                                                .getCustomerDetailsInit();
+                                            successMsg('Profile Updated',
+                                                'Your profile information was updated successfully.');
 
-                                              await profileController
-                                                  .getOperationalStatus();
+                                            await profileController
+                                                .getOperationalStatus();
 
 //go back after successful user profile edit, Get.back() didn't work for some reason
-                                              Navigator.pop(context);
-                                            } else {
-                                              errorMsg('Connectivity Error',
-                                                  'Some connectivity error has occurred, please try again later!');
-                                            }
+                                            Navigator.pop(context);
                                           } else {
-                                            errorMsg('Verify Number First',
-                                                'Please Verify Your Phone Number before continuing...');
-                                            profileController.isRegistered =
-                                                false;
-                                            profileController.isLoggedIn =
-                                                false;
-                                            Get.offAll(
-                                                () => const LoginScreen(),
-                                                transition: Transition.fadeIn);
+                                            errorMsg('Connectivity Error',
+                                                'Some connectivity error has occurred, please try again later!');
                                           }
                                         }
                                         setState(() {
@@ -663,7 +644,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                 ),
               ),
               SizedBox(height: 10.h,),
-              if(!Platform.isIOS)Row(
+              if(Platform.isIOS)Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -687,8 +668,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                   ),
                 ],
               ),
-              if(!Platform.isIOS)SizedBox(
-                height: 10,
+              if(Platform.isIOS) SizedBox(
+                height: 20.h,
               ),
             ],
           ),

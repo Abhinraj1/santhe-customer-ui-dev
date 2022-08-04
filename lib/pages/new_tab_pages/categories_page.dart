@@ -46,7 +46,7 @@ class CategoriesPage extends StatelessWidget {
       ),
       body: Stack(children: [
         GridView.builder(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(left: 8.h, right: 8.h, bottom: 30.h, top: 8.h),
             physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, childAspectRatio: 4 / 5),

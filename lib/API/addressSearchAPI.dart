@@ -53,9 +53,9 @@ class PlaceApiProvider {
         var lng = result['results'][0]['geometry']['location']['lng'];
         Get.to(() => MapAddressPicker(lat: lat, lng: lng));
       }
-      throw Exception(result['error_message']);
+      //throw Exception(result['error_message']);
     } else {
-      throw Exception('Failed to fetch suggestion');
+      //throw Exception('Failed to fetch suggestion');
     }
   }
 

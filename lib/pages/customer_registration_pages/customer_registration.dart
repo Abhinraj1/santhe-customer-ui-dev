@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_shared_preference.dart';
 import 'package:santhe/models/santhe_user_model.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/home_page.dart';
@@ -70,14 +71,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     final registrationController = Get.find<RegistrationController>();
     final profileController = Get.find<ProfileController>();
 
-    if (userPhoneNumber == 404) {
-      Get.snackbar('Verify Number First',
-          'Please Verify Your Phone Number before continuing...');
-      profileController.isLoggedIn = false;
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
-      });
-    }
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -449,48 +442,42 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                               });
                               if (_formKey.currentState!.validate() && registrationController.address.isNotEmpty) {
                                 //final otp check
-                                bool isUserLoggedin =
-                                    profileController.isLoggedIn;
 
-                                if (isUserLoggedin) {
-                                  int userPhone = int.parse(AppHelpers()
-                                      .getPhoneNumberWithoutCountryCode);
+                                int userPhone = int.parse(AppHelpers()
+                                    .getPhoneNumberWithoutCountryCode);
 
-                                  //todo add how to reach howToReach
-                                  User currentUser = User(
-                                      address:
-                                          registrationController.address.value,
-                                      emailId: userEmail,
-                                      lat: registrationController.lat.value,
-                                      lng: registrationController.lng.value,
-                                      pincode: int.parse(
-                                          registrationController.pinCode.value),
-                                      phoneNumber: userPhone,
-                                      custId: userPhone,
-                                      custName: userName,
-                                      custRatings: 5.0,
-                                      custReferal: 0,
-                                      custStatus: 'active',
-                                      howToReach: registrationController
-                                          .howToReach.value,
-                                      custPlan: 'planA',
-                                      custLoginTime: DateTime.now());
+                                //todo add how to reach howToReach
+                                User currentUser = User(
+                                    address:
+                                    registrationController.address.value,
+                                    emailId: userEmail,
+                                    lat: registrationController.lat.value,
+                                    lng: registrationController.lng.value,
+                                    pincode: int.parse(
+                                        registrationController.pinCode.value),
+                                    phoneNumber: userPhone,
+                                    custId: userPhone,
+                                    custName: userName,
+                                    custRatings: 5.0,
+                                    custReferal: 0,
+                                    custStatus: 'active',
+                                    howToReach: registrationController
+                                        .howToReach.value,
+                                    custPlan: 'planA',
+                                    custLoginTime: DateTime.now());
 
-                                  int userAdded = await apiController
-                                      .addCustomer(currentUser);
+                                int userAdded = await apiController
+                                    .addCustomer(currentUser);
 
-                                  if (userAdded == 1) {
-                                    //add to Hive
-                                    await profileController.initialise();
-                                    Get.offAll(() => const HomePage(),
-                                        transition: Transition.fadeIn);
-                                  } else {
-                                    log('error occurred');
-                                    Get.offAll(() => const OnboardingPage());
-                                  }
-                                } else {
-                                  Get.offAll(() => const LoginScreen(),
+                                if (userAdded == 1) {
+                                  //add to Hive
+                                  AppSharedPreference().setLogin(true);
+                                  await profileController.initialise();
+                                  Get.offAll(() => const HomePage(),
                                       transition: Transition.fadeIn);
+                                } else {
+                                  log('error occurred');
+                                  Get.offAll(() => const OnboardingPage());
                                 }
                               }
                               setState(() {

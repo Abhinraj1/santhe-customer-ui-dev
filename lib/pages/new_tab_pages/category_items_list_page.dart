@@ -58,7 +58,7 @@ class CategoryItemsPage extends StatelessWidget {
             } else if (snapshot.hasData) {
               return GridView.builder(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.only(left: 8.h, right: 8.h, bottom: 35.h, top: 8.h),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     childAspectRatio: 4 / 5,

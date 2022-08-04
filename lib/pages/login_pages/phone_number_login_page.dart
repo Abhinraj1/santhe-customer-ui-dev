@@ -7,7 +7,9 @@ import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_initialisations.dart';
 import 'package:santhe/pages/nav_bar_pages/privacy_policy_page.dart';
 import 'package:santhe/pages/nav_bar_pages/terms_condition_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -27,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   final GlobalKey<FormState> key = GlobalKey();
   String? number;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        focusNode: _focusNode,
                         cursorColor: Constant.bgColor,
                         decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
@@ -150,7 +154,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(10)
                         ],
-                        onChanged: (String? val) => number = val!,
+                        onChanged: (String? val){
+                          if(val != null && val.length >= 10){
+                            _focusNode.unfocus();
+                          }
+                          number = val!;
+                        },
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
@@ -330,13 +339,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       await launchUrl(
                         Uri.parse(
                             'https://play.google.com/store/apps/details?id=com.santhe.merchant'),
-                        mode: LaunchMode.externalApplication,
+                        mode: LaunchMode.externalNonBrowserApplication,
                       );
                     } else {
                       await launchUrl(
                         Uri.parse(
-                            'https://www.apple.com/in/app-store/'),
-                        mode: LaunchMode.externalNonBrowserApplication,
+                            'https://apps.apple.com/in/app/santhe-merchant/id1635267213'),
+                        mode: LaunchMode.externalApplication,
                       );
                     }
                   },
@@ -359,99 +368,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-/*// Get.to(() => const OtpPage());
-
-int enteredOtp = int.parse(controller.text);
-print('--> OTP: $enteredOtp');
-if (controller.text.isEmpty ||
-controller.text.length != 6) {
-Get.snackbar('Enter all 6 Digits',
-'Please Enter All the 6 Digits of Your OTP!',
-backgroundColor: Colors.orange,
-colorText: Colors.white);
-} else if (controller.text.length == 6) {
-setState(() {
-isLoading = true;
-});
-
-bool userVerified = await apiController.verifyOTP(
-sessionInfo, enteredOtp);
-
-if (userVerified) {
-Boxes.getUserPrefs().put('isLoggedIn', true);
-Boxes.getUserPrefs().put('showHome', false);
-Boxes.getUserPrefs().put('isRegistered', false);
-
-//skipping check and sending existing user directly to HomePage
-//                                 Boxes.getUserCredentialsDB()
-//                                     .get('currentUserCredentials')
-//                                     ?.isNewUser ??
-//                                     false
-
-int response = await apiController
-    .getCustomerInfo(userPhone);
-
-if (response == 0) {
-//if new user, get them registered
-
-print("--------$userPhone--------");
-//to not show start from old list to new user (code is inside of registration page), get's triggerd only after successful registration
-_countdownController.pause();
-if (userPhone == 404) return;
-Get.off(
-() => UserRegistrationPage(
-userPhoneNumber: userPhone),
-transition: Transition.fadeIn);
-} else {
-//Send user to Home Page directly as they r pre existing
-//take data from firebase & add
-//response will auto add it to hive.
-
-Boxes.getUserPrefs().put('isLoggedIn', true);
-Boxes.getUserPrefs().put('showHome', true);
-Boxes.getUserPrefs()
-    .put('isRegistered', true);
-
-_countdownController.pause();
-Get.off(() => const HomePage(),
-transition: Transition.fadeIn);
-}
-} else {
-controller.text = '';
-Get.snackbar(
-'',
-'',
-titleText: const Padding(
-padding: EdgeInsets.only(left: 8.0),
-child: Text('Invalid OTP!'),
-),
-messageText: const Padding(
-padding: EdgeInsets.only(left: 8.0),
-child: Text(
-'Please enter the correct OTP verify.'),
-),
-margin: const EdgeInsets.all(10.0),
-padding: const EdgeInsets.all(8.0),
-backgroundColor: Colors.white,
-shouldIconPulse: true,
-icon: const Padding(
-padding: EdgeInsets.all(8.0),
-child: Icon(
-CupertinoIcons
-    .exclamationmark_triangle_fill,
-color: Colors.orange,
-size: 45,
-),
-),
-);
-}
-
-if (mounted) {
-setState(() {
-isLoading = false;
-});
-}
-} else {
-print('ERROROROROROOROROR');
-}*/

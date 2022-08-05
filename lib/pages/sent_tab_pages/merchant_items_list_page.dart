@@ -42,22 +42,23 @@ class MerchantItemsListPage extends StatefulWidget {
   State<MerchantItemsListPage> createState() => _MerchantItemsListPageState();
 }
 
-class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
-  Future<MerchantOfferResponse> getDetails() async {
+class _MerchantItemsListPageState extends State<MerchantItemsListPage> with AutomaticKeepAliveClientMixin{
+
+  MerchantOfferResponse? merchantOfferResponse;
+  List<CustomerOfferResponse>? customerOfferResponse;
+
+  Future<void> getDetails() async {
     final apiController = Get.find<APIs>();
     if (widget.archived) {
-      final data = await apiController.getAllMerchOfferByListId(
-        widget.userList.listId,
-        widget.userList.items.length,
-      );
-      widget.currentMerchantOffer = data.firstWhere(
-          (element) => element.custOfferResponse.custOfferStatus == 'accepted');
-      widget.merchantResponse = await apiController.getMerchantDetails(
-          widget.currentMerchantOffer!.merchId.path.segments.last);
+      customerOfferResponse ??= await apiController.getAllMerchOfferByListId(
+          widget.userList.listId,
+          widget.userList.items.length,
+        );
+      widget.currentMerchantOffer = customerOfferResponse!.firstWhere((element) => element.custOfferResponse.custOfferStatus == 'accepted');
+      widget.merchantResponse ??= await apiController.getMerchantDetails(widget.currentMerchantOffer!.merchId.path.segments.last);
     }
 
-    return await apiController
-        .getMerchantResponse(widget.currentMerchantOffer!.listEventId);
+    merchantOfferResponse ??= await apiController.getMerchantResponse(widget.currentMerchantOffer!.listEventId);
   }
 
 
@@ -71,6 +72,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final screenSize = MediaQuery.of(context).size;
     return WillPopScope(
         onWillPop: () async {
@@ -95,15 +97,18 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
               widget.archived
                   ? widget.userList.listName
                   : 'Offer Rs. ${widget.currentMerchantOffer!.merchResponse.merchTotalPrice}',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18.sp)
             ),
           ),
-          body: FutureBuilder<MerchantOfferResponse>(
+          body: FutureBuilder(
             future: getDetails(),
             builder: (context, snapShot) {
-              if (snapShot.data != null &&
-                  snapShot.connectionState == ConnectionState.done) {
+              if (snapShot.connectionState == ConnectionState.done) {
                 List<OfferItem> items = [];
-                for (var element in snapShot.data!.items) {
+                for (var element in merchantOfferResponse!.items) {
                   items.add(OfferItem(
                       brandType: element.brandType,
                       catName: element.catName,
@@ -906,4 +911,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> {
             ? true
             : false;
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

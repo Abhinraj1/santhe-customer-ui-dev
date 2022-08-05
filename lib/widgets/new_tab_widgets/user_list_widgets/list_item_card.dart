@@ -164,7 +164,7 @@ class _ListItemCardState extends State<ListItemCard> {
                     onPressed: () {
                       _allListController.allListMap[widget.listId]!.items
                           .removeWhere((element) =>
-                              element.itemName == widget.listItem.itemName);
+                              element.itemId == widget.listItem.itemId);
                       _allListController
                           .update(['addedItems', 'itemCount', 'newList']);
                     },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
@@ -305,6 +307,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                   ],
                                 )
                               : _fullCategoryButton(),
+                         if(Platform.isIOS) SizedBox(height: 10.h,)
                         ],
                       ),
                     ),
@@ -994,6 +997,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                   ),
                                 ),
                               ),
+                              if(Platform.isIOS)SizedBox(height: 10.h),
                             ],
                           ),
                         ),

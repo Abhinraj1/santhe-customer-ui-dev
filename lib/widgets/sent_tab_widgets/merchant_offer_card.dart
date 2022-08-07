@@ -33,13 +33,18 @@ class MerchantOfferCard extends StatefulWidget {
   State<MerchantOfferCard> createState() => _MerchantOfferCardState();
 }
 
-class _MerchantOfferCardState extends State<MerchantOfferCard> {
+class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKeepAliveClientMixin{
   final ChatController _chatController = Get.find();
   MerchantDetailsResponse? merchantResponse;
   String imagePath = 'assets/sent_tab/0star.png';
+  
+  Future<void> getMerchantResponse() async {
+    merchantResponse ??= await APIs().getMerchantDetails(widget.currentMerchantOffer.merchId.path.segments.last);
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
@@ -227,35 +232,24 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                             width: 19.w,
                           ),
                           Expanded(
-                            child: FutureBuilder<MerchantDetailsResponse>(
-                              future: APIs().getMerchantDetails(widget
-                                  .currentMerchantOffer
-                                  .merchId
-                                  .path
-                                  .segments
-                                  .last),
+                            child: FutureBuilder(
+                              future: getMerchantResponse(),
                               builder: (builder, snapShot) {
-                                if (snapShot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive());
+                                if (snapShot.connectionState == ConnectionState.waiting) {
+                                  return const Center(child: CircularProgressIndicator.adaptive());
                                 }
 
                                 if (snapShot.hasError) {
                                   return const Center(
-                                    child: Text(
-                                        'Something went wrong please try again'),
+                                    child: Text('Something went wrong please try again'),
                                   );
                                 }
 
-                                merchantResponse = snapShot.data;
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      snapShot
-                                          .data!.fields.merchName.stringValue,
+                                      merchantResponse!.fields.merchName.stringValue,
                                       style: AppTheme().bold700(24,
                                           color: AppColors().grey100),
                                     ),
@@ -263,7 +257,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                       height: 9.h,
                                     ),
                                     Text(
-                                      snapShot.data!.fields.contact.mapValue
+                                      merchantResponse!.fields.contact.mapValue
                                           .fields.address.stringValue,
                                       style: AppTheme().normal400(13,
                                           color: AppColors().grey100),
@@ -295,8 +289,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
                                         ),
                                         //phone number
                                         Text(
-                                          '+91-${snapShot
-                                                  .data!
+                                          '+91-${merchantResponse!
                                                   .fields
                                                   .contact
                                                   .mapValue
@@ -394,4 +387,8 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> {
     _chatController.inOfferScreen = false;
     super.dispose();
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

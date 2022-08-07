@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
-import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
@@ -15,6 +14,7 @@ import 'package:santhe/pages/nav_bar_pages/terms_condition_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
 
+import '../core/app_shared_preference.dart';
 import '../core/app_theme.dart';
 
 class DeleteAccountPage extends StatelessWidget {
@@ -38,7 +38,7 @@ class DeleteAccountPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           "Delete Account",
         ),
       ),
@@ -217,7 +217,10 @@ class DeleteAccountPage extends StatelessWidget {
                                                       if (result) {
                                                         await FirebaseAuth.instance.signOut();
                                                         final  profile = Get.find<ProfileController>();
+                                                        AllListController allListController = Get.find();
                                                         profile.deleteEverything();
+                                                        allListController.deleteEverything();
+                                                        AppSharedPreference().setLogin(false);
                                                         successMsg('Success', 'Successfully deleted account');
                                                         Get.offAll(() => const LoginScreen());
                                                       } else {

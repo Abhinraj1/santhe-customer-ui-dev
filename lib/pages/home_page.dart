@@ -44,6 +44,11 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
+    _init();
+    super.initState();
+  }
+
+  Future<void> _init() async{
     _homeController.homeTabController =
         TabController(length: 3, vsync: this, initialIndex: widget.pageIndex);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -52,13 +57,12 @@ class _HomePageState extends State<HomePage>
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
+    await _profileController.initialise();
     _allListController.getAllList();
     _allListController.checkSubPlan();
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
-        _connectivityController.listenConnectivity(result));
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) => _connectivityController.listenConnectivity(result));
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
-    super.initState();
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -73,7 +77,7 @@ class _HomePageState extends State<HomePage>
         leading: IconButton(
           onPressed: () async {
             //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
-            //log(await AppHelpers().getToken);
+            log(await AppHelpers().getToken);
             _key.currentState!.openDrawer();
           },
           splashRadius: 25.0,
@@ -105,8 +109,8 @@ class _HomePageState extends State<HomePage>
                 }
               },
               splashRadius: 25.0,
-              icon: Icon(
-                Icons.adaptive.share,
+              icon: const Icon(
+                Icons.share,
                 color: Colors.white,
                 size: 27.0,
               ),

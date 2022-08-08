@@ -59,6 +59,9 @@ class _SplashToHomeState extends State<SplashToHome> {
 
   @override
   void initState(){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp
+    ]);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.orange,
       systemNavigationBarIconBrightness: Brightness.light,

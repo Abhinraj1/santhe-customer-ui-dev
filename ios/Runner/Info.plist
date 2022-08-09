@@ -43,16 +43,18 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Need to access camera in order to get image</string>
+	<string>Allow access to camera to take a photo and upload as your custom pictures for the products</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location is needed to fetch your address automatically</string>
+	<string>Your location will be used to find you on map so that you can share your shopping list with local retailers</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Need to access photo library to upload images</string>
+	<string>Allow access to photos to upload as your custom pictures for the products</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Need to access gallery in order to get image</string>
+	<string>Allow access to photos to upload as your custom pictures for the products</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

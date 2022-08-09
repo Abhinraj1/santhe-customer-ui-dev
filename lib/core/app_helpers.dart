@@ -34,9 +34,9 @@ class AppHelpers {
   Future<String> get authToken async => await FirebaseAuth.instance.currentUser!.getIdToken();
 
   String get playStoreLink => appStoreLink;
-  String get appStoreLink => '''Hey,
+  String get appStoreLink => '''Hi,
 
-Santhe Merchant App is an app built for supporting local economy. The app helps local merchants to grow their business by getting access to customers via online channel. Install the app now and grow your business.
+Santhe is an app built for getting best deals for your groceries from your local Kirana stores and retailers. Use the Free Santhe App and support local economy. 
 
 Get it for free at https://santhe.in''';
 

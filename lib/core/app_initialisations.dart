@@ -56,13 +56,13 @@ class AppInitialisations{
   }
 
   void _initialiseControllers(){
+    Get.put(NotificationController());
     Get.put(AllListController());
     Get.put(APIs());
     Get.put(LocationController());
     Get.put(RegistrationController());
     Get.put(CustomImageController());
     Get.put(SearchQueryController());
-    Get.put(NotificationController());
     Get.put(ChatController());
     Get.put(HomeController());
     Get.put(ProfileController());

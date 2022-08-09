@@ -339,13 +339,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       await launchUrl(
                         Uri.parse(
                             'https://play.google.com/store/apps/details?id=com.santhe.merchant'),
-                        mode: LaunchMode.externalApplication,
+                        mode: LaunchMode.externalNonBrowserApplication,
                       );
                     } else {
                       await launchUrl(
                         Uri.parse(
-                            'https://www.apple.com/in/app-store/'),
-                        mode: LaunchMode.externalNonBrowserApplication,
+                            'https://apps.apple.com/in/app/santhe-merchant/id1635267213'),
+                        mode: LaunchMode.externalApplication,
                       );
                     }
                   },

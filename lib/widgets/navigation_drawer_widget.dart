@@ -162,12 +162,14 @@ class NavigationDrawer extends StatelessWidget {
               if (Platform.isIOS) {
                 launchUrl(
                   Uri.parse(
-                      'https://apps.apple.com/us/app/santhe-customer/id1637209002'),
+                      'https://apps.apple.com/in/app/santhe/id1637209002'),
+                  mode: LaunchMode.externalApplication,
                 );
               } else {
                 launchUrl(
                   Uri.parse(
                       'https://play.google.com/store/apps/details?id=com.santhe.customer'),
+                  mode: LaunchMode.externalNonBrowserApplication,
                 );
               }
             },

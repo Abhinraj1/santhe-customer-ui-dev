@@ -59,6 +59,7 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
@@ -73,6 +74,7 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
@@ -87,6 +89,7 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
@@ -99,13 +102,13 @@ class APIs extends GetxController {
             );
           } catch (e) {
             AppHelpers.crashlyticsLog(e.toString());
+            throw Exception();
           }
           break;
         }
       default:
         throw WrongModePassedForAPICall('Wrong mode passed for API call.');
     }
-    throw NoInternetError();
   }
 
   //get
@@ -779,6 +782,7 @@ class APIs extends GetxController {
     var response = await callApi(mode: REST.get, url: Uri.parse(url));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      log(response.body);
       if (data['fields'] != null) {
         var jsonData = data['fields'];
         final profileController = Get.find<ProfileController>();

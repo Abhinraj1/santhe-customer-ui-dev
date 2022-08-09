@@ -13,14 +13,23 @@ import '../../models/santhe_item_model.dart';
 import '../../widgets/pop_up_widgets/new_item_popup_widget.dart';
 
 
-class CategoryItemsPage extends StatelessWidget {
+class CategoryItemsPage extends StatefulWidget {
   final int catID;
   final String listId;
-  CategoryItemsPage({required this.catID, required this.listId, Key? key}) : super(key: key);
+  const CategoryItemsPage({required this.catID, required this.listId, Key? key}) : super(key: key);
 
+  @override
+  State<CategoryItemsPage> createState() => _CategoryItemsPageState();
+}
+
+class _CategoryItemsPageState extends State<CategoryItemsPage> {
   final apiController = Get.find<APIs>();
+
   final AllListController _allListController = Get.find();
-  late final UserListModel currentUserList = _allListController.allListMap[listId]!;
+
+  late final UserListModel currentUserList = _allListController.allListMap[widget.listId]!;
+  
+  late List<Item> categoryItems;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +49,7 @@ class CategoryItemsPage extends StatelessWidget {
           },
         ),
         title: Text(
-          Boxes.getCategoriesDB().get(catID)?.catName ?? 'Category Items',
+          Boxes.getCategoriesDB().get(widget.catID)?.catName ?? 'Category Items',
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
@@ -49,66 +58,70 @@ class CategoryItemsPage extends StatelessWidget {
       ),
       body: Stack(children: [
         FutureBuilder<List<Item>>(
-          future: apiController.getCategoryItems(catID),
+          future: apiController.getCategoryItems(widget.catID),
           builder: (context, snapshot) {
-            if (snapshot.hasError) {
+            if (snapshot.hasError && categoryItems.isEmpty) {
               return Center(
-                child: Text('Error: ${snapshot.error}'),
+                child: ElevatedButton(
+                  onPressed: () => setState((){}),
+                  child: const Text('Retry'),
+                ),
               );
             } else if (snapshot.hasData) {
-              return GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 4 / 5,
-                  ),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    Item item = snapshot.data![index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              barrierColor: const Color.fromARGB(165, 241, 241, 241),
-                              builder: (context) {
-                                return NewItemPopUpWidget(item: item, listId: listId);
-                              });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            //main show
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: ProtectedCachedNetworkImage(
-                                imageUrl:
-                                'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
-                                width: 20.vw,
-                                height: 20.vw,
-                              ),
-                            ),
-                            Expanded(
-                              child: AutoSizeText(
-                                item.itemName,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                minFontSize: 10.0,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-            } else {
+              categoryItems = snapshot.data ?? [];
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
+            return GridView.builder(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.only(left: 8.h, right: 8.h, bottom: 35.h, top: 8.h),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 4 / 5,
+                ),
+                itemCount: categoryItems.length,
+                itemBuilder: (context, index) {
+                  Item item = categoryItems[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                            builder: (context) {
+                              return NewItemPopUpWidget(item: item, listId: widget.listId);
+                            });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //main show
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: ProtectedCachedNetworkImage(
+                              imageUrl:
+                              'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
+                              width: 20.vw,
+                              height: 20.vw,
+                            ),
+                          ),
+                          Expanded(
+                            child: AutoSizeText(
+                              item.itemName,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              minFontSize: 10.0,
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
           },
         ),
         Align(

@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
+    _allListController.isLoading = true;
     _init();
     super.initState();
   }
@@ -58,6 +59,7 @@ class _HomePageState extends State<HomePage>
       statusBarBrightness: Brightness.dark,
     ));
     await _profileController.initialise();
+    await _profileController.getOperationalStatus();
     _allListController.getAllList();
     _allListController.checkSubPlan();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) => _connectivityController.listenConnectivity(result));

@@ -37,8 +37,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
   final profileController = Get.find<ProfileController>();
-  int userPhoneNumber =
-      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  int userPhoneNumber = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
   late final CustomerModel? currentUser;
   late final TextEditingController _userNameController;
   late final TextEditingController _userEmailController;
@@ -46,6 +45,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   bool donePressed = false;
   bool mapSelected = false;
   bool isProcessing = false;
+
+  final registrationController = Get.find<RegistrationController>();
+  final apiController = Get.find<APIs>();
+  final locationController = Get.find<LocationController>();
 
   @override
   void initState() {
@@ -61,14 +64,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
     _userEmailController = TextEditingController(
         text: currentUser?.emailId ?? 'johndoe@gmail.com');
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    final registrationController = Get.find<RegistrationController>();
-    final apiController = Get.find<APIs>();
-    double screenHeight = MediaQuery.of(context).size.height / 100;
     if (registrationController.address.value.trim().isEmpty) {
       registrationController.address.value = currentUser?.address ?? '';
     }
@@ -86,6 +82,13 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       registrationController.pinCode.value =
           currentUser?.pinCode.toString() ?? '';
     }
+    profileController.getOperationalStatus();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -94,7 +97,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
-    final locationController = Get.find<LocationController>();
+
+    double screenHeight = MediaQuery.of(context).size.height / 100;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -415,96 +419,98 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       color: Colors.orange),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  //remove focus from text fields
-                                  FocusScopeNode currentScope =
+                              GetBuilder<RegistrationController>(
+                                id: 'fieldValue',
+                                  builder: (builder) => GestureDetector(
+                                    onTap: () async {
+                                      //remove focus from text fields
+                                      FocusScopeNode currentScope =
                                       FocusScope.of(context);
-                                  if (!currentScope.hasPrimaryFocus &&
-                                      currentScope.hasFocus) {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                  }
-                                  if (locationController.lng.value != 0.0 ||
-                                      locationController.lat.value != 0.0) {
-                                    setState(() {
-                                      mapSelected = true;
-                                    });
-                                  }
-                                  var res = await Get.to(
-                                      () => const MapSearchScreen());
-                                  if (res == 1) {
-                                    setState(() {});
-                                  }
-                                },
-                                child: Container(
-                                  width: 344.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      border: Border.all(
-                                          color: registrationController
-                                                      .address.isEmpty &&
+                                      if (!currentScope.hasPrimaryFocus &&
+                                          currentScope.hasFocus) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      }
+                                      if (locationController.lng.value != 0.0 ||
+                                          locationController.lat.value != 0.0) {
+                                        setState(() {
+                                          mapSelected = true;
+                                        });
+                                      }
+                                      var res = await Get.to(
+                                              () => const MapSearchScreen());
+                                      if (res == 1) {
+                                        setState(() {});
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 344.w,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                              color: registrationController
+                                                  .address.isEmpty &&
                                                   donePressed
-                                              ? AppColors().red100
-                                              : AppColors().grey40,
-                                          width: 2.0)),
-                                  // padding: EdgeInsets.only(
-                                  //     top: 13.h,
-                                  //     left: 10.w,
-                                  //     right: 10.w,
-                                  //     bottom: 13.h),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15),
-                                    child: Row(
-                                      crossAxisAlignment:
+                                                  ? AppColors().red100
+                                                  : AppColors().grey40,
+                                              width: 2.0)),
+                                      // padding: EdgeInsets.only(
+                                      //     top: 13.h,
+                                      //     left: 10.w,
+                                      //     right: 10.w,
+                                      //     bottom: 13.h),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15),
+                                        child: Row(
+                                          crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: [
-                                        //icon
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 4.0, horizontal: 12),
-                                          child: Container(
-                                              height: 24.w,
-                                              width: 24.w,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors().brandDark,
-                                                  borderRadius:
+                                          children: [
+                                            //icon
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 4.0, horizontal: 12),
+                                              child: Container(
+                                                  height: 24.w,
+                                                  width: 24.w,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColors().brandDark,
+                                                      borderRadius:
                                                       BorderRadius.circular(
                                                           20)),
-                                              child: Center(
-                                                child: Icon(
-                                                  Icons.home,
-                                                  color: AppColors().white100,
-                                                  size: 15.sp,
-                                                ),
-                                              )),
-                                        ),
-                                        SizedBox(
-                                          width: 1.w,
-                                        ),
-                                        //text
-                                        Expanded(
-                                          child: Obx(() => Text(
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.home,
+                                                      color: AppColors().white100,
+                                                      size: 15.sp,
+                                                    ),
+                                                  )),
+                                            ),
+                                            SizedBox(
+                                              width: 1.w,
+                                            ),
+                                            //text
+                                            Expanded(
+                                              child: Obx(() => Text(
                                                 registrationController
-                                                            .address.value
-                                                            .trim() ==
-                                                        ''
+                                                    .address.value
+                                                    .trim() ==
+                                                    ''
                                                     ? 'Select Address'
                                                     : '${registrationController.address.value} ${registrationController.howToReach.value}',
                                                 style: registrationController
-                                                            .address.value
-                                                            .trim() ==
-                                                        ''
+                                                    .address.value
+                                                    .trim() ==
+                                                    ''
                                                     ? kHintStyle
                                                     : kTextInputStyle,
                                               )),
-                                        )
-                                      ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
+                                  )),
                               SizedBox(
                                 height: 4.h,
                               ),
@@ -537,6 +543,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               BorderRadius.circular(16.0)),
                                       color: Colors.orange,
                                       onPressed: () async {
+                                        print(registrationController.lat.value);
+
+                                        print(registrationController.lng.value);
                                         setState(() {
                                           donePressed = true;
                                           isProcessing = true;
@@ -557,7 +566,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                     () => const LoginScreen());
                                           }
 
-                                          log('------>>>>>>>>${registrationController.pinCode.value}');
                                           //todo add how to reach howToReach
                                           User updatedUser = User(
                                               address: registrationController
@@ -585,8 +593,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                   .howToReach.value,
                                               custLoginTime: DateTime.now(),
                                               custPlan: 'default');
-//todo add cust plan
-                                          //todo add to firebase
                                           int userUpdated =
                                           await apiController
                                               .updateCustomerInfo(
@@ -597,10 +603,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             successMsg('Profile Updated',
                                                 'Your profile information was updated successfully.');
 
-                                            await profileController
-                                                .getOperationalStatus();
-
-//go back after successful user profile edit, Get.back() didn't work for some reason
+                                            await profileController.getOperationalStatus();
                                             Navigator.pop(context);
                                           } else {
                                             errorMsg('Connectivity Error',

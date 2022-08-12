@@ -154,14 +154,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                           itemBuilder: (context, index) =>
                                               GestureDetector(
                                                   onTap: () async {
-                                                    log(snapshot.data[index].toString());
-                                                    PlaceApiProvider
-                                                        placeApiProvider =
-                                                        PlaceApiProvider();
-                                                    placeApiProvider
-                                                        .getPlaceDetailFromId(
-                                                            snapshot.data[index]
-                                                                .placeId);
+                                                    PlaceApiProvider placeApiProvider = PlaceApiProvider();
+                                                    placeApiProvider.getPlaceDetailFromId(snapshot.data[index].placeId);
                                                   },
                                                   child: Container(
                                                     padding:

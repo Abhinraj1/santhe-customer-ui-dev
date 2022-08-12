@@ -7,7 +7,7 @@ class AppUrl {
 
   static const String _environmentDev = 'santhe-425a8';
 
-  static const bool _dev = false;
+  static const bool _dev = true;
 
   static const String _FCMKeyDev =
       'AAAAZ54wd8s:APA91bEsDji0lceBsyQ2Dm_c1eerM0N6-Vle3k83ZGH8Q8cKOY-0CGh7aJHC5iMrkxUVurSoUS_WAv4Qez9BHRSAHKgUcDeEuKVX5CevL03KAEpChNCgjz8-mInRCnQXJjORuMUZMbhF';
@@ -72,7 +72,7 @@ class AppUrl {
   static String CHECK_RADIUS(
           String customerId, String lat, String long, String pinCode) =>
       '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId&lat=$lat&lng=$long&pincode=$pinCode';
-      // '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
+  // '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
 
   static String DUPLICATE_CHECK(String customerId, String listName) =>
       '$_baseCloudFunctions/app/customer/duplicateCheck?custId=$customerId&listName=$listName';

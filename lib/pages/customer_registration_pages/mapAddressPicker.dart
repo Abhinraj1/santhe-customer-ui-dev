@@ -52,18 +52,14 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
       currentUser =
           profileController.customerDetails ?? fallback_error_customer;
     } else {
-      initialCameraPosition = CameraPosition(
-          target: LatLng(double.parse(currentUser?.lat ?? '12.980143644412847'),
-              double.parse(currentUser?.lng ?? '77.56857242435218')),
-          zoom: 18);
+      initialCameraPosition = CameraPosition(target: LatLng(double.parse(currentUser?.lat ?? '12.980143644412847'), double.parse(currentUser?.lng ?? '77.56857242435218')), zoom: 18);
       LocationController.getGeoLocationPosition().then((value) async {
         if (value != null) {
           lat = value.latitude;
           lng = value.longitude;
           await initAdd(lat, lng);
           if (_googleMapController != null) {
-            _googleMapController!.animateCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(target: LatLng(lat, lng), zoom: 18)));
+            _googleMapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(lat, lng), zoom: 18)));
           }
         }
       });
@@ -138,8 +134,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                           textController.text = "checking ...";
                         },
                         onCameraMove: (initialCameraPosition) {
-                          this.initialCameraPosition =
-                              initialCameraPosition;
+                          this.initialCameraPosition = initialCameraPosition;
                         },
                         onCameraIdle: () async {
                           mapPickerController.mapFinishedMoving!();
@@ -153,11 +148,10 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                             textController.text = a;
                             registrationController.address = a.obs;
                             addressTextController.text = a;
-
-                            registrationController.lat.value =
-                                initialCameraPosition.target.latitude;
-                            registrationController.lng.value =
-                                initialCameraPosition.target.longitude;
+                            lat = initialCameraPosition.target.latitude;
+                            lng = initialCameraPosition.target.longitude;
+                            registrationController.lat.value = initialCameraPosition.target.latitude;
+                            registrationController.lng.value = initialCameraPosition.target.longitude;
                             registrationController.address.value =
                                 textController.value.text;
                           });
@@ -269,25 +263,15 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                   0.4,
                               child: TextButton(
                                 onPressed: () {
-                                  if (_formKey.currentState!
-                                      .validate()) {
-                                    // var containPincode =
-                                    //     RegExp(r'^.*\d{6}.*$').hasMatch(
-                                    //         addressTextController
-                                    //             .value.text);
+                                  if (_formKey.currentState!.validate()) {
                                     setState(() {});
                                     if (addressTextController
                                         .value.text.isNotEmpty) {
                                       setState(() {
-                                        List<String> ls =
-                                        addressTextController
-                                            .value.text
-                                            .split(' ');
+                                        List<String> ls = addressTextController.value.text.split(' ');
                                         String pin = '';
                                         for (var i in ls) {
-                                          var a =
-                                          RegExp(r'^.*\d{6}.*$')
-                                              .hasMatch(i);
+                                          var a = RegExp(r'^.*\d{6}.*$').hasMatch(i);
                                           if (a) {
                                             pin = i;
                                           }
@@ -308,11 +292,10 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
                                             .howToReach.value =
                                             optionalAddController
                                                 .text;
-                                        registrationController
-                                            .lat.value = lat;
-                                        registrationController
-                                            .lng.value = lng;
+                                        registrationController.lat.value = lat;
+                                        registrationController.lng.value = lng;
 
+                                        registrationController.update(['fieldValue']);
                                         //go back to registration screen
                                         Get.close(2);
                                       });

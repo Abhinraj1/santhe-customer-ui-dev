@@ -72,7 +72,7 @@ class AppUrl {
   static String CHECK_RADIUS(
           String customerId, String lat, String long, String pinCode) =>
       '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId&lat=$lat&lng=$long&pincode=$pinCode';
-      // '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
+  // '$_baseCloudFunctions/app/radiusCheck?isCustomer=true&userId=$customerId';
 
   static String DUPLICATE_CHECK(String customerId, String listName) =>
       '$_baseCloudFunctions/app/customer/duplicateCheck?custId=$customerId&listName=$listName';

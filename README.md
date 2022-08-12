@@ -36,3 +36,4 @@ Next Update: **1.0.1+4**<br>
 4. Build flutter apk using:
    <br> **flutter clean**
    <br> **flutter build apk --split-per-abi**
+

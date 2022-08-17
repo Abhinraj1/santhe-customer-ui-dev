@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
-import 'package:santhe/core/app_helpers.dart';
-
 class AppUrl {
   static const String _environmentProd = 'santhe-prod';
 

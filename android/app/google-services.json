@@ -1,0 +1,183 @@
+{
+  "project_info": {
+    "project_number": "445035608011",
+    "firebase_url": "https://santhe-425a8-default-rtdb.firebaseio.com",
+    "project_id": "santhe-425a8",
+    "storage_bucket": "santhe-425a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445035608011:android:a4215691a90816d3d9684e",
+        "android_client_info": {
+          "package_name": "com.example.santhe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBN76CGaZGMw_k4_TIXywX0FVWOWh4cwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.santhe.customer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445035608011:android:936ac74b950839bdd9684e",
+        "android_client_info": {
+          "package_name": "com.santhe.customer.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445035608011-1eiv8v6lcb5usmsa7ffrtbuatmlh06h9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.customer.dev",
+            "certificate_hash": "7ea7a55404cfdb9159d7d48d90d017954e93a829"
+          }
+        },
+        {
+          "client_id": "445035608011-c5uapbjrf58s3o57f5rph6mi7aa73gut.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.customer.dev",
+            "certificate_hash": "38e7a9bf4537f4a0711284d036797ff171d9231b"
+          }
+        },
+        {
+          "client_id": "445035608011-i7s6rd1jauipvhm5fif8l5usacjb5roc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.customer.dev",
+            "certificate_hash": "3bb128f026fe9bcaabd873293b436d1cdc3bbb84"
+          }
+        },
+        {
+          "client_id": "445035608011-og1qp2s25v3omij34007k8pmrc4p18t2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.customer.dev",
+            "certificate_hash": "93d862b7592d5bfad753543da9d2fd4f6c735175"
+          }
+        },
+        {
+          "client_id": "445035608011-so55fqrmjrb4a3lib3ndi0pg73c47b29.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.customer.dev",
+            "certificate_hash": "1227a4072fef31515b6942c3d4b3098ad278b3b6"
+          }
+        },
+        {
+          "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBN76CGaZGMw_k4_TIXywX0FVWOWh4cwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.santhe.customer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445035608011:android:89579c07af4cdb66d9684e",
+        "android_client_info": {
+          "package_name": "com.santhe.merchant.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445035608011-rpbfgppa092s69a518stcgm4fv8q9uc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.merchant.dev",
+            "certificate_hash": "7ea7a55404cfdb9159d7d48d90d017954e93a829"
+          }
+        },
+        {
+          "client_id": "445035608011-tg7ke8b6qgj2lf0fa9a0n7m6emtrpfto.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.merchant.dev",
+            "certificate_hash": "93d862b7592d5bfad753543da9d2fd4f6c735175"
+          }
+        },
+        {
+          "client_id": "445035608011-vekjl9fe1vrhi4pmu7jdbic4auhvh645.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santhe.merchant.dev",
+            "certificate_hash": "1227a4072fef31515b6942c3d4b3098ad278b3b6"
+          }
+        },
+        {
+          "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBN76CGaZGMw_k4_TIXywX0FVWOWh4cwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445035608011-ine20utg5r7422o1sv1ed87l2ur2gshc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445035608011-38ralj599kuj542tljp36pjh9qck9rc5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.santhe.customer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

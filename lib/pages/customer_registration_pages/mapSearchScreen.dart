@@ -1,17 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/location_controller.dart';
+import 'package:santhe/pages/customer_registration_pages/mapAddressPicker.dart';
 
 
 import '../../API/addressSearchAPI.dart';
 import '../../constants.dart';
 import '../../controllers/registrationController.dart';
 import '../../core/app_colors.dart';
-import '../customer_registration_pages/MapAddressPicker.dart';
 
 class MapSearchScreen extends StatefulWidget {
   const MapSearchScreen({Key? key}) : super(key: key);

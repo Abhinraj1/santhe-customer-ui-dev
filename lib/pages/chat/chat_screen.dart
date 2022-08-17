@@ -12,9 +12,9 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/chat_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 
-import '../../Models/chat_model.dart';
 import '../../controllers/chat_controller.dart';
 import '../../core/app_helpers.dart';
 import '../sent_tab_pages/sent_list_detail_page.dart';

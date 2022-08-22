@@ -109,7 +109,6 @@ class _HomePageState extends State<HomePage>
                   Share.share(
                     AppHelpers().playStoreLink,
                   );
-                  _profileController.deleteEverything();
                 }
               },
               splashRadius: 25.0,

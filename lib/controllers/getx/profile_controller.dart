@@ -168,11 +168,5 @@ class ProfileController extends GetxController {
     isOperational.value = false;
     customerDetails = null;
     _urlToken = null;
-
-    //TODO: REMOVE ONLY FOR TESTING PURPOSES
-
-    await Boxes.getCacheRefreshInfo().deleteFromDisk();
-    await Boxes.getCategoriesDB().deleteFromDisk();
-    print('deleted cache');
   }
 }

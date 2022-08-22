@@ -4,6 +4,7 @@ import 'package:resize/resize.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 
 import 'package:santhe/models/santhe_item_model.dart';
@@ -84,7 +85,7 @@ class _ListItemCardState extends State<ListItemCard> {
                             expanded = !expanded;
                           }),
                           child: SizedBox(
-                            width: screenSize.width/3,
+                            width: screenSize.width / 3,
                             child: checkPlaceHolder(widget.listItem.brandType)
                                     .isEmpty
                                 ? Text(
@@ -142,7 +143,7 @@ class _ListItemCardState extends State<ListItemCard> {
                                 unit: widget.listItem.possibleUnits,
                                 dUnit: widget.listItem.unit,
                                 dBrandType: widget.listItem.brandType,
-                                dQuantity: num.parse(widget.listItem.quantity),
+                                dQuantity: int.parse(widget.listItem.quantity),
                                 itemAlias: '',
                                 itemImageId: widget.listItem.itemImageId,
                                 itemImageTn: '',

@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_user_credenetials_model.dart';
 import '../models/santhe_category_model.dart';
@@ -20,12 +21,10 @@ class Boxes {
   // static Box<bool> getUserPrefs() => Hive.box('userPrefsDB');
 
   //key: catId...
-  static Box<Category> getCategoriesDB() =>
-      Hive.box('categoryDB');
+  static Box<Category> getCategoriesDB() => Hive.box('categoryDB');
 
   //key: cacheRefresh
-  static Box<CacheRefresh> getCacheRefreshInfo() =>
-      Hive.box('cacheRefreshDB');
+  static Box<CacheRefresh> getCacheRefreshInfo() => Hive.box('cacheRefreshDB');
 
   //key: faq1, faq2,....
   static Box<FAQ> getFAQs() => Hive.box('faqDB');

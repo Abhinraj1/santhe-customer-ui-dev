@@ -49,6 +49,10 @@ class AppUrl {
 
   static const String API_KEY = "AIzaSyCFS_yaSebSR9VZC7Qv3QCCC9DNoyTzJ48";
 
+  static const String GET_ALL_ITEMS = '$_baseCloudFunctions/items';
+
+  static const String GET_ALL_CATEGORIES = '$_baseCloudFunctions/categories';
+
   static const String GET_OTP =
       'https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key=$API_KEY';
 

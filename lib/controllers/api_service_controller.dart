@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:algolia/algolia.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/error/exceptions.dart';
+import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/merchant_details_response.dart';
 import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/offer/merchant_offer_response.dart';
@@ -45,6 +47,7 @@ class APIs extends GetxController {
     await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
     final header = {"authorization": 'Bearer $token'};
+    log(header.toString());
     // case 1: get
     // case 2: post
     // case 3: update
@@ -112,8 +115,10 @@ class APIs extends GetxController {
   }
 
   //get
-  Future<void> getCheckRadius(int custId, String lat, String long, String pinCode) async {
-    final String url = AppUrl.CHECK_RADIUS(custId.toString(), lat, long, pinCode);
+  Future<void> getCheckRadius(
+      int custId, String lat, String long, String pinCode) async {
+    final String url =
+        AppUrl.CHECK_RADIUS(custId.toString(), lat, long, pinCode);
 
     try {
       final response = await callApi(mode: REST.get, url: Uri.parse(url));
@@ -348,6 +353,27 @@ class APIs extends GetxController {
     }
   }
 
+  Future<List<Item>> getAllItems() async {
+    const String url = AppUrl.GET_ALL_ITEMS;
+    List<Item> items = [];
+
+    try {
+      final response = await callApi(mode: REST.get, url: Uri.parse(url));
+      items = itemFromJson(response.body);
+
+      final itemBox = Boxes.getItemsDB();
+
+      for (int i = 0; i < items.length; i++) {
+        itemBox.put(i, items[i]);
+      }
+    } on Exception catch (e) {
+      log('Item cache refresh failed.');
+    }
+
+    print('items: ${items.length}');
+    return items;
+  }
+
   //get
   Future<int> getAllFAQs() async {
     const String url = AppUrl.FAQURL;
@@ -393,47 +419,53 @@ class APIs extends GetxController {
   }
 
   Future<List<Item>> getCategoryItems(int id) async {
+    final box = Boxes.getItemsDB();
+
     List<Item> categoryItems = [];
-    const String url = AppUrl.RUN_QUERY;
-    var body = {
-      "structuredQuery": {
-        "from": [
-          {"collectionId": "item"}
-        ],
-        "where": {
-          "compositeFilter": {
-            "filters": [
-              {
-                "fieldFilter": {
-                  "field": {"fieldPath": "catId"},
-                  "op": "EQUAL",
-                  "value": {
-                    "referenceValue":
-                        "projects/${AppUrl.envType}/databases/(default)/documents/category/$id"
-                  }
-                }
-              }
-            ],
-            "op": "AND"
-          }
-        }
-      }
-    };
-    var response = await callApi(
-        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      for (int i = 0; i < data.length; i++) {
-        categoryItems
-            .add(Item.fromFirebaseRestApi(data[i]['document']['fields']));
-      }
-      log('#####Returning with cat items#######');
-      return categoryItems;
-    } else {
-      AppHelpers.crashlyticsLog(response.body.toString());
-      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
-      throw 'Error, Category Does not Exist!';
-    }
+    categoryItems =
+        box.values.where((element) => element.catId == id.toString()).toList();
+    print('boxItems: ${categoryItems.length}');
+    return categoryItems;
+    // const String url = AppUrl.RUN_QUERY;
+    // var body = {
+    //   "structuredQuery": {
+    //     "from": [
+    //       {"collectionId": "item"}
+    //     ],
+    //     "where": {
+    //       "compositeFilter": {
+    //         "filters": [
+    //           {
+    //             "fieldFilter": {
+    //               "field": {"fieldPath": "catId"},
+    //               "op": "EQUAL",
+    //               "value": {
+    //                 "referenceValue":
+    //                     "projects/${AppUrl.envType}/databases/(default)/documents/category/$id"
+    //               }
+    //             }
+    //           }
+    //         ],
+    //         "op": "AND"
+    //       }
+    //     }
+    //   }
+    // };
+    // var response = await callApi(
+    //     mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    // if (response.statusCode == 200) {
+    //   var data = jsonDecode(response.body);
+    //   for (int i = 0; i < data.length; i++) {
+    //     categoryItems
+    //         .add(Item.fromFirebaseRestApi(data[i]['document']['fields']));
+    //   }
+    //   log('#####Returning with cat items#######');
+    //   return categoryItems;
+    // } else {
+    //   AppHelpers.crashlyticsLog(response.body.toString());
+    //   Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+    //   throw 'Error, Category Does not Exist!';
+    // }
   }
 
   Future<int> addCustomerList(
@@ -787,7 +819,8 @@ class APIs extends GetxController {
         var jsonData = data['fields'];
         final profileController = Get.find<ProfileController>();
         profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
-        profileController.isOperational.value = profileController.customerDetails!.opStats;
+        profileController.isOperational.value =
+            profileController.customerDetails!.opStats;
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');
@@ -982,13 +1015,17 @@ class APIs extends GetxController {
     }
   }
 
-  Future<CustomerOfferResponse?> acceptOffer(String listId, String listEventId) async {
+  Future<CustomerOfferResponse?> acceptOffer(
+      String listId, String listEventId) async {
     final String url = AppUrl.ACCEPT_OFFER(listId, listEventId);
 
     var response = await callApi(
-        mode: REST.put, url: Uri.parse(url),);
+      mode: REST.put,
+      url: Uri.parse(url),
+    );
     if (response.statusCode == 200) {
-      CustomerOfferResponse resp = CustomerOfferResponse.fromJson(json.decode(response.body));
+      CustomerOfferResponse resp =
+          CustomerOfferResponse.fromJson(json.decode(response.body));
       return resp;
     } else {
       log('Request failed with status: ${response.statusCode}.Details? ${response.body}');
@@ -1134,7 +1171,8 @@ class APIs extends GetxController {
       "authorization": 'Bearer ${await AppHelpers().authToken}',
       'Content-Type': 'application/json'
     };
-    var request = http.Request('PUT', Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
+    var request =
+        http.Request('PUT', Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
     request.body = json.encode({"deviceToken": token, "deviceId": uid});
     request.headers.addAll(header);
 

@@ -10,6 +10,7 @@ import 'package:santhe/controllers/boxes_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_faq_model.dart';
@@ -47,7 +48,8 @@ class ProfileController extends GetxController {
 
   Future<bool> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
-    final result = await apiController.getCustomerInfo(int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+    final result = await apiController.getCustomerInfo(
+        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
     return result == 0;
   }
 
@@ -88,6 +90,7 @@ class ProfileController extends GetxController {
     if (!box.containsKey('cacheRefresh') || box.isEmpty) {
       //cat data
       await apiController.getAllCategories();
+      apiController.getAllItems();
       box.put('cacheRefresh', newCacheRefresh);
 
       //faq data
@@ -150,7 +153,9 @@ class ProfileController extends GetxController {
             .isBefore(newCacheRefresh.itemUpdate) ??
         true) {
       log('-----------------Refreshing Item Image------------------');
-      // await apiController.getAllItems();
+      log('-----------------Updating Items in cache------------------');
+      await apiController.getAllItems();
+
       //clearing image cache
       DefaultCacheManager manager = DefaultCacheManager();
       manager.emptyCache();
@@ -159,9 +164,15 @@ class ProfileController extends GetxController {
     box.put('cacheRefresh', newCacheRefresh);
   }
 
-  void deleteEverything(){
+  void deleteEverything() async {
     isOperational.value = false;
     customerDetails = null;
     _urlToken = null;
+
+    //TODO: REMOVE ONLY FOR TESTING PURPOSES
+
+    await Boxes.getCacheRefreshInfo().deleteFromDisk();
+    await Boxes.getCategoriesDB().deleteFromDisk();
+    print('deleted cache');
   }
 }

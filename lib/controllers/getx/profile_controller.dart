@@ -77,8 +77,11 @@ class ProfileController extends GetxController {
   Future<void> cacheRefresh() async {
     final apiController = Get.find<APIs>();
 
+    bool didUpdateItems = true;
+
     CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
     var box = Boxes.getCacheRefreshInfo();
+    final itemBox = Boxes.getItemsDB();
 
     await Hive.openBox<Category>('categoryDB');
     await Hive.openBox<Item>('itemDB');
@@ -87,7 +90,7 @@ class ProfileController extends GetxController {
     await Hive.openBox<String>('contentDB');
 
     //getting all content that's to be cached if not already done
-    if (!box.containsKey('cacheRefresh') || box.isEmpty) {
+    if (!box.containsKey('cacheRefresh') || box.isEmpty || itemBox.isEmpty) {
       //cat data
       await apiController.getAllCategories();
       apiController.getAllItems();
@@ -154,19 +157,21 @@ class ProfileController extends GetxController {
         true) {
       log('-----------------Refreshing Item Image------------------');
       log('-----------------Updating Items in cache------------------');
-      await apiController.getAllItems();
+
+      didUpdateItems = await apiController.getAllItems();
 
       //clearing image cache
       DefaultCacheManager manager = DefaultCacheManager();
       manager.emptyCache();
     }
-
-    box.put('cacheRefresh', newCacheRefresh);
+    if (didUpdateItems) box.put('cacheRefresh', newCacheRefresh);
   }
 
   void deleteEverything() async {
     isOperational.value = false;
     customerDetails = null;
     _urlToken = null;
+    // await Boxes.getCacheRefreshInfo().deleteFromDisk();
+    // print('deleted cache');
   }
 }

@@ -353,25 +353,32 @@ class APIs extends GetxController {
     }
   }
 
-  Future<List<Item>> getAllItems() async {
+  Future<bool> getAllItems() async {
     const String url = AppUrl.GET_ALL_ITEMS;
     List<Item> items = [];
+    bool isSuccessful = false;
+    int retry = 0;
 
-    try {
-      final response = await callApi(mode: REST.get, url: Uri.parse(url));
-      items = itemFromJson(response.body);
+    while (retry < 2) {
+      try {
+        final response = await callApi(mode: REST.get, url: Uri.parse(url));
+        items = itemFromJson(response.body);
 
-      final itemBox = Boxes.getItemsDB();
+        final itemBox = Boxes.getItemsDB();
 
-      for (int i = 0; i < items.length; i++) {
-        itemBox.put(i, items[i]);
+        for (int i = 0; i < items.length; i++) {
+          itemBox.put(i, items[i]);
+        }
+        isSuccessful = true;
+        break;
+      } on Exception catch (e) {
+        log('Item cache refresh failed.');
+        retry++;
       }
-    } on Exception catch (e) {
-      log('Item cache refresh failed.');
     }
 
     print('items: ${items.length}');
-    return items;
+    return isSuccessful;
   }
 
   //get
@@ -1158,7 +1165,10 @@ class APIs extends GetxController {
     final resp = await query.getObjects();
 
     for (var i in resp.hits) {
-      searchResults.add(Item.fromJson(i.data));
+      final Item item = Item.fromJson(i.data);
+      final Item formatedItem =
+          item.copyWith(catId: item.catId.replaceAll('category/', ''));
+      searchResults.add(formatedItem);
     }
 
     return searchResults;

@@ -828,7 +828,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                               .get(int.parse(item
                                                                   .catId
                                                                   .replaceAll(
-                                                                      'projects/${AppUrl.envType}/databases/(default)/documents/category/',
+                                                                      'category/',
                                                                       '')))
                                                               ?.catName ??
                                                           'Others',

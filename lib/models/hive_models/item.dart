@@ -1,5 +1,7 @@
-import 'package:hive/hive.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:hive/hive.dart';
 
 part 'item.g.dart';
 
@@ -89,4 +91,38 @@ class Item {
         "createUser": createUser,
         "updateUser": updateUser,
       };
+
+  Item copyWith({
+    String? itemName,
+    String? catId,
+    String? dBrandType,
+    String? dItemNotes,
+    int? dQuantity,
+    String? dUnit,
+    String? itemAlias,
+    int? itemId,
+    String? itemImageId,
+    String? itemImageTn,
+    String? status,
+    List<String>? unit,
+    int? createUser,
+    int? updateUser,
+  }) {
+    return Item(
+      itemName: itemName ?? this.itemName,
+      catId: catId ?? this.catId,
+      dBrandType: dBrandType ?? this.dBrandType,
+      dItemNotes: dItemNotes ?? this.dItemNotes,
+      dQuantity: dQuantity ?? this.dQuantity,
+      dUnit: dUnit ?? this.dUnit,
+      itemAlias: itemAlias ?? this.itemAlias,
+      itemId: itemId ?? this.itemId,
+      itemImageId: itemImageId ?? this.itemImageId,
+      itemImageTn: itemImageTn ?? this.itemImageTn,
+      status: status ?? this.status,
+      unit: unit ?? this.unit,
+      createUser: createUser ?? this.createUser,
+      updateUser: updateUser ?? this.updateUser,
+    );
+  }
 }

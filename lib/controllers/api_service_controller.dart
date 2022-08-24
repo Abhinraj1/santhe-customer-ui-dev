@@ -366,6 +366,8 @@ class APIs extends GetxController {
 
         final itemBox = Boxes.getItemsDB();
 
+        await itemBox.deleteAll(itemBox.keys);
+
         for (int i = 0; i < items.length; i++) {
           itemBox.put(i, items[i]);
         }

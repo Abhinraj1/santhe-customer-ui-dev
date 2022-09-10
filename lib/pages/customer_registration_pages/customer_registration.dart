@@ -476,9 +476,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 if (userAdded == 1) {
                                   //add to Hive
                                   AppSharedPreference().setLogin(true);
-                                  analytics.logSignUp(
-                                      signUpMethod: registrationController
-                                          .utmMedium.value);
+                                  analytics
+                                      .logSignUp(
+                                          signUpMethod: registrationController
+                                              .utmMedium.value)
+                                      .then((value) => log(
+                                          'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
                                   Get.offAll(() => const HomePage(),
                                       transition: Transition.fadeIn);

@@ -8,6 +8,7 @@ import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/network_call/network_call.dart';
@@ -71,9 +72,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   String placeHolderValidation(String value, TextEditingController controller) {
     if (widget.edit) {
       if (controller.text.trim().isEmpty) {
-        if(value.contains(placeHolderIdentifier)){
+        if (value.contains(placeHolderIdentifier)) {
           return value;
-        }else{
+        } else {
           return '';
         }
       } else {
@@ -96,7 +97,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
     _unitsController = GroupButtonController(
         selectedIndex: units.indexWhere((element) =>
-        element.toLowerCase() == widget.item.dUnit.toLowerCase()));
+            element.toLowerCase() == widget.item.dUnit.toLowerCase()));
 
     _qtyController = TextEditingController(
         text: AppHelpers.replaceDecimalZero('${widget.item.dQuantity}'));
@@ -138,7 +139,8 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   final AllListController _allListController = Get.find();
 
-  late UserListModel currentUserList = _allListController.allListMap[widget.listId]!;
+  late UserListModel currentUserList =
+      _allListController.allListMap[widget.listId]!;
 
   static const TextStyle kLabelTextStyle = TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
@@ -309,7 +311,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                       child: GestureDetector(
                                         onTap: () {
                                           String img =
-                                          item.itemImageId.replaceAll(
+                                              item.itemImageId.replaceAll(
                                             'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
                                             '',
                                           );
@@ -333,8 +335,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                           } else {
                                             Get.to(
                                                 () => ImageViewerPage(
-                                                    itemImageUrl:
-                                                    img,
+                                                    itemImageUrl: img,
                                                     showCustomImage: false),
                                                 transition: Transition.fadeIn,
                                                 opaque: false);
@@ -648,7 +649,6 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   //function logic
                                   controller: _unitsController,
                                   buttons: units,
-
                                   onSelected: (index, isSelected) {
                                     selectedUnit = units[index];
                                   }),
@@ -781,136 +781,305 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                 BorderRadius.circular(16.0)),
                                         color: AppColors().brandDark,
                                         disabledColor: AppColors().grey80,
-                                        onPressed: disable ? null : () async {
+                                        onPressed: disable
+                                            ? null
+                                            : () async {
                                                 setState(() {
                                                   isProcessing = true;
                                                   disable = true;
                                                 });
                                                 final itemUnit = selectedUnit;
 
-                                                if (_formKey.currentState!.validate()) {
+                                                if (_formKey.currentState!
+                                                    .validate()) {
                                                   //new / edit new item
-                                                  if (imageController.editItemCustomImageUrl.value.isEmpty || imageController.editItemCustomImageUrl.value == '') {
-                                                    ListItemModel listItem = ListItemModel(
-                                                      brandType: placeHolderValidation(item.dBrandType, _brandController),
+                                                  if (imageController
+                                                          .editItemCustomImageUrl
+                                                          .value
+                                                          .isEmpty ||
+                                                      imageController
+                                                              .editItemCustomImageUrl
+                                                              .value ==
+                                                          '') {
+                                                    ListItemModel listItem =
+                                                        ListItemModel(
+                                                      brandType:
+                                                          placeHolderValidation(
+                                                              item.dBrandType,
+                                                              _brandController),
                                                       itemId: '${item.itemId}',
-                                                      itemImageId: item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
-                                                      itemName: _customItemNameController.text,
-                                                      quantity: _qtyController.text,
-                                                      notes: placeHolderValidation(item.dItemNotes, _notesController),
+                                                      itemImageId: item
+                                                          .itemImageId
+                                                          .replaceAll(
+                                                              'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
+                                                              ''),
+                                                      itemName:
+                                                          _customItemNameController
+                                                              .text,
+                                                      quantity:
+                                                          _qtyController.text,
+                                                      notes:
+                                                          placeHolderValidation(
+                                                              item.dItemNotes,
+                                                              _notesController),
                                                       unit: itemUnit,
-                                                      catName: Boxes.getCategoriesDB().get(int.parse(item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')))?.catName ?? 'Others',
-                                                      catId: item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', ''),
+                                                      catName: Boxes
+                                                                  .getCategoriesDB()
+                                                              .get(int.parse(item
+                                                                  .catId
+                                                                  .replaceAll(
+                                                                      'category/',
+                                                                      '')))
+                                                              ?.catName ??
+                                                          'Others',
+                                                      catId: item.catId.replaceAll(
+                                                          'projects/${AppUrl.envType}/databases/(default)/documents/category/',
+                                                          ''),
                                                       possibleUnits: item.unit,
                                                     );
-                                                    var tmp = currentUserList.items.where((element) => element.itemName == listItem.itemName).toList();
+                                                    var tmp = currentUserList
+                                                        .items
+                                                        .where((element) =>
+                                                            element.itemName ==
+                                                            listItem.itemName)
+                                                        .toList();
                                                     if (!widget.edit) {
-                                                      if(tmp.isNotEmpty){
-                                                        if(tmp.first.compareTo(listItem)){
-                                                          tmp.first.quantity = (double.parse(tmp.first.quantity) + double.parse(listItem.quantity)).toString();
-                                                        }else{
-                                                          currentUserList.items.add(listItem);
+                                                      if (tmp.isNotEmpty) {
+                                                        if (tmp.first.compareTo(
+                                                            listItem)) {
+                                                          tmp.first
+                                                              .quantity = (double
+                                                                      .parse(tmp
+                                                                          .first
+                                                                          .quantity) +
+                                                                  double.parse(
+                                                                      listItem
+                                                                          .quantity))
+                                                              .toString();
+                                                        } else {
+                                                          currentUserList.items
+                                                              .add(listItem);
                                                         }
-                                                      }else{
-                                                        currentUserList.items.add(listItem);
+                                                      } else {
+                                                        currentUserList.items
+                                                            .add(listItem);
                                                       }
-                                                    }else{
-                                                      for (int i = 0; i < currentUserList.items.length; i++) {
-                                                        if(currentUserList.items[i].itemName == listItem.itemName){
-                                                          currentUserList.items[i] = listItem;
+                                                    } else {
+                                                      for (int i = 0;
+                                                          i <
+                                                              currentUserList
+                                                                  .items.length;
+                                                          i++) {
+                                                        if (currentUserList
+                                                                .items[i]
+                                                                .itemName ==
+                                                            listItem.itemName) {
+                                                          currentUserList
+                                                                  .items[i] =
+                                                              listItem;
                                                           break;
                                                         }
                                                       }
                                                     }
-                                                    if (!widget.edit && widget.fromSearch != true) {
-                                                      animateAdd(MediaQuery.of(context).size.width / 100);
+                                                    if (!widget.edit &&
+                                                        widget.fromSearch !=
+                                                            true) {
+                                                      animateAdd(
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              100);
                                                     }
 
                                                     await saveListAndUpdate();
 
-                                                    Future.delayed(Duration(milliseconds: !widget.edit && widget.fromSearch != true ? 500 : 0), () async {
-                                                      Navigator.of(context).pop();
+                                                    Future.delayed(
+                                                        Duration(
+                                                            milliseconds: !widget
+                                                                        .edit &&
+                                                                    widget.fromSearch !=
+                                                                        true
+                                                                ? 500
+                                                                : 0), () async {
+                                                      Navigator.of(context)
+                                                          .pop();
                                                     });
                                                   }
                                                   //new / edit custom item
                                                   else {
-                                                    int itemCount = await apiController.getItemsCount();
+                                                    int itemCount =
+                                                        await apiController
+                                                            .getItemsCount();
 
                                                     if (itemCount != 0) {
                                                       Item newCustomItem = Item(
-                                                          dBrandType: placeHolderValidation(item.dBrandType, _brandController),
-                                                          dItemNotes: placeHolderValidation(item.dItemNotes, _notesController),
-                                                          itemImageTn: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
+                                                          dBrandType: placeHolderValidation(
+                                                              item.dBrandType,
+                                                              _brandController),
+                                                          dItemNotes: placeHolderValidation(
+                                                              item.dItemNotes,
+                                                              _notesController),
+                                                          itemImageTn: imageController
+                                                              .editItemCustomImageUrl
+                                                              .value
+                                                              .replaceAll(
+                                                                  'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
+                                                                  ''),
                                                           catId: item.catId,
                                                           createUser: custPhone,
                                                           dQuantity: 1,
                                                           dUnit: selectedUnit,
-                                                          itemAlias: _customItemNameController.text,
+                                                          itemAlias:
+                                                              _customItemNameController
+                                                                  .text,
                                                           itemId: itemCount,
-                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
-                                                          itemName: _customItemNameController.text,
+                                                          itemImageId: imageController
+                                                              .editItemCustomImageUrl
+                                                              .value
+                                                              .replaceAll(
+                                                                  'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
+                                                                  ''),
+                                                          itemName:
+                                                              _customItemNameController
+                                                                  .text,
                                                           status: 'inactive',
                                                           unit: units,
-                                                          updateUser: custPhone);
+                                                          updateUser:
+                                                              custPhone);
 
-                                                      int response = await apiController.addItem(newCustomItem);
+                                                      int response =
+                                                          await apiController
+                                                              .addItem(
+                                                                  newCustomItem);
 
                                                       if (response == 1) {
-                                                        final listItem = ListItemModel(
-                                                          brandType: placeHolderValidation(newCustomItem.dBrandType, _brandController),
+                                                        final listItem =
+                                                            ListItemModel(
+                                                          brandType:
+                                                              placeHolderValidation(
+                                                                  newCustomItem
+                                                                      .dBrandType,
+                                                                  _brandController),
                                                           //item ref
-                                                          itemId: '${newCustomItem.itemId}',
-                                                          itemImageId: imageController.editItemCustomImageUrl.value.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
-                                                          itemName: _customItemNameController.text,
-                                                          quantity: _qtyController.text.toString(),
-                                                          notes: placeHolderValidation(newCustomItem.dItemNotes, _notesController),
+                                                          itemId:
+                                                              '${newCustomItem.itemId}',
+                                                          itemImageId: imageController
+                                                              .editItemCustomImageUrl
+                                                              .value
+                                                              .replaceAll(
+                                                                  'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
+                                                                  ''),
+                                                          itemName:
+                                                              _customItemNameController
+                                                                  .text,
+                                                          quantity:
+                                                              _qtyController
+                                                                  .text
+                                                                  .toString(),
+                                                          notes: placeHolderValidation(
+                                                              newCustomItem
+                                                                  .dItemNotes,
+                                                              _notesController),
                                                           unit: itemUnit,
-                                                          possibleUnits: newCustomItem.unit,
-                                                          catName: Boxes.getCategoriesDB().get(int.parse(item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', '')))?.catName ?? 'Others',
-                                                          catId: item.catId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/category/', ''),
+                                                          possibleUnits:
+                                                              newCustomItem
+                                                                  .unit,
+                                                          catName: Boxes
+                                                                      .getCategoriesDB()
+                                                                  .get(int.parse(item
+                                                                      .catId
+                                                                      .replaceAll(
+                                                                          'projects/${AppUrl.envType}/databases/(default)/documents/category/',
+                                                                          '')))
+                                                                  ?.catName ??
+                                                              'Others',
+                                                          catId: item.catId
+                                                              .replaceAll(
+                                                                  'projects/${AppUrl.envType}/databases/(default)/documents/category/',
+                                                                  ''),
                                                         );
 
                                                         if (widget.edit) {
-                                                          currentUserList.items.removeWhere((element) => element.itemId.replaceAll('projects/${AppUrl.envType}/databases/(default)/documents/item/', '') == '${item.itemId}');
+                                                          currentUserList.items
+                                                              .removeWhere((element) =>
+                                                                  element.itemId
+                                                                      .replaceAll(
+                                                                          'projects/${AppUrl.envType}/databases/(default)/documents/item/',
+                                                                          '') ==
+                                                                  '${item.itemId}');
                                                         }
-                                                        currentUserList.items.add(listItem);
+                                                        currentUserList.items
+                                                            .add(listItem);
                                                         await saveListAndUpdate();
                                                       } else {
                                                         Get.snackbar(
                                                             'Network Error',
                                                             'Error Adding item to the list!',
-                                                            backgroundColor: Colors.white,
-                                                            colorText: Colors.grey);
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            colorText:
+                                                                Colors.grey);
                                                         setState(() {
                                                           isProcessing = false;
                                                           disable = false;
                                                         });
                                                       }
-                                                      if (!widget.edit && widget.fromSearch != true) {
-                                                        animateAdd(screenWidth / 100);
+                                                      if (!widget.edit &&
+                                                          widget.fromSearch !=
+                                                              true) {
+                                                        animateAdd(
+                                                            screenWidth / 100);
                                                       }
-                                                      Future.delayed(Duration(milliseconds: !widget.edit && widget.fromSearch != true ? 500 : 0), () async {
+                                                      Future.delayed(
+                                                          Duration(
+                                                              milliseconds: !widget
+                                                                          .edit &&
+                                                                      widget.fromSearch !=
+                                                                          true
+                                                                  ? 500
+                                                                  : 0),
+                                                          () async {
                                                         Navigator.pop(context);
                                                       });
                                                     } else {
                                                       Get.snackbar(
                                                         '',
                                                         '',
-                                                        titleText: const Padding(
-                                                          padding: EdgeInsets.only(left: 8.0),
-                                                          child: Text('Enter Quantity'),
+                                                        titleText:
+                                                            const Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 8.0),
+                                                          child: Text(
+                                                              'Enter Quantity'),
                                                         ),
-                                                        messageText: const Padding(
-                                                          padding: EdgeInsets.only(left: 8.0),
-                                                          child: Text('Please enter some quantity to add...'),
+                                                        messageText:
+                                                            const Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 8.0),
+                                                          child: Text(
+                                                              'Please enter some quantity to add...'),
                                                         ),
-                                                        margin: const EdgeInsets.all(10.0),
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        backgroundColor: Colors.white,
+                                                        margin: const EdgeInsets
+                                                            .all(10.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        backgroundColor:
+                                                            Colors.white,
                                                         shouldIconPulse: true,
                                                         icon: const Padding(
-                                                          padding: EdgeInsets.all(8.0),
-                                                          child: Icon(CupertinoIcons.exclamationmark_triangle_fill, color: Colors.yellow, size: 45,),
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  8.0),
+                                                          child: Icon(
+                                                            CupertinoIcons
+                                                                .exclamationmark_triangle_fill,
+                                                            color:
+                                                                Colors.yellow,
+                                                            size: 45,
+                                                          ),
                                                         ),
                                                       );
                                                       setState(() {
@@ -921,7 +1090,9 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                   }
                                                 }
                                                 setState(() {
-                                                  if(widget.edit || widget.fromSearch == true) {
+                                                  if (widget.edit ||
+                                                      widget.fromSearch ==
+                                                          true) {
                                                     isProcessing = false;
                                                     disable = false;
                                                   }

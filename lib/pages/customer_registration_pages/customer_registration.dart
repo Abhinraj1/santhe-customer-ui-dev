@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +35,8 @@ class UserRegistrationPage extends StatefulWidget {
 }
 
 class _UserRegistrationPageState extends State<UserRegistrationPage> {
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   final apiController = Get.find<APIs>();
   final _formKey = GlobalKey<FormState>();
   String userName = '', userEmail = '', userRefferal = '';
@@ -440,7 +443,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 donePressed = true;
                                 loading = true;
                               });
-                              if (_formKey.currentState!.validate() && registrationController.address.isNotEmpty) {
+                              if (_formKey.currentState!.validate() &&
+                                  registrationController.address.isNotEmpty) {
                                 //final otp check
 
                                 int userPhone = int.parse(AppHelpers()
@@ -449,7 +453,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 //todo add how to reach howToReach
                                 User currentUser = User(
                                     address:
-                                    registrationController.address.value,
+                                        registrationController.address.value,
                                     emailId: userEmail,
                                     lat: registrationController.lat.value,
                                     lng: registrationController.lng.value,
@@ -461,8 +465,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                     custRatings: 5.0,
                                     custReferal: 0,
                                     custStatus: 'active',
-                                    howToReach: registrationController
-                                        .howToReach.value,
+                                    howToReach:
+                                        registrationController.howToReach.value,
                                     custPlan: 'planA',
                                     custLoginTime: DateTime.now());
 
@@ -472,6 +476,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 if (userAdded == 1) {
                                   //add to Hive
                                   AppSharedPreference().setLogin(true);
+                                  analytics
+                                      .logSignUp(
+                                          signUpMethod: registrationController
+                                              .utmMedium.value)
+                                      .then((value) => log(
+                                          'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
                                   Get.offAll(() => const HomePage(),
                                       transition: Transition.fadeIn);

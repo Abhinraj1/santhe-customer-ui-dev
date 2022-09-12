@@ -12,6 +12,7 @@ import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
@@ -307,7 +308,10 @@ class _UserListScreenState extends State<UserListScreen> {
                                   ],
                                 )
                               : _fullCategoryButton(),
-                         if(Platform.isIOS) SizedBox(height: 10.h,)
+                          if (Platform.isIOS)
+                            SizedBox(
+                              height: 10.h,
+                            )
                         ],
                       ),
                     ),
@@ -481,10 +485,7 @@ class _UserListScreenState extends State<UserListScreen> {
   String getCategoryName(Item item) {
     List<Category> temp = _categoryList
         .where((element) =>
-            element.catId ==
-            int.parse(item.catId.replaceAll(
-                'projects/${AppUrl.envType}/databases/(default)/documents/category/',
-                '')))
+            element.catId == int.parse(item.catId.replaceAll('category/', '')))
         .toList();
     if (temp.isEmpty) {
       return 'Custom Category';
@@ -997,7 +998,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                   ),
                                 ),
                               ),
-                              if(Platform.isIOS)SizedBox(height: 10.h),
+                              if (Platform.isIOS) SizedBox(height: 10.h),
                             ],
                           ),
                         ),

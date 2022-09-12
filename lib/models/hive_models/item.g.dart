@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'santhe_item_model.dart';
+part of 'item.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -8,7 +8,7 @@ part of 'santhe_item_model.dart';
 
 class ItemAdapter extends TypeAdapter<Item> {
   @override
-  final int typeId = 7;
+  final int typeId = 8;
 
   @override
   Item read(BinaryReader reader) {
@@ -17,19 +17,19 @@ class ItemAdapter extends TypeAdapter<Item> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Item(
+      itemName: fields[0] as String,
+      catId: fields[1] as String,
       dBrandType: fields[2] as String,
       dItemNotes: fields[3] as String,
-      itemImageTn: fields[9] as String,
-      catId: fields[0] as String,
-      createUser: fields[1] as int,
-      dQuantity: fields[4] as num,
-      dUnit: fields[12] as String,
+      dQuantity: fields[4] as int,
+      dUnit: fields[5] as String,
       itemAlias: fields[6] as String,
       itemId: fields[7] as int,
       itemImageId: fields[8] as String,
-      itemName: fields[10] as String,
-      status: fields[11] as String,
-      unit: (fields[5] as List).cast<String>(),
+      itemImageTn: fields[9] as String,
+      status: fields[10] as String,
+      unit: (fields[11] as List).cast<String>(),
+      createUser: fields[12] as int,
       updateUser: fields[13] as int,
     );
   }
@@ -39,9 +39,9 @@ class ItemAdapter extends TypeAdapter<Item> {
     writer
       ..writeByte(14)
       ..writeByte(0)
-      ..write(obj.catId)
+      ..write(obj.itemName)
       ..writeByte(1)
-      ..write(obj.createUser)
+      ..write(obj.catId)
       ..writeByte(2)
       ..write(obj.dBrandType)
       ..writeByte(3)
@@ -49,7 +49,7 @@ class ItemAdapter extends TypeAdapter<Item> {
       ..writeByte(4)
       ..write(obj.dQuantity)
       ..writeByte(5)
-      ..write(obj.unit)
+      ..write(obj.dUnit)
       ..writeByte(6)
       ..write(obj.itemAlias)
       ..writeByte(7)
@@ -59,11 +59,11 @@ class ItemAdapter extends TypeAdapter<Item> {
       ..writeByte(9)
       ..write(obj.itemImageTn)
       ..writeByte(10)
-      ..write(obj.itemName)
-      ..writeByte(11)
       ..write(obj.status)
+      ..writeByte(11)
+      ..write(obj.unit)
       ..writeByte(12)
-      ..write(obj.dUnit)
+      ..write(obj.createUser)
       ..writeByte(13)
       ..write(obj.updateUser);
   }

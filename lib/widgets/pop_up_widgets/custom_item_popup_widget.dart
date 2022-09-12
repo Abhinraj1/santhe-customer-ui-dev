@@ -10,6 +10,7 @@ import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/new_list/list_item_model.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/network_call/network_call.dart';
@@ -487,8 +488,9 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                           isProcessing = true;
                                         });
 
-                                        if(!added){
-                                          if (_formKey.currentState!.validate() &&
+                                        if (!added) {
+                                          if (_formKey.currentState!
+                                                  .validate() &&
                                               itemUnit.isNotEmpty &&
                                               _customItemNameController.text
                                                   .trim()
@@ -503,21 +505,24 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                               //todo add custom item to firebase
                                               Item newCustomItem = Item(
                                                   dBrandType: _customBrandController.text
-                                                      .trim()
-                                                      .isEmpty
+                                                          .trim()
+                                                          .isEmpty
                                                       ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
                                                       : _customBrandController.text
-                                                      .trim(),
-                                                  dItemNotes: _customNotesController.text
-                                                      .trim()
-                                                      .isEmpty
+                                                          .trim(),
+                                                  dItemNotes: _customNotesController
+                                                          .text
+                                                          .trim()
+                                                          .isEmpty
                                                       ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
-                                                      : _customNotesController.text
-                                                      .trim(),
+                                                      : _customNotesController
+                                                          .text
+                                                          .trim(),
                                                   itemImageTn: imageController
-                                                      .addItemCustomImageUrl.value
+                                                      .addItemCustomImageUrl
+                                                      .value
                                                       .replaceAll(
-                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
+                                                          'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
                                                   catId: '4000',
                                                   createUser: custPhone,
                                                   dQuantity: 1,
@@ -528,9 +533,8 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                                   itemImageId: image.isEmpty
                                                       ? 'image%20placeholder.png?alt=media'
                                                       : image.replaceAll(
-                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
-                                                  itemName:
-                                                  _customItemNameController.text.trim(),
+                                                          'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', ''),
+                                                  itemName: _customItemNameController.text.trim(),
                                                   status: 'inactive',
                                                   unit: availableUnits,
                                                   updateUser: custPhone);
@@ -541,34 +545,34 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                               if (response == 1) {
                                                 var listItem = ListItemModel(
                                                   brandType: _customBrandController
-                                                      .text
-                                                      .trim()
-                                                      .isEmpty
+                                                          .text
+                                                          .trim()
+                                                          .isEmpty
                                                       ? 'You can mention brand, type or size of the item here$placeHolderIdentifier'
                                                       : _customBrandController
-                                                      .text
-                                                      .trim(),
+                                                          .text
+                                                          .trim(),
                                                   //item ref
                                                   itemId: '$itemCount',
                                                   itemImageId: image.isEmpty
                                                       ? 'image%20placeholder.png?alt=media'
                                                       : image.replaceAll(
-                                                      'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
-                                                      ''),
+                                                          'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
+                                                          ''),
                                                   itemName:
-                                                  _customItemNameController
-                                                      .text
-                                                      .trim(),
+                                                      _customItemNameController
+                                                          .text
+                                                          .trim(),
                                                   quantity:
-                                                  _customQtyController.text,
+                                                      _customQtyController.text,
                                                   notes: _customNotesController
-                                                      .text
-                                                      .trim()
-                                                      .isEmpty
+                                                          .text
+                                                          .trim()
+                                                          .isEmpty
                                                       ? 'Any additional information like the number of items in a pack, type of package, ingredient choice etc goes here$placeHolderIdentifier'
                                                       : _customNotesController
-                                                      .text
-                                                      .trim(),
+                                                          .text
+                                                          .trim(),
                                                   unit: itemUnit,
                                                   possibleUnits: availableUnits,
                                                   catName: 'Others',
@@ -591,12 +595,14 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                               'Please enter all the values for required fields...',
                                               snackPosition: SnackPosition.TOP,
                                               backgroundColor: Colors.white,
-                                              margin: const EdgeInsets.all(10.0),
-                                              padding: const EdgeInsets.all(15.0),
+                                              margin:
+                                                  const EdgeInsets.all(10.0),
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
                                               colorText: Colors.grey,
                                             );
                                           }
-                                        }else{
+                                        } else {
                                           Get.back();
                                         }
 
@@ -678,20 +684,18 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-
                               setState(() {
                                 disable = true;
                               });
 
                               Navigator.pop(context);
-                              await FirebaseHelper()
-                                  .addCustomItemImage(
-                                      DateTime.now()
-                                          .toUtc()
-                                          .toString()
-                                          .replaceAll(' ', 'T'),
-                                      true,
-                                      true);
+                              await FirebaseHelper().addCustomItemImage(
+                                  DateTime.now()
+                                      .toUtc()
+                                      .toString()
+                                      .replaceAll(' ', 'T'),
+                                  true,
+                                  true);
 
                               setState(() {
                                 disable = false;
@@ -730,14 +734,13 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                                 disable = true;
                               });
                               Navigator.pop(context);
-                              await FirebaseHelper()
-                                  .addCustomItemImage(
-                                      DateTime.now()
-                                          .toUtc()
-                                          .toString()
-                                          .replaceAll(' ', 'T'),
-                                      false,
-                                      true);
+                              await FirebaseHelper().addCustomItemImage(
+                                  DateTime.now()
+                                      .toUtc()
+                                      .toString()
+                                      .replaceAll(' ', 'T'),
+                                  false,
+                                  true);
                               setState(() {
                                 disable = false;
                               });

@@ -1,5 +1,3 @@
-
-
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -14,6 +12,7 @@ import '../controllers/location_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../controllers/registrationController.dart';
 import '../controllers/search_query_controller.dart';
+import '../models/hive_models/item.dart';
 import '../models/santhe_cache_refresh.dart';
 import '../models/santhe_category_model.dart';
 import '../models/santhe_faq_model.dart';
@@ -24,8 +23,7 @@ import '../models/santhe_user_list_model.dart';
 import '../models/santhe_user_model.dart';
 import 'app_shared_preference.dart';
 
-class AppInitialisations{
-
+class AppInitialisations {
   Future<void> initialiseApplication() async {
     //shared preferences
     await AppSharedPreference().initSharedPreference();
@@ -55,7 +53,7 @@ class AppInitialisations{
     await Hive.openBox<String>('contentDB');
   }
 
-  void _initialiseControllers(){
+  void _initialiseControllers() {
     Get.put(NotificationController());
     Get.put(AllListController());
     Get.put(APIs());
@@ -68,5 +66,4 @@ class AppInitialisations{
     Get.put(ProfileController());
     Get.put(ConnectivityController());
   }
-
 }

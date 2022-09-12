@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
   }
 
-  Future<void> _init() async{
+  Future<void> _init() async {
     _homeController.homeTabController =
         TabController(length: 3, vsync: this, initialIndex: widget.pageIndex);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -62,7 +62,8 @@ class _HomePageState extends State<HomePage>
     await _profileController.getOperationalStatus();
     _allListController.getAllList();
     _allListController.checkSubPlan();
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) => _connectivityController.listenConnectivity(result));
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
+        _connectivityController.listenConnectivity(result));
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
   }

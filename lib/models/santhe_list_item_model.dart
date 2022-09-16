@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:santhe/core/app_url.dart';
 part 'santhe_list_item_model.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 7)
 class ListItem {
   @HiveField(0)
   final String brandType;

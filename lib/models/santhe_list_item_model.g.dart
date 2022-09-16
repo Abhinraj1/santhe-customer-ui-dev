@@ -8,7 +8,7 @@ part of 'santhe_list_item_model.dart';
 
 class ListItemAdapter extends TypeAdapter<ListItem> {
   @override
-  final int typeId = 0;
+  final int typeId = 7;
 
   @override
   ListItem read(BinaryReader reader) {

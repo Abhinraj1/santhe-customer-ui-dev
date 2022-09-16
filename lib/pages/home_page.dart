@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -36,6 +38,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   final apiController = Get.find<APIs>();
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
 
   final NotificationController _notificationController = Get.find();
   final ConnectivityController _connectivityController = Get.find();
@@ -71,6 +76,37 @@ class _HomePageState extends State<HomePage>
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final HomeController _homeController = Get.find();
 
+  Future<void> _showNotificationCustomSound() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your other channel id',
+      'your other channel name',
+      channelDescription: 'your other channel description',
+      sound: RawResourceAndroidNotificationSound('slow_spring_board'),
+    );
+    const IOSNotificationDetails iOSPlatformChannelSpecifics =
+    IOSNotificationDetails(sound: 'slow_spring_board.aiff');
+    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
+    MacOSNotificationDetails(sound: 'slow_spring_board.aiff');
+    final LinuxNotificationDetails linuxPlatformChannelSpecifics =
+    LinuxNotificationDetails(
+      sound: AssetsLinuxSound('sound/slow_spring_board.mp3'),
+    );
+    final NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+      macOS: macOSPlatformChannelSpecifics,
+      linux: linuxPlatformChannelSpecifics,
+    );
+    print('nottif');
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'custom sound notification title',
+      'custom sound notification body',
+      platformChannelSpecifics,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,8 +116,16 @@ class _HomePageState extends State<HomePage>
         leading: IconButton(
           onPressed: () async {
             //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
-            log(await AppHelpers().getToken);
+            //log(await AppHelpers().getToken);
             _key.currentState!.openDrawer();
+            /*FirebaseAnalytics.instance.logEvent(
+              name: "select_content",
+              parameters: {
+                "content_type": "image",
+                "item_id": 'itemId',
+              },
+            );
+            */_showNotificationCustomSound();
           },
           splashRadius: 25.0,
           icon: SvgPicture.asset(

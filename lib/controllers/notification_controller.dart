@@ -46,7 +46,8 @@ class Notifications {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
+        _showNotificationCustomSound(notification);
+        /*flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,
           notification.body,
@@ -57,17 +58,18 @@ class Notifications {
                 icon: '@mipmap/ic_launcher',
                 importance: Importance.max,
                 priority: Priority.max,
+                sound: const RawResourceAndroidNotificationSound('subtle'),
+                //playSound: true,
                 styleInformation: const BigTextStyleInformation(''),
               ),
               iOS: const IOSNotificationDetails()),
-        );
+        );*/
         await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
             ?.createNotificationChannel(channel);
 
-        await FirebaseMessaging.instance
-            .setForegroundNotificationPresentationOptions(
+        await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
           alert: true,
           badge: true,
           sound: true,
@@ -113,6 +115,31 @@ class Notifications {
       _notificationController.notificationData.value = message;
       await navigateNotification(message);
     });
+  }
+
+  Future<void> _showNotificationCustomSound(RemoteNotification notification) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your other channel id',
+      'your other channel name',
+      icon: '@mipmap/ic_launcher',
+      importance: Importance.max,
+      priority: Priority.max,
+      sound: RawResourceAndroidNotificationSound('slow_spring_board'),
+      //playSound: true,
+    );
+    const IOSNotificationDetails iOSPlatformChannelSpecifics =
+    IOSNotificationDetails(presentSound: true, presentBadge: true, presentAlert: true);
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
+    await flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      platformChannelSpecifics,
+    );
   }
 
   Future<void> initialiseNotificationChannel(RemoteMessage message) async {

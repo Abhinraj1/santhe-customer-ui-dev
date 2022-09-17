@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:santhe/pages/home_page.dart';
@@ -23,13 +24,38 @@ class Notifications {
   );
 
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   final NotificationController _notificationController =
       NotificationController.instance;
 
+  //! Custom Android NOtification Channel creation
+  final MethodChannel _channel =
+      const MethodChannel('com.santhe.customer/channel_alert');
+
+  Map<String, String> channelMap = {
+    "id": "santhe_alerts",
+    "name": "Alerts",
+    "description": "Alert notifications",
+  };
+
+  void _createNewChannel() async {
+    try {
+      await _channel.invokeMethod('createNotificationChannel', channelMap);
+      log('custom channel created $channelMap');
+    } on PlatformException catch (e) {
+      // _statusText = _error;
+      print(e);
+    }
+  }
+
+  //! END
+
   fcmInit() async {
-    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) async {
+    _createNewChannel();
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) async {
       if (message != null) {
         //new notification
         _notificationController.notificationData.value = message;
@@ -40,9 +66,7 @@ class Notifications {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       //new notification
-      if (message.data['notification_type'] != 'chat') {
-
-      }
+      if (message.data['notification_type'] != 'chat') {}
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
@@ -66,20 +90,21 @@ class Notifications {
         );*/
         await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+                AndroidFlutterLocalNotificationsPlugin>()
             ?.createNotificationChannel(channel);
 
-        await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        await FirebaseMessaging.instance
+            .setForegroundNotificationPresentationOptions(
           alert: true,
           badge: true,
           sound: true,
         );
 
         const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+            AndroidInitializationSettings('@mipmap/ic_launcher');
 
         IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
+            IOSInitializationSettings(
           requestSoundPermission: true,
           requestBadgePermission: true,
           requestAlertPermission: true,
@@ -87,13 +112,11 @@ class Notifications {
           defaultPresentBadge: true,
           defaultPresentSound: true,
           onDidReceiveLocalNotification: (
-              int id,
-              String? title,
-              String? body,
-              String? payload,
-              ) async {
-
-          },
+            int id,
+            String? title,
+            String? body,
+            String? payload,
+          ) async {},
         );
 
         InitializationSettings initializationSettings = InitializationSettings(
@@ -102,14 +125,15 @@ class Notifications {
 
         await flutterLocalNotificationsPlugin.initialize(initializationSettings,
             onSelectNotification: (String? payload) async {
-              if (payload != null) {
-                await navigateNotification(message);
-              }
-            });
+          if (payload != null) {
+            await navigateNotification(message);
+          }
+        });
       }
     });
 
-    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        alert: true, badge: true, sound: true);
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       _notificationController.notificationData.value = message;
@@ -117,9 +141,10 @@ class Notifications {
     });
   }
 
-  Future<void> _showNotificationCustomSound(RemoteNotification notification) async {
+  Future<void> _showNotificationCustomSound(
+      RemoteNotification notification) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
+        AndroidNotificationDetails(
       'your other channel id',
       'your other channel name',
       icon: '@mipmap/ic_launcher',
@@ -129,7 +154,8 @@ class Notifications {
       //playSound: true,
     );
     const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(presentSound: true, presentBadge: true, presentAlert: true);
+        IOSNotificationDetails(
+            presentSound: true, presentBadge: true, presentAlert: true);
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
@@ -145,20 +171,21 @@ class Notifications {
   Future<void> initialiseNotificationChannel(RemoteMessage message) async {
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
     );
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings(
+        IOSInitializationSettings(
       requestSoundPermission: true,
       requestBadgePermission: true,
       requestAlertPermission: true,
@@ -166,11 +193,11 @@ class Notifications {
       defaultPresentBadge: true,
       defaultPresentSound: true,
       onDidReceiveLocalNotification: (
-          int id,
-          String? title,
-          String? body,
-          String? payload,
-          ) async {},
+        int id,
+        String? title,
+        String? body,
+        String? payload,
+      ) async {},
     );
 
     InitializationSettings initializationSettings = InitializationSettings(
@@ -178,11 +205,11 @@ class Notifications {
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String? payload) async {
-          if (payload != null) {
-            _notificationController.fromNotification = true;
-            await navigateNotification(message);
-          }
-        });
+      if (payload != null) {
+        _notificationController.fromNotification = true;
+        await navigateNotification(message);
+      }
+    });
     _notificationController.notificationData.value = message;
   }
 
@@ -195,26 +222,35 @@ class Notifications {
 }
 
 class NavigateNotifications {
-  final NotificationController _notificationController = NotificationController.instance;
+  final NotificationController _notificationController =
+      NotificationController.instance;
   final ChatController _chatController = Get.find();
   void toScreen(Map<String, dynamic> data) {
-    if (data['screen'] == 'new'){
+    if (data['screen'] == 'new') {
       _notificationController.landingScreen = 'new';
-      if(!_notificationController.fromNotification){
+      if (!_notificationController.fromNotification) {
         Get.offAll(const HomePage(pageIndex: 0));
       }
     }
-    if (data['screen'] == 'answered'){
+    if (data['screen'] == 'answered') {
       _notificationController.landingScreen = 'answered';
-      if(!_notificationController.fromNotification){
+      if (!_notificationController.fromNotification) {
         Get.offAll(const HomePage(pageIndex: 1));
       }
     }
-    if(data['landingScreen'] == 'chat'){
+    if (data['landingScreen'] == 'chat') {
       log(data.toString());
       _notificationController.landingScreen = 'chat';
-      if((!_chatController.inChatScreen && !_notificationController.fromNotification) || (_chatController.inOfferScreen && _notificationController.fromNotification)) {
-        Get.to(ChatScreen(chatId: data['chatId'], customerTitle: data['customerTitle'], listEventId: data['listEventId'], merchantTitle: data['merchantTitle'],));
+      if ((!_chatController.inChatScreen &&
+              !_notificationController.fromNotification) ||
+          (_chatController.inOfferScreen &&
+              _notificationController.fromNotification)) {
+        Get.to(ChatScreen(
+          chatId: data['chatId'],
+          customerTitle: data['customerTitle'],
+          listEventId: data['listEventId'],
+          merchantTitle: data['merchantTitle'],
+        ));
       }
     }
   }

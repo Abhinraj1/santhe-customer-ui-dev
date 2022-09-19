@@ -91,7 +91,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
 
   @override
   void initState() {
-    units = widget.item.unit;
+    units = widget.item.unit.map((e) => e.trim()).toList();
     units.remove(widget.item.dUnit);
     units.insert(0, widget.item.dUnit);
 

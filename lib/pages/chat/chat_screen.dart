@@ -286,6 +286,8 @@ class _ChatScreenState extends State<ChatScreen> {
             "body": content,
             "title": 'New message from customer',
             "priority": "high",
+            "sound": "slow_spring_board.aiff",
+            "android_channel_id": "santhe_alerts"
           },
           //'registration_ids': ['token1', 'token2'], // Multiple id
           'to': merchantToken, // single id
@@ -321,6 +323,8 @@ class _ChatScreenState extends State<ChatScreen> {
               "body": content,
               "title": 'New message from customer',
               "priority": "high",
+              "sound": "slow_spring_board.aiff",
+              "android_channel_id": "santhe_alerts"
             },
             'registration_ids': pairs['data'].values.toList(), // Multiple id
             //'to': merchantToken, // single id

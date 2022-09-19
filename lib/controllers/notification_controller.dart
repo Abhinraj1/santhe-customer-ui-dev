@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +53,9 @@ class Notifications {
   //! END
 
   fcmInit() async {
-    _createNewChannel();
+    if(Platform.isAndroid){
+      _createNewChannel();
+    }
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) async {
@@ -154,14 +157,13 @@ class Notifications {
       //playSound: true,
     );
     const IOSNotificationDetails iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(
-            presentSound: true, presentBadge: true, presentAlert: true);
+    IOSNotificationDetails(sound: 'slow_spring_board.aiff', presentSound: true);
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
     );
     await flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
+      0,
       notification.title,
       notification.body,
       platformChannelSpecifics,

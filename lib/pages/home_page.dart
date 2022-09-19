@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -21,8 +22,10 @@ import '../controllers/getx/all_list_controller.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../core/app_helpers.dart';
+import '../core/app_url.dart';
 import 'new_tab_pages/new_tab_page.dart';
 import 'sent_tab_pages/sent_tab_page.dart';
+import 'package:http/http.dart' as http;
 
 import '../widgets/navigation_drawer_widget.dart';
 
@@ -76,37 +79,6 @@ class _HomePageState extends State<HomePage>
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final HomeController _homeController = Get.find();
 
-  Future<void> _showNotificationCustomSound() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your other channel id',
-      'your other channel name',
-      channelDescription: 'your other channel description',
-      sound: RawResourceAndroidNotificationSound('slow_spring_board'),
-    );
-    const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'slow_spring_board.aiff');
-    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
-    MacOSNotificationDetails(sound: 'slow_spring_board.aiff');
-    final LinuxNotificationDetails linuxPlatformChannelSpecifics =
-    LinuxNotificationDetails(
-      sound: AssetsLinuxSound('sound/slow_spring_board.mp3'),
-    );
-    final NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
-      macOS: macOSPlatformChannelSpecifics,
-      linux: linuxPlatformChannelSpecifics,
-    );
-    print('nottif');
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'custom sound notification title',
-      'custom sound notification body',
-      platformChannelSpecifics,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +88,8 @@ class _HomePageState extends State<HomePage>
         leading: IconButton(
           onPressed: () async {
             //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
-            //log(await AppHelpers().getToken);
+            log(await AppHelpers().getToken);
+            //sendNotification('tesst');
             _key.currentState!.openDrawer();
             /*FirebaseAnalytics.instance.logEvent(
               name: "select_content",
@@ -125,7 +98,7 @@ class _HomePageState extends State<HomePage>
                 "item_id": 'itemId',
               },
             );
-            */_showNotificationCustomSound();
+            */
           },
           splashRadius: 25.0,
           icon: SvgPicture.asset(
@@ -213,4 +186,31 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
+
+  void sendNotification(String content) {
+    var url = 'https://fcm.googleapis.com/fcm/send';
+    http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=${AppUrl.FCMKey}', // FCM Server key
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          "notification": <String, dynamic>{
+            "body": content,
+            "title": 'New message from merchant',
+            "priority": "high",
+            "sound": "slow_spring_board.aiff",
+            "android_channel_id": "santhe_alerts"
+          },
+          //'registration_ids': pairs['data'].values.toList(), // Multiple id
+          'to': 'euUWvWStk0z_nC8qYP_jjy:APA91bHI3JO61cOdXq038BWX9pH23-LJQyzeEQhf_cyL_b8-gbtuFtmYbZ8335kYs5V_cLSRxETgrtVqn-Iq1zqIsT0xc5u9v9bnjaetLHJ-vasBfaQl1FSwGmsS5Q_oFXD49opYvZj-', // single id
+          "direct_boot_ok": true,
+          "data": {
+
+          }
+        },
+      ),
+    );}
 }

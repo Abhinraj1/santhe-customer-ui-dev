@@ -23,45 +23,51 @@ class SplashToHome extends StatefulWidget {
 }
 
 class _SplashToHomeState extends State<SplashToHome> {
-
   Future<void> bootHome() async {
     await AppInitialisations().initialiseApplication();
     await Notifications().fcmInit();
-    Future.delayed(const Duration(milliseconds: 3000), () {
+    Future.delayed(const Duration(milliseconds: 4000), () {
       Widget screen = !AppSharedPreference().loadSignUpScreen
           ? const OnboardingPage()
           : AppSharedPreference().checkForLogin
-          ? getLandingScreen()
-          : const LoginScreen();
+              ? getLandingScreen()
+              : const LoginScreen();
       Get.offAll(() => screen, transition: Transition.fadeIn);
     });
   }
 
-  Widget getLandingScreen(){
+  Widget getLandingScreen() {
     final NotificationController notificationController = Get.find();
-    if(notificationController.fromNotification){
+    if (notificationController.fromNotification) {
       //_notificationController.fromNotification = false;
-      if(notificationController.landingScreen == 'new') {
-        return const HomePage(pageIndex: 0,);
-      } else if(notificationController.landingScreen == 'answered'){
-        return const HomePage(pageIndex: 1,);
-      }else {
+      if (notificationController.landingScreen == 'new') {
+        return const HomePage(
+          pageIndex: 0,
+        );
+      } else if (notificationController.landingScreen == 'answered') {
+        return const HomePage(
+          pageIndex: 1,
+        );
+      } else {
         return ChatScreen(
           chatId: notificationController.notificationData.value.data['chatId'],
-          customerTitle: notificationController.notificationData.value.data['customerTitle'],
-          merchantTitle: notificationController.notificationData.value.data['merchantTitle'],
-          listEventId: notificationController.notificationData.value.data['listEventId'],
+          customerTitle: notificationController
+              .notificationData.value.data['customerTitle'],
+          merchantTitle: notificationController
+              .notificationData.value.data['merchantTitle'],
+          listEventId:
+              notificationController.notificationData.value.data['listEventId'],
         );
       }
     }
-    return const HomePage(pageIndex: 0,);
+    return const HomePage(
+      pageIndex: 0,
+    );
   }
 
   @override
-  void initState(){
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp
-    ]);
+  void initState() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.orange,
       systemNavigationBarIconBrightness: Brightness.light,
@@ -80,7 +86,7 @@ class _SplashToHomeState extends State<SplashToHome> {
       bootHome();
     } else {
       Get.to(
-            () => const NoInternetPage(),
+        () => const NoInternetPage(),
         transition: Transition.fade,
       );
     }

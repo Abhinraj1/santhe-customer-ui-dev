@@ -28,7 +28,7 @@ class _SplashToHomeState extends State<SplashToHome> {
     await Notifications().fcmInit();
     Future.delayed(const Duration(milliseconds: 4000), () {
       Widget screen = !AppSharedPreference().loadSignUpScreen
-          ? const OnboardingPage()
+          ? const OnBoardingPage()
           : AppSharedPreference().checkForLogin
               ? getLandingScreen()
               : const LoginScreen();

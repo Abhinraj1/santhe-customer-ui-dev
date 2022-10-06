@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -801,6 +803,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                               .editItemCustomImageUrl
                                                               .value ==
                                                           '') {
+                                                    log(item.catId);
                                                     ListItemModel listItem =
                                                         ListItemModel(
                                                       brandType:
@@ -828,7 +831,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                                               .get(int.parse(item
                                                                   .catId
                                                                   .replaceAll(
-                                                                      'category/',
+                                                                      'projects/${AppUrl.envType}/databases/(default)/documents/category/',
                                                                       '')))
                                                               ?.catName ??
                                                           'Others',

@@ -487,7 +487,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       transition: Transition.fadeIn);
                                 } else {
                                   log('error occurred');
-                                  Get.offAll(() => const OnboardingPage());
+                                  Get.offAll(() => const OnBoardingPage());
                                 }
                               }
                               setState(() {

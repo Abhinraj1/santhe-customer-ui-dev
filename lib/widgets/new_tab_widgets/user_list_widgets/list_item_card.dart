@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
@@ -132,6 +135,7 @@ class _ListItemCardState extends State<ListItemCard> {
                           barrierColor:
                               const Color.fromARGB(165, 241, 241, 241),
                           builder: (context) {
+                            log(widget.listItem.quantity);
                             return NewItemPopUpWidget(
                               item: Item(
                                 status: '',
@@ -143,7 +147,9 @@ class _ListItemCardState extends State<ListItemCard> {
                                 unit: widget.listItem.possibleUnits,
                                 dUnit: widget.listItem.unit,
                                 dBrandType: widget.listItem.brandType,
-                                dQuantity: int.parse(widget.listItem.quantity),
+                                dQuantity:
+                                    double.parse(widget.listItem.quantity)
+                                        .toInt(),
                                 itemAlias: '',
                                 itemImageId: widget.listItem.itemImageId,
                                 itemImageTn: '',

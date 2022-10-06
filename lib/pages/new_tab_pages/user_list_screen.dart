@@ -864,7 +864,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                           ),
                                           children: <TextSpan>[
                                             TextSpan(
-                                                text: ' 3 Km ',
+                                                text: ' 2 Km ',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 15.sp,
@@ -903,7 +903,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                       SizedBox(width: 12.36.sp),
                                       Expanded(
                                         child: Text(
-                                          'It will take anywhere between 3 to 12 hours before you get offers from shops.',
+                                          'As soon as shops make an offer to your list, you will get notifications (please keep notifications turned on)',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 15.sp,

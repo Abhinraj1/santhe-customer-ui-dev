@@ -29,7 +29,6 @@ class LocationController extends GetxController {
       // accessing the position and request users of the
       // App to enable the location services.
       await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
     }
 
     permission = await Geolocator.checkPermission();
@@ -54,7 +53,6 @@ class LocationController extends GetxController {
       // accessing the position and request users of the
       // App to enable the location services.
       await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
     }
 
     permission = await Geolocator.checkPermission();

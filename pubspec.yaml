@@ -26,9 +26,9 @@ dependencies:
   map_picker: ^0.0.3
   geolocator: ^9.0.0
   shared_preferences: ^2.0.13
-  firebase_core: ^1.13.1
-  firebase_auth: ^3.4.2
-  firebase_database: ^9.0.15
+  firebase_core: ^1.23.0
+  firebase_auth: ^3.10.0
+  firebase_database: ^9.1.5
   firebase_storage: ^10.3.1
   cloud_firestore: ^3.1.10
   firebase_crashlytics: ^2.8.4

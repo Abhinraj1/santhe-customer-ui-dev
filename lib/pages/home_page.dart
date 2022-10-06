@@ -89,16 +89,15 @@ class _HomePageState extends State<HomePage>
           onPressed: () async {
             //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
             log(await AppHelpers().getToken);
-            //sendNotification('tesst');
+            sendNotification('tesst');
             _key.currentState!.openDrawer();
-            /*FirebaseAnalytics.instance.logEvent(
+            FirebaseAnalytics.instance.logEvent(
               name: "select_content",
               parameters: {
                 "content_type": "image",
                 "item_id": 'itemId',
               },
-            );
-            */
+            ).then((value) => print('success')).catchError((e) => print(e.toString()));
           },
           splashRadius: 25.0,
           icon: SvgPicture.asset(
@@ -205,7 +204,7 @@ class _HomePageState extends State<HomePage>
             "android_channel_id": "santhe_alerts"
           },
           //'registration_ids': pairs['data'].values.toList(), // Multiple id
-          'to': 'euUWvWStk0z_nC8qYP_jjy:APA91bHI3JO61cOdXq038BWX9pH23-LJQyzeEQhf_cyL_b8-gbtuFtmYbZ8335kYs5V_cLSRxETgrtVqn-Iq1zqIsT0xc5u9v9bnjaetLHJ-vasBfaQl1FSwGmsS5Q_oFXD49opYvZj-', // single id
+          'to': 'fJQjW1terEU0kau3KcQcR8:APA91bFW54GwmRuizhyosmZaKXFPV-kOkMu8IdD9O_16r7HXhHW0H8C2YKSUK5dQLG7nQTeLld8E4qpz1eXQx_peCBgku9lfiWnxwSc0oWhKrJanrdTPNRV4BUTyA2Fft1BMbU9FD0gw', // single id
           "direct_boot_ok": true,
           "data": {
 

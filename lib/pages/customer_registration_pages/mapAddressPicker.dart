@@ -14,9 +14,9 @@ import '../../core/app_colors.dart';
 import '../../widgets/registration_widgets/textFieldRegistration.dart';
 
 class MapAddressPicker extends StatefulWidget {
-  final double? lat, lng;
+  final double lat, lng;
 
-  const MapAddressPicker({Key? key, this.lat, this.lng}) : super(key: key);
+  const MapAddressPicker({Key? key, required this.lat, required this.lng}) : super(key: key);
 
   @override
   _MapAddressPickerState createState() => _MapAddressPickerState();
@@ -42,15 +42,21 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
 
   @override
   void initState() {
-    if (widget.lat != null && widget.lng != null) {
+    lat = widget.lat;
+    lng = widget.lng;
+    initialCameraPosition = CameraPosition(
+      target: LatLng(lat, lng),
+      zoom: 18,
+    );
+    currentUser = profileController.customerDetails ?? fallback_error_customer;
+    /*if (widget.lat != null && widget.lng != null) {
       lat = widget.lat!;
       lng = widget.lng!;
       initialCameraPosition = CameraPosition(
         target: LatLng(lat, lng),
         zoom: 18,
       );
-      currentUser =
-          profileController.customerDetails ?? fallback_error_customer;
+      currentUser = profileController.customerDetails ?? fallback_error_customer;
     } else {
       initialCameraPosition = CameraPosition(target: LatLng(double.parse(currentUser?.lat ?? '12.980143644412847'), double.parse(currentUser?.lng ?? '77.56857242435218')), zoom: 18);
       LocationController.getGeoLocationPosition().then((value) async {
@@ -63,7 +69,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
           }
         }
       });
-    }
+    }*/
 
     // TODO: implement initState
     super.initState();
@@ -80,8 +86,8 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final locationController = Get.put(LocationController());
-    final registrationController = Get.put(RegistrationController());
+    final LocationController locationController = Get.find();
+    final RegistrationController registrationController = Get.find();
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(

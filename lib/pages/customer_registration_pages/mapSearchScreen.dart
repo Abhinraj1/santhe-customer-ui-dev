@@ -31,6 +31,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
     super.dispose();
   }
 
+  bool _isFetchingLocation = false;
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
@@ -211,21 +213,42 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    final locationController = Get.find<LocationController>();
-                    final permission = await locationController.checkPermission();
-                    if(permission){
-                      Get.to(() => const MapAddressPicker());
-                    }
+                    setState(() {
+                      _isFetchingLocation = true;
+                    });
+                    Future.delayed(const Duration(seconds: 0), () async {
+                      final locationController = Get.find<LocationController>();
+                      final permission = await locationController.checkPermission();
+                      if(permission){
+                        LocationController.getGeoLocationPosition().then((value){
+                          Get.to(() => MapAddressPicker(lat: value!.latitude, lng: value.longitude,));
+                          _isFetchingLocation = false;
+                        });
+                      }
+                      setState(() {
+                        _isFetchingLocation = false;
+                      });
+                    });
+
                   },
                   child: Center(
                     child: Container(
+                      width: 70.vw,
                       decoration: BoxDecoration(
                           color: Constant.bgColor,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(14))),
                       margin: EdgeInsets.symmetric(horizontal: 40.w),
                       padding: const EdgeInsets.all(10),
-                      child: Row(
+                      child: _isFetchingLocation ?
+                      Center(
+                        child: SizedBox(
+                          height: 30.h,
+                            width: 30.h,
+                            child: const CircularProgressIndicator(color: Colors.white,)
+                        ),
+                      ) :
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(

@@ -25,14 +25,15 @@ import 'app_shared_preference.dart';
 
 class AppInitialisations {
   Future<void> initialiseApplication() async {
+    //getX
+    _initialiseControllers();
+
     //shared preferences
     await AppSharedPreference().initSharedPreference();
 
     //hive
     await _initialiseHive();
 
-    //getX
-    _initialiseControllers();
   }
 
   Future<void> _initialiseHive() async {
@@ -54,6 +55,7 @@ class AppInitialisations {
   }
 
   void _initialiseControllers() {
+    Get.put(ConnectivityController());
     Get.put(NotificationController());
     Get.put(AllListController());
     Get.put(APIs());
@@ -64,6 +66,5 @@ class AppInitialisations {
     Get.put(ChatController());
     Get.put(HomeController());
     Get.put(ProfileController());
-    Get.put(ConnectivityController());
   }
 }

@@ -1177,8 +1177,11 @@ class APIs extends GetxController {
   }
 
   Future<void> updateDeviceToken(String userId) async {
+    print(userId);
     final String token = await AppHelpers().getToken;
     String uid = await AppHelpers().getDeviceId();
+    print('uid' + uid);
+    print('token' + token);
     final header = {
       "authorization": 'Bearer ${await AppHelpers().authToken}',
       'Content-Type': 'application/json'
@@ -1187,12 +1190,15 @@ class APIs extends GetxController {
         http.Request('PUT', Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
     request.body = json.encode({"deviceToken": token, "deviceId": uid});
     request.headers.addAll(header);
+    print(request.body);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
+      log('here done up');
       log((await response.stream.bytesToString()).toString());
     } else {
+      log('here not done up');
       AppHelpers.crashlyticsLog('update device token error');
       log('Error', error: response.reasonPhrase);
     }

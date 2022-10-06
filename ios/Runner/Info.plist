@@ -48,6 +48,14 @@
 				<string>app-1-445035608011-ios-3bceec5078ca20d3d9684e</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-178026681567-ios-a45597aa8a6a09abc1856a</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>

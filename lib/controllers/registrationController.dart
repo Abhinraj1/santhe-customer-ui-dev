@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:android_play_install_referrer/android_play_install_referrer.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,9 @@ class RegistrationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getReferrerDetails();
+    if(Platform.isAndroid){
+      getReferrerDetails();
+    }
   }
 
   RxString utmMedium = "".obs;
@@ -21,8 +24,7 @@ class RegistrationController extends GetxController {
 
   Future<void> getReferrerDetails() async {
     try {
-      ReferrerDetails referrerDetails =
-          await AndroidPlayInstallReferrer.installReferrer;
+      ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
       String installReferrer = referrerDetails.installReferrer ?? 'organic';
       // installReferrer.split('&')[1].split('=')[1];
       utmMedium.value = installReferrer.split('&')[1].split('=')[1];

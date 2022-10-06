@@ -1,11 +1,21 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
+
+import '../core/app_shared_preference.dart';
+import '../pages/chat/chat_screen.dart';
+import '../pages/home_page.dart';
+import '../pages/login_pages/phone_number_login_page.dart';
+import '../pages/onboarding_page.dart';
+import 'notification_controller.dart';
 
 class ConnectivityController extends GetxController{
   bool hasInternet = true;
 
   bool inInternetErrorScreen = false;
+
+  bool passedInitialScreen = false;
 
   ConnectivityResult connectivityResult = ConnectivityResult.none;
 
@@ -18,7 +28,11 @@ class ConnectivityController extends GetxController{
     }
 
     if((result == ConnectivityResult.wifi || result == ConnectivityResult.mobile) && !hasInternet){
-      Get.back();
+      if(passedInitialScreen) {
+        Get.back();
+      }else {
+        Get.offAll(() => _getLandingScreen(), transition: Transition.fadeIn);
+      }
       hasInternet = true;
     }
   }
@@ -27,10 +41,60 @@ class ConnectivityController extends GetxController{
     if(!hasInternet){
       Connectivity().checkConnectivity().then((result){
         if((result == ConnectivityResult.wifi || result == ConnectivityResult.mobile) && !hasInternet){
-          Get.back();
+          if(passedInitialScreen) {
+            Get.back();
+          }else {
+            Get.offAll(() => _getLandingScreen(), transition: Transition.fadeIn);
+          }
           hasInternet = true;
         }
       });
     }
+  }
+
+  Future<void> checkConnectivityAndMoveInitialPage() async {
+    var result = await Connectivity().checkConnectivity();
+    if(result == ConnectivityResult.none){
+      hasInternet = false;
+      Get.to(() => const NoInternetPage(), transition: Transition.fade);
+    } else{
+      Get.offAll(() => _getLandingScreen(), transition: Transition.fadeIn);
+    }
+  }
+
+  Widget _getLandingScreen() {
+    passedInitialScreen = true;
+    if(!AppSharedPreference().loadSignUpScreen){
+      return const OnBoardingPage();
+    }
+    if(!AppSharedPreference().checkForLogin){
+      return const LoginScreen();
+    }
+    final NotificationController notificationController = Get.find();
+    if (notificationController.fromNotification) {
+      //_notificationController.fromNotification = false;
+      if (notificationController.landingScreen == 'new') {
+        return const HomePage(
+          pageIndex: 0,
+        );
+      } else if (notificationController.landingScreen == 'answered') {
+        return const HomePage(
+          pageIndex: 1,
+        );
+      } else {
+        return ChatScreen(
+          chatId: notificationController.notificationData.value.data['chatId'],
+          customerTitle: notificationController
+              .notificationData.value.data['customerTitle'],
+          merchantTitle: notificationController
+              .notificationData.value.data['merchantTitle'],
+          listEventId:
+          notificationController.notificationData.value.data['listEventId'],
+        );
+      }
+    }
+    return const HomePage(
+      pageIndex: 0,
+    );
   }
 }

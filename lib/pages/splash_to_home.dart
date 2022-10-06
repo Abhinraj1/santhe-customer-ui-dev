@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 
 import '../controllers/api_service_controller.dart';
+import '../controllers/connectivity_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../core/app_initialisations.dart';
 import '../core/app_shared_preference.dart';
@@ -26,13 +28,12 @@ class _SplashToHomeState extends State<SplashToHome> {
   Future<void> bootHome() async {
     await AppInitialisations().initialiseApplication();
     await Notifications().fcmInit();
+    final ConnectivityController connectivityController = Get.find();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result){
+      connectivityController.listenConnectivity(result);
+    });
     Future.delayed(const Duration(milliseconds: 4000), () {
-      Widget screen = !AppSharedPreference().loadSignUpScreen
-          ? const OnBoardingPage()
-          : AppSharedPreference().checkForLogin
-              ? getLandingScreen()
-              : const LoginScreen();
-      Get.offAll(() => screen, transition: Transition.fadeIn);
+      connectivityController.checkConnectivityAndMoveInitialPage();
     });
   }
 
@@ -74,29 +75,13 @@ class _SplashToHomeState extends State<SplashToHome> {
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.dark,
     ));
-    checkNet();
-    timer = Timer.periodic(const Duration(seconds: 4), (_) => checkNet());
+    bootHome();
     super.initState();
   }
 
-  void checkNet() async {
-    final hasNet = await AppHelpers.checkConnection();
-    if (hasNet) {
-      timer.cancel();
-      bootHome();
-    } else {
-      Get.to(
-        () => const NoInternetPage(),
-        transition: Transition.fade,
-      );
-    }
-  }
-
-  late final Timer timer;
 
   @override
   void dispose() {
-    timer.cancel();
     super.dispose();
   }
 

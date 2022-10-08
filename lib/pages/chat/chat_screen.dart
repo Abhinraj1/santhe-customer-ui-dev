@@ -289,8 +289,8 @@ class _ChatScreenState extends State<ChatScreen> {
             "sound": "slow_spring_board.aiff",
             "android_channel_id": "santhe_alerts"
           },
-          'registration_ids': ['token1', 'token2'], // Multiple id
-          //'to': merchantToken, // single id
+          //'registration_ids': ['token1', 'token2'], // Multiple id
+          'to': merchantToken, // single id
           "direct_boot_ok": true,
           "data": {
             "landingScreen": 'chat',

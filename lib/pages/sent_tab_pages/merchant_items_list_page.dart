@@ -14,6 +14,7 @@ import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../controllers/api_service_controller.dart';
 import '../../models/merchant_details_response.dart';
@@ -42,8 +43,8 @@ class MerchantItemsListPage extends StatefulWidget {
   State<MerchantItemsListPage> createState() => _MerchantItemsListPageState();
 }
 
-class _MerchantItemsListPageState extends State<MerchantItemsListPage> with AutomaticKeepAliveClientMixin{
-
+class _MerchantItemsListPageState extends State<MerchantItemsListPage>
+    with AutomaticKeepAliveClientMixin {
   MerchantOfferResponse? merchantOfferResponse;
   List<CustomerOfferResponse>? customerOfferResponse;
 
@@ -51,22 +52,23 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
     final apiController = Get.find<APIs>();
     if (widget.archived) {
       customerOfferResponse ??= await apiController.getAllMerchOfferByListId(
-          widget.userList.listId,
-          widget.userList.items.length,
-        );
-      widget.currentMerchantOffer = customerOfferResponse!.firstWhere((element) => element.custOfferResponse.custOfferStatus == 'accepted');
-      widget.merchantResponse ??= await apiController.getMerchantDetails(widget.currentMerchantOffer!.merchId.path.segments.last);
+        widget.userList.listId,
+        widget.userList.items.length,
+      );
+      widget.currentMerchantOffer = customerOfferResponse!.firstWhere(
+          (element) => element.custOfferResponse.custOfferStatus == 'accepted');
+      widget.merchantResponse ??= await apiController.getMerchantDetails(
+          widget.currentMerchantOffer!.merchId.path.segments.last);
     }
 
-    merchantOfferResponse ??= await apiController.getMerchantResponse(widget.currentMerchantOffer!.listEventId);
+    merchantOfferResponse ??= await apiController
+        .getMerchantResponse(widget.currentMerchantOffer!.listEventId);
   }
-
 
   String removeDecimalZeroFormat(double n) {
     final itr = n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
     return itr.replaceAll('.0', '');
   }
-
 
   final apiController = Get.find<APIs>();
 
@@ -94,14 +96,13 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
               },
             ),
             title: Text(
-              widget.archived
-                  ? widget.userList.listName
-                  : 'Offer Rs. ${widget.currentMerchantOffer!.merchResponse.merchTotalPrice}',
+                widget.archived
+                    ? widget.userList.listName
+                    : 'Offer Rs. ${widget.currentMerchantOffer!.merchResponse.merchTotalPrice}',
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
-                    fontSize: 18.sp)
-            ),
+                    fontSize: 18.sp)),
           ),
           body: FutureBuilder(
             future: getDetails(),
@@ -152,7 +153,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                         width: screenSize.width,
                         child: Stack(
                           children: [
-                            if(isDone() && !widget.archived)
+                            if (isDone() && !widget.archived)
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 color: AppColors().white100,
@@ -174,7 +175,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           if (widget.archived)
                                             SizedBox(
@@ -185,8 +186,9 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                 .merchName.stringValue,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize:
-                                              widget.archived ? 20.sp : 24.sp,
+                                              fontSize: widget.archived
+                                                  ? 20.sp
+                                                  : 24.sp,
                                             ),
                                           ),
                                           SizedBox(
@@ -216,25 +218,30 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                           Row(
                                             children: [
                                               //phone icon
-                                              CircleAvatar(
-                                                radius: 15.sp,
-                                                backgroundColor:
-                                                AppColors().brandDark,
-                                                child: Icon(
-                                                  Icons.phone,
-                                                  color: AppColors().white100,
-                                                  size: 16.sp,
+                                              GestureDetector(
+                                                onTap: () => launchUrl(Uri.parse(
+                                                    'tel://+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
+                                                child: CircleAvatar(
+                                                  radius: 15.sp,
+                                                  backgroundColor:
+                                                      AppColors().brandDark,
+                                                  child: Icon(
+                                                    Icons.phone,
+                                                    color: AppColors().white100,
+                                                    size: 16.sp,
+                                                  ),
                                                 ),
                                               ),
                                               SizedBox(
                                                 width: 10.sp,
                                               ),
                                               //phone number
-                                              Text(
+                                              SelectableText(
                                                 '+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    color: AppColors().brandDark,
+                                                    color:
+                                                        AppColors().brandDark,
                                                     fontSize: 16.sp),
                                               )
                                             ],
@@ -244,8 +251,11 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              log(widget.merchantResponse!.fields
-                                                  .merchId.integerValue +
+                                              log(widget
+                                                      .merchantResponse!
+                                                      .fields
+                                                      .merchId
+                                                      .integerValue +
                                                   widget.userList.listId
                                                       .toString());
                                               Navigator.push(
@@ -260,15 +270,15 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                           .merchResponse
                                                           .merchTotalPrice,
                                                       listEventId: widget
-                                                          .merchantResponse!
-                                                          .fields
-                                                          .merchId
-                                                          .integerValue +
+                                                              .merchantResponse!
+                                                              .fields
+                                                              .merchId
+                                                              .integerValue +
                                                           widget.userList.listId
                                                               .toString(),
                                                       merchantTitle:
-                                                      // 'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
-                                                      'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
+                                                          // 'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
+                                                          'Request ${widget.currentMerchantOffer!.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer!.merchReqDate)}',
                                                     ),
                                                     type: PageTransitionType
                                                         .rightToLeft),
@@ -279,8 +289,10 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                   horizontal: 23.sp,
                                                   vertical: 5.sp),
                                               decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(10.sp)),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              10.sp)),
                                                   color: AppColors().brandDark),
                                               child: Text(
                                                 "Chat",
@@ -297,12 +309,12 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                   ],
                                 ),
                               ),
-                            if(isDone() && widget.archived)
+                            if (isDone() && widget.archived)
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 color: AppColors().white100,
                                 width: screenSize.width,
-                                height: screenSize.width/3 - 40.sp,
+                                height: screenSize.width / 3 - 40.sp,
                                 alignment: Alignment.center,
                                 child: Row(
                                   children: [
@@ -320,7 +332,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           if (widget.archived)
                                             SizedBox(
@@ -330,8 +342,9 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                             'Some Random Store',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize:
-                                              widget.archived ? 20.sp : 24.sp,
+                                              fontSize: widget.archived
+                                                  ? 20.sp
+                                                  : 24.sp,
                                             ),
                                           ),
                                           SizedBox(
@@ -354,14 +367,18 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                           Row(
                                             children: [
                                               //phone icon
-                                              CircleAvatar(
-                                                radius: 15.sp,
-                                                backgroundColor:
-                                                AppColors().brandDark,
-                                                child: Icon(
-                                                  Icons.phone,
-                                                  color: AppColors().white100,
-                                                  size: 16.sp,
+                                              GestureDetector(
+                                                onTap: () => launchUrl(
+                                                    Uri.parse('tel://')),
+                                                child: CircleAvatar(
+                                                  radius: 15.sp,
+                                                  backgroundColor:
+                                                      AppColors().brandDark,
+                                                  child: Icon(
+                                                    Icons.phone,
+                                                    color: AppColors().white100,
+                                                    size: 16.sp,
+                                                  ),
                                                 ),
                                               ),
                                               SizedBox(
@@ -372,7 +389,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                 '+91-9999999999',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    color: AppColors().brandDark,
+                                                    color:
+                                                        AppColors().brandDark,
                                                     fontSize: 16.sp),
                                               )
                                             ],
@@ -407,7 +425,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                 child: ClipRect(
                                   child: BackdropFilter(
                                     filter:
-                                    ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                                        ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                                     child: SizedBox(
                                       height: screenSize.height / 3 - 40.sp,
                                       width: screenSize.width,
@@ -485,7 +503,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         value,
@@ -516,8 +534,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                               ],
                             );
                           },
-                          indexedItemBuilder:
-                              (BuildContext context, dynamic element, int index) {
+                          indexedItemBuilder: (BuildContext context,
+                              dynamic element, int index) {
                             return MerchantItemCard(
                               merchantItem: items[index],
                               archived: widget.archived,
@@ -528,42 +546,44 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                     ),
                     isDone()
                         ? Container(
-                      width: screenSize.width,
-                      color: AppColors().white100,
-                      padding: EdgeInsets.symmetric(vertical: 5.sp),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Divider(
-                            thickness: 1.sp,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 20.w, right: 20.w, bottom: Platform.isIOS ? 20.h : 0),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                            width: screenSize.width,
+                            color: AppColors().white100,
+                            padding: EdgeInsets.symmetric(vertical: 5.sp),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                  'Total:',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 24.sp,
-                                      color: const Color(0xff8B8B8B)),
+                                Divider(
+                                  thickness: 1.sp,
                                 ),
-                                Text(
-                                  '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 17.sp,
-                                      color: Colors.orange),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 20.w,
+                                      right: 20.w,
+                                      bottom: Platform.isIOS ? 20.h : 0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Total:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 24.sp,
+                                            color: const Color(0xff8B8B8B)),
+                                      ),
+                                      Text(
+                                        '₹ ${removeDecimalZeroFormat(double.parse(widget.currentMerchantOffer!.merchResponse.merchTotalPrice))}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 17.sp,
+                                            color: Colors.orange),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    )
+                          )
                         : const SizedBox.shrink(),
                     if (!isDone())
                       Container(
@@ -583,7 +603,8 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                               padding: const EdgeInsets.only(
                                   top: 8.0, left: 25.0, right: 25.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Total:',
@@ -634,50 +655,53 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                  const BorderRadius.only(
+                                                      const BorderRadius.only(
                                                     topRight:
-                                                    Radius.circular(28.0),
+                                                        Radius.circular(28.0),
                                                     topLeft:
-                                                    Radius.circular(28.0),
+                                                        Radius.circular(28.0),
                                                   ),
                                                   color: Colors.white,
                                                   boxShadow: [
                                                     BoxShadow(
-                                                      color: Colors.grey.shade400,
+                                                      color:
+                                                          Colors.grey.shade400,
                                                       blurRadius: 14.0,
                                                     ),
                                                   ],
                                                 ),
                                                 child: SingleChildScrollView(
                                                   physics:
-                                                  const BouncingScrollPhysics(),
+                                                      const BouncingScrollPhysics(),
                                                   child: Padding(
-                                                    padding: const EdgeInsets.all(
-                                                        10.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
                                                     child: Column(
                                                       crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .center,
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
                                                       children: [
                                                         Stack(
                                                           children: <Widget>[
                                                             Center(
                                                               child: Padding(
                                                                 padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
                                                                 child: Text(
                                                                   'Are you sure?',
                                                                   style:
-                                                                  TextStyle(
+                                                                      TextStyle(
                                                                     fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
+                                                                        FontWeight
+                                                                            .w700,
                                                                     fontSize:
-                                                                    24.sp,
+                                                                        24.sp,
                                                                     color: Colors
                                                                         .orange,
                                                                   ),
@@ -685,15 +709,17 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                               ),
                                                             ),
                                                             Align(
-                                                              alignment: Alignment
-                                                                  .topRight,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topRight,
                                                               child:
-                                                              GestureDetector(
+                                                                  GestureDetector(
                                                                 onTap: () {
                                                                   Navigator.pop(
                                                                       context);
                                                                 },
-                                                                child: const Icon(
+                                                                child:
+                                                                    const Icon(
                                                                   Icons.close,
                                                                   color: Color(
                                                                       0xffeaeaea),
@@ -704,48 +730,49 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                         ),
                                                         Padding(
                                                           padding:
-                                                          EdgeInsets.only(
+                                                              EdgeInsets.only(
                                                             top: 18.sp,
                                                             left: 45.sp,
                                                             right: 45.sp,
                                                           ),
                                                           child: RichText(
-                                                            textAlign:
-                                                            TextAlign.center,
+                                                            textAlign: TextAlign
+                                                                .center,
                                                             text: TextSpan(
                                                               text:
-                                                              'You can accept',
+                                                                  'You can accept',
                                                               style: TextStyle(
-                                                                  fontSize: 18.sp,
-                                                                  color:
-                                                                  Colors.grey,
+                                                                  fontSize:
+                                                                      18.sp,
+                                                                  color: Colors
+                                                                      .grey,
                                                                   fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                                                      FontWeight
+                                                                          .w400),
                                                               children: [
                                                                 TextSpan(
                                                                   text:
-                                                                  ' only ONE ',
+                                                                      ' only ONE ',
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                      18.sp,
+                                                                          18.sp,
                                                                       color: Colors
                                                                           .grey,
                                                                       fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
+                                                                          FontWeight
+                                                                              .w700),
                                                                 ),
                                                                 TextSpan(
                                                                   text:
-                                                                  'offer. If you accept this offer, all other offers will disappear',
+                                                                      'offer. If you accept this offer, all other offers will disappear',
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                      18.sp,
+                                                                          18.sp,
                                                                       color: Colors
                                                                           .grey,
                                                                       fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
+                                                                          FontWeight
+                                                                              .w400),
                                                                 ),
                                                               ],
                                                             ),
@@ -753,8 +780,12 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                         ),
                                                         Padding(
                                                           padding:
-                                                          EdgeInsets.only(
-                                                              top: 25.sp, bottom: Platform.isIOS ? 20.h : 10.h),
+                                                              EdgeInsets.only(
+                                                                  top: 25.sp,
+                                                                  bottom: Platform
+                                                                          .isIOS
+                                                                      ? 20.h
+                                                                      : 10.h),
                                                           child: SizedBox(
                                                             height: accepting
                                                                 ? 30.sp
@@ -765,92 +796,90 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
                                                             child: accepting
                                                                 ? const CircularProgressIndicator()
                                                                 : MaterialButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                ss(() {
-                                                                  accepting =
-                                                                  true;
-                                                                });
-                                                                final CustomerOfferResponse?
-                                                                response =
-                                                                await apiController
-                                                                    .acceptOffer(
-                                                                  widget
-                                                                      .userList
-                                                                      .listId,
-                                                                  widget
-                                                                      .currentMerchantOffer!
-                                                                      .listEventId,
-                                                                );
-
-                                                                // int response = 1;
-                                                                // int response2 = 1;
-                                                                if (response!=null) {
-                                                                  widget.currentMerchantOffer = response;
-                                                                  widget.merchantResponse = await apiController.getMerchantDetails(widget
-                                                                      .currentMerchantOffer!
-                                                                      .merchId
-                                                                      .path
-                                                                      .segments
-                                                                      .last);
-                                                                  successMsg(
-                                                                      'Yay! Offer Accepted!',
-                                                                      'Hope you had a pleasant time using the app.');
-                                                                  final allListController =
-                                                                  Get.find<
-                                                                      AllListController>();
-                                                                  allListController
-                                                                      .allListMap[
-                                                                  widget
-                                                                      .userList
-                                                                      .listId] = widget
-                                                                      .userList
-                                                                    ..processStatus =
-                                                                        "accepted"
-                                                                    ..listUpdateTime =
-                                                                    DateTime.now();
-                                                                  allListController
-                                                                      .update([
-                                                                    'sentList'
-                                                                  ]);
-                                                                  Get.back();
-                                                                  setState(
-                                                                          () {
-                                                                        widget.overrideData =
-                                                                        true;
-                                                                        Navigator.of(context)
-                                                                            .pop();
+                                                                    onPressed:
+                                                                        () async {
+                                                                      ss(() {
+                                                                        accepting =
+                                                                            true;
                                                                       });
-                                                                } else {
-                                                                  errorMsg(
-                                                                      'Connectivity Error',
-                                                                      'Some connectivity error has occurred, please try again later!');
-                                                                }
-                                                              },
-                                                              color: Colors
-                                                                  .orange,
-                                                              elevation:
-                                                              0.0,
-                                                              highlightElevation:
-                                                              0.0,
-                                                              shape:
-                                                              RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                BorderRadius.circular(
-                                                                    16.0),
-                                                              ),
-                                                              child: Text(
-                                                                'Accept',
-                                                                style: TextStyle(
+                                                                      final CustomerOfferResponse?
+                                                                          response =
+                                                                          await apiController
+                                                                              .acceptOffer(
+                                                                        widget
+                                                                            .userList
+                                                                            .listId,
+                                                                        widget
+                                                                            .currentMerchantOffer!
+                                                                            .listEventId,
+                                                                      );
+
+                                                                      // int response = 1;
+                                                                      // int response2 = 1;
+                                                                      if (response !=
+                                                                          null) {
+                                                                        widget.currentMerchantOffer =
+                                                                            response;
+                                                                        widget.merchantResponse = await apiController.getMerchantDetails(widget
+                                                                            .currentMerchantOffer!
+                                                                            .merchId
+                                                                            .path
+                                                                            .segments
+                                                                            .last);
+                                                                        successMsg(
+                                                                            'Yay! Offer Accepted!',
+                                                                            'Hope you had a pleasant time using the app.');
+                                                                        final allListController =
+                                                                            Get.find<AllListController>();
+                                                                        allListController.allListMap[
+                                                                            widget
+                                                                                .userList.listId] = widget
+                                                                            .userList
+                                                                          ..processStatus =
+                                                                              "accepted"
+                                                                          ..listUpdateTime =
+                                                                              DateTime.now();
+                                                                        allListController
+                                                                            .update([
+                                                                          'sentList'
+                                                                        ]);
+                                                                        Get.back();
+                                                                        setState(
+                                                                            () {
+                                                                          widget.overrideData =
+                                                                              true;
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        });
+                                                                      } else {
+                                                                        errorMsg(
+                                                                            'Connectivity Error',
+                                                                            'Some connectivity error has occurred, please try again later!');
+                                                                      }
+                                                                    },
                                                                     color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                    fontSize:
-                                                                    18.sp),
-                                                              ),
-                                                            ),
+                                                                        .orange,
+                                                                    elevation:
+                                                                        0.0,
+                                                                    highlightElevation:
+                                                                        0.0,
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              16.0),
+                                                                    ),
+                                                                    child: Text(
+                                                                      'Accept',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight: FontWeight
+                                                                              .w700,
+                                                                          fontSize:
+                                                                              18.sp),
+                                                                    ),
+                                                                  ),
                                                           ),
                                                         )
                                                       ],
@@ -899,8 +928,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage> with Auto
               );
             },
           ),
-    )
-    );
+        ));
   }
 
   bool isDone() {

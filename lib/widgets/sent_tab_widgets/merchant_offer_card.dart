@@ -10,6 +10,7 @@ import 'package:santhe/models/merchant_details_response.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/app_theme.dart';
 import '../../models/offer/customer_offer_response.dart';
@@ -33,13 +34,15 @@ class MerchantOfferCard extends StatefulWidget {
   State<MerchantOfferCard> createState() => _MerchantOfferCardState();
 }
 
-class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKeepAliveClientMixin{
+class _MerchantOfferCardState extends State<MerchantOfferCard>
+    with AutomaticKeepAliveClientMixin {
   final ChatController _chatController = Get.find();
   MerchantDetailsResponse? merchantResponse;
   String imagePath = 'assets/sent_tab/0star.png';
-  
+
   Future<void> getMerchantResponse() async {
-    merchantResponse ??= await APIs().getMerchantDetails(widget.currentMerchantOffer.merchId.path.segments.last);
+    merchantResponse ??= await APIs().getMerchantDetails(
+        widget.currentMerchantOffer.merchId.path.segments.last);
   }
 
   @override
@@ -235,13 +238,17 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKee
                             child: FutureBuilder(
                               future: getMerchantResponse(),
                               builder: (builder, snapShot) {
-                                if (snapShot.connectionState == ConnectionState.waiting) {
-                                  return const Center(child: CircularProgressIndicator.adaptive());
+                                if (snapShot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive());
                                 }
 
                                 if (snapShot.hasError) {
                                   return const Center(
-                                    child: Text('Something went wrong please try again'),
+                                    child: Text(
+                                        'Something went wrong please try again'),
                                   );
                                 }
 
@@ -249,7 +256,8 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKee
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      merchantResponse!.fields.merchName.stringValue,
+                                      merchantResponse!
+                                          .fields.merchName.stringValue,
                                       style: AppTheme().bold700(24,
                                           color: AppColors().grey100),
                                     ),
@@ -269,18 +277,22 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKee
                                     Row(
                                       children: [
                                         //phone icon
-                                        Container(
-                                          height: 24.h,
-                                          width: 24.h,
-                                          decoration: BoxDecoration(
-                                              color: AppColors().brandDark,
-                                              borderRadius:
-                                                  BorderRadius.circular(60)),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.phone,
-                                              color: AppColors().white100,
-                                              size: 15,
+                                        GestureDetector(
+                                          onTap: () => launchUrl(Uri.parse(
+                                              'tel://+91-${merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
+                                          child: Container(
+                                            height: 24.h,
+                                            width: 24.h,
+                                            decoration: BoxDecoration(
+                                                color: AppColors().brandDark,
+                                                borderRadius:
+                                                    BorderRadius.circular(60)),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.phone,
+                                                color: AppColors().white100,
+                                                size: 15,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -288,14 +300,8 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKee
                                           width: 9.w,
                                         ),
                                         //phone number
-                                        Text(
-                                          '+91-${merchantResponse!
-                                                  .fields
-                                                  .contact
-                                                  .mapValue
-                                                  .fields
-                                                  .phoneNumber
-                                                  .integerValue}',
+                                        SelectableText(
+                                          '+91-${merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
                                           style: AppTheme().bold700(16,
                                               color: AppColors().brandDark),
                                         )
@@ -322,7 +328,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKee
                                                       .merchTotalPrice,
                                                   merchantTitle:
                                                       // 'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
-                                                  'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
+                                                      'Request ${widget.currentMerchantOffer.requestForDay} of ${DateFormat('yyyy-MM-dd').format(widget.currentMerchantOffer.merchReqDate)}',
                                                   listEventId: merchantResponse!
                                                           .fields
                                                           .merchId
@@ -359,8 +365,8 @@ class _MerchantOfferCardState extends State<MerchantOfferCard> with AutomaticKee
   }
 
   String loadImage() {
-    if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best1' || widget.currentMerchantOffer.custOfferResponse.custDeal ==
-        'best2') {
+    if (widget.currentMerchantOffer.custOfferResponse.custDeal == 'best1' ||
+        widget.currentMerchantOffer.custOfferResponse.custDeal == 'best2') {
       return 'assets/sent_tab/3star.png';
     } else if (widget.currentMerchantOffer.custOfferResponse.custDeal ==
         'best3') {

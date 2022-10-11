@@ -8,10 +8,34 @@ import '../../controllers/getx/all_list_controller.dart';
 import '../../models/new_list/user_list_model.dart';
 import '../../widgets/sent_tab_widgets/offer_card_widget.dart';
 
-class OfferTabPage extends StatelessWidget {
+class OfferTabPage extends StatefulWidget {
   OfferTabPage({Key? key}) : super(key: key);
 
+  @override
+  State<OfferTabPage> createState() => _OfferTabPageState();
+}
+
+class _OfferTabPageState extends State<OfferTabPage> with WidgetsBindingObserver{
   final AllListController _allListController = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed){
+      _allListController.getAllList();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

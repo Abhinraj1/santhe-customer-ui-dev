@@ -220,7 +220,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
                                               //phone icon
                                               GestureDetector(
                                                 onTap: () => launchUrl(Uri.parse(
-                                                    'tel://+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
+                                                    'tel:+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
                                                 child: CircleAvatar(
                                                   radius: 15.sp,
                                                   backgroundColor:
@@ -236,7 +236,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
                                                 width: 10.sp,
                                               ),
                                               //phone number
-                                              SelectableText(
+                                              Text(
                                                 '+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -251,13 +251,6 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              log(widget
-                                                      .merchantResponse!
-                                                      .fields
-                                                      .merchId
-                                                      .integerValue +
-                                                  widget.userList.listId
-                                                      .toString());
                                               Navigator.push(
                                                 context,
                                                 PageTransition(

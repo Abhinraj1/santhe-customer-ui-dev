@@ -26,8 +26,10 @@ class RegistrationController extends GetxController {
     try {
       ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
       String installReferrer = referrerDetails.installReferrer ?? 'organic';
-      // installReferrer.split('&')[1].split('=')[1];
-      utmMedium.value = installReferrer.split('&')[1].split('=')[1];
+      List<String> val = installReferrer.split('=');
+      if(val.isNotEmpty){
+        utmMedium.value = val.last;
+      }
       log('referrerDetails: ${utmMedium.value}');
     } on Exception catch (e) {
       utmMedium.value = 'organic';

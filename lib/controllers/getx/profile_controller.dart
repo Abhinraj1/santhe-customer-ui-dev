@@ -48,8 +48,7 @@ class ProfileController extends GetxController {
 
   Future<bool> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
-    final result = await apiController.getCustomerInfo(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+    final result = await apiController.getCustomerInfo(int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
     return result == 0;
   }
 

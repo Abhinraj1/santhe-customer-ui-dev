@@ -38,8 +38,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   final apiController = Get.find<APIs>();
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -88,16 +87,16 @@ class _HomePageState extends State<HomePage>
         leading: IconButton(
           onPressed: () async {
             //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
-            log(await AppHelpers().getToken);
-            sendNotification('tesst');
+            /*log(await AppHelpers().getToken);
+            sendNotification('tesst');*/
             _key.currentState!.openDrawer();
-            FirebaseAnalytics.instance.logEvent(
+            /*FirebaseAnalytics.instance.logEvent(
               name: "select_content",
               parameters: {
                 "content_type": "image",
                 "item_id": 'itemId',
               },
-            ).then((value) => print('success')).catchError((e) => print(e.toString()));
+            ).then((value) => print('success')).catchError((e) => print(e.toString()));*/
           },
           splashRadius: 25.0,
           icon: SvgPicture.asset(

@@ -93,7 +93,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
           //     ),
           //   ),
           // ),
-          Padding(
+         /* Padding(
             padding: EdgeInsets.only(
               top: 24.sp,
               left: 24.sp,
@@ -101,6 +101,29 @@ class _ContactUsPageState extends State<ContactUsPage> {
             ),
             child: Text(
               'Your opinion and feedback is of utmost importance to us. Please leave your comments and contact information below and we will get back to you. You can also reach us on your favorite social media sites and apps.',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.grey.shade500,
+                fontWeight: FontWeight.w400,
+                // height: 1.2,
+                fontSize: 16.sp,
+              ),
+            ),
+          ),*/
+          Padding(
+            padding: EdgeInsets.only(
+              top: 24.sp,
+              left: 24.sp,
+              right: 24.sp,
+            ),
+            child: Text(
+              '''
+You may contact us at: 
+Email id: contact@santhe.in
+Address:140, 14th Cross, Telecom Layout Pennifield Garden, Srirampura post, Bengaluru Urban, Karnataka, 560064.
+
+OR, Simply fill in the below form:
+              ''',
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.grey.shade500,

@@ -111,6 +111,7 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
           await getBytesFromAssets('assets/customerPin.png', 180);
       ccustomMarkers.add(
         Marker(
+            infoWindow: const InfoWindow(title: 'Your Location'),
             markerId: MarkerId(
               position.latitude.toString(),
             ),

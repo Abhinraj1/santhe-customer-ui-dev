@@ -749,7 +749,7 @@ class _UserListScreenState extends State<UserListScreen> {
       );
 
   Widget _sendToShopsButton() => SizedBox(
-        height: 55,
+        height: 75,
         width: 65.vw,
         child: MaterialButton(
           elevation: 0.0,
@@ -903,7 +903,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                       SizedBox(width: 12.36.sp),
                                       Expanded(
                                         child: Text(
-                                          'As soon as shops make an offer to your list, you will get notifications (please keep notifications turned on)',
+                                          'Shops will be able to see your name and phone number for clarifications about your list',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 15.sp,
@@ -930,7 +930,61 @@ class _UserListScreenState extends State<UserListScreen> {
                                       SizedBox(width: 12.36.sp),
                                       Expanded(
                                         child: Text(
+                                          'As soon as shops make an offer to your list, you will get notifications (please keep notifications turned on)',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 15.sp,
+                                            color: const Color(0xffB0B0B0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 13.sp),
+                                  Row(
+                                    textBaseline: TextBaseline.ideographic,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    children: [
+                                      Text(
+                                        '4.',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.sp,
+                                          color: const Color(0xffB0B0B0),
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.36.sp),
+                                      Expanded(
+                                        child: Text(
                                           'Once sent, you cannot modify this list.',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 15.sp,
+                                            color: const Color(0xffB0B0B0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 13.sp),
+                                  Row(
+                                    textBaseline: TextBaseline.ideographic,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    children: [
+                                      Text(
+                                        '5.',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.sp,
+                                          color: const Color(0xffB0B0B0),
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.36.sp),
+                                      Expanded(
+                                        child: Text(
+                                          'Sending a list with few items may not get enough offers from shops.',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 15.sp,

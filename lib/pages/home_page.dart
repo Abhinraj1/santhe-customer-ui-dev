@@ -8,6 +8,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
+import 'package:santhe/pages/map_merch.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
 import '../controllers/getx/all_list_controller.dart';
@@ -38,11 +40,12 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final apiController = Get.find<APIs>();
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   final NotificationController _notificationController = Get.find();
   final ConnectivityController _connectivityController = Get.find();
@@ -173,13 +176,31 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _homeController.homeTabController,
-        physics: const BouncingScrollPhysics(),
+      body: Stack(
         children: [
-          const NewTabPage(),
-          OfferTabPage(),
-          ArchivedTabScreen(),
+          TabBarView(
+            controller: _homeController.homeTabController,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              const NewTabPage(),
+              OfferTabPage(),
+              ArchivedTabScreen(),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: GestureDetector(
+              onTap: () {
+                log('Tapped on floating action button');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MapMerchant(),
+                    ));
+              },
+              child: Image.asset('assets/map_dialog.png'),
+            ),
+          ),
         ],
       ),
     );
@@ -203,12 +224,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             "android_channel_id": "santhe_alerts"
           },
           //'registration_ids': pairs['data'].values.toList(), // Multiple id
-          'to': 'fJQjW1terEU0kau3KcQcR8:APA91bFW54GwmRuizhyosmZaKXFPV-kOkMu8IdD9O_16r7HXhHW0H8C2YKSUK5dQLG7nQTeLld8E4qpz1eXQx_peCBgku9lfiWnxwSc0oWhKrJanrdTPNRV4BUTyA2Fft1BMbU9FD0gw', // single id
+          'to':
+              'fJQjW1terEU0kau3KcQcR8:APA91bFW54GwmRuizhyosmZaKXFPV-kOkMu8IdD9O_16r7HXhHW0H8C2YKSUK5dQLG7nQTeLld8E4qpz1eXQx_peCBgku9lfiWnxwSc0oWhKrJanrdTPNRV4BUTyA2Fft1BMbU9FD0gw', // single id
           "direct_boot_ok": true,
-          "data": {
-
-          }
+          "data": {}
         },
       ),
-    );}
+    );
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
+
 import 'navigation_drawer_tile.dart';
 import 'dart:io';
 
@@ -196,6 +198,14 @@ class NavigationDrawer extends StatelessWidget {
             onPress: () {
               // Navigator.pop(context);
               Get.to(() => const PrivacyPolicyPage());
+            },
+          ),
+          NavigationDrawerTile(
+            icon: CupertinoIcons.lock_shield_fill,
+            tileText: 'Log Out',
+            onPress: () {
+              // Navigator.pop(context);
+              Get.to(() => const LoginScreen());
             },
           ),
         ],

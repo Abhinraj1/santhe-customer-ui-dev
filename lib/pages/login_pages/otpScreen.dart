@@ -39,7 +39,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void initState() {
     super.initState();
-    verifyPhoneNumber('+91${widget.phoneNumber}', setData);
+    verifyPhoneNumber(widget.phoneNumber, setData);
     startTimer();
   }
 
@@ -303,9 +303,10 @@ class _OtpScreenState extends State<OtpScreen> {
     final profileController = Get.find<ProfileController>();
     await profileController.generateUrlToken();
 
-    if(await profileController.getCustomerDetailsInit()){
-      Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone), transition: Transition.fadeIn);
-    }else{
+    if (await profileController.getCustomerDetailsInit()) {
+      Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone),
+          transition: Transition.fadeIn);
+    } else {
       AppSharedPreference().setLogin(true);
       apiController.updateDeviceToken(widget.phoneNumber.toString());
       await profileController.initialise();
@@ -337,6 +338,6 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void showSnackBar(BuildContext context, String text) {
-    successMsg('',text, textColorGreen: true);
+    successMsg('', text, textColorGreen: true);
   }
 }

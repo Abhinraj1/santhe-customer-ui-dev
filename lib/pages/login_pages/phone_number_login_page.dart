@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:resize/resize.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_initialisations.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/nav_bar_pages/privacy_policy_page.dart';
 import 'package:santhe/pages/nav_bar_pages/terms_condition_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -24,8 +26,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-
+class _LoginScreenState extends State<LoginScreen> with LogMixin {
   bool isLoading = false;
   final GlobalKey<FormState> key = GlobalKey();
   String? number;
@@ -77,57 +78,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 276.w,
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 50,
-                      child: TextFormField(
-                        enabled: false,
-                        cursorColor: Constant.bgColor,
-                        decoration: InputDecoration(
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Constant.bgColor, width: 2.0),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Constant.bgColor, width: 2.0),
-                          ),
-                          errorBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 2.0),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Constant.bgColor, width: 2.0),
-                          ),
-                          border: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Constant.bgColor, width: 2.0),
-                          ),
-                          contentPadding: EdgeInsets.zero,
-                          label: Text(
-                            '+91',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                              color: Constant.bgColor,
-                            ),
-                          ),
-                        ),
-                        validator: (String? val) {
-                          if (number != null &&
-                              number.toString().length == 10) {
-                            return null;
-                          }
-                          return '';
-                        },
-                        readOnly: true,
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 50,
+                    //   child: TextFormField(
+                    //     enabled: false,
+                    //     cursorColor: Constant.bgColor,
+                    //     decoration: InputDecoration(
+                    //       disabledBorder: UnderlineInputBorder(
+                    //         borderSide:
+                    //             BorderSide(color: Constant.bgColor, width: 2.0),
+                    //       ),
+                    //       focusedBorder: UnderlineInputBorder(
+                    //         borderSide:
+                    //             BorderSide(color: Constant.bgColor, width: 2.0),
+                    //       ),
+                    //       errorBorder: const UnderlineInputBorder(
+                    //         borderSide:
+                    //             BorderSide(color: Colors.red, width: 2.0),
+                    //       ),
+                    //       enabledBorder: UnderlineInputBorder(
+                    //         borderSide:
+                    //             BorderSide(color: Constant.bgColor, width: 2.0),
+                    //       ),
+                    //       border: UnderlineInputBorder(
+                    //         borderSide:
+                    //             BorderSide(color: Constant.bgColor, width: 2.0),
+                    //       ),
+                    //       contentPadding: EdgeInsets.zero,
+                    //       label: Text(
+                    //         '+91',
+                    //         style: TextStyle(
+                    //           fontSize: 18,
+                    //           fontWeight: FontWeight.w900,
+                    //           color: Constant.bgColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     validator: (String? val) {
+                    //       if (number != null &&
+                    //           number.toString().length == 10) {
+                    //         return null;
+                    //       }
+                    //       return '';
+                    //     },
+                    //     readOnly: true,
+                    //   ),
+                    // ),
                     SizedBox(
                       width: 10.w,
                     ),
                     Expanded(
-                      child: TextFormField(
+                      child: IntlPhoneField(
                         focusNode: _focusNode,
                         cursorColor: Constant.bgColor,
                         decoration: InputDecoration(
@@ -147,18 +148,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderSide:
                                 BorderSide(color: Constant.bgColor, width: 2.0),
                           ),
-                          contentPadding: EdgeInsets.zero,
+                          // contentPadding: EdgeInsets.zero,
                         ),
                         keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(10)
-                        ],
-                        onChanged: (String? val){
-                          if(val != null && val.length >= 10){
-                            _focusNode.unfocus();
-                          }
-                          number = val!;
+                        // inputFormatters: [
+                        //   FilteringTextInputFormatter.digitsOnly,
+                        //   LengthLimitingTextInputFormatter(10)
+                        // ],
+                        onChanged: (phone) {
+                          warningLog(phone.completeNumber);
+                          number = phone.completeNumber;
                         },
                         style: TextStyle(
                           fontSize: 18,
@@ -166,12 +165,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Constant.bgColor,
                           letterSpacing: 6.sp,
                         ),
-                        validator: (String? val) {
-                          if (val != null && val.length == 10) {
-                            return null;
-                          }
-                          return 'Valid mobile number required';
-                        },
+                        // validator: (String? val) {
+                        //   if (val != null && val.length == 10) {
+                        //     return null;
+                        //   }
+                        //   return 'Valid mobile number required';
+                        // },
                       ),
                     ),
                   ],
@@ -227,14 +226,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (key.currentState!.validate() && !isLoading) {
                   setState(() => isLoading = true);
                   bool status = await APIs().getLoginStatus(number!);
-                  if(status){
+                  if (status) {
                     setState(() => isLoading = false);
                     Get.to(
-                    OtpScreen(phoneNumber: number!),
-                  );
-                  }else{
+                      OtpScreen(phoneNumber: number!),
+                    );
+                  } else {
                     setState(() => isLoading = false);
-                    errorMsg('Account Deleted', 'Please use different phone number');
+                    errorMsg(
+                        'Account Deleted', 'Please use different phone number');
                   }
                 }
               },
@@ -250,13 +250,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 12.0, horizontal: 24),
-                    child: isLoading ? SizedBox(height: 25.h, width: 25.h, child: CircularProgressIndicator(color: AppColors().white100,),) : Text(
-                      "Next",
-                      style: TextStyle(
-                          color: Constant.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700),
-                    ),
+                    child: isLoading
+                        ? SizedBox(
+                            height: 25.h,
+                            width: 25.h,
+                            child: CircularProgressIndicator(
+                              color: AppColors().white100,
+                            ),
+                          )
+                        : Text(
+                            "Next",
+                            style: TextStyle(
+                                color: Constant.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700),
+                          ),
                   ),
                 ),
               ),

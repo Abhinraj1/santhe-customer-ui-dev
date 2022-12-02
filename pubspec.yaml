@@ -58,6 +58,10 @@ dependencies:
   algolia: ^1.1.1
   firebase_analytics: ^9.3.4
   android_play_install_referrer: ^0.2.1
+  intl_phone_field: ^3.1.0
+  youtube_player_flutter: ^8.1.1
+  logger: ^1.1.0
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

@@ -54,6 +54,7 @@ class _NewTabPageState extends State<NewTabPage>
                 _allListController.isLoading
             ? const SizedBox()
             : FloatingActionButton(
+                heroTag: "btn2",
                 elevation: 0.0,
                 onPressed: () => showModalBottomSheet<void>(
                     backgroundColor: Colors.transparent,
@@ -112,7 +113,9 @@ class _NewTabPageState extends State<NewTabPage>
                 children: [
                   SizedBox(height: 23.h),
                   Image.asset(
-                    Platform.isIOS ? 'assets/new_tab_image_ios.png' : 'assets/new_tab_image.png',
+                    Platform.isIOS
+                        ? 'assets/new_tab_image_ios.png'
+                        : 'assets/new_tab_image.png',
                     height: 45.vh,
                   ),
                   _profileController.isOperational.value
@@ -452,14 +455,18 @@ class _NewTabPageState extends State<NewTabPage>
                                   color: Colors.orange,
                                   disabledColor: AppColors().grey80,
                                   onPressed: () async {
-                                    _allListController.isProcessing.value = true;
+                                    _allListController.isProcessing.value =
+                                        true;
                                     if (listName.isNotEmpty &&
                                         _type == NewListType.startFromNew) {
                                       if (_formKey.currentState!.validate()) {
                                         if (await _allListController
-                                            .isListAlreadyExist(listName.trim())) {
-                                          errorMsg('List name is already taken', 'Enter unique name');
-                                          _allListController.isProcessing.value = false;
+                                            .isListAlreadyExist(
+                                                listName.trim())) {
+                                          errorMsg('List name is already taken',
+                                              'Enter unique name');
+                                          _allListController
+                                              .isProcessing.value = false;
                                         } else {
                                           _allListController
                                               .addNewListToDB(listName);
@@ -493,7 +500,8 @@ class _NewTabPageState extends State<NewTabPage>
                                           ),
                                         ),
                                       );
-                                      _allListController.isProcessing.value = false;
+                                      _allListController.isProcessing.value =
+                                          false;
                                     } else if (_type ==
                                         NewListType.importFromOld) {
                                       if (selectedValue != null) {
@@ -526,7 +534,8 @@ class _NewTabPageState extends State<NewTabPage>
                                             ),
                                           ),
                                         );
-                                        _allListController.isProcessing.value = false;
+                                        _allListController.isProcessing.value =
+                                            false;
                                       }
                                     }
                                   },

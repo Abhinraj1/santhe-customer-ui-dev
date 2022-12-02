@@ -8,6 +8,7 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
@@ -47,6 +48,13 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
     with AutomaticKeepAliveClientMixin {
   MerchantOfferResponse? merchantOfferResponse;
   List<CustomerOfferResponse>? customerOfferResponse;
+  late MerchantDetailsResponse merchantDetails;
+
+  @override
+  void initState() {
+    super.initState();
+    getDetails();
+  }
 
   Future<void> getDetails() async {
     final apiController = Get.find<APIs>();
@@ -57,12 +65,12 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
       );
       widget.currentMerchantOffer = customerOfferResponse!.firstWhere(
           (element) => element.custOfferResponse.custOfferStatus == 'accepted');
-      widget.merchantResponse ??= await apiController.getMerchantDetails(
-          widget.currentMerchantOffer!.merchId.path.segments.last);
     }
 
     merchantOfferResponse ??= await apiController
         .getMerchantResponse(widget.currentMerchantOffer!.listEventId);
+    widget.merchantResponse ??= await apiController.getMerchantDetails(
+        widget.currentMerchantOffer!.merchId.path.segments.last);
   }
 
   String removeDecimalZeroFormat(double n) {
@@ -466,12 +474,85 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
                       width: screenSize.width,
                       color: AppColors().white100,
                       alignment: Alignment.center,
-                      child: Text(
-                        '${items.length} Items',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 40.0, top: 8),
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/shop_icon.png'),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 18.0,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            widget.merchantResponse!.fields
+                                                .merchName.stringValue,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 26),
+                                          ),
+                                          const SizedBox(
+                                            height: 6,
+                                          ),
+                                          Row(
+                                            children: [
+                                              CircleAvatar(
+                                                backgroundColor:
+                                                    Constant.bgColor,
+                                                radius: 14,
+                                                child: const Icon(
+                                                  Icons.phone,
+                                                  color: Colors.white,
+                                                  size: 14,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                widget
+                                                    .merchantResponse!
+                                                    .fields
+                                                    .contact
+                                                    .mapValue
+                                                    .fields
+                                                    .phoneNumber
+                                                    .integerValue,
+                                                style: TextStyle(
+                                                    color: Constant.bgColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '${items.length} Items',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Expanded(

@@ -115,6 +115,18 @@ class _HomePageState extends State<HomePage>
               fontWeight: FontWeight.w800, color: Colors.white, fontSize: 24),
         ),
         actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                PageTransition(
+                  child: YoutubeVideoGuide(),
+                  type: PageTransitionType.rightToLeft,
+                ),
+              );
+            },
+            child: Image.asset('assets/questioncircle.png'),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 4.5),
             child: IconButton(

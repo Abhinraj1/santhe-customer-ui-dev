@@ -18,6 +18,7 @@ import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:santhe/pages/map_merch.dart';
+import 'package:santhe/pages/youtubevideo.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/api_service_controller.dart';
 import '../controllers/getx/all_list_controller.dart';

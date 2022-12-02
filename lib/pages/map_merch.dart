@@ -86,6 +86,7 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
             await getBytesFromAssets('assets/shopPin.png', 180);
         ccustomMarkers.add(
           Marker(
+            infoWindow: InfoWindow(title: element['contact']['address']),
             markerId: MarkerId(
               element['gstinNumber'],
             ),

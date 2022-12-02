@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_collection_literals
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -39,10 +41,12 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
   late Position position;
   // List<MapMarker> mapMarkers = [];
   Set<Marker> customMarkers = Set();
+  Set<Polyline> customerPolygon = Set();
   bool _hasData = false;
   LocationData? currentLocation;
   MapPickerController mapPickerController = MapPickerController();
   Location? location;
+  Set<Marker> customerMarkerIncluded = Set();
 
   @override
   void initState() {
@@ -78,6 +82,9 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
         'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/customer/nearby/merchants?lat=${position.latitude}&lng=${position.longitude}');
     try {
       final response = await http.get(url, headers: header);
+      final Uint8List polygonIcon =
+          await getBytesFromAssets('assets/customerPin.png', 180);
+
       warningLog('$response');
       final responseBody = json.decode(response.body)['data'] as List<dynamic>;
       Set<Marker> ccustomMarkers = Set();
@@ -100,6 +107,20 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
       }
       // List<Marker> markers = [];
       warningLog('$ccustomMarkers');
+      final Uint8List customerIcon =
+          await getBytesFromAssets('assets/customerPin.png', 180);
+      ccustomMarkers.add(
+        Marker(
+            markerId: MarkerId(
+              position.latitude.toString(),
+            ),
+            position: LatLng(
+              position.latitude,
+              position.longitude,
+            ),
+            icon: BitmapDescriptor.fromBytes(customerIcon)),
+      );
+      infoLog('$ccustomMarkers');
       setState(() {
         customMarkers = ccustomMarkers;
       });
@@ -185,15 +206,16 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
               mapPickerController: mapPickerController,
               iconWidget: Column(
                 children: const [
-                  Image(
-                    image: AssetImage("assets/customerPin.png"),
-                    height: 50,
-                    width: 30,
-                  ),
+                  // Image(
+                  //   image: AssetImage("assets/customerPin.png"),
+                  //   height: 50,
+                  //   width: 30,
+                  // ),
                 ],
               ),
               child: GoogleMap(
                 myLocationEnabled: true,
+                myLocationButtonEnabled: false,
                 markers: customMarkers,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(position.latitude, position.longitude),
@@ -201,6 +223,8 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
                 ),
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
+                  warningLog('${mapPickerController.mapFinishedMoving}');
+                  mapPickerController.mapFinishedMoving;
                 },
               ),
             )

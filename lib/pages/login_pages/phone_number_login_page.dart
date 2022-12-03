@@ -131,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> with LogMixin {
                       child: IntlPhoneField(
                         focusNode: _focusNode,
                         cursorColor: Constant.bgColor,
+                        initialCountryCode: 'IN',
                         decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
                             borderSide:
@@ -160,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> with LogMixin {
                           number = phone.completeNumber;
                         },
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.w900,
                           color: Constant.bgColor,
                           letterSpacing: 6.sp,

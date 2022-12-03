@@ -73,7 +73,7 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
     setState(() => isLoading = false);
   }
 
-  void switchOverride(bool value){
+  void switchOverride(bool value) {
     setState(() {
       widget.overrideData = value;
     });
@@ -139,12 +139,16 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
                   onPressed: () {
                     if (_notificationController.fromNotification) {
                       _notificationController.fromNotification = false;
-                      Get.offAll(() => const HomePage(pageIndex: 1),
+                      Get.offAll(
+                          () => HomePage(
+                                pageIndex: 1,
+                                showMap: false,
+                              ),
                           transition: Transition.leftToRight);
-                    } else if(widget.overrideData){
+                    } else if (widget.overrideData) {
                       Navigator.of(context).pop(widget.overrideData);
                     } else {
-                      if(_homeController.homeTabController.index != 1){
+                      if (_homeController.homeTabController.index != 1) {
                         _homeController.homeTabController.animateTo(1);
                       }
                       Navigator.pop(context);
@@ -184,12 +188,16 @@ class _SentUserListDetailsPageState extends State<SentUserListDetailsPage> {
                 onWillPop: () async {
                   if (_notificationController.fromNotification) {
                     _notificationController.fromNotification = false;
-                    Get.offAll(() => const HomePage(pageIndex: 1),
+                    Get.offAll(
+                        () => HomePage(
+                              pageIndex: 1,
+                              showMap: false,
+                            ),
                         transition: Transition.leftToRight);
-                  } else if(widget.overrideData){
+                  } else if (widget.overrideData) {
                     Navigator.of(context).pop(widget.overrideData);
                   } else {
-                    if(_homeController.homeTabController.index != 1){
+                    if (_homeController.homeTabController.index != 1) {
                       _homeController.homeTabController.animateTo(1);
                     }
                     Navigator.pop(context);

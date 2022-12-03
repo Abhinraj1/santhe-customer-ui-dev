@@ -4,14 +4,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:santhe/core/app_helpers.dart';
-import 'package:santhe/pages/error_pages/no_internet_page.dart';
-
-import '../controllers/api_service_controller.dart';
+import 'package:santhe/pages/map_merch.dart';
 import '../controllers/connectivity_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../core/app_initialisations.dart';
-import '../core/app_shared_preference.dart';
 import 'chat/chat_screen.dart';
 import 'home_page.dart';
 import 'login_pages/phone_number_login_page.dart';
@@ -29,7 +25,7 @@ class _SplashToHomeState extends State<SplashToHome> {
     await AppInitialisations().initialiseApplication();
     await Notifications().fcmInit();
     final ConnectivityController connectivityController = Get.find();
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result){
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       connectivityController.listenConnectivity(result);
     });
     Future.delayed(const Duration(milliseconds: 4000), () {
@@ -42,12 +38,11 @@ class _SplashToHomeState extends State<SplashToHome> {
     if (notificationController.fromNotification) {
       //_notificationController.fromNotification = false;
       if (notificationController.landingScreen == 'new') {
-        return const HomePage(
-          pageIndex: 0,
-        );
+        return const MapMerchant();
       } else if (notificationController.landingScreen == 'answered') {
-        return const HomePage(
+        return HomePage(
           pageIndex: 1,
+          showMap: false,
         );
       } else {
         return ChatScreen(
@@ -61,9 +56,7 @@ class _SplashToHomeState extends State<SplashToHome> {
         );
       }
     }
-    return const HomePage(
-      pageIndex: 0,
-    );
+    return const MapMerchant();
   }
 
   @override
@@ -78,7 +71,6 @@ class _SplashToHomeState extends State<SplashToHome> {
     bootHome();
     super.initState();
   }
-
 
   @override
   void dispose() {

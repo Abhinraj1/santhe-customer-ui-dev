@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -8,41 +9,50 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:resize/resize.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:page_transition/page_transition.dart';
+import 'package:resize/resize.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/connectivity_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/youtubevideo.dart';
-import 'package:share_plus/share_plus.dart';
+
 import '../controllers/api_service_controller.dart';
 import '../controllers/getx/all_list_controller.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../core/app_helpers.dart';
 import '../core/app_url.dart';
+import '../widgets/navigation_drawer_widget.dart';
 import 'new_tab_pages/new_tab_page.dart';
 import 'sent_tab_pages/sent_tab_page.dart';
-import 'package:http/http.dart' as http;
-
-import '../widgets/navigation_drawer_widget.dart';
 
 class HomePage extends StatefulWidget {
   final int pageIndex;
+  bool showMap;
 
-  const HomePage({this.pageIndex = 0, Key? key}) : super(key: key);
+  bool? showSomeMap;
+
+  HomePage({
+    Key? key,
+    required this.pageIndex,
+    required this.showMap,
+    this.showSomeMap,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, LogMixin {
   final apiController = Get.find<APIs>();
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -52,11 +62,13 @@ class _HomePageState extends State<HomePage>
   final ConnectivityController _connectivityController = Get.find();
   final AllListController _allListController = Get.find();
   final ProfileController _profileController = Get.find();
+  bool _showMapOnStart = false;
 
   @override
   void initState() {
     _allListController.isLoading = true;
     _init();
+    warningLog('$_showMapOnStart');
     super.initState();
   }
 
@@ -77,6 +89,9 @@ class _HomePageState extends State<HomePage>
         _connectivityController.listenConnectivity(result));*/
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
+    setState(() {
+      _showMapOnStart = true;
+    });
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -211,7 +226,10 @@ class _HomePageState extends State<HomePage>
                       builder: (context) => const MapMerchant(),
                     ));
               },
-              child: Image.asset('assets/map_dialog.png'),
+              child: Image.asset(
+                'assets/map_dialog.png',
+                height: 100,
+              ),
             ),
           ),
         ],

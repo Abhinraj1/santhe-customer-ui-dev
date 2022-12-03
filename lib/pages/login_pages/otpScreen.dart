@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/pages/map_merch.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../core/app_shared_preference.dart';
@@ -310,7 +311,7 @@ class _OtpScreenState extends State<OtpScreen> {
       AppSharedPreference().setLogin(true);
       apiController.updateDeviceToken(widget.phoneNumber.toString());
       await profileController.initialise();
-      Get.offAll(() => const HomePage(), transition: Transition.fadeIn);
+      Get.offAll(() => const MapMerchant(), transition: Transition.fadeIn);
     }
   }
 

@@ -9,6 +9,7 @@ import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as sv;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -17,13 +18,18 @@ import 'package:location/location.dart';
 import 'package:map_picker/map_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:santhe/constants.dart';
+import 'package:santhe/controllers/connectivity_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
+import 'package:santhe/controllers/notification_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/loggers.dart';
+import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/youtubevideo.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
 
+import '../controllers/api_service_controller.dart';
 import '../controllers/getx/profile_controller.dart';
 
 class MapMerchant extends StatefulWidget {
@@ -47,12 +53,22 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
   MapPickerController mapPickerController = MapPickerController();
   Location? location;
   Set<Marker> customerMarkerIncluded = Set();
+  final apiController = Get.find<APIs>();
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  final NotificationController _notificationController = Get.find();
+  final ConnectivityController _connectivityController = Get.find();
+  final AllListController _allListController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   @override
   void initState() {
     super.initState();
     // getLocation();
     // setInitialLocation();
+    _allListController.isLoading = true;
     getListOfShopsAroundRadius();
     mapPickerController.mapFinishedMoving;
   }
@@ -235,6 +251,24 @@ class _MapMerchantState extends State<MapMerchant> with LogMixin {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(
+                pageIndex: 0,
+                showMap: false,
+                showSomeMap: false,
+              ),
+            ),
+          );
+        },
+        child: const Icon(
+          Icons.home,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }

@@ -483,7 +483,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       .then((value) => log(
                                           'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
-                                  Get.offAll(() => const HomePage(),
+                                  Get.offAll(
+                                      () => HomePage(
+                                            pageIndex: 0,
+                                            showMap: true,
+                                          ),
                                       transition: Transition.fadeIn);
                                 } else {
                                   log('error occurred');

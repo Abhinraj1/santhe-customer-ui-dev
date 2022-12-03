@@ -38,7 +38,7 @@ class _YoutubeVideoGuideState extends State<YoutubeVideoGuide> with LogMixin {
   void initState() {
     super.initState();
     _youtubecontroller = YoutubePlayerController(
-      initialVideoId: 'XKMKWENGENE',
+      initialVideoId: 'BkvCsbmzkU8',
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: false,
@@ -88,7 +88,10 @@ class _YoutubeVideoGuideState extends State<YoutubeVideoGuide> with LogMixin {
                 Navigator.pushReplacement(
                   context,
                   PageTransition(
-                    child: const HomePage(),
+                    child: HomePage(
+                      showMap: false,
+                      pageIndex: 0,
+                    ),
                     type: PageTransitionType.leftToRight,
                   ),
                 );

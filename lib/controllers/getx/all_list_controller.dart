@@ -91,7 +91,11 @@ class AllListController extends GetxController {
   }
 
   List<UserListModel> getLatestList(int count) {
-    List<UserListModel> list = allList.where((element) => element.custListStatus!='deleted' && element.custListStatus!='purged').toList();
+    List<UserListModel> list = allList
+        .where((element) =>
+            element.custListStatus != 'deleted' &&
+            element.custListStatus != 'purged')
+        .toList();
     list.sort((a, b) => b.createListTime.compareTo(a.createListTime));
     return list.take(count).toList();
   }
@@ -124,7 +128,8 @@ class AllListController extends GetxController {
     }
   }
 
-  Future<void> addCopyListToDB(String listId,{bool moveToArchived = false}) async {
+  Future<void> addCopyListToDB(String listId,
+      {bool moveToArchived = false}) async {
     isProcessing.value = true;
     String copyListId = AppHelpers().getPhoneNumberWithoutCountryCode +
         (allList.length + 1).toString();
@@ -135,7 +140,7 @@ class AllListController extends GetxController {
     isProcessing.value = false;
     if (response == 1) {
       allListMap[copyListId] = copyUserList;
-      if(moveToArchived) {
+      if (moveToArchived) {
         await moveToArchive(allListMap[listId]!, showArchivedList: false);
       }
       update(['newList', 'fab']);
@@ -202,7 +207,8 @@ class AllListController extends GetxController {
     }
   }
 
-  Future<void> moveToArchive(UserListModel userList, {bool showArchivedList = true}) async {
+  Future<void> moveToArchive(UserListModel userList,
+      {bool showArchivedList = true}) async {
     isProcessing.value = true;
     int response = await NetworkCall().updateUserList(userList,
         status: 'archived', processStatus: userList.processStatus);
@@ -212,11 +218,12 @@ class AllListController extends GetxController {
       sentList.remove(allListMap[userList.listId]);
       archivedList.add(allListMap[userList.listId]!);
       update(['sentList', 'archivedList']);
-      if(showArchivedList){
+      if (showArchivedList) {
         Get.offAll(
-                () => const HomePage(
-              pageIndex: 2,
-            ),
+            () => HomePage(
+                  pageIndex: 2,
+                  showMap: false,
+                ),
             transition: Transition.fade);
       }
     } else {
@@ -238,7 +245,7 @@ class AllListController extends GetxController {
     lengthLimit = data;
   }
 
-  void deleteEverything(){
+  void deleteEverything() {
     allListMap.clear();
     newList.clear();
     sentList.clear();

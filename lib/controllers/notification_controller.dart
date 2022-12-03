@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/pages/map_merch.dart';
 
 import '../pages/chat/chat_screen.dart';
 import 'chat_controller.dart';
@@ -53,7 +54,7 @@ class Notifications {
   //! END
 
   fcmInit() async {
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       _createNewChannel();
     }
     FirebaseMessaging.instance
@@ -157,7 +158,8 @@ class Notifications {
       //playSound: true,
     );
     const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'slow_spring_board.aiff', presentSound: true);
+        IOSNotificationDetails(
+            sound: 'slow_spring_board.aiff', presentSound: true);
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
@@ -231,13 +233,16 @@ class NavigateNotifications {
     if (data['screen'] == 'new') {
       _notificationController.landingScreen = 'new';
       if (!_notificationController.fromNotification) {
-        Get.offAll(const HomePage(pageIndex: 0));
+        Get.offAll(const MapMerchant());
       }
     }
     if (data['screen'] == 'answered') {
       _notificationController.landingScreen = 'answered';
       if (!_notificationController.fromNotification) {
-        Get.offAll(const HomePage(pageIndex: 1));
+        Get.offAll(HomePage(
+          pageIndex: 1,
+          showMap: false,
+        ));
       }
     }
     if (data['landingScreen'] == 'chat') {

@@ -106,80 +106,80 @@ class _NewTabPageState extends State<NewTabPage>
 
   Widget _emptyList() => Obx(
         () => RefreshIndicator(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 23.h),
-                  Image.asset(
-                    Platform.isIOS
-                        ? 'assets/new_tab_image_ios.png'
-                        : 'assets/new_tab_image.png',
-                    height: 45.vh,
-                  ),
-                  _profileController.isOperational.value
-                      ? Align(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 23.h),
+                Image.asset(
+                  Platform.isIOS
+                      ? 'assets/new_tab_image_ios.png'
+                      : 'assets/new_tab_image.png',
+                  height: 45.vh,
+                ),
+                _profileController.isOperational.value
+                    ? Align(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          'Get started by easily creating your\nshopping list',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16.sp,
+                              height: 2.sp,
+                              color: kTextGrey),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                        child: Align(
                           alignment: Alignment.topCenter,
                           child: Text(
-                            'Get started by easily creating your\nshopping list',
+                            'We don\'t serve in your location yet. As soon as we have active merchants in your locality, you will be able to send your lists to shop',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w700,
                                 fontSize: 16.sp,
                                 height: 2.sp,
                                 color: kTextGrey),
                           ),
-                        )
-                      : Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.sp),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              'We don\'t serve in your location yet. As soon as we have active merchants in your locality, you will be able to send your lists to shop',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16.sp,
-                                  height: 2.sp,
-                                  color: kTextGrey),
-                            ),
-                          ),
                         ),
-                  SizedBox(
-                    height:
-                        _profileController.isOperational.value ? 30.h : 45.h,
-                  ),
-                  if (!_profileController.isOperational.value)
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        'Create and manage your shopping list',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
-                            height: 2.sp,
-                            color: kTextGrey),
                       ),
-                    ),
+                SizedBox(
+                  height: _profileController.isOperational.value ? 30.h : 45.h,
+                ),
+                if (!_profileController.isOperational.value)
                   Align(
-                    alignment: const Alignment(-0.2, 0.5),
-                    child: SizedBox(
-                      width: 50.vw,
-                      child: SvgPicture.asset(
-                        _profileController.isOperational.value
-                            ? 'assets/new_tab_arrow.svg'
-                            : 'assets/non_operational_arrow.svg',
-                        color: Colors.orange,
-                        fit: BoxFit.contain,
-                      ),
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'Create and manage your shopping list',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                          height: 2.sp,
+                          color: kTextGrey),
                     ),
                   ),
-                ],
-              ),
+                Align(
+                  alignment: const Alignment(-0.2, 0.5),
+                  child: SizedBox(
+                    width: 50.vw,
+                    child: SvgPicture.asset(
+                      _profileController.isOperational.value
+                          ? 'assets/new_tab_arrow.svg'
+                          : 'assets/non_operational_arrow.svg',
+                      color: Colors.orange,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onRefresh: () async => await _allListController.getAllList()),
+          ),
+          onRefresh: () async => await _allListController.getAllList(),
+        ),
       );
 
   Widget _bottomSheet(BuildContext context) => Padding(

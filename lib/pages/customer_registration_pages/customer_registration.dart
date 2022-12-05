@@ -14,6 +14,7 @@ import 'package:santhe/core/app_shared_preference.dart';
 import 'package:santhe/models/santhe_user_model.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/onboarding_page.dart';
 
 import '../../constants.dart';
@@ -483,11 +484,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       .then((value) => log(
                                           'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
-                                  Get.offAll(
-                                      () => HomePage(
-                                            pageIndex: 0,
-                                            showMap: true,
-                                          ),
+                                  Get.offAll(() => MapMerchant(),
                                       transition: Transition.fadeIn);
                                 } else {
                                   log('error occurred');

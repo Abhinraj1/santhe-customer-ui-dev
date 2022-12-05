@@ -220,15 +220,17 @@ class _HomePageState extends State<HomePage>
             child: GestureDetector(
               onTap: () {
                 log('Tapped on floating action button');
+                // Navigator.pop(context);
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MapMerchant(),
-                    ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MapMerchant(),
+                  ),
+                );
               },
               child: Image.asset(
                 'assets/map_dialog.png',
-                height: 100,
+                height: 90,
               ),
             ),
           ),

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/pages/customer_registration_pages/mapAddressPicker.dart';
 
-
 import '../../API/addressSearchAPI.dart';
 import '../../constants.dart';
 import '../../controllers/registrationController.dart';
@@ -121,12 +120,12 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                           ? const Radius.circular(16)
                           : const Radius.circular(2),
                     )),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                            kTextFieldCircularBorderRadius),
-                        borderSide: BorderSide(
-                            width: 1.0, color: AppColors().brandDark),
-                      ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(kTextFieldCircularBorderRadius),
+                      borderSide:
+                          BorderSide(width: 1.0, color: AppColors().brandDark),
+                    ),
                     contentPadding: EdgeInsets.symmetric(vertical: 5.sp),
                   ),
                 ),
@@ -154,8 +153,13 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                           itemBuilder: (context, index) =>
                                               GestureDetector(
                                                   onTap: () async {
-                                                    PlaceApiProvider placeApiProvider = PlaceApiProvider();
-                                                    placeApiProvider.getPlaceDetailFromId(snapshot.data[index].placeId);
+                                                    PlaceApiProvider
+                                                        placeApiProvider =
+                                                        PlaceApiProvider();
+                                                    placeApiProvider
+                                                        .getPlaceDetailFromId(
+                                                            snapshot.data[index]
+                                                                .placeId);
                                                   },
                                                   child: Container(
                                                     padding:
@@ -207,7 +211,16 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 SizedBox(
                   height: 15.h,
                 ),
-                Visibility(visible: _controller.text.isEmpty ? true : false,child: const SizedBox(width: double.maxFinite,child: Text("OR",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey),)),),
+                Visibility(
+                  visible: _controller.text.isEmpty ? true : false,
+                  child: const SizedBox(
+                      width: double.maxFinite,
+                      child: Text(
+                        "OR",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      )),
+                ),
                 SizedBox(
                   height: 15.h,
                 ),
@@ -218,10 +231,15 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                     });
                     Future.delayed(const Duration(seconds: 0), () async {
                       final locationController = Get.find<LocationController>();
-                      final permission = await locationController.checkPermission();
-                      if(permission){
-                        LocationController.getGeoLocationPosition().then((value){
-                          Get.to(() => MapAddressPicker(lat: value!.latitude, lng: value.longitude,));
+                      final permission =
+                          await locationController.checkPermission();
+                      if (permission) {
+                        LocationController.getGeoLocationPosition()
+                            .then((value) {
+                          Get.to(() => MapAddressPicker(
+                                lat: value!.latitude,
+                                lng: value.longitude,
+                              ));
                           _isFetchingLocation = false;
                         });
                       }
@@ -229,7 +247,6 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                         _isFetchingLocation = false;
                       });
                     });
-
                   },
                   child: Center(
                     child: Container(
@@ -240,32 +257,33 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                               const BorderRadius.all(Radius.circular(14))),
                       margin: EdgeInsets.symmetric(horizontal: 40.w),
                       padding: const EdgeInsets.all(10),
-                      child: _isFetchingLocation ?
-                      Center(
-                        child: SizedBox(
-                          height: 30.h,
-                            width: 30.h,
-                            child: const CircularProgressIndicator(color: Colors.white,)
-                        ),
-                      ) :
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.gps_fixed,
-                            color: Constant.white,
-                          ),
-                          SizedBox(
-                            width: 5.w,
-                          ),
-                          Text(
-                            "Use current location",
-                            style: TextStyle(
-                                color: Constant.white,
-                                fontWeight: FontWeight.w800),
-                          )
-                        ],
-                      ),
+                      child: _isFetchingLocation
+                          ? Center(
+                              child: SizedBox(
+                                  height: 30.h,
+                                  width: 30.h,
+                                  child: const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.gps_fixed,
+                                  color: Constant.white,
+                                ),
+                                SizedBox(
+                                  width: 5.w,
+                                ),
+                                Text(
+                                  "Use current location",
+                                  style: TextStyle(
+                                      color: Constant.white,
+                                      fontWeight: FontWeight.w800),
+                                )
+                              ],
+                            ),
                     ),
                   ),
                 ),
@@ -291,7 +309,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                   fontSize: 17),
                             )),
                       ),
-                      Obx(() => Text('${userInfoController.address.obs.string}\n${userInfoController.howToReach.value}'))
+                      Obx(() => Text(
+                          '${userInfoController.address.obs.string}\n${userInfoController.howToReach.value}'))
                     ],
                   ),
                 ),

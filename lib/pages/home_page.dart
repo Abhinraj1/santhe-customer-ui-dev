@@ -64,6 +64,9 @@ class _HomePageState extends State<HomePage>
   final ProfileController _profileController = Get.find();
   bool _showMapOnStart = false;
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final HomeController _homeController = Get.find();
+
   @override
   void initState() {
     _allListController.isLoading = true;
@@ -93,9 +96,6 @@ class _HomePageState extends State<HomePage>
       _showMapOnStart = true;
     });
   }
-
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
-  final HomeController _homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {

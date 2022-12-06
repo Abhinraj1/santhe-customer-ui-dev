@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
@@ -12,7 +13,7 @@ import '../../models/new_list/list_item_model.dart';
 import '../../models/new_list/new_list_response_model.dart';
 import '../../network_call/network_call.dart';
 
-class AllListController extends GetxController {
+class AllListController extends GetxController with LogMixin {
   bool isLoading = true;
 
   RxBool isProcessing = false.obs, isTitleEditable = false.obs;
@@ -44,6 +45,7 @@ class AllListController extends GetxController {
       allListMap[element.listId] = element;
     }
     isLoading = false;
+    warningLog('checking for  $isLoading');
     update(['newList', 'fab', 'archivedList', 'sentList']);
   }
 

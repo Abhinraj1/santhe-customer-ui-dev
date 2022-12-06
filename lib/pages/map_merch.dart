@@ -31,6 +31,7 @@ import 'package:santhe/controllers/notification_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/error/exceptions.dart';
 import 'package:santhe/core/loggers.dart';
@@ -59,7 +60,10 @@ class MapMerchant extends StatefulWidget {
 }
 
 class _MapMerchantState extends State<MapMerchant>
-    with LogMixin, AutomaticKeepAliveClientMixin {
+    with
+        LogMixin,
+        AutomaticKeepAliveClientMixin,
+        SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   Completer<GoogleMapController> _controller = Completer();
   late Position position;
@@ -94,6 +98,7 @@ class _MapMerchantState extends State<MapMerchant>
   CustomerModel? customerModel;
   double? customerLat;
   double? customerLong;
+  final HomeController _homeController = Get.find();
 
   @override
   void initState() {
@@ -101,12 +106,14 @@ class _MapMerchantState extends State<MapMerchant>
     // getLocation();
     // setInitialLocation();
     _init();
-    _allListController.getAllList();
     getListOfShopsAroundRadius();
+    _allListController.getAllList();
     mapPickerController.mapFinishedMoving;
   }
 
   Future<void> _init() async {
+    _homeController.homeTabController =
+        TabController(length: 3, vsync: this, initialIndex: 0);
     sv.SystemChrome.setSystemUIOverlayStyle(const sv.SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
@@ -153,14 +160,14 @@ class _MapMerchantState extends State<MapMerchant>
           warningLog(
               '${element['contact']['location']['lat']} ${element['contact']['location']['lng']}');
           final Uint8List markerIcon =
-              await getBytesFromAssets('assets/shopPin.png', 180);
+              await getBytesFromAssets('assets/shopPin.png', 150);
           double? latitude =
               double.tryParse(element['contact']['location']['lat'].toString());
           double? longitude =
               double.tryParse(element['contact']['location']['lng'].toString());
           ccustomMarkers.add(
             Marker(
-              infoWindow: InfoWindow(title: element['contact']['address']),
+              infoWindow: InfoWindow(title: element['merchName']),
               markerId: MarkerId(
                 element['gstinNumber'],
               ),
@@ -175,7 +182,7 @@ class _MapMerchantState extends State<MapMerchant>
         // List<Marker> markers = [];
         warningLog('$ccustomMarkers');
         final Uint8List customerIcon =
-            await getBytesFromAssets('assets/customerPin.png', 180);
+            await getBytesFromAssets('assets/customerPin.png', 150);
         ccustomMarkers.add(
           Marker(
             infoWindow: const InfoWindow(title: 'Your Location'),
@@ -190,11 +197,13 @@ class _MapMerchantState extends State<MapMerchant>
           ),
         );
         infoLog('$ccustomMarkers');
-        setState(() {
-          customMarkers = ccustomMarkers;
+        setState(
+          () {
+            customMarkers = ccustomMarkers;
 
-          _hasData = true;
-        });
+            _hasData = true;
+          },
+        );
       } catch (e) {
         rethrow;
       }
@@ -260,7 +269,11 @@ class _MapMerchantState extends State<MapMerchant>
                 ),
               );
             },
-            child: Image.asset('assets/questioncircle.png'),
+            child: Image.asset(
+              'assets/questioncircle.png',
+              height: 18,
+              width: 40,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 4.5),
@@ -290,7 +303,7 @@ class _MapMerchantState extends State<MapMerchant>
           ? Stack(
               children: [
                 GoogleMap(
-                  myLocationEnabled: true,
+                  myLocationEnabled: false,
                   myLocationButtonEnabled: false,
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: false,
@@ -301,7 +314,7 @@ class _MapMerchantState extends State<MapMerchant>
                   markers: customMarkers,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(customerLat!, customerLong!),
-                    zoom: 14,
+                    zoom: 13.5,
                   ),
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
@@ -361,18 +374,20 @@ class _MapMerchantState extends State<MapMerchant>
                         child: Center(
                           child: ccustomMarkers.isEmpty
                               ? const Text(
-                                  'Unfortunately Shops near you are not yet \n    registered on Santhe. But, you can still\n         create and manage a grocery list. ',
+                                  'Unfortunately Shops near you are not yet\nregistered on Santhe. But, you can still\ncreate and manage a grocery list.',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18,
                                   ),
+                                  textAlign: TextAlign.center,
                                 )
                               : const Text(
-                                  '    Grocery store near you on santhe \n Create a grocery list and Send it shops',
+                                  'Grocery store near you on santhe \n Create a grocery list and Send it shops',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                         ),
                       ),
@@ -381,21 +396,19 @@ class _MapMerchantState extends State<MapMerchant>
                 ),
               ],
             )
-          : const Center(
-              child: Text(
-                'Getting your Location..please wait',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
+          : Center(
+              child: CircularProgressIndicator(
+              color: AppColors().brandDark,
+            )),
       floatingActionButton: GetBuilder(
         init: _allListController,
-        id: 'fab',
+        id: 'fab1',
         builder: (ctr) => _allListController.newList.length >=
                     _allListController.lengthLimit ||
                 _allListController.isLoading
             ? const SizedBox()
             : FloatingActionButton(
-                heroTag: "btn8",
+                heroTag: "btn10",
                 elevation: 0.0,
                 onPressed: () => showModalBottomSheet<void>(
                     backgroundColor: Colors.transparent,

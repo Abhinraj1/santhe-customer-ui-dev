@@ -14,6 +14,7 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/network_call/network_call.dart';
+import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
@@ -70,7 +71,8 @@ class _UserListScreenState extends State<UserListScreen> {
           onPressed: () async {
             saveList();
             _homeController.homeTabController.animateTo(0);
-            Get.back();
+            Get.to(HomePage(pageIndex: 0, showMap: false),
+                transition: Transition.leftToRight);
           },
         ),
         title: Obx(() => _allListController.isTitleEditable.value
@@ -749,7 +751,7 @@ class _UserListScreenState extends State<UserListScreen> {
       );
 
   Widget _sendToShopsButton() => SizedBox(
-        height: 75,
+        height: 55,
         width: 65.vw,
         child: MaterialButton(
           elevation: 0.0,
@@ -967,33 +969,6 @@ class _UserListScreenState extends State<UserListScreen> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 13.sp),
-                                  Row(
-                                    textBaseline: TextBaseline.ideographic,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.baseline,
-                                    children: [
-                                      Text(
-                                        '5.',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15.sp,
-                                          color: const Color(0xffB0B0B0),
-                                        ),
-                                      ),
-                                      SizedBox(width: 12.36.sp),
-                                      Expanded(
-                                        child: Text(
-                                          'Sending a list with few items may not get enough offers from shops.',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15.sp,
-                                            color: const Color(0xffB0B0B0),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                   if (_userList.items.length <= 3)
                                     SizedBox(height: 13.sp),
                                   if (_userList.items.length <= 3)
@@ -1003,7 +978,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                           CrossAxisAlignment.baseline,
                                       children: [
                                         Text(
-                                          '4.',
+                                          '5.',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 15.sp,

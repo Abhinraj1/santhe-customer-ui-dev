@@ -11,6 +11,7 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/delete_account_page.dart';
+import 'package:santhe/pages/map_merch.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -37,7 +38,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
   final profileController = Get.find<ProfileController>();
-  int userPhoneNumber = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  int userPhoneNumber =
+      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
   late final CustomerModel? currentUser;
   late final TextEditingController _userNameController;
   late final TextEditingController _userEmailController;
@@ -88,7 +90,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
 
   @override
   Widget build(BuildContext context) {
-
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -110,7 +111,12 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
             size: 13.sp,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MapMerchant(),
+              ),
+            );
           },
         ),
         title: Text(
@@ -420,97 +426,108 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 ),
                               ),
                               GetBuilder<RegistrationController>(
-                                id: 'fieldValue',
+                                  id: 'fieldValue',
                                   builder: (builder) => GestureDetector(
-                                    onTap: () async {
-                                      //remove focus from text fields
-                                      FocusScopeNode currentScope =
-                                      FocusScope.of(context);
-                                      if (!currentScope.hasPrimaryFocus &&
-                                          currentScope.hasFocus) {
-                                        FocusManager.instance.primaryFocus
-                                            ?.unfocus();
-                                      }
-                                      if (locationController.lng.value != 0.0 ||
-                                          locationController.lat.value != 0.0) {
-                                        setState(() {
-                                          mapSelected = true;
-                                        });
-                                      }
-                                      var res = await Get.to(
+                                        onTap: () async {
+                                          //remove focus from text fields
+                                          FocusScopeNode currentScope =
+                                              FocusScope.of(context);
+                                          if (!currentScope.hasPrimaryFocus &&
+                                              currentScope.hasFocus) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          }
+                                          if (locationController.lng.value !=
+                                                  0.0 ||
+                                              locationController.lat.value !=
+                                                  0.0) {
+                                            setState(() {
+                                              mapSelected = true;
+                                            });
+                                          }
+                                          var res = await Get.to(
                                               () => const MapSearchScreen());
-                                      if (res == 1) {
-                                        setState(() {});
-                                      }
-                                    },
-                                    child: Container(
-                                      width: 344.w,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                              color: registrationController
-                                                  .address.isEmpty &&
-                                                  donePressed
-                                                  ? AppColors().red100
-                                                  : AppColors().grey40,
-                                              width: 2.0)),
-                                      // padding: EdgeInsets.only(
-                                      //     top: 13.h,
-                                      //     left: 10.w,
-                                      //     right: 10.w,
-                                      //     bottom: 13.h),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            //icon
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 4.0, horizontal: 12),
-                                              child: Container(
-                                                  height: 24.w,
-                                                  width: 24.w,
-                                                  decoration: BoxDecoration(
-                                                      color: AppColors().brandDark,
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                                  child: Center(
-                                                    child: Icon(
-                                                      Icons.home,
-                                                      color: AppColors().white100,
-                                                      size: 15.sp,
-                                                    ),
-                                                  )),
+                                          if (res == 1) {
+                                            setState(() {});
+                                          }
+                                        },
+                                        child: Container(
+                                          width: 344.w,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                              border: Border.all(
+                                                  color: registrationController
+                                                              .address
+                                                              .isEmpty &&
+                                                          donePressed
+                                                      ? AppColors().red100
+                                                      : AppColors().grey40,
+                                                  width: 2.0)),
+                                          // padding: EdgeInsets.only(
+                                          //     top: 13.h,
+                                          //     left: 10.w,
+                                          //     right: 10.w,
+                                          //     bottom: 13.h),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 15),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                //icon
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 4.0,
+                                                      horizontal: 12),
+                                                  child: Container(
+                                                      height: 24.w,
+                                                      width: 24.w,
+                                                      decoration: BoxDecoration(
+                                                          color: AppColors()
+                                                              .brandDark,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.home,
+                                                          color: AppColors()
+                                                              .white100,
+                                                          size: 15.sp,
+                                                        ),
+                                                      )),
+                                                ),
+                                                SizedBox(
+                                                  width: 1.w,
+                                                ),
+                                                //text
+                                                Expanded(
+                                                  child: Obx(() => Text(
+                                                        registrationController
+                                                                    .address
+                                                                    .value
+                                                                    .trim() ==
+                                                                ''
+                                                            ? 'Select Address'
+                                                            : '${registrationController.address.value} ${registrationController.howToReach.value}',
+                                                        style: registrationController
+                                                                    .address
+                                                                    .value
+                                                                    .trim() ==
+                                                                ''
+                                                            ? kHintStyle
+                                                            : kTextInputStyle,
+                                                      )),
+                                                )
+                                              ],
                                             ),
-                                            SizedBox(
-                                              width: 1.w,
-                                            ),
-                                            //text
-                                            Expanded(
-                                              child: Obx(() => Text(
-                                                registrationController
-                                                    .address.value
-                                                    .trim() ==
-                                                    ''
-                                                    ? 'Select Address'
-                                                    : '${registrationController.address.value} ${registrationController.howToReach.value}',
-                                                style: registrationController
-                                                    .address.value
-                                                    .trim() ==
-                                                    ''
-                                                    ? kHintStyle
-                                                    : kTextInputStyle,
-                                              )),
-                                            )
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  )),
+                                      )),
                               SizedBox(
                                 height: 4.h,
                               ),
@@ -555,15 +572,14 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                 .address.isNotEmpty) {
                                           CustomerModel? currentUser =
                                               profileController
-                                                  .customerDetails ??
+                                                      .customerDetails ??
                                                   fallback_error_customer;
 
                                           int userPhone = int.parse(AppHelpers()
                                               .getPhoneNumberWithoutCountryCode);
 
                                           if (userPhone == 404) {
-                                            Get.off(
-                                                    () => const LoginScreen());
+                                            Get.off(() => const LoginScreen());
                                           }
 
                                           //todo add how to reach howToReach
@@ -571,7 +587,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               address: registrationController
                                                   .address.value,
                                               emailId:
-                                              _userEmailController.text,
+                                                  _userEmailController.text,
                                               lat: registrationController
                                                   .lat.value,
                                               lng: registrationController
@@ -582,29 +598,33 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               phoneNumber: userPhone,
                                               custId: userPhone,
                                               custName:
-                                              _userNameController.text,
+                                                  _userNameController.text,
                                               custRatings: double.parse(
-                                                  currentUser
-                                                      .customerRatings),
+                                                  currentUser.customerRatings),
                                               custReferal: 0000,
                                               custStatus: 'active',
-                                              howToReach:
-                                              registrationController
+                                              howToReach: registrationController
                                                   .howToReach.value,
                                               custLoginTime: DateTime.now(),
                                               custPlan: 'default');
-                                          int userUpdated =
-                                          await apiController
+                                          int userUpdated = await apiController
                                               .updateCustomerInfo(
-                                              userPhone, updatedUser);
+                                                  userPhone, updatedUser);
                                           if (userUpdated == 1) {
                                             await profileController
                                                 .getCustomerDetailsInit();
                                             successMsg('Profile Updated',
                                                 'Your profile information was updated successfully.');
 
-                                            await profileController.getOperationalStatus();
-                                            Navigator.pop(context);
+                                            await profileController
+                                                .getOperationalStatus();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const MapMerchant(),
+                                              ),
+                                            );
                                           } else {
                                             errorMsg('Connectivity Error',
                                                 'Some connectivity error has occurred, please try again later!');
@@ -646,34 +666,38 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                   ),
                 ),
               ),
-              SizedBox(height: 10.h,),
-              if(Platform.isIOS)Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'If you wish to delete your account click here: ',
-                    style: AppTheme().bold700(12, color: AppColors().grey80),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const DeleteAccountPage(),
-                              type: PageTransitionType.rightToLeft));
-                    },
-                    child: Text(
-                      'Delete Account',
-                      style: AppTheme().bold700(12,
-                          color: AppColors().grey80,
-                          textDecoration: TextDecoration.underline),
+              SizedBox(
+                height: 10.h,
+              ),
+              if (Platform.isIOS)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'If you wish to delete your account click here: ',
+                      style: AppTheme().bold700(12, color: AppColors().grey80),
                     ),
-                  ),
-                ],
-              ),
-              if(Platform.isIOS) SizedBox(
-                height: 20.h,
-              ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: const DeleteAccountPage(),
+                                type: PageTransitionType.rightToLeft));
+                      },
+                      child: Text(
+                        'Delete Account',
+                        style: AppTheme().bold700(12,
+                            color: AppColors().grey80,
+                            textDecoration: TextDecoration.underline),
+                      ),
+                    ),
+                  ],
+                ),
+              if (Platform.isIOS)
+                SizedBox(
+                  height: 20.h,
+                ),
             ],
           ),
         ),

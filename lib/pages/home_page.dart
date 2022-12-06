@@ -23,6 +23,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/youtubevideo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/api_service_controller.dart';
 import '../controllers/getx/all_list_controller.dart';
@@ -97,6 +98,13 @@ class _HomePageState extends State<HomePage>
     });
   }
 
+  _launchUrl() async {
+    final url = Uri.parse('https://www.youtube.com/watch?v=BkvCsbmzkU8');
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,15 +140,16 @@ class _HomePageState extends State<HomePage>
         ),
         actions: [
           GestureDetector(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                PageTransition(
-                  child: YoutubeVideoGuide(),
-                  type: PageTransitionType.rightToLeft,
-                ),
-              );
-            },
+            onTap: _launchUrl,
+            //  () {
+            //   Navigator.pushReplacement(
+            //     context,
+            //     PageTransition(
+            //       child: YoutubeVideoGuide(),
+            //       type: PageTransitionType.rightToLeft,
+            //     ),
+            //   );
+            // },
             child: Image.asset('assets/questioncircle.png'),
           ),
           Padding(

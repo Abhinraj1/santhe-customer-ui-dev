@@ -46,6 +46,7 @@ import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/api_service_controller.dart';
 import '../controllers/getx/profile_controller.dart';
@@ -220,6 +221,13 @@ class _MapMerchantState extends State<MapMerchant>
         .asUint8List();
   }
 
+  _launchUrl() async {
+    final url = Uri.parse('https://www.youtube.com/watch?v=BkvCsbmzkU8');
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -260,15 +268,16 @@ class _MapMerchantState extends State<MapMerchant>
         ),
         actions: [
           GestureDetector(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                PageTransition(
-                  child: YoutubeVideoGuide(),
-                  type: PageTransitionType.rightToLeft,
-                ),
-              );
-            },
+            onTap: _launchUrl,
+            // () {
+            //   Navigator.pushReplacement(
+            //     context,
+            //     PageTransition(
+            //       child: const YoutubeVideoGuide(),
+            //       type: PageTransitionType.rightToLeft,
+            //     ),
+            //   );
+            // },
             child: Image.asset(
               'assets/questioncircle.png',
               height: 18,

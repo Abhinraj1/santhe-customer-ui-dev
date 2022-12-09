@@ -38,8 +38,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
   final profileController = Get.find<ProfileController>();
-  int userPhoneNumber =
-      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  int userPhoneNumber = int.parse(
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
+      AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+          AppHelpers().getPhoneNumber));
   late final CustomerModel? currentUser;
   late final TextEditingController _userNameController;
   late final TextEditingController _userEmailController;

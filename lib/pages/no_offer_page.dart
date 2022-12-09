@@ -23,8 +23,13 @@ class NoOfferPage extends StatelessWidget {
   final apiController = Get.find<APIs>();
 
   final AllListController _allListController = Get.find<AllListController>();
+  final formattedPhoneNumber = AppHelpers()
+      .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
 
-  final int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  final int custId = int.parse(
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
+      AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+          AppHelpers().getPhoneNumber));
 
   @override
   Widget build(BuildContext context) {

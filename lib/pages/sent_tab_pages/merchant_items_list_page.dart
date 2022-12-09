@@ -11,6 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/offer/santhe_offer_item_model.dart';
 import 'package:santhe/pages/chat/chat_screen.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -45,7 +46,7 @@ class MerchantItemsListPage extends StatefulWidget {
 }
 
 class _MerchantItemsListPageState extends State<MerchantItemsListPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, LogMixin {
   MerchantOfferResponse? merchantOfferResponse;
   List<CustomerOfferResponse>? customerOfferResponse;
   late MerchantDetailsResponse merchantDetails;
@@ -240,7 +241,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
                                           ),
                                           //phone number
                                           Text(
-                                            '+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
+                                            '+${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: AppColors().brandDark,
@@ -306,122 +307,118 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
                         width: screenSize.width,
                         child: Stack(
                           children: [
-                            if (isDone() && !widget.archived)
-                              if (isDone() && widget.archived)
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  color: AppColors().white100,
-                                  width: screenSize.width,
-                                  height: screenSize.width / 3 - 40.sp,
-                                  alignment: Alignment.center,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 20.w,
-                                      ),
-                                      Image.asset(
-                                        'assets/offers/store_icon.png',
-                                        height: 60.h,
-                                        width: 60.w,
-                                      ),
-                                      SizedBox(
-                                        width: 15.w,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            if (widget.archived)
-                                              SizedBox(
-                                                height: 15.sp,
-                                              ),
-                                            Text(
-                                              'Some Random Store',
+                            //  if (isDone() && !widget.archived)
+                            if (isDone() && widget.archived)
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                color: AppColors().white100,
+                                width: screenSize.width,
+                                height: screenSize.width / 3 - 40.sp,
+                                alignment: Alignment.center,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                    Image.asset(
+                                      'assets/offers/store_icon.png',
+                                      height: 60.h,
+                                      width: 60.w,
+                                    ),
+                                    SizedBox(
+                                      width: 15.w,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if (widget.archived)
+                                            SizedBox(
+                                              height: 15.sp,
+                                            ),
+                                          Text(
+                                            'Some Random Store',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: widget.archived
+                                                  ? 20.sp
+                                                  : 24.sp,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10.sp,
+                                          ),
+                                          SizedBox(
+                                            width: 240.w,
+                                            child: Text(
+                                              'Addres: value lorem Ipsum, casa blanka lorett caster monte lorgeti 000000',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: widget.archived
-                                                    ? 20.sp
-                                                    : 24.sp,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14.sp,
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 10.sp,
-                                            ),
-                                            SizedBox(
-                                              width: 240.w,
-                                              child: Text(
-                                                'Addres: value lorem Ipsum, casa blanka lorett caster monte lorgeti 000000',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 14.sp,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10.sp,
-                                            ),
-                                            //contact number
-                                            Row(
-                                              children: [
-                                                //phone icon
-                                                GestureDetector(
-                                                  onTap: () => launchUrl(
-                                                      Uri.parse('tel://')),
-                                                  child: CircleAvatar(
-                                                    radius: 15.sp,
-                                                    backgroundColor:
-                                                        AppColors().brandDark,
-                                                    child: Icon(
-                                                      Icons.phone,
-                                                      color:
-                                                          AppColors().white100,
-                                                      size: 16.sp,
-                                                    ),
+                                          ),
+                                          SizedBox(
+                                            height: 10.sp,
+                                          ),
+                                          //contact number
+                                          Row(
+                                            children: [
+                                              //phone icon
+                                              GestureDetector(
+                                                onTap: () => launchUrl(
+                                                    Uri.parse('tel://')),
+                                                child: CircleAvatar(
+                                                  radius: 15.sp,
+                                                  backgroundColor:
+                                                      AppColors().brandDark,
+                                                  child: Icon(
+                                                    Icons.phone,
+                                                    color: AppColors().white100,
+                                                    size: 16.sp,
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  width: 10.sp,
-                                                ),
-                                                //phone number
-                                                Text(
-                                                  '+91-9999999999',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color:
-                                                          AppColors().brandDark,
-                                                      fontSize: 16.sp),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 15.h,
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 23.sp,
-                                                  vertical: 5.sp),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              10.sp)),
-                                                  color: AppColors().brandDark),
-                                              child: Text(
-                                                "Chat",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16.sp),
                                               ),
+                                              SizedBox(
+                                                width: 10.sp,
+                                              ),
+                                              //phone number
+                                              Text(
+                                                '+91-9999999999',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        AppColors().brandDark,
+                                                    fontSize: 16.sp),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 15.h,
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 23.sp,
+                                                vertical: 5.sp),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.sp)),
+                                                color: AppColors().brandDark),
+                                            child: Text(
+                                              "Chat",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16.sp),
                                             ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 ),
+                              ),
                             if (widget.archived)
                               Center(
                                 child: ClipRect(

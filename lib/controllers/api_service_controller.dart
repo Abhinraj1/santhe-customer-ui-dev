@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:algolia/algolia.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/error/exceptions.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/merchant_details_response.dart';
 import 'package:santhe/models/offer/customer_offer_response.dart';
 import 'package:santhe/models/offer/merchant_offer_response.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
-import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/santhe_user_list_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/error_pages/server_error_page.dart';
@@ -33,7 +32,7 @@ enum REST {
   patch,
 }
 
-class APIs extends GetxController {
+class APIs extends GetxController with LogMixin {
   //Items & Category
   // var categoriesDB = <Category>[].obs;
   // var itemsDB = <Item>[].obs;
@@ -1177,11 +1176,11 @@ class APIs extends GetxController {
   }
 
   Future<void> updateDeviceToken(String userId) async {
-    print(userId);
+    log('userId being passed for device token$userId');
     final String token = await AppHelpers().getToken;
     String uid = await AppHelpers().getDeviceId();
-    print('uid' + uid);
-    print('token' + token);
+    log('uid + $uid');
+    log('token + $token');
     final header = {
       "authorization": 'Bearer ${await AppHelpers().authToken}',
       'Content-Type': 'application/json'
@@ -1190,10 +1189,8 @@ class APIs extends GetxController {
         http.Request('PUT', Uri.parse(AppUrl.UPDATE_DEVICE_TOKEN(userId)));
     request.body = json.encode({"deviceToken": token, "deviceId": uid});
     request.headers.addAll(header);
-    print(request.body);
-
+    warningLog('request body ${request.body}');
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       log('here done up');
       log((await response.stream.bytesToString()).toString());

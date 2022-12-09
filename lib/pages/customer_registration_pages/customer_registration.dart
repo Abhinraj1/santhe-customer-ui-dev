@@ -11,9 +11,9 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_shared_preference.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/santhe_user_model.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
-import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/onboarding_page.dart';
 
@@ -22,7 +22,6 @@ import '../../controllers/api_service_controller.dart';
 import '../../controllers/location_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
-import '../login_pages/phone_number_login_page.dart';
 import 'mapSearchScreen.dart';
 
 class UserRegistrationPage extends StatefulWidget {
@@ -35,7 +34,8 @@ class UserRegistrationPage extends StatefulWidget {
   State<UserRegistrationPage> createState() => _UserRegistrationPageState();
 }
 
-class _UserRegistrationPageState extends State<UserRegistrationPage> {
+class _UserRegistrationPageState extends State<UserRegistrationPage>
+    with LogMixin {
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   final apiController = Get.find<APIs>();
@@ -74,7 +74,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     int userPhoneNumber = widget.userPhoneNumber;
     final registrationController = Get.find<RegistrationController>();
     final profileController = Get.find<ProfileController>();
-
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -132,7 +131,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                           color: Colors.grey.shade600),
                       decoration: InputDecoration(
                         prefix: Text(
-                          '+91-',
+                          '+',
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.sp,
@@ -448,9 +447,13 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                   registrationController.address.isNotEmpty) {
                                 //final otp check
 
-                                int userPhone = int.parse(AppHelpers()
-                                    .getPhoneNumberWithoutCountryCode);
-
+                                int userPhone = int.parse(
+                                  // AppHelpers().getPhoneNumberWithoutCountryCode,
+                                  AppHelpers()
+                                      .getPhoneNumberWithoutFoundedCountryCode(
+                                          AppHelpers().getPhoneNumber),
+                                );
+                                log('$userPhone');
                                 //todo add how to reach howToReach
                                 User currentUser = User(
                                     address:
@@ -484,7 +487,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                       .then((value) => log(
                                           'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
-                                  Get.offAll(() => MapMerchant(),
+                                  Get.offAll(() => const MapMerchant(),
                                       transition: Transition.fadeIn);
                                 } else {
                                   log('error occurred');

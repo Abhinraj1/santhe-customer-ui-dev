@@ -2,23 +2,23 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/boxes_controller.dart';
-import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/hive_models/item.dart';
 import 'package:santhe/models/santhe_cache_refresh.dart';
 import 'package:santhe/models/santhe_category_model.dart';
 import 'package:santhe/models/santhe_faq_model.dart';
-import 'package:santhe/models/santhe_item_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 
-class ProfileController extends GetxController {
+class ProfileController extends GetxController with LogMixin {
   CustomerModel? customerDetails;
 
   RxBool isOperational = true.obs;
@@ -48,14 +48,29 @@ class ProfileController extends GetxController {
 
   Future<bool> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
-    final result = await apiController.getCustomerInfo(int.parse(AppHelpers().getPhoneNumberWithoutCountryCode));
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
+    final intPhoneNumber = int.parse(formattedPhoneNumber);
+    warningLog(
+        'Formatted PhoneNumber $formattedPhoneNumber and formatted int phone number $intPhoneNumber');
+    final result = await apiController.getCustomerInfo(
+      //!previous function
+      int.parse(
+        // AppHelpers().getPhoneNumberWithoutCountryCode,
+        formattedPhoneNumber,
+      ),
+    );
     return result == 0;
   }
 
   Future<void> getOperationalStatus() async {
     final apiController = Get.find<APIs>();
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     await apiController.getCheckRadius(
-      int.parse(AppHelpers().getPhoneNumberWithoutCountryCode),
+      int.parse(
+          // AppHelpers().getPhoneNumberWithoutCountryCode,
+          formattedPhoneNumber),
       customerDetails!.lat.toString(),
       customerDetails!.lng.toString(),
       customerDetails!.pinCode,

@@ -27,7 +27,10 @@ class OfferCard extends StatefulWidget {
 class _OfferCardState extends State<OfferCard> {
   final apiController = Get.find<APIs>();
 
-  final int custId = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  final int custId = int.parse(
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
+      AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+          AppHelpers().getPhoneNumber));
 
   final AllListController _allListController = Get.find();
 
@@ -98,9 +101,11 @@ class _OfferCardState extends State<OfferCard> {
               motion: const ScrollMotion(),
               children: [
                 Visibility(
-                  visible: _allListController.newList.length < _allListController.lengthLimit,
+                  visible: _allListController.newList.length <
+                      _allListController.lengthLimit,
                   child: SlidableAction(
-                    onPressed: (context) async => _allListController.addCopyListToDB(widget.userList.listId),
+                    onPressed: (context) async => _allListController
+                        .addCopyListToDB(widget.userList.listId),
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.orange,
                     autoClose: true,

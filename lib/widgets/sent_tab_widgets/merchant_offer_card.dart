@@ -301,7 +301,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard>
                                         ),
                                         //phone number
                                         Text(
-                                          '+91-${merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
+                                          '+${merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}',
                                           style: AppTheme().bold700(16,
                                               color: AppColors().brandDark),
                                         )

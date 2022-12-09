@@ -7,8 +7,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/loggers.dart';
+import 'package:santhe/models/countrymodel.dart';
 
-class AppHelpers {
+class AppHelpers with LogMixin {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   void updateName(String name) =>
@@ -17,21 +19,47 @@ class AppHelpers {
   void updateEmail(String email) =>
       _firebaseAuth.currentUser!.updateEmail(email);
 
-  static void crashlyticsLog(String error){
+  static void crashlyticsLog(String error) {
     final profileController = Get.find<ProfileController>();
     dev.log(error);
-    final message = '$error\n Caused on customer id: ${profileController.customerDetails?.phoneNumber}';
+    final message =
+        '$error\n Caused on customer id: ${profileController.customerDetails?.phoneNumber}';
     FirebaseCrashlytics.instance.log(message);
   }
 
   String get getPhoneNumber => _firebaseAuth.currentUser?.phoneNumber ?? '404';
 
-  String get getPhoneNumberWithoutCountryCode => getPhoneNumber.replaceAll('+91', '');
+  String get getPhoneNumberWithoutCountryCode =>
+      getPhoneNumber.replaceAll('+91', '');
+
+  //!country function added
+  String getPhoneNumberWithoutFoundedCountryCode(String getphoneNumber) {
+    Map<String, String> foundedCountryCode = {};
+    for (var country in Countries.allCountries) {
+      String dialCode = country["dial_code"].toString();
+      if (getPhoneNumber.contains(dialCode)) foundedCountryCode = country;
+    }
+    warningLog('founded country with code and number$foundedCountryCode');
+    if (foundedCountryCode.isNotEmpty) {
+      var dialCode = getPhoneNumber.substring(
+        0,
+        foundedCountryCode["dial_code"]!.length,
+      );
+      var formattedPhoneNumber = getPhoneNumber.substring(
+        foundedCountryCode["dial_code"]!.length,
+      );
+      warningLog(
+          'formatted PhoneNumber $formattedPhoneNumber and Formatted dialCode $dialCode');
+      return formattedPhoneNumber;
+    }
+    return getphoneNumber;
+  }
 
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';
 
-  Future<String> get authToken async => await FirebaseAuth.instance.currentUser!.getIdToken();
+  Future<String> get authToken async =>
+      await FirebaseAuth.instance.currentUser!.getIdToken();
 
   String get playStoreLink => appStoreLink;
   String get appStoreLink => '''Hi,
@@ -52,8 +80,8 @@ Get it for free at https://santhe.in''';
     // }
   }
 
-  static bool isInBetween(num compare, num a, num b){
-    if(compare>a && compare<=b){
+  static bool isInBetween(num compare, num a, num b) {
+    if (compare > a && compare <= b) {
       return true;
     }
     return false;
@@ -68,18 +96,18 @@ Get it for free at https://santhe.in''';
       } else {
         hasConnection = false;
       }
-    } on SocketException catch(_) {
+    } on SocketException catch (_) {
       hasConnection = false;
     }
     return hasConnection;
   }
 
-  static String replaceDecimalZero(String value){
+  static String replaceDecimalZero(String value) {
     final data = value.split('.');
-    if(data.length>1){
-      if(data[1]!='0'){
+    if (data.length > 1) {
+      if (data[1] != '0') {
         return value;
-      }else{
+      } else {
         return data[0];
       }
     }
@@ -95,9 +123,9 @@ class DecimalTextInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, // unused.
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue, // unused.
+    TextEditingValue newValue,
+  ) {
     TextSelection newSelection = newValue.selection;
     String truncated = newValue.text;
 

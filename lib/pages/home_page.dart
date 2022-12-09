@@ -150,7 +150,11 @@ class _HomePageState extends State<HomePage>
             //     ),
             //   );
             // },
-            child: Image.asset('assets/questioncircle.png'),
+            child: Image.asset(
+              'assets/questioncircle.png',
+              height: 18,
+              width: 40,
+              ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 4.5),

@@ -12,36 +12,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as sv;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:map_picker/map_picker.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
 import 'package:santhe/constants.dart';
-import 'package:santhe/controllers/connectivity_controller.dart';
-import 'package:santhe/controllers/error_user_fallback.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
 import 'package:santhe/controllers/home_controller.dart';
 import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/notification_controller.dart';
-import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
-import 'package:santhe/core/app_theme.dart';
-import 'package:santhe/core/app_url.dart';
-import 'package:santhe/core/error/exceptions.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/new_tab_page.dart';
-import 'package:santhe/pages/new_tab_pages/user_list_screen.dart';
-import 'package:santhe/pages/youtubevideo.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart';
 import 'package:share_plus/share_plus.dart';
@@ -78,6 +68,7 @@ class _MapMerchantState extends State<MapMerchant>
   MapPickerController mapPickerController = MapPickerController();
   Location? location;
   Set<Marker> customerMarkerIncluded = Set();
+  Set<Marker> customerMarkerExcluded = Set();
   final apiController = Get.find<APIs>();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -88,8 +79,10 @@ class _MapMerchantState extends State<MapMerchant>
   NewListType? _type = NewListType.startFromNew;
 
   NetworkCall networkcall = NetworkCall();
-
+  String mapShops =
+      'Unfortunately no Shops near you on Santhe,\n But you can create and manage list.';
   String? selectedValue;
+  bool _noShops = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -179,11 +172,26 @@ class _MapMerchantState extends State<MapMerchant>
               icon: BitmapDescriptor.fromBytes(markerIcon),
             ),
           );
+          customerMarkerExcluded.add(
+            Marker(
+              infoWindow: InfoWindow(title: element['merchName']),
+              markerId: MarkerId(
+                element['gstinNumber'],
+              ),
+              position: LatLng(
+                latitude,
+                longitude,
+              ),
+              icon: BitmapDescriptor.fromBytes(markerIcon),
+            ),
+          );
         }
         // List<Marker> markers = [];
         warningLog('$ccustomMarkers');
         final Uint8List customerIcon =
             await getBytesFromAssets('assets/customerPin.png', 150);
+        errorLog(
+            'is Empty function ? ${customerMarkerExcluded.isEmpty} is Blank function ${customerMarkerExcluded.isBlank} length ${customerMarkerExcluded.length}');
         ccustomMarkers.add(
           Marker(
             infoWindow: const InfoWindow(title: 'Your Location'),
@@ -197,14 +205,14 @@ class _MapMerchantState extends State<MapMerchant>
             icon: BitmapDescriptor.fromBytes(customerIcon),
           ),
         );
-        infoLog('$ccustomMarkers');
+        debugLog('$ccustomMarkers');
         setState(
           () {
             customMarkers = ccustomMarkers;
-
             _hasData = true;
           },
         );
+        warningLog('checking for String change$mapShops');
       } catch (e) {
         rethrow;
       }
@@ -230,6 +238,7 @@ class _MapMerchantState extends State<MapMerchant>
 
   @override
   Widget build(BuildContext context) {
+    errorLog('buildcontext${customerMarkerExcluded.isEmpty}');
     super.build(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -381,20 +390,22 @@ class _MapMerchantState extends State<MapMerchant>
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: Center(
-                          child: ccustomMarkers.isEmpty
+                          child: customerMarkerExcluded.isEmpty
                               ? const Text(
-                                  'Unfortunately Shops near you are not yet\nregistered on Santhe. But, you can still\ncreate and manage a grocery list.',
+                                  'Unfortunately no Shops near you on Santhe,\n But you can create and manage list.',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 18,
+                                    fontSize: 14,
                                   ),
                                   textAlign: TextAlign.center,
                                 )
-                              : const Text(
-                                  'Grocery store near you on santhe \n Create a grocery list and Send it shops',
+                              :
+                              // child:
+                              const Text(
+                                  'Grocery stores near you are on santhe \n Create list >> Send to shops >> Get great deal',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 18,
+                                    fontSize: 14,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -402,7 +413,7 @@ class _MapMerchantState extends State<MapMerchant>
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             )
           : Center(

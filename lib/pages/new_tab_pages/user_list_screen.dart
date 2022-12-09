@@ -71,8 +71,8 @@ class _UserListScreenState extends State<UserListScreen> {
           onPressed: () async {
             saveList();
             _homeController.homeTabController.animateTo(0);
-            Get.to(HomePage(pageIndex: 0, showMap: false),
-                transition: Transition.leftToRight);
+            //! Nav change
+            Get.back();
           },
         ),
         title: Obx(() => _allListController.isTitleEditable.value

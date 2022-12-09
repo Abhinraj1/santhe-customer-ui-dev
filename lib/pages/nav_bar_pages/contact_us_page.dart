@@ -24,8 +24,12 @@ class ContactUsPage extends StatefulWidget {
 
 class _ContactUsPageState extends State<ContactUsPage> {
   final _formKey = GlobalKey<FormState>();
-
-  int userPhoneNumber = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  final formattedPhoneNumber = AppHelpers()
+      .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
+  int userPhoneNumber = int.parse(
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
+      AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+          AppHelpers().getPhoneNumber));
 
   final profileController = Get.find<ProfileController>();
 
@@ -39,8 +43,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
     currentUser = profileController.customerDetails ?? fallback_error_customer;
     _userNameController =
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
-    _userEmailController =
-        TextEditingController(text: currentUser?.emailId ?? 'johndoe@gmail.com');
+    _userEmailController = TextEditingController(
+        text: currentUser?.emailId ?? 'johndoe@gmail.com');
     super.initState();
   }
 
@@ -93,7 +97,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
           //     ),
           //   ),
           // ),
-         /* Padding(
+          /* Padding(
             padding: EdgeInsets.only(
               top: 24.sp,
               left: 24.sp,
@@ -464,7 +468,8 @@ OR, Simply fill in the below form:
                             int response = await apiController.contactUs(
                                 userPhoneNumber,
                                 _messageController.text,
-                               double.parse(profileController.customerDetails!.customerRatings));
+                                double.parse(profileController
+                                    .customerDetails!.customerRatings));
 
                             //checking for API call's success | 1 = success
                             if (response == 1) {

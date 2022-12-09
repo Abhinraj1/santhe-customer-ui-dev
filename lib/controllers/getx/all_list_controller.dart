@@ -43,9 +43,11 @@ class AllListController extends GetxController with LogMixin {
     var val = await NetworkCall().getAllCustomerLists();
     for (var element in _toUserListModel(val)) {
       allListMap[element.listId] = element;
+
+      // warningLog('checking for allList $element');
     }
     isLoading = false;
-    warningLog('checking for  $isLoading');
+
     update(['newList', 'fab', 'archivedList', 'sentList']);
   }
 
@@ -104,11 +106,16 @@ class AllListController extends GetxController with LogMixin {
 
   Future<void> addNewListToDB(String name) async {
     isProcessing.value = true;
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     UserListModel newUserList = UserListModel(
       createListTime: DateTime.now(),
-      custId: AppHelpers().getPhoneNumberWithoutCountryCode,
+      custId: formattedPhoneNumber,
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
       items: [],
-      listId: AppHelpers().getPhoneNumberWithoutCountryCode +
+      listId: formattedPhoneNumber
+          // AppHelpers().getPhoneNumberWithoutCountryCode
+          +
           (allList.length + 1).toString(),
       listName: name,
       processStatus: 'draft',
@@ -118,8 +125,12 @@ class AllListController extends GetxController with LogMixin {
       custOfferWaitTime: DateTime.now(),
       listUpdateTime: DateTime.now(),
     );
+    // warningLog(
+    //     'userModel $newUserList checking allListlength ${allList.length}');
+
     int response = await NetworkCall().addNewList(newUserList);
     isProcessing.value = false;
+    // warningLog('response of the network call to add list $response');
     if (response == 1) {
       allListMap[newUserList.listId] = newUserList;
       update(['newList', 'fab']);
@@ -132,8 +143,12 @@ class AllListController extends GetxController with LogMixin {
 
   Future<void> addCopyListToDB(String listId,
       {bool moveToArchived = false}) async {
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     isProcessing.value = true;
-    String copyListId = AppHelpers().getPhoneNumberWithoutCountryCode +
+    String copyListId = formattedPhoneNumber
+        //  AppHelpers().getPhoneNumberWithoutCountryCode
+        +
         (allList.length + 1).toString();
     UserListModel copyUserList = _copyModel(
         allList.where((element) => element.listId == listId).toList().first,
@@ -235,8 +250,13 @@ class AllListController extends GetxController with LogMixin {
 
   Future<bool> isListAlreadyExist(String listName) async {
     final APIs api = Get.find();
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     return await api.duplicateCheck(
-        int.parse(AppHelpers().getPhoneNumberWithoutCountryCode),
+        int.parse(
+          // AppHelpers().getPhoneNumberWithoutCountryCode,
+          formattedPhoneNumber,
+        ),
         listName.trim());
   }
 

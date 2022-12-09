@@ -57,7 +57,10 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
   late final List<String> units;
   final placeHolderIdentifier = 'H+MbQeThWmYq3t6w';
   final apiController = Get.find<APIs>();
-  int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  int custPhone = int.parse(
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
+      AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+          AppHelpers().getPhoneNumber));
 
   String removeDecimalZeroFormat(double n) {
     final data = n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);

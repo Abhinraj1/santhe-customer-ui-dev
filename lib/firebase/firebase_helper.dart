@@ -40,8 +40,12 @@ class FirebaseHelper {
     );
 
     FirebaseStorage storage = FirebaseStorage.instance;
-
-    int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
+    int custPhone = int.parse(
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
+      formattedPhoneNumber,
+    );
     try {
       File file;
       if (image != null) {
@@ -66,10 +70,10 @@ class FirebaseHelper {
             '${event.bytesTransferred.toDouble() / event.totalBytes.toDouble()}';
       });
 
-
       final snapshot = await uploadTask.whenComplete(() => null);
       var urlDownloadWToken = await snapshot.ref.getDownloadURL();
-      var urlDownload = urlDownloadWToken.replaceAll(RegExp(r'&token=[^\]]*$'), '');
+      var urlDownload =
+          urlDownloadWToken.replaceAll(RegExp(r'&token=[^\]]*$'), '');
       file.delete();
       if (addNewItem) {
         imageController.addItemCustomImageUrl.value = urlDownload;

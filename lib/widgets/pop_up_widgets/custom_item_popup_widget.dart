@@ -62,7 +62,10 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
   TextStyle kLabelTextStyle = const TextStyle(
       color: Colors.orange, fontWeight: FontWeight.w500, fontSize: 15);
 
-  int custPhone = int.parse(AppHelpers().getPhoneNumberWithoutCountryCode);
+  int custPhone = int.parse(
+      // AppHelpers().getPhoneNumberWithoutCountryCode,
+      AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+          AppHelpers().getPhoneNumber));
 
   bool isProcessing = false;
 

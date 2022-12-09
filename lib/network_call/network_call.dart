@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/santhe_faq_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -18,10 +19,12 @@ import 'package:http/http.dart' as http;
 
 enum REST { get, post, put, delete, patch }
 
-class NetworkCall {
+class NetworkCall with LogMixin {
   final profileController = Get.find<ProfileController>();
 
   Future<List<NewListResponseModel>> getAllCustomerLists() async {
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     var body = {
       "structuredQuery": {
         "from": [
@@ -39,7 +42,11 @@ class NetworkCall {
                   "op": "EQUAL",
                   "value": {
                     "referenceValue":
-                        "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+                        // ! appHelper().getPhoneNumberWithOutContryCode was used here
+                        // ignore: unnecessary_brace_in_string_interps
+                        "projects/${AppUrl.envType}/databases/(default)/documents/customer/${
+                        // AppHelpers().getPhoneNumberWithoutCountryCode
+                        formattedPhoneNumber}"
                   }
                 }
               }
@@ -69,6 +76,8 @@ class NetworkCall {
   Future<int> addNewList(UserListModel userList) async {
     List items = [];
     int i = 0;
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     for (ListItemModel item in userList.items) {
       items.add({
         "mapValue": {
@@ -106,7 +115,10 @@ class NetworkCall {
         "custListStatus": {"stringValue": 'new'},
         "custId": {
           "referenceValue":
-              "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+              // ignore: unnecessary_brace_in_string_interps
+              "projects/${AppUrl.envType}/databases/(default)/documents/customer/${
+              // AppHelpers().getPhoneNumberWithoutCountryCode
+              formattedPhoneNumber}"
         },
         "custListSentTime": {
           "timestampValue":
@@ -128,14 +140,17 @@ class NetworkCall {
         "listName": {"stringValue": userList.listName}
       }
     };
-
+    warningLog('checking for the list Id ${userList.listId}');
+    //! response causing issues mostly due to userlist.ListId
     var response = await callApi(
         mode: REST.post,
         url: Uri.parse(AppUrl.ADD_LIST(userList.listId)),
         body: jsonEncode(body));
+    warningLog(
+        'checking the response body ${response.body} and statusCode ${response.statusCode}');
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data.toString());
+      warningLog(data.toString());
       return 1;
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
@@ -185,11 +200,20 @@ class NetworkCall {
   }
 
   Future<CustomerModel> getCustomerDetails() async {
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     var response = await callApi(
-        mode: REST.get,
-        url: Uri.parse(AppUrl.GET_CUSTOMER_DETAILS(
-            AppHelpers().getPhoneNumberWithoutCountryCode)));
+      mode: REST.get,
+      url: Uri.parse(
+        AppUrl.GET_CUSTOMER_DETAILS(formattedPhoneNumber
+            // AppHelpers().getPhoneNumberWithoutCountryCode,
+            ),
+      ),
+    );
+
+    warningLog(' the phone number without country code $formattedPhoneNumber');
     var jsonResponse = jsonDecode(response.body);
+    warningLog(' response $jsonResponse');
     if (jsonResponse != null && response.statusCode == 200) {
       return CustomerModel.fromJson(jsonResponse['fields']);
     } else {
@@ -221,7 +245,8 @@ class NetworkCall {
       {String? status, String? processStatus, bool success = false}) async {
     List items = [];
     int i = 0;
-
+    final formattedPhoneNumber = AppHelpers()
+        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     for (ListItemModel item in userList.items) {
       items.add({
         "mapValue": {
@@ -271,7 +296,10 @@ class NetworkCall {
         "custListStatus": {"stringValue": status ?? "sent"},
         "custId": {
           "referenceValue":
-              "projects/${AppUrl.envType}/databases/(default)/documents/customer/${AppHelpers().getPhoneNumberWithoutCountryCode}"
+              // ignore: unnecessary_brace_in_string_interps
+              "projects/${AppUrl.envType}/databases/(default)/documents/customer/${
+              // AppHelpers().getPhoneNumberWithoutCountryCode
+              formattedPhoneNumber}"
         },
         "listOfferCounter": {"integerValue": "0"},
         "listName": {"stringValue": userList.listName},

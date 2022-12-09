@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/map_merch.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -24,7 +25,7 @@ class OtpScreen extends StatefulWidget {
   _OtpScreenState createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends State<OtpScreen> with LogMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   int start = 60;
   bool wait = false;
@@ -57,7 +58,8 @@ class _OtpScreenState extends State<OtpScreen> {
         border: Border.all(color: Colors.grey),
       ),
     );
-
+    debugLog(
+        'Checking for intial phone number being sent ${widget.phoneNumber}');
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
@@ -205,9 +207,10 @@ class _OtpScreenState extends State<OtpScreen> {
                         maxLines: 4,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15.sp,
-                            color: Colors.orange),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15.sp,
+                          color: Colors.orange,
+                        ),
                       ),
                     ),
                   )
@@ -251,6 +254,8 @@ class _OtpScreenState extends State<OtpScreen> {
   //automatic verification and start verification
   Future<void> verifyPhoneNumber(String phoneNumber, Function setData) async {
     try {
+      debugLog(
+          'Checking for phonnumber in VerifyPHoneNumber function $phoneNumber');
       await _auth.verifyPhoneNumber(
           //after this you can't enter the code
           timeout: const Duration(seconds: 50),
@@ -303,7 +308,8 @@ class _OtpScreenState extends State<OtpScreen> {
     int userPhone = int.parse(widget.phoneNumber);
     final profileController = Get.find<ProfileController>();
     await profileController.generateUrlToken();
-
+    warningLog(
+        'Checking for phone Number being passed in the next steps $userPhone');
     if (await profileController.getCustomerDetailsInit()) {
       Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone),
           transition: Transition.fadeIn);

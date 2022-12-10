@@ -224,7 +224,7 @@ class _MerchantItemsListPageState extends State<MerchantItemsListPage>
                                           //phone icon
                                           GestureDetector(
                                             onTap: () => launchUrl(Uri.parse(
-                                                'tel:+91-${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
+                                                'tel:${widget.merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
                                             child: CircleAvatar(
                                               radius: 15.sp,
                                               backgroundColor:

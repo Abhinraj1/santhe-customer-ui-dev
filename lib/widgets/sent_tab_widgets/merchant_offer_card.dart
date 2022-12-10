@@ -279,7 +279,7 @@ class _MerchantOfferCardState extends State<MerchantOfferCard>
                                         //phone icon
                                         GestureDetector(
                                           onTap: () => launchUrl(Uri.parse(
-                                              'tel:+91-${merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
+                                              'tel:${merchantResponse!.fields.contact.mapValue.fields.phoneNumber.integerValue}')),
                                           child: Container(
                                             height: 24.h,
                                             width: 24.h,

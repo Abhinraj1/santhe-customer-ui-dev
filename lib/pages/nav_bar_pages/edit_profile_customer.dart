@@ -113,12 +113,15 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
             size: 13.sp,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MapMerchant(),
-              ),
-            );
+            Get.back();
+            // Get.to(() => const MapMerchant(),
+            //     transition: Transition.leftToRight);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const MapMerchant(),
+            //   ),
+            // );
           },
         ),
         title: Text(
@@ -241,7 +244,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             color: AppColors().brandDark),
                                       ),
                                       hintText:
-                                          '+91-${currentUser?.customerId ?? '91-9876543210'}',
+                                          '${currentUser?.customerId ?? '91-9876543210'}',
                                       hintStyle: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 1.0,
@@ -577,8 +580,12 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                       .customerDetails ??
                                                   fallback_error_customer;
 
-                                          int userPhone = int.parse(AppHelpers()
-                                              .getPhoneNumberWithoutCountryCode);
+                                          int userPhone = int.parse(
+                                            AppHelpers()
+                                                .getPhoneNumberWithoutFoundedCountryCode(
+                                                    AppHelpers()
+                                                        .getPhoneNumber),
+                                          );
 
                                           if (userPhone == 404) {
                                             Get.off(() => const LoginScreen());
@@ -620,13 +627,17 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
 
                                             await profileController
                                                 .getOperationalStatus();
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const MapMerchant(),
-                                              ),
-                                            );
+                                            Get.offAll(
+                                                () => const MapMerchant(),
+                                                transition:
+                                                    Transition.leftToRight);
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         const MapMerchant(),
+                                            //   ),
+                                            // );
                                           } else {
                                             errorMsg('Connectivity Error',
                                                 'Some connectivity error has occurred, please try again later!');

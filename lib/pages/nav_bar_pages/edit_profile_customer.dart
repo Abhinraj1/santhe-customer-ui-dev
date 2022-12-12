@@ -566,7 +566,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                       color: Colors.orange,
                                       onPressed: () async {
                                         print(registrationController.lat.value);
-
                                         print(registrationController.lng.value);
                                         setState(() {
                                           donePressed = true;

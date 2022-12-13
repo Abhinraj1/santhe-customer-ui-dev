@@ -26,6 +26,7 @@ import 'package:santhe/controllers/location_controller.dart';
 import 'package:santhe/controllers/notification_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
@@ -142,7 +143,8 @@ class _MapMerchantState extends State<MapMerchant>
       final header = {"authorization": 'Bearer $token'};
       log(header.toString());
       final url = Uri.parse(
-          'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/customer/nearby/merchants?lat=$customerLat&lng=$customerLong');
+        AppUrl.GET_MERCHANTS(customerModel!.lat, customerModel!.lng),
+      );
       try {
         final response = await http.get(url, headers: header);
 

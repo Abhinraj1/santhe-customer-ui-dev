@@ -108,6 +108,9 @@ class AppUrl {
   static String UPDATE_DEVICE_TOKEN(String userId) =>
       '$_baseCloudFunctions/customers/$userId/deviceToken';
 
+  static String GET_MERCHANTS(String customerLat, String customerLong) =>
+      '$_baseCloudFunctions/app/customer/nearby/merchants?lat=$customerLat&lng=$customerLong';
+
   static String ACCEPT_OFFER(String listId, String listEventId) =>
       '$_baseCloudFunctions/offers/$listId/$listEventId/accept';
 }

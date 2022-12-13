@@ -142,10 +142,11 @@ class _MapMerchantState extends State<MapMerchant>
       final header = {"authorization": 'Bearer $token'};
       log(header.toString());
       final url = Uri.parse(
-          'https://us-central1-santhe-425a8.cloudfunctions.net/apis/santhe/v1/app/customer/nearby/merchants?lat=$customerLat&lng=$customerLong');
+          //prod version url
+          'https://us-central1-santhe-prod.cloudfunctions.net/apis/santhe/v1/app/customer/nearby/merchants?lat=$customerLat&lng=$customerLong');
       try {
         final response = await http.get(url, headers: header);
-
+        warningLog('${response.statusCode}');
         final responseBody =
             json.decode(response.body)['data'] as List<dynamic>;
         warningLog('$responseBody');

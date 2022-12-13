@@ -39,7 +39,7 @@ class AppHelpers with LogMixin {
       String dialCode = country["dial_code"].toString();
       if (getPhoneNumber.contains(dialCode)) foundedCountryCode = country;
     }
-    warningLog('founded country with code and number$foundedCountryCode');
+    // warningLog('founded country with code and number$foundedCountryCode');
     if (foundedCountryCode.isNotEmpty) {
       var dialCode = getPhoneNumber.substring(
         0,
@@ -48,8 +48,8 @@ class AppHelpers with LogMixin {
       var formattedPhoneNumber = getPhoneNumber.substring(
         foundedCountryCode["dial_code"]!.length,
       );
-      warningLog(
-          'formatted PhoneNumber $formattedPhoneNumber and Formatted dialCode $dialCode');
+      // warningLog(
+      //     'formatted PhoneNumber $formattedPhoneNumber and Formatted dialCode $dialCode');
       return formattedPhoneNumber;
     }
     return getphoneNumber;

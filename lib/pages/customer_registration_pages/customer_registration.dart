@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -453,7 +454,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                                       .getPhoneNumberWithoutFoundedCountryCode(
                                           AppHelpers().getPhoneNumber),
                                 );
-                                log('$userPhone');
+                                //! CustId change
+                                // String? custIdChange = fb
+                                //     .FirebaseAuth.instance.currentUser?.uid
+                                //     .substring(0, 10);
+                                // int finalCustId = int.parse(custIdChange!);
+                                log('PhoneNumber without country code $userPhone');
                                 //todo add how to reach howToReach
                                 User currentUser = User(
                                     address:

@@ -38,14 +38,13 @@ import 'sent_tab_pages/sent_tab_page.dart';
 class HomePage extends StatefulWidget {
   final int pageIndex;
   bool showMap;
-
-  bool? showSomeMap;
+  bool? cameFromHomeScreen;
 
   HomePage({
     Key? key,
     required this.pageIndex,
     required this.showMap,
-    this.showSomeMap,
+    this.cameFromHomeScreen,
   }) : super(key: key);
 
   @override
@@ -93,9 +92,6 @@ class _HomePageState extends State<HomePage>
         _connectivityController.listenConnectivity(result));*/
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
-    setState(() {
-      _showMapOnStart = true;
-    });
   }
 
   _launchUrl() async {
@@ -154,7 +150,7 @@ class _HomePageState extends State<HomePage>
               'assets/questioncircle.png',
               height: 18,
               width: 40,
-              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 4.5),
@@ -233,13 +229,16 @@ class _HomePageState extends State<HomePage>
             child: GestureDetector(
               onTap: () {
                 log('Tapped on floating action button');
-                // Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MapMerchant(),
-                  ),
-                );
+                widget.cameFromHomeScreen == true
+                    ? Navigator.pop(context)
+                    :
+                    // Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MapMerchant(),
+                        ),
+                      );
               },
               child: Image.asset(
                 'assets/map_dialog.png',

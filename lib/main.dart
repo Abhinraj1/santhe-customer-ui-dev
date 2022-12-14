@@ -4,7 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'dart:developer' as dev;
 import 'package:resize/resize.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_colors.dart';
@@ -24,12 +26,16 @@ void main() async {
     () async {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
-
       runApp(const MyApp());
     },
     (error, stack) =>
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(const MyApp());
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: AppColors().brandDark,
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -52,7 +58,7 @@ class MyApp extends StatelessWidget {
                   selectionHandleColor: Colors.transparent,
                 ),
               ),
-          home: const SplashToHome()),
+          home: const SplashToHome(),),
       allowtextScaling: false,
       size: const Size(390, 844),
     );

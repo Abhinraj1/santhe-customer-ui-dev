@@ -100,10 +100,9 @@ class _MapMerchantState extends State<MapMerchant>
     super.initState();
     // getLocation();
     // setInitialLocation();
+    _allListController.isLoading = true;
     _init();
     getListOfShopsAroundRadius();
-    _allListController.getAllList();
-    mapPickerController.mapFinishedMoving;
   }
 
   Future<void> _init() async {
@@ -241,7 +240,8 @@ class _MapMerchantState extends State<MapMerchant>
 
   @override
   Widget build(BuildContext context) {
-    errorLog('buildcontext${customerMarkerExcluded.isEmpty}');
+    errorLog(
+        'buildcontext${customerMarkerExcluded.isEmpty} checking for condition${_allListController.newList.length} for isloading ${_allListController.isLoading}');
     super.build(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -321,103 +321,107 @@ class _MapMerchantState extends State<MapMerchant>
         ],
       ),
       body: _hasData
-          ? Stack(
-              children: [
-                GoogleMap(
-                  myLocationEnabled: false,
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
-                  zoomGesturesEnabled: false,
-                  tiltGesturesEnabled: false,
-                  compassEnabled: false,
-                  scrollGesturesEnabled: false,
-                  rotateGesturesEnabled: false,
-                  markers: customMarkers,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(customerLat!, customerLong!),
-                    zoom: 13.5,
+          ? RefreshIndicator(
+              onRefresh: () => _allListController.getAllList(),
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    myLocationEnabled: false,
+                    myLocationButtonEnabled: false,
+                    zoomControlsEnabled: false,
+                    zoomGesturesEnabled: false,
+                    tiltGesturesEnabled: false,
+                    compassEnabled: false,
+                    scrollGesturesEnabled: false,
+                    rotateGesturesEnabled: false,
+                    markers: customMarkers,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(customerLat!, customerLong!),
+                      zoom: 13.5,
+                    ),
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                      warningLog('${mapPickerController.mapFinishedMoving}');
+                      mapPickerController.mapFinishedMoving;
+                    },
                   ),
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                    warningLog('${mapPickerController.mapFinishedMoving}');
-                    mapPickerController.mapFinishedMoving;
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        log('Tapped on floating action button');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(
-                              showMap: false,
-                              pageIndex: 0,
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: GestureDetector(
+                        onTap: () {
+                          log('Tapped on floating action button');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                showMap: false,
+                                pageIndex: 0,
+                                cameFromHomeScreen: true,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: Constant.bgColor,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'My Lists',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
                       child: Container(
-                        height: 40,
-                        width: 100,
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          color: Constant.bgColor,
+                          color: const Color.fromRGBO(255, 190, 116, 1),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'My Lists',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Center(
+                            child: customerMarkerExcluded.isEmpty
+                                ? const Text(
+                                    'Unfortunately no Shops near you on Santhe,\n But you can create and manage list.',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  )
+                                :
+                                // child:
+                                const Text(
+                                    'Grocery stores near you are on santhe \n Create list >> Send to shops >> Get great deal',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(255, 190, 116, 1),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Center(
-                          child: customerMarkerExcluded.isEmpty
-                              ? const Text(
-                                  'Unfortunately no Shops near you on Santhe,\n But you can create and manage list.',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )
-                              :
-                              // child:
-                              const Text(
-                                  'Grocery stores near you are on santhe \n Create list >> Send to shops >> Get great deal',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             )
           : Center(
               child: CircularProgressIndicator(
@@ -426,26 +430,27 @@ class _MapMerchantState extends State<MapMerchant>
       floatingActionButton: GetBuilder(
         init: _allListController,
         id: 'fab1',
-        builder: (ctr) => _allListController.newList.length >=
-                    _allListController.lengthLimit ||
-                _allListController.isLoading
-            ? const SizedBox()
-            : FloatingActionButton(
-                heroTag: "btn10",
-                elevation: 0.0,
-                onPressed: () => showModalBottomSheet<void>(
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    barrierColor: const Color.fromARGB(165, 241, 241, 241),
-                    isScrollControlled: true,
-                    builder: (ctx) => _bottomSheet(ctx)),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 22.5.sp,
-                  semanticLabel: 'Click here to create a new order!',
-                ),
-              ),
+        builder: (ctr) =>
+            _allListController.newList.length >= _allListController.lengthLimit
+                //     ||
+                // _allListController.isLoading
+                ? const SizedBox()
+                : FloatingActionButton(
+                    heroTag: "btn10",
+                    elevation: 0.0,
+                    onPressed: () => showModalBottomSheet<void>(
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        barrierColor: const Color.fromARGB(165, 241, 241, 241),
+                        isScrollControlled: true,
+                        builder: (ctx) => _bottomSheet(ctx)),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 22.5.sp,
+                      semanticLabel: 'Click here to create a new order!',
+                    ),
+                  ),
       ),
     );
   }

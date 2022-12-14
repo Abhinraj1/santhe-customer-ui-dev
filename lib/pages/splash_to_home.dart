@@ -4,6 +4,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:santhe/core/app_helpers.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/map_merch.dart';
 import '../controllers/connectivity_controller.dart';
 import '../controllers/notification_controller.dart';
@@ -20,7 +22,7 @@ class SplashToHome extends StatefulWidget {
   State<SplashToHome> createState() => _SplashToHomeState();
 }
 
-class _SplashToHomeState extends State<SplashToHome> {
+class _SplashToHomeState extends State<SplashToHome> with LogMixin {
   Future<void> bootHome() async {
     await AppInitialisations().initialiseApplication();
     await Notifications().fcmInit();
@@ -34,6 +36,8 @@ class _SplashToHomeState extends State<SplashToHome> {
   }
 
   Widget getLandingScreen() {
+    _intialiseToken();
+    AppHelpers().generateToken();
     final NotificationController notificationController = Get.find();
     if (notificationController.fromNotification) {
       //_notificationController.fromNotification = false;
@@ -56,7 +60,13 @@ class _SplashToHomeState extends State<SplashToHome> {
         );
       }
     }
+    // warningLog(
+    //     'device token on start up being generated ${AppHelpers.newBearerToken}');
     return const MapMerchant();
+  }
+
+  _intialiseToken() async {
+    await AppHelpers.bearerToken;
   }
 
   @override

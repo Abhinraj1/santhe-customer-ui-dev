@@ -109,7 +109,8 @@ class _HomePageState extends State<HomePage>
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {
-            //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode);
+            //!something to add
+            //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode) ;
             /*log(await AppHelpers().getToken);
             sendNotification('tesst');*/
             _key.currentState!.openDrawer();

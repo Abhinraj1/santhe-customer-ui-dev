@@ -91,15 +91,15 @@ Get it for free at https://santhe.in''';
 
   Future<String> getDeviceId() async {
     //! changed token
-    // return FirebaseAuth.instance.currentUser!.uid;
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.toMap()['id'];
-    } else {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.toMap()['identifierForVendor'];
-    }
+    return FirebaseAuth.instance.currentUser!.uid;
+    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    // if (Platform.isAndroid) {
+    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    //   return androidInfo.toMap()['id'];
+    // } else {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   return iosInfo.toMap()['identifierForVendor'];
+    // }
   }
 
   static bool isInBetween(num compare, num a, num b) {

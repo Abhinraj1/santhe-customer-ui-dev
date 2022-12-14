@@ -69,8 +69,9 @@ class ProfileController extends GetxController with LogMixin {
         .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     await apiController.getCheckRadius(
       int.parse(
-          // AppHelpers().getPhoneNumberWithoutCountryCode,
-          formattedPhoneNumber),
+        AppHelpers().getPhoneNumberWithoutCountryCode,
+        // formattedPhoneNumber,
+      ),
       customerDetails!.lat.toString(),
       customerDetails!.lng.toString(),
       customerDetails!.pinCode,

@@ -120,6 +120,7 @@ class _MapMerchantState extends State<MapMerchant>
     _allListController.checkSubPlan();
     /*Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
         _connectivityController.listenConnectivity(result));*/
+    APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber),);
     apiController.searchedItemResult('potato');
     _notificationController.fromNotification = false;
   }

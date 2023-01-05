@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:developer' as dev;
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -58,6 +59,26 @@ class AppHelpers with LogMixin {
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';
 
+  static Future<String> get bearerToken async {
+    try {
+      newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+      dev.log('token $newBearerToken', name: 'AppHelper.dart');
+      return newBearerToken;
+    } catch (e) {
+      dev.log(
+        e.toString(),
+      );
+      return '';
+    }
+  }
+
+  static late String newBearerToken;
+
+  Future<void> generateToken() async {
+    newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+    // warningLog(newBearerToken);
+  }
+
   Future<String> get authToken async =>
       await FirebaseAuth.instance.currentUser!.getIdToken();
 
@@ -69,11 +90,12 @@ Santhe is an app built for getting best deals for your groceries from your local
 Get it for free at https://santhe.in''';
 
   Future<String> getDeviceId() async {
+    //! changed token
     return FirebaseAuth.instance.currentUser!.uid;
     // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     // if (Platform.isAndroid) {
     //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    //   return androidInfo.toMap()['androidId'];
+    //   return androidInfo.toMap()['id'];
     // } else {
     //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
     //   return iosInfo.toMap()['identifierForVendor'];

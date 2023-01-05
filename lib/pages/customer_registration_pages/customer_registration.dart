@@ -17,6 +17,7 @@ import 'package:santhe/models/santhe_user_model.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/onboarding_page.dart';
+import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
@@ -493,7 +494,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                                       .then((value) => log(
                                           'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
-                                  Get.offAll(() => const MapMerchant(),
+                                  Get.offAll(() => const OndcIntroView(),
+                                      //! previous const MapMerchant(),
                                       transition: Transition.fadeIn);
                                 } else {
                                   log('error occurred');

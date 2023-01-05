@@ -113,4 +113,11 @@ class AppUrl {
 
   static String ACCEPT_OFFER(String listId, String listEventId) =>
       '$_baseCloudFunctions/offers/$listId/$listEventId/accept';
+
+  //!Ondc
+  static String getNearByStore =
+      'http://ondcstaging.santhe.in/santhe/ondc/store/nearby';
+
+  static String getSearchItem =
+      'http://ondcstaging.santhe.in/santhe/ondc/item/nearby';
 }

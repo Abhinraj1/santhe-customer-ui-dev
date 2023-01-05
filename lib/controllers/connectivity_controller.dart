@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/map_merch.dart';
+import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 
 import '../core/app_shared_preference.dart';
 import '../pages/chat/chat_screen.dart';
@@ -80,7 +81,9 @@ class ConnectivityController extends GetxController {
     if (notificationController.fromNotification) {
       //_notificationController.fromNotification = false;
       if (notificationController.landingScreen == 'new') {
-        return const MapMerchant();
+        return const OndcIntroView();
+        //!previous
+        //return const MapMerchant();
       } else if (notificationController.landingScreen == 'answered') {
         return HomePage(
           pageIndex: 1,
@@ -98,6 +101,8 @@ class ConnectivityController extends GetxController {
         );
       }
     }
-    return MapMerchant();
+    return const OndcIntroView();
+    //!previous
+    // return MapMerchant();
   }
 }

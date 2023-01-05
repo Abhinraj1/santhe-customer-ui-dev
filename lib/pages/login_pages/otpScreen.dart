@@ -9,14 +9,13 @@ import 'package:pinput/pinput.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/loggers.dart';
-import 'package:santhe/pages/map_merch.dart';
+import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../core/app_shared_preference.dart';
 import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 import '../customer_registration_pages/customer_registration.dart';
-import '../home_page.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -317,7 +316,9 @@ class _OtpScreenState extends State<OtpScreen> with LogMixin {
       AppSharedPreference().setLogin(true);
       apiController.updateDeviceToken(widget.phoneNumber.toString());
       await profileController.initialise();
-      Get.offAll(() => const MapMerchant(), transition: Transition.fadeIn);
+      Get.offAll(() => const OndcIntroView(),
+          //!previous const MapMerchant(),
+          transition: Transition.fadeIn);
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 
@@ -18,7 +19,7 @@ class NotificationController extends GetxController {
   Rx<RemoteMessage> notificationData = const RemoteMessage().obs;
 }
 
-class Notifications {
+class Notifications with LogMixin {
   late AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
@@ -62,6 +63,7 @@ class Notifications {
         .then((RemoteMessage? message) async {
       if (message != null) {
         //new notification
+        warningLog('checking for notification message$message');
         _notificationController.notificationData.value = message;
         _notificationController.fromNotification = true;
         await navigateNotification(message);
@@ -74,6 +76,7 @@ class Notifications {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
+        warningLog('notification of $notification');
         _showNotificationCustomSound(notification);
         /*flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -130,6 +133,7 @@ class Notifications {
         await flutterLocalNotificationsPlugin.initialize(initializationSettings,
             onSelectNotification: (String? payload) async {
           if (payload != null) {
+            warningLog('payload $payload');
             await navigateNotification(message);
           }
         });
@@ -233,7 +237,9 @@ class NavigateNotifications {
     if (data['screen'] == 'new') {
       _notificationController.landingScreen = 'new';
       if (!_notificationController.fromNotification) {
-        Get.offAll(const MapMerchant());
+        Get.offAll(
+          const MapMerchant(),
+        );
       }
     }
     if (data['screen'] == 'answered') {

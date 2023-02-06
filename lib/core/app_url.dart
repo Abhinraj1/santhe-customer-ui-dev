@@ -120,4 +120,7 @@ class AppUrl {
 
   static String getSearchItem =
       'http://ondcstaging.santhe.in/santhe/ondc/item/nearby';
+
+  static String transactionIdUrl =
+      'http://ondcstaging.santhe.in/santhe/ondc/transaction_id';
 }

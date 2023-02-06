@@ -6,6 +6,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
+import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
 
 part 'ondc_event.dart';
 part 'ondc_state.dart';
@@ -15,6 +16,7 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
   OndcBloc({
     required this.ondcRepository,
   }) : super(OndcInitial()) {
+    List<ShopModel> revertshopModel = [];
     on<OndcEvent>((event, emit) {});
     on<FetchNearByShops>((event, emit) async {
       emit(OndcLoadingState());
@@ -25,11 +27,13 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
                 lng: event.lng,
                 pincode: event.pincode,
                 isDelivery: event.isDelivery);
-        warningLog('transaction Id$transactionId');
+        warningLog('transaction $transactionId');
         // await ondcRepository.getNearByShopsModel(
         //     transactionIdl: transactionId!);
         emit(
-          OndcLoadingForShopsModelState(transactionId: transactionId),
+          OndcLoadingForShopsModelState(
+            transactionId: transactionId,
+          ),
         );
         // emit(OndcShopModelsLoaded(shopModels: shopModels));
       } catch (e) {
@@ -46,7 +50,9 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       try {
         List<ProductOndcModel> productModels =
             await ondcRepository.getProductsOfShop(
-                shopId: event.shopId, transactionIdLoc: event.transactionId);
+                shopId: event.shopId, transactionIdLoc: event.transactionId
+                // event.transactionId,
+                );
         emit(OndcProductsOfShopsLoaded(productModels: productModels));
       } catch (e) {
         emit(
@@ -57,6 +63,12 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       }
     });
 
+    on<GoBackStore>((event, emit) {
+      emit(
+        OndcShopModelsLoaded(shopModels: event.existingModels),
+      );
+    });
+
     on<SearchOndcItemInLocalShop>((event, emit) async {
       emit(OndcFetchProductLoading());
       try {
@@ -64,6 +76,7 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
             await ondcRepository.getProductsOnSearchinLocalShop(
                 shopId: event.storeId,
                 transactionIdLoc: event.transactionId,
+                //  event.transactionId,
                 productName: event.productName);
         emit(FetchedItemsInLocalShop(productModels: productModels));
       } catch (e) {
@@ -81,6 +94,7 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
         List<ProductOndcModel> productModels =
             await ondcRepository.searchProductsOnGlobal(
                 transactionIdLocal: event.transactionId,
+                //  event.transactionId,
                 productName: event.productName);
         emit(
           FetchedItemsInGlobal(productModels: productModels),
@@ -94,12 +108,21 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       }
     });
 
+    on<ClearSearchEventOndc>((event, emit) {
+      emit(
+        OndcProductsOfShopsLoaded(productModels: event.productModels),
+      );
+    });
+
     on<FetchShopModelsGet>((event, emit) async {
       emit(OndcFetchShopLoading());
       try {
         List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
-            transactionIdl: event.transactionId!);
-        warningLog('$shopModel');
+            transactionIdl: event.transactionId!
+            //  event.transactionId!,
+            );
+        revertshopModel = shopModel;
+        warningLog('$revertshopModel');
         emit(
           OndcShopModelsLoaded(shopModels: shopModel),
         );

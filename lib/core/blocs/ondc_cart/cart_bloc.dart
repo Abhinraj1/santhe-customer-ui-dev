@@ -1,0 +1,125 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, body_might_complete_normally_nullable
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:santhe/core/loggers.dart';
+
+import 'package:santhe/core/repositories/ondc_cart_repository.dart';
+import 'package:santhe/core/sharedpref.dart';
+import 'package:santhe/models/ondc/product_ondc.dart';
+
+part 'cart_event.dart';
+part 'cart_state.dart';
+
+class CartBloc extends Bloc<CartEvent, CartState> with LogMixin, HydratedMixin {
+  final OndcCartRepository ondcCartRepository;
+  List<ProductOndcModel> productModelBloc = [];
+  List<ProductOndcModel> productModelBlocLocal = [];
+  SharedPref sharedPref = SharedPref();
+  Map<dynamic, dynamic> data = {};
+  CartBloc({
+    required this.ondcCartRepository,
+  }) : super(CartState()) {
+    on<CartEvent>((event, emit) {});
+
+    on<AddToCartEvent>((event, emit) async {
+      try {
+        bool canAdd = event.productOndcModel.addToCart();
+
+        // ondcCartRepository.addToCart(productOndcModel: event.productOndcModel);
+        canAdd
+            ? productModelBloc = await ondcCartRepository.addToCart(
+                productOndcModel: event.productOndcModel)
+            : null;
+        warningLog('${productModelBloc.length}');
+        emit(
+          AddedToCartList(productOndcModels: productModelBloc),
+        );
+      } on ErrorAddingItemToCartState catch (e) {
+        emit(
+          ErrorAddingItemToCartState(message: e.message),
+        );
+      }
+    });
+
+    on<UpdateCartEvent>((event, emit) async {
+      // sharedPref.save('MyCart', event.productOndcModels);
+      // productModelBloc = await loadSharedPrefs();
+      productModelBloc = event.productOndcModels;
+      // ondcCartRepository.productModels = productModelBloc;
+      emit(
+        UpdatedCartItemState(productOndcModel: event.productOndcModels),
+      );
+    });
+
+    on<DeleteCartItemEvent>((event, emit) async {
+      emit(DeleteCartLoading());
+      try {
+        event.productOndcModel.removeFromCart();
+        await ondcCartRepository.deleteCartItem(
+            productOndcModelLocal: event.productOndcModel);
+        productModelBloc.removeWhere(
+          (element) => element.id == event.productOndcModel.id,
+        );
+        emit(
+          DeleteCartItemState(productOndcModel: productModelBloc),
+        );
+      } on ErrorDeletingItemState catch (e) {
+        emit(ErrorDeletingItemState(message: e.message));
+      }
+    });
+
+    on<UpdateQuantityEvent>((event, emit) async {
+      try {
+        await ondcCartRepository.updateQuantityOfItems(
+            productOndcModel: event.cartModel);
+        warningLog('Cartmodels ${event.cartModel.quantity}');
+        emit(UpdatedQuantityState(productOndcModel: event.cartModel));
+      } catch (e) {
+        rethrow;
+      }
+    });
+
+    on<OnAppRefreshEvent>((event, emit) async {
+      // await clear();
+      try {
+        // List<ProductOndcModel> products = await ondcCartRepository.getCart();
+        errorLog('checking for storage state $state');
+        ondcCartRepository.getCart();
+        emit(state);
+      } on ErrorGettingCartListState catch (e) {
+        emit(ErrorGettingCartListState(message: e.message));
+      }
+    });
+  }
+
+  Future<List<ProductOndcModel>> loadSharedPrefs() async {
+    try {
+      List<ProductOndcModel> cartItems = await sharedPref.read("MyCart");
+      log('$cartItems', name: 'LoadSharedPrefs');
+      productModelBloc = cartItems;
+      return productModelBloc;
+    } catch (Excepetion) {
+      // do something
+      rethrow;
+    }
+  }
+
+  @override
+  CartState? fromJson(Map<String, dynamic> json) {
+    // log('checking for hyrdated statefromjson${json['productOndcModel']}',
+    //     name: "CartState fromJson()");
+    return UpdatedCartItemState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(CartState state) {
+    if (state is UpdatedCartItemState) {
+      // debugLog('checking for hydrated state$state');
+      return state.toMap();
+    }
+  }
+}

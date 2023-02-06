@@ -84,7 +84,7 @@ class _MapMerchantState extends State<MapMerchant>
       'Unfortunately no Shops near you on Santhe,\n But you can create and manage list.';
   String? selectedValue;
   bool _noShops = false;
-
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
 
   String listName = '';
@@ -137,6 +137,7 @@ class _MapMerchantState extends State<MapMerchant>
       setState(() {
         customerLat = double.tryParse(customerModel!.lat);
         customerLong = double.tryParse(customerModel!.lng);
+        _isLoading = true;
       });
       warningLog(
           'latitude ${customerModel!.lat} longitude ${customerModel!.lng}');
@@ -215,10 +216,14 @@ class _MapMerchantState extends State<MapMerchant>
           () {
             customMarkers = ccustomMarkers;
             _hasData = true;
+            _isLoading = false;
           },
         );
         warningLog('checking for String change$mapShops');
       } catch (e) {
+        setState(() {
+          _hasData = true;
+        });
         rethrow;
       }
     }
@@ -426,10 +431,99 @@ class _MapMerchantState extends State<MapMerchant>
                 ],
               ),
             )
+          // : RefreshIndicator(
+          //     onRefresh: () => _allListController.getAllList(),
+          //     child: Stack(
+          //       children: [
+          //         GoogleMap(
+          //           myLocationEnabled: false,
+          //           myLocationButtonEnabled: false,
+          //           zoomControlsEnabled: false,
+          //           zoomGesturesEnabled: false,
+          //           tiltGesturesEnabled: false,
+          //           compassEnabled: false,
+          //           scrollGesturesEnabled: false,
+          //           rotateGesturesEnabled: false,
+          //           // markers: customMarkers,
+          //           initialCameraPosition: CameraPosition(
+          //             target: LatLng(customerLat!, customerLong!),
+          //             zoom: 13.5,
+          //           ),
+          //           onMapCreated: (GoogleMapController controller) {
+          //             _controller.complete(controller);
+          //             warningLog('${mapPickerController.mapFinishedMoving}');
+          //             mapPickerController.mapFinishedMoving;
+          //           },
+          //         ),
+          //         Padding(
+          //           padding: const EdgeInsets.all(15.0),
+          //           child: Align(
+          //             alignment: Alignment.bottomLeft,
+          //             child: GestureDetector(
+          //               onTap: () {
+          //                 log('Tapped on floating action button');
+          //                 Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                     builder: (context) => HomePage(
+          //                       showMap: false,
+          //                       pageIndex: 0,
+          //                       cameFromHomeScreen: true,
+          //                     ),
+          //                   ),
+          //                 );
+          //               },
+          //               child: Container(
+          //                 height: 40,
+          //                 width: 100,
+          //                 decoration: BoxDecoration(
+          //                   color: Constant.bgColor,
+          //                   borderRadius: BorderRadius.circular(10.0),
+          //                 ),
+          //                 child: const Center(
+          //                   child: Text(
+          //                     'My Lists',
+          //                     style: TextStyle(
+          //                         color: Colors.white,
+          //                         fontWeight: FontWeight.bold),
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: const EdgeInsets.all(15.0),
+          //           child: Align(
+          //             alignment: Alignment.topCenter,
+          //             child: Container(
+          //               height: 100,
+          //               width: MediaQuery.of(context).size.width,
+          //               decoration: BoxDecoration(
+          //                 color: const Color.fromRGBO(255, 190, 116, 1),
+          //                 borderRadius: BorderRadius.circular(10.0),
+          //               ),
+          //               child: const Padding(
+          //                 padding: EdgeInsets.all(3.0),
+          //                 child: Center(
+          //                     child: Text(
+          //                   'Unfortunately no Shops near you on Santhe,\n But you can create and manage list.',
+          //                   style: TextStyle(
+          //                     color: Colors.black,
+          //                     fontSize: 14,
+          //                   ),
+          //                   textAlign: TextAlign.center,
+          //                 )),
+          //               ),
+          //             ),
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
           : Center(
-              child: CircularProgressIndicator(
-              color: AppColors().brandDark,
-            )),
+              child: CircularProgressIndicator(),
+            ),
       floatingActionButton: GetBuilder(
         init: _allListController,
         id: 'fab1',

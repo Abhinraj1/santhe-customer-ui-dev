@@ -147,8 +147,10 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                             Image.asset('assets/createList.png'),
                             const Text(
                               '*Includes waiting for merchants\n to give prices, but you have more\n options here',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 12),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                              ),
                             ),
                             const SizedBox(
                               height: 40,
@@ -178,8 +180,8 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                             Image.asset('assets/ondclist.png'),
                             const Text(
                               '*Buy from ONDC registered \n shops near you.\n *You can see prices immediately\n and checkout,but your options\n are limite',
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 12),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
                             ),
                             const SizedBox(
                               height: 10,

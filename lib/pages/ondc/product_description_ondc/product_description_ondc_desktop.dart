@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 part of product_description_ondc_view;
 
 class _ProductDescriptionOndcDesktop extends StatelessWidget {
@@ -5,7 +7,7 @@ class _ProductDescriptionOndcDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(child: Text('ProductDescriptionOndcDesktop')),
     );
   }

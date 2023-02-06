@@ -13,22 +13,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' as ge;
 import 'package:http/http.dart' as http;
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:santhe/controllers/notification_controller.dart';
+import 'package:share_plus/share_plus.dart';
+
+import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
+import 'package:santhe/models/ondc/location_model.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-import 'package:santhe/pages/ondc/ondc_search_global/ondc_search_global_view.dart';
+import 'package:santhe/models/user_profile/customer_model.dart';
+import 'package:santhe/pages/ondc/ondc_cart/ondc_cart_view.dart';
+import 'package:santhe/pages/ondc/ondc_product_global/ondc_product_global_view.dart';
+import 'package:santhe/widgets/navigation_drawer_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:santhe/constants.dart';
-import 'package:santhe/core/app_helpers.dart';
-import 'package:santhe/models/user_profile/customer_model.dart';
-import 'package:santhe/widgets/navigation_drawer_widget.dart';
 
 part 'ondc_shop_list_desktop.dart';
 part 'ondc_shop_list_mobile.dart';
@@ -36,6 +37,7 @@ part 'ondc_shop_list_tablet.dart';
 
 class OndcShopListView extends StatelessWidget {
   final CustomerModel customerModel;
+
   const OndcShopListView({
     Key? key,
     required this.customerModel,

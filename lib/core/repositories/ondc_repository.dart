@@ -1,13 +1,12 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_url.dart';
-import 'package:santhe/core/error/error_handler.dart';
 import 'package:santhe/core/loggers.dart';
+import 'package:santhe/firebase/firebase_helper.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 
@@ -15,6 +14,21 @@ import '../../controllers/getx/profile_controller.dart';
 
 class OndcRepository with LogMixin {
   String? transactionid;
+  int _productGlobalCount = 0;
+  int _shopProductCount = 0;
+  int _searchProductCountInLocalShop = 0;
+
+  int get productGlobalCount {
+    return _productGlobalCount;
+  }
+
+  int get searchProductCountInLocalShop {
+    return _searchProductCountInLocalShop;
+  }
+
+  int get productShopCount {
+    return _shopProductCount;
+  }
 
   String get transactionId {
     return transactionid!;
@@ -25,29 +39,31 @@ class OndcRepository with LogMixin {
       required String lng,
       required String pincode,
       required bool isDelivery}) async {
-    final url = Uri.parse(AppUrl.getNearByStore);
+    final url = Uri.parse(AppUrl.transactionIdUrl);
     // final tokenHandler = Get.find<ProfileController>();
     // await tokenHandler.generateUrlToken();
     // final token = tokenHandler.urlToken;
     // final header = {"authorization": 'Bearer $token'};
     final header = {
       'Content-Type': 'application/json',
-      "Authorization": 'Bearer ${await AppHelpers().authToken}'
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     // final header = {"authorization": 'Bearer $authtoken'};
     try {
-      final response = await http.post(url,
-          body: json.encode({
-            "firebase_id": 2.toString(),
-            // "lat": lat,
-            // "lng": lng,
-            // "pincode": pincode,
-            // "isDelivery": isDelivery
-          }),
-          headers: header);
-      warningLog('$response');
-      final responseBody =
-          json.decode(response.body)['context']['transaction_id'];
+      warningLog('the header token being sent $header');
+      final response = await http.get(
+        url,
+        // body: json.encode({
+        //   "firebase_id": 2.toString(),
+        //   // "lat": lat,
+        //   // "lng": lng,
+        //   // "pincode": pincode,
+        //   // "isDelivery": isDelivery
+        // }),
+        headers: header,
+      );
+      warningLog('checking for transactionid response${response.statusCode}');
+      final responseBody = json.decode(response.body)['data']['transaction_id'];
       warningLog('transactionId $responseBody');
       transactionid = responseBody;
       return transactionid;
@@ -75,18 +91,23 @@ class OndcRepository with LogMixin {
 
   Future<List<ShopModel>> getNearByShopsModel(
       {required String transactionIdl}) async {
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+    warningLog('Firebase Id being sent$firebaseId');
+    //! transaction id needs to be updated
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/nearby?transaction_id=$transactionIdl&limit=10&offset=0&firebase_id=2');
+        'http://ondcstaging.santhe.in/santhe/ondc/store/nearby?transaction_id=$transactionIdl&limit=4&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
-      "Authorization": 'Bearer ${await AppHelpers().authToken}'
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
+      warningLog('api call made to shops $url');
       final response = await http.get(url, headers: header);
       warningLog('checking for shop model via transcationid $response');
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
-      warningLog('shops $responseBody');
+      final count = json.decode(response.body);
+      warningLog('shops$count $responseBody ');
       List<ShopModel> shopModel =
           responseBody.map((e) => ShopModel.fromMap(e)).toList();
       warningLog('shopModels $shopModel');
@@ -100,13 +121,20 @@ class OndcRepository with LogMixin {
       {required String shopId, required String transactionIdLoc}) async {
     final url = Uri.parse(
         'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id=$transactionIdLoc&store_id=$shopId&search=%%&limit=100&offset=0');
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
     try {
-      final response = await http.get(url);
+      warningLog('get the url sent to get the products $url');
+      final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
       final responseBody =
           await json.decode(response.body)['data']['rows'] as List<dynamic>;
       warningLog('$responseBody');
-      List<ProductOndcModel> products =
+      _shopProductCount =
+          await json.decode(response.body)['data']['count'] as int;
+      final List<ProductOndcModel> products =
           responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
       warningLog('$products');
       return products;
@@ -122,13 +150,19 @@ class OndcRepository with LogMixin {
       required String productName}) async {
     final url = Uri.parse(
         'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id=$transactionIdLoc&store_id=$shopId&search=%$productName%&limit=100&offset=0');
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
     try {
       warningLog('product name $productName');
-      final response = await http.get(url);
+      final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
       final responseBody =
           await json.decode(response.body)['data']['rows'] as List<dynamic>;
       warningLog('$responseBody');
+      _searchProductCountInLocalShop =
+          await json.decode(response.body)['data']['count'] as int;
       List<ProductOndcModel> searchedProducts =
           responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
       warningLog('$searchedProducts');
@@ -143,13 +177,22 @@ class OndcRepository with LogMixin {
       {required String transactionIdLocal, required String productName}) async {
     final url = Uri.parse(
         'http://ondcstaging.santhe.in/santhe/ondc/item/nearby?transaction_id=$transactionIdLocal&search=%$productName%&limit=10&offset=0');
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
     try {
       warningLog('global search product $productName');
-      final response = await http.get(url);
+      final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
+
       final responseBody =
           await json.decode(response.body)['data']['rows'] as List<dynamic>;
+
       warningLog('$responseBody');
+      _productGlobalCount =
+          await json.decode(response.body)['data']['count'] as int;
+      warningLog('checking for count of global items $_productGlobalCount');
       List<ProductOndcModel> searchedProducts =
           responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
       warningLog('$searchedProducts');

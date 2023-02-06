@@ -12,13 +12,24 @@ class ShopImageIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        height: 66,
-        width: 66,
-        child: CachedNetworkImage(
-          imageUrl: image,
-          errorWidget: (context, url, error) => const Icon(Icons.shopping_cart),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Container(
+        height: 102,
+        width: 102,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: CachedNetworkImage(
+            imageUrl: image,
+            fit: BoxFit.contain,
+            errorWidget: (context, url, error) => Image.asset(
+              'assets/cart.png',
+              fit: BoxFit.fill,
+            ),
+          ),
         ),
       ),
     );

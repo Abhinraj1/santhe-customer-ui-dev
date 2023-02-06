@@ -20,6 +20,8 @@ class ShopModel extends Equatable {
   final dynamic state;
   final dynamic bpp_id;
   final dynamic bpp_uri;
+  final dynamic email;
+  final dynamic phone;
   final dynamic symbol;
   final dynamic message_id;
   final dynamic transaction_id;
@@ -42,6 +44,8 @@ class ShopModel extends Equatable {
     required this.state,
     required this.bpp_id,
     required this.bpp_uri,
+    required this.email,
+    required this.phone,
     required this.symbol,
     required this.message_id,
     required this.transaction_id,
@@ -50,51 +54,54 @@ class ShopModel extends Equatable {
   });
 
   ShopModel copyWith({
-    dynamic? name,
-    dynamic? address,
-    dynamic? city,
-    dynamic? pincode,
-    dynamic? item_count,
-    dynamic? distance,
-    dynamic? createdAt,
-    dynamic? updatedAt,
-    dynamic? deletedAt,
-    dynamic? description,
-    dynamic? delivery,
-    dynamic? ondc_location_id,
-    dynamic? ondc_store_id,
-    dynamic? state,
-    dynamic? bpp_id,
-    dynamic? bpp_uri,
-    dynamic? symbol,
-    dynamic? message_id,
-    dynamic? transaction_id,
-    dynamic? id,
-    dynamic? items,
+    dynamic name,
+    dynamic address,
+    dynamic city,
+    dynamic pincode,
+    dynamic item_count,
+    dynamic distance,
+    dynamic createdAt,
+    dynamic updatedAt,
+    dynamic deletedAt,
+    dynamic description,
+    dynamic delivery,
+    dynamic ondc_location_id,
+    dynamic ondc_store_id,
+    dynamic state,
+    dynamic bpp_id,
+    dynamic bpp_uri,
+    dynamic symbol,
+    dynamic message_id,
+    dynamic transaction_id,
+    dynamic id,
+    dynamic items,
+    dynamic email,
+    dynamic phone,
   }) {
     return ShopModel(
-      name: name ?? this.name,
-      address: address ?? this.address,
-      city: city ?? this.city,
-      pincode: pincode ?? this.pincode,
-      item_count: item_count ?? this.item_count,
-      distance: distance ?? this.distance,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
-      description: description ?? this.description,
-      delivery: delivery ?? this.delivery,
-      ondc_location_id: ondc_location_id ?? this.ondc_location_id,
-      ondc_store_id: ondc_store_id ?? this.ondc_store_id,
-      state: state ?? this.state,
-      bpp_id: bpp_id ?? this.bpp_id,
-      bpp_uri: bpp_uri ?? this.bpp_uri,
-      symbol: symbol ?? this.symbol,
-      message_id: message_id ?? this.message_id,
-      transaction_id: transaction_id ?? this.transaction_id,
-      id: id ?? this.id,
-      items: items ?? this.items,
-    );
+        name: name ?? this.name,
+        address: address ?? this.address,
+        city: city ?? this.city,
+        pincode: pincode ?? this.pincode,
+        item_count: item_count ?? this.item_count,
+        distance: distance ?? this.distance,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        deletedAt: deletedAt ?? this.deletedAt,
+        description: description ?? this.description,
+        delivery: delivery ?? this.delivery,
+        ondc_location_id: ondc_location_id ?? this.ondc_location_id,
+        ondc_store_id: ondc_store_id ?? this.ondc_store_id,
+        state: state ?? this.state,
+        bpp_id: bpp_id ?? this.bpp_id,
+        bpp_uri: bpp_uri ?? this.bpp_uri,
+        symbol: symbol ?? this.symbol,
+        message_id: message_id ?? this.message_id,
+        transaction_id: transaction_id ?? this.transaction_id,
+        id: id ?? this.id,
+        items: items ?? this.items,
+        email: email ?? this.email,
+        phone: phone ?? this.phone);
   }
 
   Map<String, dynamic> toMap() {
@@ -120,6 +127,8 @@ class ShopModel extends Equatable {
       'transaction_id': transaction_id,
       'id': id,
       'items': items,
+      'email': email,
+      'phone': phone
     };
   }
 
@@ -154,6 +163,8 @@ class ShopModel extends Equatable {
           : null,
       id: map['id'] != null ? map['id'] as dynamic : null,
       items: map['items'] != null ? map['items'] as dynamic : null,
+      email: map['email'] != null ? map['email'] as dynamic : null,
+      phone: map['phone'] != null ? map['phone'] as dynamic : null,
     );
   }
 
@@ -189,6 +200,8 @@ class ShopModel extends Equatable {
       transaction_id,
       id,
       items,
+      email,
+      phone
     ];
   }
 }

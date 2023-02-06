@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 part of 'ondc_bloc.dart';
 
 abstract class OndcEvent extends Equatable {
@@ -23,6 +23,15 @@ class FetchNearByShops extends OndcEvent {
   List<Object> get props => [lat, lng, pincode, isDelivery];
 }
 
+class GoBackStore extends OndcEvent {
+  List<ShopModel> existingModels = [];
+  GoBackStore({
+    required this.existingModels,
+  });
+  @override
+  List<Object> get props => [existingModels];
+}
+
 class SearchOndcItemInLocalShop extends OndcEvent {
   final String transactionId;
   final String storeId;
@@ -34,6 +43,15 @@ class SearchOndcItemInLocalShop extends OndcEvent {
   });
   @override
   List<Object> get props => [transactionId, storeId, productName];
+}
+
+class ClearSearchEventOndc extends OndcEvent {
+  List<ProductOndcModel> productModels;
+  ClearSearchEventOndc({
+    required this.productModels,
+  });
+  @override
+  List<Object> get props => [productModels];
 }
 
 class SearchOndcItemGlobal extends OndcEvent {

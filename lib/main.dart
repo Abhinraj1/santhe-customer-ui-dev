@@ -7,13 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart' as gets;
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'dart:developer' as dev;
 import 'package:resize/resize.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
+import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
+import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/getapp.dart';
+import 'package:santhe/core/repositories/ondc_cart_repository.dart';
+import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 
@@ -26,18 +32,25 @@ void main() async {
   initializeGetIt();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
   runZonedGuarded<Future<void>>(
     () async {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
-      runApp(const MyApp());
+      HydratedBlocOverrides.runZoned(() => runApp(const MyApp()),
+          storage: storage);
     },
     (error, stack) =>
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const MyApp());
+  HydratedBlocOverrides.runZoned(
+      () => runApp(
+            const MyApp(),
+          ),
+      storage: storage);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: AppColors().brandDark,
   ));
@@ -53,6 +66,12 @@ class MyApp extends StatelessWidget {
         providers: [
           RepositoryProvider<OndcRepository>(
             create: (context) => OndcRepository(),
+          ),
+          RepositoryProvider<OndcCartRepository>(
+            create: (context) => OndcCartRepository(),
+          ),
+          RepositoryProvider<OndcCheckoutRepository>(
+            create: (context) => OndcCheckoutRepository(),
           )
         ],
         child: MultiBlocProvider(
@@ -60,6 +79,16 @@ class MyApp extends StatelessWidget {
             BlocProvider<OndcBloc>(
               create: (context) =>
                   OndcBloc(ondcRepository: context.read<OndcRepository>()),
+            ),
+            BlocProvider<CartBloc>(
+              create: (context) => CartBloc(
+                ondcCartRepository: context.read<OndcCartRepository>(),
+              ),
+            ),
+            BlocProvider<CheckoutBloc>(
+              create: (context) => CheckoutBloc(
+                ondcCheckoutRepository: context.read<OndcCheckoutRepository>(),
+              ),
             )
           ],
           child: gets.GetMaterialApp(

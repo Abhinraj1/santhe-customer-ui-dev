@@ -1,7 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_question_mark
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_question_mark, must_be_immutable, prefer_if_null_operators
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
+import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 
 class ProductOndcModel extends Equatable with LogMixin {
@@ -35,8 +38,11 @@ class ProductOndcModel extends Equatable with LogMixin {
   final dynamic updatedAt;
   final dynamic deletedAt;
   final dynamic itemId;
+  bool? isAddedToCart = false;
+  dynamic quantity = 1;
+  dynamic total;
   final List<dynamic>? images;
-  const ProductOndcModel({
+  ProductOndcModel({
     required this.id,
     required this.transaction_id,
     required this.ondc_item_id,
@@ -67,6 +73,9 @@ class ProductOndcModel extends Equatable with LogMixin {
     required this.updatedAt,
     required this.deletedAt,
     required this.itemId,
+    this.isAddedToCart,
+    this.quantity,
+    this.total,
     required this.images,
   });
 
@@ -101,6 +110,9 @@ class ProductOndcModel extends Equatable with LogMixin {
     dynamic? updatedAt,
     dynamic? deletedAt,
     dynamic? itemId,
+    bool? isAddedToCart,
+    dynamic? quantity,
+    dynamic? total,
     List<dynamic>? images,
   }) {
     return ProductOndcModel(
@@ -134,7 +146,10 @@ class ProductOndcModel extends Equatable with LogMixin {
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
       itemId: itemId ?? this.itemId,
+      isAddedToCart: isAddedToCart ?? this.isAddedToCart,
+      quantity: quantity ?? this.quantity,
       images: images ?? this.images,
+      total: total ?? this.total,
     );
   }
 
@@ -171,12 +186,75 @@ class ProductOndcModel extends Equatable with LogMixin {
       'deletedAt': deletedAt,
       'itemId': itemId,
       'images': images,
+      'quantity': quantity,
+      'isAddedToCart': isAddedToCart,
+      'total': total
     };
+  }
+
+  factory ProductOndcModel.fromNewMap(Map<String, dynamic> map) {
+    return ProductOndcModel(
+      id: map['id'] != null ? map['id'] as dynamic : null,
+      quantity: map['quantity'] != null ? map['quantity'] as dynamic : 0,
+      isAddedToCart:
+          map['isAddedToCart'] != null ? map['isAddedToCart'] as bool : false,
+      transaction_id: map['transaction_id'] != null
+          ? map['transaction_id'] as dynamic
+          : null,
+      ondc_item_id:
+          map['ondc_item_id'] != null ? map['ondc_item_id'] as dynamic : null,
+      name: map['name'] != null ? map['name'] as dynamic : null,
+      short_description: map['short_description'] != null
+          ? map['short_description'] as dynamic
+          : null,
+      long_description: map['long_description'] != null
+          ? map['long_description'] as dynamic
+          : null,
+      returnable:
+          map['returnable'] != null ? map['returnable'] as dynamic : null,
+      isVeg: map['isVeg'] != null ? map['isVeg'] as dynamic : null,
+      time_to_ship:
+          map['time_to_ship'] != null ? map['time_to_ship'] as dynamic : null,
+      rating: map['rating'] != null ? map['rating'] as dynamic : null,
+      storeId: map['storeId'] != null ? map['storeId'] as dynamic : null,
+      customer_care:
+          map['customer_care'] != null ? map['customer_care'] as dynamic : null,
+      return_window:
+          map['return_window'] != null ? map['return_window'] as dynamic : null,
+      seller_pickup_return: map['seller_pickup_return'] != null
+          ? map['seller_pickup_return'] as dynamic
+          : null,
+      symbol: map['symbol'] != null ? map['symbol'] as dynamic : null,
+      available: map['available'] != null ? map['available'] as dynamic : null,
+      maximum: map['maximum'] != null ? map['maximum'] as dynamic : null,
+      itemPriceId: map['itemPriceId'] != null ? map['itemPriceId'] : null,
+      itemPriceCurrency:
+          map['itemPriceCurrency'] != null ? map['itemPriceCurrency'] : null,
+      estimated_value:
+          map['estimated_value'] != null ? map['estimated_value'] : null,
+      computed_value:
+          map['computed_value'] != null ? map['computed_value'] : null,
+      listed_value: map['listed_value'] != null ? map['listed_value'] : null,
+      offered_value: map['offered_value'] != null ? map['offered_value'] : null,
+      minimum_value:
+          map['minimum_value'] != null ? map['minimum_value'] != null : null,
+      maximum_value: map['maximum_value'] != null ? map['maximum_value'] : null,
+      value: map['value'] != null ? map['value'] : null,
+      createdAt: map['createdAt'] != null ? map['createdAt'] : null,
+      updatedAt: map['updatedAt'] != null ? map['updatedAt'] : null,
+      deletedAt: map['deletedAt'] != null ? map['deletedAt'] : null,
+      itemId: map['itemId'] != null ? map['itemId'] : null,
+      images: map['images'] != null ? map['images'] as List<dynamic> : null,
+      total: map['total'] != null ? map['total'] as dynamic : null,
+    );
   }
 
   factory ProductOndcModel.fromMap(Map<String, dynamic> map) {
     return ProductOndcModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
+      quantity: map['quantity'] != null ? map['quantity'] as dynamic : 0,
+      isAddedToCart:
+          map['isAddedToCart'] != null ? map['isAddedToCart'] as bool : false,
       transaction_id: map['transaction_id'] != null
           ? map['transaction_id'] as dynamic
           : null,
@@ -272,13 +350,48 @@ class ProductOndcModel extends Equatable with LogMixin {
               : null
           : null,
       images: map['images'] != null ? map['images'] as List<dynamic> : null,
+      total: map['total'] != null ? map['total'] as dynamic : null,
     );
+  }
+  add() {
+    if (quantity < available) {
+      quantity = quantity + 1;
+      getTotal();
+    }
+  }
+
+  bool addToCart() {
+    // if (available > 0) {
+    quantity = 1;
+    isAddedToCart = true;
+    getTotal();
+    return true;
+    // }
+    // return false;
+  }
+
+  minus() {
+    if (quantity != 1) {
+      quantity = quantity - 1;
+      getTotal();
+    }
+  }
+
+  removeFromCart() {
+    isAddedToCart = false;
+    quantity = 0;
+  }
+
+  getTotal() {
+    total = quantity * value;
+    warningLog('$total');
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ProductOndcModel.fromJson(String source) =>
-      ProductOndcModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductOndcModel.fromJson(String source) => ProductOndcModel.fromMap(
+        json.decode(source),
+      );
 
   @override
   bool get stringify => true;
@@ -316,7 +429,10 @@ class ProductOndcModel extends Equatable with LogMixin {
       updatedAt,
       deletedAt,
       itemId,
+      isAddedToCart,
+      quantity,
       images,
+      total,
     ];
   }
 }

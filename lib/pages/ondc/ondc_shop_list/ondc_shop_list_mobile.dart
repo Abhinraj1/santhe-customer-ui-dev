@@ -29,10 +29,78 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   List<OndcProductWidget> productWidget = [];
   List<ProductOndcModel> existingModels = [];
   List<ShopModel> existingShopModels = [];
-  _launchUrl() async {
-    final url = Uri.parse('https://www.youtube.com/watch?v=BkvCsbmzkU8');
-    if (!await launchUrl(url)) {
-      throw 'Could not launch $url';
+  int n = 10;
+  String productName = "";
+  late LocationModel locationModel;
+
+  _getLocationCity() async {
+    final url = Uri.parse(
+        'http://www.postalpincode.in/api/pincode/${widget.customerModel.pinCode}');
+    try {
+      final response = await http.get(url);
+      warningLog('${response.statusCode}');
+      final responseBody =
+          await json.decode(response.body)['PostOffice'] as List<dynamic>;
+      warningLog('$responseBody');
+      locationModel = LocationModel.fromMap(
+        responseBody[0],
+      );
+      warningLog('$locationModel');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  getNewShops(
+      {required String transactionIdl,
+      required List<OndcShopWidget> shops,
+      required int limit}) async {
+    final url = Uri.parse(
+        'http://ondcstaging.santhe.in/santhe/ondc/store/nearby?transaction_id=$transactionIdl&limit=$limit&offset=0&firebase_id=2');
+    final header = {
+      'Content-Type': 'application/json',
+      "Authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final response = await http.get(url, headers: header);
+      warningLog(
+          'checking for shop model via transcationid $response checking for existing shops length${shops.length}');
+      final responseBody =
+          json.decode(response.body)['data']['rows'] as List<dynamic>;
+
+      List<ShopModel> shopModel =
+          responseBody.map((e) => ShopModel.fromMap(e)).toList();
+      // .sublist(existingShopModels.length);
+      warningLog('limit check $limit $shopModel');
+      List<ShopModel> differenceShopModels =
+          shopModel.toSet().difference(existingShopModels.toSet()).toList();
+      warningLog(
+          'difference shops length${differenceShopModels.length} $differenceShopModels');
+      List<OndcShopWidget> addableItems = [];
+      for (var shopModelData in differenceShopModels) {
+        addableItems.add(OndcShopWidget(shopModel: shopModelData));
+      }
+      warningLog('shopModels $addableItems');
+      shops.addAll(
+        addableItems.where(
+          (shopwidget) => shops.every((shopwidgetmain) =>
+              shopwidget.shopModel.id != shopwidgetmain.shopModel.id),
+        ),
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          addableItems.clear();
+          existingShopModels.addAll(differenceShopModels);
+          shopWidgets = shops;
+          _isLoading = false;
+        });
+      });
+      warningLog('new exisiting models length ${existingShopModels.length}');
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -47,26 +115,21 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
             isDelivery: widget.customerModel.opStats,
           ),
         );
-    _controller.addListener(() {
-      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        // Bottom poistion
-        warningLog('Called');
-        getNewProducts(
-            transactionIdLocal:
-                RepositoryProvider.of<OndcRepository>(context).transactionId,
-            productName: _textEditingController.text,
-            productWidgetsLocal: productWidget);
-      }
-    });
     _shopScroll.addListener(() {
       if (_shopScroll.position.pixels == _shopScroll.position.maxScrollExtent) {
         warningLog('called');
+        setState(() {
+          n = n + 10;
+        });
         getNewShops(
-            transactionIdl:
-                RepositoryProvider.of<OndcRepository>(context).transactionId,
-            shops: shopWidgets);
+          transactionIdl:
+              RepositoryProvider.of<OndcRepository>(context).transactionId,
+          shops: shopWidgets,
+          limit: n,
+        );
       }
     });
+    _getLocationCity();
   }
 
   // List<OndcShopWidget> _searchList(
@@ -92,43 +155,65 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       child: Scaffold(
         body: Column(
           children: [
-            SizedBox(
-              height: 30,
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Icon(
+                  Icons.arrow_back,
+                  color: AppColors().brandDark,
+                  size: 25,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: TextFormField(
-                controller: _textEditingController,
-                onChanged: (value) {
-                  // _searchList(
-                  //   searchText: value,
-                  //   mainOndcShopWidgets: shopWidgets,
-                  // );
-                },
-                decoration: InputDecoration(
-                  labelText: 'Search Products here',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  suffixIcon: ElevatedButton(
-                    onPressed: () {
-                      context.read<OndcBloc>().add(
-                            SearchOndcItemGlobal(
-                              transactionId:
-                                  RepositoryProvider.of<OndcRepository>(context)
-                                      .transactionId,
-                              productName: _textEditingController.text,
-                            ),
-                          );
-                      ge.Get.back();
-                    },
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                      CircleBorder(),
-                    )),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.white,
+              child: SizedBox(
+                height: 70,
+                child: TextFormField(
+                  maxLength: 50,
+                  controller: _textEditingController,
+                  onChanged: (value) {
+                    // _searchList(
+                    //   searchText: value,
+                    //   mainOndcShopWidgets: shopWidgets,
+                    // );
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Search Products here',
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    prefixIcon: GestureDetector(
+                      onTap: () {
+                        context.read<OndcBloc>().add(
+                              SearchOndcItemGlobal(
+                                transactionId:
+                                    // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
+                                    RepositoryProvider.of<OndcRepository>(
+                                            context)
+                                        .transactionId,
+                                productName: _textEditingController.text,
+                              ),
+                            );
+                        setState(() {
+                          productName = _textEditingController.text;
+                        });
+                        _textEditingController.clear();
+                        ge.Get.back();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 9.0),
+                        child: Icon(
+                          CupertinoIcons.search_circle_fill,
+                          size: 32,
+                          color: Colors.orange,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -153,97 +238,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
     );
   }
 
-  getNewProducts(
-      {required String transactionIdLocal,
-      required String productName,
-      required List<OndcProductWidget> productWidgetsLocal}) async {
-    final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/item/nearby?transaction_id=$transactionIdLocal&search=%$productName%&limit=20&offset=0');
-    try {
-      setState(() {
-        _loading = true;
-      });
-      warningLog(
-          'global search product $productName and length of product list ${productWidgetsLocal.length}');
-      final response = await http.get(url);
-      warningLog('${response.statusCode}');
-      final responseBody =
-          await json.decode(response.body)['data']['rows'] as List<dynamic>;
-      warningLog('json data $responseBody');
-      List<ProductOndcModel> searchedProducts =
-          responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
-      warningLog(
-          'models length ${existingModels.length} and ${searchedProducts.length}');
-      List<ProductOndcModel> differenceModels =
-          searchedProducts.toSet().difference(existingModels.toSet()).toList();
-      warningLog(
-          'difference of models${differenceModels.length} $differenceModels');
-      List<OndcProductWidget> addableItems = [];
-      for (var model in differenceModels) {
-        addableItems.add(OndcProductWidget(productOndcModel: model));
-      }
-      warningLog('addable items${addableItems.length}');
-      productWidgetsLocal.addAll(addableItems);
-      warningLog('new length${productWidgetsLocal.length}');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          addableItems.clear();
-          productWidget = productWidgetsLocal;
-          existingModels.addAll(differenceModels);
-          _loading = false;
-        });
-      });
-    } catch (e) {
-      warningLog(e.toString());
-      rethrow;
-    }
-  }
-
-  getNewShops(
-      {required String transactionIdl,
-      required List<OndcShopWidget> shops}) async {
-    final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/nearby?transaction_id=$transactionIdl&limit=10&offset=0&firebase_id=2');
-    final header = {
-      'Content-Type': 'application/json',
-      "Authorization": 'Bearer ${await AppHelpers().authToken}'
-    };
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      final response = await http.get(url, headers: header);
-      warningLog(
-          'checking for shop model via transcationid $response checking for existing shops length${shops.length}');
-      final responseBody =
-          json.decode(response.body)['data']['rows'] as List<dynamic>;
-      warningLog('shops $responseBody');
-      List<ShopModel> shopModel =
-          responseBody.map((e) => ShopModel.fromMap(e)).toList();
-      List<ShopModel> differenceShopModels =
-          shopModel.toSet().difference(existingModels.toSet()).toList();
-      warningLog(
-          'difference shops length${differenceShopModels.length} $differenceShopModels');
-      List<OndcShopWidget> addableItems = [];
-      for (var shopModelData in differenceShopModels) {
-        addableItems.add(OndcShopWidget(shopModel: shopModelData));
-      }
-      warningLog('shopModels $addableItems');
-      shops.addAll(addableItems);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          addableItems.clear();
-          existingShopModels.addAll(differenceShopModels);
-          shopWidgets = shops;
-          _isLoading = false;
-        });
-      });
-      warningLog('new exisiting models length ${existingShopModels.length}');
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     warningLog(
@@ -253,12 +247,12 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       listener: (context, state) {
         warningLog('$state');
         if (state is OndcLoadingForShopsModelState) {
-          Timer(
-            Duration(seconds: 3),
-            () => context.read<OndcBloc>().add(
+          //toDo: change this timing for actual physical device to 2 seconds
+          Future.delayed(Duration(seconds: 5), () {
+            context.read<OndcBloc>().add(
                   FetchShopModelsGet(transactionId: state.transactionId),
-                ),
-          );
+                );
+          });
         }
         if (state is OndcShopModelsLoaded) {
           List<OndcShopWidget> ondcShopWidgets = [];
@@ -284,12 +278,17 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
             productWidget = productsWidget;
             existingModels = state.productModels;
           });
+          ge.Get.to(OndcProductGlobalView(
+            customerModel: widget.customerModel,
+            productWidget: productWidget,
+            productOndcModel: state.productModels,
+            productName: productName,
+          ));
         }
       },
       builder: (context, state) {
         return Scaffold(
           key: _key,
-          backgroundColor: CupertinoColors.lightBackgroundGray,
           drawer: const NavigationDrawer(),
           appBar: AppBar(
             leading: IconButton(
@@ -327,19 +326,20 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                 padding: const EdgeInsets.only(right: 4.5),
                 child: IconButton(
                   onPressed: () {
-                    if (Platform.isIOS) {
-                      Share.share(
-                        AppHelpers().appStoreLink,
-                      );
-                    } else {
-                      Share.share(
-                        AppHelpers().playStoreLink,
-                      );
-                    }
+                    // if (Platform.isIOS) {
+                    //   Share.share(
+                    //     AppHelpers().appStoreLink,
+                    //   );
+                    // } else {
+                    //   Share.share(
+                    //     AppHelpers().playStoreLink,
+                    //   );
+                    // }
+                    ge.Get.back();
                   },
                   splashRadius: 25.0,
                   icon: const Icon(
-                    Icons.share,
+                    Icons.home,
                     color: Colors.white,
                     size: 27.0,
                   ),
@@ -411,231 +411,142 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                 ],
                               ),
                             )
-                          : state is FetchedItemsInGlobal
-                              ? SingleChildScrollView(
-                                  controller: _controller,
-                                  child: Column(
+                          : SingleChildScrollView(
+                              controller: _shopScroll,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
                                     children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          color: CupertinoColors
-                                              .lightBackgroundGray,
-                                          height: 30,
-                                          width: 350,
-                                          child: Center(
-                                            child: Text.rich(
-                                              TextSpan(
-                                                text: 'Delivery to: ',
-                                                style: TextStyle(fontSize: 15),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: widget
-                                                          .customerModel.address
-                                                          .substring(0, 25),
-                                                      style: TextStyle(
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      )),
-                                                  // can add more TextSpans here...
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0, vertical: 8),
-                                        child: TextFormField(
-                                          onTap: () {
-                                            warningLog('tapped');
-                                            ge.Get.to(getSearchView(),
-                                                transition:
-                                                    ge.Transition.rightToLeft);
-                                          },
-                                          // controller: _textEditingController,
-                                          // onChanged: (value) {
-                                          //   _searchList(
-                                          //     searchText: value,
-                                          //     mainOndcShopWidgets: shopWidgets,
-                                          //   );
-                                          // },
-                                          // maxLines: 1,
-                                          decoration: InputDecoration(
-                                            labelText: 'Search Products here',
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                            ),
-                                            suffixIcon: ElevatedButton(
-                                              onPressed: () {
-                                                // context.read<OndcBloc>().add(
-                                                //       SearchOndcItemGlobal(
-                                                //           transactionId:
-                                                //               RepositoryProvider
-                                                //                       .of<OndcRepository>(
-                                                //                           context)
-                                                //                   .transactionId,
-                                                //           productName:
-                                                //               _textEditingController
-                                                //                   .text),
-                                                //     );
-                                              },
-                                              style: ButtonStyle(
-                                                shape:
-                                                    MaterialStateProperty.all(
-                                                  CircleBorder(),
+                                      Container(
+                                        color: Colors.white,
+                                        height: 30,
+                                        width: 340,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 8.0, left: 25),
+                                          child: Text.rich(
+                                            TextSpan(
+                                              text: 'Delivery to: ',
+                                              style: TextStyle(fontSize: 15),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: widget
+                                                      .customerModel.address
+                                                      .substring(0, 25),
+                                                  style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    decorationColor:
+                                                        Color.fromARGB(
+                                                            255, 77, 81, 84),
+                                                  ),
                                                 ),
-                                              ),
-                                              child: Icon(
-                                                Icons.search,
-                                                color: Colors.white,
-                                              ),
+                                                // can add more TextSpans here...
+                                              ],
                                             ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 20.0),
-                                        child: Center(
-                                          child: GridView.count(
-                                            shrinkWrap: true,
-                                            physics: const ScrollPhysics(),
-                                            scrollDirection: Axis.vertical,
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: 5,
-                                            mainAxisSpacing: 5,
-                                            childAspectRatio: 0.9,
-                                            children: productWidget,
-                                          ),
+                                      //! add the indicator here
+                                      GestureDetector(
+                                        onTap: () => ge.Get.to(
+                                          OndcCartView(),
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            Image.asset(
+                                              'assets/newshoppingcartorange.png',
+                                              height: 45,
+                                              width: 45,
+                                            )
+                                          ],
                                         ),
                                       ),
-                                      _loading
-                                          ? CircularProgressIndicator()
-                                          : Text('')
                                     ],
                                   ),
-                                )
-                              : SingleChildScrollView(
-                                  controller: _shopScroll,
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          color: CupertinoColors
-                                              .lightBackgroundGray,
-                                          height: 30,
-                                          width: 350,
-                                          child: Center(
-                                            child: Text.rich(
-                                              TextSpan(
-                                                text: 'Delivery to: ',
-                                                style: TextStyle(fontSize: 15),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: widget
-                                                          .customerModel.address
-                                                          .substring(0, 25),
-                                                      style: TextStyle(
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      )),
-                                                  // can add more TextSpans here...
-                                                ],
-                                              ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 8),
+                                    child: SizedBox(
+                                      height: 50,
+                                      child: TextFormField(
+                                        controller: _textEditingController,
+                                        // initialValue: _textEditingController
+                                        //     .value.text,
+                                        // onChanged: (value) {
+                                        //   _searchList(
+                                        //     searchText: value,
+                                        //     mainOndcShopWidgets: shopWidgets,
+                                        //   );
+                                        // },
+                                        // maxLines: 1,
+                                        onTap: () {
+                                          warningLog('00');
+                                          ge.Get.to(
+                                            getSearchView(),
+                                            transition:
+                                                ge.Transition.rightToLeft,
+                                          );
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: 'Search Products here',
+                                          isDense: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          prefixIcon: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 9.0),
+                                            child: Icon(
+                                              CupertinoIcons.search_circle_fill,
+                                              size: 32,
+                                              color: Colors.orange,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0, vertical: 8),
-                                        child: TextFormField(
-                                          // controller: _textEditingController,
-                                          // onChanged: (value) {
-                                          //   _searchList(
-                                          //     searchText: value,
-                                          //     mainOndcShopWidgets: shopWidgets,
-                                          //   );
-                                          // },
-                                          // maxLines: 1,
-                                          onTap: () {
-                                            warningLog('00');
-                                            ge.Get.to(
-                                              getSearchView(),
-                                              transition:
-                                                  ge.Transition.rightToLeft,
-                                            );
-                                          },
-                                          decoration: InputDecoration(
-                                              labelText: 'Search Products here',
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                              ),
-                                              suffixIcon: ElevatedButton(
-                                                onPressed: () {
-                                                  warningLog('pressed');
-                                                  // context.read<OndcBloc>().add(
-                                                  //       SearchOndcItemGlobal(
-                                                  //           transactionId: RepositoryProvider
-                                                  //                   .of<OndcRepository>(
-                                                  //                       context)
-                                                  //               .transactionId,
-                                                  //           productName:
-                                                  //               _textEditingController
-                                                  //                   .text),
-                                                  //     );
-                                                },
-                                                style: ButtonStyle(
-                                                    shape: MaterialStateProperty
-                                                        .all(
-                                                  CircleBorder(),
-                                                )),
-                                                child: Icon(
-                                                  Icons.search,
-                                                  color: Colors.white,
-                                                ),
-                                              )),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 25.0),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child:
-                                              Text('Browse your Local Shops'),
-                                        ),
-                                      ),
-                                      SingleChildScrollView(
-                                        child: Column(
-                                          children: isSearching
-                                              ? searchWidgets
-                                              : shopWidgets,
-                                        ),
-                                      ),
-                                      _isLoading
-                                          ? CircularProgressIndicator()
-                                          : Text('')
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'OR',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 15),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 25.0),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text('Browse your Local Shops'),
+                                    ),
+                                  ),
+                                  SingleChildScrollView(
+                                    child: Column(
+                                      children: isSearching
+                                          ? searchWidgets
+                                          : shopWidgets,
+                                    ),
+                                  ),
+                                  _isLoading
+                                      ? CircularProgressIndicator()
+                                      : Text('')
+                                ],
+                              ),
+                            ),
         );
       },
     );

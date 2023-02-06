@@ -79,11 +79,14 @@ class AppHelpers with LogMixin {
     // warningLog(newBearerToken);
   }
 
+  String get razorPayApi => "rzp_test_QXg3iPJDrauAuX";
+
   Future<String> get authToken async =>
       await FirebaseAuth.instance.currentUser!.getIdToken();
 
   String get playStoreLink => appStoreLink;
   String get appStoreLink => '''Hi,
+  
 
 Santhe is an app built for getting best deals for your groceries from your local Kirana stores and retailers. Use the Free Santhe App and support local economy. 
 

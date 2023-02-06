@@ -4,8 +4,10 @@ library ondc_shop_details_view;
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' as ge;
 import 'package:http/http.dart' as http;
@@ -18,6 +20,8 @@ import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 
 import 'package:santhe/models/ondc/shop_model.dart';
+import 'package:santhe/pages/ondc/ondc_cart/ondc_cart_view.dart';
+import 'package:santhe/pages/ondc/ondc_product_local/ondc_product_local_view.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
 

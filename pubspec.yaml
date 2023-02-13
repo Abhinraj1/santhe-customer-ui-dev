@@ -14,43 +14,44 @@ dependencies:
   bloc: ^8.0.3
   cached_network_image: ^3.2.0
   carousel_slider: ^4.2.1
-  cloud_firestore: ^3.1.10
-  connectivity_plus: ^2.2.1
+  cloud_firestore: ^4.3.2
+  connectivity_plus: ^3.0.3
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
   device_info_plus: ^4.0.0
   dropdown_button2: ^1.2.2
   easy_debounce: ^2.0.2+1
   equatable: ^2.0.3
-  firebase_analytics: ^9.3.4
-  firebase_auth: ^3.10.0
-  firebase_core: ^1.23.0
-  firebase_crashlytics: ^2.8.4
-  firebase_database: ^9.1.5
-  firebase_messaging: ^11.2.13
-  firebase_storage: ^10.3.1
+  firebase_analytics: ^10.1.1
+  firebase_auth: ^4.2.2
+  firebase_core: ^2.5.0
+  firebase_crashlytics: ^3.0.12
+  firebase_database: ^10.0.10
+  firebase_messaging: ^14.2.2
+  firebase_storage: ^11.0.11
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_cache_manager: ^3.3.0
   flutter_html: ^2.2.1
   flutter_image_compress: ^1.1.0
-  flutter_local_notifications: ^9.4.0
+  flutter_local_notifications: ^12.0.4
   flutter_slidable: ^2.0.0
   flutter_svg: ^0.23.0+1
   geolocator: ^9.0.0
   get: ^4.6.5
   get_it: ^7.2.0
+  dio: ^4.0.6
   google_maps_flutter: ^2.1.2
-  group_button: ^4.6.0
-  grouped_list: ^4.2.0
+  group_button: ^5.2.2
+  grouped_list: ^5.1.2
   hive: ^2.0.6
   hive_flutter: ^1.1.0
   http: ^0.13.4
-  hydrated_bloc: ^8.1.0
+  hydrated_bloc: ^9.1.0
   image_picker: ^0.8.4+11
-  internet_connection_checker: ^0.0.1+3
-  intl: ^0.17.0
+  internet_connection_checker: ^1.0.0+1
+  intl: ^0.18.0
   intl_phone_field: ^3.1.0
   location: ^4.4.0
   logger: ^1.1.0
@@ -61,12 +62,13 @@ dependencies:
   pinput: null
   readmore: ^2.2.0
   resize: ^1.0.0
-  responsive_builder: ^0.4.3
+  responsive_builder: ^0.5.0+1
   share_plus: ^4.0.4
   shared_preferences: ^2.0.13
   smooth_page_indicator: ^1.0.0+2
   timer_count_down: ^2.2.1
   url_launcher: ^6.1.7
+  geocoding: ^2.0.5
   uuid: ^3.0.7
   webview_flutter: ^2.0.4
   youtube_player_flutter: ^8.1.1
@@ -79,7 +81,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
-  hive_generator: ^1.1.2
+  hive_generator: ^2.0.0
 
 flutter:
 

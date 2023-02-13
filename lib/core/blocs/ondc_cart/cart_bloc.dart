@@ -88,7 +88,8 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin, HydratedMixin {
       try {
         // List<ProductOndcModel> products = await ondcCartRepository.getCart();
         errorLog('checking for storage state $state');
-        ondcCartRepository.getCart();
+        productModelBlocLocal = await ondcCartRepository.getCart();
+        warningLog('local cart ${productModelBlocLocal.length}');
         emit(state);
       } on ErrorGettingCartListState catch (e) {
         emit(ErrorGettingCartListState(message: e.message));

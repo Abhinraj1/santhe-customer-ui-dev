@@ -353,6 +353,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       total: map['total'] != null ? map['total'] as dynamic : null,
     );
   }
+
   add() {
     if (quantity < available) {
       quantity = quantity + 1;
@@ -361,13 +362,13 @@ class ProductOndcModel extends Equatable with LogMixin {
   }
 
   bool addToCart() {
-    // if (available > 0) {
-    quantity = 1;
-    isAddedToCart = true;
-    getTotal();
-    return true;
-    // }
-    // return false;
+    if (available > 0) {
+      quantity = 1;
+      isAddedToCart = true;
+      getTotal();
+      return true;
+    }
+    return false;
   }
 
   minus() {

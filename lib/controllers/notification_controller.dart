@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'
+    as noti;
 import 'package:get/get.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/home_page.dart';
@@ -20,14 +21,15 @@ class NotificationController extends GetxController {
 }
 
 class Notifications with LogMixin {
-  late AndroidNotificationChannel channel = const AndroidNotificationChannel(
+  late noti.AndroidNotificationChannel channel =
+      const noti.AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    importance: Importance.max,
+    importance: noti.Importance.max,
   );
 
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  late noti.FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      noti.FlutterLocalNotificationsPlugin();
 
   final NotificationController _notificationController =
       NotificationController.instance;
@@ -97,7 +99,7 @@ class Notifications with LogMixin {
         );*/
         await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
+                noti.AndroidFlutterLocalNotificationsPlugin>()
             ?.createNotificationChannel(channel);
 
         await FirebaseMessaging.instance
@@ -107,11 +109,11 @@ class Notifications with LogMixin {
           sound: true,
         );
 
-        const AndroidInitializationSettings initializationSettingsAndroid =
-            AndroidInitializationSettings('@mipmap/ic_launcher');
+        const noti.AndroidInitializationSettings initializationSettingsAndroid =
+            noti.AndroidInitializationSettings('@mipmap/ic_launcher');
 
-        IOSInitializationSettings initializationSettingsIOS =
-            IOSInitializationSettings(
+        noti.DarwinInitializationSettings initializationSettingsIOS =
+            noti.DarwinInitializationSettings(
           requestSoundPermission: true,
           requestBadgePermission: true,
           requestAlertPermission: true,
@@ -126,12 +128,13 @@ class Notifications with LogMixin {
           ) async {},
         );
 
-        InitializationSettings initializationSettings = InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsIOS);
+        noti.InitializationSettings initializationSettings =
+            noti.InitializationSettings(
+                android: initializationSettingsAndroid,
+                iOS: initializationSettingsIOS);
 
         await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-            onSelectNotification: (String? payload) async {
+            onDidReceiveNotificationResponse: (payload) async {
           if (payload != null) {
             warningLog('payload $payload');
             await navigateNotification(message);
@@ -151,20 +154,21 @@ class Notifications with LogMixin {
 
   Future<void> _showNotificationCustomSound(
       RemoteNotification notification) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+    const noti.AndroidNotificationDetails androidPlatformChannelSpecifics =
+        noti.AndroidNotificationDetails(
       'your other channel id',
       'your other channel name',
       icon: '@mipmap/ic_launcher',
-      importance: Importance.max,
-      priority: Priority.max,
-      sound: RawResourceAndroidNotificationSound('slow_spring_board'),
+      importance: noti.Importance.max,
+      priority: noti.Priority.max,
+      sound: noti.RawResourceAndroidNotificationSound('slow_spring_board'),
       //playSound: true,
     );
-    const IOSNotificationDetails iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(
+    const noti.DarwinNotificationDetails iOSPlatformChannelSpecifics =
+        noti.DarwinNotificationDetails(
             sound: 'slow_spring_board.aiff', presentSound: true);
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    const noti.NotificationDetails platformChannelSpecifics =
+        noti.NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
     );
@@ -179,7 +183,7 @@ class Notifications with LogMixin {
   Future<void> initialiseNotificationChannel(RemoteMessage message) async {
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+            noti.AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     await FirebaseMessaging.instance
@@ -189,11 +193,11 @@ class Notifications with LogMixin {
       sound: true,
     );
 
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const noti.AndroidInitializationSettings initializationSettingsAndroid =
+        noti.AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
+    noti.DarwinInitializationSettings initializationSettingsIOS =
+        noti.DarwinInitializationSettings(
       requestSoundPermission: true,
       requestBadgePermission: true,
       requestAlertPermission: true,
@@ -208,11 +212,13 @@ class Notifications with LogMixin {
       ) async {},
     );
 
-    InitializationSettings initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    noti.InitializationSettings initializationSettings =
+        noti.InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
+        onDidReceiveNotificationResponse: (payload) async {
       if (payload != null) {
         _notificationController.fromNotification = true;
         await navigateNotification(message);

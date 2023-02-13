@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:algolia/algolia.dart';
+import 'package:dio/dio.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/error/exceptions.dart';
@@ -36,6 +39,8 @@ class APIs extends GetxController with LogMixin {
   //Items & Category
   // var categoriesDB = <Category>[].obs;
   // var itemsDB = <Item>[].obs;
+
+  late final Dio _dio;
 
   Future<http.Response> callApi({
     required REST mode,
@@ -755,10 +760,19 @@ class APIs extends GetxController with LogMixin {
 
   //post
   Future<int> addCustomer(User user) async {
+    final tokenHandler = Get.find<ProfileController>();
+    await tokenHandler.generateUrlToken();
+    final token = tokenHandler.urlToken;
+    final header = {"authorization": 'Bearer $token'};
     final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
-    String token = await AppHelpers().getToken;
+    //! add customer node api
+    final String nodeAPIUrl = AppUrl.addCustomerNode;
+    warningLog(nodeAPIUrl);
+    final nodeUrl = Uri.parse(nodeAPIUrl);
+    //!end
     String uid = await AppHelpers().getDeviceId();
-
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     var body = {
       "fields": {
         "custName": {"stringValue": user.custName},
@@ -800,15 +814,57 @@ class APIs extends GetxController with LogMixin {
       }
     };
 
-    var response = await callApi(
-        mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
-    if (response.statusCode == 200) {
+    //! new way
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
+    };
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(user.lat, user.lng);
+    final getfinalAddress = placemarks[0];
+    debugLog('$getfinalAddress');
+    var data = {
+      "custName": user.custName,
+      "address": user.address,
+      "state": getfinalAddress.administrativeArea,
+      "city": getfinalAddress.locality,
+      "flat": getfinalAddress.street,
+      "locality": getfinalAddress.locality,
+      "lat": user.lat,
+      "lng": user.lng,
+      "emailId": user.emailId,
+      "phoneNumber": user.phoneNumber,
+      "pincode": user.pincode,
+      "custPlan": user.custPlan,
+      "deviceMap": {},
+      "custLoginTime": formattedDate,
+    };
+
+    var rawResponse = await http.post(Uri.parse(AppUrl.updateCustomer),
+        body: json.encode(data), headers: headers);
+    warningLog('data ${rawResponse.body} and ${rawResponse.headers}');
+    // //! add the node api here
+    // final responseNode = await http.post(
+    //   nodeUrl,
+    //   // headers: header,
+    //   body: json.encode(
+    //     {},
+    //   ),
+    // );
+    // warningLog(
+    //     'Node Api Registration ${responseNode.statusCode} and body ${responseNode.body}');
+    // final responseBodynode = json.decode(responseNode.body);
+    // warningLog('Node Api body $responseBodynode');
+    //!add node api finished
+    // var response = await callApi(
+    //     mode: REST.post, url: Uri.parse(url), body: jsonEncode(body));
+    if (rawResponse.statusCode == 200) {
       // var data = jsonDecode(response.body);
       log('user added');
       return 1;
     } else {
-      AppHelpers.crashlyticsLog(response.body.toString());
-      log('Request failed with status: ${response.statusCode}.');
+      AppHelpers.crashlyticsLog(rawResponse.body.toString());
+      log('Request failed with status: ${rawResponse.statusCode}.');
       Get.to(() => const ServerErrorPage(), transition: Transition.fade);
       throw 'Error!';
       // return 0;
@@ -819,16 +875,28 @@ class APIs extends GetxController with LogMixin {
   Future<int> getCustomerInfo(int custId) async {
     final String url = AppUrl.GET_CUSTOMER_DETAILS(custId.toString());
 
-    var response = await callApi(mode: REST.get, url: Uri.parse(url));
+    final String nodeUrl = AppUrl.getCustomerDetails;
+
+    final header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
+    };
+
+    var data = {'id': AppHelpers().getPhoneNumberWithoutCountryCode};
+
+    // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
+    var response = await http.post(Uri.parse(nodeUrl),
+        body: json.encode(data), headers: header);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(response.body);
-      if (data['fields'] != null) {
-        var jsonData = data['fields'];
+      errorLog('$data');
+      if (data['data'] != null) {
+        var jsonData = data['data'];
         final profileController = Get.find<ProfileController>();
         profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
         profileController.isOperational.value =
             profileController.customerDetails!.opStats;
+        warningLog('${profileController.customerDetails}');
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');
@@ -874,8 +942,44 @@ class APIs extends GetxController with LogMixin {
       }
     };
 
-    var response = await callApi(
-        mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    final String nodeUrl = AppUrl.updateCustomer;
+
+    final header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
+    };
+
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(updatedUser.lat, updatedUser.lng);
+    final getfinalAddress = placemarks[0];
+
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+
+    //! update user method
+    var data = {
+      "custName": updatedUser.custName,
+      "address": updatedUser.address,
+      "state": getfinalAddress.administrativeArea,
+      "city": getfinalAddress.locality,
+      "flat": getfinalAddress.street,
+      "locality": getfinalAddress.locality,
+      "lat": updatedUser.lat,
+      "lng": updatedUser.lng,
+      "emailId": updatedUser.emailId,
+      "phoneNumber": updatedUser.phoneNumber,
+      "pincode": updatedUser.pincode,
+      "custPlan": updatedUser.custPlan,
+      "deviceMap": {},
+      "custLoginTime": formattedDate,
+    };
+
+    // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
+    var response = await http.post(Uri.parse(nodeUrl),
+        body: json.encode(data), headers: header);
+
+    // var response = await callApi(
+    //     mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);

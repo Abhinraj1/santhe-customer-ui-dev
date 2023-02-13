@@ -136,7 +136,7 @@ class _ProductDescriptionOndcMobileState
     final cart = RepositoryProvider.of<OndcCartRepository>(context);
     return Scaffold(
       key: _key,
-      drawer: const NavigationDrawer(),
+      drawer: const nv.NavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {
@@ -400,26 +400,25 @@ class _ProductDescriptionOndcMobileState
                           )
                         : GestureDetector(
                             onTap: () async {
-                              // if (widget.productOndcModel.available >= 1) {
-                              context.read<CartBloc>().add(
-                                    AddToCartEvent(
-                                      productOndcModel: widget.productOndcModel,
-                                    ),
-                                  );
-                              setState(() {
-                                _addedToCart = true;
-                              });
-                              // }
+                              if (widget.productOndcModel.available >= 1) {
+                                context.read<CartBloc>().add(
+                                      AddToCartEvent(
+                                        productOndcModel:
+                                            widget.productOndcModel,
+                                      ),
+                                    );
+                                setState(() {
+                                  _addedToCart = true;
+                                });
+                              }
                             },
                             child: Container(
                               width: 160,
                               height: 45,
                               decoration: BoxDecoration(
-                                color:
-                                    // widget.productOndcModel.available > 0
-                                    // ?
-                                    AppColors().brandDark,
-                                // : AppColors().grey40,
+                                color: widget.productOndcModel.available > 0
+                                    ? AppColors().brandDark
+                                    : AppColors().grey40,
                                 borderRadius: BorderRadius.circular(10.0),
                                 boxShadow: const [
                                   BoxShadow(

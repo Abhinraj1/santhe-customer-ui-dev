@@ -13,7 +13,7 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      drawer: const NavigationDrawer(),
+      drawer: const nv.NavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {

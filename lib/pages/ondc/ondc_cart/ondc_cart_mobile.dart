@@ -11,6 +11,8 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   List<ProductOndcModel> productModels = [];
   List<OndcCartItem> cartWidget = [];
+  List<OndcCartItem> cartItemsWidgets = [];
+  List<OndcCartItem> cartFilteredItems = [];
   bool doesContain = false;
   double total = 0;
   late final CartBloc cartBloc;
@@ -20,6 +22,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
     cartBloc = context.read<CartBloc>();
     cartBloc.add(OnAppRefreshEvent());
     getCartList();
+    // getApiCartList();
   }
 
   //toDo : method to check if the products are still available to be written
@@ -32,6 +35,19 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
         OndcCartItem(productOndcModel: value),
       );
     });
+  }
+
+  getApiCartList() {
+    for (var element in cartBloc.productModelBlocLocal) {
+      cartItemsWidgets.add(OndcCartItem(productOndcModel: element));
+    }
+    cartFilteredItems = cartWidget
+        .where(
+          (mainModel) => cartItemsWidgets.every((subModel) =>
+              mainModel.productOndcModel.id == subModel.productOndcModel.id),
+        )
+        .toList();
+    errorLog('cart Items Filtered $cartFilteredItems');
   }
 
   @override
@@ -84,6 +100,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
             );
             total = total + model.total;
           });
+          getApiCartList();
           setState(() {
             cartWidget = cartItems;
             cartBloc.productModelBloc = productModels;
@@ -97,7 +114,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
           children: [
             Scaffold(
               key: _key,
-              drawer: const NavigationDrawer(),
+              drawer: const nv.NavigationDrawer(),
               appBar: AppBar(
                 leading: IconButton(
                   onPressed: () async {

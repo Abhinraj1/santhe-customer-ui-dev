@@ -277,7 +277,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       }
     }, builder: (context, state) {
       return Scaffold(
-        drawer: const NavigationDrawer(),
+        drawer: const nv.NavigationDrawer(),
         key: _key,
         appBar: AppBar(
           leading: IconButton(
@@ -686,28 +686,31 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                     : Padding(
                                         padding:
                                             const EdgeInsets.only(top: 5.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/phonepng.png',
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            AutoSizeText(
-                                              '${widget.shopModel.phone}',
-                                              style: TextStyle(
-                                                color: AppColors().white100,
-                                                fontSize: 11,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/phonepng.png',
+                                                height: 25,
+                                                width: 25,
                                               ),
-                                            ),
-                                          ],
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              AutoSizeText(
+                                                '${widget.shopModel.phone}',
+                                                style: TextStyle(
+                                                  color: AppColors().white100,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                 widget.shopModel.email == null

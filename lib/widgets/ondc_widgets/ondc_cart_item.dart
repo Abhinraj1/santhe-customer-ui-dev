@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -181,31 +182,31 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
+                              AutoSizeText(
                                 '₹ ${widget.productOndcModel.maximum_value}',
                                 style: TextStyle(
                                     color: AppColors().brandDark,
-                                    fontSize: 13,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.lineThrough),
                               ),
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
+                              AutoSizeText(
                                 '₹ ${widget.productOndcModel.value}',
                                 style: TextStyle(
                                     color: AppColors().brandDark,
-                                    fontSize: 14,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
-                                width: 30,
+                                width: 20,
                               ),
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: Container(
-                                  width: 100,
+                                  width: 90,
                                   color: Colors.white,
                                   child: Row(
                                     children: [
@@ -225,7 +226,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                         '${widget.productOndcModel.quantity}',
                                         style: TextStyle(
                                           color: AppColors().brandDark,
-                                          fontSize: 14,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

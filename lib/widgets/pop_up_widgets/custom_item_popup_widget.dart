@@ -347,7 +347,7 @@ class _CustomItemPopUpWidgetState extends State<CustomItemPopUpWidget> {
                           //function logic
                           controller: _unitsController,
                           buttons: availableUnits,
-                          onSelected: (index, isSelected) {
+                          onSelected: (_, index, isSelected) {
                             selectedUnit = availableUnits[index];
                           }),
                     ),

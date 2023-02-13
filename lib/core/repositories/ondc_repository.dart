@@ -1,16 +1,13 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_url.dart';
+import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/loggers.dart';
-import 'package:santhe/firebase/firebase_helper.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-
-import '../../controllers/getx/profile_controller.dart';
 
 class OndcRepository with LogMixin {
   String? transactionid;
@@ -93,9 +90,9 @@ class OndcRepository with LogMixin {
       {required String transactionIdl}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     warningLog('Firebase Id being sent$firebaseId');
-    //! transaction id needs to be updated
+    //! Firebase id needs to be updated
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/nearby?transaction_id=$transactionIdl&limit=4&offset=0&firebase_id=$firebaseId');
+        'http://ondcstaging.santhe.in/santhe/ondc/store/nearby?transaction_id=$transactionIdl&limit=10&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

@@ -19,7 +19,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/ondc/ondc_shop_list/ondc_shop_list_view.dart';
-import 'package:santhe/widgets/navigation_drawer_widget.dart';
+import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 

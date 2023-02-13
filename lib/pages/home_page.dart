@@ -31,7 +31,7 @@ import '../controllers/home_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../core/app_helpers.dart';
 import '../core/app_url.dart';
-import '../widgets/navigation_drawer_widget.dart';
+import '../widgets/navigation_drawer_widget.dart' as nv;
 import 'new_tab_pages/new_tab_page.dart';
 import 'sent_tab_pages/sent_tab_page.dart';
 
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      drawer: const NavigationDrawer(),
+      drawer: const nv.NavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {

@@ -59,6 +59,9 @@ class AppHelpers with LogMixin {
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';
 
+  Future<String> get getAuthToken async =>
+      await FirebaseAuth.instance.currentUser?.getIdToken() ?? '';
+
   static Future<String> get bearerToken async {
     try {
       newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();

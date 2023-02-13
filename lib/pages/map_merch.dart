@@ -34,7 +34,7 @@ import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/new_tab_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
-import 'package:santhe/widgets/navigation_drawer_widget.dart';
+import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -155,7 +155,6 @@ class _MapMerchantState extends State<MapMerchant>
         final responseBody =
             json.decode(response.body)['data'] as List<dynamic>;
         warningLog('$responseBody');
-
         for (var element in responseBody) {
           warningLog(
               '${element['contact']['location']['lat']} ${element['contact']['location']['lng']}');
@@ -254,7 +253,7 @@ class _MapMerchantState extends State<MapMerchant>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _key,
-      drawer: const NavigationDrawer(),
+      drawer: const nv.NavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {
@@ -778,7 +777,7 @@ class _MapMerchantState extends State<MapMerchant>
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             items: _addDividersAfterItems(),
-                                            customItemsHeight: 4,
+                                            customItemsHeights: const [4],
                                             value: selectedValue,
                                             onChanged: (value) {
                                               changeState(() {

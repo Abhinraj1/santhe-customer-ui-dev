@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, non_constant_identifier_names
 part of 'ondc_bloc.dart';
 
 abstract class OndcEvent extends Equatable {

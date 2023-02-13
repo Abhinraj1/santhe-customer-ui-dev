@@ -10,7 +10,7 @@ CustomerModel fallback_error_customer = CustomerModel(
   lat: '0',
   address: 'X',
   customerId: '0',
-  customerLoginTime: DateTime.now(),
+  customerLoginTime: DateTime.now().toString(),
   customerName: 'X',
   customerPlan: 'default',
   customerRatings: '0',

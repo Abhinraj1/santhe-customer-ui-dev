@@ -14,10 +14,12 @@ import 'package:resize/resize.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
+import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/getapp.dart';
+import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
@@ -39,18 +41,15 @@ void main() async {
     () async {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
-      HydratedBlocOverrides.runZoned(() => runApp(const MyApp()),
-          storage: storage);
+      runApp(const MyApp());
     },
     (error, stack) =>
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  HydratedBlocOverrides.runZoned(
-      () => runApp(
-            const MyApp(),
-          ),
-      storage: storage);
+  runApp(
+    const MyApp(),
+  );
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: AppColors().brandDark,
   ));
@@ -72,6 +71,9 @@ class MyApp extends StatelessWidget {
           ),
           RepositoryProvider<OndcCheckoutRepository>(
             create: (context) => OndcCheckoutRepository(),
+          ),
+          RepositoryProvider<AddressRepository>(
+            create: (context) => AddressRepository(),
           )
         ],
         child: MultiBlocProvider(
@@ -89,7 +91,12 @@ class MyApp extends StatelessWidget {
               create: (context) => CheckoutBloc(
                 ondcCheckoutRepository: context.read<OndcCheckoutRepository>(),
               ),
-            )
+            ),
+            BlocProvider<AddressBloc>(
+              create: (context) => AddressBloc(
+                addressRepository: context.read<AddressRepository>(),
+              ),
+            ),
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,

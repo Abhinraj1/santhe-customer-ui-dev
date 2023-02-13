@@ -27,6 +27,14 @@ class AppUrl {
   static const String _baseCloudFunctions =
       'https://us-central1-$envType.cloudfunctions.net/apis/santhe/v1';
 
+  static String host = 'https://us-central1-$envType.cloudfunctions.net';
+
+  static String updateCustomer =
+      '$host/apis/santhe/v1/app/customer/updateCustomer';
+
+  static String addCustomerNode =
+      '$_baseCloudFunctions/app/customer/updateCustomer';
+
   static const String FAQURL = '$_baseUrl/content/custContent/';
 
   static String checkLogin = '$_baseCloudFunctions/customers/status/';
@@ -70,6 +78,9 @@ class AppUrl {
 
   static String GET_CUSTOMER_DETAILS(String customerId) =>
       '$_baseUrl/customer/$customerId';
+
+  static String getCustomerDetails =
+      '$host/apis/santhe/v1/app/customer/getCustomer';
 
   static String CHECK_RADIUS(
           String customerId, String lat, String long, String pinCode) =>

@@ -1,6 +1,6 @@
 class CustomerModel {
-
-  CustomerModel({required this.lng,
+  CustomerModel({
+    required this.lng,
     required this.lat,
     required this.address,
     required this.customerId,
@@ -33,7 +33,7 @@ class CustomerModel {
 
   String customerId;
 
-  DateTime customerLoginTime;
+  String customerLoginTime;
 
   String customerName;
 
@@ -47,30 +47,23 @@ class CustomerModel {
 
   bool opStats;
 
-  factory CustomerModel.fromJson(Map json){
+  factory CustomerModel.fromJson(Map json) {
     return CustomerModel(
-        address: json['contact']['mapValue']['fields']['address']['stringValue'],
-        emailId: json['contact']['mapValue']['fields']['emailId']['stringValue'],
-        lat: json['contact']['mapValue']['fields']['location']
-        ['mapValue']['fields']['lat']['doubleValue']
-            .toString(),
-        lng: json['contact']['mapValue']['fields']['location']
-        ['mapValue']['fields']['lng']['doubleValue']
-            .toString(),
-        pinCode: json['contact']['mapValue']['fields']['pincode']['integerValue'],
-        phoneNumber: json['contact']['mapValue']['fields']['phoneNumber']['integerValue'],
-        customerId: json['custId']['integerValue'],
-        customerName: json['custName']['stringValue'],
-        customerRatings: json['custRatings']['integerValue'] ??
-            json['custRatings']['doubleValue'].toString(),
-        customerReferral: json['custReferal']['integerValue'],
-        customerStatus: json['custStatus']['stringValue'],
-        customerPlan: json['custPlan']['stringValue'],
-        customerLoginTime: DateTime.parse(
-            json['custLoginTime']['timestampValue']),
-        howToReach: json['contact']['mapValue']['fields']['howToReach']
-        ['stringValue'],
-        opStats: json['opStats']==null?false:json['opStats']['booleanValue']
+      address: json['contact']['address'].toString(),
+      emailId: json['contact']['emailId'].toString(),
+      lat: json['contact']['location']['lat'].toString(),
+      lng: json['contact']['location']['lng'].toString(),
+      pinCode: json['contact']['pincode'].toString(),
+      phoneNumber: json['contact']['phoneNumber'].toString(),
+      customerId: json['contact']['phoneNumber'].toString(),
+      customerName: json['custName'].toString(),
+      customerRatings: json['custRatings'].toString(),
+      customerReferral: json['custReferal'].toString(),
+      customerStatus: json['custStatus'].toString(),
+      customerPlan: json['custPlan'].toString(),
+      customerLoginTime: json['custLoginTime'],
+      howToReach: json['contact']['howToReach'].toString(),
+      opStats: json['opStats'].toString().contains('true') ? true : false,
     );
   }
 }

@@ -155,6 +155,24 @@ class OndcCheckoutRepository with LogMixin {
     }
   }
 
+  confirmOrder(
+      {required String messageId, required String transactionId}) async {
+    final url =
+        Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/confirm/order');
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {"transaction_id": transactionId, "message_id": messageId},
+        ),
+      );
+      final responseBody = json.decode(response.body);
+      warningLog('$responseBody');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<String> initializeCart({
     required String firebaseId,
     required String messageId,

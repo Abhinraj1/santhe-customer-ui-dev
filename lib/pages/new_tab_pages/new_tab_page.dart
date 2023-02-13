@@ -375,7 +375,7 @@ class _NewTabPageState extends State<NewTabPage>
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             items: _addDividersAfterItems(),
-                                            customItemsHeight: 4,
+                                            customItemsHeights: const [4],
                                             value: selectedValue,
                                             onChanged: (value) {
                                               changeState(() {

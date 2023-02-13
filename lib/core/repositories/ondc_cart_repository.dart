@@ -120,8 +120,8 @@ class OndcCartRepository with LogMixin {
       final response = await http.get(url, headers: header);
       warningLog('$response');
       final responseBody = await json.decode(response.body);
-      final cartItemBody = responseBody['data'];
-      final cartItemCount = responseBody['count'];
+      final cartItemBody = responseBody['data']['data'];
+      final cartItemCount = responseBody['data']['count'];
       warningLog('$cartItemCount and body $cartItemBody');
       if (cartItemCount == 0) {
         productModels.clear();
@@ -131,7 +131,7 @@ class OndcCartRepository with LogMixin {
       for (var element in cartItemBody) {
         models.add(
           ProductOndcModel.fromMap(
-            element['item'],
+            element,
           ),
         );
       }

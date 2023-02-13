@@ -22,7 +22,7 @@ import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
 
-import '../../../widgets/navigation_drawer_widget.dart';
+import '../../../widgets/navigation_drawer_widget.dart' as nv;
 
 part 'ondc_product_global_desktop.dart';
 part 'ondc_product_global_mobile.dart';

@@ -654,7 +654,7 @@ class _NewItemPopUpWidgetState extends State<NewItemPopUpWidget> {
                                   //function logic
                                   controller: _unitsController,
                                   buttons: units,
-                                  onSelected: (index, isSelected) {
+                                  onSelected: (_, index, isSelected) {
                                     selectedUnit = units[index];
                                   }),
                             ),

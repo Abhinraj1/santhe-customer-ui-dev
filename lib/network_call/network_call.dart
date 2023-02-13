@@ -202,20 +202,34 @@ class NetworkCall with LogMixin {
   Future<CustomerModel> getCustomerDetails() async {
     final formattedPhoneNumber = AppHelpers()
         .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
-    var response = await callApi(
-      mode: REST.get,
-      url: Uri.parse(
-        AppUrl.GET_CUSTOMER_DETAILS(formattedPhoneNumber
-            // AppHelpers().getPhoneNumberWithoutCountryCode,
-            ),
-      ),
-    );
+    final String nodeUrl = AppUrl.getCustomerDetails;
+
+    final header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
+    };
+
+    var data = {'id': AppHelpers().getPhoneNumberWithoutCountryCode};
+
+    // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
+    var response = await http.post(Uri.parse(nodeUrl),
+        body: json.encode(data), headers: header);
+    //  await callApi(
+    //   mode: REST.get,
+    //   url: Uri.parse(
+    //     AppUrl.GET_CUSTOMER_DETAILS(formattedPhoneNumber
+    //         // AppHelpers().getPhoneNumberWithoutCountryCode,
+    //         ),
+    //   ),
+    // );
 
     warningLog(' the phone number without country code $formattedPhoneNumber');
     var jsonResponse = jsonDecode(response.body);
     warningLog(' response $jsonResponse');
     if (jsonResponse != null && response.statusCode == 200) {
-      return CustomerModel.fromJson(jsonResponse['fields']);
+      return CustomerModel.fromJson(
+        jsonResponse['data'],
+      );
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
       throw ServerError();

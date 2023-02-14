@@ -168,7 +168,7 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
       builder: (context, state) {
         return Scaffold(
           key: _key,
-          drawer: const nv.NavigationDrawer(),
+          drawer: const nv.CustomNavigationDrawer(),
           appBar: AppBar(
             leading: IconButton(
               onPressed: () async {

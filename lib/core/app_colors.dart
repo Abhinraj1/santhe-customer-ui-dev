@@ -34,4 +34,10 @@ class AppColors{
 
   Color get green100 => const Color(0xFF38B000);
 
+  Color get appBarShadow => const Color(0xffFFBE74);
+
+
+  Color get primaryOrange => const Color(0xffFF9800);
+
+
 }

@@ -13,10 +13,15 @@ class OndcRepository with LogMixin {
   String? transactionid;
   int _productGlobalCount = 0;
   int _shopProductCount = 0;
+  int _shopsListCount = 0;
   int _searchProductCountInLocalShop = 0;
 
   int get productGlobalCount {
     return _productGlobalCount;
+  }
+
+  int get shopsListCount {
+    return _shopsListCount;
   }
 
   int get searchProductCountInLocalShop {
@@ -206,5 +211,36 @@ class OndcRepository with LogMixin {
         jsonData.map((e) => ShopModel.fromMap(e)).toList();
     warningLog('$shopModel');
     return shopModel;
+  }
+
+  Future<List<ShopModel>> getListOfShopsForSearchedProduct(
+      {required String transactionIdLocal, required String productName}) async {
+    final url = Uri.parse(
+        'http://ondcstaging.santhe.in/santhe/ondc/item/nearby?transaction_id'
+        '=$transactionIdLocal&search=%$productName%&limit=10&offset=0');
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    try {
+      warningLog('global search product $productName');
+      final response = await http.get(url, headers: header);
+      warningLog('${response.statusCode}');
+
+      final responseBody =
+          await json.decode(response.body)['data']['rows'] as List<dynamic>;
+
+      warningLog('$responseBody');
+      _shopsListCount =
+          await json.decode(response.body)['data']['count'] as int;
+      warningLog('checking for count of global items $_shopsListCount');
+      List<ShopModel> shopsWithSearchedProduct =
+          responseBody.map((e) => ShopModel.fromMap(e)).toList();
+      warningLog('$shopsWithSearchedProduct');
+      return shopsWithSearchedProduct;
+    } catch (e) {
+      warningLog(e.toString());
+      rethrow;
+    }
   }
 }

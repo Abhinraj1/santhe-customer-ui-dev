@@ -31,9 +31,12 @@ import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/ondc/map_text/map_text_view.dart';
 import 'package:santhe/pages/ondc/ondc_cart/ondc_cart_view.dart';
 import 'package:santhe/pages/ondc/ondc_product_global/ondc_product_global_view.dart';
-import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
-import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
+import 'package:santhe/widgets/navigation_drawer_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
+import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
+
+import '../../../widgets/ondc_widgets/ondc_product_widget.dart';
+import '../../../widgets/ondc_widgets/ondc_search_view.dart';
 
 import '../../customer_registration_pages/mapAddressPicker.dart';
 

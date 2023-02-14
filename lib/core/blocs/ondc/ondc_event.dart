@@ -84,3 +84,16 @@ class FetchProductsOfShops extends OndcEvent {
   @override
   List<Object?> get props => [transactionId, shopId];
 }
+
+
+
+class FetchListOfShopWithSearchedProducts extends OndcEvent {
+  final String transactionId;
+  final String productName;
+  const FetchListOfShopWithSearchedProducts({
+    required this.transactionId,
+    required this.productName,
+  });
+  @override
+  List<Object> get props => [transactionId, productName];
+}

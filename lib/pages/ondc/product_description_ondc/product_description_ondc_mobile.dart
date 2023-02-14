@@ -136,7 +136,7 @@ class _ProductDescriptionOndcMobileState
     final cart = RepositoryProvider.of<OndcCartRepository>(context);
     return Scaffold(
       key: _key,
-      drawer: const nv.NavigationDrawer(),
+      drawer: const nv.CustomNavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {

@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -96,22 +95,22 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
               ),
               widget.shopModel.items.isEmpty
                   ? Expanded(
-                      child: Text(
-                        widget.shopModel.name,
-                        style: TextStyle(
-                            color: AppColors().brandDark,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
+                child: Text(
+                  "${widget.shopModel.name}",
+                  style: TextStyle(
+                      color: AppColors().brandDark,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
                   : Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: networkImages,
-                        ),
-                      ),
-                    ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: networkImages,
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Row(

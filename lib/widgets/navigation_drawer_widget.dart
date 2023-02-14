@@ -2,7 +2,6 @@ import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 
 import 'navigation_drawer_tile.dart';
 import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +20,10 @@ import '../pages/nav_bar_pages/contact_us_page.dart';
 import '../pages/nav_bar_pages/faq_page.dart';
 import '../pages/nav_bar_pages/terms_condition_page.dart';
 
-class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({Key? key}) : super(key: key);
+
+///changed name from NavigationDrawer to CustomNavigationDrawer
+class CustomNavigationDrawer extends StatelessWidget {
+  const CustomNavigationDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +144,14 @@ class NavigationDrawer extends StatelessWidget {
             thickness: 1.1,
           ),
           SizedBox(height: screenHeight * 3),
+          NavigationDrawerTile(
+            icon: CupertinoIcons.list_bullet,
+            tileText: 'My Orders',
+            onPress: () {
+              // Navigator.pop(context);
+              ///Get.to(() => const FAQPage());
+            },
+          ),
           NavigationDrawerTile(
             icon: CupertinoIcons.question,
             tileText: 'FAQ',

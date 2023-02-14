@@ -59,7 +59,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
     final ProfileController profileController = Get.find<ProfileController>();
     return Scaffold(
       key: _key,
-      drawer: const nv.NavigationDrawer(),
+      drawer: const nv.CustomNavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {

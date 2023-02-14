@@ -4,6 +4,8 @@ const String kAppName = "Santhe";
 const Color kTextFieldGrey = Color(0xffD1D1D1);
 const Color kTextGrey = Color(0xff8B8B8B);
 const double kTextFieldCircularBorderRadius = 14.0;
+const double customButtonBorderRadius = 10;
+const double imageCellBorderRadius = 8;
 
 class Constant {
   static Color bgColor = const Color(0xffF89522);

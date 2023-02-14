@@ -91,3 +91,19 @@ class OndcProductsOfShopsLoaded extends OndcState {
   @override
   List<Object> get props => [productModels];
 }
+
+class SearchItem extends OndcState{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SearchItemLoaded extends OndcState{
+
+   final List<ShopModel> shopsList;
+
+  const SearchItemLoaded({required this.shopsList});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [shopsList];
+}

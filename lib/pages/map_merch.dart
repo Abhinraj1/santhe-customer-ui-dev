@@ -34,13 +34,13 @@ import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/new_tab_page.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
-import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/api_service_controller.dart';
 import '../controllers/getx/profile_controller.dart';
+import '../widgets/navigation_drawer_widget.dart';
 
 class MapMerchant extends StatefulWidget {
   const MapMerchant({
@@ -253,7 +253,7 @@ class _MapMerchantState extends State<MapMerchant>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _key,
-      drawer: const nv.NavigationDrawer(),
+      drawer: const CustomNavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {
@@ -777,6 +777,8 @@ class _MapMerchantState extends State<MapMerchant>
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             items: _addDividersAfterItems(),
+
+                                            ///
                                             customItemsHeights: const [4],
                                             value: selectedValue,
                                             onChanged: (value) {

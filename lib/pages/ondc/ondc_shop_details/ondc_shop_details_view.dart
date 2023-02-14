@@ -18,16 +18,15 @@ import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
-
 import 'package:santhe/models/ondc/shop_model.dart';
 import 'package:santhe/pages/ondc/ondc_cart/ondc_cart_view.dart';
 import 'package:santhe/pages/ondc/ondc_product_local/ondc_product_local_view.dart';
-import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
-import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
-
+import 'package:santhe/widgets/navigation_drawer_widget.dart';
+import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
+import '../../../widgets/ondc_widgets/ondc_product_widget.dart';
 part 'ondc_shop_details_desktop.dart';
-part 'ondc_shop_details_mobile.dart';
 part 'ondc_shop_details_tablet.dart';
+part 'ondc_shop_details_mobile.dart';
 
 class OndcShopDetailsView extends StatelessWidget {
   final ShopModel shopModel;

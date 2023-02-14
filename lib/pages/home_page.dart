@@ -24,14 +24,13 @@ import 'package:santhe/pages/archive_tab_pages/archive_tab_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/youtubevideo.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:santhe/widgets/navigation_drawer_widget.dart';
 import '../controllers/api_service_controller.dart';
 import '../controllers/getx/all_list_controller.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/notification_controller.dart';
 import '../core/app_helpers.dart';
 import '../core/app_url.dart';
-import '../widgets/navigation_drawer_widget.dart' as nv;
 import 'new_tab_pages/new_tab_page.dart';
 import 'sent_tab_pages/sent_tab_page.dart';
 
@@ -105,7 +104,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      drawer: const nv.NavigationDrawer(),
+      drawer: const CustomNavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {

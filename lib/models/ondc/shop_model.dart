@@ -13,7 +13,6 @@ class ShopModel extends Equatable {
   final dynamic createdAt;
   final dynamic updatedAt;
   final dynamic deletedAt;
-  final dynamic description;
   final dynamic delivery;
   final dynamic ondc_location_id;
   final dynamic ondc_store_id;
@@ -27,6 +26,13 @@ class ShopModel extends Equatable {
   final dynamic transaction_id;
   final dynamic id;
   final dynamic items;
+  final dynamic days;
+  final dynamic frequency;
+  final dynamic storeOpenTime;
+  final dynamic storeClosingTime;
+  final dynamic times;
+  final dynamic short_description;
+  final dynamic long_description;
   const ShopModel({
     required this.name,
     required this.address,
@@ -37,7 +43,6 @@ class ShopModel extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
-    required this.description,
     required this.delivery,
     required this.ondc_location_id,
     required this.ondc_store_id,
@@ -51,57 +56,77 @@ class ShopModel extends Equatable {
     required this.transaction_id,
     required this.id,
     required this.items,
+    required this.days,
+    required this.frequency,
+    required this.storeOpenTime,
+    required this.storeClosingTime,
+    required this.times,
+    required this.short_description,
+    required this.long_description,
   });
 
   ShopModel copyWith({
-    dynamic name,
-    dynamic address,
-    dynamic city,
-    dynamic pincode,
-    dynamic item_count,
-    dynamic distance,
-    dynamic createdAt,
-    dynamic updatedAt,
-    dynamic deletedAt,
-    dynamic description,
-    dynamic delivery,
-    dynamic ondc_location_id,
-    dynamic ondc_store_id,
-    dynamic state,
-    dynamic bpp_id,
-    dynamic bpp_uri,
-    dynamic symbol,
-    dynamic message_id,
-    dynamic transaction_id,
-    dynamic id,
-    dynamic items,
-    dynamic email,
-    dynamic phone,
+    dynamic? name,
+    dynamic? address,
+    dynamic? city,
+    dynamic? pincode,
+    dynamic? item_count,
+    dynamic? distance,
+    dynamic? createdAt,
+    dynamic? updatedAt,
+    dynamic? deletedAt,
+    dynamic? delivery,
+    dynamic? ondc_location_id,
+    dynamic? ondc_store_id,
+    dynamic? state,
+    dynamic? bpp_id,
+    dynamic? bpp_uri,
+    dynamic? email,
+    dynamic? phone,
+    dynamic? symbol,
+    dynamic? message_id,
+    dynamic? transaction_id,
+    dynamic? id,
+    dynamic? items,
+    dynamic? days,
+    dynamic? frequency,
+    dynamic? storeOpenTime,
+    dynamic? storeClosingTime,
+    dynamic? times,
+    dynamic? short_description,
+    dynamic? long_description,
   }) {
     return ShopModel(
-        name: name ?? this.name,
-        address: address ?? this.address,
-        city: city ?? this.city,
-        pincode: pincode ?? this.pincode,
-        item_count: item_count ?? this.item_count,
-        distance: distance ?? this.distance,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        deletedAt: deletedAt ?? this.deletedAt,
-        description: description ?? this.description,
-        delivery: delivery ?? this.delivery,
-        ondc_location_id: ondc_location_id ?? this.ondc_location_id,
-        ondc_store_id: ondc_store_id ?? this.ondc_store_id,
-        state: state ?? this.state,
-        bpp_id: bpp_id ?? this.bpp_id,
-        bpp_uri: bpp_uri ?? this.bpp_uri,
-        symbol: symbol ?? this.symbol,
-        message_id: message_id ?? this.message_id,
-        transaction_id: transaction_id ?? this.transaction_id,
-        id: id ?? this.id,
-        items: items ?? this.items,
-        email: email ?? this.email,
-        phone: phone ?? this.phone);
+      name: name ?? this.name,
+      address: address ?? this.address,
+      city: city ?? this.city,
+      pincode: pincode ?? this.pincode,
+      item_count: item_count ?? this.item_count,
+      distance: distance ?? this.distance,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      delivery: delivery ?? this.delivery,
+      ondc_location_id: ondc_location_id ?? this.ondc_location_id,
+      ondc_store_id: ondc_store_id ?? this.ondc_store_id,
+      state: state ?? this.state,
+      bpp_id: bpp_id ?? this.bpp_id,
+      bpp_uri: bpp_uri ?? this.bpp_uri,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      symbol: symbol ?? this.symbol,
+      message_id: message_id ?? this.message_id,
+      transaction_id: transaction_id ?? this.transaction_id,
+      id: id ?? this.id,
+      items: items ?? this.items,
+      days: days ?? this.days,
+      frequency: frequency ?? this.frequency,
+      storeOpenTime: storeOpenTime ?? this.storeOpenTime,
+      storeClosingTime: storeClosingTime ?? this.storeClosingTime,
+      times: times ?? this.times,
+      short_description: short_description ?? this.short_description,
+      long_description: long_description ?? this.long_description,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -115,7 +140,6 @@ class ShopModel extends Equatable {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'deletedAt': deletedAt,
-      'description': description,
       'delivery': delivery,
       'ondc_location_id': ondc_location_id,
       'ondc_store_id': ondc_store_id,
@@ -134,7 +158,8 @@ class ShopModel extends Equatable {
 
   factory ShopModel.fromMap(Map<String, dynamic> map) {
     return ShopModel(
-      name: map['name'] != null ? map['name'] as dynamic : null,
+      name:
+          map['store']['name'] != null ? map['store']['name'] as dynamic : null,
       address: map['address'] != null ? map['address'] as dynamic : null,
       city: map['city'] != null ? map['city'] as dynamic : null,
       pincode: map['pincode'] != null ? map['pincode'] as dynamic : null,
@@ -144,27 +169,51 @@ class ShopModel extends Equatable {
       createdAt: map['createdAt'] != null ? map['createdAt'] as dynamic : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as dynamic : null,
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] as dynamic : null,
-      description:
-          map['description'] != null ? map['description'] as dynamic : null,
       delivery: map['delivery'] != null ? map['delivery'] as dynamic : null,
       ondc_location_id: map['ondc_location_id'] != null
           ? map['ondc_location_id'] as dynamic
           : null,
-      ondc_store_id:
-          map['ondc_store_id'] != null ? map['ondc_store_id'] as dynamic : null,
-      state: map['state'] != null ? map['state'] as dynamic : null,
-      bpp_id: map['bpp_id'] != null ? map['bpp_id'] as dynamic : null,
-      bpp_uri: map['bpp_uri'] != null ? map['bpp_uri'] as dynamic : null,
-      symbol: map['symbol'] != null ? map['symbol'] as dynamic : null,
-      message_id:
-          map['message_id'] != null ? map['message_id'] as dynamic : null,
-      transaction_id: map['transaction_id'] != null
-          ? map['transaction_id'] as dynamic
+      ondc_store_id: map['store']['ondc_store_id'] != null
+          ? map['store']['ondc_store_id'] as dynamic
           : null,
-      id: map['id'] != null ? map['id'] as dynamic : null,
+      state: map['state'] != null ? map['state'] as dynamic : null,
+      bpp_id: map['store']['bpp_id'] != null
+          ? map['store']['bpp_id'] as dynamic
+          : null,
+      bpp_uri: map['store']['bpp_uri'] != null
+          ? map['store']['bpp_uri'] as dynamic
+          : null,
+      symbol: map['store']['symbol'] != null
+          ? map['store']['symbol'] as dynamic
+          : null,
+      message_id: map['store']['message_id'] != null
+          ? map['store']['message_id'] as dynamic
+          : null,
+      transaction_id: map['store']['transaction_id'] != null
+          ? map['store']['transaction_id'] as dynamic
+          : null,
+      id: map['store']['id'] != null ? map['store']['id'] as dynamic : null,
       items: map['items'] != null ? map['items'] as dynamic : null,
-      email: map['email'] != null ? map['email'] as dynamic : null,
-      phone: map['phone'] != null ? map['phone'] as dynamic : null,
+      email: map['store']['email'] != null
+          ? map['store']['email'] as dynamic
+          : null,
+      phone: map['store']['phone'] != null
+          ? map['store']['phone'] as dynamic
+          : null,
+      days: map['days'] != null ? map['days'] as dynamic : null,
+      frequency: map['frequency'] != null ? map['frequency'] as dynamic : null,
+      storeOpenTime:
+          map['storeOpenTime'] != null ? map['storeOpenTime'] as dynamic : null,
+      storeClosingTime: map['storeCloseTime'] != null
+          ? map['storeCloseTime'] as dynamic
+          : null,
+      times: map['times'] != null ? map['times'] as dynamic : null,
+      short_description: map['store']['short_description'] != null
+          ? map['store']['short_description'] as dynamic
+          : null,
+      long_description: map['store']['long_description'] != null
+          ? map['store']['long_description'] as dynamic
+          : null,
     );
   }
 
@@ -188,20 +237,26 @@ class ShopModel extends Equatable {
       createdAt,
       updatedAt,
       deletedAt,
-      description,
       delivery,
       ondc_location_id,
       ondc_store_id,
       state,
       bpp_id,
       bpp_uri,
+      email,
+      phone,
       symbol,
       message_id,
       transaction_id,
       id,
       items,
-      email,
-      phone
+      days,
+      frequency,
+      storeOpenTime,
+      storeClosingTime,
+      times,
+      short_description,
+      long_description,
     ];
   }
 }

@@ -1,7 +1,6 @@
 library ondc_cart_view;
 
 import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +23,7 @@ import 'package:share_plus/share_plus.dart';
 part 'ondc_cart_mobile.dart';
 part 'ondc_cart_tablet.dart';
 part 'ondc_cart_desktop.dart';
+
 
 class OndcCartView extends StatelessWidget {
   const OndcCartView({Key? key}) : super(key: key);

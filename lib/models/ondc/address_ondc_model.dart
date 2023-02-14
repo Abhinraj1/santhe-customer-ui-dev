@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 
 class AddressOndcModel extends Equatable {
+  //! how to reach model update
   final dynamic id;
   final dynamic address_name;
   final dynamic lat;

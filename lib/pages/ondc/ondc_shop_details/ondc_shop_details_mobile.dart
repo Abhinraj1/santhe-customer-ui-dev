@@ -1,5 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+
 part of ondc_shop_details_view;
+
+//
 
 class _OndcShopDetailsMobile extends StatefulWidget {
   final ShopModel shopModel;
@@ -277,7 +280,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       }
     }, builder: (context, state) {
       return Scaffold(
-        drawer: const nv.NavigationDrawer(),
+        drawer: const CustomNavigationDrawer(),
         key: _key,
         appBar: AppBar(
           leading: IconButton(
@@ -686,31 +689,28 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                     : Padding(
                                         padding:
                                             const EdgeInsets.only(top: 5.0),
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/phonepng.png',
-                                                height: 25,
-                                                width: 25,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/phonepng.png',
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            AutoSizeText(
+                                              '${widget.shopModel.phone}',
+                                              style: TextStyle(
+                                                color: AppColors().white100,
+                                                fontSize: 11,
                                               ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                '${widget.shopModel.phone}',
-                                                style: TextStyle(
-                                                  color: AppColors().white100,
-                                                  fontSize: 11,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                 widget.shopModel.email == null

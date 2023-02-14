@@ -191,7 +191,7 @@ class _OndcProductLocalMobileState extends State<_OndcProductLocalMobile>
       }
     }, builder: (context, state) {
       return Scaffold(
-          drawer: const nv.NavigationDrawer(),
+          drawer: const CustomNavigationDrawer(),
           key: _key,
           appBar: AppBar(
             leading: IconButton(

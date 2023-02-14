@@ -23,7 +23,12 @@ import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
+import 'package:santhe/models/ondc/shop_model.dart';
+import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_mobile.dart';
+import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_screen_mobile.dart';
+import 'package:santhe/pages/ondc/ondc_return_screens/ondc_return_acknowledgement%20_screen/ondc_return_acknowledgement%20_screen_mobile.dart';
 import 'package:santhe/pages/splash_to_home.dart';
+import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -33,10 +38,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeGetIt();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runZonedGuarded<Future<void>>(
     () async {
       FlutterError.onError =
@@ -46,6 +51,7 @@ void main() async {
     (error, stack) =>
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     const MyApp(),
@@ -53,6 +59,10 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: AppColors().brandDark,
   ));
+
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {

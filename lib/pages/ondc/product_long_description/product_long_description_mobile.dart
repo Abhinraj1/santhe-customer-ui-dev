@@ -18,7 +18,7 @@ class _ProductLongDescriptionMobileState
   Widget build(BuildContext context) {
     return Scaffold(
         key: _key,
-        drawer: const nv.NavigationDrawer(),
+        drawer: const nv.CustomNavigationDrawer(),
         appBar: AppBar(
           leading: IconButton(
             onPressed: () async {

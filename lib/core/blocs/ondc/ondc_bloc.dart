@@ -2,11 +2,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:santhe/core/loggers.dart';
-
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-
+import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
 part 'ondc_event.dart';
 part 'ondc_state.dart';
 
@@ -128,6 +127,24 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       } catch (e) {
         emit(
           ErrorFetchingShops(
+            message: e.toString(),
+          ),
+        );
+      }
+    });
+
+    on<FetchListOfShopWithSearchedProducts>((event, emit) async {
+      emit(OndcFetchShopLoading());
+      try {
+        List<ShopModel> shopsList =
+            await ondcRepository.getListOfShopsForSearchedProduct(
+                productName: event.productName,
+                transactionIdLocal: event.transactionId);
+        warningLog("${shopsList}");
+        emit(SearchItemLoaded(shopsList: shopsList));
+      } catch (e) {
+        emit(
+          ErrorFetchingProductsOfShops(
             message: e.toString(),
           ),
         );

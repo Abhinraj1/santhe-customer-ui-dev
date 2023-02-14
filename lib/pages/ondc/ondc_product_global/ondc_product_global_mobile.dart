@@ -1,5 +1,25 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
-part of ondc_product_global_view;
+part of "ondc_product_global_view.dart";
+
+// import 'dart:convert';
+// import 'package:auto_size_text/auto_size_text.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_svg/svg.dart';
+// import 'package:get/get.dart';
+// import 'package:get/get_core/src/get_main.dart';
+// import '../../../constants.dart';
+// import '../../../core/app_colors.dart';
+// import '../../../core/blocs/ondc/ondc_bloc.dart';
+// import '../../../core/loggers.dart';
+// import '../../../core/repositories/ondc_repository.dart';
+// import '../../../models/ondc/product_ondc.dart';
+// import '../../../models/ondc/shop_model.dart';
+// import '../../../models/user_profile/customer_model.dart';
+// import '../../../widgets/navigation_drawer_widget.dart';
+// import '../../../widgets/ondc_widgets/ondc_shop_widget.dart';
+// import 'package:http/http.dart' as http;
+// import '../ondc_cart/ondc_cart_view.dart';
 
 class _OndcProductGlobalMobile extends StatefulWidget {
   final CustomerModel customerModel;
@@ -206,7 +226,7 @@ class _OndcProductGlobalMobileState extends State<_OndcProductGlobalMobile>
       builder: (context, state) {
         return Scaffold(
             key: _key,
-            drawer: const nv.NavigationDrawer(),
+            drawer: const CustomNavigationDrawer(),
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () async {
@@ -320,8 +340,9 @@ class _OndcProductGlobalMobileState extends State<_OndcProductGlobalMobile>
 
                         onTap: () {
                           warningLog('tapped');
-                          ge.Get.to(getSearchView(),
-                              transition: ge.Transition.rightToLeft);
+                          ge.Get.to(
+                            getSearchView(),
+                          );
                         },
                         // controller: _textEditingController,
                         // onChanged: (value) {

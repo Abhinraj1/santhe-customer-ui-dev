@@ -2,7 +2,6 @@
 library ondc_product_global_view;
 
 import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +19,10 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
-import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
+import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
 
-import '../../../widgets/navigation_drawer_widget.dart' as nv;
+import '../../../widgets/navigation_drawer_widget.dart';
+import '../../../widgets/ondc_widgets/ondc_product_widget.dart';
 
 part 'ondc_product_global_desktop.dart';
 part 'ondc_product_global_mobile.dart';

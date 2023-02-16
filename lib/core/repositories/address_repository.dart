@@ -32,6 +32,7 @@ class AddressRepository with LogMixin {
     required double lng,
     required String flat,
     required String address_id,
+    String? howtoReach,
   }) async {
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/address/update');
@@ -61,6 +62,7 @@ class AddressRepository with LogMixin {
             "country": getfinalAddress.country,
             "pincode": getfinalAddress.postalCode,
             "address_id": address_id,
+            "howToReach": "$howtoReach"
           },
         ),
       );

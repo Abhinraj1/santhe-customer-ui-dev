@@ -192,7 +192,7 @@ class ShopModel extends Equatable {
       transaction_id: map['store']['transaction_id'] != null
           ? map['store']['transaction_id'] as dynamic
           : null,
-      id: map['store']['id'] != null ? map['store']['id'] as dynamic : null,
+      id: map['id'] != null ? map['id'] as dynamic : null,
       items: map['items'] != null ? map['items'] as dynamic : null,
       email: map['store']['email'] != null
           ? map['store']['email'] as dynamic

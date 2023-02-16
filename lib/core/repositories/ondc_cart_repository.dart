@@ -130,7 +130,7 @@ class OndcCartRepository with LogMixin {
       List<ProductOndcModel> models = [];
       for (var element in cartItemBody) {
         models.add(
-          ProductOndcModel.fromMap(
+          ProductOndcModel.fromNewMap(
             element,
           ),
         );

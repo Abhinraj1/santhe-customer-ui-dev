@@ -38,7 +38,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeGetIt();
   await Firebase.initializeApp();
-  final storage = await HydratedStorage.build(
+  HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

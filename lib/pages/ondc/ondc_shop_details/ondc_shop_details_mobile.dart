@@ -85,10 +85,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       final response = await http.get(url);
       warningLog('${response.statusCode}');
       final responseBody =
-          await json.decode(response.body)['data']['rows'] as List<dynamic>;
+          await json.decode(response.body)['data'] as List<dynamic>;
       warningLog('$responseBody');
       List<ProductOndcModel> newSearchedProduct =
-          responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
+          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
       warningLog('new search products${newSearchedProduct.length}');
       List<ProductOndcModel> differenceModels = newSearchedProduct
           .toSet()
@@ -123,7 +123,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       required String shopId,
       required List<OndcProductWidget> productWidgetsLocal}) async {
     final Uri url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id=$transactionIdLocal&store_id=$shopId&search=%%&limit=$n&offset=0');
+        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id=$transactionIdLocal&storeLocation_id=$shopId&search=%%&limit=$n&offset=0');
     setState(() {
       _loading = true;
     });
@@ -131,10 +131,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       final response = await http.get(url);
       warningLog('${response.statusCode}');
       final responseBody =
-          await json.decode(response.body)['data']['rows'] as List<dynamic>;
+          await json.decode(response.body)['data'] as List<dynamic>;
       warningLog('$responseBody');
       List<ProductOndcModel> newProductList =
-          responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
+          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
       warningLog('new models $newProductList');
       infoLog('${existingProductModels.length}');
       List<ProductOndcModel> differenceModels = newProductList
@@ -247,8 +247,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
 
   @override
   Widget build(BuildContext context) {
-    warningLog(
-        'email ${widget.shopModel.email} and phone ${widget.shopModel.phone}');
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
       warningLog('checking for state $state');
       if (state is OndcProductsOfShopsLoaded) {
@@ -520,7 +518,8 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                           ),
                                         ),
                                   AutoSizeText(
-                                    widget.shopModel.delivery
+                                    widget.shopModel.delivery != null &&
+                                            widget.shopModel.delivery == true
                                         ? "Home Delivery Available"
                                         : "",
                                     minFontSize: 10,
@@ -767,7 +766,8 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         ),
                                       ),
                                 AutoSizeText(
-                                  widget.shopModel.delivery
+                                  widget.shopModel.delivery != null &&
+                                          widget.shopModel.delivery == true
                                       ? "Home Delivery Available"
                                       : "",
                                   minFontSize: 10,

@@ -54,6 +54,15 @@ class ClearSearchEventOndc extends OndcEvent {
   List<Object> get props => [productModels];
 }
 
+class ClearSearchEventShops extends OndcEvent {
+  List<ShopModel> shopModels;
+  ClearSearchEventShops({
+    required this.shopModels,
+  });
+  @override
+  List<Object> get props => [shopModels];
+}
+
 class SearchOndcItemGlobal extends OndcEvent {
   final String transactionId;
   final String productName;
@@ -84,8 +93,6 @@ class FetchProductsOfShops extends OndcEvent {
   @override
   List<Object?> get props => [transactionId, shopId];
 }
-
-
 
 class FetchListOfShopWithSearchedProducts extends OndcEvent {
   final String transactionId;

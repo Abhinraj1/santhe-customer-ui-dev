@@ -173,7 +173,7 @@ class _OndcProductGlobalMobileState extends State<_OndcProductGlobalMobile>
           await json.decode(response.body)['data']['rows'] as List<dynamic>;
       warningLog('json data $responseBody');
       List<ProductOndcModel> searchedProducts =
-          responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
+          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
       warningLog(
           'models length ${widget.productOndcModel.length} and ${searchedProducts.length}');
       List<ProductOndcModel> differenceModels = searchedProducts

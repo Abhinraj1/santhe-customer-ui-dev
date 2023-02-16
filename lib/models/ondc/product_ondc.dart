@@ -2,15 +2,14 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
-import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:santhe/core/loggers.dart';
 
 class ProductOndcModel extends Equatable with LogMixin {
   final dynamic id;
   final dynamic transaction_id;
   final dynamic ondc_item_id;
+  final dynamic ondc_location_id;
   final dynamic name;
   final dynamic short_description;
   final dynamic long_description;
@@ -33,11 +32,26 @@ class ProductOndcModel extends Equatable with LogMixin {
   final dynamic offered_value;
   final dynamic minimum_value;
   final dynamic maximum_value;
+  final dynamic net_quantity;
+  final dynamic storeLocationId;
+  final dynamic importer_FSSAI_license_no;
+  final dynamic other_FSSAI_license_no;
+  final dynamic additives_info;
+  final dynamic brand_owner_FSSAI_license_no;
+  final dynamic nutritional_info;
+  final dynamic fulfillment_id;
+  final dynamic fulfillmentId;
+  final dynamic ondc_fullfilment_type;
+  final dynamic packer_name;
+  final dynamic packer_address;
   final dynamic value;
+  final dynamic back_image_url;
   final dynamic createdAt;
   final dynamic updatedAt;
   final dynamic deletedAt;
   final dynamic itemId;
+  final dynamic categoryId;
+  final dynamic category;
   bool? isAddedToCart = false;
   dynamic quantity = 1;
   dynamic total;
@@ -46,6 +60,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     required this.id,
     required this.transaction_id,
     required this.ondc_item_id,
+    required this.ondc_location_id,
     required this.name,
     required this.short_description,
     required this.long_description,
@@ -68,11 +83,26 @@ class ProductOndcModel extends Equatable with LogMixin {
     required this.offered_value,
     required this.minimum_value,
     required this.maximum_value,
+    required this.net_quantity,
+    required this.storeLocationId,
+    required this.importer_FSSAI_license_no,
+    required this.other_FSSAI_license_no,
+    required this.additives_info,
+    required this.brand_owner_FSSAI_license_no,
+    required this.nutritional_info,
+    required this.fulfillment_id,
+    required this.fulfillmentId,
+    required this.ondc_fullfilment_type,
+    required this.packer_name,
+    required this.packer_address,
     required this.value,
+    required this.back_image_url,
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
     required this.itemId,
+    required this.categoryId,
+    required this.category,
     this.isAddedToCart,
     this.quantity,
     this.total,
@@ -83,6 +113,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     dynamic? id,
     dynamic? transaction_id,
     dynamic? ondc_item_id,
+    dynamic? ondc_location_id,
     dynamic? name,
     dynamic? short_description,
     dynamic? long_description,
@@ -105,11 +136,26 @@ class ProductOndcModel extends Equatable with LogMixin {
     dynamic? offered_value,
     dynamic? minimum_value,
     dynamic? maximum_value,
+    dynamic? net_quantity,
+    dynamic? storeLocationId,
+    dynamic? importer_FSSAI_license_no,
+    dynamic? other_FSSAI_license_no,
+    dynamic? additives_info,
+    dynamic? brand_owner_FSSAI_license_no,
+    dynamic? nutritional_info,
+    dynamic? fulfillment_id,
+    dynamic? fulfillmentId,
+    dynamic? ondc_fullfilment_type,
+    dynamic? packer_name,
+    dynamic? packer_address,
     dynamic? value,
+    dynamic? back_image_url,
     dynamic? createdAt,
     dynamic? updatedAt,
     dynamic? deletedAt,
     dynamic? itemId,
+    dynamic? categoryId,
+    dynamic? category,
     bool? isAddedToCart,
     dynamic? quantity,
     dynamic? total,
@@ -119,6 +165,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       id: id ?? this.id,
       transaction_id: transaction_id ?? this.transaction_id,
       ondc_item_id: ondc_item_id ?? this.ondc_item_id,
+      ondc_location_id: ondc_location_id ?? this.ondc_location_id,
       name: name ?? this.name,
       short_description: short_description ?? this.short_description,
       long_description: long_description ?? this.long_description,
@@ -141,15 +188,34 @@ class ProductOndcModel extends Equatable with LogMixin {
       offered_value: offered_value ?? this.offered_value,
       minimum_value: minimum_value ?? this.minimum_value,
       maximum_value: maximum_value ?? this.maximum_value,
+      net_quantity: net_quantity ?? this.net_quantity,
+      storeLocationId: storeLocationId ?? this.storeLocationId,
+      importer_FSSAI_license_no:
+          importer_FSSAI_license_no ?? this.importer_FSSAI_license_no,
+      other_FSSAI_license_no:
+          other_FSSAI_license_no ?? this.other_FSSAI_license_no,
+      additives_info: additives_info ?? this.additives_info,
+      brand_owner_FSSAI_license_no:
+          brand_owner_FSSAI_license_no ?? this.brand_owner_FSSAI_license_no,
+      nutritional_info: nutritional_info ?? this.nutritional_info,
+      fulfillment_id: fulfillment_id ?? this.fulfillment_id,
+      fulfillmentId: fulfillmentId ?? this.fulfillmentId,
+      ondc_fullfilment_type:
+          ondc_fullfilment_type ?? this.ondc_fullfilment_type,
+      packer_name: packer_name ?? this.packer_name,
+      packer_address: packer_address ?? this.packer_address,
       value: value ?? this.value,
+      back_image_url: back_image_url ?? this.back_image_url,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
       itemId: itemId ?? this.itemId,
+      categoryId: categoryId ?? this.categoryId,
+      category: category ?? this.category,
       isAddedToCart: isAddedToCart ?? this.isAddedToCart,
       quantity: quantity ?? this.quantity,
-      images: images ?? this.images,
       total: total ?? this.total,
+      images: images ?? this.images,
     );
   }
 
@@ -176,6 +242,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       'itemPriceCurrency': itemPriceCurrency,
       'estimated_value': estimated_value,
       'computed_value': computed_value,
+      'ondc_location_id': ondc_location_id,
       'listed_value': listed_value,
       'offered_value': offered_value,
       'minimum_value': minimum_value,
@@ -188,6 +255,18 @@ class ProductOndcModel extends Equatable with LogMixin {
       'images': images,
       'quantity': quantity,
       'isAddedToCart': isAddedToCart,
+      'category_id': categoryId,
+      'net_quantity': net_quantity,
+      'packer_name': packer_name,
+      'packer_address': packer_address,
+      'nutritional_info': nutritional_info,
+      'importer_FSSAI_license_no': importer_FSSAI_license_no,
+      'other_FSSAI_license_no': other_FSSAI_license_no,
+      'back_image_url': back_image_url,
+      'additives_info': additives_info,
+      'brand_owner_FSSAI_license_no': brand_owner_FSSAI_license_no,
+      'fulfillment_id': fulfillment_id,
+      'fulfillmentId': fulfillmentId,
       'total': total
     };
   }
@@ -195,7 +274,42 @@ class ProductOndcModel extends Equatable with LogMixin {
   factory ProductOndcModel.fromNewMap(Map<String, dynamic> map) {
     return ProductOndcModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
+      storeLocationId: map['storeLocationId'] != null
+          ? map['storeLocationId'] as dynamic
+          : null,
+      ondc_fullfilment_type: map['fulfillment']['ondc_fullfilment_type'] != null
+          ? map['fulfillment']['ondc_fullfilment_type'] as dynamic
+          : null,
+      fulfillmentId:
+          map['fulfillmentId'] != null ? map['fulfillmentId'] as dynamic : null,
+      back_image_url: map['back_image_url'] != null
+          ? map['back_image_url'] as dynamic
+          : null,
+      fulfillment_id: map['fulfillment_id'] != null
+          ? map['fulfillment_id'] as dynamic
+          : null,
       quantity: map['quantity'] != null ? map['quantity'] as dynamic : 0,
+      other_FSSAI_license_no: map['other_FSSAI_license_no'] != null
+          ? map['other_FSSAI_license_no'] as dynamic
+          : null,
+      importer_FSSAI_license_no: map['importer_FSSAI_license_no'] != null
+          ? map['importer_FSSAI_license_no'] as dynamic
+          : null,
+      nutritional_info:
+          map['nutritional_info'] != null ? map['nutritional_info'] : null,
+      packer_name:
+          map['packer_name'] != null ? map['packer_name'] as dynamic : null,
+      packer_address: map['packer_address'] != null
+          ? map['packer_address'] as dynamic
+          : null,
+      additives_info:
+          map['additives_info'] != null ? map['additives_info'] : null,
+      brand_owner_FSSAI_license_no: map['brand_owner_FSSAI_license_no'] != null
+          ? map['brand_owner_FSSAI_license_no'] as dynamic
+          : null,
+      net_quantity:
+          map['net_quantity'] != null ? map['net_quantity'] as dynamic : 0,
+      category: map['category'] != null ? map['category'] as dynamic : null,
       isAddedToCart:
           map['isAddedToCart'] != null ? map['isAddedToCart'] as bool : false,
       transaction_id: map['transaction_id'] != null
@@ -238,117 +352,16 @@ class ProductOndcModel extends Equatable with LogMixin {
       offered_value: map['offered_value'] != null ? map['offered_value'] : null,
       minimum_value:
           map['minimum_value'] != null ? map['minimum_value'] != null : null,
+      ondc_location_id: map['ondc_location_id'] != null
+          ? map['ondc_location_id'] as dynamic
+          : null,
       maximum_value: map['maximum_value'] != null ? map['maximum_value'] : null,
       value: map['value'] != null ? map['value'] : null,
+      categoryId: map['category_id'] != null ? map['category_id'] : null,
       createdAt: map['createdAt'] != null ? map['createdAt'] : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] : null,
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] : null,
       itemId: map['itemId'] != null ? map['itemId'] : null,
-      images: map['images'] != null ? map['images'] as List<dynamic> : null,
-      total: map['total'] != null ? map['total'] as dynamic : null,
-    );
-  }
-
-  factory ProductOndcModel.fromMap(Map<String, dynamic> map) {
-    return ProductOndcModel(
-      id: map['id'] != null ? map['id'] as dynamic : null,
-      quantity: map['quantity'] != null ? map['quantity'] as dynamic : 0,
-      isAddedToCart:
-          map['isAddedToCart'] != null ? map['isAddedToCart'] as bool : false,
-      transaction_id: map['transaction_id'] != null
-          ? map['transaction_id'] as dynamic
-          : null,
-      ondc_item_id:
-          map['ondc_item_id'] != null ? map['ondc_item_id'] as dynamic : null,
-      name: map['name'] != null ? map['name'] as dynamic : null,
-      short_description: map['short_description'] != null
-          ? map['short_description'] as dynamic
-          : null,
-      long_description: map['long_description'] != null
-          ? map['long_description'] as dynamic
-          : null,
-      returnable:
-          map['returnable'] != null ? map['returnable'] as dynamic : null,
-      isVeg: map['isVeg'] != null ? map['isVeg'] as dynamic : null,
-      time_to_ship:
-          map['time_to_ship'] != null ? map['time_to_ship'] as dynamic : null,
-      rating: map['rating'] != null ? map['rating'] as dynamic : null,
-      storeId: map['storeId'] != null ? map['storeId'] as dynamic : null,
-      customer_care:
-          map['customer_care'] != null ? map['customer_care'] as dynamic : null,
-      return_window:
-          map['return_window'] != null ? map['return_window'] as dynamic : null,
-      seller_pickup_return: map['seller_pickup_return'] != null
-          ? map['seller_pickup_return'] as dynamic
-          : null,
-      symbol: map['symbol'] != null ? map['symbol'] as dynamic : null,
-      available: map['available'] != null ? map['available'] as dynamic : null,
-      maximum: map['maximum'] != null ? map['maximum'] as dynamic : null,
-      itemPriceId: map['itemPrice'] != null
-          ? map['itemPrice']['id'] != null
-              ? map['itemPrice']['id'] as dynamic
-              : null
-          : null,
-      itemPriceCurrency: map['itemPrice'] != null
-          ? map['itemPrice']['currency'] != null
-              ? map['itemPrice']['currency'] as dynamic
-              : null
-          : null,
-      estimated_value: map['itemPrice'] != null
-          ? map['itemPrice']['estimated_value'] != null
-              ? map['itemPrice']['estimated_value'] as dynamic
-              : null
-          : null,
-      computed_value: map['itemPrice'] != null
-          ? map['itemPrice']['computed_value'] != null
-              ? map['itemPrice']['computed_value'] as dynamic
-              : null
-          : null,
-      listed_value: map['itemPrice'] != null
-          ? map['itemPrice']['listed_value'] != null
-              ? map['itemPrice']['listed_value'] as dynamic
-              : null
-          : null,
-      offered_value: map['itemPrice'] != null
-          ? map['itemPrice']['offered_value'] != null
-              ? map['itemPrice']['offered_value'] as dynamic
-              : null
-          : null,
-      minimum_value: map['itemPrice'] != null
-          ? map['itemPrice']['minimum_value'] != null
-              ? map['itemPrice']['minimum_value'] as dynamic
-              : null
-          : null,
-      maximum_value: map['itemPrice'] != null
-          ? map['itemPrice']['maximum_value'] != null
-              ? map['itemPrice']['maximum_value'] as dynamic
-              : null
-          : null,
-      value: map['itemPrice'] != null
-          ? map['itemPrice']['value'] != null
-              ? map['itemPrice']['value'] as dynamic
-              : null
-          : null,
-      createdAt: map['itemPrice'] != null
-          ? map['itemPrice']['createdAt'] != null
-              ? map['itemPrice']['createdAt'] as dynamic
-              : null
-          : null,
-      updatedAt: map['itemPrice'] != null
-          ? map['itemPrice']['updatedAt'] != null
-              ? map['itemPrice']['updatedAt'] as dynamic
-              : null
-          : null,
-      deletedAt: map['itemPrice'] != null
-          ? map['itemPrice']['deletedAt'] != null
-              ? map['itemPrice']['deletedAt'] as dynamic
-              : null
-          : null,
-      itemId: map['itemPrice'] != null
-          ? map['itemPrice']['itemId'] != null
-              ? map['itemPrice']['itemId'] as dynamic
-              : null
-          : null,
       images: map['images'] != null ? map['images'] as List<dynamic> : null,
       total: map['total'] != null ? map['total'] as dynamic : null,
     );
@@ -390,7 +403,8 @@ class ProductOndcModel extends Equatable with LogMixin {
 
   String toJson() => json.encode(toMap());
 
-  factory ProductOndcModel.fromJson(String source) => ProductOndcModel.fromMap(
+  factory ProductOndcModel.fromJson(String source) =>
+      ProductOndcModel.fromNewMap(
         json.decode(source),
       );
 
@@ -403,6 +417,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       id,
       transaction_id,
       ondc_item_id,
+      ondc_location_id,
       name,
       short_description,
       long_description,
@@ -425,15 +440,30 @@ class ProductOndcModel extends Equatable with LogMixin {
       offered_value,
       minimum_value,
       maximum_value,
+      net_quantity,
+      storeLocationId,
+      importer_FSSAI_license_no,
+      other_FSSAI_license_no,
+      additives_info,
+      brand_owner_FSSAI_license_no,
+      nutritional_info,
+      fulfillment_id,
+      fulfillmentId,
+      ondc_fullfilment_type,
+      packer_name,
+      packer_address,
       value,
+      back_image_url,
       createdAt,
       updatedAt,
       deletedAt,
       itemId,
+      categoryId,
+      category,
       isAddedToCart,
       quantity,
-      images,
       total,
+      images,
     ];
   }
 }

@@ -62,7 +62,7 @@ class _OndcProductLocalMobileState extends State<_OndcProductLocalMobile>
           await json.decode(response.body)['data']['rows'] as List<dynamic>;
       warningLog('$responseBody');
       List<ProductOndcModel> newSearchedProduct =
-          responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
+          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
       warningLog('new search products${newSearchedProduct.length}');
       infoLog('${widget.productOndcModel.length}');
       List<ProductOndcModel> differenceModels = newSearchedProduct

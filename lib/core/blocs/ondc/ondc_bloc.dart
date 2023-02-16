@@ -86,6 +86,12 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       }
     });
 
+    on<ClearSearchEventShops>((event, emit) {
+      emit(
+        OndcShopModelsLoaded(shopModels: event.shopModels),
+      );
+    });
+
     on<SearchOndcItemGlobal>((event, emit) async {
       emit(OndcFetchProductsGlobalLoading());
       try {

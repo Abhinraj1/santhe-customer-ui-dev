@@ -35,8 +35,8 @@ class CartitemModel {
 
   factory CartitemModel.fromMap(Map<String, dynamic> map) {
     return CartitemModel(
-      productModel:
-          ProductOndcModel.fromMap(map['productModel'] as Map<String, dynamic>),
+      productModel: ProductOndcModel.fromNewMap(
+          map['productModel'] as Map<String, dynamic>),
       quantity: map['quantity'] as int,
       isAddedToCart: map['isAddedToCart'] as bool,
     );

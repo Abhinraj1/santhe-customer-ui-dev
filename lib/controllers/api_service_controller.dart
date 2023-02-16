@@ -837,6 +837,7 @@ class APIs extends GetxController with LogMixin {
       "pincode": user.pincode,
       "custPlan": user.custPlan,
       "deviceMap": {},
+      "howToReach": user.howToReach,
       "custLoginTime": formattedDate,
     };
 

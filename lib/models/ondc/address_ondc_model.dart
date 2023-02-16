@@ -5,7 +5,6 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 
 class AddressOndcModel extends Equatable {
-  //! how to reach model update
   final dynamic id;
   final dynamic address_name;
   final dynamic lat;
@@ -20,6 +19,7 @@ class AddressOndcModel extends Equatable {
   final dynamic updatedAt;
   final dynamic deletedAt;
   final dynamic customerId;
+  final dynamic howToReach;
   const AddressOndcModel({
     required this.id,
     required this.address_name,
@@ -33,26 +33,27 @@ class AddressOndcModel extends Equatable {
     required this.pincode,
     required this.createdAt,
     required this.updatedAt,
+    required this.howToReach,
     required this.deletedAt,
     required this.customerId,
   });
 
-  AddressOndcModel copyWith({
-    dynamic? id,
-    dynamic? address_name,
-    dynamic? lat,
-    dynamic? lng,
-    dynamic? locality,
-    dynamic? flat,
-    dynamic? city,
-    dynamic? state,
-    dynamic? country,
-    dynamic? pincode,
-    dynamic? createdAt,
-    dynamic? updatedAt,
-    dynamic? deletedAt,
-    dynamic? customerId,
-  }) {
+  AddressOndcModel copyWith(
+      {dynamic? id,
+      dynamic? address_name,
+      dynamic? lat,
+      dynamic? lng,
+      dynamic? locality,
+      dynamic? flat,
+      dynamic? city,
+      dynamic? state,
+      dynamic? country,
+      dynamic? pincode,
+      dynamic? createdAt,
+      dynamic? updatedAt,
+      dynamic? deletedAt,
+      dynamic? customerId,
+      dynamic? howToReach}) {
     return AddressOndcModel(
       id: id ?? this.id,
       address_name: address_name ?? this.address_name,
@@ -68,6 +69,7 @@ class AddressOndcModel extends Equatable {
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
       customerId: customerId ?? this.customerId,
+      howToReach: howToReach ?? this.howToReach,
     );
   }
 
@@ -87,6 +89,7 @@ class AddressOndcModel extends Equatable {
       'updatedAt': updatedAt,
       'deletedAt': deletedAt,
       'customerId': customerId,
+      'howToReach': howToReach,
     };
   }
 
@@ -108,6 +111,8 @@ class AddressOndcModel extends Equatable {
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] as dynamic : null,
       customerId:
           map['customerId'] != null ? map['customerId'] as dynamic : null,
+      howToReach:
+          map['howToReach'] != null ? map['howToReach'] as dynamic : null,
     );
   }
 
@@ -135,6 +140,7 @@ class AddressOndcModel extends Equatable {
       createdAt,
       updatedAt,
       deletedAt,
+      howToReach,
       customerId,
     ];
   }

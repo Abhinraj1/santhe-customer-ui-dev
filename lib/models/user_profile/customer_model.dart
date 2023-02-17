@@ -33,7 +33,7 @@ class CustomerModel {
 
   String customerId;
 
-  String customerLoginTime;
+  dynamic customerLoginTime;
 
   String customerName;
 
@@ -61,7 +61,7 @@ class CustomerModel {
       customerReferral: json['custReferal'].toString(),
       customerStatus: json['custStatus'].toString(),
       customerPlan: json['custPlan'].toString(),
-      customerLoginTime: json['custLoginTime'],
+      customerLoginTime: json['custLoginTime'] as Map,
       howToReach: json['contact']['howToReach'].toString(),
       opStats: json['opStats'].toString().contains('true') ? true : false,
     );

@@ -587,379 +587,384 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                   ],
                 ),
               )
-            : Column(
-                children: [
-                  Stack(
-                    children: [
-                      Image.asset(
-                        'assets/bannerondc.png',
-                        height: 175,
-                        fit: BoxFit.fill,
-                        width: MediaQuery.of(context).size.width,
-                      ),
-                      Container(
-                        color: Colors.transparent,
-                        height: 175,
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10.0, left: 5),
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Image.asset(
+                          'assets/bannerondc.png',
+                          height: 175,
+                          fit: BoxFit.fill,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        Container(
+                          color: Colors.transparent,
+                          height: 175,
+                          width: MediaQuery.of(context).size.width,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 3.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 5),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Icon(
-                                    Icons.arrow_back,
-                                    color: AppColors().white100,
+                            padding: const EdgeInsets.only(top: 10.0, left: 5),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 3.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 5),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: AppColors().white100,
+                                    ),
                                   ),
-                                ),
-                                AutoSizeText(
-                                  widget.shopModel.name,
-                                  minFontSize: 16,
-                                  style: TextStyle(
-                                    color: AppColors().white100,
-                                    fontSize: 22,
-                                    // fontSize: widget.shopModel.name
-                                    //             .toString()
-                                    //             .length >
-                                    //         60
-                                    //     ? 20
-                                    //     : 30,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
+                                  AutoSizeText(
+                                    widget.shopModel.name,
+                                    minFontSize: 16,
+                                    style: TextStyle(
+                                      color: AppColors().white100,
+                                      fontSize: 22,
+                                      // fontSize: widget.shopModel.name
+                                      //             .toString()
+                                      //             .length >
+                                      //         60
+                                      //     ? 20
+                                      //     : 30,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0),
-                                    child: AutoSizeText(
-                                      widget.shopModel.address,
-                                      textAlign: TextAlign.center,
-                                      minFontSize: 10,
-                                      style: TextStyle(
-                                        color: AppColors().white100,
-                                        fontSize: 13,
-                                        // fontSize: widget.shopModel.name
-                                        //             .toString()
-                                        //             .length >
-                                        //         60
-                                        //     ? 20
-                                        //     : 30,
-                                        fontWeight: FontWeight.bold,
-                                        overflow: TextOverflow.values.first,
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0),
+                                      child: AutoSizeText(
+                                        widget.shopModel.address,
+                                        textAlign: TextAlign.center,
+                                        minFontSize: 10,
+                                        style: TextStyle(
+                                          color: AppColors().white100,
+                                          fontSize: 13,
+                                          // fontSize: widget.shopModel.name
+                                          //             .toString()
+                                          //             .length >
+                                          //         60
+                                          //     ? 20
+                                          //     : 30,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.values.first,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                //! reatest
-                                widget.shopModel.phone == null
-                                    ? Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 5.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/phonepng.png',
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            AutoSizeText(
-                                              "NA",
-                                              style: TextStyle(
-                                                fontSize: 11,
-                                                color: AppColors().white100,
+                                  //! reatest
+                                  widget.shopModel.phone == null
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/phonepng.png',
+                                                height: 25,
+                                                width: 25,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 5.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/phonepng.png',
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            AutoSizeText(
-                                              '${widget.shopModel.phone}',
-                                              style: TextStyle(
-                                                color: AppColors().white100,
-                                                fontSize: 11,
+                                              const SizedBox(
+                                                width: 8,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                widget.shopModel.email == null
-                                    ? Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 5.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/emailpng.png',
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            AutoSizeText(
-                                              "NA",
-                                              style: TextStyle(
+                                              AutoSizeText(
+                                                "NA",
+                                                style: TextStyle(
+                                                  fontSize: 11,
                                                   color: AppColors().white100,
-                                                  fontSize: 10),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 5.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/emailpng.png',
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            AutoSizeText(
-                                              '${widget.shopModel.email}',
-                                              style: TextStyle(
-                                                  color: AppColors().white100,
-                                                  fontSize: 10),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                AutoSizeText(
-                                  widget.shopModel.delivery != null &&
-                                          widget.shopModel.delivery == true
-                                      ? "Home Delivery Available"
-                                      : "",
-                                  minFontSize: 10,
-                                  style: TextStyle(
-                                    color: AppColors().white100,
-                                    fontSize: 13,
-                                    // fontFamily: ,
-                                    // fontSize: widget.shopModel.name
-                                    //             .toString()
-                                    //             .length >
-                                    //         60
-                                    //     ? 20
-                                    //     : 30,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          //toDo : add indicator while cart bloc implementation
-                          child: GestureDetector(
-                            onTap: () => ge.Get.to(
-                              () => const OndcCartView(),
-                            ),
-                            child: Stack(
-                              children: [
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: AppColors().brandDark,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                      'assets/newshoppingcart.png',
-                                      fit: BoxFit.fill,
-                                      height: 55,
-                                      width: 55,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 8),
-                    child: SizedBox(
-                      height: 50,
-                      child: TextField(
-                        controller: _textEditingController,
-                        onChanged: (value) {},
-                        // onTap: () {
-                        //   ge.Get.to(getSearchView());
-                        // },
-                        maxLines: 1,
-                        decoration: InputDecoration(
-                          labelText: 'Search Products',
-                          isDense: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          suffixIcon: state is FetchedItemsInLocalShop
-                              ? GestureDetector(
-                                  onTap: () {
-                                    context.read<OndcBloc>().add(
-                                          ClearSearchEventOndc(
-                                            productModels:
-                                                existingProductModels,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        );
-                                    _textEditingController.clear();
-                                  },
-                                  child: const Icon(Icons.cancel),
-                                )
-                              : null,
-                          prefixIcon: GestureDetector(
-                            onTap: () {
-                              setState(
-                                () {
-                                  productNameLocal =
-                                      _textEditingController.text;
-                                },
-                              );
-                              context.read<OndcBloc>().add(
-                                    SearchOndcItemInLocalShop(
-                                      transactionId:
-                                          widget.shopModel.transaction_id,
-                                      storeId: widget.shopModel.id,
-                                      productName: _textEditingController.text,
+                                        )
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/phonepng.png',
+                                                height: 25,
+                                                width: 25,
+                                              ),
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              AutoSizeText(
+                                                '${widget.shopModel.phone}',
+                                                style: TextStyle(
+                                                  color: AppColors().white100,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                  widget.shopModel.email == null
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/emailpng.png',
+                                                height: 25,
+                                                width: 25,
+                                              ),
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              AutoSizeText(
+                                                "NA",
+                                                style: TextStyle(
+                                                    color: AppColors().white100,
+                                                    fontSize: 10),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/emailpng.png',
+                                                height: 25,
+                                                width: 25,
+                                              ),
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              AutoSizeText(
+                                                '${widget.shopModel.email}',
+                                                style: TextStyle(
+                                                    color: AppColors().white100,
+                                                    fontSize: 10),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                  AutoSizeText(
+                                    widget.shopModel.delivery != null &&
+                                            widget.shopModel.delivery == true
+                                        ? "Home Delivery Available"
+                                        : "",
+                                    minFontSize: 10,
+                                    style: TextStyle(
+                                      color: AppColors().white100,
+                                      fontSize: 13,
+                                      // fontFamily: ,
+                                      // fontSize: widget.shopModel.name
+                                      //             .toString()
+                                      //             .length >
+                                      //         60
+                                      //     ? 20
+                                      //     : 30,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  );
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 9.0),
-                              child: Icon(
-                                CupertinoIcons.search_circle_fill,
-                                size: 32,
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 30.0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '${widget.shopModel.item_count} items available',
-                      ),
-                    ),
-                  ),
-                  state is FetchedItemsInLocalShop
-                      ? Container(
-                          height: MediaQuery.of(context).size.height * 0.54,
-                          color: Colors.transparent,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20.0, top: 20),
-                            child: Center(
-                              child: GridView.count(
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 5,
-                                controller: _searchScrollController,
-                                mainAxisSpacing: 15,
-                                childAspectRatio: 0.9,
-                                children: [
-                                  ...searchWidgets,
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          height: MediaQuery.of(context).size.height * 0.54,
-                          color: Colors.transparent,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20.0, top: 20),
-                            child: Center(
-                              child: GridView.count(
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                controller: _scrollController,
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 15,
-                                childAspectRatio: 0.95,
-                                children: [
-                                  ...productWidget,
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                  _loading
-                      ? Column(
-                          children: const [
-                            Center(
-                              heightFactor: 0.8,
-                              child: CircularProgressIndicator(),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            //toDo : add indicator while cart bloc implementation
+                            child: GestureDetector(
+                              onTap: () => ge.Get.to(
+                                () => const OndcCartView(),
+                              ),
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor: AppColors().brandDark,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        'assets/newshoppingcart.png',
+                                        fit: BoxFit.fill,
+                                        height: 55,
+                                        width: 55,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ],
+                          ),
                         )
-                      : _searchLoading
-                          ? Column(
-                              children: const [
-                                Center(
-                                  heightFactor: 0.8,
-                                  child: CircularProgressIndicator(),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 8),
+                      child: SizedBox(
+                        height: 50,
+                        child: TextField(
+                          controller: _textEditingController,
+                          onChanged: (value) {},
+                          // onTap: () {
+                          //   ge.Get.to(getSearchView());
+                          // },
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            labelText: 'Search Products',
+                            isDense: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            suffixIcon: state is FetchedItemsInLocalShop
+                                ? GestureDetector(
+                                    onTap: () {
+                                      context.read<OndcBloc>().add(
+                                            ClearSearchEventOndc(
+                                              productModels:
+                                                  existingProductModels,
+                                            ),
+                                          );
+                                      _textEditingController.clear();
+                                    },
+                                    child: const Icon(Icons.cancel),
+                                  )
+                                : null,
+                            prefixIcon: GestureDetector(
+                              onTap: () {
+                                setState(
+                                  () {
+                                    productNameLocal =
+                                        _textEditingController.text;
+                                  },
+                                );
+                                context.read<OndcBloc>().add(
+                                      SearchOndcItemInLocalShop(
+                                        transactionId:
+                                            widget.shopModel.transaction_id,
+                                        storeId: widget.shopModel.id,
+                                        productName:
+                                            _textEditingController.text,
+                                      ),
+                                    );
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 9.0),
+                                child: Icon(
+                                  CupertinoIcons.search_circle_fill,
+                                  size: 32,
+                                  color: Colors.orange,
                                 ),
-                              ],
-                            )
-                          : const Text('')
-                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 30.0),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${widget.shopModel.item_count} items available',
+                        ),
+                      ),
+                    ),
+                    state is FetchedItemsInLocalShop
+                        ? Container(
+                            height: MediaQuery.of(context).size.height * 0.54,
+                            color: Colors.transparent,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20.0, top: 20),
+                              child: Center(
+                                child: GridView.count(
+                                  shrinkWrap: true,
+                                  physics: const ScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 5,
+                                  controller: _searchScrollController,
+                                  mainAxisSpacing: 15,
+                                  childAspectRatio: 0.9,
+                                  children: [
+                                    ...searchWidgets,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: MediaQuery.of(context).size.height * 0.54,
+                            color: Colors.transparent,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20.0, top: 20),
+                              child: Center(
+                                child: GridView.count(
+                                  shrinkWrap: true,
+                                  physics: const ScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  controller: _scrollController,
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 15,
+                                  childAspectRatio: 0.95,
+                                  children: [
+                                    ...productWidget,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                    _loading
+                        ? Column(
+                            children: const [
+                              Center(
+                                heightFactor: 0.8,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : _searchLoading
+                            ? Column(
+                                children: const [
+                                  Center(
+                                    heightFactor: 0.8,
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ],
+                              )
+                            : const Text('')
+                  ],
+                ),
               ),
       );
     });

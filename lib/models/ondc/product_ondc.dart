@@ -277,8 +277,10 @@ class ProductOndcModel extends Equatable with LogMixin {
       storeLocationId: map['storeLocationId'] != null
           ? map['storeLocationId'] as dynamic
           : null,
-      ondc_fullfilment_type: map['fulfillment']['ondc_fullfilment_type'] != null
-          ? map['fulfillment']['ondc_fullfilment_type'] as dynamic
+      ondc_fullfilment_type: map['fulfillment'] != null
+          ? map['fulfillment']['ondc_fullfilment_type'] != null
+              ? map['fulfillment']['ondc_fullfilment_type'] as dynamic
+              : null
           : null,
       fulfillmentId:
           map['fulfillmentId'] != null ? map['fulfillmentId'] as dynamic : null,

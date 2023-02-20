@@ -152,7 +152,7 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
         }
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
-         openCheckout(profileController);
+          openCheckout(profileController);
         }
         if (state is FinalizePaymentSuccessState) {
           RepositoryProvider.of<OndcCartRepository>(context)

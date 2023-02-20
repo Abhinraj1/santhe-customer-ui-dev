@@ -60,7 +60,14 @@ class UpdateCartEvent extends CartEvent {
   List<Object> get props => [productOndcModels];
 }
 
-class OnAppRefreshEvent extends CartEvent {}
+class OnAppRefreshEvent extends CartEvent {
+  final String storeLocationId;
+  const OnAppRefreshEvent({
+    required this.storeLocationId,
+  });
+  @override
+  List<Object> get props => [storeLocationId];
+}
 
 class DeleteCartItemEvent extends CartEvent {
   final ProductOndcModel productOndcModel;
@@ -69,4 +76,13 @@ class DeleteCartItemEvent extends CartEvent {
   });
   @override
   List<Object> get props => [productOndcModel];
+}
+
+class GetCartItemsEvents extends CartEvent {
+  final ShopModel shopModel;
+  const GetCartItemsEvents({
+    required this.shopModel,
+  });
+  @override
+  List<Object> get props => [shopModel];
 }

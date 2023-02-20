@@ -16,6 +16,8 @@ class ShopModel extends Equatable {
   final dynamic delivery;
   final dynamic ondc_location_id;
   final dynamic ondc_store_id;
+  final dynamic storeId;
+  final dynamic storeId1;
   final dynamic state;
   final dynamic bpp_id;
   final dynamic bpp_uri;
@@ -46,6 +48,8 @@ class ShopModel extends Equatable {
     required this.delivery,
     required this.ondc_location_id,
     required this.ondc_store_id,
+    required this.storeId,
+    required this.storeId1,
     required this.state,
     required this.bpp_id,
     required this.bpp_uri,
@@ -78,6 +82,8 @@ class ShopModel extends Equatable {
     dynamic? delivery,
     dynamic? ondc_location_id,
     dynamic? ondc_store_id,
+    dynamic? storeId,
+    dynamic? storeId1,
     dynamic? state,
     dynamic? bpp_id,
     dynamic? bpp_uri,
@@ -109,6 +115,8 @@ class ShopModel extends Equatable {
       delivery: delivery ?? this.delivery,
       ondc_location_id: ondc_location_id ?? this.ondc_location_id,
       ondc_store_id: ondc_store_id ?? this.ondc_store_id,
+      storeId: storeId ?? this.storeId,
+      storeId1: storeId1 ?? this.storeId1,
       state: state ?? this.state,
       bpp_id: bpp_id ?? this.bpp_id,
       bpp_uri: bpp_uri ?? this.bpp_uri,
@@ -152,7 +160,12 @@ class ShopModel extends Equatable {
       'id': id,
       'items': items,
       'email': email,
-      'phone': phone
+      'phone': phone,
+      'storeId': storeId,
+      'storeId1': storeId1,
+      'long_description': long_description,
+      'short_description': short_description,
+      'frequency': frequency,
     };
   }
 
@@ -163,6 +176,7 @@ class ShopModel extends Equatable {
       address: map['address'] != null ? map['address'] as dynamic : null,
       city: map['city'] != null ? map['city'] as dynamic : null,
       pincode: map['pincode'] != null ? map['pincode'] as dynamic : null,
+      storeId1: map['storeId'] != null ? map['storeId'] as dynamic : null,
       item_count:
           map['item_count'] != null ? map['item_count'] as dynamic : null,
       distance: map['distance'] != null ? map['distance'] as dynamic : null,
@@ -173,32 +187,53 @@ class ShopModel extends Equatable {
       ondc_location_id: map['ondc_location_id'] != null
           ? map['ondc_location_id'] as dynamic
           : null,
-      ondc_store_id: map['store']['ondc_store_id'] != null
-          ? map['store']['ondc_store_id'] as dynamic
+      ondc_store_id: map['store'] != null
+          ? map['store']['ondc_store_id'] != null
+              ? map['store']['ondc_store_id'] as dynamic
+              : null
+          : null,
+      storeId: map['store'] != null
+          ? map['store']['id'] != null
+              ? map['store']['id'] as dynamic
+              : null
           : null,
       state: map['state'] != null ? map['state'] as dynamic : null,
-      bpp_id: map['store']['bpp_id'] != null
-          ? map['store']['bpp_id'] as dynamic
+      bpp_id: map['store'] != null
+          ? map['store']['bpp_id'] != null
+              ? map['store']['bpp_id'] as dynamic
+              : null
           : null,
-      bpp_uri: map['store']['bpp_uri'] != null
-          ? map['store']['bpp_uri'] as dynamic
+      bpp_uri: map['store'] != null
+          ? map['store']['bpp_uri'] != null
+              ? map['store']['bpp_uri'] as dynamic
+              : null
           : null,
-      symbol: map['store']['symbol'] != null
-          ? map['store']['symbol'] as dynamic
+      symbol: map['store'] != null
+          ? map['store']['symbol'] != null
+              ? map['store']['symbol'] as dynamic
+              : null
           : null,
-      message_id: map['store']['message_id'] != null
-          ? map['store']['message_id'] as dynamic
+      message_id: map['store'] != null
+          ? map['store']['message_id'] != null
+              ? map['store']['message_id'] as dynamic
+              : null
           : null,
-      transaction_id: map['store']['transaction_id'] != null
-          ? map['store']['transaction_id'] as dynamic
+      transaction_id: map['store'] != null
+          ? map['store']['transaction_id'] != null
+              ? map['store']['transaction_id'] as dynamic
+              : null
           : null,
       id: map['id'] != null ? map['id'] as dynamic : null,
       items: map['items'] != null ? map['items'] as dynamic : null,
-      email: map['store']['email'] != null
-          ? map['store']['email'] as dynamic
+      email: map['store'] != null
+          ? map['store']['email'] != null
+              ? map['store']['email'] as dynamic
+              : null
           : null,
-      phone: map['store']['phone'] != null
-          ? map['store']['phone'] as dynamic
+      phone: map['store'] != null
+          ? map['store']['phone'] != null
+              ? map['store']['phone'] as dynamic
+              : null
           : null,
       days: map['days'] != null ? map['days'] as dynamic : null,
       frequency: map['frequency'] != null ? map['frequency'] as dynamic : null,
@@ -208,11 +243,15 @@ class ShopModel extends Equatable {
           ? map['storeCloseTime'] as dynamic
           : null,
       times: map['times'] != null ? map['times'] as dynamic : null,
-      short_description: map['store']['short_description'] != null
-          ? map['store']['short_description'] as dynamic
+      short_description: map['store'] != null
+          ? map['store']['short_description'] != null
+              ? map['store']['short_description'] as dynamic
+              : null
           : null,
-      long_description: map['store']['long_description'] != null
-          ? map['store']['long_description'] as dynamic
+      long_description: map['store'] != null
+          ? map['store']['long_description'] != null
+              ? map['store']['long_description'] as dynamic
+              : null
           : null,
     );
   }
@@ -240,6 +279,8 @@ class ShopModel extends Equatable {
       delivery,
       ondc_location_id,
       ondc_store_id,
+      storeId,
+      storeId1,
       state,
       bpp_id,
       bpp_uri,

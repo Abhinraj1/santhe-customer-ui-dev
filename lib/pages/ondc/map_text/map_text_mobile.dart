@@ -300,7 +300,8 @@ class _MapTextMobileState extends State<_MapTextMobile> {
                                   fontSize: 17),
                             )),
                       ),
-                      Text('${widget.addressOndcModel?.flat}')
+                      Text(
+                          '${RepositoryProvider.of<AddressRepository>(context).deliveryAddressModel?.flat}')
                     ],
                   ),
                 ),

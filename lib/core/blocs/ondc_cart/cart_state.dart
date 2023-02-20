@@ -159,3 +159,12 @@ class DeleteCartItemState extends CartState {
   @override
   List<Object> get props => [productOndcModel];
 }
+
+class GetCartItemsOfShopState extends CartState {
+  final List<ProductOndcModel> products;
+  const GetCartItemsOfShopState({
+    required this.products,
+  });
+  @override
+  List<Object> get props => [products];
+}

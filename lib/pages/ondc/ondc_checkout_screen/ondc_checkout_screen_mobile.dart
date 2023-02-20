@@ -155,11 +155,10 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
           openCheckout(profileController);
         }
         if (state is FinalizePaymentSuccessState) {
-          context.read<CartBloc>().productModelBloc.clear();
           RepositoryProvider.of<OndcCartRepository>(context)
               .cartOndcModels
               .clear();
-          context.read<CartBloc>().clear();
+          // context.read<CartBloc>().clear();
           Get.to(
             () => PaymentSuccessView(),
           );

@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 part of ondc_cart_view;
 
 class _OndcCartMobile extends StatefulWidget {
-  const _OndcCartMobile();
+  final String storeLocation_id;
+  const _OndcCartMobile({required this.storeLocation_id});
 
   @override
   State<_OndcCartMobile> createState() => _OndcCartMobileState();
@@ -20,8 +22,10 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
   void initState() {
     super.initState();
     cartBloc = context.read<CartBloc>();
-    cartBloc.add(OnAppRefreshEvent());
-    getCartList();
+    cartBloc.add(
+      OnAppRefreshEvent(storeLocationId: widget.storeLocation_id),
+    );
+    // getCartList();
     // getApiCartList();
   }
 
@@ -52,7 +56,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
 
   @override
   Widget build(BuildContext context) {
-    debugLog('$cartWidget');
+    debugLog('store id${widget.storeLocation_id}');
     return BlocConsumer<CartBloc, CartState>(
       bloc: cartBloc,
       listener: (context, state) {
@@ -67,6 +71,17 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
           context
               .read<CartBloc>()
               .add(UpdateCartEvent(productOndcModels: models));
+        }
+        if (state is GetCartItemsOfShopState) {
+          List<OndcCartItem> cartWidgets = [];
+          for (var element in state.products) {
+            cartWidgets.add(
+              OndcCartItem(productOndcModel: element),
+            );
+          }
+          setState(() {
+            cartWidget = cartWidgets;
+          });
         }
         if (state is DeleteCartItemState) {
           productModels = state.productOndcModel;

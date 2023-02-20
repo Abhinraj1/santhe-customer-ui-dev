@@ -221,12 +221,16 @@ class _ProductDescriptionOndcMobileState
                           size: 30,
                         ),
                       ),
+                      //! Navigation not allowed for now due to shopmodel trouble
                       Stack(
                         children: [
                           GestureDetector(
                             onTap: () async {
                               await Get.to(
-                                const OndcCartView(),
+                                OndcCartView(
+                                  storeLocation_id:
+                                      widget.productOndcModel.storeLocationId,
+                                ),
                               );
                               setState(() {
                                 widget.productOndcModel.quantity;

@@ -1,13 +1,7 @@
 import 'dart:convert';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
-import 'package:santhe/firebase/firebase_helper.dart';
-import 'package:santhe/models/ondc/cart_item_model.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_cart_item.dart';
 import 'package:http/http.dart' as http;
@@ -80,15 +74,19 @@ class OndcCartRepository with LogMixin {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
+    final dynamic firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
+    warningLog(
+        '$firebaseID, item_id ${productOndcModel.id}, store id${productOndcModel.storeLocationId}');
     try {
       final response = await http.post(
         url,
         headers: header,
         body: json.encode(
           {
-            "quantity": productOndcModel.quantity,
-            "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
-            "item_id": productOndcModel.itemId
+            "quantity": 1,
+            "firebase_id": firebaseID,
+            "item_id": productOndcModel.id,
+            "storeLocation_id": productOndcModel.storeLocationId,
           },
         ),
       );
@@ -109,9 +107,11 @@ class OndcCartRepository with LogMixin {
     }
   }
 
-  Future<List<ProductOndcModel>> getCart() async {
+  Future<List<ProductOndcModel>> getCart(
+      {required String storeLocationId}) async {
+    final String firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/cart/list?firebase_id=${AppHelpers().getPhoneNumberWithoutCountryCode}');
+        'http://ondcstaging.santhe.in/santhe/ondc/cart/list?firebase_id=$firebaseID&storeLocation_id=$storeLocationId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

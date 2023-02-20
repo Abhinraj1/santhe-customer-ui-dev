@@ -222,6 +222,9 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
             isDelivery: widget.customerModel.opStats,
           ),
         );
+    context.read<AddressBloc>().add(
+          GetAddressListEvent(),
+        );
     _shopScroll.addListener(() {
       if (_shopScroll.position.pixels == _shopScroll.position.maxScrollExtent) {
         warningLog('called');
@@ -457,51 +460,60 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                   ),
                                   Row(
                                     children: [
-                                      Container(
-                                        color: Colors.white,
-                                        height: 30,
-                                        width: 340,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, left: 25),
-                                          child: Text.rich(
-                                            TextSpan(
-                                              text: 'Delivery to: ',
-                                              style: TextStyle(fontSize: 15),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: widget
-                                                      .customerModel.address
-                                                      .substring(0, 25),
-                                                  style: TextStyle(
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    decorationColor:
-                                                        Color.fromARGB(
-                                                            255, 77, 81, 84),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(
+                                            () => MapTextView(),
+                                          );
+                                        },
+                                        child: Container(
+                                          color: Colors.white,
+                                          height: 30,
+                                          width: 340,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 8.0, left: 25),
+                                            child: Text.rich(
+                                              TextSpan(
+                                                text: 'Delivery to: ',
+                                                style: TextStyle(fontSize: 15),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text:
+                                                        '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
+                                                    // widget
+                                                    //     .customerModel.address
+                                                    //     .substring(0, 25),
+                                                    style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      decorationColor:
+                                                          Color.fromARGB(
+                                                              255, 77, 81, 84),
+                                                    ),
                                                   ),
-                                                ),
-                                                // can add more TextSpans here...
-                                              ],
+                                                  // can add more TextSpans here...
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                       //! add the indicator here
-                                      GestureDetector(
-                                        onTap: () => ge.Get.to(
-                                          OndcCartView(),
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Image.asset(
-                                              'assets/newshoppingcartorange.png',
-                                              height: 45,
-                                              width: 45,
-                                            )
-                                          ],
-                                        ),
-                                      ),
+                                      // GestureDetector(
+                                      //   onTap: () => ge.Get.to(
+                                      //     OndcCartView(),
+                                      //   ),
+                                      //   child: Stack(
+                                      //     children: [
+                                      //       Image.asset(
+                                      //         'assets/newshoppingcartorange.png',
+                                      //         height: 45,
+                                      //         width: 45,
+                                      //       )
+                                      //     ],
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                   SizedBox(

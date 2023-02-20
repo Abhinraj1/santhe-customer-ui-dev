@@ -549,7 +549,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             //toDo : add indicator while cart bloc implementation
                             child: GestureDetector(
                               onTap: () => ge.Get.to(
-                                () => const OndcCartView(),
+                                () => OndcCartView(
+                                  storeLocation_id: widget.shopModel.storeId,
+                                ),
                               ),
                               child: Stack(
                                 children: [
@@ -798,7 +800,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             //toDo : add indicator while cart bloc implementation
                             child: GestureDetector(
                               onTap: () => ge.Get.to(
-                                () => const OndcCartView(),
+                                () => OndcCartView(
+                                  storeLocation_id: widget.shopModel.storeId,
+                                ),
                               ),
                               child: Stack(
                                 children: [

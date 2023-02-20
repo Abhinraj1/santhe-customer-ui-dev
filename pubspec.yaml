@@ -97,6 +97,7 @@ flutter:
     - assets/sent_tab/
     - assets/offers/
     - assets/fonts/
+    - assets/app_icon/icon.png
 
   fonts:
     - family: Mulish

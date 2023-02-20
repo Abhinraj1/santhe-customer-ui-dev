@@ -6,7 +6,7 @@ import '../../../../core/app_colors.dart';
 
 
 ///
-Widget shipmentCard({required int shipmentNumber}){
+Widget shipmentCard({required int shipmentNumber, required List<Widget> products}){
 
   return
       Center(
@@ -24,15 +24,7 @@ Widget shipmentCard({required int shipmentNumber}){
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
-                  children: [
-                    productCell(
-                      showStatus: true,
-                      status: "Cancelled",),
-                    productCell(
-                      showStatus: true,
-                      status: "Cancelled",),
-                    fulfillmentMessage()
-                  ],
+                  children: products,
                 ),
               ),
             ),
@@ -55,14 +47,16 @@ Widget shipmentCard({required int shipmentNumber}){
 }
 
 Widget productCell({
+  required  String productName,
+  required String productDetails ,
+  required String productPrice ,
+  required String productImg ,
   bool? showStatus,
   String? status,
   String? textButtonTitle,
   Function()? textButtonOnTap
 }){
-  String productName = "Bru Original mixed coffee",
-  productDetails = "250gm , 1  units",
-  productPrice = "₹250";
+
   return
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
@@ -71,7 +65,7 @@ Widget productCell({
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset("assets/app_icon/icon.png",
+              Image.asset(productImg,
               width: 50,
               height: 60,
               fit: BoxFit.cover,),
@@ -125,15 +119,14 @@ Widget productCell({
       );
 }
 
-Widget fulfillmentMessage(){
+Widget bottomTextRow({String? title, required String message}){
 
-  String message = "Delivered";
 
   return Table(
     children: [
       TableRow(
         children: [
-          Text("Fulfilment status",style: FontStyleManager().s14fw600Grey,),
+          Text(title ?? "Fulfilment status",style: FontStyleManager().s14fw600Grey,),
 
           Text(message,style: FontStyleManager().s14fw600Grey,
           textAlign: TextAlign.right,),

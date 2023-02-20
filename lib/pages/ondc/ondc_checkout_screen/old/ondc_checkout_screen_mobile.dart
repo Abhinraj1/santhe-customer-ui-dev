@@ -100,15 +100,15 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
   @override
   void initState() {
     super.initState();
-    getList();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    context.read<CheckoutBloc>().add(
-          GetCartPriceEventPost(
-              transactionId:
-                  RepositoryProvider.of<OndcRepository>(context).transactionId),
-        );
+    // getList();
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // context.read<CheckoutBloc>().add(
+    //       GetCartPriceEventPost(
+    //           transactionId:
+    //               RepositoryProvider.of<OndcRepository>(context).transactionId),
+    //     );
   }
 
   @override
@@ -152,7 +152,7 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
         }
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
-          openCheckout(profileController);
+         openCheckout(profileController);
         }
         if (state is FinalizePaymentSuccessState) {
           context.read<CartBloc>().productModelBloc.clear();

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../manager/font_manager.dart';
 
 
-Widget invoiceTable(){
-  String subTotal = "₹425",
-  deliveryCharger = "₹30",
-      taxesCGST = "₹8",
-      taxesSGST = "₹12",
-      total = "₹475";
+Widget invoiceTable({
+  required String subTotal,
+  deliveryCharger,
+  taxesCGST ,
+  taxesSGST,
+  total
+}){
+
 
   return
     Padding(
@@ -63,7 +65,7 @@ Widget invoiceTable(){
                   padding: const EdgeInsets.all(5.0),
                   child: Text("Total:  ",style: FontStyleManager().s18fw700Black,),
                 ),
-                Text(total,style: FontStyleManager().s16fw700Brown,textAlign: TextAlign.right),
+                Text(total,style: FontStyleManager().s20fw700Orange,textAlign: TextAlign.right),
 
               ]
           ),

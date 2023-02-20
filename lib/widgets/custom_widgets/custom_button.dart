@@ -15,13 +15,18 @@
 
         double? verticalPadding,
 
+        double? horizontalPadding,
+
         bool? isActive,
 
       }){
 
     return Center(
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 40.0,vertical:verticalPadding ?? 10),
+        padding:  EdgeInsets.symmetric(
+            horizontal: horizontalPadding ?? 40.0,
+            vertical:verticalPadding ?? 10
+        ),
         child: MaterialButton(
           onPressed: (){
             onTap();

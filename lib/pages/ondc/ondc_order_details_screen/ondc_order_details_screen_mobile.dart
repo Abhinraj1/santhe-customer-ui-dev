@@ -59,8 +59,36 @@ class ONDCOrderDetailsScreen extends StatelessWidget {
               ),
             ),
 
-            shipmentCard(shipmentNumber: 1),
-            invoiceTable(),
+            shipmentCard(shipmentNumber: 1,
+            products: [
+
+              productCell(
+                  showStatus: true,
+                  productImg: "assets/app_icon/icon.png",
+                  status: "Cancelled",
+                  productName : "Bru Original mixed coffee",
+                  productDetails : "250gm , 1  units",
+                  productPrice : "₹250"),
+
+              productCell(
+                showStatus: true,
+                productImg: "assets/app_icon/icon.png",
+                status: "Cancelled",
+                  productName : "Bru Original mixed coffee",
+                  productDetails : "250gm , 1  units",
+                  productPrice : "₹250"),
+
+              bottomTextRow(
+                  message: "Delivered"
+              )
+            ]),
+            invoiceTable(
+                subTotal : "₹425",
+                deliveryCharger : "₹30",
+                taxesCGST : "₹8",
+                taxesSGST : "₹12",
+                total : "₹475"
+            ),
             customerSupportButton(
               onTap: (){}
             ),

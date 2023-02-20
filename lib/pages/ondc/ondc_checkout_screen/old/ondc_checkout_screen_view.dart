@@ -26,7 +26,7 @@ import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../core/blocs/checkout/checkout_bloc.dart';
+import '../../../../core/blocs/checkout/checkout_bloc.dart';
 
 part 'ondc_checkout_screen_mobile.dart';
 part 'ondc_checkout_screen_tablet.dart';

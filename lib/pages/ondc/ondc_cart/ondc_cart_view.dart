@@ -16,7 +16,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
-import 'package:santhe/pages/ondc/ondc_checkout_screen/ondc_checkout_screen_view.dart';
+import 'package:santhe/pages/ondc/ondc_checkout_screen/old/ondc_checkout_screen_view.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/ondc_cart_item.dart';
 import 'package:share_plus/share_plus.dart';

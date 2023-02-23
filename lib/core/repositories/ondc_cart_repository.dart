@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
+import 'package:santhe/models/ondc/cart_item_model.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_cart_item.dart';
 import 'package:http/http.dart' as http;
@@ -30,8 +31,7 @@ class OndcCartRepository with LogMixin {
     return isAddedToCart;
   }
 
-  Future<List<ProductOndcModel>> deleteCartItem(
-      {required ProductOndcModel productOndcModelLocal}) async {
+  deleteCartItem({required CartitemModel productOndcModelLocal}) async {
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/cart/delete/item');
     final header = {
@@ -39,12 +39,13 @@ class OndcCartRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
+      warningLog('${productOndcModelLocal.id}');
       final response = await http.post(
         url,
         headers: header,
         body: json.encode(
           {
-            'item_id': productOndcModelLocal.itemId,
+            'item_id': productOndcModelLocal.id,
             'firebase_id': AppHelpers().getPhoneNumberWithoutCountryCode,
           },
         ),
@@ -52,14 +53,14 @@ class OndcCartRepository with LogMixin {
       warningLog('${response.statusCode}');
       final responseBody = await json.decode(response.body);
       warningLog('$responseBody');
-      productModels
-          .removeWhere((value) => value.id == productOndcModelLocal.id);
-      warningLog('${productModels.length}');
-      total = 0;
-      productModels.forEach((model) {
-        total = total + model.total;
-      });
-      return productModels;
+      // productModels
+      //     .removeWhere((value) => value.id == productOndcModelLocal.id);
+      // warningLog('${productModels.length}');
+      // total = 0;
+      // productModels.forEach((model) {
+      //   total = total + model.total;
+      // });
+      // return productModels;
     } catch (e) {
       rethrow;
     }
@@ -76,14 +77,14 @@ class OndcCartRepository with LogMixin {
     };
     final dynamic firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
     warningLog(
-        '$firebaseID, item_id ${productOndcModel.id}, store id${productOndcModel.storeLocationId}');
+        '$firebaseID,quantity ${productOndcModel.quantity}, item_id ${productOndcModel.id}, store id${productOndcModel.storeLocationId} ');
     try {
       final response = await http.post(
         url,
         headers: header,
         body: json.encode(
           {
-            "quantity": 1,
+            "quantity": productOndcModel.quantity,
             "firebase_id": firebaseID,
             "item_id": productOndcModel.id,
             "storeLocation_id": productOndcModel.storeLocationId,
@@ -107,9 +108,9 @@ class OndcCartRepository with LogMixin {
     }
   }
 
-  Future<List<ProductOndcModel>> getCart(
-      {required String storeLocationId}) async {
+  Future<List<CartitemModel>> getCart({required String storeLocationId}) async {
     final String firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
+    warningLog('$storeLocationId, and firebaseId $firebaseID');
     final url = Uri.parse(
         'http://ondcstaging.santhe.in/santhe/ondc/cart/list?firebase_id=$firebaseID&storeLocation_id=$storeLocationId');
     final header = {
@@ -118,7 +119,7 @@ class OndcCartRepository with LogMixin {
     };
     try {
       final response = await http.get(url, headers: header);
-      warningLog('$response');
+      warningLog('$response and url $url');
       final responseBody = await json.decode(response.body);
       final cartItemBody = responseBody['data']['data'];
       final cartItemCount = responseBody['data']['count'];
@@ -127,10 +128,10 @@ class OndcCartRepository with LogMixin {
         productModels.clear();
       }
       warningLog('getting cart data$responseBody');
-      List<ProductOndcModel> models = [];
+      List<CartitemModel> models = [];
       for (var element in cartItemBody) {
         models.add(
-          ProductOndcModel.fromNewMap(
+          CartitemModel.fromMap(
             element,
           ),
         );
@@ -142,7 +143,7 @@ class OndcCartRepository with LogMixin {
     }
   }
 
-  updateQuantityOfItems({required ProductOndcModel productOndcModel}) async {
+  updateQuantityOfItems({required CartitemModel productOndcModel}) async {
     final url = Uri.parse(
         'http://ondcstaging.santhe.in/santhe/ondc/cart/update/quantity');
     final header = {
@@ -157,7 +158,7 @@ class OndcCartRepository with LogMixin {
         body: json.encode({
           "quantity": productOndcModel.quantity,
           "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
-          "item_id": productOndcModel.itemId
+          "item_id": productOndcModel.id
         }),
       );
       warningLog('${response.statusCode}');

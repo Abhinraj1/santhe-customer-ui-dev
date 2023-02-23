@@ -1,20 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
-import 'package:santhe/models/ondc/product_ondc.dart';
+import 'package:santhe/models/ondc/cart_item_model.dart';
 
 class OndcCartItem extends StatefulWidget {
-  final ProductOndcModel productOndcModel;
+  final CartitemModel productOndcModel;
   const OndcCartItem({
     Key? key,
     required this.productOndcModel,
@@ -44,23 +41,20 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
   }
 
   minus() {
-    setState(() {
-      if (widget.productOndcModel.quantity != 0) {
-        setState(() {
-          widget.productOndcModel.minus();
-        });
-        context.read<CartBloc>().add(
-              UpdateQuantityEvent(cartModel: widget.productOndcModel),
-            );
-      }
-    });
+    if (widget.productOndcModel.quantity != 0) {
+      setState(() {
+        widget.productOndcModel.minus();
+      });
+      context.read<CartBloc>().add(
+            UpdateQuantityEvent(cartModel: widget.productOndcModel),
+          );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final cart = RepositoryProvider.of<OndcCartRepository>(context);
-    warningLog(
-        '${widget.productOndcModel.maximum_value} also ${widget.productOndcModel.value}');
+    warningLog('${widget.productOndcModel} also ');
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Dismissible(
@@ -71,13 +65,15 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
           //   productOndcModelLocal: widget.productOndcModel,
           // );
           Future.delayed(const Duration(milliseconds: 50), () {
+            // widget.productOndcModel.removeFromCart();
             context.read<CartBloc>().add(
                   DeleteCartItemEvent(
                       productOndcModel: widget.productOndcModel),
                 );
-          });
-          setState(() {
-            widget.productOndcModel.removeFromCart();
+            // context.read<CartBloc>().add(
+            //       DeleteCartItemEvent(
+            //           productOndcModel: widget.productOndcModel),
+            //     );
           });
         },
         direction: DismissDirection.endToStart,
@@ -152,7 +148,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                             width: 200,
                             color: Colors.white,
                             child: Text(
-                              '${widget.productOndcModel.name}',
+                              '${widget.productOndcModel.item_name}',
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,
@@ -166,7 +162,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                 color: Colors.white,
                                 child: Text(
                                   //! make a check here as to what should be put in
-                                  '${widget.productOndcModel.maximum}',
+                                  '${widget.productOndcModel.quantity}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
@@ -266,7 +262,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                     SizedBox(
                       width: 100,
                       child: Text(
-                        '${widget.productOndcModel.storeId}',
+                        '${widget.productOndcModel.store_name}',
                         style: const TextStyle(
                           overflow: TextOverflow.ellipsis,
                           fontSize: 13,

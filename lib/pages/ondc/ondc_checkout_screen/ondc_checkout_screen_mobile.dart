@@ -1,9 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 
 part of ondc_checkout_screen_view;
 
 class _OndcCheckoutScreenMobile extends StatefulWidget {
-  _OndcCheckoutScreenMobile();
+  final String storeLocation_id;
+  _OndcCheckoutScreenMobile({required this.storeLocation_id});
 
   @override
   State<_OndcCheckoutScreenMobile> createState() =>
@@ -106,8 +108,10 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     context.read<CheckoutBloc>().add(
           GetCartPriceEventPost(
-              transactionId:
-                  RepositoryProvider.of<OndcRepository>(context).transactionId),
+            transactionId:
+                RepositoryProvider.of<OndcRepository>(context).transactionId,
+            storeLocation_id: widget.storeLocation_id,
+          ),
         );
   }
 
@@ -127,12 +131,30 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
             () => context.read<CheckoutBloc>().add(
                   GetFinalItemsEvent(
                     messageId: state.messageId,
+                    storeLocation_id: widget.storeLocation_id,
                     transactionId:
                         RepositoryProvider.of<OndcRepository>(context)
                             .transactionId,
                   ),
                 ),
           );
+        }
+        if (state is InitializePostSuccessState) {
+          context.read<CheckoutBloc>().add(
+                InitializeGetEvent(
+                    order_id:
+                        RepositoryProvider.of<OndcCheckoutRepository>(context)
+                            .orderId),
+              );
+        }
+        if (state is InitializeGetSuccessState) {
+          //! STATUS KEYWORD - CREATED ...
+          //! STATUS KEYWORD - INITIATED THEN RUN BLOC
+          context.read<CheckoutBloc>().add(
+                InitializeCartEvent(
+                    customerId: AppHelpers().getPhoneNumberWithoutCountryCode,
+                    messageId: messageID),
+              );
         }
         // if (state is CheckoutGetSuccess) {
         //   errorLog(
@@ -528,14 +550,12 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Get.to(
-                        //   () => const OndcCheckoutScreenView(),
-                        // );
                         context.read<CheckoutBloc>().add(
-                              InitializeCartEvent(
-                                  customerId: AppHelpers()
-                                      .getPhoneNumberWithoutCountryCode,
-                                  messageId: messageID),
+                              InitializePostEvent(
+                                  message_id: messageID,
+                                  order_id: RepositoryProvider.of<
+                                          OndcCheckoutRepository>(context)
+                                      .orderId),
                             );
                       },
                       style: ButtonStyle(

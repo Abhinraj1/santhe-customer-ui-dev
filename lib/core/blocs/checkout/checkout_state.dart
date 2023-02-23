@@ -12,6 +12,46 @@ class CheckoutInitial extends CheckoutState {}
 
 class CheckoutPostLoading extends CheckoutState {}
 
+class InitializePostLoadingState extends CheckoutState {}
+
+class InitializeGetLoadingState extends CheckoutState {}
+
+class InitializePostErrorState extends CheckoutState {
+  final String message;
+  const InitializePostErrorState({
+    required this.message,
+  });
+  @override
+  List<Object?> get props => [message];
+}
+
+class InitializeGetErrorState extends CheckoutState {
+  final String message;
+  const InitializeGetErrorState({
+    required this.message,
+  });
+  @override
+  List<Object?> get props => [message];
+}
+
+class InitializePostSuccessState extends CheckoutState {
+  final dynamic status;
+  const InitializePostSuccessState({
+    required this.status,
+  });
+  @override
+  List<Object?> get props => [status];
+}
+
+class InitializeGetSuccessState extends CheckoutState {
+  final String status;
+  const InitializeGetSuccessState({
+    required this.status,
+  });
+  @override
+  List<Object?> get props => [status];
+}
+
 class CheckoutPostError extends CheckoutState {
   final String message;
   const CheckoutPostError({

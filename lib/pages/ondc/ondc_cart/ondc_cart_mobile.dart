@@ -15,6 +15,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
   List<OndcCartItem> cartWidget = [];
   List<OndcCartItem> cartItemsWidgets = [];
   List<OndcCartItem> cartFilteredItems = [];
+  List<CartitemModel> cartModels = [];
   bool doesContain = false;
   double total = 0;
   late final CartBloc cartBloc;
@@ -31,28 +32,28 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
 
   //toDo : method to check if the products are still available to be written
 
-  getCartList() {
-    total = 0;
-    cartBloc.productModelBloc.forEach((value) {
-      total = total + value.total;
-      cartWidget.add(
-        OndcCartItem(productOndcModel: value),
-      );
-    });
-  }
+  // getCartList() {
+  //   total = 0;
+  //   cartBloc.productModelBloc.forEach((value) {
+  //     total = total + value.total;
+  //     cartWidget.add(
+  //       OndcCartItem(productOndcModel: value),
+  //     );
+  //   });
+  // }
 
-  getApiCartList() {
-    for (var element in cartBloc.productModelBlocLocal) {
-      cartItemsWidgets.add(OndcCartItem(productOndcModel: element));
-    }
-    cartFilteredItems = cartWidget
-        .where(
-          (mainModel) => cartItemsWidgets.every((subModel) =>
-              mainModel.productOndcModel.id == subModel.productOndcModel.id),
-        )
-        .toList();
-    errorLog('cart Items Filtered $cartFilteredItems');
-  }
+  // getApiCartList() {
+  //   for (var element in cartBloc.productModelBlocLocal) {
+  //     cartItemsWidgets.add(OndcCartItem(productOndcModel: element));
+  //   }
+  //   cartFilteredItems = cartWidget
+  //       .where(
+  //         (mainModel) => cartItemsWidgets.every((subModel) =>
+  //             mainModel.productOndcModel.id == subModel.productOndcModel.id),
+  //       )
+  //       .toList();
+  //   errorLog('cart Items Filtered $cartFilteredItems');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,30 +62,61 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
       bloc: cartBloc,
       listener: (context, state) {
         errorLog('checking for state $state');
+        // if (state is UpdatedQuantityState) {
+        //   List<CartitemModel> models = [];
+        //   models = state.productOndcModel;
+        //   int indexL = models
+        //       .indexWhere((element) => element.id == state.productOndcModel.id);
+        //   models.removeWhere((model) => model.id == state.productOndcModel.id);
+        //   models.insert(indexL, state.productOndcModel);
+        //   context
+        //       .read<CartBloc>()
+        //       .add(UpdateCartEvent(productOndcModels: models));
+        // }
         if (state is UpdatedQuantityState) {
-          List<ProductOndcModel> models = [];
-          models = cartBloc.productModelBloc;
-          int indexL = models
-              .indexWhere((element) => element.id == state.productOndcModel.id);
-          models.removeWhere((model) => model.id == state.productOndcModel.id);
-          models.insert(indexL, state.productOndcModel);
-          context
-              .read<CartBloc>()
-              .add(UpdateCartEvent(productOndcModels: models));
-        }
-        if (state is GetCartItemsOfShopState) {
           List<OndcCartItem> cartWidgets = [];
-          for (var element in state.products) {
+          total = 0;
+          int indexL = cartModels
+              .indexWhere((element) => element.id == state.productOndcModel.id);
+          errorLog('$indexL');
+          cartModels.removeWhere(
+              (element) => element.id == state.productOndcModel.id);
+          errorLog('${cartModels.length}');
+          cartModels.insert(indexL, state.productOndcModel);
+          for (var element in cartModels) {
+            errorLog('${cartModels.length}');
             cartWidgets.add(
               OndcCartItem(productOndcModel: element),
             );
+            total = total + element.value * element.quantity;
           }
+          setState(() {
+            cartWidget = cartWidgets;
+          });
+          context
+              .read<CartBloc>()
+              .add(UpdateCartEvent(productOndcModels: cartModels));
+        }
+        if (state is GetCartItemsOfShopState) {
+          List<OndcCartItem> cartWidgets = [];
+          cartModels = state.products;
+          total = 0;
+          for (var element in cartModels) {
+            cartWidgets.add(
+              OndcCartItem(productOndcModel: element),
+            );
+            total = total + element.quantity * element.value;
+          }
+          errorLog('$total');
           setState(() {
             cartWidget = cartWidgets;
           });
         }
         if (state is DeleteCartItemState) {
-          productModels = state.productOndcModel;
+          context.read<CartBloc>().add(
+                OnAppRefreshEvent(storeLocationId: widget.storeLocation_id),
+              );
+          // productModels = state.productOndcModel;
           // errorLog('checking the length ${productModels.length}');
           // List<OndcCartItem> newCartList = [];
           // productModels.forEach((key, value) {
@@ -95,34 +127,34 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
           // setState(() {
           //   cartWidget = newCartList;
           // });
-          warningLog('DeleteCartItemState models $productModels');
-          context.read<CartBloc>().add(
-                UpdateCartEvent(productOndcModels: productModels),
-              );
+          // warningLog('DeleteCartItemState models $productModels');
+          // context.read<CartBloc>().add(
+          //       UpdateCartEvent(productOndcModels: productModels),
+          //     );
         }
-        if (state is UpdatedCartItemState) {
-          errorLog('$state');
-          List<OndcCartItem> cartItems = [];
-          total = 0;
-          List<ProductOndcModel> productOndcModels = [];
-          productOndcModels.addAll(state.productOndcModel);
-          setState(() {
-            productModels = productOndcModels;
-          });
-          productModels.forEach((model) {
-            cartItems.add(
-              OndcCartItem(productOndcModel: model),
-            );
-            total = total + model.total;
-          });
-          getApiCartList();
-          setState(() {
-            cartWidget = cartItems;
-            cartBloc.productModelBloc = productModels;
-            RepositoryProvider.of<OndcCartRepository>(context).productModels =
-                productModels;
-          });
-        }
+        // if (state is UpdatedCartItemState) {
+        //   errorLog('$state');
+        //   List<OndcCartItem> cartItems = [];
+        //   total = 0;
+        //   List<ProductOndcModel> productOndcModels = [];
+        //   productOndcModels.addAll(state.productOndcModel);
+        //   setState(() {
+        //     productModels = productOndcModels;
+        //   });
+        //   productModels.forEach((model) {
+        //     cartItems.add(
+        //       OndcCartItem(productOndcModel: model),
+        //     );
+        //     total = total + model.total;
+        //   });
+        //   // getApiCartList();
+        //   setState(() {
+        //     cartWidget = cartItems;
+        //     cartBloc.productModelBloc = productModels;
+        //     RepositoryProvider.of<OndcCartRepository>(context).productModels =
+        //         productModels;
+        //   });
+        // }
       },
       builder: (context, state) {
         return Stack(
@@ -254,7 +286,9 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                             child: ElevatedButton(
                               onPressed: () {
                                 Get.to(
-                                  () => const OndcCheckoutScreenView(),
+                                  () => OndcCheckoutScreenView(
+                                    storeLocation_id: widget.storeLocation_id,
+                                  ),
                                 );
                               },
                               child: Text('Proceed To Checkout'),

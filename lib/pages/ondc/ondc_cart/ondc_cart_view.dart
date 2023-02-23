@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 library ondc_cart_view;
 
 import 'dart:io';
@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:santhe/models/ondc/cart_item_model.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
 import 'package:share_plus/share_plus.dart';
 

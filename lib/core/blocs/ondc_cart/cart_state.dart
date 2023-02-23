@@ -6,7 +6,7 @@ class CartState extends Equatable with LogMixin {
   const CartState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CartInitial extends CartState {}
@@ -32,7 +32,7 @@ class ErrorGettingCartListState extends CartState {
 }
 
 class UpdatedQuantityState extends CartState {
-  final ProductOndcModel productOndcModel;
+  final CartitemModel productOndcModel;
   const UpdatedQuantityState({
     required this.productOndcModel,
   });
@@ -52,7 +52,7 @@ class ErrorUpdatingQuantityState extends CartState {
 }
 
 class AddedToCartList extends CartState {
-  final List<ProductOndcModel> productOndcModels;
+  final List<ProductOndcModel>? productOndcModels;
   const AddedToCartList({
     required this.productOndcModels,
   });
@@ -86,7 +86,7 @@ class AddedToCartList extends CartState {
   String toString() => 'AddedToCartList(productOndcModels: $productOndcModels)';
 
   @override
-  List<Object> get props => [productOndcModels];
+  List<Object?> get props => [productOndcModels];
 }
 
 class UpdateCartLoading extends CartState {}
@@ -103,20 +103,12 @@ class ErrorDeletingItemState extends CartState {
 }
 
 class UpdatedCartItemState extends CartState {
-  final List<ProductOndcModel> productOndcModel;
+  final List<CartitemModel> productOndcModel;
   const UpdatedCartItemState({
     required this.productOndcModel,
   });
   @override
   List<Object> get props => [productOndcModel];
-
-  UpdatedCartItemState copyWith({
-    List<ProductOndcModel>? productOndcModel,
-  }) {
-    return UpdatedCartItemState(
-      productOndcModel: productOndcModel ?? this.productOndcModel,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     // infoLog('what is being stored$productOndcModel');
@@ -129,10 +121,10 @@ class UpdatedCartItemState extends CartState {
     // log('${map['productOndcModel']}', name: 'UpdatedCartItemStart.fromMap');
     List<dynamic> data = map['productOndcModel'];
     // log('$data', level: 3);
-    List<ProductOndcModel> productOndcModels = [];
+    List<CartitemModel> productOndcModels = [];
     data.forEach((mape) {
       productOndcModels.add(
-        ProductOndcModel.fromNewMap(json.decode(mape)),
+        CartitemModel.fromMap(json.decode(mape)),
       );
     });
     // log('$productOndcModels', name: "Hydrated Blocfrom map");
@@ -152,7 +144,7 @@ class UpdatedCartItemState extends CartState {
 }
 
 class DeleteCartItemState extends CartState {
-  final List<ProductOndcModel> productOndcModel;
+  final CartitemModel productOndcModel;
   const DeleteCartItemState({
     required this.productOndcModel,
   });
@@ -161,7 +153,7 @@ class DeleteCartItemState extends CartState {
 }
 
 class GetCartItemsOfShopState extends CartState {
-  final List<ProductOndcModel> products;
+  final List<CartitemModel> products;
   const GetCartItemsOfShopState({
     required this.products,
   });

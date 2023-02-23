@@ -9,6 +9,7 @@ import 'package:santhe/core/loggers.dart';
 
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/sharedpref.dart';
+import 'package:santhe/models/ondc/cart_item_model.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 
@@ -17,13 +18,13 @@ part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> with LogMixin {
   final OndcCartRepository ondcCartRepository;
-  List<ProductOndcModel> productModelBloc = [];
+  List<CartitemModel> productModelBloc = [];
   List<ProductOndcModel> productModelBlocLocal = [];
   SharedPref sharedPref = SharedPref();
   Map<dynamic, dynamic> data = {};
   CartBloc({
     required this.ondcCartRepository,
-  }) : super(CartState()) {
+  }) : super(const CartState()) {
     on<CartEvent>((event, emit) {});
 
     on<AddToCartEvent>((event, emit) async {
@@ -32,12 +33,12 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin {
 
         // ondcCartRepository.addToCart(productOndcModel: event.productOndcModel);
         canAdd
-            ? productModelBloc = await ondcCartRepository.addToCart(
+            ? await ondcCartRepository.addToCart(
                 productOndcModel: event.productOndcModel)
             : null;
         warningLog('${productModelBloc.length}');
         emit(
-          AddedToCartList(productOndcModels: productModelBloc),
+          AddedToCartList(productOndcModels: productModelBlocLocal),
         );
       } on ErrorAddingItemToCartState catch (e) {
         emit(
@@ -59,14 +60,16 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin {
     on<DeleteCartItemEvent>((event, emit) async {
       emit(DeleteCartLoading());
       try {
-        event.productOndcModel.removeFromCart();
+        // event.productOndcModel.removeFromCart();
         await ondcCartRepository.deleteCartItem(
             productOndcModelLocal: event.productOndcModel);
         productModelBloc.removeWhere(
           (element) => element.id == event.productOndcModel.id,
         );
         emit(
-          DeleteCartItemState(productOndcModel: productModelBloc),
+          DeleteCartItemState(
+            productOndcModel: event.productOndcModel,
+          ),
         );
       } on ErrorDeletingItemState catch (e) {
         emit(ErrorDeletingItemState(message: e.message));
@@ -88,8 +91,8 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin {
       // await clear();
       try {
         // List<ProductOndcModel> products = await ondcCartRepository.getCart();
-        List<ProductOndcModel> productModels1 = await ondcCartRepository
-            .getCart(storeLocationId: event.storeLocationId);
+        List<CartitemModel> productModels1 = await ondcCartRepository.getCart(
+            storeLocationId: event.storeLocationId);
         warningLog('local cart $productModels1');
         emit(
           GetCartItemsOfShopState(products: productModels1),
@@ -100,18 +103,6 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin {
         );
       }
     });
-  }
-
-  Future<List<ProductOndcModel>> loadSharedPrefs() async {
-    try {
-      List<ProductOndcModel> cartItems = await sharedPref.read("MyCart");
-      log('$cartItems', name: 'LoadSharedPrefs');
-      productModelBloc = cartItems;
-      return productModelBloc;
-    } catch (Excepetion) {
-      // do something
-      rethrow;
-    }
   }
 
   // @override

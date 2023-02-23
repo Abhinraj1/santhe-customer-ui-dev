@@ -344,200 +344,204 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                       children: [
                         Image.asset(
                           'assets/bannerondc.png',
-                          height: 175,
+                          height: 185,
                           fit: BoxFit.fill,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Container(
                           color: Colors.transparent,
-                          height: 175,
+                          height: 180,
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10.0, left: 5),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 3.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(height: 5),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Icon(
-                                      Icons.arrow_back,
-                                      color: AppColors().white100,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 5),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Icon(
+                                        Icons.arrow_back,
+                                        color: AppColors().white100,
+                                      ),
                                     ),
-                                  ),
-                                  AutoSizeText(
-                                    widget.shopModel.name,
-                                    minFontSize: 16,
-                                    style: TextStyle(
-                                      color: AppColors().white100,
-                                      fontSize: 22,
-                                      // fontSize: widget.shopModel.name
-                                      //             .toString()
-                                      //             .length >
-                                      //         60
-                                      //     ? 20
-                                      //     : 30,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
+                                    AutoSizeText(
+                                      widget.shopModel.name,
+                                      minFontSize: 16,
+                                      style: TextStyle(
+                                        color: AppColors().white100,
+                                        fontSize: 22,
+                                        // fontSize: widget.shopModel.name
+                                        //             .toString()
+                                        //             .length >
+                                        //         60
+                                        //     ? 20
+                                        //     : 30,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-                                  Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0),
-                                      child: AutoSizeText(
-                                        widget.shopModel.address,
-                                        textAlign: TextAlign.center,
-                                        minFontSize: 10,
-                                        style: TextStyle(
-                                          color: AppColors().white100,
-                                          fontSize: 13,
-                                          // fontSize: widget.shopModel.name
-                                          //             .toString()
-                                          //             .length >
-                                          //         60
-                                          //     ? 20
-                                          //     : 30,
-                                          fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.values.first,
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: AutoSizeText(
+                                          widget.shopModel.address,
+                                          textAlign: TextAlign.center,
+                                          minFontSize: 10,
+                                          style: TextStyle(
+                                            color: AppColors().white100,
+                                            fontSize: 13,
+                                            // fontSize: widget.shopModel.name
+                                            //             .toString()
+                                            //             .length >
+                                            //         60
+                                            //     ? 20
+                                            //     : 30,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.values.first,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  //! reatest
-                                  widget.shopModel.phone == null
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/phonepng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                "NA",
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: AppColors().white100,
+                                    //! reatest
+                                    widget.shopModel.phone == null
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/phonepng.png',
+                                                  height: 25,
+                                                  width: 25,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/phonepng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                '${widget.shopModel.phone}',
-                                                style: TextStyle(
-                                                  color: AppColors().white100,
-                                                  fontSize: 11,
+                                                const SizedBox(
+                                                  width: 8,
                                                 ),
-                                              ),
-                                            ],
+                                                AutoSizeText(
+                                                  "NA",
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    color: AppColors().white100,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/phonepng.png',
+                                                  height: 25,
+                                                  width: 25,
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                                AutoSizeText(
+                                                  '${widget.shopModel.phone}',
+                                                  style: TextStyle(
+                                                    color: AppColors().white100,
+                                                    fontSize: 11,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
 
-                                  widget.shopModel.email == null
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/emailpng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                "NA",
-                                                style: TextStyle(
-                                                    color: AppColors().white100,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
+                                    widget.shopModel.email == null
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/emailpng.png',
+                                                  height: 25,
+                                                  width: 25,
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                                AutoSizeText(
+                                                  "NA",
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors().white100,
+                                                      fontSize: 10),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/emailpng.png',
+                                                  height: 25,
+                                                  width: 25,
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                                AutoSizeText(
+                                                  '${widget.shopModel.email}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors().white100,
+                                                      fontSize: 10),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/emailpng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                '${widget.shopModel.email}',
-                                                style: TextStyle(
-                                                    color: AppColors().white100,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                  AutoSizeText(
-                                    widget.shopModel.delivery != null &&
-                                            widget.shopModel.delivery == true
-                                        ? "Home Delivery Available"
-                                        : "",
-                                    minFontSize: 10,
-                                    style: TextStyle(
-                                      color: AppColors().white100,
-                                      fontSize: 13,
-                                      // fontFamily: ,
-                                      // fontSize: widget.shopModel.name
-                                      //             .toString()
-                                      //             .length >
-                                      //         60
-                                      //     ? 20
-                                      //     : 30,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
+                                    AutoSizeText(
+                                      widget.shopModel.delivery != null &&
+                                              widget.shopModel.delivery == true
+                                          ? "Home Delivery Available"
+                                          : "",
+                                      minFontSize: 10,
+                                      style: TextStyle(
+                                        color: AppColors().white100,
+                                        fontSize: 13,
+                                        // fontFamily: ,
+                                        // fontSize: widget.shopModel.name
+                                        //             .toString()
+                                        //             .length >
+                                        //         60
+                                        //     ? 20
+                                        //     : 30,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -596,199 +600,203 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                       children: [
                         Image.asset(
                           'assets/bannerondc.png',
-                          height: 175,
+                          height: 180,
                           fit: BoxFit.fill,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Container(
                           color: Colors.transparent,
-                          height: 175,
+                          height: 180,
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10.0, left: 5),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 3.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(height: 5),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Icon(
-                                      Icons.arrow_back,
-                                      color: AppColors().white100,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 5),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Icon(
+                                        Icons.arrow_back,
+                                        color: AppColors().white100,
+                                      ),
                                     ),
-                                  ),
-                                  AutoSizeText(
-                                    widget.shopModel.name,
-                                    minFontSize: 16,
-                                    style: TextStyle(
-                                      color: AppColors().white100,
-                                      fontSize: 22,
-                                      // fontSize: widget.shopModel.name
-                                      //             .toString()
-                                      //             .length >
-                                      //         60
-                                      //     ? 20
-                                      //     : 30,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
+                                    AutoSizeText(
+                                      widget.shopModel.name,
+                                      minFontSize: 16,
+                                      style: TextStyle(
+                                        color: AppColors().white100,
+                                        fontSize: 22,
+                                        // fontSize: widget.shopModel.name
+                                        //             .toString()
+                                        //             .length >
+                                        //         60
+                                        //     ? 20
+                                        //     : 30,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-                                  Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0),
-                                      child: AutoSizeText(
-                                        widget.shopModel.address,
-                                        textAlign: TextAlign.center,
-                                        minFontSize: 10,
-                                        style: TextStyle(
-                                          color: AppColors().white100,
-                                          fontSize: 13,
-                                          // fontSize: widget.shopModel.name
-                                          //             .toString()
-                                          //             .length >
-                                          //         60
-                                          //     ? 20
-                                          //     : 30,
-                                          fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.values.first,
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: AutoSizeText(
+                                          widget.shopModel.address,
+                                          textAlign: TextAlign.center,
+                                          minFontSize: 10,
+                                          style: TextStyle(
+                                            color: AppColors().white100,
+                                            fontSize: 13,
+                                            // fontSize: widget.shopModel.name
+                                            //             .toString()
+                                            //             .length >
+                                            //         60
+                                            //     ? 20
+                                            //     : 30,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.values.first,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  //! reatest
-                                  widget.shopModel.phone == null
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/phonepng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                "NA",
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: AppColors().white100,
+                                    //! reatest
+                                    widget.shopModel.phone == null
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/phonepng.png',
+                                                  height: 25,
+                                                  width: 25,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/phonepng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                '${widget.shopModel.phone}',
-                                                style: TextStyle(
-                                                  color: AppColors().white100,
-                                                  fontSize: 11,
+                                                const SizedBox(
+                                                  width: 8,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                  widget.shopModel.email == null
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/emailpng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                "NA",
-                                                style: TextStyle(
+                                                AutoSizeText(
+                                                  "NA",
+                                                  style: TextStyle(
+                                                    fontSize: 11,
                                                     color: AppColors().white100,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/emailpng.png',
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              AutoSizeText(
-                                                '${widget.shopModel.email}',
-                                                style: TextStyle(
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/phonepng.png',
+                                                  height: 25,
+                                                  width: 25,
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                                AutoSizeText(
+                                                  '${widget.shopModel.phone}',
+                                                  style: TextStyle(
                                                     color: AppColors().white100,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
+                                                    fontSize: 11,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                  AutoSizeText(
-                                    widget.shopModel.delivery != null &&
-                                            widget.shopModel.delivery == true
-                                        ? "Home Delivery Available"
-                                        : "",
-                                    minFontSize: 10,
-                                    style: TextStyle(
-                                      color: AppColors().white100,
-                                      fontSize: 13,
-                                      // fontFamily: ,
-                                      // fontSize: widget.shopModel.name
-                                      //             .toString()
-                                      //             .length >
-                                      //         60
-                                      //     ? 20
-                                      //     : 30,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
+                                    widget.shopModel.email == null
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/emailpng.png',
+                                                  height: 25,
+                                                  width: 25,
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                                AutoSizeText(
+                                                  "NA",
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors().white100,
+                                                      fontSize: 10),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  'assets/emailpng.png',
+                                                  height: 25,
+                                                  width: 25,
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                                AutoSizeText(
+                                                  '${widget.shopModel.email}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors().white100,
+                                                      fontSize: 10),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                    AutoSizeText(
+                                      widget.shopModel.delivery != null &&
+                                              widget.shopModel.delivery == true
+                                          ? "Home Delivery Available"
+                                          : "",
+                                      minFontSize: 10,
+                                      style: TextStyle(
+                                        color: AppColors().white100,
+                                        fontSize: 13,
+                                        // fontFamily: ,
+                                        // fontSize: widget.shopModel.name
+                                        //             .toString()
+                                        //             .length >
+                                        //         60
+                                        //     ? 20
+                                        //     : 30,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -799,11 +807,14 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             alignment: Alignment.topRight,
                             //toDo : add indicator while cart bloc implementation
                             child: GestureDetector(
-                              onTap: () => ge.Get.to(
-                                () => OndcCartView(
-                                  storeLocation_id: widget.shopModel.storeId,
-                                ),
-                              ),
+                              onTap: () {
+                                errorLog('${widget.shopModel.id}');
+                                ge.Get.to(
+                                  () => OndcCartView(
+                                    storeLocation_id: widget.shopModel.id,
+                                  ),
+                                );
+                              },
                               child: Stack(
                                 children: [
                                   CircleAvatar(

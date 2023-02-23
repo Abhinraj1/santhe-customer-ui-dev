@@ -15,6 +15,8 @@ import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
+import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
+import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_state.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
@@ -27,6 +29,7 @@ import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/blocs/checkout/checkout_bloc.dart';
+import '../new/ondc_checkout_screen_mobile.dart';
 
 part 'ondc_checkout_screen_mobile.dart';
 part 'ondc_checkout_screen_tablet.dart';
@@ -39,7 +42,7 @@ class OndcCheckoutScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
-        mobile: _OndcCheckoutScreenMobile(),
+        mobile: const OndcCheckOutScreenMobile(),
         desktop: _OndcCheckoutScreenDesktop(),
         tablet: _OndcCheckoutScreenTablet(),
       );

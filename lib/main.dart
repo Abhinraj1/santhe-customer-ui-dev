@@ -18,6 +18,7 @@ import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
+import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
@@ -108,6 +109,10 @@ class MyApp extends StatelessWidget {
                 addressRepository: context.read<AddressRepository>(),
               ),
             ),
+
+            BlocProvider<CustomerContactCubit>(
+              create: (context) => CustomerContactCubit()
+            ),
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,
@@ -123,8 +128,8 @@ class MyApp extends StatelessWidget {
                     selectionHandleColor: Colors.transparent,
                   ),
                 ),
-            home: OndcCheckOutScreenMobile()
-            ///const SplashToHome(),
+            home:
+                const SplashToHome(),
           ),
         ),
       ),

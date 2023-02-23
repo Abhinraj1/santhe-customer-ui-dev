@@ -9,7 +9,7 @@
       {
         required Function() onTap,
 
-        required String buttonTile,
+        required String buttonTitle,
 
         double? width,
 
@@ -41,7 +41,7 @@
           ),
           minWidth: width ?? 150,
           child: Text(
-            buttonTile,
+            buttonTitle,
             style: isActive ??
                 true ?
             FontStyleManager().s14fw700White :

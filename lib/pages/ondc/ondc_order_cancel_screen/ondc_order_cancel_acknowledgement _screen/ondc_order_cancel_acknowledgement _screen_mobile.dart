@@ -7,11 +7,11 @@ import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
 
 
-class ONDCReturnAcknowledgement extends StatelessWidget {
+class ONDCOrderCancelAcknowledgement extends StatelessWidget {
 
   final bool? isFullCancellation;
 
-  const ONDCReturnAcknowledgement({
+  const ONDCOrderCancelAcknowledgement({
     Key? key,
 
   this.isFullCancellation
@@ -55,7 +55,7 @@ class ONDCReturnAcknowledgement extends StatelessWidget {
                 onTap: (){},
               width: 160,
               verticalPadding: 40,
-                buttonTile: "Back",
+                buttonTitle: "Back",
             )
           ],
         )

@@ -191,6 +191,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                                 elevation: MaterialStateProperty.all(0),
                               ),
                               onPressed: () {
+
                                 Get.to(
                                   () => OndcShopListView(
                                     customerModel: currentUser,
@@ -216,4 +217,6 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           }),
     );
   }
+
+
 }

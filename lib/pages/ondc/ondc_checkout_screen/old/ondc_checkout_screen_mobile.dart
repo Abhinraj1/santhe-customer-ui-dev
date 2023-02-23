@@ -2,15 +2,15 @@
 
 part of ondc_checkout_screen_view;
 
-class _OndcCheckoutScreenMobile extends StatefulWidget {
-  _OndcCheckoutScreenMobile();
+class OndcCheckoutScreenMobileOld extends StatefulWidget {
+  OndcCheckoutScreenMobileOld();
 
   @override
-  State<_OndcCheckoutScreenMobile> createState() =>
-      _OndcCheckoutScreenMobileState();
+  State<OndcCheckoutScreenMobileOld> createState() =>
+      _OndcCheckoutScreenMobileOldState();
 }
 
-class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
+class _OndcCheckoutScreenMobileOldState extends State<OndcCheckoutScreenMobileOld>
     with LogMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   FinalCostingModel? finalCostingModel;
@@ -108,6 +108,7 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
     //       GetCartPriceEventPost(
     //           transactionId:
     //               RepositoryProvider.of<OndcRepository>(context).transactionId),
+    //
     //     );
   }
 
@@ -119,9 +120,11 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
       listener: (context, state) {
         debugLog('$state');
         if (state is CheckoutPostSuccess) {
+
           setState(() {
             messageID = state.messageId;
           });
+          warningLog("MESSAGEID RECEIVED HERE ###################### $messageID");
           Future.delayed(
             Duration(seconds: 1),
             () => context.read<CheckoutBloc>().add(
@@ -134,17 +137,17 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
                 ),
           );
         }
-        // if (state is CheckoutGetSuccess) {
-        //   errorLog(
-        //       'checking to see if the right message id is being sent $messageID');
-        //   context.read<CheckoutBloc>().add(
-        //         GetFinalItemsEvent(
-        //             transactionId:
-        //                 RepositoryProvider.of<OndcRepository>(context)
-        //                     .transactionId,
-        //             messageId: messageID),
-        //       );
-        // }
+        if (state is CheckoutGetSuccess) {
+          errorLog(
+              'checking to see if the right message id is being sent $messageID');
+          context.read<CheckoutBloc>().add(
+                GetFinalItemsEvent(
+                    transactionId:
+                        RepositoryProvider.of<OndcRepository>(context)
+                            .transactionId,
+                    messageId: messageID),
+              );
+        }
         if (state is FinalizeProductSuccessState) {
           setState(() {
             finalCostingModel = state.finalCostingModel;
@@ -152,6 +155,8 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
         }
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
+
+          warningLog("RECEIVED ORDERID HERE#########################   ${orderId}");
           openCheckout(profileController);
         }
         if (state is FinalizePaymentSuccessState) {
@@ -528,15 +533,18 @@ class _OndcCheckoutScreenMobileState extends State<_OndcCheckoutScreenMobile>
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Get.to(
-                        //   () => const OndcCheckoutScreenView(),
-                        // );
-                        context.read<CheckoutBloc>().add(
-                              InitializeCartEvent(
-                                  customerId: AppHelpers()
-                                      .getPhoneNumberWithoutCountryCode,
-                                  messageId: messageID),
-                            );
+
+                        Get.to(
+                          () => const OndcCheckoutScreenView(),
+                        );
+
+
+                        // context.read<CheckoutBloc>().add(
+                        //       InitializeCartEvent(
+                        //           customerId: AppHelpers()
+                        //               .getPhoneNumberWithoutCountryCode,
+                        //           messageId: messageID),
+                        //     );
                       },
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all(

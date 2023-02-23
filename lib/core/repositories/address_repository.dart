@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:geocoding/geocoding.dart';
+import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/loggers.dart';
@@ -15,6 +16,9 @@ class AddressRepository with LogMixin {
   AddressOndcModel? deliveryAddressModel;
   String? deliveryAddressId;
 
+  AddressOndcModel? billingAddressModel;
+  String? billingAddressId;
+
   List<AddressOndcModel> get addressModels {
     return addressOndcModels;
   }
@@ -23,8 +27,12 @@ class AddressRepository with LogMixin {
     return deliveryAddressModel;
   }
 
-  String? get deliveryAddressIdGlobal {
-    return deliveryAddressId;
+  AddressOndcModel? get billingModel {
+    return billingAddressModel;
+  }
+
+  String? get billingAddressIdGlobal {
+    return billingAddressId;
   }
 
   Future<String> updateAddress({
@@ -32,15 +40,25 @@ class AddressRepository with LogMixin {
     required double lng,
     required String flat,
     required String address_id,
+    required String deliveryName,
     String? howtoReach,
+
   }) async {
+
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/address/update');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
+
     errorLog('$flat, and also id $address_id');
+
+
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+
+
+
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       final getfinalAddress = placemarks[0];
@@ -51,8 +69,8 @@ class AddressRepository with LogMixin {
         //! how to reach api update
         body: json.encode(
           {
-            "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
-            "address_name": "Delivery",
+            "firebase_id": firebaseId,
+            "address_name": deliveryName,
             "lat": lat,
             "lng": lng,
             "flat": flat,
@@ -68,16 +86,23 @@ class AddressRepository with LogMixin {
       );
       errorLog('${response.statusCode}');
       final responseBody = json.decode(response.body);
+
+      isBillingAddress = false;
+
       errorLog('$responseBody');
+
+
       return responseBody['message'];
     } catch (e) {
       throw OndcUpdateAddressErrorState(message: e.toString());
     }
   }
 
-  getAddressList() async {
+ Future<List<AddressOndcModel>> getAddressList() async {
+
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
-    warningLog('Firebase Id being sent$firebaseId');
+
+    warningLog('Firebase Id being sent IN GET ADDRESS LIST $firebaseId');
     final url = Uri.parse(
         'http://ondcstaging.santhe.in/santhe/ondc/address/list?firebase_id=$firebaseId');
     final header = {
@@ -92,15 +117,27 @@ class AddressRepository with LogMixin {
       errorLog('${response.statusCode}');
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
-      errorLog('$responseBody');
+      ///
+      errorLog('################ RAW DATA  HEREE $responseBody');
       addressOndcModels =
           responseBody.map((e) => AddressOndcModel.fromMap(e)).toList();
       errorLog('${addressOndcModels}');
+
+      ///
+      warningLog("################################# body ${addressOndcModels}");
       deliveryAddressModel = addressOndcModels.firstWhere(
         (element) => element.address_name.toString().contains('Delivery'),
       );
+
+     billingAddressModel = addressOndcModels.firstWhere(
+            (element) => element.address_name.toString().contains('Billing'),
+      );
       errorLog('$deliveryAddressModel');
+
       deliveryAddressId = deliveryAddressModel?.id;
+
+      billingAddressId = billingAddressModel?.id;
+
       warningLog('$deliveryAddressId');
       return addressOndcModels;
     } catch (e) {

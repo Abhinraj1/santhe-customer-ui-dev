@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
 import 'package:santhe/API/addressSearchAPI.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/location_controller.dart';

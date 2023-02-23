@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/loggers.dart';
@@ -9,6 +10,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 import 'package:santhe/pages/ondc/ondc_shop_details/ondc_shop_details_view.dart';
 import 'package:santhe/widgets/ondc_widgets/shop_images_intro.dart';
+
+import '../../core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 
 class OndcShopWidget extends StatefulWidget {
   final ShopModel shopModel;
@@ -42,6 +45,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
     super.initState();
     getImagesOfShops();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +121,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
                   children: [
                     Expanded(
                       child: Text(
-                        '${widget.shopModel.distance.toString().substring(0, 4)} kms',
+                        '${widget.shopModel.distance.toString()} kms',
                         style: TextStyle(
                           color: AppColors().grey80,
                         ),

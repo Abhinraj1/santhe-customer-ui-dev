@@ -253,8 +253,9 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                             width: 350,
                             child: ElevatedButton(
                               onPressed: () {
+
                                 Get.to(
-                                  () => const OndcCheckoutScreenView(),
+                                  () =>  const OndcCheckoutScreenView(),
                                 );
                               },
                               child: Text('Proceed To Checkout'),

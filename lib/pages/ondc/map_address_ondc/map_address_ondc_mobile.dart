@@ -4,9 +4,11 @@ part of map_address_ondc_view;
 class _MapAddressOndcMobile extends StatefulWidget {
   final double lat;
   final double lng;
+
   _MapAddressOndcMobile({
     required this.lat,
     required this.lng,
+
   });
 
   @override
@@ -291,17 +293,41 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                                   }
                                                   locationController
                                                       .mapSelected = true.obs;
+
+                                                  isBillingAddress ?
+
                                                   context
                                                       .read<AddressBloc>()
                                                       .add(
                                                         UpdateAddressEvent(
                                                             lat: lat,
                                                             lng: lng,
+                                                            deliveryName: "Billing",
+                                                            address_id:
+                                                                '${RepositoryProvider.of<AddressRepository>(context).billingAddressId}',
+                                                            flat: textController
+                                                                .text),
+                                                      ) :
+
+
+                                                  context
+                                                      .read<AddressBloc>()
+                                                      .add(
+                                                        UpdateAddressEvent(
+                                                            lat: lat,
+                                                            lng: lng,
+                                                            deliveryName: "Delivery",
                                                             address_id:
                                                                 '${RepositoryProvider.of<AddressRepository>(context).deliveryAddressId}',
                                                             flat: textController
                                                                 .text),
                                                       );
+
+
+
+
+
+
                                                   // registrationController
                                                   //     .isMapSelected = true.obs;
                                                   // registrationController

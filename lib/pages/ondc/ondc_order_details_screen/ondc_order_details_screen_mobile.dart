@@ -24,6 +24,7 @@ class ONDCOrderDetailsScreen extends StatelessWidget {
     return  CustomScaffold(
        trailingButton: homeIconButton(),
         backgroundColor: AppColors().grey10,
+
         body: ListView(
           children: [
 

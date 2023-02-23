@@ -34,6 +34,8 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   String productName = "";
   late LocationModel locationModel;
 
+
+
   _getLocationCity() async {
     final url = Uri.parse(
         'http://www.postalpincode.in/api/pincode/${widget.customerModel.pinCode}');
@@ -326,7 +328,10 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           ));
         }
       },
+
       builder: (context, state) {
+
+
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
@@ -375,13 +380,20 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                     //     AppHelpers().playStoreLink,
                     //   );
                     // }
-                    ge.Get.back();
+                   /// ge.Get.back();
+                    ge.Get.to(OndcCheckOutScreenMobile());
                   },
                   splashRadius: 25.0,
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.white,
-                    size: 27.0,
+
+                  icon: InkWell(
+                    onTap: (){
+
+                    },
+                    child: const Icon(
+                      Icons.home,
+                      color: Colors.white,
+                      size: 27.0,
+                    ),
                   ),
                 ),
               )
@@ -467,6 +479,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                           );
                                         },
                                         child: Container(
+
                                           color: Colors.white,
                                           height: 30,
                                           width: 340,
@@ -634,3 +647,4 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
     );
   }
 }
+

@@ -128,7 +128,189 @@ class _ProductLongDescriptionMobileState
                     fontSize: 15,
                   ),
                 ),
-              )
+              ),
+              widget.productOndcModel.generic_name != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            'Generic Name: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          AutoSizeText(
+                            '${widget.productOndcModel.generic_name}',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.net_quantity != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            'Net Quantity: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          AutoSizeText(
+                            '${widget.productOndcModel.net_quantity}',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Text(''),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const AutoSizeText(
+                      'Manufacturer name : ',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    AutoSizeText(
+                      widget.productOndcModel.packer_name,
+                      style: const TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const AutoSizeText(
+                      'Manufacturer Address : ',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    AutoSizeText(
+                      widget.productOndcModel.packer_address,
+                      style: const TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+              widget.productOndcModel.nutritional_info != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            'Nutritional Info: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          AutoSizeText(
+                            widget.productOndcModel.nutritional_info,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.additives_info != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            'Additives Info: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          AutoSizeText(
+                            widget.productOndcModel.additives_info,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.brand_owner_FSSAI_license_no != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            'Brand Owner FSSAI LICENSE NUMBER: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          AutoSizeText(
+                            widget
+                                .productOndcModel.brand_owner_FSSAI_license_no,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.other_FSSAI_license_no != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            'Other FSSAI License Number: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          AutoSizeText(
+                            widget.productOndcModel.other_FSSAI_license_no,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.importer_FSSAI_license_no != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            'Importer FSSAI License Number: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          AutoSizeText(
+                            widget.productOndcModel.importer_FSSAI_license_no,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Text(''),
             ],
           ),
         ));

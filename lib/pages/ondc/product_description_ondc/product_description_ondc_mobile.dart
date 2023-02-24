@@ -194,7 +194,7 @@ class _ProductDescriptionOndcMobileState
       ),
       body: BlocConsumer<CartBloc, CartState>(
         listener: (context, state) {
-          // warningLog('$state');
+          warningLog('$state');
           if (state is AddedToCartList) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -297,7 +297,7 @@ class _ProductDescriptionOndcMobileState
                               Text(
                                 '₹ ${widget.productOndcModel.maximum_value}',
                                 style: TextStyle(
-                                    color: AppColors().brandDark,
+                                    color: AppColors().grey100,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     decoration: TextDecoration.lineThrough),
@@ -335,7 +335,7 @@ class _ProductDescriptionOndcMobileState
                 Row(
                   children: [
                     widget.productOndcModel.isAddedToCart!
-                        ? const Text('')
+                        ? const Text('                          ')
                         : Padding(
                             padding: const EdgeInsets.only(top: 8.0, left: 10),
                             child: Container(

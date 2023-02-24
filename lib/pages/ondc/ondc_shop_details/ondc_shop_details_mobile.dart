@@ -83,7 +83,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
     try {
       warningLog('product name $productName');
       final response = await http.get(url);
-      warningLog('${response.statusCode}');
+      warningLog('${response.statusCode} and url $url');
       final responseBody =
           await json.decode(response.body)['data'] as List<dynamic>;
       warningLog('$responseBody');

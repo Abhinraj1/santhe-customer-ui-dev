@@ -87,6 +87,12 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin {
       }
     });
 
+    on<ResetCartEvent>((event, emit) {
+      emit(
+        ResetCartState(),
+      );
+    });
+
     on<OnAppRefreshEvent>((event, emit) async {
       // await clear();
       try {

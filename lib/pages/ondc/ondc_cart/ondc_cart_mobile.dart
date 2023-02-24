@@ -111,6 +111,9 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
           setState(() {
             cartWidget = cartWidgets;
           });
+          context.read<CartBloc>().add(
+                ResetCartEvent(),
+              );
         }
         if (state is DeleteCartItemState) {
           context.read<CartBloc>().add(

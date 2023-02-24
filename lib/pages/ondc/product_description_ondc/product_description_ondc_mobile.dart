@@ -196,9 +196,14 @@ class _ProductDescriptionOndcMobileState
         listener: (context, state) {
           // warningLog('$state');
           if (state is AddedToCartList) {
-            context.read<CartBloc>().add(
-                  UpdateCartEvent(productOndcModels: state.productOndcModels),
-                );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Added to Cart'),
+              ),
+            );
+            // context.read<CartBloc>().add(
+            //       UpdateCartEvent(productOndcModels: state.productOndcModels),
+            //     );
           }
         },
         builder: (context, state) {
@@ -329,51 +334,55 @@ class _ProductDescriptionOndcMobileState
                 ),
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 10),
-                      child: Container(
-                        width: 160,
-                        height: 45,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15.0),
-                            bottomRight: Radius.circular(15.0),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: add,
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                  size: 17,
+                    widget.productOndcModel.isAddedToCart!
+                        ? const Text('')
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 8.0, left: 10),
+                            child: Container(
+                              width: 160,
+                              height: 45,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15.0),
+                                  bottomRight: Radius.circular(15.0),
                                 ),
                               ),
-                              Text(
-                                ' ${widget.productOndcModel.quantity}',
-                                style: TextStyle(
-                                    color: AppColors().brandDark,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              GestureDetector(
-                                onTap: minus,
-                                child: const Icon(
-                                  Icons.remove,
-                                  color: Colors.black,
-                                  size: 17,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 35.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: add,
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.black,
+                                        size: 17,
+                                      ),
+                                    ),
+                                    Text(
+                                      ' ${widget.productOndcModel.quantity}',
+                                      style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    GestureDetector(
+                                      onTap: minus,
+                                      child: const Icon(
+                                        Icons.remove,
+                                        color: Colors.black,
+                                        size: 17,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                     const SizedBox(
                       width: 20,
                     ),

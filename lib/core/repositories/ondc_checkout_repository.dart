@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -16,6 +18,11 @@ class OndcCheckoutRepository with LogMixin {
   String razorPayOrderId = '';
   String receiptNo = '';
   String offer_id = '';
+  String orderIdCart = '';
+
+  String get orderId {
+    return orderIdCart;
+  }
 
   double? get costCheckout {
     return finalCost;
@@ -38,7 +45,8 @@ class OndcCheckoutRepository with LogMixin {
   }
 
   Future<dynamic> proceedToCheckoutMethodPost(
-      {required final String transactionId}) async {
+      {required final String transactionId,
+      required final String storeLocation_id}) async {
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/price/request');
     final header = {
@@ -52,7 +60,7 @@ class OndcCheckoutRepository with LogMixin {
         body: json.encode(
           {
             "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
-            "transaction_id": transactionId
+            "storeLocation_id": storeLocation_id,
           },
         ),
       );
@@ -97,10 +105,14 @@ class OndcCheckoutRepository with LogMixin {
   }
 
   Future<FinalCostingModel?> proceedToCheckoutFinalCart(
-      {required final String transactionid, required String messageId}) async {
-    warningLog("finalcart$messageId");
+      {required final String storeLocation_id,
+      required final String transactionid,
+      required String messageId}) async {
+    final String firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+    warningLog("finalcart$messageId $firebaseId and also $storeLocation_id");
+
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/cart/items?message_id=$messageId');
+        'http://ondcstaging.santhe.in/santhe/ondc/cart/items?message_id=$messageId&firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
     warningLog("finalcart  $url");
     final header = {
       'Content-Type': 'application/json',
@@ -112,7 +124,9 @@ class OndcCheckoutRepository with LogMixin {
       final responseBody = await json.decode(response.body);
       warningLog('$responseBody');
       dynamic map = responseBody['finalCosting'];
-      items = responseBody['data']['rows'] as List<dynamic>;
+      items = responseBody['data']['quotes'] as List<dynamic>;
+      orderIdCart = items.first['orderId'] as String;
+      errorLog('checking for orderID $orderIdCart');
       List collection = items.first['cartItemPrices'] as List<dynamic>;
       for (var element in collection) {
         previewModels.add(PreviewWidgetModel.fromMap(element));
@@ -122,6 +136,60 @@ class OndcCheckoutRepository with LogMixin {
       return finalCostingModel;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<dynamic> initPost(
+      {required String messageId, required String order_id}) async {
+    final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/init');
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+    warningLog("message id $messageId also orderId $order_id and url $url");
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    try {
+      final response = await http.post(
+        url,
+        headers: header,
+        body: json.encode(
+          {
+            "firebase_id": firebaseId,
+            "message_id": messageId,
+            "order_id": order_id
+          },
+        ),
+      );
+      warningLog('checking for response body ${response.body}');
+      final responseBody = json.decode(response.body);
+      final status = responseBody['status'];
+      return status;
+    } catch (e) {
+      throw InitializePostErrorState(
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<String> initGet({required String order_Id}) async {
+    final url = Uri.parse(
+        'http://ondcstaging.santhe.in/santhe/ondc/init/response?order_id=$order_Id');
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    try {
+      final response = await http.get(url, headers: header);
+      warningLog('${response.statusCode} and also ${response.body}');
+      final responseBody = json.decode(response.body);
+      final String status = responseBody['data']['status'];
+      //!
+      errorLog('checking for status $status');
+      return status;
+    } catch (e) {
+      throw InitializeGetErrorState(
+        message: e.toString(),
+      );
     }
   }
 

@@ -133,7 +133,7 @@ class OndcRepository with LogMixin {
 
     try {
       final response = await http.get(url, headers: header);
-      warningLog('${response.statusCode}');
+      warningLog('${response.statusCode} and ${response.body}');
       final responseBody =
           await json.decode(response.body)['data'] as List<dynamic>;
       warningLog('$responseBody');

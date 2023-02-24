@@ -378,7 +378,6 @@ class ProductOndcModel extends Equatable with LogMixin {
 
   bool addToCart() {
     if (available > 0) {
-      quantity = 1;
       isAddedToCart = true;
       getTotal();
       return true;

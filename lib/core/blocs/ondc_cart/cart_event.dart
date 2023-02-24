@@ -18,7 +18,7 @@ class AddToCartEvent extends CartEvent {
 }
 
 class UpdateQuantityEvent extends CartEvent {
-  final ProductOndcModel cartModel;
+  final CartitemModel cartModel;
   const UpdateQuantityEvent({
     required this.cartModel,
   });
@@ -54,7 +54,7 @@ class ErrorAddingQuantityEvent extends CartEvent {
 }
 
 class UpdateCartEvent extends CartEvent {
-  final List<ProductOndcModel> productOndcModels;
+  final List<CartitemModel> productOndcModels;
   const UpdateCartEvent({required this.productOndcModels});
   @override
   List<Object> get props => [productOndcModels];
@@ -70,7 +70,7 @@ class OnAppRefreshEvent extends CartEvent {
 }
 
 class DeleteCartItemEvent extends CartEvent {
-  final ProductOndcModel productOndcModel;
+  final CartitemModel productOndcModel;
   const DeleteCartItemEvent({
     required this.productOndcModel,
   });

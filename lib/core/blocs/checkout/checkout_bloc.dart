@@ -22,11 +22,12 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
 
     on<GetCartPriceEventPost>((event, emit) async {
       emit(CheckoutPostLoading());
+      debugLog('store id ${event.storeLocation_id}');
       try {
         final String messageId =
             await ondcCheckoutRepository.proceedToCheckoutMethodPost(
-          transactionId: event.transactionId,
-        );
+                transactionId: event.transactionId,
+                storeLocation_id: event.storeLocation_id);
         emit(
           CheckoutPostSuccess(messageId: messageId),
         );
@@ -58,6 +59,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         final FinalCostingModel? finalCostingModel =
             await ondcCheckoutRepository.proceedToCheckoutFinalCart(
           transactionid: event.transactionId,
+          storeLocation_id: event.storeLocation_id,
           messageId: event.messageId,
         );
         emit(
@@ -67,6 +69,35 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         emit(
           FinalizeProductErrorState(message: e.message),
         );
+      }
+    });
+
+    on<InitializePostEvent>((event, emit) async {
+      emit(InitializePostLoadingState());
+      try {
+        final dynamic status = await ondcCheckoutRepository.initPost(
+            messageId: event.message_id, order_id: event.order_id);
+        emit(
+          InitializePostSuccessState(status: status),
+        );
+      } on InitializePostErrorState catch (e) {
+        emit(
+          InitializePostErrorState(message: e.message),
+        );
+      }
+    });
+
+    on<InitializeGetEvent>((event, emit) async {
+      emit(InitializeGetLoadingState());
+      try {
+        final String status =
+            await ondcCheckoutRepository.initGet(order_Id: event.order_id);
+        warningLog('checking for status $status');
+        emit(
+          InitializeGetSuccessState(status: status),
+        );
+      } on InitializeGetErrorState catch (e) {
+        emit(InitializeGetErrorState(message: e.message));
       }
     });
 

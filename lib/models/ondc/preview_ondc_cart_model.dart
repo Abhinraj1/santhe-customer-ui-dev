@@ -10,6 +10,9 @@ class PreviewWidgetModel extends Equatable {
   final dynamic type;
   final dynamic quantity;
   final dynamic ondc_item_id;
+  final dynamic status;
+  final dynamic cancellable;
+  final dynamic symbol;
   final dynamic createdAt;
   final dynamic deletedAt;
   final dynamic updatedAt;
@@ -21,6 +24,9 @@ class PreviewWidgetModel extends Equatable {
     required this.type,
     required this.quantity,
     required this.ondc_item_id,
+    required this.status,
+    required this.cancellable,
+    required this.symbol,
     required this.createdAt,
     required this.deletedAt,
     required this.updatedAt,
@@ -34,6 +40,9 @@ class PreviewWidgetModel extends Equatable {
     dynamic? type,
     dynamic? quantity,
     dynamic? ondc_item_id,
+    dynamic? status,
+    dynamic? cancellable,
+    dynamic? symbol,
     dynamic? createdAt,
     dynamic? deletedAt,
     dynamic? updatedAt,
@@ -46,6 +55,9 @@ class PreviewWidgetModel extends Equatable {
       type: type ?? this.type,
       quantity: quantity ?? this.quantity,
       ondc_item_id: ondc_item_id ?? this.ondc_item_id,
+      status: status ?? this.status,
+      cancellable: cancellable ?? this.cancellable,
+      symbol: symbol ?? this.symbol,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt ?? this.deletedAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -65,12 +77,19 @@ class PreviewWidgetModel extends Equatable {
       'deletedAt': deletedAt,
       'updatedAt': updatedAt,
       'quoteId': quoteId,
+      'status': status,
+      'cancellable': cancellable,
+      'symbol': symbol,
     };
   }
 
   factory PreviewWidgetModel.fromMap(Map<String, dynamic> map) {
     return PreviewWidgetModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
+      symbol: map['symbol'] != null ? map['symbol'] as dynamic : null,
+      status: map['status'] != null ? map['status'] as dynamic : null,
+      cancellable:
+          map['cancellable'] != null ? map['cancellable'] as dynamic : null,
       price: map['price'] != null ? map['price'] as dynamic : null,
       title: map['title'] != null ? map['title'] as dynamic : null,
       type: map['type'] != null ? map['id'] as dynamic : null,
@@ -101,6 +120,9 @@ class PreviewWidgetModel extends Equatable {
       type,
       quantity,
       ondc_item_id,
+      status,
+      cancellable,
+      symbol,
       createdAt,
       deletedAt,
       updatedAt,

@@ -71,7 +71,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
     try {
       final response = await http.get(url, headers: header);
       warningLog(
-          'checking for shop model via transcationid $response checking for existing shops length${shops.length}');
+          ' url $url checking for shop model via transcationid $response checking for existing shops length${shops.length}');
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
 

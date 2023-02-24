@@ -1,16 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 
 part of ondc_checkout_screen_view;
 
-class OndcCheckoutScreenMobileOld extends StatefulWidget {
-  OndcCheckoutScreenMobileOld();
+class _OndcCheckoutScreenMobile extends StatefulWidget {
+  final String storeLocation_id;
+  _OndcCheckoutScreenMobile({required this.storeLocation_id});
 
   @override
-  State<OndcCheckoutScreenMobileOld> createState() =>
+  State<_OndcCheckoutScreenMobile> createState() =>
       _OndcCheckoutScreenMobileOldState();
 }
 
-class _OndcCheckoutScreenMobileOldState extends State<OndcCheckoutScreenMobileOld>
+class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     with LogMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   FinalCostingModel? finalCostingModel;
@@ -100,16 +102,17 @@ class _OndcCheckoutScreenMobileOldState extends State<OndcCheckoutScreenMobileOl
   @override
   void initState() {
     super.initState();
-    // getList();
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    // context.read<CheckoutBloc>().add(
-    //       GetCartPriceEventPost(
-    //           transactionId:
-    //               RepositoryProvider.of<OndcRepository>(context).transactionId),
-    //
-    //     );
+    getList();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    context.read<CheckoutBloc>().add(
+          GetCartPriceEventPost(
+            transactionId:
+                RepositoryProvider.of<OndcRepository>(context).transactionId,
+            storeLocation_id: widget.storeLocation_id,
+          ),
+        );
   }
 
   @override
@@ -120,16 +123,17 @@ class _OndcCheckoutScreenMobileOldState extends State<OndcCheckoutScreenMobileOl
       listener: (context, state) {
         debugLog('$state');
         if (state is CheckoutPostSuccess) {
-
           setState(() {
             messageID = state.messageId;
           });
-          warningLog("MESSAGEID RECEIVED HERE ###################### $messageID");
+          warningLog(
+              "MESSAGEID RECEIVED HERE ###################### $messageID");
           Future.delayed(
             Duration(seconds: 1),
             () => context.read<CheckoutBloc>().add(
                   GetFinalItemsEvent(
                     messageId: state.messageId,
+                    storeLocation_id: widget.storeLocation_id,
                     transactionId:
                         RepositoryProvider.of<OndcRepository>(context)
                             .transactionId,
@@ -137,17 +141,34 @@ class _OndcCheckoutScreenMobileOldState extends State<OndcCheckoutScreenMobileOl
                 ),
           );
         }
-        if (state is CheckoutGetSuccess) {
-          errorLog(
-              'checking to see if the right message id is being sent $messageID');
+        if (state is InitializePostSuccessState) {
           context.read<CheckoutBloc>().add(
-                GetFinalItemsEvent(
-                    transactionId:
-                        RepositoryProvider.of<OndcRepository>(context)
-                            .transactionId,
+                InitializeGetEvent(
+                    order_id:
+                        RepositoryProvider.of<OndcCheckoutRepository>(context)
+                            .orderId),
+              );
+        }
+        if (state is InitializeGetSuccessState) {
+          //! STATUS KEYWORD - CREATED ...
+          //! STATUS KEYWORD - INITIATED THEN RUN BLOC
+          context.read<CheckoutBloc>().add(
+                InitializeCartEvent(
+                    customerId: AppHelpers().getPhoneNumberWithoutCountryCode,
                     messageId: messageID),
               );
         }
+        // if (state is CheckoutGetSuccess) {
+        //   errorLog(
+        //       'checking to see if the right message id is being sent $messageID');
+        //   context.read<CheckoutBloc>().add(
+        //         GetFinalItemsEvent(
+        //             transactionId:
+        //                 RepositoryProvider.of<OndcRepository>(context)
+        //                     .transactionId,
+        //             messageId: messageID),
+        //       );
+        // }
         if (state is FinalizeProductSuccessState) {
           setState(() {
             finalCostingModel = state.finalCostingModel;
@@ -156,7 +177,8 @@ class _OndcCheckoutScreenMobileOldState extends State<OndcCheckoutScreenMobileOl
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
 
-          warningLog("RECEIVED ORDERID HERE#########################   ${orderId}");
+          warningLog(
+              "RECEIVED ORDERID HERE#########################   ${orderId}");
           openCheckout(profileController);
         }
         if (state is FinalizePaymentSuccessState) {
@@ -533,18 +555,13 @@ class _OndcCheckoutScreenMobileOldState extends State<OndcCheckoutScreenMobileOl
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-
-                        Get.to(
-                          () => const OndcCheckoutScreenView(),
-                        );
-
-
-                        // context.read<CheckoutBloc>().add(
-                        //       InitializeCartEvent(
-                        //           customerId: AppHelpers()
-                        //               .getPhoneNumberWithoutCountryCode,
-                        //           messageId: messageID),
-                        //     );
+                        context.read<CheckoutBloc>().add(
+                              InitializePostEvent(
+                                  message_id: messageID,
+                                  order_id: RepositoryProvider.of<
+                                          OndcCheckoutRepository>(context)
+                                      .orderId),
+                            );
                       },
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all(

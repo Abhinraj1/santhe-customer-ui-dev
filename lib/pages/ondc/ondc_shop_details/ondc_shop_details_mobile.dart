@@ -646,7 +646,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0),
                                         child: AutoSizeText(
-                                          widget.shopModel.address,
+                                          widget.shopModel.address.toString(),
                                           textAlign: TextAlign.center,
                                           minFontSize: 10,
                                           style: TextStyle(

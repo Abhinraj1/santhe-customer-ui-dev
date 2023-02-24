@@ -1,60 +1,10 @@
 
-class PastCartItems {
-  int? status;
-  Data? data;
-  String? message;
-
-  PastCartItems({this.status, this.data, this.message});
-
-  PastCartItems.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
-    message = json["message"];
-  }
-
-  static List<PastCartItems> fromList(List<Map<String, dynamic>> list) {
-    return list.map((map) => PastCartItems.fromJson(map)).toList();
-  }
 
 
 
-  PastCartItems copyWith({
-    int? status,
-    Data? data,
-    String? message,
-  }) => PastCartItems(
-    status: status ?? this.status,
-    data: data ?? this.data,
-    message: message ?? this.message,
-  );
-}
-
-class Data {
-  int? count;
-  List<Rows>? rows;
-
-  Data({this.count, this.rows});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    count = json["count"];
-    rows = json["rows"] == null ? null : (json["rows"] as List).map((e) => Rows.fromJson(e)).toList();
-  }
-
-  static List<Data> fromList(List<Map<String, dynamic>> list) {
-    return list.map((map) => Data.fromJson(map)).toList();
-  }
 
 
-  Data copyWith({
-    int? count,
-    List<Rows>? rows,
-  }) => Data(
-    count: count ?? this.count,
-    rows: rows ?? this.rows,
-  );
-}
-
-class Rows {
+class PastOrderRow {
   String? id;
   String? status;
   String? transactionId;
@@ -72,9 +22,9 @@ class Rows {
   List<Quotes>? quotes;
   Address? address;
 
-  Rows({this.id, this.status, this.transactionId, this.messageId, this.invoice, this.supportPhone, this.supportEmail, this.createdAt, this.updatedAt, this.deletedAt, this.addressId, this.customerId, this.storeLocationId, this.customer, this.quotes, this.address});
+  PastOrderRow({this.id, this.status, this.transactionId, this.messageId, this.invoice, this.supportPhone, this.supportEmail, this.createdAt, this.updatedAt, this.deletedAt, this.addressId, this.customerId, this.storeLocationId, this.customer, this.quotes, this.address});
 
-  Rows.fromJson(Map<String, dynamic> json) {
+  PastOrderRow.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     status = json["status"];
     transactionId = json["transaction_id"];
@@ -93,8 +43,8 @@ class Rows {
     address = json["address"] == null ? null : Address.fromJson(json["address"]);
   }
 
-  static List<Rows> fromList(List<Map<String, dynamic>> list) {
-    return list.map((map) => Rows.fromJson(map)).toList();
+  static List<PastOrderRow> fromList(List<dynamic> list) {
+    return list.map((map) => PastOrderRow.fromJson(map)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -124,7 +74,7 @@ class Rows {
     return _data;
   }
 
-  Rows copyWith({
+  PastOrderRow copyWith({
     String? id,
     String? status,
     String? transactionId,
@@ -141,7 +91,7 @@ class Rows {
     Customer? customer,
     List<Quotes>? quotes,
     Address? address,
-  }) => Rows(
+  }) => PastOrderRow(
     id: id ?? this.id,
     status: status ?? this.status,
     transactionId: transactionId ?? this.transactionId,

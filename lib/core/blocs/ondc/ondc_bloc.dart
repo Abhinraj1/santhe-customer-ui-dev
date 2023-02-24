@@ -10,14 +10,21 @@ part 'ondc_event.dart';
 part 'ondc_state.dart';
 
 class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
+
   final OndcRepository ondcRepository;
+
   OndcBloc({
     required this.ondcRepository,
   }) : super(OndcInitial()) {
+
     List<ShopModel> revertshopModel = [];
+
     on<OndcEvent>((event, emit) {});
+
     on<FetchNearByShops>((event, emit) async {
+
       emit(OndcLoadingState());
+
       try {
         final String? transactionId =
             await ondcRepository.getNearByOndcShopsTransactionId(
@@ -25,9 +32,11 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
                 lng: event.lng,
                 pincode: event.pincode,
                 isDelivery: event.isDelivery);
+
         warningLog('transaction $transactionId');
         // await ondcRepository.getNearByShopsModel(
         //     transactionIdl: transactionId!);
+
         emit(
           OndcLoadingForShopsModelState(
             transactionId: transactionId,

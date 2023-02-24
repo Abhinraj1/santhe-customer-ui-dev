@@ -179,8 +179,10 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
+      warningLog(url.toString());
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode} and also ${response.body}');
+
       final responseBody = json.decode(response.body);
       final String status = responseBody['data']['status'];
       //!

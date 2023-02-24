@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/manager/font_manager.dart';
+import 'package:santhe/manager/imageManager.dart';
 import '../../../../constants.dart';
 import '../../../../core/app_colors.dart';
 
@@ -34,7 +35,7 @@ Widget shipmentCard({required int shipmentNumber, required List<Widget> products
                 child: Container(
                     height: 20,
                     width: 85,
-                    color: Colors.white,
+                    color: AppColors().grey10,
                     child: Center(child: Text("Shipment $shipmentNumber",
                     style: FontStyleManager().s14fw600Grey,)
                     )
@@ -65,10 +66,17 @@ Widget productCell({
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset(productImg,
+              productImg != "null" && productImg != "" ?
+              Image.network(productImg,
               width: 50,
               height: 60,
-              fit: BoxFit.cover,),
+              fit: BoxFit.cover,) :
+              Image.asset(ImgManager().santheIcon,
+                width: 50,
+                height: 60,
+                fit: BoxFit.cover,
+              ),
+
 
               SizedBox(
                 height: 70,
@@ -77,7 +85,7 @@ Widget productCell({
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                    //  width: 150,
+                      width: 200,
                         child: AutoSizeText(
                           productName,
                           style: FontStyleManager().s12fw700Brown,

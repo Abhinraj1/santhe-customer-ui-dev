@@ -299,44 +299,48 @@ Future<int> sendContactSupportQuery(
 
 
 
-  Future<List<Data>> getCartItems(
-      {required String transactionIdLocal, required String productName}) async {
+  Future<List<PastOrderRow>> getPastOrderDetails() async {
 
-    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+    const String firebaseId = "8808435978";
+        //AppHelpers().getPhoneNumberWithoutCountryCode;
+
     final url = Uri.parse(
        "http://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&firebase_id=$firebaseId&status=INITIATED");
-    // final header = {
-    //   'Content-Type': 'application/json',
-    //   "authorization": 'Bearer ${await AppHelpers().authToken}'
-    // };
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
     try {
 
-      warningLog('global search product $url');
+      warningLog('GET PAST ODER DETAILS $url');
 
-      final response = await http.get(url);
+      final response = await http.get(
+        url,
+        headers: header
+      );
 
       warningLog('${response.statusCode}');
 
       final responseBody =
-      await json.decode(response.body)["data"] as List<dynamic>;
+      await json.decode(response.body)["data"]["rows"];
 
-      warningLog('$responseBody');
+      warningLog(' respose here =============############### $responseBody');
 
       dynamic count =
       await json.decode(response.body)['data']['count'] as int;
 
       warningLog('THE COUNT IN PAST CART items IS == $count');
 
-
-      List<Data> cartData = responseBody.map((e) => Data.fromJson(e)).toList();
-
+    List<PastOrderRow> data =  PastOrderRow.fromList(responseBody);
 
       // List<ShopModel> shopsWithSearchedProduct =
       // responseBody.map((e) => ShopModel.fromMap(e)).toList();
 
-      warningLog('$cartData');
+      warningLog('${data.first.quotes!.first.status}');
 
-      return cartData;
+      return data;
 
     } catch (e) {
 

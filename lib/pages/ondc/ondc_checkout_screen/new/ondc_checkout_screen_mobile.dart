@@ -119,7 +119,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                       productCell(
                           showStatus: true,
                           status: "Cancelled",
-                          productImg: "assets/app_icon/icon.png",
+                          productImg: "",
                           productName : "Bru Original mixed coffee",
                           productDetails : "250gm , 1  units",
                           productPrice : "₹250"),
@@ -127,7 +127,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                       productCell(
                           showStatus: true,
                           status: "Cancelled",
-                          productImg: "assets/app_icon/icon.png",
+                          productImg: "null",
                           productName : "Bru Original mixed coffee",
                           productDetails : "250gm , 1  units",
                           productPrice : "₹250"),

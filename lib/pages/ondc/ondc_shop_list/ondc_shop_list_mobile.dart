@@ -331,10 +331,19 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
 
       builder: (context, state) {
 
+        test(){
+
+            Get.to(()=>ONDCOrderDetailsScreen());
+        }
 
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: (){
+              test();
+            },
+          ),
           appBar: AppBar(
             leading: IconButton(
               onPressed: () async {

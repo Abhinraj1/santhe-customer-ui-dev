@@ -32,6 +32,8 @@ import 'package:santhe/pages/ondc/ondc_return_screens/ondc_return_acknowledgemen
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
 
+import 'core/blocs/ondc/ondc_past_order_details_bloc/ondc_past_order_details_bloc.dart';
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
@@ -113,6 +115,12 @@ class MyApp extends StatelessWidget {
             BlocProvider<CustomerContactCubit>(
               create: (context) => CustomerContactCubit()
             ),
+
+            BlocProvider<PastOrderDetailsBloc>(
+                create: (context) => PastOrderDetailsBloc(
+                    ondcRepository: context.read<OndcRepository>())..add(LoadDataEvent()),
+            )
+
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,

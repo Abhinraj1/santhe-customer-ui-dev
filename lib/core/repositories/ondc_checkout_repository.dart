@@ -120,14 +120,14 @@ class OndcCheckoutRepository with LogMixin {
     };
     try {
       final response = await http.get(url, headers: header);
-      warningLog(response.body);
       final responseBody = await json.decode(response.body);
-      warningLog('$responseBody');
+      warningLog('$url $responseBody');
       dynamic map = responseBody['finalCosting'];
       items = responseBody['data']['quotes'] as List<dynamic>;
       orderIdCart = items.first['orderId'] as String;
       errorLog('checking for orderID $orderIdCart');
       List collection = items.first['cartItemPrices'] as List<dynamic>;
+      previewModels = [];
       for (var element in collection) {
         previewModels.add(PreviewWidgetModel.fromMap(element));
       }
@@ -179,8 +179,10 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
+      warningLog(url.toString());
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode} and also ${response.body}');
+
       final responseBody = json.decode(response.body);
       final String status = responseBody['data']['status'];
       //!

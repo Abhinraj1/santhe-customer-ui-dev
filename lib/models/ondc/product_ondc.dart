@@ -53,6 +53,7 @@ class ProductOndcModel extends Equatable with LogMixin {
   final dynamic itemId;
   final dynamic categoryId;
   final dynamic category;
+  final dynamic manufacture_date;
   bool? isAddedToCart = false;
   dynamic quantity = 1;
   dynamic total;
@@ -105,6 +106,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     required this.itemId,
     required this.categoryId,
     required this.category,
+    required this.manufacture_date,
     this.isAddedToCart,
     this.quantity,
     this.total,
@@ -159,6 +161,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     dynamic? itemId,
     dynamic? categoryId,
     dynamic? category,
+    dynamic? manufacture_date,
     bool? isAddedToCart,
     dynamic? quantity,
     dynamic? total,
@@ -216,6 +219,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       itemId: itemId ?? this.itemId,
       categoryId: categoryId ?? this.categoryId,
       category: category ?? this.category,
+      manufacture_date: manufacture_date ?? this.manufacture_date,
       isAddedToCart: isAddedToCart ?? this.isAddedToCart,
       quantity: quantity ?? this.quantity,
       total: total ?? this.total,
@@ -279,6 +283,8 @@ class ProductOndcModel extends Equatable with LogMixin {
   factory ProductOndcModel.fromNewMap(Map<String, dynamic> map) {
     return ProductOndcModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
+      manufacture_date:
+          map['manufacture_date'] != null ? map['manufacture_date'] : null,
       generic_name:
           map['generic_name'] != null ? map['generic_name'] as dynamic : null,
       storeLocationId: map['storeLocationId'] != null
@@ -469,6 +475,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       itemId,
       categoryId,
       category,
+      manufacture_date,
       isAddedToCart,
       quantity,
       total,

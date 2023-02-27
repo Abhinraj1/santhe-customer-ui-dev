@@ -9,11 +9,13 @@
       {
         required Function() onTap,
 
-        required String buttonTile,
+        required String buttonTitle,
 
         double? width,
 
         double? verticalPadding,
+
+        double? horizontalPadding,
 
         bool? isActive,
 
@@ -21,7 +23,10 @@
 
     return Center(
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 40.0,vertical:verticalPadding ?? 10),
+        padding:  EdgeInsets.symmetric(
+            horizontal: horizontalPadding ?? 40.0,
+            vertical:verticalPadding ?? 10
+        ),
         child: MaterialButton(
           onPressed: (){
             onTap();
@@ -36,7 +41,7 @@
           ),
           minWidth: width ?? 150,
           child: Text(
-            buttonTile,
+            buttonTitle,
             style: isActive ??
                 true ?
             FontStyleManager().s14fw700White :

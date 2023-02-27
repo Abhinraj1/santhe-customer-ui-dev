@@ -62,7 +62,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
     return GestureDetector(
       onTap: () async {
         await Get.to(
-              () => ProductDescriptionOndcView(
+          () => ProductDescriptionOndcView(
             productOndcModel: widget.productOndcModel,
             value: n,
           ),
@@ -94,40 +94,43 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                     alignment: Alignment.topRight,
                     child: widget.productOndcModel.isVeg
                         ? Image.asset(
-                      'assets/nonveg.png',
-                      height: 17,
-                      width: 17,
-                    )
+                            'assets/nonveg.png',
+                            height: 17,
+                            width: 17,
+                          )
                         : Image.asset('assets/veg.png'),
                   ),
                 ),
                 widget.productOndcModel.symbol == null
                     ? SizedBox(
-                  height: 102,
-                  width: 102,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: Image.asset(
-                      'assets/cart.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                )
-                    : SizedBox(
-                  height: 102,
-                  width: 102,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.productOndcModel.symbol,
-                      fit: BoxFit.contain,
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/cart.png',
-                        fit: BoxFit.fill,
+                        height: 102,
+                        width: 102,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: Image.asset(
+                            'assets/cart.png',
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: SizedBox(
+                          height: 102,
+                          width: 102,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.productOndcModel.symbol,
+                              fit: BoxFit.contain,
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/cart.png',
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -149,50 +152,50 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                 ),
                 isSameValue
                     ? Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Rs ${widget.productOndcModel.value.toString()}',
-                        style: TextStyle(
-                            color: AppColors().brandDark,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12),
-                      ),
-                    ),
-                  ),
-                )
-                    : Expanded(
-                  child: Center(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Rs ${widget.productOndcModel.maximum_value}',
-                          style: TextStyle(
-                            color: AppColors().brandDark,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.lineThrough,
-                            decorationThickness: 4,
-                            fontSize: 12,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Rs ${widget.productOndcModel.value.toString()}',
+                              style: TextStyle(
+                                  color: AppColors().brandDark,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                            ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 10,
+                      )
+                    : Expanded(
+                        child: Center(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Rs ${widget.productOndcModel.maximum_value}',
+                                style: TextStyle(
+                                  color: AppColors().brandDark,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.lineThrough,
+                                  decorationThickness: 4,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Rs ${widget.productOndcModel.value.toString()}',
+                                style: TextStyle(
+                                    color: AppColors().brandDark,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12),
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(
-                          'Rs ${widget.productOndcModel.value.toString()}',
-                          style: TextStyle(
-                              color: AppColors().brandDark,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                      )
               ],
             ),
           ),

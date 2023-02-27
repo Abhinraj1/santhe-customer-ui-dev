@@ -10,8 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:santhe/models/ondc/cart_item_model.dart';
-import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:santhe/constants.dart';
@@ -21,11 +19,14 @@ import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
+import 'package:santhe/models/ondc/cart_item_model.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-import 'package:santhe/pages/ondc/ondc_checkout_screen/ondc_checkout_screen_view.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/ondc_cart_item.dart';
+import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
+
+import '../ondc_checkout_screen/old/ondc_checkout_screen_view.dart';
 
 part 'ondc_cart_desktop.dart';
 part 'ondc_cart_mobile.dart';

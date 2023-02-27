@@ -18,17 +18,21 @@ import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
+import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
+import 'package:santhe/pages/ondc/ondc_checkout_screen/new/ondc_checkout_screen_mobile.dart';
 import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_mobile.dart';
 import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_screen_mobile.dart';
 import 'package:santhe/pages/ondc/ondc_return_screens/ondc_return_acknowledgement%20_screen/ondc_return_acknowledgement%20_screen_mobile.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
+
+import 'core/blocs/ondc/ondc_past_order_details_bloc/ondc_past_order_details_bloc.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -107,6 +111,16 @@ class MyApp extends StatelessWidget {
                 addressRepository: context.read<AddressRepository>(),
               ),
             ),
+
+            BlocProvider<CustomerContactCubit>(
+              create: (context) => CustomerContactCubit()
+            ),
+
+            BlocProvider<PastOrderDetailsBloc>(
+                create: (context) => PastOrderDetailsBloc(
+                    ondcRepository: context.read<OndcRepository>())..add(LoadDataEvent()),
+            )
+
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,
@@ -122,7 +136,8 @@ class MyApp extends StatelessWidget {
                     selectionHandleColor: Colors.transparent,
                   ),
                 ),
-            home: const SplashToHome(),
+            home:
+                const SplashToHome(),
           ),
         ),
       ),

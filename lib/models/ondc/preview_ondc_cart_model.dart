@@ -1,5 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_question_mark
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 
@@ -84,6 +85,7 @@ class PreviewWidgetModel extends Equatable {
   }
 
   factory PreviewWidgetModel.fromMap(Map<String, dynamic> map) {
+    // log('$map', name: 'PreviewWidgetModel.fromMap');
     return PreviewWidgetModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
       symbol: map['symbol'] != null ? map['symbol'] as dynamic : null,
@@ -92,7 +94,7 @@ class PreviewWidgetModel extends Equatable {
           map['cancellable'] != null ? map['cancellable'] as dynamic : null,
       price: map['price'] != null ? map['price'] as dynamic : null,
       title: map['title'] != null ? map['title'] as dynamic : null,
-      type: map['type'] != null ? map['id'] as dynamic : null,
+      type: map['type'] != null ? map['type'] as dynamic : null,
       quantity: map['quantity'] != null ? map['quantity'] as dynamic : null,
       ondc_item_id:
           map['ondc_item_id'] != null ? map['ondc_item_id'] as dynamic : null,

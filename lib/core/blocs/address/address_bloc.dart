@@ -22,6 +22,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
           lat: event.lat,
           lng: event.lng,
           flat: event.flat,
+          deliveryName: event.deliveryName.toString(),
           address_id: event.address_id,
         );
         emit(OndcAddressUpdatedState(message: message));

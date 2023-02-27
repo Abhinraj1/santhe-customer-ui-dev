@@ -9,6 +9,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 
+import '../../models/ondc/past_cart_items_model.dart';
+
 class OndcRepository with LogMixin {
   String? transactionid;
   int _productGlobalCount = 0;
@@ -240,6 +242,110 @@ class OndcRepository with LogMixin {
       return shopsWithSearchedProduct;
     } catch (e) {
       warningLog(e.toString());
+      rethrow;
+    }
+  }
+
+
+Future<int> sendContactSupportQuery(
+
+      {required String orderId,
+        required String message
+
+      }) async {
+
+    final firebaseId = "8808435978";
+
+       // AppHelpers().getPhoneNumberWithoutCountryCode;
+
+
+
+    final url = Uri.parse(
+        'http://ondcstaging.santhe.in/santhe/ondc/support');
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
+    try {
+      warningLog('Send Message Customer Contact url = $url');
+      final response = await http.post(
+        url,
+        headers: header,
+        body: json.encode(
+          {
+            "order_id": orderId,
+            "firebase_id": firebaseId,
+            "message" : message
+          },
+        ),
+      );
+
+      warningLog('${response.statusCode}');
+
+      final responseBody =
+      await json.decode(response.body);
+
+      warningLog('$responseBody');
+
+      return response.statusCode;
+
+    } catch (e) {
+      warningLog(e.toString());
+      rethrow;
+    }
+  }
+
+
+
+  Future<List<PastOrderRow>> getPastOrderDetails() async {
+
+    const String firebaseId = "8808435978";
+        //AppHelpers().getPhoneNumberWithoutCountryCode;
+
+    final url = Uri.parse(
+       "http://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&firebase_id=$firebaseId&status=INITIATED");
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
+    try {
+
+      warningLog('GET PAST ODER DETAILS $url');
+
+      final response = await http.get(
+        url,
+        headers: header
+      );
+
+      warningLog('${response.statusCode}');
+
+      final responseBody =
+      await json.decode(response.body)["data"]["rows"];
+
+      warningLog(' respose here =============############### $responseBody');
+
+      dynamic count =
+      await json.decode(response.body)['data']['count'] as int;
+
+      warningLog('THE COUNT IN PAST CART items IS == $count');
+
+    List<PastOrderRow> data =  PastOrderRow.fromList(responseBody);
+
+      // List<ShopModel> shopsWithSearchedProduct =
+      // responseBody.map((e) => ShopModel.fromMap(e)).toList();
+
+      warningLog('${data.first.quotes!.first.status}');
+
+      return data;
+
+    } catch (e) {
+
+      warningLog(e.toString());
+
       rethrow;
     }
   }

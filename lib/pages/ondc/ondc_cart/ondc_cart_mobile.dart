@@ -3,7 +3,10 @@ part of ondc_cart_view;
 
 class _OndcCartMobile extends StatefulWidget {
   final String storeLocation_id;
-  const _OndcCartMobile({required this.storeLocation_id});
+  const _OndcCartMobile({
+    Key? key,
+    required this.storeLocation_id,
+  }) : super(key: key);
 
   @override
   State<_OndcCartMobile> createState() => _OndcCartMobileState();
@@ -17,6 +20,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
   List<OndcCartItem> cartFilteredItems = [];
   List<CartitemModel> cartModels = [];
   bool doesContain = false;
+  String? shopName;
   double total = 0;
   late final CartBloc cartBloc;
   @override
@@ -100,6 +104,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
         if (state is GetCartItemsOfShopState) {
           List<OndcCartItem> cartWidgets = [];
           cartModels = state.products;
+          shopName = state.products.first.store_name;
           total = 0;
           for (var element in cartModels) {
             cartWidgets.add(
@@ -251,6 +256,29 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                         ],
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    shopName == null
+                        ? const Text('')
+                        : Text(
+                            'Shop Name: $shopName',
+                            style: TextStyle(
+                              color: AppColors().brandDark,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 40.0, top: 10),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${cartWidget.length} items',
+                          style: TextStyle(color: AppColors().brandDark),
+                        ),
+                      ),
+                    ),
                     Column(
                       children: cartWidget,
                     ),
@@ -291,6 +319,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 Get.to(
                                   () => OndcCheckoutScreenView(
                                     storeLocation_id: widget.storeLocation_id,
+                                    storeName: shopName,
                                   ),
                                 );
                               },

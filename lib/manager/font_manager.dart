@@ -12,6 +12,15 @@ class FontStyleManager {
   TextStyle s14fw700Orange = const TextStyle(
       color: Color(0xffFF9800), fontSize: 14, fontWeight: FontWeight.w700);
 
+  TextStyle s20fw700Orange = const TextStyle(
+      color: Color(0xffFF9800), fontSize: 20, fontWeight: FontWeight.w700);
+
+  TextStyle s18fw700Orange = const TextStyle(
+      color: Color(0xffFF9800), fontSize: 18, fontWeight: FontWeight.w700);
+
+  TextStyle s12fw400Orange = const TextStyle(
+      color: Color(0xffFF9800), fontSize: 12, fontWeight: FontWeight.w400);
+
   TextStyle s16fw700 = GoogleFonts.mulish(
       color: Color(0xff8B8B8B), fontSize: 16, fontWeight: FontWeight.w700);
 
@@ -77,6 +86,13 @@ class FontStyleManager {
     fontSize: 12,
     fontWeight: FontWeight.w500,
   );
+
+  TextStyle s12fw400Grey = GoogleFonts.mulish(
+    color: AppColors().grey100,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+
 
   TextStyle s16fw600Orange = GoogleFonts.mulish(
       color: AppColors().primaryOrange,

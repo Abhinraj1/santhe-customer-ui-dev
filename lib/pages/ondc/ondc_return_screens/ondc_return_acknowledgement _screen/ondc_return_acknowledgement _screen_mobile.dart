@@ -8,14 +8,18 @@ import '../../../../widgets/custom_widgets/home_icon_button.dart';
 
 
 class ONDCReturnAcknowledgement extends StatelessWidget {
-  const ONDCReturnAcknowledgement({Key? key}) : super(key: key);
+  final String? message;
+  final String? title;
+  const ONDCReturnAcknowledgement({Key? key,
+  this.message,
+  this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
     String orderId = "0123456",
 
-    message = "Your return request is received,"
+    message1 = "Your return request is received,"
         " Once we have received a confirmation from "
         "the seller you will get an update from us on"
         " the return  status and refund details";
@@ -26,7 +30,7 @@ class ONDCReturnAcknowledgement extends StatelessWidget {
           children: [
 
             customTitleWithBackButton(
-                title: "Return Request",
+                title: title ?? "Return Request",
                 context: context
             ),
 
@@ -37,7 +41,7 @@ class ONDCReturnAcknowledgement extends StatelessWidget {
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0,),
-              child: Text(message,
+              child: Text(message ?? message1,
                 style: FontStyleManager().s16fw500,),
             ),
 
@@ -47,7 +51,7 @@ class ONDCReturnAcknowledgement extends StatelessWidget {
                 onTap: (){},
               width: 160,
               verticalPadding: 40,
-                buttonTile: "Back",
+                buttonTitle: "Back",
             )
           ],
         )

@@ -119,7 +119,7 @@ class CartitemModel extends Equatable {
       CartitemModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       symbol,
       quantity,

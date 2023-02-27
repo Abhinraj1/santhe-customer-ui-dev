@@ -83,7 +83,7 @@ class ONDCReturnSelectReasonScreen extends StatelessWidget {
 
           customButton(
             onTap: (){},
-            buttonTile: "NEXT",
+            buttonTitle: "NEXT",
             isActive: null,
             width: 200,
           )

@@ -240,7 +240,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                               SizedBox(
                                 width: 100,
                                 child: Align(
-                                  alignment: Alignment.bottomRight,
+                                  alignment: Alignment.centerRight,
                                   child: Row(
                                     children: [
                                       AutoSizeText(

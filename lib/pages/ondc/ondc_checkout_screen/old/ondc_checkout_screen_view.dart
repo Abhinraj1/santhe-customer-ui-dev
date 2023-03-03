@@ -21,14 +21,19 @@ import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
+import 'package:santhe/manager/font_manager.dart';
+import 'package:santhe/manager/imageManager.dart';
 import 'package:santhe/models/ondc/final_costing.dart';
 import 'package:santhe/models/ondc/preview_ondc_cart_model.dart';
+import 'package:santhe/models/ondc/shipment_segregator_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/ondc/map_text/map_text_view.dart';
 import 'package:santhe/pages/ondc/ondc_checkout_screen/new/widgets/address_column.dart';
 import 'package:santhe/pages/ondc/payment_buffer/payment_buffer_view.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';
+import 'package:santhe/widgets/ondc_widgets/shipment_segregator.dart';
+import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 import '../../../../core/blocs/checkout/checkout_bloc.dart';
 

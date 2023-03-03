@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
@@ -12,6 +14,8 @@ class OndcCartRepository with LogMixin {
   List<OndcCartItem> ondcCartItem = [];
   int quantityOfItems = 1;
   bool isAddedToCart = false;
+  int cartCount = 0;
+
   double total = 0;
 
   List<ProductOndcModel> get cartOndcModels {
@@ -29,6 +33,10 @@ class OndcCartRepository with LogMixin {
 
   bool get addedToCart {
     return isAddedToCart;
+  }
+
+  int get totalCartItemCount {
+    return cartCount;
   }
 
   deleteCartItem({required CartitemModel productOndcModelLocal}) async {
@@ -140,6 +148,27 @@ class OndcCartRepository with LogMixin {
       return models;
     } catch (e) {
       throw ErrorGettingCartListState(message: e.toString());
+    }
+  }
+
+  Future<int> getCartCountMethod({required String storeLocation_id}) async {
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    final url = Uri.parse(
+        'http://ondcstaging.santhe.in/santhe/ondc/cart/count?firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
+    try {
+      final response = await http.get(url, headers: header);
+      warningLog('${response.statusCode}');
+      final responseBody = json.decode(response.body);
+      warningLog('$responseBody');
+      cartCount = responseBody['data'];
+      debugLog('cartCount $cartCount');
+      return cartCount;
+    } catch (e) {
+      rethrow;
     }
   }
 

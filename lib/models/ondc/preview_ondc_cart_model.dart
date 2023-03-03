@@ -18,6 +18,13 @@ class PreviewWidgetModel extends Equatable {
   final dynamic deletedAt;
   final dynamic updatedAt;
   final dynamic quoteId;
+  final dynamic deliveryFulfillmentId;
+  final dynamic fulfillment_id;
+  final dynamic provider_name;
+  final dynamic category;
+  final dynamic tat;
+  final dynamic serviceable;
+  final dynamic message_id;
   const PreviewWidgetModel({
     required this.id,
     required this.price,
@@ -32,6 +39,13 @@ class PreviewWidgetModel extends Equatable {
     required this.deletedAt,
     required this.updatedAt,
     required this.quoteId,
+    required this.deliveryFulfillmentId,
+    required this.fulfillment_id,
+    required this.provider_name,
+    required this.category,
+    required this.tat,
+    required this.serviceable,
+    required this.message_id,
   });
 
   PreviewWidgetModel copyWith({
@@ -48,6 +62,13 @@ class PreviewWidgetModel extends Equatable {
     dynamic? deletedAt,
     dynamic? updatedAt,
     dynamic? quoteId,
+    dynamic? deliveryFulfillmentId,
+    dynamic? fulfillment_id,
+    dynamic? provider_name,
+    dynamic? category,
+    dynamic? tat,
+    dynamic? serviceable,
+    dynamic? message_id,
   }) {
     return PreviewWidgetModel(
       id: id ?? this.id,
@@ -63,6 +84,14 @@ class PreviewWidgetModel extends Equatable {
       deletedAt: deletedAt ?? this.deletedAt,
       updatedAt: updatedAt ?? this.updatedAt,
       quoteId: quoteId ?? this.quoteId,
+      deliveryFulfillmentId:
+          deliveryFulfillmentId ?? this.deliveryFulfillmentId,
+      fulfillment_id: fulfillment_id ?? this.fulfillment_id,
+      provider_name: provider_name ?? this.provider_name,
+      category: category ?? this.category,
+      tat: tat ?? this.tat,
+      serviceable: serviceable ?? this.serviceable,
+      message_id: message_id ?? this.message_id,
     );
   }
 
@@ -81,6 +110,13 @@ class PreviewWidgetModel extends Equatable {
       'status': status,
       'cancellable': cancellable,
       'symbol': symbol,
+      'deliveryFulfillmentId': deliveryFulfillmentId,
+      'fulfillment_id': fulfillment_id,
+      'provider_name': provider_name,
+      'category': category,
+      'tat': tat,
+      'serviceable': serviceable,
+      'message_id': message_id,
     };
   }
 
@@ -102,6 +138,39 @@ class PreviewWidgetModel extends Equatable {
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] as dynamic : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as dynamic : null,
       quoteId: map['quoteId'] != null ? map['quoteId'] as dynamic : null,
+      deliveryFulfillmentId: map['deliveryFulfillmentId'] != null
+          ? map['deliveryFulfillmentId'] as dynamic
+          : null,
+      fulfillment_id: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['fulfillment_id'] != null
+              ? map['deliveryFulfillment']['fulfillment_id'] as dynamic
+              : null
+          : null,
+      provider_name: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['provider_name'] != null
+              ? map['deliveryFulfillment']['provider_name'] as dynamic
+              : null
+          : null,
+      category: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['category'] != null
+              ? map['deliveryFulfillment']['category'] as dynamic
+              : null
+          : null,
+      tat: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['tat'] != null
+              ? map['deliveryFulfillment']['tat'] as dynamic
+              : null
+          : null,
+      serviceable: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['serviceable'] != null
+              ? map['deliveryFulfillment']['serviceable'] as dynamic
+              : null
+          : null,
+      message_id: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['message_id'] != null
+              ? map['deliveryFulfillment']['message_id'] as dynamic
+              : null
+          : null,
     );
   }
 
@@ -129,6 +198,13 @@ class PreviewWidgetModel extends Equatable {
       deletedAt,
       updatedAt,
       quoteId,
+      deliveryFulfillmentId,
+      fulfillment_id,
+      provider_name,
+      category,
+      tat,
+      serviceable,
+      message_id,
     ];
   }
 }

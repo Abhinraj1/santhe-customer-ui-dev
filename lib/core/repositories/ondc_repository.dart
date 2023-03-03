@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -17,6 +17,7 @@ class OndcRepository with LogMixin {
   int _shopProductCount = 0;
   int _shopsListCount = 0;
   int _searchProductCountInLocalShop = 0;
+  int cartCount = 0;
 
   int get productGlobalCount {
     return _productGlobalCount;
@@ -28,6 +29,10 @@ class OndcRepository with LogMixin {
 
   int get searchProductCountInLocalShop {
     return _searchProductCountInLocalShop;
+  }
+
+  int get totalCartItemCount {
+    return cartCount;
   }
 
   int get productShopCount {
@@ -216,6 +221,27 @@ class OndcRepository with LogMixin {
     return shopModel;
   }
 
+  Future<int> getCartCountMethod({required String storeLocation_id}) async {
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    final url = Uri.parse(
+        'http://ondcstaging.santhe.in/santhe/ondc/cart/count?firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
+    try {
+      final response = await http.get(url, headers: header);
+      warningLog('Count code${response.statusCode}');
+      final responseBody = json.decode(response.body);
+      warningLog('Count body$responseBody');
+      cartCount = responseBody['data'];
+      debugLog('cartCount $cartCount');
+      return cartCount;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<ShopModel>> getListOfShopsForSearchedProduct(
       {required String transactionIdLocal, required String productName}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
@@ -246,22 +272,13 @@ class OndcRepository with LogMixin {
     }
   }
 
-
-Future<int> sendContactSupportQuery(
-
-      {required String orderId,
-        required String message
-
-      }) async {
-
+  Future<int> sendContactSupportQuery(
+      {required String orderId, required String message}) async {
     final firebaseId = "8808435978";
 
-       // AppHelpers().getPhoneNumberWithoutCountryCode;
+    // AppHelpers().getPhoneNumberWithoutCountryCode;
 
-
-
-    final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/support');
+    final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/support');
 
     final header = {
       'Content-Type': 'application/json',
@@ -274,38 +291,29 @@ Future<int> sendContactSupportQuery(
         url,
         headers: header,
         body: json.encode(
-          {
-            "order_id": orderId,
-            "firebase_id": firebaseId,
-            "message" : message
-          },
+          {"order_id": orderId, "firebase_id": firebaseId, "message": message},
         ),
       );
 
       warningLog('${response.statusCode}');
 
-      final responseBody =
-      await json.decode(response.body);
+      final responseBody = await json.decode(response.body);
 
       warningLog('$responseBody');
 
       return response.statusCode;
-
     } catch (e) {
       warningLog(e.toString());
       rethrow;
     }
   }
 
-
-
   Future<List<PastOrderRow>> getPastOrderDetails() async {
-
     const String firebaseId = "8808435978";
-        //AppHelpers().getPhoneNumberWithoutCountryCode;
+    //AppHelpers().getPhoneNumberWithoutCountryCode;
 
     final url = Uri.parse(
-       "http://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&firebase_id=$firebaseId&status=INITIATED");
+        "http://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&firebase_id=$firebaseId&status=INITIATED");
 
     final header = {
       'Content-Type': 'application/json',
@@ -313,27 +321,21 @@ Future<int> sendContactSupportQuery(
     };
 
     try {
-
       warningLog('GET PAST ODER DETAILS $url');
 
-      final response = await http.get(
-        url,
-        headers: header
-      );
+      final response = await http.get(url, headers: header);
 
       warningLog('${response.statusCode}');
 
-      final responseBody =
-      await json.decode(response.body)["data"]["rows"];
+      final responseBody = await json.decode(response.body)["data"]["rows"];
 
       warningLog(' respose here =============############### $responseBody');
 
-      dynamic count =
-      await json.decode(response.body)['data']['count'] as int;
+      dynamic count = await json.decode(response.body)['data']['count'] as int;
 
       warningLog('THE COUNT IN PAST CART items IS == $count');
 
-    List<PastOrderRow> data =  PastOrderRow.fromList(responseBody);
+      List<PastOrderRow> data = PastOrderRow.fromList(responseBody);
 
       // List<ShopModel> shopsWithSearchedProduct =
       // responseBody.map((e) => ShopModel.fromMap(e)).toList();
@@ -341,9 +343,7 @@ Future<int> sendContactSupportQuery(
       warningLog('${data.first.quotes!.first.status}');
 
       return data;
-
     } catch (e) {
-
       warningLog(e.toString());
 
       rethrow;

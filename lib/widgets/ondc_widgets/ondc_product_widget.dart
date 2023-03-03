@@ -61,12 +61,13 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await Get.to(
+        dynamic result = await Get.to(
           () => ProductDescriptionOndcView(
             productOndcModel: widget.productOndcModel,
             value: n,
           ),
         );
+        warningLog('checking for nav$result');
       },
       child: Stack(
         children: [

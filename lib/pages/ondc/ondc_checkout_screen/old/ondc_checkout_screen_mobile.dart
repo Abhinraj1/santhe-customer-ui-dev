@@ -29,8 +29,14 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   String? orderId;
   bool _isLoading = false;
   List<PreviewWidgetOndcItem> previewWidgetItems = [];
+  List<ShipmentSegregatorModel> shipmentSegregatorModels = [];
+  List<ShipmentSegregator> shipmentSegregatorWidgets = [];
+  late GroupedItemScrollController _controller;
+  bool isLoadingInit = false;
+  bool isLoadingInitGet = false;
 
   Razorpay _razorpay = Razorpay();
+  bool _showErrorNoResponseFromSeller = false;
 
   getList() {
     final checkoutRepo = RepositoryProvider.of<OndcCheckoutRepository>(context);
@@ -48,6 +54,19 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     super.dispose();
     _razorpay.clear();
   }
+
+//   _scrollListener() {
+//   if (_controller.offset >= _controller.position.maxScrollExtent &&
+//      !_controller.position.outOfRange) {
+//    setState(() {//you can do anything here
+//    });
+//  }
+//  if (_controller.offset <= _controller.position.minScrollExtent &&
+//     !_controller.position.outOfRange) {
+//    setState(() {//you can do anything here
+//     });
+//   }
+// }
 
   void openCheckout(ProfileController profileCon) async {
     var options = {
@@ -105,6 +124,32 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     );
   }
 
+  Widget _getGroupSeparator(PreviewWidgetOndcItem element) {
+    return SizedBox(
+      height: 50,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          width: 120,
+          decoration: BoxDecoration(
+            color: AppColors().brandDark,
+            border: Border.all(
+              color: Colors.white,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Shipment No ${element.previewWidgetModel.deliveryFulfillmentId}',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -121,6 +166,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             storeLocation_id: widget.storeLocation_id,
           ),
         );
+    _controller = GroupedItemScrollController();
   }
 
   @override
@@ -130,6 +176,16 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     return BlocConsumer<CheckoutBloc, CheckoutState>(
       listener: (context, state) {
         debugLog('$state');
+        if (state is FinalizeProductErrorState) {
+          Get.back(
+            result: state.message,
+          );
+        }
+        if (state is CheckoutPostError) {
+          Get.back(
+            result: 'There is an Error',
+          );
+        }
         if (state is CheckoutPostSuccess) {
           setState(() {
             messageID = state.messageId;
@@ -137,7 +193,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           warningLog(
               "MESSAGEID RECEIVED HERE ###################### $messageID");
           Future.delayed(
-            Duration(seconds: 1),
+            Duration(seconds: 5),
             () => context.read<CheckoutBloc>().add(
                   GetFinalItemsEvent(
                     messageId: state.messageId,
@@ -148,18 +204,44 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                   ),
                 ),
           );
+          //! 30 second continuous hit
         }
+
+        if (state is InitializePostErrorState) {
+          setState(() {
+            isLoadingInit = false;
+            _showErrorNoResponseFromSeller = true;
+          });
+        }
+        if (state is InitializeGetErrorState) {
+          setState(() {
+            _showErrorNoResponseFromSeller = true;
+            isLoadingInitGet = false;
+          });
+        }
+
         if (state is InitializePostSuccessState) {
-          context.read<CheckoutBloc>().add(
-                InitializeGetEvent(
-                    order_id:
-                        RepositoryProvider.of<OndcCheckoutRepository>(context)
-                            .orderId),
-              );
+          setState(() {
+            isLoadingInit = false;
+            isLoadingInitGet = true;
+          });
+          Future.delayed(
+            Duration(seconds: 5),
+            () => context.read<CheckoutBloc>().add(
+                  InitializeGetEvent(
+                      order_id:
+                          RepositoryProvider.of<OndcCheckoutRepository>(context)
+                              .orderId),
+                ),
+          );
         }
+
         if (state is InitializeGetSuccessState) {
           //! STATUS KEYWORD - CREATED ...
           //! STATUS KEYWORD - INITIATED THEN RUN BLOC
+          setState(() {
+            isLoadingInitGet = false;
+          });
           context.read<CheckoutBloc>().add(
                 InitializeCartEvent(
                     customerId: AppHelpers().getPhoneNumberWithoutCountryCode,
@@ -187,12 +269,18 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           previewModels = checkoutRepo.previewFinalModels
               .where((element) => element.type.toString().contains('item'))
               .toList();
+
           errorLog('preview models ${previewModels.length}');
+          // List<ShipmentSegregatorModel> shipmentModels = [];
+          // List<ShipmentSegregator> shipmentWidget = [];
+          // shipmentModels = checkoutRepo.shipmentFinalModels;
+          // debugLog('Checking for shipment models ${shipmentModels}');
           for (var element in previewModels) {
             previewItems.add(
               PreviewWidgetOndcItem(previewWidgetModel: element),
             );
           }
+
           warningLog('$previewItems');
           setState(() {
             finalCostingModel = state.finalCostingModel;
@@ -204,7 +292,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           orderId = state.orderId;
 
           warningLog(
-              "RECEIVED ORDERID HERE#########################   ${orderId}");
+              "RECEIVED ORDERID HERE#########################   $orderId");
           openCheckout(profileController);
         }
         if (state is FinalizePaymentLoading) {
@@ -304,6 +392,31 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _showErrorNoResponseFromSeller
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 48,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Seller is not responding.Please try later',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Text(''),
                         SizedBox(
                           height: 20,
                         ),
@@ -420,7 +533,110 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                             ),
                           ),
                         ),
-                        ...previewWidgetItems,
+                        //! add the shipment logic here
+                        StickyGroupedListView<PreviewWidgetOndcItem, String>(
+                          shrinkWrap: true,
+                          elements: previewWidgetItems,
+                          itemScrollController: _controller,
+                          groupBy: (PreviewWidgetOndcItem previewWidget) {
+                            return previewWidget
+                                .previewWidgetModel.deliveryFulfillmentId;
+                          },
+                          groupSeparatorBuilder:
+                              (PreviewWidgetOndcItem previewWidget) {
+                            return _getGroupSeparator(previewWidget);
+                          },
+                          itemBuilder: (context, previewWidgetModel) {
+                            warningLog(
+                                'Length passed into builder ${previewWidgetItems.length}');
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: SizedBox(
+                                height: 70,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    previewWidgetModel.previewWidgetModel
+                                                    .symbol !=
+                                                null &&
+                                            previewWidgetModel
+                                                    .previewWidgetModel
+                                                    .symbol !=
+                                                ""
+                                        ? Image.network(
+                                            previewWidgetModel
+                                                .previewWidgetModel.symbol,
+                                            width: 50,
+                                            height: 60,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.asset(
+                                            ImgManager().santheIcon,
+                                            width: 50,
+                                            height: 60,
+                                            fit: BoxFit.cover,
+                                          ),
+                                    SizedBox(
+                                      height: 70,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                              width: 200,
+                                              child: AutoSizeText(
+                                                previewWidgetModel
+                                                    .previewWidgetModel.title,
+                                                style: FontStyleManager()
+                                                    .s12fw700Brown,
+                                                maxLines: 2,
+                                              )),
+
+                                          Text(
+                                            '${previewWidgetModel.previewWidgetModel.quantity}',
+                                            style: FontStyleManager()
+                                                .s10fw500Brown,
+                                          ),
+                                          //  showStatus ?? false ?
+                                          //  Text(status.toString(),style: FontStyleManager().s12fw500Grey,) :
+                                          //  textButtonTitle != null && textButtonOnTap != null ?
+                                          //      TextButton(
+                                          //          onPressed: (){
+                                          //            textButtonOnTap();
+                                          //          },
+                                          //          child: Text(textButtonTitle,
+                                          //          style: FontStyleManager().s12fw500Red,),) :
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Center(
+                                      child: SizedBox(
+                                        width: 50,
+                                        child: AutoSizeText(
+                                          "${previewWidgetModel.previewWidgetModel.price}",
+                                          maxFontSize: 16,
+                                          minFontSize: 12,
+                                          style:
+                                              FontStyleManager().s16fw600Grey,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        //! shipment ends
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 15.0,
@@ -604,13 +820,18 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           onPressed: () {
-                            context.read<CheckoutBloc>().add(
-                                  InitializePostEvent(
-                                      message_id: messageID,
-                                      order_id: RepositoryProvider.of<
-                                              OndcCheckoutRepository>(context)
-                                          .orderId),
-                                );
+                            setState(() {
+                              isLoadingInit = true;
+                            });
+                            Future.delayed(Duration(seconds: 5), () {
+                              context.read<CheckoutBloc>().add(
+                                    InitializePostEvent(
+                                        message_id: messageID,
+                                        order_id: RepositoryProvider.of<
+                                                OndcCheckoutRepository>(context)
+                                            .orderId),
+                                  );
+                            });
                           },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
@@ -627,7 +848,19 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                     color: Colors.white,
                                   ),
                                 )
-                              : Text('Proceed to pay'),
+                              : isLoadingInit
+                                  ? Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : isLoadingInitGet
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                            color: Colors.grey,
+                                          ),
+                                        )
+                                      : Text('Proceed to pay'),
                         ),
                       ),
                     )

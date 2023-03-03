@@ -9,12 +9,15 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/checkout_cart.dart';
 import 'package:santhe/models/ondc/final_costing.dart';
 import 'package:santhe/models/ondc/preview_ondc_cart_model.dart';
+import 'package:santhe/models/ondc/shipment_segregator_model.dart';
+import 'package:santhe/widgets/ondc_widgets/shipment_segregator.dart';
 
 class OndcCheckoutRepository with LogMixin {
   FinalCostingModel? finalCostingModel;
   double? finalCost;
   List<dynamic> items = [];
   List<PreviewWidgetModel> previewModels = [];
+  List<ShipmentSegregatorModel> shipmentModels = [];
   String razorPayOrderId = '';
   String receiptNo = '';
   String offer_id = '';
@@ -30,6 +33,10 @@ class OndcCheckoutRepository with LogMixin {
 
   List<PreviewWidgetModel> get previewFinalModels {
     return previewModels;
+  }
+
+  List<ShipmentSegregatorModel> get shipmentFinalModels {
+    return shipmentModels;
   }
 
   String get razorOrderId {
@@ -64,12 +71,15 @@ class OndcCheckoutRepository with LogMixin {
           },
         ),
       );
-      warningLog('${response.statusCode}');
+      warningLog('Setter ${response.statusCode}');
       final responseBody = json.decode(response.body)['message_id'];
       warningLog('$responseBody');
+      if (responseBody == null) {
+        throw const CheckoutPostError(message: 'There is no response');
+      }
       return responseBody;
     } catch (e) {
-      CheckoutPostError(
+      throw CheckoutPostError(
         message: e.toString(),
       );
     }
@@ -122,6 +132,9 @@ class OndcCheckoutRepository with LogMixin {
       final response = await http.get(url, headers: header);
       final responseBody = await json.decode(response.body);
       warningLog('$url $responseBody');
+      // if(responseBody['message'].toString().contains('Seller has not responded')){
+      //   throw Finalize
+      // }
       dynamic map = responseBody['finalCosting'];
       items = responseBody['data']['quotes'] as List<dynamic>;
       orderIdCart = items.first['orderId'] as String;
@@ -129,13 +142,20 @@ class OndcCheckoutRepository with LogMixin {
       List collection = items.first['cartItemPrices'] as List<dynamic>;
       previewModels = [];
       for (var element in collection) {
-        previewModels.add(PreviewWidgetModel.fromMap(element));
+        shipmentModels.add(
+          ShipmentSegregatorModel.fromMap(element),
+        );
+        previewModels.add(
+          PreviewWidgetModel.fromMap(element),
+        );
       }
       finalCostingModel = FinalCostingModel.fromMap(map);
       warningLog(' cost$finalCostingModel $previewModels');
       return finalCostingModel;
     } catch (e) {
-      rethrow;
+      throw FinalizeProductErrorState(
+        message: e.toString(),
+      );
     }
   }
 
@@ -143,7 +163,8 @@ class OndcCheckoutRepository with LogMixin {
       {required String messageId, required String order_id}) async {
     final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/init');
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
-    warningLog("message id $messageId also orderId $order_id and url $url");
+    warningLog(
+        "message id $messageId also orderId $order_id firebase id $firebaseId and url $url");
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -220,6 +241,12 @@ class OndcCheckoutRepository with LogMixin {
       warningLog('${response.statusCode}');
       final responseBody = await json.decode(response.body);
       warningLog('$responseBody');
+      final statusCodeFromApiBody = responseBody['status'];
+      if (statusCodeFromApiBody == 400) {
+        throw FinalizePaymentErrorState(
+          message: responseBody['message'],
+        );
+      }
     } catch (e) {
       throw FinalizePaymentErrorState(message: e.toString());
     }

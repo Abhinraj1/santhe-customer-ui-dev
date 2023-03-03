@@ -24,6 +24,11 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
           () => const PaymentSuccessView(),
         );
       }
+      if (state is FinalizePaymentErrorState) {
+        Get.off(
+          () => const ErrorNackView(),
+        );
+      }
     }, builder: (context, state) {
       return Scaffold(
         key: _key,

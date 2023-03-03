@@ -5,24 +5,29 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
 part 'ondc_event.dart';
 part 'ondc_state.dart';
 
 class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
-
   final OndcRepository ondcRepository;
 
   OndcBloc({
     required this.ondcRepository,
   }) : super(OndcInitial()) {
-
     List<ShopModel> revertshopModel = [];
 
     on<OndcEvent>((event, emit) {});
 
-    on<FetchNearByShops>((event, emit) async {
+    on<ResetOndcEvent>((event, emit) async {
+      int shopCartCount = await ondcRepository.getCartCountMethod(
+          storeLocation_id: event.shopId);
+      warningLog('called $shopCartCount');
+      emit(
+        ResetOndcState(cartCount: shopCartCount),
+      );
+    });
 
+    on<FetchNearByShops>((event, emit) async {
       emit(OndcLoadingState());
 
       try {
@@ -55,6 +60,9 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
     on<FetchProductsOfShops>((event, emit) async {
       emit(OndcFetchProductLoading());
       try {
+        int shopCartCount = await ondcRepository.getCartCountMethod(
+            storeLocation_id: event.shopId);
+        warningLog('Getting cartCount $shopCartCount');
         List<ProductOndcModel> productModels =
             await ondcRepository.getProductsOfShop(
                 shopId: event.shopId, transactionIdLoc: event.transactionId

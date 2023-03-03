@@ -20,6 +20,15 @@ class OndcFetchProductsLocalLoading extends OndcState {}
 
 class OndcFetchProductsGlobalLoading extends OndcState {}
 
+class ResetOndcState extends OndcState {
+  final int cartCount;
+  const ResetOndcState({
+    required this.cartCount,
+  });
+  @override
+  List<Object?> get props => [cartCount];
+}
+
 class ErrorFetchingGlobalProducts extends OndcState {
   final String message;
   const ErrorFetchingGlobalProducts({
@@ -92,15 +101,14 @@ class OndcProductsOfShopsLoaded extends OndcState {
   List<Object> get props => [productModels];
 }
 
-class SearchItem extends OndcState{
+class SearchItem extends OndcState {
   @override
   // TODO: implement props
   List<Object?> get props => [];
 }
 
-class SearchItemLoaded extends OndcState{
-
-   final List<ShopModel> shopsList;
+class SearchItemLoaded extends OndcState {
+  final List<ShopModel> shopsList;
 
   const SearchItemLoaded({required this.shopsList});
   @override

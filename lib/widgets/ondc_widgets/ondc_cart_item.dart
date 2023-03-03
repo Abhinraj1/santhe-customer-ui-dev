@@ -243,24 +243,30 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                   alignment: Alignment.centerRight,
                                   child: Row(
                                     children: [
-                                      AutoSizeText(
-                                        '₹ ${widget.productOndcModel.maximum_value}',
-                                        style: TextStyle(
-                                            color: AppColors().brandDark,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                                TextDecoration.lineThrough),
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          '₹ ${widget.productOndcModel.maximum_value}',
+                                          style: TextStyle(
+                                              color: AppColors().brandDark,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.bold,
+                                              overflow: TextOverflow.ellipsis,
+                                              decoration:
+                                                  TextDecoration.lineThrough),
+                                        ),
                                       ),
                                       const SizedBox(
                                         width: 8,
                                       ),
-                                      AutoSizeText(
-                                        '₹ ${widget.productOndcModel.value}',
-                                        style: TextStyle(
-                                            color: AppColors().brandDark,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.bold),
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          '₹ ${widget.productOndcModel.value}',
+                                          style: TextStyle(
+                                              color: AppColors().brandDark,
+                                              fontSize: 11,
+                                              overflow: TextOverflow.ellipsis,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ],
                                   ),

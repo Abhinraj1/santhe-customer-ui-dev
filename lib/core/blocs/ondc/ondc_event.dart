@@ -8,6 +8,15 @@ abstract class OndcEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class ResetOndcEvent extends OndcEvent {
+  final String shopId;
+  const ResetOndcEvent({
+    required this.shopId,
+  });
+  @override
+  List<Object?> get props => [shopId];
+}
+
 class FetchNearByShops extends OndcEvent {
   final String lat;
   final String lng;

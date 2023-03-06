@@ -10,29 +10,32 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/error_user_fallback.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_helpers.dart';
-import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
-import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
-import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_state.dart';
 import 'package:santhe/core/loggers.dart';
+import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
+import 'package:santhe/manager/font_manager.dart';
+import 'package:santhe/manager/imageManager.dart';
 import 'package:santhe/models/ondc/final_costing.dart';
+import 'package:santhe/models/ondc/preview_ondc_cart_model.dart';
+import 'package:santhe/models/ondc/shipment_segregator_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
-import 'package:santhe/pages/ondc/payment_success/payment_success_view.dart';
+import 'package:santhe/pages/ondc/map_text/map_text_view.dart';
+import 'package:santhe/pages/ondc/ondc_checkout_screen/new/widgets/address_column.dart';
+import 'package:santhe/pages/ondc/payment_buffer/payment_buffer_view.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';
+import 'package:santhe/widgets/ondc_widgets/shipment_segregator.dart';
+import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 import '../../../../core/blocs/checkout/checkout_bloc.dart';
-import '../../../../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
-import '../new/ondc_checkout_screen_mobile.dart';
 
 part 'ondc_checkout_screen_desktop.dart';
 part 'ondc_checkout_screen_mobile.dart';
@@ -40,9 +43,11 @@ part 'ondc_checkout_screen_tablet.dart';
 
 class OndcCheckoutScreenView extends StatelessWidget {
   final String storeLocation_id;
+  final String? storeName;
   const OndcCheckoutScreenView({
     Key? key,
     required this.storeLocation_id,
+    required this.storeName,
   }) : super(key: key);
 
   @override
@@ -51,9 +56,10 @@ class OndcCheckoutScreenView extends StatelessWidget {
       return ScreenTypeLayout(
         mobile: _OndcCheckoutScreenMobile(
           storeLocation_id: storeLocation_id,
+          storeName: storeName,
         ),
-        desktop: _OndcCheckoutScreenDesktop(),
-        tablet: _OndcCheckoutScreenTablet(),
+        desktop: const _OndcCheckoutScreenDesktop(),
+        tablet: const _OndcCheckoutScreenTablet(),
       );
     });
   }

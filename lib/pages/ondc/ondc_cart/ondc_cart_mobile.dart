@@ -1,9 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, prefer_final_fields
 part of ondc_cart_view;
 
 class _OndcCartMobile extends StatefulWidget {
   final String storeLocation_id;
-  const _OndcCartMobile({required this.storeLocation_id});
+  const _OndcCartMobile({
+    Key? key,
+    required this.storeLocation_id,
+  }) : super(key: key);
 
   @override
   State<_OndcCartMobile> createState() => _OndcCartMobileState();
@@ -17,8 +20,12 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
   List<OndcCartItem> cartFilteredItems = [];
   List<CartitemModel> cartModels = [];
   bool doesContain = false;
+  String? shopName;
   double total = 0;
   late final CartBloc cartBloc;
+  bool _showErrorNoResponseFromSeller = false;
+  bool _showNothingIsAvailableFromCart = false;
+  bool _showErrorWhen1or2ItemsNotAvailable = false;
   @override
   void initState() {
     super.initState();
@@ -100,6 +107,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
         if (state is GetCartItemsOfShopState) {
           List<OndcCartItem> cartWidgets = [];
           cartModels = state.products;
+          shopName = state.products.first.store_name;
           total = 0;
           for (var element in cartModels) {
             cartWidgets.add(
@@ -111,11 +119,15 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
           setState(() {
             cartWidget = cartWidgets;
           });
+          context.read<CartBloc>().add(
+                ResetCartEvent(),
+              );
         }
         if (state is DeleteCartItemState) {
           context.read<CartBloc>().add(
                 OnAppRefreshEvent(storeLocationId: widget.storeLocation_id),
               );
+
           // productModels = state.productOndcModel;
           // errorLog('checking the length ${productModels.length}');
           // List<OndcCartItem> newCartList = [];
@@ -248,6 +260,50 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                         ],
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    shopName == null
+                        ? const Text('')
+                        : Text(
+                            'Shop Name: $shopName',
+                            style: TextStyle(
+                              color: AppColors().brandDark,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                    _showErrorNoResponseFromSeller
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 48,
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(
+                                  12,
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Seller is not responding.Please try later',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ),
+                          )
+                        : const Text(''),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 40.0, top: 10),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${cartWidget.length} items',
+                          style: TextStyle(color: AppColors().brandDark),
+                        ),
+                      ),
+                    ),
                     Column(
                       children: cartWidget,
                     ),
@@ -284,12 +340,24 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                           SizedBox(
                             width: 350,
                             child: ElevatedButton(
-                              onPressed: () {
-                                Get.to(
+                              onPressed: () async {
+                                final String message = await Get.to(
                                   () => OndcCheckoutScreenView(
                                     storeLocation_id: widget.storeLocation_id,
+                                    storeName: shopName,
                                   ),
                                 );
+                                debugLog('there is a message $message');
+                                if (message.contains('rror')) {
+                                  setState(() {
+                                    _showErrorNoResponseFromSeller = true;
+                                  });
+                                } else if (message.contains('seller')) {
+                                  errorLog('true');
+                                  setState(() {
+                                    _showErrorNoResponseFromSeller = true;
+                                  });
+                                }
                               },
                               child: Text('Proceed To Checkout'),
                               style: ButtonStyle(

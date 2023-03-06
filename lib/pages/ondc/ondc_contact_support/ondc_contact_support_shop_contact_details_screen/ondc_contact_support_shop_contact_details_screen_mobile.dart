@@ -6,8 +6,12 @@ import '../../../../models/ondc/shop_model.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
+<<<<<<< HEAD
 import '../../../../widgets/ondc_contact_support_widgets/shop_contact_support_card.dart';
 
+=======
+import '../widgets/shop_contact_support_card.dart';
+>>>>>>> 878f2e9d5bbeb479e3e3b69b99b20d00d6d16657
 
 
 class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
@@ -24,7 +28,12 @@ class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
       backgroundColor: AppColors().grey20,
         body: Column(
       children: [
+<<<<<<< HEAD
         const CustomTitleWithBackButton(
+=======
+        customTitleWithBackButton(
+          context: context,
+>>>>>>> 878f2e9d5bbeb479e3e3b69b99b20d00d6d16657
           title: "Contact Support"
         ),
 
@@ -49,11 +58,19 @@ class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
           ),
         ),
 
+<<<<<<< HEAD
         ShopContactSupportCard(
           model: shopModel
         ),
 
         CustomButton(
+=======
+        shopContactSupportCard(
+          model: shopModel
+        ),
+
+        customButton(
+>>>>>>> 878f2e9d5bbeb479e3e3b69b99b20d00d6d16657
           verticalPadding: 50,
           onTap: (){},
           buttonTitle: "Back"

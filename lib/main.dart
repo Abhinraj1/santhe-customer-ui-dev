@@ -19,7 +19,6 @@ import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
-import 'package:santhe/core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
@@ -36,6 +35,8 @@ import 'core/blocs/ondc/ondc_order_cancel_bloc/ondc_order_cancel_bloc.dart';
 import 'core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'core/repositories/ondc_order_cancel_repository.dart';
+
+import 'core/blocs/ondc/ondc_past_order_details_bloc/ondc_past_order_details_bloc.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -92,7 +93,6 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<AddressRepository>(
             create: (context) => AddressRepository(),
           ),
-
           RepositoryProvider<ONDCOrderCancelRepository>(
             create: (context) => ONDCOrderCancelRepository(),
           ),
@@ -118,24 +118,18 @@ class MyApp extends StatelessWidget {
                 addressRepository: context.read<AddressRepository>(),
               ),
             ),
-
             BlocProvider<CustomerContactCubit>(
-              create: (context) => CustomerContactCubit()
-            ),
-
+                create: (context) => CustomerContactCubit()),
             BlocProvider<OrderDetailsCubit>(
-                create: (context) => OrderDetailsCubit()
-            ),
+                create: (context) => OrderDetailsCubit()),
             BlocProvider<ONDCOrderCancelBloc>(
                 create: (context) => ONDCOrderCancelBloc(
-                    orderCancelRepository: context.read<ONDCOrderCancelRepository>())
-            ),
-
+                    orderCancelRepository:
+                        context.read<ONDCOrderCancelRepository>())),
             BlocProvider<SingleOrderDetailsBloc>(
-                create: (context) => SingleOrderDetailsBloc(
-                    ondcRepository: context.read<OndcRepository>()),
+              create: (context) => SingleOrderDetailsBloc(
+                  ondcRepository: context.read<OndcRepository>()),
             )
-
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,
@@ -151,8 +145,7 @@ class MyApp extends StatelessWidget {
                     selectionHandleColor: Colors.transparent,
                   ),
                 ),
-            home:
-                const SplashToHome(),
+            home: const SplashToHome(),
           ),
         ),
       ),

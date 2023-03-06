@@ -28,6 +28,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
   bool _searchLoading = false;
   int n = 100;
   int nsearch = 100;
+  int cartCount = 0;
   String productNameLocal = '';
 
   @override
@@ -83,7 +84,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
     try {
       warningLog('product name $productName');
       final response = await http.get(url);
-      warningLog('${response.statusCode}');
+      warningLog('${response.statusCode} and url $url');
       final responseBody =
           await json.decode(response.body)['data'] as List<dynamic>;
       warningLog('$responseBody');
@@ -248,7 +249,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
-      warningLog('checking for state $state');
       if (state is OndcProductsOfShopsLoaded) {
         List<OndcProductWidget> productsWidget = [];
         for (var productModel in state.productModels) {
@@ -256,10 +256,12 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
             OndcProductWidget(productOndcModel: productModel),
           );
         }
-        warningLog('productWidgets $productsWidget');
+        // warningLog('productWidgets $productsWidget');
         setState(() {
           existingProductModels = state.productModels;
           productWidget = productsWidget;
+          cartCount =
+              RepositoryProvider.of<OndcRepository>(context).totalCartItemCount;
         });
       }
       if (state is FetchedItemsInLocalShop) {
@@ -274,6 +276,11 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
         setState(() {
           searchExistingModels = state.productModels;
           searchWidgets = productsWidget;
+        });
+      }
+      if (state is ResetOndcState) {
+        setState(() {
+          cartCount = state.cartCount;
         });
       }
     }, builder: (context, state) {
@@ -801,25 +808,49 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            //toDo : add indicator while cart bloc implementation
-                            child: GestureDetector(
-                              onTap: () {
-                                errorLog('${widget.shopModel.id}');
-
-                                ge.Get.to(
-                                  () =>
-                                      OndcCartView(
-                                    storeLocation_id: widget.shopModel.id,
+                        BlocConsumer<CartBloc, CartState>(
+                            listener: (context, state) async {
+                          errorLog('state check $state');
+                          if (state is ResetCartState) {
+                            await RepositoryProvider.of<OndcRepository>(context)
+                                .getCartCountMethod(
+                              storeLocation_id: widget.shopModel.id,
+                            );
+                            setState(() {
+                              cartCount =
+                                  RepositoryProvider.of<OndcRepository>(context)
+                                      .cartCount;
+                            });
+                          }
+                        }, builder: (context, state) {
+                          return Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              //toDo : add indicator while cart bloc implementation
+                              child: GestureDetector(
+                                onTap: () {
+                                  errorLog('${widget.shopModel.id}');
+                                  ge.Get.to(
+                                    () => OndcCartView(
+                                      storeLocation_id: widget.shopModel.id,
+                                    ),
+                                  );
+                                },
+                                child: badges.Badge(
+                                  position: badges.BadgePosition.topEnd(
+                                      top: 0, end: 3),
+                                  badgeAnimation:
+                                      const badges.BadgeAnimation.slide(),
+                                  badgeStyle: badges.BadgeStyle(
+                                    badgeColor: AppColors().brandDark,
                                   ),
-                                );
-                              },
-                              child: Stack(
-                                children: [
-                                  CircleAvatar(
+                                  showBadge: true,
+                                  badgeContent: Text(
+                                    '$cartCount',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  child: CircleAvatar(
                                     radius: 25,
                                     backgroundColor: AppColors().brandDark,
                                     child: Padding(
@@ -831,12 +862,12 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         width: 55,
                                       ),
                                     ),
-                                  )
-                                ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        )
+                          );
+                        })
                       ],
                     ),
                     Padding(

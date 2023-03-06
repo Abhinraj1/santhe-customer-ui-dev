@@ -126,13 +126,20 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                             height: 90,
                             width: 70,
                           )
-                        : CachedNetworkImage(
-                            imageUrl: widget.productOndcModel.symbol,
-                            height: 90,
-                            width: 70,
-                            errorWidget: (context, url, error) => Image.asset(
-                              'assets/cart.png',
-                              fit: BoxFit.fill,
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.productOndcModel.symbol,
+                                height: 90,
+                                width: 70,
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                  'assets/cart.png',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
                             ),
                           ),
                     const SizedBox(
@@ -155,6 +162,9 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                   overflow: TextOverflow.ellipsis),
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             children: [
                               Container(
@@ -175,30 +185,12 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                             ],
                           ),
                           //! do a conditional check once data is available
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              AutoSizeText(
-                                '₹ ${widget.productOndcModel.maximum_value}',
-                                style: TextStyle(
-                                    color: AppColors().brandDark,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.lineThrough),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              AutoSizeText(
-                                '₹ ${widget.productOndcModel.value}',
-                                style: TextStyle(
-                                    color: AppColors().brandDark,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: Container(
@@ -241,7 +233,45 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                     ],
                                   ),
                                 ),
-                              )
+                              ),
+                              const SizedBox(
+                                width: 40,
+                              ),
+                              SizedBox(
+                                width: 100,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          '₹ ${widget.productOndcModel.maximum_value}',
+                                          style: TextStyle(
+                                              color: AppColors().brandDark,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.bold,
+                                              overflow: TextOverflow.ellipsis,
+                                              decoration:
+                                                  TextDecoration.lineThrough),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          '₹ ${widget.productOndcModel.value}',
+                                          style: TextStyle(
+                                              color: AppColors().brandDark,
+                                              fontSize: 11,
+                                              overflow: TextOverflow.ellipsis,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ],

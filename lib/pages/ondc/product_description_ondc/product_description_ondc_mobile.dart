@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, use_build_context_synchronously
 part of product_description_ondc_view;
 
 class _ProductDescriptionOndcMobile extends StatefulWidget {
@@ -17,7 +17,7 @@ class _ProductDescriptionOndcMobile extends StatefulWidget {
 
 class _ProductDescriptionOndcMobileState
     extends State<_ProductDescriptionOndcMobile> with LogMixin {
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   int currentPage = 0;
   List<OndcProductCarouselImage> images = [];
   Map<String, ProductOndcModel> productModels = {};
@@ -25,6 +25,7 @@ class _ProductDescriptionOndcMobileState
   List<OndcCartItem> cartWidget = [];
   String cancellable = 'No';
   String returnable = 'No';
+  int cartCount = 0;
 
   bool isSameValue = false;
   buildPageIndicator() {
@@ -124,6 +125,8 @@ class _ProductDescriptionOndcMobileState
     super.initState();
     widget.value = 1;
     widget.productOndcModel.quantity = 1;
+    cartCount =
+        RepositoryProvider.of<OndcRepository>(context).totalCartItemCount;
     getImages();
     checkValue();
     yesNoCancellable();
@@ -193,14 +196,23 @@ class _ProductDescriptionOndcMobileState
         ],
       ),
       body: BlocConsumer<CartBloc, CartState>(
-        listener: (context, state) {
-          // warningLog('$state');
+        listener: (context, state) async {
+          warningLog('$state');
           if (state is AddedToCartList) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Added to Cart'),
               ),
             );
+            await RepositoryProvider.of<OndcRepository>(context)
+                .getCartCountMethod(
+              storeLocation_id: widget.productOndcModel.storeLocationId,
+            );
+            setState(() {
+              cartCount =
+                  RepositoryProvider.of<OndcRepository>(context).cartCount;
+            });
+            context.read<CartBloc>().add(ResetCartEvent());
             // context.read<CartBloc>().add(
             //       UpdateCartEvent(productOndcModels: state.productOndcModels),
             //     );
@@ -229,22 +241,43 @@ class _ProductDescriptionOndcMobileState
                       //! Navigation not allowed for now due to shopmodel trouble
                       Stack(
                         children: [
-                          GestureDetector(
-                            onTap: () async {
-                              await Get.to(
-                                OndcCartView(
-                                  storeLocation_id:
-                                      widget.productOndcModel.storeLocationId,
+                          badges.Badge(
+                            position:
+                                badges.BadgePosition.topEnd(top: 0, end: 2),
+                            badgeAnimation: const badges.BadgeAnimation.slide(),
+                            badgeStyle: badges.BadgeStyle(
+                              badgeColor: AppColors().white100,
+                            ),
+                            showBadge: true,
+                            badgeContent: Text(
+                              '$cartCount',
+                              style: TextStyle(color: AppColors().brandDark),
+                            ),
+                            child: GestureDetector(
+                              onTap: () async {
+                                await Get.to(
+                                  OndcCartView(
+                                    storeLocation_id:
+                                        widget.productOndcModel.storeLocationId,
+                                  ),
+                                );
+                                setState(() {
+                                  widget.productOndcModel.quantity;
+                                });
+                              },
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: AppColors().brandDark,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    'assets/newshoppingcart.png',
+                                    fit: BoxFit.fill,
+                                    height: 55,
+                                    width: 55,
+                                  ),
                                 ),
-                              );
-                              setState(() {
-                                widget.productOndcModel.quantity;
-                              });
-                            },
-                            child: Image.asset(
-                              'assets/newshoppingcartorange.png',
-                              height: 35,
-                              width: 35,
+                              ),
                             ),
                           ),
                         ],
@@ -297,7 +330,7 @@ class _ProductDescriptionOndcMobileState
                               Text(
                                 '₹ ${widget.productOndcModel.maximum_value}',
                                 style: TextStyle(
-                                    color: AppColors().brandDark,
+                                    color: AppColors().grey100,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     decoration: TextDecoration.lineThrough),
@@ -335,7 +368,7 @@ class _ProductDescriptionOndcMobileState
                 Row(
                   children: [
                     widget.productOndcModel.isAddedToCart!
-                        ? const Text('')
+                        ? const Text('                          ')
                         : Padding(
                             padding: const EdgeInsets.only(top: 8.0, left: 10),
                             child: Container(
@@ -423,6 +456,7 @@ class _ProductDescriptionOndcMobileState
                                 setState(() {
                                   _addedToCart = true;
                                 });
+                                debugLog('Count$cartCount');
                               }
                             },
                             child: Container(

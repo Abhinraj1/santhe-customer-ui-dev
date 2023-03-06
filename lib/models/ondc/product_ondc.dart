@@ -8,6 +8,7 @@ import 'package:santhe/core/loggers.dart';
 class ProductOndcModel extends Equatable with LogMixin {
   final dynamic id;
   final dynamic transaction_id;
+  final dynamic generic_name;
   final dynamic ondc_item_id;
   final dynamic ondc_location_id;
   final dynamic name;
@@ -52,6 +53,7 @@ class ProductOndcModel extends Equatable with LogMixin {
   final dynamic itemId;
   final dynamic categoryId;
   final dynamic category;
+  final dynamic manufacture_date;
   bool? isAddedToCart = false;
   dynamic quantity = 1;
   dynamic total;
@@ -59,6 +61,7 @@ class ProductOndcModel extends Equatable with LogMixin {
   ProductOndcModel({
     required this.id,
     required this.transaction_id,
+    required this.generic_name,
     required this.ondc_item_id,
     required this.ondc_location_id,
     required this.name,
@@ -103,6 +106,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     required this.itemId,
     required this.categoryId,
     required this.category,
+    required this.manufacture_date,
     this.isAddedToCart,
     this.quantity,
     this.total,
@@ -112,6 +116,7 @@ class ProductOndcModel extends Equatable with LogMixin {
   ProductOndcModel copyWith({
     dynamic? id,
     dynamic? transaction_id,
+    dynamic? generic_name,
     dynamic? ondc_item_id,
     dynamic? ondc_location_id,
     dynamic? name,
@@ -156,6 +161,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     dynamic? itemId,
     dynamic? categoryId,
     dynamic? category,
+    dynamic? manufacture_date,
     bool? isAddedToCart,
     dynamic? quantity,
     dynamic? total,
@@ -164,6 +170,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     return ProductOndcModel(
       id: id ?? this.id,
       transaction_id: transaction_id ?? this.transaction_id,
+      generic_name: generic_name ?? this.generic_name,
       ondc_item_id: ondc_item_id ?? this.ondc_item_id,
       ondc_location_id: ondc_location_id ?? this.ondc_location_id,
       name: name ?? this.name,
@@ -212,6 +219,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       itemId: itemId ?? this.itemId,
       categoryId: categoryId ?? this.categoryId,
       category: category ?? this.category,
+      manufacture_date: manufacture_date ?? this.manufacture_date,
       isAddedToCart: isAddedToCart ?? this.isAddedToCart,
       quantity: quantity ?? this.quantity,
       total: total ?? this.total,
@@ -267,13 +275,18 @@ class ProductOndcModel extends Equatable with LogMixin {
       'brand_owner_FSSAI_license_no': brand_owner_FSSAI_license_no,
       'fulfillment_id': fulfillment_id,
       'fulfillmentId': fulfillmentId,
-      'total': total
+      'total': total,
+      'generic_name': generic_name,
     };
   }
 
   factory ProductOndcModel.fromNewMap(Map<String, dynamic> map) {
     return ProductOndcModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
+      manufacture_date:
+          map['manufacture_date'] != null ? map['manufacture_date'] : null,
+      generic_name:
+          map['generic_name'] != null ? map['generic_name'] as dynamic : null,
       storeLocationId: map['storeLocationId'] != null
           ? map['storeLocationId'] as dynamic
           : null,
@@ -417,6 +430,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     return [
       id,
       transaction_id,
+      generic_name,
       ondc_item_id,
       ondc_location_id,
       name,
@@ -461,6 +475,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       itemId,
       categoryId,
       category,
+      manufacture_date,
       isAddedToCart,
       quantity,
       total,

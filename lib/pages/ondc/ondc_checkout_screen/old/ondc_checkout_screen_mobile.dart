@@ -5,7 +5,12 @@ part of ondc_checkout_screen_view;
 
 class _OndcCheckoutScreenMobile extends StatefulWidget {
   final String storeLocation_id;
-  _OndcCheckoutScreenMobile({required this.storeLocation_id});
+  final String? storeName;
+  _OndcCheckoutScreenMobile({
+    Key? key,
+    required this.storeLocation_id,
+    required this.storeName,
+  }) : super(key: key);
 
   @override
   State<_OndcCheckoutScreenMobile> createState() =>
@@ -22,9 +27,16 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   double taxescgst = 0;
   double taxessgst = 0;
   String? orderId;
+  bool _isLoading = false;
   List<PreviewWidgetOndcItem> previewWidgetItems = [];
+  List<ShipmentSegregatorModel> shipmentSegregatorModels = [];
+  List<ShipmentSegregator> shipmentSegregatorWidgets = [];
+  late GroupedItemScrollController _controller;
+  bool isLoadingInit = false;
+  bool isLoadingInitGet = false;
 
   Razorpay _razorpay = Razorpay();
+  bool _showErrorNoResponseFromSeller = false;
 
   getList() {
     final checkoutRepo = RepositoryProvider.of<OndcCheckoutRepository>(context);
@@ -42,6 +54,19 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     super.dispose();
     _razorpay.clear();
   }
+
+//   _scrollListener() {
+//   if (_controller.offset >= _controller.position.maxScrollExtent &&
+//      !_controller.position.outOfRange) {
+//    setState(() {//you can do anything here
+//    });
+//  }
+//  if (_controller.offset <= _controller.position.minScrollExtent &&
+//     !_controller.position.outOfRange) {
+//    setState(() {//you can do anything here
+//     });
+//   }
+// }
 
   void openCheckout(ProfileController profileCon) async {
     var options = {
@@ -99,10 +124,38 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     );
   }
 
+  Widget _getGroupSeparator(PreviewWidgetOndcItem element) {
+    return SizedBox(
+      height: 50,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          width: 120,
+          decoration: BoxDecoration(
+            color: AppColors().brandDark,
+            border: Border.all(
+              color: Colors.white,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Shipment No ${element.previewWidgetModel.deliveryFulfillmentId}',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    getList();
+    setState(() {
+      _isLoading = true;
+    });
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
@@ -113,6 +166,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             storeLocation_id: widget.storeLocation_id,
           ),
         );
+    _controller = GroupedItemScrollController();
   }
 
   @override
@@ -122,13 +176,24 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     return BlocConsumer<CheckoutBloc, CheckoutState>(
       listener: (context, state) {
         debugLog('$state');
+        if (state is FinalizeProductErrorState) {
+          Get.back(
+            result: state.message,
+          );
+        }
+        if (state is CheckoutPostError) {
+          Get.back(
+            result: 'There is an Error',
+          );
+        }
         if (state is CheckoutPostSuccess) {
           setState(() {
             messageID = state.messageId;
           });
-
+          warningLog(
+              "MESSAGEID RECEIVED HERE ###################### $messageID");
           Future.delayed(
-            Duration(seconds: 1),
+            Duration(seconds: 5),
             () => context.read<CheckoutBloc>().add(
                   GetFinalItemsEvent(
                     messageId: state.messageId,
@@ -139,18 +204,44 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                   ),
                 ),
           );
+          //! 30 second continuous hit
         }
+
+        if (state is InitializePostErrorState) {
+          setState(() {
+            isLoadingInit = false;
+            _showErrorNoResponseFromSeller = true;
+          });
+        }
+        if (state is InitializeGetErrorState) {
+          setState(() {
+            _showErrorNoResponseFromSeller = true;
+            isLoadingInitGet = false;
+          });
+        }
+
         if (state is InitializePostSuccessState) {
-          context.read<CheckoutBloc>().add(
-                InitializeGetEvent(
-                    order_id:
-                        RepositoryProvider.of<OndcCheckoutRepository>(context)
-                            .orderId),
-              );
+          setState(() {
+            isLoadingInit = false;
+            isLoadingInitGet = true;
+          });
+          Future.delayed(
+            Duration(seconds: 5),
+            () => context.read<CheckoutBloc>().add(
+                  InitializeGetEvent(
+                      order_id:
+                          RepositoryProvider.of<OndcCheckoutRepository>(context)
+                              .orderId),
+                ),
+          );
         }
+
         if (state is InitializeGetSuccessState) {
           //! STATUS KEYWORD - CREATED ...
           //! STATUS KEYWORD - INITIATED THEN RUN BLOC
+          setState(() {
+            isLoadingInitGet = false;
+          });
           context.read<CheckoutBloc>().add(
                 InitializeCartEvent(
                     customerId: AppHelpers().getPhoneNumberWithoutCountryCode,
@@ -169,431 +260,620 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
         //       );
         // }
         if (state is FinalizeProductSuccessState) {
+          previewWidgetItems = [];
+          final checkoutRepo =
+              RepositoryProvider.of<OndcCheckoutRepository>(context);
+          List<PreviewWidgetOndcItem> previewItems = [];
+          debugLog('items $previewItems and $previewWidgetItems');
+          List<PreviewWidgetModel> previewModels = [];
+          previewModels = checkoutRepo.previewFinalModels
+              .where((element) => element.type.toString().contains('item'))
+              .toList();
+
+          errorLog('preview models ${previewModels.length}');
+          // List<ShipmentSegregatorModel> shipmentModels = [];
+          // List<ShipmentSegregator> shipmentWidget = [];
+          // shipmentModels = checkoutRepo.shipmentFinalModels;
+          // debugLog('Checking for shipment models ${shipmentModels}');
+          for (var element in previewModels) {
+            previewItems.add(
+              PreviewWidgetOndcItem(previewWidgetModel: element),
+            );
+          }
+
+          warningLog('$previewItems');
           setState(() {
             finalCostingModel = state.finalCostingModel;
+            previewWidgetItems = previewItems;
+            _isLoading = false;
           });
         }
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
 
-
+          warningLog(
+              "RECEIVED ORDERID HERE#########################   $orderId");
           openCheckout(profileController);
         }
-        if (state is FinalizePaymentSuccessState) {
+        if (state is FinalizePaymentLoading) {
           RepositoryProvider.of<OndcCartRepository>(context)
               .cartOndcModels
               .clear();
           // context.read<CartBloc>().clear();
-
-
-          warningLog("ORDER ID IS HEREE ########################################## ${RepositoryProvider.of<OndcCheckoutRepository>(context)
-              .orderId}");
-          context.read<SingleOrderDetailsBloc>().add(
-              LoadDataEvent(orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
-                  .orderId
-              )
-
-
-          );
           Get.to(
-            () => PaymentSuccessView(),
+            () => PaymentBufferView(),
           );
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          key: _key,
-          drawer: const nv.CustomNavigationDrawer(),
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () async {
-                //!something to add
-                //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode) ;
-                /*log(await AppHelpers().getToken);
-                            sendNotification('tesst');*/
-                _key.currentState!.openDrawer();
-                /*FirebaseAnalytics.instance.logEvent(
-                              name: "select_content",
-                              parameters: {
-                                "content_type": "image",
-                                "item_id": 'itemId',
-                              },
-                            ).then((value) => print('success')).catchError((e) => print(e.toString()));*/
-              },
-              splashRadius: 25.0,
-              icon: SvgPicture.asset(
-                'assets/drawer_icon.svg',
-                color: Colors.white,
+        return Stack(
+          children: [
+            Scaffold(
+              key: _key,
+              drawer: const nv.CustomNavigationDrawer(),
+              appBar: AppBar(
+                leading: IconButton(
+                  onPressed: () async {
+                    //!something to add
+                    //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode) ;
+                    /*log(await AppHelpers().getToken);
+                                sendNotification('tesst');*/
+                    _key.currentState!.openDrawer();
+                    /*FirebaseAnalytics.instance.logEvent(
+                                  name: "select_content",
+                                  parameters: {
+                                    "content_type": "image",
+                                    "item_id": 'itemId',
+                                  },
+                                ).then((value) => print('success')).catchError((e) => print(e.toString()));*/
+                  },
+                  splashRadius: 25.0,
+                  icon: SvgPicture.asset(
+                    'assets/drawer_icon.svg',
+                    color: Colors.white,
+                  ),
+                ),
+                shadowColor: Colors.orange.withOpacity(0.5),
+                elevation: 10.0,
+                title: const AutoSizeText(
+                  kAppName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
               ),
-            ),
-            shadowColor: Colors.orange.withOpacity(0.5),
-            elevation: 10.0,
-            title: const AutoSizeText(
-              kAppName,
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                fontSize: 24,
-              ),
-            ),
-          ),
-          body: GetBuilder<ProfileController>(
-            init: profileController,
-            id: 'navDrawer',
-            builder: (_) {
-              CustomerModel currentUser =
-                  profileController.customerDetails ?? fallback_error_customer;
-              return SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: AppColors().brandDark,
-                            radius: 20,
-                            child: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
+              body: GetBuilder<ProfileController>(
+                init: profileController,
+                id: 'navDrawer',
+                builder: (_) {
+                  CustomerModel currentUser =
+                      profileController.customerDetails ??
+                          fallback_error_customer;
+                  return SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: AppColors().brandDark,
+                                radius: 20,
+                                child: const Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 100,
+                              ),
+                              const Text(
+                                'Checkout',
+                                style: TextStyle(
+                                    color: Colors.black54, fontSize: 20),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Shop Name: ${widget.storeName}',
+                          style: TextStyle(
+                            color: AppColors().brandDark,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _showErrorNoResponseFromSeller
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 48,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Seller is not responding.Please try later',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Text(''),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              'Shipping Details',
+                              style: TextStyle(
+                                color: AppColors().brandDark,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 100,
-                          ),
-                          const Text(
-                            'Checkout',
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: 20),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          'Shipping Details',
-                          style: TextStyle(
-                            color: AppColors().brandDark,
-                            fontSize: 15,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15.0, left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Delivery to:',
+                              style: TextStyle(
+                                color: AppColors().brandDark,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15.0, left: 15.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Delivery to:',
-                          style: TextStyle(
-                            color: AppColors().brandDark,
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 15.0, right: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              currentUser.address,
+                              style: TextStyle(
+                                  color: AppColors().grey100, fontSize: 13),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          currentUser.address,
-                          style: TextStyle(
-                              color: AppColors().grey100, fontSize: 13),
-                        ),
-                      ),
-                    ),
 
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                    //   child: Row(
-                    //     children: [
-                    //       Icon(
-                    //         Icons.phone,
-                    //         color: AppColors().brandDark,
-                    //       ),
-                    //       Text(
-                    //         currentUser.phoneNumber,
-                    //         style: TextStyle(
-                    //             color: AppColors().grey100, fontSize: 13),
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    //   child: Divider(
-                    //     thickness: 2,
-                    //     color: Colors.grey,
-                    //   ),
-                    // ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: Text(
-                        'Payment Details',
-                        style: TextStyle(
-                          color: AppColors().brandDark,
-                          fontSize: 15,
+                        // Padding(
+                        //   padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        //   child: Row(
+                        //     children: [
+                        //       Icon(
+                        //         Icons.phone,
+                        //         color: AppColors().brandDark,
+                        //       ),
+                        //       Text(
+                        //         currentUser.phoneNumber,
+                        //         style: TextStyle(
+                        //             color: AppColors().grey100, fontSize: 13),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        //   child: Divider(
+                        //     thickness: 2,
+                        //     color: Colors.grey,
+                        //   ),
+                        // ),
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 15.0, right: 15, left: 15),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Billing address:',
-                          style: TextStyle(
-                              color: AppColors().brandDark, fontSize: 13),
+                        // Center(
+                        //   child: Text(
+                        //     'Payment Details',
+                        //     style: TextStyle(
+                        //       color: AppColors().brandDark,
+                        //       fontSize: 15,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding:
+                        //       const EdgeInsets.only(top: 15.0, right: 15, left: 15),
+                        //   child: Align(
+                        //     alignment: Alignment.centerLeft,
+                        //     child: Text(
+                        //       'Billing address:',
+                        //       style: TextStyle(
+                        //           color: AppColors().brandDark, fontSize: 13),
+                        //     ),
+                        //   ),
+                        // ),
+                        addressColumn(
+                            title: "Payment Details",
+                            addressType: "Billing Address:",
+                            address: (RepositoryProvider.of<AddressRepository>(
+                                        context)
+                                    .billingModel
+                                    ?.flat)
+                                .toString(),
+                            hasEditButton: true,
+                            onTap: () {
+                              isBillingAddress = true;
+
+                              Get.to(
+                                () => const MapTextView(),
+                              );
+                            }),
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          currentUser.address,
-                          style: TextStyle(
-                              color: AppColors().grey100, fontSize: 13),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Items',
+                              style: TextStyle(color: AppColors().brandDark),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Items',
-                          style: TextStyle(color: AppColors().brandDark),
+                        //! add the shipment logic here
+                        StickyGroupedListView<PreviewWidgetOndcItem, String>(
+                          shrinkWrap: true,
+                          elements: previewWidgetItems,
+                          itemScrollController: _controller,
+                          groupBy: (PreviewWidgetOndcItem previewWidget) {
+                            return previewWidget
+                                .previewWidgetModel.deliveryFulfillmentId;
+                          },
+                          groupSeparatorBuilder:
+                              (PreviewWidgetOndcItem previewWidget) {
+                            return _getGroupSeparator(previewWidget);
+                          },
+                          itemBuilder: (context, previewWidgetModel) {
+                            warningLog(
+                                'Length passed into builder ${previewWidgetItems.length}');
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: SizedBox(
+                                height: 70,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    previewWidgetModel.previewWidgetModel
+                                                    .symbol !=
+                                                null &&
+                                            previewWidgetModel
+                                                    .previewWidgetModel
+                                                    .symbol !=
+                                                ""
+                                        ? Image.network(
+                                            previewWidgetModel
+                                                .previewWidgetModel.symbol,
+                                            width: 50,
+                                            height: 60,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.asset(
+                                            ImgManager().santheIcon,
+                                            width: 50,
+                                            height: 60,
+                                            fit: BoxFit.cover,
+                                          ),
+                                    SizedBox(
+                                      height: 70,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                              width: 200,
+                                              child: AutoSizeText(
+                                                previewWidgetModel
+                                                    .previewWidgetModel.title,
+                                                style: FontStyleManager()
+                                                    .s12fw700Brown,
+                                                maxLines: 2,
+                                              )),
+
+                                          Text(
+                                            '${previewWidgetModel.previewWidgetModel.quantity}',
+                                            style: FontStyleManager()
+                                                .s10fw500Brown,
+                                          ),
+                                          //  showStatus ?? false ?
+                                          //  Text(status.toString(),style: FontStyleManager().s12fw500Grey,) :
+                                          //  textButtonTitle != null && textButtonOnTap != null ?
+                                          //      TextButton(
+                                          //          onPressed: (){
+                                          //            textButtonOnTap();
+                                          //          },
+                                          //          child: Text(textButtonTitle,
+                                          //          style: FontStyleManager().s12fw500Red,),) :
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Center(
+                                      child: SizedBox(
+                                        width: 50,
+                                        child: AutoSizeText(
+                                          "${previewWidgetModel.previewWidgetModel.price}",
+                                          maxFontSize: 16,
+                                          minFontSize: 12,
+                                          style:
+                                              FontStyleManager().s16fw600Grey,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
+                        //! shipment ends
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Subtotal:',
+                                style: TextStyle(
+                                  color: AppColors().grey100,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                '₹ ${finalCostingModel?.itemCost}',
+                                style: TextStyle(
+                                    color: AppColors().grey100, fontSize: 15),
+                              )
+                            ],
+                          ),
+                        ),
+                        //toDo : packaging charges to be added here
+                        finalCostingModel?.discount == 0
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Packing Charges:',
+                                      style: TextStyle(
+                                        color: AppColors().grey100,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '₹ ${finalCostingModel?.discount}',
+                                      style: TextStyle(
+                                          color: AppColors().black100,
+                                          fontSize: 15),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : SizedBox(),
+                        //todo: packaging charges to be added
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Delivery Charges:',
+                                style: TextStyle(
+                                  color: AppColors().grey100,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                '₹ ${finalCostingModel?.deliveryCost}',
+                                style: TextStyle(
+                                  color: AppColors().black100,
+                                  fontSize: 15,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        finalCostingModel?.miscCost == 0
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Miscellaneous:',
+                                      style: TextStyle(
+                                        color: AppColors().grey100,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '₹ ${finalCostingModel?.miscCost}',
+                                      style: TextStyle(
+                                          color: AppColors().black100,
+                                          fontSize: 15),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : SizedBox(),
+                        finalCostingModel?.discount == 0
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Discount:',
+                                      style: TextStyle(
+                                        color: AppColors().grey100,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '₹ ${finalCostingModel?.discount}',
+                                      style: TextStyle(
+                                          color: AppColors().black100,
+                                          fontSize: 15),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Tax:',
+                                style: TextStyle(
+                                  color: AppColors().grey100,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                '₹ ${finalCostingModel?.tax}',
+                                style: TextStyle(
+                                    color: AppColors().black100, fontSize: 15),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 100,
+                        ),
+                      ],
                     ),
-                    ...previewWidgetItems,
+                  );
+                },
+              ),
+              bottomSheet: SizedBox(
+                height: 100,
+                child: Column(
+                  children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0,
-                      ),
+                          horizontal: 15.0, vertical: 10),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Subtotal:',
+                            'Total:',
                             style: TextStyle(
-                              color: AppColors().grey100,
-                              fontSize: 15,
-                            ),
+                                color: AppColors().grey100,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
                           ),
                           Text(
                             '₹ ${finalCostingModel?.itemCost}',
                             style: TextStyle(
-                                color: AppColors().grey100, fontSize: 15),
-                          )
+                                fontSize: 18,
+                                color: AppColors().grey100,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
                     ),
-                    //toDo : packaging charges to be added here
-                    finalCostingModel?.discount == 0
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Packing Charges:',
-                                  style: TextStyle(
-                                    color: AppColors().grey100,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  '₹ ${finalCostingModel?.discount}',
-                                  style: TextStyle(
-                                      color: AppColors().black100,
-                                      fontSize: 15),
-                                )
-                              ],
-                            ),
-                          )
-                        : SizedBox(),
-                    //todo: packaging charges to be added
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Delivery Charges:',
-                            style: TextStyle(
-                              color: AppColors().grey100,
-                              fontSize: 15,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              isLoadingInit = true;
+                            });
+                            Future.delayed(Duration(seconds: 5), () {
+                              context.read<CheckoutBloc>().add(
+                                    InitializePostEvent(
+                                        message_id: messageID,
+                                        order_id: RepositoryProvider.of<
+                                                OndcCheckoutRepository>(context)
+                                            .orderId),
+                                  );
+                            });
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
+                            backgroundColor: MaterialStateProperty.all(
+                                AppColors().brandDark),
                           ),
-                          Text(
-                            '₹ ${finalCostingModel?.deliveryCost}',
-                            style: TextStyle(
-                              color: AppColors().black100,
-                              fontSize: 15,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    finalCostingModel?.miscCost == 0
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Miscellaneous:',
-                                  style: TextStyle(
-                                    color: AppColors().grey100,
-                                    fontSize: 15,
+                          child: state is FinalizePaymentLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
                                   ),
-                                ),
-                                Text(
-                                  '₹ ${finalCostingModel?.miscCost}',
-                                  style: TextStyle(
-                                      color: AppColors().black100,
-                                      fontSize: 15),
                                 )
-                              ],
-                            ),
-                          )
-                        : SizedBox(),
-                    finalCostingModel?.discount == 0
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Discount:',
-                                  style: TextStyle(
-                                    color: AppColors().grey100,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  '₹ ${finalCostingModel?.discount}',
-                                  style: TextStyle(
-                                      color: AppColors().black100,
-                                      fontSize: 15),
-                                )
-                              ],
-                            ),
-                          )
-                        : SizedBox(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Tax:',
-                            style: TextStyle(
-                              color: AppColors().grey100,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '₹ ${finalCostingModel?.tax}',
-                            style: TextStyle(
-                                color: AppColors().black100, fontSize: 15),
-                          )
-                        ],
+                              : isLoadingInit
+                                  ? Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : isLoadingInitGet
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                            color: Colors.grey,
+                                          ),
+                                        )
+                                      : Text('Proceed to pay'),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 100,
-                    ),
+                    )
                   ],
                 ),
-              );
-            },
-          ),
-          bottomSheet: SizedBox(
-            height: 100,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total:',
-                        style: TextStyle(
-                            color: AppColors().grey100,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '₹ ${finalCostingModel?.itemCost}',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: AppColors().grey100,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.read<CheckoutBloc>().add(
-                              InitializePostEvent(
-                                  message_id: messageID,
-                                  order_id: RepositoryProvider.of<
-                                          OndcCheckoutRepository>(context)
-                                      .orderId),
-                            );
-                      },
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        backgroundColor:
-                            MaterialStateProperty.all(AppColors().brandDark),
-                      ),
-                      child: state is FinalizePaymentLoading
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text('Proceed to pay'),
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
+            _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Text('')
+          ],
         );
       },
     );

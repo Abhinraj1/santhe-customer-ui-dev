@@ -78,6 +78,8 @@ class DeleteCartItemEvent extends CartEvent {
   List<Object> get props => [productOndcModel];
 }
 
+class ResetCartEvent extends CartEvent {}
+
 class GetCartItemsEvents extends CartEvent {
   final ShopModel shopModel;
   const GetCartItemsEvents({

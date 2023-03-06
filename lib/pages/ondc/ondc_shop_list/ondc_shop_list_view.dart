@@ -46,7 +46,6 @@ import '../../../widgets/ondc_widgets/ondc_search_view.dart';
 import '../../customer_registration_pages/mapAddressPicker.dart';
 import '../ondc_checkout_screen/new/ondc_checkout_screen_mobile.dart';
 import '../ondc_order_details_screen/ondc_order_details_screen_mobile.dart';
-import '../ondc_order_details_screen/ondc_order_details_view.dart';
 
 part 'ondc_shop_list_desktop.dart';
 part 'ondc_shop_list_mobile.dart';

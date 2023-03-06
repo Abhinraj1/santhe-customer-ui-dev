@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
 
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +10,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 
+import '../../models/ondc/past_cart_items_model.dart';
 import '../../models/ondc/single_order_model.dart';
-import 'ondc_checkout_repository.dart';
 
 class OndcRepository with LogMixin {
   String? transactionid;
@@ -19,6 +19,7 @@ class OndcRepository with LogMixin {
   int _shopProductCount = 0;
   int _shopsListCount = 0;
   int _searchProductCountInLocalShop = 0;
+  int cartCount = 0;
 
   int get productGlobalCount {
     return _productGlobalCount;
@@ -30,6 +31,10 @@ class OndcRepository with LogMixin {
 
   int get searchProductCountInLocalShop {
     return _searchProductCountInLocalShop;
+  }
+
+  int get totalCartItemCount {
+    return cartCount;
   }
 
   int get productShopCount {
@@ -218,6 +223,27 @@ class OndcRepository with LogMixin {
     return shopModel;
   }
 
+  Future<int> getCartCountMethod({required String storeLocation_id}) async {
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    final url = Uri.parse(
+        'http://ondcstaging.santhe.in/santhe/ondc/cart/count?firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
+    try {
+      final response = await http.get(url, headers: header);
+      warningLog('Count code${response.statusCode}');
+      final responseBody = json.decode(response.body);
+      warningLog('Count body$responseBody');
+      cartCount = responseBody['data'];
+      debugLog('cartCount $cartCount');
+      return cartCount;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<ShopModel>> getListOfShopsForSearchedProduct(
       {required String transactionIdLocal, required String productName}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
@@ -248,22 +274,13 @@ class OndcRepository with LogMixin {
     }
   }
 
+  Future<int> sendContactSupportQuery(
+      {required String orderId, required String message}) async {
+    final firebaseId = "8808435978";
 
-Future<int> sendContactSupportQuery(
+    // AppHelpers().getPhoneNumberWithoutCountryCode;
 
-      {required String orderId,
-        required String message
-
-      }) async {
-
-    final firebaseId = //"8808435978";
-
-        AppHelpers().getPhoneNumberWithoutCountryCode;
-
-
-
-    final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/support');
+    final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/support');
 
     final header = {
       'Content-Type': 'application/json',
@@ -276,41 +293,31 @@ Future<int> sendContactSupportQuery(
         url,
         headers: header,
         body: json.encode(
-          {
-            "order_id": orderId,
-            "firebase_id": firebaseId,
-            "message" : message
-          },
+          {"order_id": orderId, "firebase_id": firebaseId, "message": message},
         ),
       );
 
       warningLog('${response.statusCode}');
 
-      final responseBody =
-      await json.decode(response.body);
+      final responseBody = await json.decode(response.body);
 
       warningLog('$responseBody');
 
       return response.statusCode;
-
     } catch (e) {
       warningLog(e.toString());
       rethrow;
     }
   }
 
-
-
-  Future<List<SingleOrderModel>> getSingleOrder({required String OrderId}) async {
-
-
-
-     String orderId = OrderId;
-        // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
-   //  "e80574c6-32f2-45ce-8b67-d97a89490523";
+  Future<List<SingleOrderModel>> getSingleOrder(
+      {required String OrderId}) async {
+    String orderId = OrderId;
+    // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
+    //  "e80574c6-32f2-45ce-8b67-d97a89490523";
 
     final url = Uri.parse(
-       "http://ondcstaging.santhe.in/santhe/ondc/customer/order/$orderId");
+        "http://ondcstaging.santhe.in/santhe/ondc/customer/order/$orderId");
 
     final header = {
       'Content-Type': 'application/json',
@@ -318,32 +325,24 @@ Future<int> sendContactSupportQuery(
     };
 
     try {
-
       warningLog('GET PAST ODER DETAILS $url');
 
-      final response = await http.get(
-        url,
-        headers: header
-      );
+      final response = await http.get(url, headers: header);
 
       warningLog('${response.statusCode}');
 
-      final responseBody =
-      await json.decode(response.body)["data"]["rows"];
+      final responseBody = await json.decode(response.body)["data"]["rows"];
 
       warningLog(' respose here =============############### $responseBody');
 
-
-
-    List<SingleOrderModel> data =  []; //SingleOrderModel.fromJson(responseBody);
-    data.add(SingleOrderModel.fromJson(responseBody));
+      List<SingleOrderModel> data =
+          []; //SingleOrderModel.fromJson(responseBody);
+      data.add(SingleOrderModel.fromJson(responseBody));
 
       warningLog('${data.first.quotes!.first.status}');
 
       return data;
-
     } catch (e) {
-
       warningLog(e.toString());
 
       rethrow;

@@ -7,9 +7,9 @@ const double kTextFieldCircularBorderRadius = 14.0;
 const double customButtonBorderRadius = 10;
 const double imageCellBorderRadius = 8;
 const double queryTextFieldBorderRadius = 20;
+
 /// TO update billing address
 bool isBillingAddress = false;
-
 
 class Constant {
   static Color bgColor = const Color(0xffF89522);

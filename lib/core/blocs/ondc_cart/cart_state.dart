@@ -152,6 +152,8 @@ class DeleteCartItemState extends CartState {
   List<Object> get props => [productOndcModel];
 }
 
+class ResetCartState extends CartState {}
+
 class GetCartItemsOfShopState extends CartState {
   final List<CartitemModel> products;
   const GetCartItemsOfShopState({

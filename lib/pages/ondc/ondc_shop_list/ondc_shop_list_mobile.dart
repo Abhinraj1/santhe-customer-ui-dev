@@ -30,11 +30,10 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   List<ProductOndcModel> existingModels = [];
   List<ShopModel> searchedModels = [];
   List<ShopModel> existingShopModels = [];
+  String? noShopsMessage;
   int n = 10;
   String productName = "";
   late LocationModel locationModel;
-
-
 
   _getLocationCity() async {
     final url = Uri.parse(
@@ -277,6 +276,12 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
             newShopModel = state.shopsList;
           });
           debugLog('searched shops models${newShopModel.length}');
+          if (newShopModel.isEmpty) {
+            setState(() {
+              noShopsMessage =
+                  'There are no shops available \n servicing your search ';
+            });
+          }
           for (var model in newShopModel) {
             newShopWidget.add(
               OndcShopWidget(shopModel: model),
@@ -330,28 +335,24 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       },
 
       builder: (context, state) {
-
-        test() async{
-
-
-          Get.to(()=>ONDCOrderDetailsScreen());
-         // List<SingleOrderModel> list = await OndcRepository().getSingleOrder(OrderId: '');
-         // List<String> idList = [];
-         // list.forEach((element) {
-         //   element.quotes?.forEach((element) {
-         //     element.cartItemPrices!.forEach((element) {
-         //       if(element.deliveryFulfillmentId != null){
-         //        idList.add(element.deliveryFulfillmentId.toString());
-         //       }
-         //     });
-         //   });
-         // });
-         // var seen = Set<String>();
-         // idList = idList.where((element) => seen.add(element)).toList();
-         //
-         // print("########################################################="
-         //     "${idList.length}");
-
+        test() async {
+          Get.to(() => ONDCOrderDetailsScreen());
+          // List<SingleOrderModel> list = await OndcRepository().getSingleOrder(OrderId: '');
+          // List<String> idList = [];
+          // list.forEach((element) {
+          //   element.quotes?.forEach((element) {
+          //     element.cartItemPrices!.forEach((element) {
+          //       if(element.deliveryFulfillmentId != null){
+          //        idList.add(element.deliveryFulfillmentId.toString());
+          //       }
+          //     });
+          //   });
+          // });
+          // var seen = Set<String>();
+          // idList = idList.where((element) => seen.add(element)).toList();
+          //
+          // print("########################################################="
+          //     "${idList.length}");
 
           // BlocProvider.of<ONDCOrderCancelBloc>(context).add(FullOrderCancelEvent(
           //     orderId: "1e6943d2-cd96-472c-9c6a-b8e33350a3e1",
@@ -363,9 +364,8 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           key: _key,
           drawer: const CustomNavigationDrawer(),
           floatingActionButton: FloatingActionButton(
-            onPressed: (){
+            onPressed: () {
               test();
-
             },
           ),
           appBar: AppBar(
@@ -413,15 +413,12 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                     //     AppHelpers().playStoreLink,
                     //   );
                     // }
-                   /// ge.Get.back();
+                    /// ge.Get.back();
                     ge.Get.to(OndcCheckOutScreenMobile());
                   },
                   splashRadius: 25.0,
-
                   icon: InkWell(
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                     child: const Icon(
                       Icons.home,
                       color: Colors.white,
@@ -432,9 +429,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
               )
             ],
           ),
-          body:
-
-          state is OndcLoadingForShopsModelState
+          body: state is OndcLoadingForShopsModelState
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -505,64 +500,68 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(
-                                            () => MapTextView(),
-                                          );
-                                        },
-                                        child: Container(
-
-                                          color: Colors.white,
-                                          height: 30,
-                                          width: 340,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 8.0, left: 25),
-                                            child: Text.rich(
-                                              TextSpan(
-                                                text: 'Delivery to: ',
-                                                style: TextStyle(fontSize: 15),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                    text:
-                                                        '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
-                                                    // widget
-                                                    //     .customerModel.address
-                                                    //     .substring(0, 25),
-                                                    style: TextStyle(
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      decorationColor:
-                                                          Color.fromARGB(
-                                                              255, 77, 81, 84),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => MapTextView(),
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          child: Container(
+                                            color: Colors.white,
+                                            height: 30,
+                                            width: 340,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0, left: 25),
+                                              child: Text.rich(
+                                                TextSpan(
+                                                  text: 'Delivery to: ',
+                                                  style:
+                                                      TextStyle(fontSize: 15),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
+                                                      // widget
+                                                      //     .customerModel.address
+                                                      //     .substring(0, 25),
+                                                      style: TextStyle(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        decorationColor:
+                                                            Color.fromARGB(255,
+                                                                77, 81, 84),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  // can add more TextSpans here...
-                                                ],
+                                                    // can add more TextSpans here...
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      //! add the indicator here
-                                      // GestureDetector(
-                                      //   onTap: () => ge.Get.to(
-                                      //     OndcCartView(),
-                                      //   ),
-                                      //   child: Stack(
-                                      //     children: [
-                                      //       Image.asset(
-                                      //         'assets/newshoppingcartorange.png',
-                                      //         height: 45,
-                                      //         width: 45,
-                                      //       )
-                                      //     ],
-                                      //   ),
-                                      // ),
-                                    ],
+                                        //! add the indicator here
+                                        // GestureDetector(
+                                        //   onTap: () => ge.Get.to(
+                                        //     OndcCartView(),
+                                        //   ),
+                                        //   child: Stack(
+                                        //     children: [
+                                        //       Image.asset(
+                                        //         'assets/newshoppingcartorange.png',
+                                        //         height: 45,
+                                        //         width: 45,
+                                        //       )
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                        Image.asset('assets/edit.png')
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 20,
@@ -660,11 +659,22 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                       child: Text('Browse your Local Shops'),
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
                                   SingleChildScrollView(
                                     child: state is SearchItemLoaded
-                                        ? Column(
-                                            children: [...searchWidgets],
-                                          )
+                                        ? searchWidgets.isEmpty
+                                            ? Text(
+                                                'There are no Shops servicing this \n product for the time being sorry',
+                                                style: TextStyle(
+                                                  color: AppColors().brandDark,
+                                                  fontSize: 18,
+                                                ),
+                                              )
+                                            : Column(
+                                                children: [...searchWidgets],
+                                              )
                                         : Column(
                                             children: isSearching
                                                 ? searchWidgets
@@ -682,4 +692,3 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
     );
   }
 }
-

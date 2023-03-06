@@ -17,54 +17,46 @@ class ONDCFullOrderCancelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return CustomScaffold(
       trailingButton: homeIconButton(),
-      body:
-      BlocBuilder<ONDCOrderCancelBloc, ONDCOrderCancelState>(
-        builder: (context, state) {
-
-      if(state is ReasonsLoadedFullOrderCancelState){
-        return body(
-            orderNumber: state.orderNumber,
-            reasons: state.reasons,
-            onTap: (){},
-            isActive: false);
-
-        }else if (state is ReasonsLoadedSingleOrderCancelState){
-        return body(
-            orderNumber: state.orderNumber,
-            reasons: state.reasons,
-            onTap: (){},
-            isActive: false);
-
-      }else if (state is SelectedCodeState){
-        return body(
-            orderNumber: state.orderNumber,
-            reasons: state.reasons,
-            onTap: (){
-              BlocProvider.of<ONDCOrderCancelBloc>(context).add(CancelFullOrderRequestEvent());
-            },
-            isActive: true);
-
-      }else if(state is OrderCancelErrorState) {
-        return Center(child: Text(state.message));
-      }else{
-        return const Center(child: CircularProgressIndicator());
-      }
+      body: BlocBuilder<ONDCOrderCancelBloc, ONDCOrderCancelState>(
+          builder: (context, state) {
+        if (state is ReasonsLoadedFullOrderCancelState) {
+          return body(
+              orderNumber: state.orderNumber,
+              reasons: state.reasons,
+              onTap: () {},
+              isActive: false);
+        } else if (state is ReasonsLoadedSingleOrderCancelState) {
+          return body(
+              orderNumber: state.orderNumber,
+              reasons: state.reasons,
+              onTap: () {},
+              isActive: false);
+        } else if (state is SelectedCodeState) {
+          return body(
+              orderNumber: state.orderNumber,
+              reasons: state.reasons,
+              onTap: () {
+                BlocProvider.of<ONDCOrderCancelBloc>(context)
+                    .add(CancelFullOrderRequestEvent());
+              },
+              isActive: true);
+        } else if (state is OrderCancelErrorState) {
+          return Center(child: Text(state.message));
+        } else {
+          return const Center(child: CircularProgressIndicator());
         }
-      ),
+      }),
     );
   }
-  Widget body({
-    required String orderNumber,
-    required List<ReasonsModel> reasons,
-    required bool isActive,
-    required Function() onTap }){
 
-    return
-      Column(
+  Widget body(
+      {required String orderNumber,
+      required List<ReasonsModel> reasons,
+      required bool isActive,
+      required Function() onTap}) {
+    return Column(
       children: [
         const CustomTitleWithBackButton(
           title: "Cancel Order",
@@ -73,38 +65,33 @@ class ONDCFullOrderCancelScreen extends StatelessWidget {
           "Order ID  : $orderNumber",
           style: FontStyleManager().s16fw700,
         ),
-
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
               "All items in your order will be cancelled."
-                  " Please select a reason for cancelling your order",
+              " Please select a reason for cancelling your order",
               style: FontStyleManager().s16fw500,
             ),
           ),
         ),
         SizedBox(
           height: 210,
-          child:
-          ReturnReasonsListTile(
+          child: ReturnReasonsListTile(
             reasons: reasons,
           ),
         ),
         CustomButton(
           onTap: () {
-
-            if(isActive){
+            if (isActive) {
               onTap();
             }
-
           },
           buttonTitle: "NEXT",
           isActive: isActive,
           width: 200,
         )
-
       ],
     );
   }

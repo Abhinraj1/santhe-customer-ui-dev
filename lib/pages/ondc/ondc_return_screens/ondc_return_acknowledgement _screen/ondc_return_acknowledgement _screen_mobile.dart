@@ -29,9 +29,8 @@ class ONDCReturnAcknowledgement extends StatelessWidget {
         body: Column(
           children: [
 
-            customTitleWithBackButton(
+            CustomTitleWithBackButton(
                 title: title ?? "Return Request",
-                context: context
             ),
 
             Text("Order ID  : $orderId",
@@ -47,7 +46,7 @@ class ONDCReturnAcknowledgement extends StatelessWidget {
 
             const Spacer(),
 
-            customButton(
+            CustomButton(
                 onTap: (){},
               width: 160,
               verticalPadding: 40,

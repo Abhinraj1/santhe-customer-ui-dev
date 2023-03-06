@@ -809,8 +809,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             child: GestureDetector(
                               onTap: () {
                                 errorLog('${widget.shopModel.id}');
+
                                 ge.Get.to(
-                                  () => OndcCartView(
+                                  () =>
+                                      OndcCartView(
                                     storeLocation_id: widget.shopModel.id,
                                   ),
                                 );

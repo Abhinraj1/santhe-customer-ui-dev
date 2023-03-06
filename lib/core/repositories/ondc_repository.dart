@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_url.dart';
@@ -9,7 +10,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 
-import '../../models/ondc/past_cart_items_model.dart';
+import '../../models/ondc/single_order_model.dart';
+import 'ondc_checkout_repository.dart';
 
 class OndcRepository with LogMixin {
   String? transactionid;
@@ -254,9 +256,9 @@ Future<int> sendContactSupportQuery(
 
       }) async {
 
-    final firebaseId = "8808435978";
+    final firebaseId = //"8808435978";
 
-       // AppHelpers().getPhoneNumberWithoutCountryCode;
+        AppHelpers().getPhoneNumberWithoutCountryCode;
 
 
 
@@ -299,13 +301,16 @@ Future<int> sendContactSupportQuery(
 
 
 
-  Future<List<PastOrderRow>> getPastOrderDetails() async {
+  Future<List<SingleOrderModel>> getSingleOrder({required String OrderId}) async {
 
-    const String firebaseId = "8808435978";
-        //AppHelpers().getPhoneNumberWithoutCountryCode;
+
+
+     String orderId = OrderId;
+        // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
+   //  "e80574c6-32f2-45ce-8b67-d97a89490523";
 
     final url = Uri.parse(
-       "http://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&firebase_id=$firebaseId&status=INITIATED");
+       "http://ondcstaging.santhe.in/santhe/ondc/customer/order/$orderId");
 
     final header = {
       'Content-Type': 'application/json',
@@ -328,15 +333,10 @@ Future<int> sendContactSupportQuery(
 
       warningLog(' respose here =============############### $responseBody');
 
-      dynamic count =
-      await json.decode(response.body)['data']['count'] as int;
 
-      warningLog('THE COUNT IN PAST CART items IS == $count');
 
-    List<PastOrderRow> data =  PastOrderRow.fromList(responseBody);
-
-      // List<ShopModel> shopsWithSearchedProduct =
-      // responseBody.map((e) => ShopModel.fromMap(e)).toList();
+    List<SingleOrderModel> data =  []; //SingleOrderModel.fromJson(responseBody);
+    data.add(SingleOrderModel.fromJson(responseBody));
 
       warningLog('${data.first.quotes!.first.status}');
 

@@ -1,95 +1,111 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/pages/ondc/ondc_return_screens/widgets/return_reasons_listTile.dart';
+import 'package:santhe/core/blocs/ondc/ondc_order_cancel_bloc/ondc_order_cancel_bloc.dart';
+import 'package:santhe/models/ondc/order_cancel_reasons_model.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
+import '../../../../widgets/ondc_return_widgets/return_reasons_listTile.dart';
 
-
-
-
-class ONDCReturnSelectReasonScreen extends StatelessWidget {
-  final bool? isFullCancellation;
-
-  const ONDCReturnSelectReasonScreen({Key? key,
-  this.isFullCancellation}) : super(key: key);
+class ONDCFullOrderCancelScreen extends StatelessWidget {
+  const ONDCFullOrderCancelScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    String orderId = "0123456",
-        productName = "Nescafe classic coffee jar",
-        productDetails = "250gm , 1  units";
 
-
-    return  CustomScaffold(
+    return CustomScaffold(
       trailingButton: homeIconButton(),
-      body: Column(
-        children: [
+      body:
+      BlocBuilder<ONDCOrderCancelBloc, ONDCOrderCancelState>(
+        builder: (context, state) {
 
-          customTitleWithBackButton(
-            title: "Return Request",
-            context: context
-          ),
-
-          Text("Order ID  : $orderId",
-          style: FontStyleManager().s16fw700,),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical:10.0,horizontal: 40),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text("You wish to return the following item: ",
-                style: FontStyleManager().s16fw500,),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical:10.0,horizontal: 40),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(productName,
-                style: FontStyleManager().s16fw700Brown,),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(productDetails,
-                style: FontStyleManager().s14fw500,),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
-            child: Text("Please select a reason for cancelling your order",
-              style: FontStyleManager().s16fw500,),
-          ),
-
-         Expanded(
-           child: ListView.builder(
-             itemCount: 4,
-               itemBuilder: (_ , index){
-               return  returnReasonsListTile(
-                 reason: "Product damaged or not in usable condition",
-                   onTap: (){}
-               );
-               }),
-         ),
-
-          customButton(
+      if(state is ReasonsLoadedFullOrderCancelState){
+        return body(
+            orderNumber: state.orderNumber,
+            reasons: state.reasons,
             onTap: (){},
-            buttonTitle: "NEXT",
-            isActive: null,
-            width: 200,
-          )
+            isActive: false);
 
-        ],
+        }else if (state is ReasonsLoadedSingleOrderCancelState){
+        return body(
+            orderNumber: state.orderNumber,
+            reasons: state.reasons,
+            onTap: (){},
+            isActive: false);
+
+      }else if (state is SelectedCodeState){
+        return body(
+            orderNumber: state.orderNumber,
+            reasons: state.reasons,
+            onTap: (){
+              BlocProvider.of<ONDCOrderCancelBloc>(context).add(CancelFullOrderRequestEvent());
+            },
+            isActive: true);
+
+      }else if(state is OrderCancelErrorState) {
+        return Center(child: Text(state.message));
+      }else{
+        return const Center(child: CircularProgressIndicator());
+      }
+        }
       ),
+    );
+  }
+  Widget body({
+    required String orderNumber,
+    required List<ReasonsModel> reasons,
+    required bool isActive,
+    required Function() onTap }){
+
+    return
+      Column(
+      children: [
+        const CustomTitleWithBackButton(
+          title: "Cancel Order",
+        ),
+        Text(
+          "Order ID  : $orderNumber",
+          style: FontStyleManager().s16fw700,
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "All items in your order will be cancelled."
+                  " Please select a reason for cancelling your order",
+              style: FontStyleManager().s16fw500,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 210,
+          child:
+          ReturnReasonsListTile(
+            reasons: reasons,
+          ),
+        ),
+        CustomButton(
+          onTap: () {
+
+            if(isActive){
+              onTap();
+            }
+
+          },
+          buttonTitle: "NEXT",
+          isActive: isActive,
+          width: 200,
+        )
+
+      ],
     );
   }
 }

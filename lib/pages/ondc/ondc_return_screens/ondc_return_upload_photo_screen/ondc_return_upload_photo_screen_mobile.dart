@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:santhe/pages/ondc/ondc_return_screens/widgets/image_grid.dart';
 import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
+import '../../../../widgets/ondc_return_widgets/image_grid.dart';
 
 
 
@@ -24,9 +24,8 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
         trailingButton: homeIconButton(),
           body: Column(
             children: [
-              customTitleWithBackButton(
+              CustomTitleWithBackButton(
                   title: "Return Request",
-                  context: context
               ),
 
               Text("Order ID  : $orderId",
@@ -64,7 +63,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                   style: FontStyleManager().s16fw700,),
               ),
 
-              imageGrid(),
+              ImageGrid(),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -76,7 +75,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                 ),
               ),
 
-              customButton(
+              CustomButton(
                 buttonTitle: "RETURN ITEM",
                 onTap: (){},
                 isActive: false,

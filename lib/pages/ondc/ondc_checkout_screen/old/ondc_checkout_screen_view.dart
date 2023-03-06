@@ -31,6 +31,7 @@ import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';
 
 import '../../../../core/blocs/checkout/checkout_bloc.dart';
+import '../../../../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import '../new/ondc_checkout_screen_mobile.dart';
 
 part 'ondc_checkout_screen_desktop.dart';

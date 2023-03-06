@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/manager/font_manager.dart';
-import 'package:santhe/pages/ondc/ondc_checkout_screen/new/widgets/address_column.dart';
 import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 import 'package:santhe/widgets/custom_widgets/custom_button.dart';
 import 'package:santhe/widgets/custom_widgets/custom_title_with_back_button.dart';
@@ -12,9 +11,11 @@ import '../../../../core/app_colors.dart';
 import '../../../../core/blocs/address/address_bloc.dart';
 import '../../../../core/blocs/checkout/checkout_bloc.dart';
 import '../../../../core/repositories/address_repository.dart';
+import '../../../../widgets/ondc_checkout_widgets/address_column.dart';
+import '../../../../widgets/ondc_order_details_widgets/invoice_table.dart';
+import '../../../../widgets/ondc_order_details_widgets/shipments_card.dart';
 import '../../map_text/map_text_view.dart';
-import '../../ondc_order_details_screen/widgets/invoice_table.dart';
-import '../../ondc_order_details_screen/widgets/shipments_card.dart';
+
 
 
 
@@ -61,8 +62,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
           return
             ListView(
               children: [
-                customTitleWithBackButton(
-                    context: context,
+                const CustomTitleWithBackButton(
                     title: "Checkout"),
 
                 Padding(
@@ -76,7 +76,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                 ),
 
 
-                addressColumn(
+                AddressColumn(
                   title: "Shipping Details",
                   addressType: "Delivering to:",
                   address: (RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat).toString(),
@@ -88,7 +88,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                 ),
 
 
-                addressColumn(
+                AddressColumn(
                     title: "Payment Details",
                     addressType: "Billing Address:",
                     address: (RepositoryProvider.of<AddressRepository>(context).billingModel?.flat).toString(),
@@ -110,13 +110,13 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                   ),
                 ),
 
-                shipmentCard(
+                ShipmentCard(
 
                     shipmentNumber: 1,
 
                     products: [
 
-                      productCell(
+                      ProductCell(
                           showStatus: true,
                           status: "Cancelled",
                           productImg: "",
@@ -124,7 +124,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                           productDetails : "250gm , 1  units",
                           productPrice : "₹250"),
 
-                      productCell(
+                      ProductCell(
                           showStatus: true,
                           status: "Cancelled",
                           productImg: "null",
@@ -132,22 +132,22 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                           productDetails : "250gm , 1  units",
                           productPrice : "₹250"),
 
-                      bottomTextRow(
+                      BottomTextRow(
                           title: "Delivery in",
                           message: "3 Days"
                       )
                     ]
                 ),
 
-                invoiceTable(
-                    subTotal : "₹425",
-                    deliveryCharger : "₹30",
-                    taxesCGST : "₹8",
-                    taxesSGST : "₹12",
-                    total : "₹475"
-                ),
+                // InvoiceTable(
+                //     subTotal : "₹425",
+                //     deliveryCharger : "₹30",
+                //     taxesCGST : "₹8",
+                //     taxesSGST : "₹12",
+                //     total : "₹475"
+                // ),
 
-                customButton(
+                CustomButton(
                     onTap: (){
 
                     },

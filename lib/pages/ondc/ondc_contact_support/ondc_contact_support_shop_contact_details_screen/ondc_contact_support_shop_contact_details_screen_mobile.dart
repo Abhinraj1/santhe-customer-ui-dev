@@ -6,7 +6,8 @@ import '../../../../models/ondc/shop_model.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
-import '../widgets/shop_contact_support_card.dart';
+import '../../../../widgets/ondc_contact_support_widgets/shop_contact_support_card.dart';
+
 
 
 class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
@@ -23,8 +24,7 @@ class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
       backgroundColor: AppColors().grey20,
         body: Column(
       children: [
-        customTitleWithBackButton(
-          context: context,
+        const CustomTitleWithBackButton(
           title: "Contact Support"
         ),
 
@@ -49,11 +49,11 @@ class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
           ),
         ),
 
-        shopContactSupportCard(
+        ShopContactSupportCard(
           model: shopModel
         ),
 
-        customButton(
+        CustomButton(
           verticalPadding: 50,
           onTap: (){},
           buttonTitle: "Back"

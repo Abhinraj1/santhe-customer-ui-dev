@@ -6,12 +6,13 @@ import '../../../../core/app_colors.dart';
 import '../../../../manager/font_manager.dart';
 
 
+class TextFieldForQuery extends StatelessWidget {
+  final TextEditingController controller;
+  const TextFieldForQuery({Key? key, required this.controller}) : super(key: key);
 
-
-Widget textFieldForQuery(TextEditingController controller){
-
-  return
-    Center(
+  @override
+  Widget build(BuildContext context) {
+    return     Center(
       child: SizedBox(
         height: 230,
         width: 300,
@@ -29,10 +30,13 @@ Widget textFieldForQuery(TextEditingController controller){
                 borderSide: BorderSide.none,
               ),
 
-            hintText: "Enter your Query",
-            hintStyle: FontStyleManager().s16fw600Grey
+              hintText: "Enter your Query",
+              hintStyle: FontStyleManager().s16fw600Grey
           ),
         ),
       ),
     );
+  }
 }
+
+

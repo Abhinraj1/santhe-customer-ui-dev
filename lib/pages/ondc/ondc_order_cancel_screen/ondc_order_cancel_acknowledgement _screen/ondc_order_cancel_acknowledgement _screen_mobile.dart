@@ -9,33 +9,32 @@ import '../../../../widgets/custom_widgets/home_icon_button.dart';
 
 class ONDCOrderCancelAcknowledgement extends StatelessWidget {
 
+  final String orderId;
+
   final bool? isFullCancellation;
 
   const ONDCOrderCancelAcknowledgement({
     Key? key,
 
-  this.isFullCancellation
+  this.isFullCancellation, required this.orderId
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    String orderId = "0123456",
-
-    message = "Your return request is received,"
-        " Once we have received a confirmation from "
-        "the seller you will get an update from us on"
-        " the return  status and refund details";
+   String message = "Your cancellation request is received,"
+       " Once we have received a confirmation from the "
+       "seller you will get an update from us on your "
+       "cancellation status and refund details";
 
     return  CustomScaffold(
       trailingButton: homeIconButton(),
         body: Column(
           children: [
 
-            customTitleWithBackButton(
-                title: "Return Request",
-                context: context
+            const CustomTitleWithBackButton(
+                title: "Cancel Order",
             ),
 
             Text("Order ID  : $orderId",
@@ -51,7 +50,7 @@ class ONDCOrderCancelAcknowledgement extends StatelessWidget {
 
             const Spacer(),
 
-            customButton(
+            CustomButton(
                 onTap: (){},
               width: 160,
               verticalPadding: 40,

@@ -126,8 +126,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           setState(() {
             messageID = state.messageId;
           });
-          warningLog(
-              "MESSAGEID RECEIVED HERE ###################### $messageID");
+
           Future.delayed(
             Duration(seconds: 1),
             () => context.read<CheckoutBloc>().add(
@@ -177,8 +176,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
 
-          warningLog(
-              "RECEIVED ORDERID HERE#########################   ${orderId}");
+
           openCheckout(profileController);
         }
         if (state is FinalizePaymentSuccessState) {
@@ -186,6 +184,17 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
               .cartOndcModels
               .clear();
           // context.read<CartBloc>().clear();
+
+
+          warningLog("ORDER ID IS HEREE ########################################## ${RepositoryProvider.of<OndcCheckoutRepository>(context)
+              .orderId}");
+          context.read<SingleOrderDetailsBloc>().add(
+              LoadDataEvent(orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
+                  .orderId
+              )
+
+
+          );
           Get.to(
             () => PaymentSuccessView(),
           );

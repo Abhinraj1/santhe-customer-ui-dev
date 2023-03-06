@@ -19,6 +19,7 @@ import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
+import 'package:santhe/core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
@@ -31,8 +32,10 @@ import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_s
 import 'package:santhe/pages/ondc/ondc_return_screens/ondc_return_acknowledgement%20_screen/ondc_return_acknowledgement%20_screen_mobile.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
-
-import 'core/blocs/ondc/ondc_past_order_details_bloc/ondc_past_order_details_bloc.dart';
+import 'core/blocs/ondc/ondc_order_cancel_bloc/ondc_order_cancel_bloc.dart';
+import 'core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
+import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
+import 'core/repositories/ondc_order_cancel_repository.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -88,7 +91,11 @@ class MyApp extends StatelessWidget {
           ),
           RepositoryProvider<AddressRepository>(
             create: (context) => AddressRepository(),
-          )
+          ),
+
+          RepositoryProvider<ONDCOrderCancelRepository>(
+            create: (context) => ONDCOrderCancelRepository(),
+          ),
         ],
         child: MultiBlocProvider(
           providers: [
@@ -116,9 +123,17 @@ class MyApp extends StatelessWidget {
               create: (context) => CustomerContactCubit()
             ),
 
-            BlocProvider<PastOrderDetailsBloc>(
-                create: (context) => PastOrderDetailsBloc(
-                    ondcRepository: context.read<OndcRepository>())..add(LoadDataEvent()),
+            BlocProvider<OrderDetailsCubit>(
+                create: (context) => OrderDetailsCubit()
+            ),
+            BlocProvider<ONDCOrderCancelBloc>(
+                create: (context) => ONDCOrderCancelBloc(
+                    orderCancelRepository: context.read<ONDCOrderCancelRepository>())
+            ),
+
+            BlocProvider<SingleOrderDetailsBloc>(
+                create: (context) => SingleOrderDetailsBloc(
+                    ondcRepository: context.read<OndcRepository>()),
             )
 
           ],
@@ -146,3 +161,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+///use this order id 89088251-33a2-4e2b-9602-e83f5fb57f7d

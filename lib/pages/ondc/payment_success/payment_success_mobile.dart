@@ -48,8 +48,11 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          const SizedBox(
+            height: 120,
+          ),
           Stack(
             children: [
               Center(
@@ -67,10 +70,24 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile> {
             height: 10,
           ),
           Image.asset('assets/successOrder.png'),
+          // const SizedBox(
+          //   height: 20,
+          // ),
+          Image.asset('assets/processOrder.png'),
           const SizedBox(
-            height: 20,
+            height: 120,
           ),
-          Image.asset('assets/processOrder.png')
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: CustomButton(
+                onTap: (){
+                  Get.to(()=> const ONDCOrderDetailsView());
+                },
+              horizontalPadding: 20,
+              width: 300,
+                buttonTitle: "ORDER DETAILS",
+            ),
+          )
         ],
       ),
     );

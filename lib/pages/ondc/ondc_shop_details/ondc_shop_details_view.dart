@@ -24,6 +24,8 @@ import 'package:santhe/pages/ondc/ondc_product_local/ondc_product_local_view.dar
 import 'package:santhe/widgets/navigation_drawer_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
 import '../../../widgets/ondc_widgets/ondc_product_widget.dart';
+import '../ondc_contact_support/ondc_contact_support_enter_query_screen/ondc_contact_support_enter_query_screen_mobile.dart';
+import '../ondc_contact_support/ondc_contact_support_shop_contact_details_screen/ondc_contact_support_shop_contact_details_screen_mobile.dart';
 part 'ondc_shop_details_desktop.dart';
 part 'ondc_shop_details_tablet.dart';
 part 'ondc_shop_details_mobile.dart';

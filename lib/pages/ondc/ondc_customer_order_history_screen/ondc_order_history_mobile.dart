@@ -2,9 +2,11 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/manager/font_manager.dart';
-import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/widgets/order_history_list.dart';
-import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/widgets/select_date_filter.dart';
 import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
+
+import '../../../widgets/ondc_customer_order_history_widgets/order_history_list.dart';
+import '../../../widgets/ondc_customer_order_history_widgets/select_date_filter.dart';
+
 
 class ONDCOrderHistoryMobile extends StatelessWidget {
   const ONDCOrderHistoryMobile({Key? key}) : super(key: key);
@@ -28,9 +30,8 @@ class ONDCOrderHistoryMobile extends StatelessWidget {
               thickness: 1,
               color: AppColors().grey40,
             ),
-            selectDateFilter(context: context),
-            orderHistoryList(context:context )
-
+            const SelectDateFilter(),
+            const OrderHistoryList( )
           ],
         )
     );

@@ -7,7 +7,8 @@ import '../../../../manager/font_manager.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
-import '../widgets/textField_for_query.dart';
+import '../../../../widgets/ondc_contact_support_widgets/textField_for_query.dart';
+
 
 
 class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
@@ -24,8 +25,7 @@ class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
         backgroundColor: AppColors().grey20,
           body: ListView(
           children: [
-            customTitleWithBackButton(
-                context: context,
+            const CustomTitleWithBackButton(
                 title: "Contact Support"
             ),
 
@@ -49,9 +49,9 @@ class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
               ),
             ),
 
-            textFieldForQuery(textEditingController),
+            TextFieldForQuery(controller: textEditingController),
 
-            customButton(
+            CustomButton(
               verticalPadding: 70,
                 onTap: (){
                   BlocProvider.of<CustomerContactCubit>(context).

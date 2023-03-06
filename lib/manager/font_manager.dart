@@ -45,6 +45,11 @@ class FontStyleManager {
   TextStyle s14fw700Grey = GoogleFonts.mulish(
       color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w700);
 
+  TextStyle s12fw700Blue = GoogleFonts.mulish(
+      color: Color(0xff0246F6), fontSize: 12, fontWeight: FontWeight.w700,
+      decoration: TextDecoration.underline);
+
+
   TextStyle s14fw800Grey = GoogleFonts.mulish(
       color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w800);
 

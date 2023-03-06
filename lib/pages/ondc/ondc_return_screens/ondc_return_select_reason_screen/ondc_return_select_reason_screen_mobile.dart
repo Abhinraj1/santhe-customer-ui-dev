@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/pages/ondc/ondc_return_screens/widgets/return_reasons_listTile.dart';
+import '../../../../core/blocs/ondc/ondc_bloc.dart';
 import '../../../../manager/font_manager.dart';
+import '../../../../models/ondc/order_cancel_reasons_model.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
+import '../../../../widgets/ondc_return_widgets/return_reasons_listTile.dart';
 
 
 
@@ -26,9 +29,8 @@ class ONDCReturnSelectReasonScreen extends StatelessWidget {
       body: Column(
         children: [
 
-          customTitleWithBackButton(
+          const CustomTitleWithBackButton(
             title: "Return Request",
-            context: context
           ),
 
           Text("Order ID  : $orderId",
@@ -67,19 +69,26 @@ class ONDCReturnSelectReasonScreen extends StatelessWidget {
               style: FontStyleManager().s16fw500,),
           ),
 
-         Expanded(
-           child: ListView.builder(
-             itemCount: 4,
-               itemBuilder: (_ , index){
-               return  returnReasonsListTile(
-                 reason: "Product damaged or not in usable condition",
-                   onTap: (){}
-               );
-               }),
-         ),
+         // Expanded(
+         //   child: ListView.builder(
+         //     itemCount: 4,
+         //       itemBuilder: (_ , index){
+         //       return  ReturnReasonsListTile(
+         //         reason: "Product damaged or not in usable condition",
+         //           onTap: (){},
+         //       );
+         //       }),
+         // ),
+        Expanded(
+          child: ReturnReasonsListTile(
 
-          customButton(
-            onTap: (){},
+            reasons:[ ReasonsModel()],
+          ),
+        ),
+          CustomButton(
+            onTap: (){
+
+            },
             buttonTitle: "NEXT",
             isActive: null,
             width: 200,

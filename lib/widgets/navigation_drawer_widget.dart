@@ -1,4 +1,5 @@
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
+import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 
 import '../constants.dart';
 import 'navigation_drawer_tile.dart';
@@ -22,7 +23,7 @@ import '../pages/nav_bar_pages/faq_page.dart';
 import '../pages/nav_bar_pages/terms_condition_page.dart';
 
 
-///changed name from NavigationDrawer to CustomNavigationDrawer
+
 class CustomNavigationDrawer extends StatelessWidget {
   const CustomNavigationDrawer({Key? key}) : super(key: key);
 
@@ -150,7 +151,7 @@ class CustomNavigationDrawer extends StatelessWidget {
             tileText: 'My Orders',
             onPress: () {
               // Navigator.pop(context);
-              ///Get.to(() => const FAQPage());
+              Get.to(() => const ONDCOrderHistoryView());
             },
           ),
           NavigationDrawerTile(

@@ -102,7 +102,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                   ),
                 ),
 
-                ShipmentCard(shipmentNumber: 1, products: [
+                const ShipmentCard(shipmentNumber: 1, products: [
                   ProductCell(
                       showStatus: true,
                       status: "Cancelled",

@@ -276,9 +276,9 @@ class OndcRepository with LogMixin {
 
   Future<int> sendContactSupportQuery(
       {required String orderId, required String message}) async {
-    final firebaseId = "8808435978";
+    final firebaseId = //"8808435978";
 
-    // AppHelpers().getPhoneNumberWithoutCountryCode;
+    AppHelpers().getPhoneNumberWithoutCountryCode;
 
     final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/support');
 

@@ -28,7 +28,6 @@ import 'package:santhe/models/ondc/preview_ondc_cart_model.dart';
 import 'package:santhe/models/ondc/shipment_segregator_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/ondc/map_text/map_text_view.dart';
-import 'package:santhe/pages/ondc/ondc_checkout_screen/new/widgets/address_column.dart';
 import 'package:santhe/pages/ondc/payment_buffer/payment_buffer_view.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';
@@ -36,6 +35,7 @@ import 'package:santhe/widgets/ondc_widgets/shipment_segregator.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 import '../../../../core/blocs/checkout/checkout_bloc.dart';
+import '../../../../widgets/ondc_checkout_widgets/address_column.dart';
 
 part 'ondc_checkout_screen_desktop.dart';
 part 'ondc_checkout_screen_mobile.dart';

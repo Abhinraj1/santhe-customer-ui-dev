@@ -504,7 +504,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         //     ),
                         //   ),
                         // ),
-                        addressColumn(
+                        AddressColumn(
                             title: "Payment Details",
                             addressType: "Billing Address:",
                             address: (RepositoryProvider.of<AddressRepository>(

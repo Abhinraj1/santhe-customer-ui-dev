@@ -31,7 +31,7 @@ class ONDCOrderHistoryMobile extends StatelessWidget {
               color: AppColors().grey40,
             ),
             const SelectDateFilter(),
-            const OrderHistoryList( )
+            const OrderHistoryList()
           ],
         )
     );

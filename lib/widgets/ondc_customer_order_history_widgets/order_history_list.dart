@@ -33,8 +33,8 @@ class OrderHistoryCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return     Container(
-      width: 300,
+    return   Container(
+      width: 320,
       margin: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: AppColors().white100,

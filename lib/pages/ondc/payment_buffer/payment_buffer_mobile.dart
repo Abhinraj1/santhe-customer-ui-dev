@@ -1,7 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of payment_buffer_view;
 
 class _PaymentBufferMobile extends StatefulWidget {
-  _PaymentBufferMobile();
+  final String messageID;
+  final String transactionId;
+  _PaymentBufferMobile({
+    required this.messageID,
+    required this.transactionId,
+  });
 
   @override
   State<_PaymentBufferMobile> createState() => _PaymentBufferMobileState();

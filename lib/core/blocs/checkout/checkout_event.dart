@@ -78,12 +78,21 @@ class VerifyPaymentEvent extends CheckoutEvent {
   final String razorpayOrderIdFromRazor;
   final String razorpayPaymentIdFromRazor;
   final String razorpaySignature;
+  final String transactionId;
+  final String messageId;
   const VerifyPaymentEvent({
     required this.razorpayOrderIdFromRazor,
     required this.razorpayPaymentIdFromRazor,
     required this.razorpaySignature,
+    required this.transactionId,
+    required this.messageId,
   });
   @override
-  List<Object> get props =>
-      [razorpayOrderIdFromRazor, razorpayPaymentIdFromRazor, razorpaySignature];
+  List<Object> get props => [
+        razorpayOrderIdFromRazor,
+        razorpayPaymentIdFromRazor,
+        razorpaySignature,
+        transactionId,
+        messageId
+      ];
 }

@@ -31,9 +31,16 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
         );
       }
       if (state is FinalizePaymentErrorState) {
-        Get.off(
-          () => const ErrorNackView(),
-        );
+        warningLog('Verify payment api error  ${state.message}');
+        if (state.message.contains('ERROR')) {
+          Get.off(
+            () => ErrorNackView(
+              message: state.message,
+            ),
+          );
+        } else if (state.message.contains('SYSTEM_ERROR')) {
+          errorLog('Check sequence of apis called');
+        }
       }
     }, builder: (context, state) {
       return Scaffold(

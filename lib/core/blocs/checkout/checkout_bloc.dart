@@ -129,9 +129,9 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         await ondcCheckoutRepository.confirmOrder(
             messageId: event.messageId, transactionId: event.transactionId);
         emit(FinalizePaymentSuccessState());
-      } on FinalizeProductErrorState catch (e) {
+      } on FinalizePaymentErrorState catch (e) {
         emit(
-          FinalizeProductErrorState(message: e.message),
+          FinalizePaymentErrorState(message: e.message),
         );
       }
     });

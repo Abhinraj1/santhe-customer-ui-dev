@@ -279,8 +279,18 @@ class OndcCheckoutRepository with LogMixin {
       );
       final responseBody = json.decode(response.body);
       warningLog('confirm order url $url and confirm order body $responseBody');
+      final typeErrorMessage = responseBody['type'];
+      debugLog('$typeErrorMessage');
+      if (typeErrorMessage.toString().contains('ERROR')) {
+        throw FinalizePaymentErrorState(message: responseBody['message']);
+      }
+      if (typeErrorMessage.toString().contains('SYSTEM_ERROR')) {
+        throw FinalizePaymentErrorState(message: responseBody['message']);
+      }
     } catch (e) {
-      rethrow;
+      throw FinalizePaymentErrorState(
+        message: e.toString(),
+      );
     }
   }
 

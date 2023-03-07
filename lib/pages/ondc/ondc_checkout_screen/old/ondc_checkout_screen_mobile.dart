@@ -40,6 +40,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   bool _showOneOrMoreItemsAreNotAvailable = false;
   bool _showAllItemsAreNotAvailable = false;
 
+  bool _isInitBuffer = false;
+
   getList() {
     final checkoutRepo = RepositoryProvider.of<OndcCheckoutRepository>(context);
     List<PreviewWidgetOndcItem> previewItems = [];
@@ -225,7 +227,6 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             isLoadingInitGet = false;
           });
         }
-
         if (state is InitializePostSuccessState) {
           setState(() {
             isLoadingInit = false;
@@ -307,6 +308,9 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           });
         }
         if (state is InitializeCartSuccessState) {
+          setState(() {
+            _isInitBuffer = false;
+          });
           orderId = state.orderId;
 
           warningLog(
@@ -972,7 +976,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '₹ ${finalCostingModel?.itemCost}',
+                                  '₹ ${finalCostingModel?.totalCost}',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: AppColors().grey100,
@@ -990,6 +994,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                 onPressed: () {
                                   setState(() {
                                     isLoadingInit = true;
+                                    _isInitBuffer = true;
                                   });
                                   Future.delayed(Duration(seconds: 5), () {
                                     context.read<CheckoutBloc>().add(
@@ -1039,10 +1044,83 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                     ),
             ),
             _isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
+                ? Material(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/circularProgress.png'),
+                              const SizedBox(
+                                height: 60,
+                              ),
+                              Text(
+                                'Preparing your cart',
+                                style: TextStyle(
+                                  color: AppColors().brandDark,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text(
+                                'Please wait while we prepare your cart',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   )
-                : Text('')
+                : _isInitBuffer
+                    ? Material(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.white,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset('assets/circularProgress.png'),
+                                  const SizedBox(
+                                    height: 60,
+                                  ),
+                                  Text(
+                                    'Initiating Payment',
+                                    style: TextStyle(
+                                      color: AppColors().brandDark,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  const Text(
+                                    'Connecting to razorPay',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 15),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Text('')
           ],
         );
       },

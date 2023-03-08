@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../../../models/ondc/shop_model.dart';
+import '../../../models/ondc/single_order_model.dart';
 import '../../../pages/ondc/ondc_contact_support/ondc_contact_support_enter_query_screen/ondc_contact_support_enter_query_screen_mobile.dart';
 import '../../../pages/ondc/ondc_contact_support/ondc_contact_support_shop_contact_details_screen/ondc_contact_support_shop_contact_details_screen_mobile.dart';
 import '../../../pages/ondc/ondc_return_screens/ondc_return_acknowledgement _screen/ondc_return_acknowledgement _screen_mobile.dart';
@@ -49,21 +50,23 @@ class CustomerContactCubit extends Cubit<CustomerContactState>{
 
   }
 
-  void customerContact({required ShopModel model}){
+  void customerContact({required SingleOrderModel model}){
 
-    String mail = model.email.toString();
-    String phone = model.phone.toString();
+    String mail = (model.storeLocation?.store?.email).toString();
+    String phone = (model.storeLocation?.store?.phone).toString();
 
     if( mail != "null" && mail != "" && phone != "null" && phone != ""){
       ///Navigate to contact details
 
       Get.to(()=>  ONDCContactSupportShopContactDetailsScreen(
-        shopModel: model,
+        model: model,
       ));
 
     }else{
       ///Navigate to query screen
-      Get.to(()=>  ONDCContactSupportEnterQueryScreenMobile());
+      Get.to(()=>  ONDCContactSupportEnterQueryScreenMobile(
+        store: model,
+      ));
 
     }
   }

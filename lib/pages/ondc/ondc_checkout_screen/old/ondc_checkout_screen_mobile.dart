@@ -291,8 +291,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
 
-          warningLog(
-              "RECEIVED ORDERID HERE#########################   $orderId");
+
           openCheckout(profileController);
         }
         if (state is FinalizePaymentLoading) {

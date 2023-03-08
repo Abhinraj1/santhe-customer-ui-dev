@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:santhe/manager/font_manager.dart';
 
 class OrderDetailsTable extends StatelessWidget {
-  final Function()? onTap;
   final String redTextButtonTitle,
       firstTitle,firstData,
       secondTitle,secondData,
@@ -20,7 +19,7 @@ class OrderDetailsTable extends StatelessWidget {
     required this.secondTitle, required this.secondData,
     required this.thirdTitle, required this.thirdData,
     required this.fourthTitle, required this.fourthData,
-    this.onTap,
+
      this.horizontalPadding,
      this.verticalPadding, this.thirdDataOnTap, this.thirdDataTextStyle}) : super(key: key);
 
@@ -89,18 +88,10 @@ class OrderDetailsTable extends StatelessWidget {
           TableRow(
               children: [
                 const SizedBox(),
-                onTap != null ?
-                InkWell(
-                    onTap: (){
 
-                      onTap!();
-
-
-                    },
-                    child: Text(redTextButtonTitle,
-                        style: FontStyleManager().s12fw500Red,
-                        textAlign: TextAlign.right)) :
-                const SizedBox(),
+                Text(redTextButtonTitle,
+                    style: FontStyleManager().s12fw500Red,
+                    textAlign: TextAlign.right)
 
               ]
           ),

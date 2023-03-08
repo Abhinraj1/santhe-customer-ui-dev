@@ -1,19 +1,31 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import 'package:santhe/manager/font_manager.dart';
 import '../../../../constants.dart';
 
 
-class SelectDateFilter extends StatelessWidget {
+class SelectDateFilter extends StatefulWidget {
   const SelectDateFilter({Key? key}) : super(key: key);
 
   @override
+  State<SelectDateFilter> createState() => _SelectDateFilterState();
+}
+
+class _SelectDateFilterState extends State<SelectDateFilter> {
+
+  String selectedValue = "";
+  String hint = "";
+  @override
   Widget build(BuildContext context) {
 
-    List<String> groupValue = ["7days","30days","custom"];
 
-    String currentValue = groupValue[0];
+
+
+
+   // bool isSelected = selectedValue == groupValue[0] ? true : false;
 
 
     TextEditingController datePickedController = TextEditingController();
@@ -97,143 +109,224 @@ class SelectDateFilter extends StatelessWidget {
 
     return Container(
       height: 130,
-      width: 300,
       margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 30),
       decoration: BoxDecoration(
         color: AppColors().white100,
         borderRadius: BorderRadius.circular(customButtonBorderRadius),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          SizedBox(
-            width: 280,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 110,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      LimitedBox(
-                        maxWidth: 20,
-                        child: Radio(
-                            fillColor: MaterialStateProperty.resolveWith((states) {
-                              if(currentValue == groupValue[0]){
-                                return AppColors().primaryOrange;
-                              }
-                              return AppColors().grey80;
-                            }),
-
-                            activeColor: Colors.red,
-                            value: groupValue[0],
-                            groupValue: currentValue ,
-                            onChanged: (value){
-                              currentValue = value.toString();
-                            }
-                        ),
+          Padding(
+            padding: const EdgeInsets.only(left:20 ,top: 10.0),
+            child: SizedBox(
+              width: 300,
+              child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      BlocProvider.of<OrderHistoryBloc>(context).add(SevenDaysFilterEvent());
+                      setState(() {
+                        selectedValue = "7days";
+                      });
+                    },
+                    child: SizedBox(
+                      width: 125,
+                      child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 15,
+                            width: 15,
+                            margin: const EdgeInsets.only(right: 10),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                border: Border.all(
+                                    width: 1.5,
+                                    color: selectedValue == "7days"
+                                        ? AppColors().primaryOrange
+                                        : AppColors().grey100)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: CircleAvatar(
+                                  backgroundColor: selectedValue == "7days"
+                                      ? AppColors().primaryOrange
+                                      : AppColors().white100),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 80,
+                            child: Text(
+                              "Last 7 Days",
+                              style: selectedValue == "7days" ?
+                              FontStyleManager().s14fw700Orange :
+                              FontStyleManager().s14fw600Grey
+                              ,
+                            ),
+                          )
+                        ],
                       ),
-                      InkWell(
-                        onTap: (){
-                          currentValue = groupValue[0];
-                        },
-                        child: Text("Last 7 Days",
-                            style: currentValue == groupValue[0] ?
-                            FontStyleManager().s14fw700Orange:
-                            FontStyleManager().s14fw700Grey),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 110,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      LimitedBox(
-                        maxWidth: 20,
-                        child: Radio(
-                            fillColor: MaterialStateProperty.resolveWith((states) {
-                              if(currentValue == groupValue[1]){
-                                return AppColors().primaryOrange;
-                              }
-                              return AppColors().grey80;
-                            }),
 
-                            activeColor: Colors.red,
-                            value: groupValue[1],
-                            groupValue: currentValue ,
-                            onChanged: (value){
-                              currentValue = value.toString();
-                            }
-                        ),
+                  ///30 Days
+                  InkWell(
+                    onTap: (){
+                      setState(() {
+                        BlocProvider.of<OrderHistoryBloc>(context).add(ThirtyDaysFilterEvent());
+                        selectedValue = "30days";
+                      });
+                    },
+                    child: SizedBox(
+                      width: 125,
+                      child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 15,
+                            width: 15,
+                            margin: const EdgeInsets.only(right: 10),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                border: Border.all(
+                                    width: 1.5,
+                                    color: selectedValue == "30days"
+                                        ? AppColors().primaryOrange
+                                        : AppColors().grey100)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: CircleAvatar(
+                                  backgroundColor: selectedValue == "30days"
+                                      ? AppColors().primaryOrange
+                                      : AppColors().white100),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 100,
+                            child: Text(
+                              "Last 30 Days",
+                              style: selectedValue == "30days" ?
+                              FontStyleManager().s14fw700Orange :
+                              FontStyleManager().s14fw600Grey
+                              ,
+                            ),
+                          )
+                        ],
                       ),
-                      InkWell(
-                        onTap: (){
-                          currentValue = groupValue[1];
-                        },
-                        child: Text("Last 30 Days",
-                            style: currentValue == groupValue[1] ?
-                            FontStyleManager().s14fw700Orange:
-                            FontStyleManager().s14fw700Grey),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: SizedBox(
-                width: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    LimitedBox(
-                      maxWidth: 20,
-                      maxHeight: 30,
-                      child: Radio(
-                          fillColor: MaterialStateProperty.resolveWith((states) {
-                            if(currentValue == groupValue[2]){
-                              return AppColors().primaryOrange;
-                            }
-                            return AppColors().grey80;
-                          }),
+          ///Custom
+          SizedBox(
+            width: 300,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12.0,top: 10),
 
-                          activeColor: Colors.red,
-                          value: groupValue[2],
-                          groupValue: currentValue ,
-                          onChanged: (value){
-                            currentValue = value.toString();
+                child: InkWell(
+                  onTap: ()async {
+                    setState(() {
+                      selectedValue = "custom";
+                    });
+                    final values = await showCalendarDatePicker2Dialog(
+                      context: context,
+                      config: config,
+                      dialogSize: const Size(325, 400),
+                      borderRadius: BorderRadius.circular(15),
+                      dialogBackgroundColor: Colors.white,
+                    );
+
+                    if (values != null) {
+
+                      BlocProvider.of<OrderHistoryBloc>(context).add(CustomDaysFilterEvent(
+                          selectedDates: values));
+
+                      datePickedController.text = _getValueText(
+                        config.calendarType,
+                        values,
+                      );
+
+
+
+                    }
+                  },
+                  child: SizedBox(
+                    width: 80,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 15,
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(
+                                  width: 1.5,
+                                  color: selectedValue == "custom"
+                                      ? AppColors().primaryOrange
+                                      : AppColors().grey100)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: CircleAvatar(
+                                backgroundColor: selectedValue == "custom"
+                                    ? AppColors().primaryOrange
+                                    : AppColors().white100),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              selectedValue = "custom";
+                            });
+                            final values = await showCalendarDatePicker2Dialog(
+                              context: context,
+                              config: config,
+                              dialogSize: const Size(325, 400),
+                              borderRadius: BorderRadius.circular(15),
+                              dialogBackgroundColor: Colors.white,
+                            );
+                            if (values != null) {
+
+                              datePickedController.text = _getValueText(
+                                config.calendarType,
+                                values,
+                              );
+                            }
                           }
-                      ),
+
+                          ,
+                          child: Text("Custom",
+                              style: selectedValue == "custom" ?
+                              FontStyleManager().s14fw700Orange:
+                              FontStyleManager().s14fw700Grey),
+                        ),
+                      ],
                     ),
-                    InkWell(
-                      onTap: (){
-                        currentValue = groupValue[2];
-                      },
-                      child: Text("Custom",
-                          style: currentValue == groupValue[2] ?
-                          FontStyleManager().s14fw700Orange:
-                          FontStyleManager().s14fw700Grey),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+            padding: const EdgeInsets.only(left: 20.0,bottom: 10),
             child: SizedBox(
               height: 40,
               width: 250,
               child: TextField(
                 onTap: () async {
-                  currentValue = groupValue[2];
                   final values = await showCalendarDatePicker2Dialog(
                     context: context,
                     config: config,
@@ -241,20 +334,30 @@ class SelectDateFilter extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     dialogBackgroundColor: Colors.white,
                   );
+
                   if (values != null) {
 
-                    datePickedController.text = _getValueText(
-                      config.calendarType,
-                      values,
-                    );
+                    BlocProvider.of<OrderHistoryBloc>(context).add(CustomDaysFilterEvent(
+                        selectedDates: values));
 
-
+                    setState(() {
+                      selectedValue = "custom";
+                      datePickedController.text = _getValueText(
+                        config.calendarType,
+                        values,
+                      );
+                      hint = _getValueText(
+                        config.calendarType,
+                        values,
+                      );
+                    });
                   }
                 },
                 controller: datePickedController,
-                style: FontStyleManager().s14fw700Grey,
                 readOnly: true,
                 decoration: InputDecoration(
+                  hintText: hint,
+                    hintStyle: FontStyleManager().s14fw700Orange,
                     contentPadding: const EdgeInsets.only(left: 20,bottom: 10),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(kTextFieldCircularBorderRadius),
@@ -269,7 +372,9 @@ class SelectDateFilter extends StatelessWidget {
                       ),
                     ),
                     suffixIcon: Icon(Icons.calendar_today,
-                      color: AppColors().grey60,)
+                      color:  selectedValue == "custom"
+                          ? AppColors().primaryOrange
+                          : AppColors().grey60,)
                 ),
               ),
             ),

@@ -45,7 +45,7 @@ class SingleOrderModel {
     payment = json["payment"] == null ? null : Payment.fromJson(json["payment"]);
   }
 
-  static List<SingleOrderModel> fromList(List<Map<String, dynamic>> list) {
+  static List<SingleOrderModel> fromList(List<dynamic> list) {
     return list.map((map) => SingleOrderModel.fromJson(map)).toList();
   }
 
@@ -86,7 +86,7 @@ class Payment {
   dynamic razorpayPaymentId;
   String? razorpayOrderId;
   bool? paymentStatus;
-  int? amountInCents;
+  String? amountInCents;
   dynamic transactionId;
   String? messageId;
   String? createdAt;
@@ -101,7 +101,7 @@ class Payment {
     razorpayPaymentId = json["razorpay_payment_id"];
     razorpayOrderId = json["razorpay_order_id"];
     paymentStatus = json["payment_status"];
-    amountInCents = json["amountInCents"];
+    amountInCents = json["amountInCents"].toString();
     transactionId = json["transaction_id"];
     messageId = json["message_id"];
     createdAt = json["createdAt"];
@@ -336,7 +336,7 @@ class Quotes {
   dynamic transactionId;
   String? messageId;
   String? currency;
-  double? totalPrice;
+  String? totalPrice;
   String? status;
   String? createdAt;
   String? updatedAt;
@@ -352,7 +352,7 @@ class Quotes {
     transactionId = json["transaction_id"];
     messageId = json["message_id"];
     currency = json["currency"];
-    totalPrice = json["total_price"].toDouble();
+    totalPrice = json["total_price"].toString();
     status = json["status"];
     createdAt = json["createdAt"];
     updatedAt = json["updatedAt"];
@@ -464,7 +464,7 @@ class Tracks {
 
 class CartItemPrices {
   String? id;
-  double? price;
+  String? price;
   String? title;
   String? type;
   int? quantity;
@@ -484,7 +484,7 @@ class CartItemPrices {
 
   CartItemPrices.fromJson(Map<String, dynamic> json) {
     id = json["id"];
-    price = json["price"].toDouble();
+    price = json["price"].toString();
     title = json["title"];
     type = json["type"];
     quantity = json["quantity"];

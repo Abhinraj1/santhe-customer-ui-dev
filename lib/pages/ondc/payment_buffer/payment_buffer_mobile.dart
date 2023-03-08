@@ -1,7 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of payment_buffer_view;
 
 class _PaymentBufferMobile extends StatefulWidget {
-  _PaymentBufferMobile();
+  final String messageID;
+  final String transactionId;
+  _PaymentBufferMobile({
+    required this.messageID,
+    required this.transactionId,
+  });
 
   @override
   State<_PaymentBufferMobile> createState() => _PaymentBufferMobileState();
@@ -25,9 +31,16 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
         );
       }
       if (state is FinalizePaymentErrorState) {
-        Get.off(
-          () => const ErrorNackView(),
-        );
+        warningLog('Verify payment api error  ${state.message}');
+        if (state.message.contains('ERROR')) {
+          Get.off(
+            () => ErrorNackView(
+              message: state.message,
+            ),
+          );
+        } else if (state.message.contains('SYSTEM_ERROR')) {
+          errorLog('Check sequence of apis called');
+        }
       }
     }, builder: (context, state) {
       return Scaffold(

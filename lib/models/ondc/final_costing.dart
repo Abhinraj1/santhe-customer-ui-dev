@@ -9,12 +9,14 @@ class FinalCostingModel extends Equatable {
   final dynamic miscCost;
   final dynamic tax;
   final dynamic deliveryCost;
+  final dynamic totalCost;
   const FinalCostingModel({
     required this.itemCost,
     required this.discount,
     required this.miscCost,
     required this.tax,
     required this.deliveryCost,
+    required this.totalCost,
   });
 
   FinalCostingModel copyWith({
@@ -23,6 +25,7 @@ class FinalCostingModel extends Equatable {
     dynamic? miscCost,
     dynamic? tax,
     dynamic? deliveryCost,
+    dynamic? totalCost,
   }) {
     return FinalCostingModel(
       itemCost: itemCost ?? this.itemCost,
@@ -30,6 +33,7 @@ class FinalCostingModel extends Equatable {
       miscCost: miscCost ?? this.miscCost,
       tax: tax ?? this.tax,
       deliveryCost: deliveryCost ?? this.deliveryCost,
+      totalCost: totalCost ?? this.totalCost,
     );
   }
 
@@ -40,6 +44,7 @@ class FinalCostingModel extends Equatable {
       'miscCost': miscCost,
       'tax': tax,
       'deliveryCost': deliveryCost,
+      'totalCost': totalCost,
     };
   }
 
@@ -51,6 +56,7 @@ class FinalCostingModel extends Equatable {
       tax: map['tax'] != null ? map['tax'] as dynamic : null,
       deliveryCost:
           map['deliveryCost'] != null ? map['deliveryCost'] as dynamic : null,
+      totalCost: map['totalCost'] != null ? map['totalCost'] as dynamic : null,
     );
   }
 
@@ -70,6 +76,7 @@ class FinalCostingModel extends Equatable {
       miscCost,
       tax,
       deliveryCost,
+      totalCost,
     ];
   }
 }

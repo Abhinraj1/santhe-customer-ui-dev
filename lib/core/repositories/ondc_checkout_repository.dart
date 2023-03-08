@@ -21,9 +21,14 @@ class OndcCheckoutRepository with LogMixin {
   String receiptNo = '';
   String offer_id = '';
   String orderIdCart = '';
+  String oneOrMoreItemsNotAvailable = '';
 
   String get orderId {
     return orderIdCart;
+  }
+
+  String get oneOrMoreItemsHasChanged {
+    return oneOrMoreItemsNotAvailable;
   }
 
   double? get costCheckout {
@@ -131,9 +136,7 @@ class OndcCheckoutRepository with LogMixin {
       final response = await http.get(url, headers: header);
       final responseBody = await json.decode(response.body);
       warningLog('$url $responseBody');
-      // if(responseBody['message'].toString().contains('Seller has not responded')){
-      //   throw Finalize
-      // }
+
       dynamic map = responseBody['finalCosting'];
       items = responseBody['data']['quotes'] as List<dynamic>;
       orderIdCart = items.first['orderId'] as String;
@@ -150,6 +153,13 @@ class OndcCheckoutRepository with LogMixin {
       }
       finalCostingModel = FinalCostingModel.fromMap(map);
       warningLog(' cost$finalCostingModel $previewModels');
+      if (responseBody['message']
+          .toString()
+          .contains('Quantity of one more items in your cart is updated')) {
+        throw const FinalizeProductErrorState(
+            message:
+                'Quantity of one or more items items in your cart is updated or are not deliverable anymore.please review before proceeding');
+      }
       return finalCostingModel;
     } catch (e) {
       throw FinalizeProductErrorState(
@@ -255,17 +265,32 @@ class OndcCheckoutRepository with LogMixin {
       {required String messageId, required String transactionId}) async {
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/confirm/order');
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
     try {
       final response = await http.post(
         url,
+        headers: header,
         body: json.encode(
           {"transaction_id": transactionId, "message_id": messageId},
         ),
       );
       final responseBody = json.decode(response.body);
-      warningLog('$responseBody');
+      warningLog('confirm order url $url and confirm order body $responseBody');
+      final typeErrorMessage = responseBody['type'];
+      debugLog('$typeErrorMessage');
+      if (typeErrorMessage.toString().contains('ERROR')) {
+        throw FinalizePaymentErrorState(message: responseBody['message']);
+      }
+      if (typeErrorMessage.toString().contains('SYSTEM_ERROR')) {
+        throw FinalizePaymentErrorState(message: responseBody['message']);
+      }
     } catch (e) {
-      rethrow;
+      throw FinalizePaymentErrorState(
+        message: e.toString(),
+      );
     }
   }
 

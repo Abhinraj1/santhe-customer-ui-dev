@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:santhe/manager/font_manager.dart';
 
 class OrderDetailsTable extends StatelessWidget {
-  final Function()? onTap;
   final String redTextButtonTitle,
       firstTitle,firstData,
       secondTitle,secondData,
       thirdTitle,thirdData,
       fourthTitle,fourthData;
 
-  final Function()? thirdDataOnTap;
   final TextStyle? thirdDataTextStyle;
   final double? horizontalPadding,
                 verticalPadding;
@@ -20,9 +18,9 @@ class OrderDetailsTable extends StatelessWidget {
     required this.secondTitle, required this.secondData,
     required this.thirdTitle, required this.thirdData,
     required this.fourthTitle, required this.fourthData,
-    this.onTap,
+
      this.horizontalPadding,
-     this.verticalPadding, this.thirdDataOnTap, this.thirdDataTextStyle}) : super(key: key);
+     this.verticalPadding, this.thirdDataTextStyle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,17 +58,11 @@ class OrderDetailsTable extends StatelessWidget {
                   padding: const EdgeInsets.all(5.0),
                   child: Text(thirdTitle,style: FontStyleManager().s14fw800Grey,),
                 ),
-                InkWell(
 
-                  onTap: (){
-                    if(thirdDataOnTap != null){
-                      thirdDataOnTap!();
-                    }
 
-                  },
-                    child: Text(
-                        thirdData,style: thirdDataTextStyle ?? FontStyleManager().s14fw700Grey,
-                        textAlign: TextAlign.right)),
+                Text(
+                    thirdData,style: thirdDataTextStyle ?? FontStyleManager().s14fw700Grey,
+                    textAlign: TextAlign.right),
 
               ]
           ),
@@ -89,18 +81,10 @@ class OrderDetailsTable extends StatelessWidget {
           TableRow(
               children: [
                 const SizedBox(),
-                onTap != null ?
-                InkWell(
-                    onTap: (){
 
-                      onTap!();
-
-
-                    },
-                    child: Text(redTextButtonTitle,
-                        style: FontStyleManager().s12fw500Red,
-                        textAlign: TextAlign.right)) :
-                const SizedBox(),
+                Text(redTextButtonTitle,
+                    style: FontStyleManager().s12fw500Red,
+                    textAlign: TextAlign.right)
 
               ]
           ),

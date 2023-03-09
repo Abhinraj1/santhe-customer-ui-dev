@@ -1,7 +1,27 @@
 
 
-abstract class OrderDetailsState {}
+import '../../../models/ondc/single_order_model.dart';
 
-class ShowCancelButton extends OrderDetailsState{}
+abstract class OrderDetailsButtonState {}
 
-class HideCancelButton extends OrderDetailsState{}
+class ShowCancelButton extends OrderDetailsButtonState{}
+
+class HideCancelButton extends OrderDetailsButtonState{}
+
+
+
+abstract class OrderDetailsScreenState{}
+
+class OrderDetailsDataLoadedState extends OrderDetailsScreenState{
+  final List<SingleOrderModel> orderDetails;
+
+  OrderDetailsDataLoadedState({required this.orderDetails});
+
+}
+
+class OrderDetailsDataLoadingState extends OrderDetailsScreenState{}
+
+class OrderDetailsErrorState extends OrderDetailsScreenState{
+  final String message;
+  OrderDetailsErrorState({required this.message});
+}

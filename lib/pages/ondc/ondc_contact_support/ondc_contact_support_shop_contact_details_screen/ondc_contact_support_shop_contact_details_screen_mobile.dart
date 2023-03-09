@@ -1,22 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_colors.dart';
+import '../../../../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../models/ondc/shop_model.dart';
+import '../../../../models/ondc/single_order_model.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/ondc_contact_support_widgets/shop_contact_support_card.dart';
 
-class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
-  final ShopModel shopModel;
+class ONDCContactSupportShopContactDetailsScreen extends StatefulWidget {
+  final SingleOrderModel model;
   const ONDCContactSupportShopContactDetailsScreen(
-      {Key? key, required this.shopModel})
+      {Key? key, required this.model})
       : super(key: key);
 
   @override
+  State<ONDCContactSupportShopContactDetailsScreen> createState() => _ONDCContactSupportShopContactDetailsScreenState();
+}
+
+class _ONDCContactSupportShopContactDetailsScreenState extends State<ONDCContactSupportShopContactDetailsScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    BlocProvider.of<OrderHistoryBloc>(context).add
+      (const LoadPastOrderDataEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String orderId = "0123456";
+    String orderId = widget.model.orderNumber.toString();
 
     return CustomScaffold(
         backgroundColor: AppColors().grey20,
@@ -46,8 +63,11 @@ class ONDCContactSupportShopContactDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            ShopContactSupportCard(model: shopModel),
-            CustomButton(verticalPadding: 50, onTap: () {}, buttonTitle: "Back")
+            ShopContactSupportCard(model: widget.model),
+            CustomButton(
+                verticalPadding: 50,
+                onTap: () {},
+                buttonTitle: "Back")
           ],
         ));
   }

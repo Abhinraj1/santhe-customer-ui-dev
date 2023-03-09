@@ -310,8 +310,11 @@ class OndcRepository with LogMixin {
     }
   }
 
+
+
   Future<List<SingleOrderModel>> getSingleOrder(
       {required String OrderId}) async {
+
     String orderId = OrderId;
     // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
     //  "e80574c6-32f2-45ce-8b67-d97a89490523";
@@ -325,7 +328,7 @@ class OndcRepository with LogMixin {
     };
 
     try {
-      warningLog('GET PAST ODER DETAILS $url');
+      warningLog('GET Single ODER DETAILS $url');
 
       final response = await http.get(url, headers: header);
 
@@ -336,8 +339,47 @@ class OndcRepository with LogMixin {
       warningLog(' respose here =============############### $responseBody');
 
       List<SingleOrderModel> data =
-          []; //SingleOrderModel.fromJson(responseBody);
+      []; //SingleOrderModel.fromJson(responseBody);
       data.add(SingleOrderModel.fromJson(responseBody));
+
+      warningLog('${data.first.quotes!.first.status}');
+
+      return data;
+    } catch (e) {
+      warningLog(e.toString());
+
+      rethrow;
+    }
+  }
+
+
+  Future<List<SingleOrderModel>> getPastOrder() async {
+
+    final firebaseId = //"8808435978";
+    AppHelpers().getPhoneNumberWithoutCountryCode;
+
+
+    final url = Uri.parse(
+        "http://ondcstaging.santhe.in/santhe/ondc/customer/"
+            "order/list?limit=10&offset=0&firebase_id=$firebaseId&status=PAID");
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
+    try {
+      warningLog('GET Past ODER DETAILS $url');
+
+      final response = await http.get(url, headers: header);
+
+      warningLog('${response.statusCode}');
+
+      final responseBody = await json.decode(response.body)["data"]["rows"];
+
+      warningLog(' respose here =============############### $responseBody');
+
+      List<SingleOrderModel> data = SingleOrderModel.fromList(responseBody);
 
       warningLog('${data.first.quotes!.first.status}');
 

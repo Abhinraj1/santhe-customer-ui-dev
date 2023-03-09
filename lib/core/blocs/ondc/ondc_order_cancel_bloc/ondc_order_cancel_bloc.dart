@@ -35,7 +35,7 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
     on<ONDCOrderCancelEvent>((event, emit) {});
 
 
-    on<FullOrderCancelEvent>((event, emit) async {
+    on<LoadReasonsForFullOrderCancelEvent>((event, emit) async {
 
 
       Get.to(()=> const ONDCOrderCancelView());
@@ -58,6 +58,62 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
 
     });
 
+
+
+
+
+    on<LoadReasonsForPartialOrderCancelEvent>((event, emit) async {
+
+
+      Get.to(()=> const ONDCOrderCancelView());
+
+
+      emit(Loading());
+
+      try{
+        reasons = await orderCancelRepository.getOrderCancelReasons();
+        orderId = event.orderId;
+        orderNumber = event.orderNumber;
+        emit(ReasonsLoadedPartialOrderCancelState(
+            reasons: reasons,
+            orderId: event.orderId,
+            orderNumber: event.orderNumber));
+
+      }catch(e){
+        emit(OrderCancelErrorState(message: e.toString()));
+      }
+
+    });
+
+
+
+    on<CancelPartialOrderRequestEvent>((event, emit) async{
+
+      print("Selected code iss ############################################## $selectedCode");
+
+      emit(Loading());
+
+      try{
+        // reasons = await orderCancelRepository.getOrderCancelReasons();
+
+        String status = await orderCancelRepository.fullOrderCancelPost(
+            code: selectedCode,
+            orderId: orderId);
+
+        if(status == "ACK" ){
+
+          Get.to(()=> ONDCOrderCancelAcknowledgementView(orderNumber: orderNumber));
+
+          emit(FullOrderCancelRequestSentState());
+
+        }
+
+      }catch(e){
+        emit(OrderCancelErrorState(message: e.toString()));
+      }
+
+    });
+
   on<CancelFullOrderRequestEvent>((event, emit) async{
 
     print("Selected code iss ############################################## $selectedCode");
@@ -65,7 +121,7 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
     emit(Loading());
 
     try{
-      // reasons = await orderCancelRepository.getOrderCancelReasons();
+
 
       String status = await orderCancelRepository.fullOrderCancelPost(
           code: selectedCode,

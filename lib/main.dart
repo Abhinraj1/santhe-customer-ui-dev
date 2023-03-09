@@ -118,14 +118,20 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<CustomerContactCubit>(
                 create: (context) => CustomerContactCubit()),
-            BlocProvider<OrderDetailsCubit>(
-                create: (context) => OrderDetailsCubit()),
+
+            BlocProvider<OrderDetailsScreenCubit>(
+                create: (context) => OrderDetailsScreenCubit(
+                  ondcRepository: context.read<OndcRepository>()
+                )),
+
+            BlocProvider<OrderDetailsButtonCubit>(
+                create: (context) => OrderDetailsButtonCubit()),
             BlocProvider<ONDCOrderCancelBloc>(
                 create: (context) => ONDCOrderCancelBloc(
                     orderCancelRepository:
                         context.read<ONDCOrderCancelRepository>())),
-            BlocProvider<SingleOrderDetailsBloc>(
-              create: (context) => SingleOrderDetailsBloc(
+            BlocProvider<OrderHistoryBloc>(
+              create: (context) => OrderHistoryBloc(
                   ondcRepository: context.read<OndcRepository>()),
             )
           ],

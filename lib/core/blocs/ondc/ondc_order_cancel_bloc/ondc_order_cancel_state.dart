@@ -27,6 +27,19 @@ class ReasonsLoadedFullOrderCancelState extends ONDCOrderCancelState {
   List<Object?> get props => [reasons,orderNumber,orderId];
 }
 
+class ReasonsLoadedPartialOrderCancelState extends ONDCOrderCancelState {
+
+  final List<ReasonsModel> reasons;
+
+  final String orderId;
+
+  final String orderNumber;
+
+  const ReasonsLoadedPartialOrderCancelState( {required this.reasons ,required this.orderId, required this.orderNumber,});
+  @override
+  List<Object?> get props => [reasons,orderNumber,orderId];
+}
+
 class ReasonsLoaded extends ONDCOrderCancelState {
 
   final List<ReasonsModel> reasons;

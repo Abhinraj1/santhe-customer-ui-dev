@@ -25,12 +25,24 @@ class CancelSingleOrderEvent extends ONDCOrderCancelEvent{
 class CancelFullOrderRequestEvent extends ONDCOrderCancelEvent{}
 
 
+class CancelPartialOrderRequestEvent extends ONDCOrderCancelEvent{}
 
-class FullOrderCancelEvent extends ONDCOrderCancelEvent{
+
+class LoadReasonsForFullOrderCancelEvent extends ONDCOrderCancelEvent{
   final String orderId;
   final String orderNumber;
 
-  const FullOrderCancelEvent({required this.orderId,required this.orderNumber});
+  const LoadReasonsForFullOrderCancelEvent({required this.orderId,required this.orderNumber});
+
+  @override
+  List<Object?> get props => [orderId,orderNumber,orderId];
+}
+
+class LoadReasonsForPartialOrderCancelEvent extends ONDCOrderCancelEvent{
+  final String orderId;
+  final String orderNumber;
+
+  const LoadReasonsForPartialOrderCancelEvent({required this.orderId,required this.orderNumber});
 
   @override
   List<Object?> get props => [orderId,orderNumber,orderId];

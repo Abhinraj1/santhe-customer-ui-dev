@@ -22,7 +22,8 @@ class InvoiceTable extends StatelessWidget {
       int subtotal = 0;
       for(var i in prices){
         if(i.type == "item"){
-         subtotal = subtotal+i.price!.toInt();
+         int price  = int.parse(i.price.toString());
+         subtotal = subtotal+price.toInt();
          return subtotal.toString();
         }
       }
@@ -40,7 +41,7 @@ class InvoiceTable extends StatelessWidget {
               data: "₹$subTotal"
             ),
             SizedBox(
-              height: prices.length*15,
+              height: prices.length*17,
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                  itemCount: prices.length,

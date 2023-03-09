@@ -3,8 +3,8 @@ part of "ondc_single_order_details_bloc.dart";
 
 
 
-abstract class SingleOrdersDetailsState extends Equatable {
-  const SingleOrdersDetailsState();
+abstract class OrderHistoryState extends Equatable {
+  const OrderHistoryState();
 
   @override
   List<Object?> get props => [];
@@ -13,11 +13,40 @@ abstract class SingleOrdersDetailsState extends Equatable {
 
 
 
-class LoadDataState extends SingleOrdersDetailsState{}
+class LoadDataState extends OrderHistoryState{}
 
-class LoadingState extends SingleOrdersDetailsState{}
+class LoadingState extends OrderHistoryState{}
 
-class DataLoadedState extends SingleOrdersDetailsState{
+class SevenDaysFilterState extends OrderHistoryState{
+
+  final List<SingleOrderModel> orderDetails;
+
+  const SevenDaysFilterState({required this.orderDetails});
+
+  @override
+  List<Object?> get props => [orderDetails];
+}
+
+class ThirtyDaysFilterState extends OrderHistoryState{
+  final List<SingleOrderModel> orderDetails;
+
+  const ThirtyDaysFilterState({required this.orderDetails});
+
+  @override
+  List<Object?> get props => [orderDetails];
+}
+
+class CustomDaysFilterState extends OrderHistoryState{
+  final List<SingleOrderModel> orderDetails;
+
+  const CustomDaysFilterState({required this.orderDetails});
+
+  @override
+  List<Object?> get props => [orderDetails];
+}
+
+
+class DataLoadedState extends OrderHistoryState{
 
  final List<SingleOrderModel> orderDetails;
 
@@ -28,7 +57,18 @@ class DataLoadedState extends SingleOrdersDetailsState{
 
 }
 
-class SingleOrderErrorState extends SingleOrdersDetailsState{
+class PastOrderDataLoadedState extends OrderHistoryState{
+
+  final List<SingleOrderModel> orderDetails;
+
+  const PastOrderDataLoadedState({required this.orderDetails});
+
+  @override
+  List<Object?> get props => [orderDetails];
+
+}
+
+class SingleOrderErrorState extends OrderHistoryState{
 
   final String message;
 

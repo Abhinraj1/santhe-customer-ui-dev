@@ -45,7 +45,7 @@ class SingleOrderModel {
     payment = json["payment"] == null ? null : Payment.fromJson(json["payment"]);
   }
 
-  static List<SingleOrderModel> fromList(List<Map<String, dynamic>> list) {
+  static List<SingleOrderModel> fromList(List<dynamic> list) {
     return list.map((map) => SingleOrderModel.fromJson(map)).toList();
   }
 
@@ -86,7 +86,7 @@ class Payment {
   dynamic razorpayPaymentId;
   String? razorpayOrderId;
   bool? paymentStatus;
-  int? amountInCents;
+  String? amountInCents;
   dynamic transactionId;
   String? messageId;
   String? createdAt;
@@ -101,7 +101,7 @@ class Payment {
     razorpayPaymentId = json["razorpay_payment_id"];
     razorpayOrderId = json["razorpay_order_id"];
     paymentStatus = json["payment_status"];
-    amountInCents = json["amountInCents"];
+    amountInCents = json["amountInCents"].toString();
     transactionId = json["transaction_id"];
     messageId = json["message_id"];
     createdAt = json["createdAt"];
@@ -336,7 +336,7 @@ class Quotes {
   dynamic transactionId;
   String? messageId;
   String? currency;
-  double? totalPrice;
+  String? totalPrice;
   String? status;
   String? createdAt;
   String? updatedAt;
@@ -352,7 +352,7 @@ class Quotes {
     transactionId = json["transaction_id"];
     messageId = json["message_id"];
     currency = json["currency"];
-    totalPrice = json["total_price"].toDouble();
+    totalPrice = json["total_price"].toString();
     status = json["status"];
     createdAt = json["createdAt"];
     updatedAt = json["updatedAt"];
@@ -391,6 +391,7 @@ class Quotes {
 class Tracks {
   String? id;
   String? transactionId;
+  String? fulfillmentId;
   String? messageId;
   String? deliveryPartner;
   String? type;
@@ -409,11 +410,16 @@ class Tracks {
   dynamic deletedAt;
   String? quoteId;
 
-  Tracks({this.id, this.transactionId, this.messageId, this.deliveryPartner, this.type, this.startRangeEnd, this.startRangeStart, this.endRangeStart, this.endRangeEnd, this.state, this.deliveryCode, this.deliveryContactPhone, this.status, this.label, this.url, this.createdAt, this.updatedAt, this.deletedAt, this.quoteId});
+  Tracks({this.id, this.transactionId, this.messageId,this.fulfillmentId,
+    this.deliveryPartner, this.type, this.startRangeEnd, this.startRangeStart,
+    this.endRangeStart, this.endRangeEnd, this.state, this.deliveryCode,
+    this.deliveryContactPhone, this.status, this.label, this.url, this.createdAt,
+    this.updatedAt, this.deletedAt, this.quoteId});
 
   Tracks.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     transactionId = json["transaction_id"];
+    fulfillmentId = json["fulfillment_id"];
     messageId = json["message_id"];
     deliveryPartner = json["delivery_partner"];
     type = json["type"];
@@ -442,6 +448,7 @@ class Tracks {
     _data["id"] = id;
     _data["transaction_id"] = transactionId;
     _data["message_id"] = messageId;
+    _data["fulfillment_id"] = fulfillmentId;
     _data["delivery_partner"] = deliveryPartner;
     _data["type"] = type;
     _data["startRangeEnd"] = startRangeEnd;
@@ -464,7 +471,7 @@ class Tracks {
 
 class CartItemPrices {
   String? id;
-  double? price;
+  String? price;
   String? title;
   String? type;
   int? quantity;
@@ -478,13 +485,13 @@ class CartItemPrices {
   dynamic deletedAt;
   String? quoteId;
   dynamic deliveryFulfillmentId;
-  dynamic deliveryFulfillment;
+  DeliveryFulfillment? deliveryFulfillment;
 
   CartItemPrices({this.id, this.price, this.title, this.type, this.quantity, this.ondcItemId, this.status, this.cancellable, this.symbol, this.returnable, this.createdAt, this.updatedAt, this.deletedAt, this.quoteId, this.deliveryFulfillmentId, this.deliveryFulfillment});
 
   CartItemPrices.fromJson(Map<String, dynamic> json) {
     id = json["id"];
-    price = json["price"].toDouble();
+    price = json["price"].toString();
     title = json["title"];
     type = json["type"];
     quantity = json["quantity"];
@@ -498,7 +505,7 @@ class CartItemPrices {
     deletedAt = json["deletedAt"];
     quoteId = json["quoteId"];
     deliveryFulfillmentId = json["deliveryFulfillmentId"];
-    deliveryFulfillment = json["deliveryFulfillment"];
+    deliveryFulfillment = json["deliveryFulfillment"] == null ? null : DeliveryFulfillment.fromJson(json["deliveryFulfillment"]);
   }
 
   static List<CartItemPrices> fromList(List<Map<String, dynamic>> list) {
@@ -522,7 +529,60 @@ class CartItemPrices {
     _data["deletedAt"] = deletedAt;
     _data["quoteId"] = quoteId;
     _data["deliveryFulfillmentId"] = deliveryFulfillmentId;
-    _data["deliveryFulfillment"] = deliveryFulfillment;
+    if(deliveryFulfillment != null) {
+      _data["deliveryFulfillment"] = deliveryFulfillment?.toJson();
+    }
     return _data;
   }
 }
+
+  class DeliveryFulfillment {
+    String? id;
+    String? fulfillmentId;
+    dynamic providerName;
+    String? category;
+    String? tat;
+    bool? serviceable;
+    String? messageId;
+    String? createdAt;
+    String? updatedAt;
+    dynamic deletedAt;
+
+    DeliveryFulfillment(
+        {this.id, this.fulfillmentId, this.providerName, this.category, this.tat, this.serviceable, this.messageId, this.createdAt, this.updatedAt, this.deletedAt});
+
+    DeliveryFulfillment.fromJson(Map<String, dynamic> json) {
+      id = json["id"];
+      fulfillmentId = json["fulfillment_id"];
+      providerName = json["provider_name"];
+      category = json["category"];
+      tat = json["tat"];
+      serviceable = json["serviceable"];
+      messageId = json["message_id"];
+      createdAt = json["createdAt"];
+      updatedAt = json["updatedAt"];
+      deletedAt = json["deletedAt"];
+    }
+
+    static List<DeliveryFulfillment> fromList(List<Map<String, dynamic>> list) {
+      return list.map((map) => DeliveryFulfillment.fromJson(map)).toList();
+    }
+
+    Map<String, dynamic> toJson() {
+      final Map<String, dynamic> _data = <String, dynamic>{};
+      _data["id"] = id;
+      _data["fulfillment_id"] = fulfillmentId;
+      _data["provider_name"] = providerName;
+      _data["category"] = category;
+      _data["tat"] = tat;
+      _data["serviceable"] = serviceable;
+      _data["message_id"] = messageId;
+      _data["createdAt"] = createdAt;
+      _data["updatedAt"] = updatedAt;
+      _data["deletedAt"] = deletedAt;
+      return _data;
+    }
+
+  }
+
+

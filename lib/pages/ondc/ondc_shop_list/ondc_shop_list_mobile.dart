@@ -335,39 +335,37 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       },
 
       builder: (context, state) {
-        test() async {
-          Get.to(() => ONDCOrderDetailsScreen());
-          // List<SingleOrderModel> list = await OndcRepository().getSingleOrder(OrderId: '');
-          // List<String> idList = [];
-          // list.forEach((element) {
-          //   element.quotes?.forEach((element) {
-          //     element.cartItemPrices!.forEach((element) {
-          //       if(element.deliveryFulfillmentId != null){
-          //        idList.add(element.deliveryFulfillmentId.toString());
-          //       }
-          //     });
-          //   });
-          // });
-          // var seen = Set<String>();
-          // idList = idList.where((element) => seen.add(element)).toList();
-          //
-          // print("########################################################="
-          //     "${idList.length}");
 
-          // BlocProvider.of<ONDCOrderCancelBloc>(context).add(FullOrderCancelEvent(
-          //     orderId: "1e6943d2-cd96-472c-9c6a-b8e33350a3e1",
-          //     orderNumber:"7777777"
-          // ));
-        }
+        ///@ABHI
+        // test() async {
+        //   Get.to(() => ONDCOrderDetailsScreen());
+        //   // List<SingleOrderModel> list = await OndcRepository().getSingleOrder(OrderId: '');
+        //   // List<String> idList = [];
+        //   // list.forEach((element) {
+        //   //   element.quotes?.forEach((element) {
+        //   //     element.cartItemPrices!.forEach((element) {
+        //   //       if(element.deliveryFulfillmentId != null){
+        //   //        idList.add(element.deliveryFulfillmentId.toString());
+        //   //       }
+        //   //     });
+        //   //   });
+        //   // });
+        //   // var seen = Set<String>();
+        //   // idList = idList.where((element) => seen.add(element)).toList();
+        //   //
+        //   // print("########################################################="
+        //   //     "${idList.length}");
+        //
+        //   // BlocProvider.of<ONDCOrderCancelBloc>(context).add(FullOrderCancelEvent(
+        //   //     orderId: "1e6943d2-cd96-472c-9c6a-b8e33350a3e1",
+        //   //     orderNumber:"7777777"
+        //   // ));
+        // }
 
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              test();
-            },
-          ),
+
           appBar: AppBar(
             leading: IconButton(
               onPressed: () async {

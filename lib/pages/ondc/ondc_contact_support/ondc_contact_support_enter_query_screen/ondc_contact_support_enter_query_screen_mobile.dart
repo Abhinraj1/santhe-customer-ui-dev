@@ -4,19 +4,25 @@ import 'package:santhe/core/repositories/ondc_repository.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import '../../../../manager/font_manager.dart';
+import '../../../../models/ondc/single_order_model.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/ondc_contact_support_widgets/textField_for_query.dart';
 
 class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
-  ONDCContactSupportEnterQueryScreenMobile({Key? key}) : super(key: key);
+  final SingleOrderModel store;
+   ONDCContactSupportEnterQueryScreenMobile(
+      {Key? key, required this.store})
+      : super(key: key);
+
+
 
   final TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    String orderId = "0b8d1f4a-093a-4925-a60d-23ca2274d813";
+    String orderId = store.orderNumber.toString();
 
     return CustomScaffold(
         backgroundColor: AppColors().grey20,

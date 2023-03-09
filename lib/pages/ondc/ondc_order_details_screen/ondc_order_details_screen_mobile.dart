@@ -117,6 +117,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         orderStatus = orderDetails.first.status.toString(),
         paymentStatus = (orderDetails.first.payment!.paymentStatus).toString(),
         orderNumber = orderDetails.first.orderNumber.toString();
+
     List<CartItemPrices> products =
         orderDetails.first.quotes!.first.cartItemPrices as List<CartItemPrices>;
 
@@ -127,6 +128,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             : true : false;
 
     bool hasInvoice = orderDetails.first.invoice == null ? false : true;
+
 
 
 
@@ -189,7 +191,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                   quoteId: element.quoteId,
                   serviceable: "N/A",
                   provider_name: "N/A",
-                  fulfillment_id: "N/A",
+                  fulfillment_id: orderDetails.first.quotes!.first.cartItemPrices!.first.deliveryFulfillmentId,
                   category: "N/A",
                   message_id: "N/A",
                   tat: "N/A"
@@ -229,7 +231,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         thirdData: orderStatus,
         fourthTitle: "Payment status",
         fourthData: paymentStatus,
-        redTextButtonTitle: hasInvoice ? "Download invoice" : "",
+        redTextButtonTitle: hasInvoice ? "Download invoice" : ""
       ),
 
       // Padding(

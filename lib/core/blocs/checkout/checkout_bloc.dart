@@ -38,6 +38,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         );
       }
     });
+
     on<GetCartPriceEventGet>((event, emit) async {
       emit(CheckoutGetLoading());
       try {

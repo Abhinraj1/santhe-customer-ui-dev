@@ -1,7 +1,7 @@
 part of razorpaybuffer_view;
 
 class _RazorpaybufferMobile extends StatefulWidget {
-  _RazorpaybufferMobile();
+  const _RazorpaybufferMobile();
 
   @override
   State<_RazorpaybufferMobile> createState() => _RazorpaybufferMobileState();

@@ -41,7 +41,7 @@ class InvoiceTable extends StatelessWidget {
               data: "₹$subTotal"
             ),
             SizedBox(
-              height: prices.length*15,
+              height: prices.length*17,
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                  itemCount: prices.length,

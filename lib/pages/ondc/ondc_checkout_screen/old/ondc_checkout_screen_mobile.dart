@@ -282,9 +282,13 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           previewWidgetItems = [];
           final checkoutRepo =
               RepositoryProvider.of<OndcCheckoutRepository>(context);
+
           List<PreviewWidgetOndcItem> previewItems = [];
+
           debugLog('items $previewItems and $previewWidgetItems');
+
           List<PreviewWidgetModel> previewModels = [];
+
           previewModels = checkoutRepo.previewFinalModels
               .where((element) => element.type.toString().contains('item'))
               .toList();
@@ -295,9 +299,11 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           // shipmentModels = checkoutRepo.shipmentFinalModels;
           // debugLog('Checking for shipment models ${shipmentModels}');
           for (var element in previewModels) {
+
             previewItems.add(
               PreviewWidgetOndcItem(previewWidgetModel: element),
             );
+
           }
 
           warningLog('$previewItems');

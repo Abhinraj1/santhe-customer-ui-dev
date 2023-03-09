@@ -129,6 +129,7 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                     onTap: (){
                       BlocProvider.of<OrderHistoryBloc>(context).add(SevenDaysFilterEvent());
                       setState(() {
+                        hint = "";
                         selectedValue = "7days";
                       });
                     },
@@ -179,6 +180,7 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                       setState(() {
                         BlocProvider.of<OrderHistoryBloc>(context).add(ThirtyDaysFilterEvent());
                         selectedValue = "30days";
+                        hint = "";
                       });
                     },
                     child: SizedBox(

@@ -132,27 +132,28 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   }
 
   Widget _getGroupSeparator(PreviewWidgetOndcItem element) {
-    return SizedBox(
-      height: 50,
-      child: Align(
-        alignment: Alignment.center,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            color: AppColors().brandDark,
-            border: Border.all(
-              color: Colors.white,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.87,
+        decoration: BoxDecoration(
+          color: CupertinoColors.systemBackground,
+          border: Border.all(
+            color: CupertinoColors.systemBackground,
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Shipment No ${element.previewWidgetModel.deliveryFulfillmentId}',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Shipment No ${element.previewWidgetModel.fulfillment_id}',
+                textAlign: TextAlign.left,
+                style: TextStyle(color: AppColors().brandDark),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -219,12 +220,14 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           setState(() {
             isLoadingInit = false;
             _showErrorNoResponseFromSeller = true;
+            _isInitBuffer = false;
           });
         }
         if (state is InitializeGetErrorState) {
           setState(() {
             _showErrorNoResponseFromSeller = true;
             isLoadingInitGet = false;
+            _isInitBuffer = false;
           });
         }
         if (state is InitializePostSuccessState) {
@@ -249,11 +252,14 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           setState(() {
             isLoadingInitGet = false;
           });
-          context.read<CheckoutBloc>().add(
-                InitializeCartEvent(
-                    customerId: AppHelpers().getPhoneNumberWithoutCountryCode,
-                    messageId: messageID),
-              );
+          Future.delayed(
+            Duration(seconds: 5),
+            () => context.read<CheckoutBloc>().add(
+                  InitializeCartEvent(
+                      customerId: AppHelpers().getPhoneNumberWithoutCountryCode,
+                      messageId: messageID),
+                ),
+          );
         }
         // if (state is CheckoutGetSuccess) {
         //   errorLog(
@@ -655,6 +661,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                 String>(
                                 shrinkWrap: true,
                                 elements: previewWidgetItems,
+                                stickyHeaderBackgroundColor:
+                                    CupertinoColors.systemBackground,
                                 itemScrollController: _controller,
                                 groupBy: (PreviewWidgetOndcItem previewWidget) {
                                   return previewWidget
@@ -669,7 +677,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                       'Length passed into builder ${previewWidgetItems.length}');
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
+                                        horizontal: 20, vertical: 10),
                                     child: Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:

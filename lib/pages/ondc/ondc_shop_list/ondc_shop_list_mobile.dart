@@ -335,7 +335,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       },
 
       builder: (context, state) {
-
         ///@ABHI
         // test() async {
         //   Get.to(() => ONDCOrderDetailsScreen());
@@ -365,7 +364,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
-
+          backgroundColor: CupertinoColors.systemBackground,
           appBar: AppBar(
             leading: IconButton(
               onPressed: () async {
@@ -506,37 +505,43 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                     },
                                     child: Row(
                                       children: [
-                                        GestureDetector(
-                                          child: Container(
-                                            color: Colors.white,
-                                            height: 30,
-                                            width: 340,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8.0, left: 25),
-                                              child: Text.rich(
-                                                TextSpan(
-                                                  text: 'Delivery to: ',
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                      text:
-                                                          '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
-                                                      // widget
-                                                      //     .customerModel.address
-                                                      //     .substring(0, 25),
-                                                      style: TextStyle(
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                        decorationColor:
-                                                            Color.fromARGB(255,
-                                                                77, 81, 84),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            child: Container(
+                                              color: CupertinoColors
+                                                  .systemBackground,
+                                              height: 30,
+                                              width: 340,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0, left: 25),
+                                                child: Text.rich(
+                                                  TextSpan(
+                                                    text: 'Delivery to: ',
+                                                    style:
+                                                        TextStyle(fontSize: 15),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
+                                                        // widget
+                                                        //     .customerModel.address
+                                                        //     .substring(0, 25),
+                                                        style: TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                          decorationColor:
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  77,
+                                                                  81,
+                                                                  84),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    // can add more TextSpans here...
-                                                  ],
+                                                      // can add more TextSpans here...
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -571,7 +576,22 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                       height: 50,
                                       child: TextFormField(
                                         controller: _textEditingController,
-
+                                        onFieldSubmitted: (value) {
+                                          context.read<OndcBloc>().add(
+                                                FetchListOfShopWithSearchedProducts(
+                                                  transactionId:
+                                                      // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
+                                                      RepositoryProvider.of<
+                                                                  OndcRepository>(
+                                                              context)
+                                                          .transactionId,
+                                                  productName:
+                                                      _textEditingController
+                                                          .text
+                                                          .toString(),
+                                                ),
+                                              );
+                                        },
                                         // initialValue: _textEditingController
                                         //     .value.text,
                                         // onChanged: (value) {
@@ -591,12 +611,30 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                           suffixIcon: state is SearchItemLoaded
                                               ? GestureDetector(
                                                   onTap: () {
+                                                    // context
+                                                    //     .read<OndcBloc>()
+                                                    //     .add(
+                                                    //       ClearSearchEventShops(
+                                                    //           shopModels:
+                                                    //               existingShopModels),
+                                                    //     );
                                                     context
                                                         .read<OndcBloc>()
                                                         .add(
-                                                          ClearSearchEventShops(
-                                                              shopModels:
-                                                                  existingShopModels),
+                                                          FetchNearByShops(
+                                                            lat: widget
+                                                                .customerModel
+                                                                .lat,
+                                                            lng: widget
+                                                                .customerModel
+                                                                .lng,
+                                                            pincode: widget
+                                                                .customerModel
+                                                                .pinCode,
+                                                            isDelivery: widget
+                                                                .customerModel
+                                                                .opStats,
+                                                          ),
                                                         );
                                                     _textEditingController
                                                         .clear();
@@ -633,38 +671,52 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                             ),
                                           ),
                                         ),
-                                        onFieldSubmitted: (value) {},
                                       ),
                                     ),
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Center(
-                                    child: Text(
-                                      'OR',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 15),
-                                    ),
-                                  ),
+                                  state is SearchItemLoaded
+                                      ? Text('')
+                                      : Center(
+                                          child: Text(
+                                            'OR',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 15),
+                                          ),
+                                        ),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 25.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('Browse your Local Shops'),
-                                    ),
-                                  ),
+                                  state is SearchItemLoaded
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 25.0),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                'Below are the shops that sell "${_textEditingController.text.toString().capitalizeFirst}"'),
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 25.0),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child:
+                                                Text('Browse your Local Shops'),
+                                          ),
+                                        ),
                                   SizedBox(
-                                    height: 30,
+                                    height: 12,
                                   ),
                                   SingleChildScrollView(
                                     child: state is SearchItemLoaded
                                         ? searchWidgets.isEmpty
                                             ? Text(
-                                                'There are no Shops servicing this \n product for the time being sorry',
+                                                'Unfortunately there are no shops that sell the product you are looking for.\n Please try search for something different',
                                                 style: TextStyle(
                                                   color: AppColors().brandDark,
                                                   fontSize: 18,

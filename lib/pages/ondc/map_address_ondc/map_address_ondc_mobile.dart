@@ -8,7 +8,6 @@ class _MapAddressOndcMobile extends StatefulWidget {
   _MapAddressOndcMobile({
     required this.lat,
     required this.lng,
-
   });
 
   @override
@@ -28,7 +27,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
   bool isVisible = false;
   bool denied = false;
   final _formKey = GlobalKey<FormState>();
-  final profileController = Get.find<ProfileController>();
+  final profileController = ge.Get.find<ProfileController>();
   CustomerModel? currentUser;
   PlaceApiProvider placeApiProvider = PlaceApiProvider();
   var textController = TextEditingController();
@@ -81,9 +80,10 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
 
   @override
   Widget build(BuildContext context) {
-    final LocationController locationController = Get.find();
-    final RegistrationController registrationController = Get.find();
-    final ProfileController profileController = Get.find<ProfileController>();
+    final LocationController locationController = ge.Get.find();
+    final RegistrationController registrationController = ge.Get.find();
+    final ProfileController profileController =
+        ge.Get.find<ProfileController>();
     CustomerModel currentUser =
         profileController.customerDetails ?? fallback_error_customer;
     Size size = MediaQuery.of(context).size;
@@ -91,7 +91,13 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
       listener: (context, state) {
         warningLog('$state');
         if (state is OndcAddressUpdatedState) {
-          Get.to(() => OndcShopListView(customerModel: currentUser));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Delivery address updated!'),
+            ),
+          );
+          ge.Get.to(() => OndcShopListView(customerModel: currentUser),
+              transition: ge.Transition.leftToRight);
         }
       },
       builder: (context, state) {
@@ -294,39 +300,35 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                                   locationController
                                                       .mapSelected = true.obs;
 
-                                                  isBillingAddress ?
-
-                                                  context
-                                                      .read<AddressBloc>()
-                                                      .add(
-                                                        UpdateAddressEvent(
-                                                            lat: lat,
-                                                            lng: lng,
-                                                            deliveryName: "Billing",
-                                                            address_id:
-                                                                '${RepositoryProvider.of<AddressRepository>(context).billingAddressId}',
-                                                            flat: textController
-                                                                .text),
-                                                      ) :
-
-
-                                                  context
-                                                      .read<AddressBloc>()
-                                                      .add(
-                                                        UpdateAddressEvent(
-                                                            lat: lat,
-                                                            lng: lng,
-                                                            deliveryName: "Delivery",
-                                                            address_id:
-                                                                '${RepositoryProvider.of<AddressRepository>(context).deliveryAddressId}',
-                                                            flat: textController
-                                                                .text),
-                                                      );
-
-
-
-
-
+                                                  isBillingAddress
+                                                      ? context
+                                                          .read<AddressBloc>()
+                                                          .add(
+                                                            UpdateAddressEvent(
+                                                                lat: lat,
+                                                                lng: lng,
+                                                                deliveryName:
+                                                                    "Billing",
+                                                                address_id:
+                                                                    '${RepositoryProvider.of<AddressRepository>(context).billingAddressId}',
+                                                                flat:
+                                                                    textController
+                                                                        .text),
+                                                          )
+                                                      : context
+                                                          .read<AddressBloc>()
+                                                          .add(
+                                                            UpdateAddressEvent(
+                                                                lat: lat,
+                                                                lng: lng,
+                                                                deliveryName:
+                                                                    "Delivery",
+                                                                address_id:
+                                                                    '${RepositoryProvider.of<AddressRepository>(context).deliveryAddressId}',
+                                                                flat:
+                                                                    textController
+                                                                        .text),
+                                                          );
 
                                                   // registrationController
                                                   //     .isMapSelected = true.obs;

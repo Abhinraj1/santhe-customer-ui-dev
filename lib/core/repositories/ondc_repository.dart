@@ -9,6 +9,8 @@ import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
+
+import '../../models/ondc/past_cart_items_model.dart';
 import '../../models/ondc/single_order_model.dart';
 
 class OndcRepository with LogMixin {
@@ -264,7 +266,7 @@ class OndcRepository with LogMixin {
       warningLog('checking for count of global items $_shopsListCount');
       List<ShopModel> shopsWithSearchedProduct =
           responseBody.map((e) => ShopModel.fromMap(e)).toList();
-      warningLog('$shopsWithSearchedProduct');
+      warningLog('Searched shops $shopsWithSearchedProduct');
       return shopsWithSearchedProduct;
     } catch (e) {
       warningLog(e.toString());
@@ -276,7 +278,7 @@ class OndcRepository with LogMixin {
       {required String orderId, required String message}) async {
     final firebaseId = //"8808435978";
 
-    AppHelpers().getPhoneNumberWithoutCountryCode;
+        AppHelpers().getPhoneNumberWithoutCountryCode;
 
     final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/support');
 

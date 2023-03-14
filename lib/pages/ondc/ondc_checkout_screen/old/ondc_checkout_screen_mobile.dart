@@ -145,12 +145,14 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
         ),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Shipment No ${element.previewWidgetModel.fulfillment_id}',
-                textAlign: TextAlign.left,
-                style: TextStyle(color: AppColors().brandDark),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AutoSizeText(
+                  'Shipment No ${element.previewWidgetModel.fulfillment_id}',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: AppColors().brandDark),
+                ),
               ),
             ),
           ],
@@ -305,11 +307,9 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           // shipmentModels = checkoutRepo.shipmentFinalModels;
           // debugLog('Checking for shipment models ${shipmentModels}');
           for (var element in previewModels) {
-
             previewItems.add(
               PreviewWidgetOndcItem(previewWidgetModel: element),
             );
-
           }
 
           warningLog('$previewItems');
@@ -320,11 +320,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           });
         }
         if (state is InitializeCartSuccessState) {
-          setState(() {
-            _isInitBuffer = false;
-          });
           orderId = state.orderId;
-
 
           openCheckout(profileController);
         }
@@ -333,13 +329,12 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
               .cartOndcModels
               .clear();
           // context.read<CartBloc>().clear();
-          Get.to(
-            () => PaymentBufferView(
-              messageId: messageID,
-              transactionId:
-                  RepositoryProvider.of<OndcRepository>(context).transactionId,
-            ),
-          );
+
+          Get.off(PaymentBufferView(
+            messageId: messageID,
+            transactionId:
+                RepositoryProvider.of<OndcRepository>(context).transactionId,
+          ));
         }
       },
       builder: (context, state) {
@@ -348,6 +343,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             Scaffold(
               key: _key,
               drawer: const nv.CustomNavigationDrawer(),
+              backgroundColor: CupertinoColors.systemBackground,
               appBar: AppBar(
                 leading: IconButton(
                   onPressed: () async {

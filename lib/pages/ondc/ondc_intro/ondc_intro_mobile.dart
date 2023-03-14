@@ -142,71 +142,85 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                     ),
                     Row(
                       children: [
-                        Column(
-                          children: [
-                            Image.asset('assets/createList.png'),
-                            const Text(
-                              '*Includes waiting for merchants\n to give prices, but you have more\n options here',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 40,
-                            ),
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                              ),
-                              onPressed: () {
-                                Get.to(
-                                  const MapMerchant(),
-                                  transition: Transition.leftToRight,
-                                );
-                              },
-                              child: const Text(
-                                'Create List',
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Image.asset('assets/createList.png'),
+                              const Text(
+                                '*Includes waiting for merchants\n to give prices, but you have more\n options here',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontSize: 12,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Image.asset('assets/ondclist.png'),
-                            const Text(
-                              '*Buy from ONDC registered \n shops near you.\n *You can see prices immediately\n and checkout,but your options\n are limite',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 12),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
+                              const SizedBox(
+                                height: 40,
                               ),
-                              onPressed: () {
-
-                                Get.to(
-                                  () => OndcShopListView(
-                                    customerModel: currentUser,
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  elevation: MaterialStateProperty.all(0),
+                                ),
+                                onPressed: () {
+                                  Get.to(
+                                    const MapMerchant(),
+                                    transition: Transition.leftToRight,
+                                  );
+                                },
+                                child: const Text(
+                                  'Create List',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
                                   ),
-                                );
-                              },
-                              child: const Text(
-                                'Shop Now',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
                                 ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Stack(
+                                children: [
+                                  Image.asset('assets/buyfromlocalshop.png'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 118.0),
+                                    child: Center(
+                                      child: Image.asset(
+                                          'assets/ondctrademark.png'),
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
+                              const Text(
+                                '*Buy from ONDC registered \n shops near you.\n *You can see prices immediately\n and checkout,but your options\n are limite',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 12),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  elevation: MaterialStateProperty.all(0),
+                                ),
+                                onPressed: () {
+                                  Get.to(
+                                    () => OndcShopListView(
+                                      customerModel: currentUser,
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Shop Now',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -217,6 +231,4 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           }),
     );
   }
-
-
 }

@@ -46,7 +46,6 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
     getImagesOfShops();
   }
 
-
   @override
   Widget build(BuildContext context) {
     // warningLog(
@@ -99,29 +98,29 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
               ),
               widget.shopModel.items.isEmpty
                   ? Expanded(
-                child: Text(
-                  "${widget.shopModel.name}",
-                  style: TextStyle(
-                      color: AppColors().brandDark,
-                      fontWeight: FontWeight.bold),
-                ),
-              )
+                      child: Text(
+                        "${widget.shopModel.name}",
+                        style: TextStyle(
+                            color: AppColors().brandDark,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
                   : Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: networkImages,
-                  ),
-                ),
-              ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: networkImages,
+                        ),
+                      ),
+                    ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Row(
                   children: [
                     Expanded(
                       child: Text(
-                        '${widget.shopModel.distance.toString()} kms',
+                        '${widget.shopModel.distance.toString().characters.take(5)} kms',
                         style: TextStyle(
                           color: AppColors().grey80,
                         ),

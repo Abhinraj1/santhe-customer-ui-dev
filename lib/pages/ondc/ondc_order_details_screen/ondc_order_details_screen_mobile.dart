@@ -53,7 +53,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           if (track.fulfillmentId.toString() ==
               element.previewWidgetModel.fulfillment_id) {
             if ((track.url).toString() != "" &&
-                (track.url).toString() != "null" &&
                  track.url != null) {
               return true;
             }

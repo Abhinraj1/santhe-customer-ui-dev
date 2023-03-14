@@ -9,8 +9,6 @@ import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-
-import '../../models/ondc/past_cart_items_model.dart';
 import '../../models/ondc/single_order_model.dart';
 
 class OndcRepository with LogMixin {

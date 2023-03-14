@@ -9,8 +9,6 @@ import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-
-import '../../models/ondc/past_cart_items_model.dart';
 import '../../models/ondc/single_order_model.dart';
 
 class OndcRepository with LogMixin {
@@ -312,7 +310,7 @@ class OndcRepository with LogMixin {
 
 
 
-  Future<List<SingleOrderModel>> getSingleOrder(
+  Future<Data> getSingleOrder(
       {required String OrderId}) async {
 
     String orderId = OrderId;
@@ -334,15 +332,15 @@ class OndcRepository with LogMixin {
 
       warningLog('${response.statusCode}');
 
-      final responseBody = await json.decode(response.body)["data"]["rows"];
+      final responseBody = await json.decode(response.body);
 
       warningLog(' respose here =============############### $responseBody');
 
-      List<SingleOrderModel> data =
-      []; //SingleOrderModel.fromJson(responseBody);
-      data.add(SingleOrderModel.fromJson(responseBody));
+     Data data = Data.fromJson(responseBody);
+     //SingleOrderModel.fromJson(responseBody);
+     /// data.add(SingleOrderModel.fromJson(responseBody));
 
-      warningLog('${data.first.quotes!.first.status}');
+      warningLog('${data.singleOrderModel!.quotes!.first.status}');
 
       return data;
     } catch (e) {

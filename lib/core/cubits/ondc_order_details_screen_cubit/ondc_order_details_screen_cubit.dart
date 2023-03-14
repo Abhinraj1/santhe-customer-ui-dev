@@ -28,7 +28,7 @@ class OrderDetailsScreenCubit extends Cubit<OrderDetailsScreenState>{
         super(OrderDetailsDataLoadingState());
 
 
-  List<SingleOrderModel> orderDetails = [];
+ late Data orderDetails ;
 
 
   loadOrderDetails({required String orderId}) async{
@@ -36,6 +36,7 @@ class OrderDetailsScreenCubit extends Cubit<OrderDetailsScreenState>{
     emit(OrderDetailsDataLoadingState());
 
     try{
+
       orderDetails = await ondcRepository.getSingleOrder(OrderId: orderId);
 
       emit(OrderDetailsDataLoadedState(

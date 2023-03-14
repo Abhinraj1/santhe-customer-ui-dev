@@ -152,7 +152,12 @@ class ProductCell extends StatelessWidget {
 class BottomTextRow extends StatelessWidget {
   final String? title;
   final String message;
-  const BottomTextRow({Key? key, this.title, required this.message}) : super(key: key);
+  final bool hasTrackingData;
+  final Function() onTap;
+  const BottomTextRow({
+    Key? key,
+    this.title, required this.message,
+    required this.hasTrackingData, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -162,8 +167,17 @@ class BottomTextRow extends StatelessWidget {
             children: [
               Text(title ?? "Fulfilment status",style: FontStyleManager().s14fw600Grey,),
 
-              Text(message,style: FontStyleManager().s14fw600Grey,
-                textAlign: TextAlign.right,),
+              InkWell(
+                onTap: (){
+                  if(hasTrackingData){
+                    onTap();
+                  }
+                },
+                child: Text(message,style: hasTrackingData ?
+                FontStyleManager().s14fw700Blue :
+                FontStyleManager().s14fw600Grey,
+                  textAlign: TextAlign.right,),
+              ),
 
             ]
         )

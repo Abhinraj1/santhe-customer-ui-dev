@@ -1,5 +1,40 @@
 
 
+class Data {
+  int? status;
+  SingleOrderModel? singleOrderModel;
+  String? message;
+  String? type;
+  List<FinalCosting>? finalCosting;
+
+  Data({this.status, this.singleOrderModel, this.message, this.type, this.finalCosting});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    status = json["status"];
+    singleOrderModel = json["data"] == null ? null : SingleOrderModel.fromJson(json["data"]);
+    message = json["message"];
+    type = json["type"];
+    finalCosting = json["finalCosting"] == null ? null : (json["finalCosting"] as List).map((e) => FinalCosting.fromJson(e)).toList();
+  }
+
+  static List<Data> fromList(List<Map<String, dynamic>> list) {
+    return list.map((map) => Data.fromJson(map)).toList();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["status"] = status;
+    if(singleOrderModel != null) {
+      _data["data"] = singleOrderModel?.toJson();
+    }
+    _data["message"] = message;
+    _data["type"] = type;
+    if(finalCosting != null) {
+      _data["finalCosting"] = finalCosting?.map((e) => e.toJson()).toList();
+    }
+    return _data;
+  }
+}
 
 
 class SingleOrderModel {
@@ -586,3 +621,25 @@ class CartItemPrices {
   }
 
 
+class FinalCosting {
+  String? lable;
+  int? value;
+
+  FinalCosting({this.lable, this.value});
+
+  FinalCosting.fromJson(Map<String, dynamic> json) {
+    lable = json["lable"];
+    value = json["value"];
+  }
+
+  static List<FinalCosting> fromList(List<Map<String, dynamic>> list) {
+    return list.map((map) => FinalCosting.fromJson(map)).toList();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["lable"] = lable;
+    _data["value"] = value;
+    return _data;
+  }
+}

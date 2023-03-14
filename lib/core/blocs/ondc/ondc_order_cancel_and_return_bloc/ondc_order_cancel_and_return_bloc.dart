@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:santhe/core/repositories/ondc_order_cancel_repository.dart';
+import 'package:santhe/core/repositories/ondc_order_cancel_and_return_repository.dart';
 import 'package:santhe/pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_acknowledgement%20_screen/ondc_order_cancel_acknowledgement_view.dart';
 import '../../../../models/ondc/order_cancel_reasons_model.dart';
+import '../../../../models/ondc/single_order_model.dart';
 import '../../../../pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_acknowledgement _screen/ondc_order_cancel_acknowledgement _screen_mobile.dart';
 import '../../../../pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_view.dart';
 import '../../../../pages/ondc/ondc_return_screens/ondc_return_view.dart';
@@ -13,26 +14,27 @@ import '../../../cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import '../../../loggers.dart';
 import 'package:bloc/bloc.dart';
 import '../../../repositories/ondc_repository.dart';
-part 'ondc_order_cancel_event.dart';
-part 'ondc_order_cancel_state.dart';
+part 'ondc_order_cancel_and return_event.dart';
+part 'ondc_order_cancel_and_return_state.dart';
 
 
 
 
-class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
-    ONDCOrderCancelState> with LogMixin {
+class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnEvent,
+    ONDCOrderCancelAndReturnState> with LogMixin {
 
-  final ONDCOrderCancelRepository orderCancelRepository;
+  final ONDCOrderCancelAndReturnRepository orderCancelRepository;
    List<ReasonsModel> reasons = [];
     String selectedCode = "";
     String orderId = "";
     String orderNumber = "";
+  late CartItemPrices returnProduct;
 
-  ONDCOrderCancelBloc({
+  ONDCOrderCancelAndReturnReasonsBloc({
     required this.orderCancelRepository,
   }) : super(Loading()) {
 
-    on<ONDCOrderCancelEvent>((event, emit) {});
+    on<ONDCOrderCancelAndReturnEvent>((event, emit) {});
 
 
     on<LoadReasonsForFullOrderCancelEvent>((event, emit) async {
@@ -44,7 +46,7 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
       emit(Loading());
 
       try{
-        reasons = await orderCancelRepository.getOrderCancelReasons();
+        reasons = await orderCancelRepository.getReasons();
         orderId = event.orderId;
         orderNumber = event.orderNumber;
         emit(ReasonsLoadedFullOrderCancelState(
@@ -62,16 +64,15 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
 
 
 
+
     on<LoadReasonsForPartialOrderCancelEvent>((event, emit) async {
 
-
       Get.to(()=> const ONDCOrderCancelView());
-
 
       emit(Loading());
 
       try{
-        reasons = await orderCancelRepository.getOrderCancelReasons();
+        reasons = await orderCancelRepository.getReasons();
         orderId = event.orderId;
         orderNumber = event.orderNumber;
         emit(ReasonsLoadedPartialOrderCancelState(
@@ -87,6 +88,30 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
 
 
 
+    on<LoadReasonsForReturnEvent>((event, emit) async {
+
+      returnProduct = event.product;
+
+      Get.to(()=> const ONDCOrderCancelView());
+
+      emit(Loading());
+
+      try{
+        reasons = await orderCancelRepository.getReasons(isReturn: true);
+        orderId = event.orderId;
+        orderNumber = event.orderNumber;
+        emit(
+            ReasonsLoadedForReturnState(
+            reasons: reasons,
+            orderId: event.orderId,
+            orderNumber: event.orderNumber));
+
+      }catch(e){
+        emit(OrderCancelErrorState(message: "Return Error //${e.toString()}"));
+      }
+    });
+
+
     on<CancelPartialOrderRequestEvent>((event, emit) async{
 
       print("Selected code iss ############################################## $selectedCode");
@@ -94,11 +119,12 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
       emit(Loading());
 
       try{
-        // reasons = await orderCancelRepository.getOrderCancelReasons();
 
-        String status = await orderCancelRepository.fullOrderCancelPost(
-            code: selectedCode,
-            orderId: orderId);
+        ///uncomment & remove "ACK";
+        String status = "ACK";
+        // await orderCancelRepository.fullOrderCancelPost(
+        //     code: selectedCode,
+        //     orderId: orderId);
 
         if(status == "ACK" ){
 
@@ -152,6 +178,23 @@ class ONDCOrderCancelBloc extends Bloc<ONDCOrderCancelEvent,
             orderNumber: orderNumber,
             orderId:orderId,
             reasons: reasons
+        ));
+
+      }
+    });
+
+    on<SelectedCodeForReturnEvent>((event, emit) {
+
+
+      if(event.code != "null" || event.code != ""){
+        selectedCode = event.code;
+
+        emit( SelectedCodeForReturnState(
+            code: event.code.toString(),
+            orderNumber: orderNumber,
+            orderId:orderId,
+            reasons: reasons,
+            returnProduct: returnProduct,
         ));
 
       }

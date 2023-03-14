@@ -31,10 +31,11 @@ import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_s
 import 'package:santhe/pages/ondc/ondc_return_screens/ondc_return_acknowledgement%20_screen/ondc_return_acknowledgement%20_screen_mobile.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
-import 'core/blocs/ondc/ondc_order_cancel_bloc/ondc_order_cancel_bloc.dart';
+import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import 'core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
-import 'core/repositories/ondc_order_cancel_repository.dart';
+import 'core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
+import 'core/repositories/ondc_order_cancel_and_return_repository.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -91,8 +92,8 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<AddressRepository>(
             create: (context) => AddressRepository(),
           ),
-          RepositoryProvider<ONDCOrderCancelRepository>(
-            create: (context) => ONDCOrderCancelRepository(),
+          RepositoryProvider<ONDCOrderCancelAndReturnRepository>(
+            create: (context) => ONDCOrderCancelAndReturnRepository(),
           ),
         ],
         child: MultiBlocProvider(
@@ -119,17 +120,22 @@ class MyApp extends StatelessWidget {
             BlocProvider<CustomerContactCubit>(
                 create: (context) => CustomerContactCubit()),
 
+            BlocProvider<UploadImageAndReturnRequestCubit>(
+                create: (context) => UploadImageAndReturnRequestCubit(
+                  repository: context.read<ONDCOrderCancelAndReturnRepository>(),
+                )),
+
             BlocProvider<OrderDetailsScreenCubit>(
                 create: (context) => OrderDetailsScreenCubit(
-                  ondcRepository: context.read<OndcRepository>()
+                    ondcRepository: context.read<OndcRepository>()
                 )),
 
             BlocProvider<OrderDetailsButtonCubit>(
                 create: (context) => OrderDetailsButtonCubit()),
-            BlocProvider<ONDCOrderCancelBloc>(
-                create: (context) => ONDCOrderCancelBloc(
+            BlocProvider<ONDCOrderCancelAndReturnReasonsBloc>(
+                create: (context) => ONDCOrderCancelAndReturnReasonsBloc(
                     orderCancelRepository:
-                        context.read<ONDCOrderCancelRepository>())),
+                        context.read<ONDCOrderCancelAndReturnRepository>())),
             BlocProvider<OrderHistoryBloc>(
               create: (context) => OrderHistoryBloc(
                   ondcRepository: context.read<OndcRepository>()),

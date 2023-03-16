@@ -577,11 +577,14 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             alignment: Alignment.topRight,
                             //toDo : add indicator while cart bloc implementation
                             child: GestureDetector(
-                              onTap: () => ge.Get.to(
-                                () => OndcCartView(
-                                  storeLocation_id: widget.shopModel.storeId,
-                                ),
-                              ),
+                              onTap: () {
+                                ge.Get.to(
+                                  () => OndcCartView(
+                                    storeLocation_id: widget.shopModel.storeId,
+                                  ),
+                                );
+                                setState(() {});
+                              },
                               child: Stack(
                                 children: [
                                   CircleAvatar(

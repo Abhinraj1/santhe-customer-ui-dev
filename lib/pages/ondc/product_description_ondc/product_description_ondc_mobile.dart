@@ -96,7 +96,7 @@ class _ProductDescriptionOndcMobileState
     }
   }
 
-  yesNoCancellable() {
+  yesNoReturnable() {
     if (widget.productOndcModel.returnable == true) {
       setState(() {
         returnable = 'Yes';
@@ -108,8 +108,8 @@ class _ProductDescriptionOndcMobileState
     }
   }
 
-  yesNoReturnable() {
-    if (widget.productOndcModel.return_window == true) {
+  yesNoCancellable() {
+    if (widget.productOndcModel.cancellable == true) {
       setState(() {
         cancellable = 'Yes';
       });
@@ -135,8 +135,9 @@ class _ProductDescriptionOndcMobileState
 
   @override
   Widget build(BuildContext context) {
-    // warningLog('${widget.productOndcModel.maximum}');
+    warningLog('${widget.productOndcModel.cancellable}');
     final cart = RepositoryProvider.of<OndcCartRepository>(context);
+    debugLog('cartCount ${widget.productOndcModel}');
     return Scaffold(
       key: _key,
       drawer: const nv.CustomNavigationDrawer(),
@@ -217,6 +218,16 @@ class _ProductDescriptionOndcMobileState
             //       UpdateCartEvent(productOndcModels: state.productOndcModels),
             //     );
           }
+          if (state is ResetCartState) {
+            await RepositoryProvider.of<OndcRepository>(context)
+                .getCartCountMethod(
+              storeLocation_id: widget.productOndcModel.storeLocationId,
+            );
+            setState(() {
+              cartCount =
+                  RepositoryProvider.of<OndcRepository>(context).cartCount;
+            });
+          }
         },
         builder: (context, state) {
           return SingleChildScrollView(
@@ -260,10 +271,13 @@ class _ProductDescriptionOndcMobileState
                                     storeLocation_id:
                                         widget.productOndcModel.storeLocationId,
                                   ),
-                                );
-                                setState(() {
-                                  widget.productOndcModel.quantity;
+                                )?.then((_) {
+                                  setState(() {
+                                    widget.productOndcModel.quantity;
+                                  });
                                 });
+
+                                warningLog('something');
                               },
                               child: CircleAvatar(
                                 radius: 25,
@@ -583,7 +597,7 @@ class _ProductDescriptionOndcMobileState
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
-                      'Returnable:   ${cancellable.toString().toUpperCase()}',
+                      'Returnable:   ${returnable.toString().toUpperCase()}',
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),

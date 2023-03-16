@@ -10,6 +10,7 @@ class ProductOndcModel extends Equatable with LogMixin {
   final dynamic transaction_id;
   final dynamic generic_name;
   final dynamic ondc_item_id;
+  final dynamic cancellable;
   final dynamic ondc_location_id;
   final dynamic name;
   final dynamic short_description;
@@ -63,6 +64,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     required this.transaction_id,
     required this.generic_name,
     required this.ondc_item_id,
+    required this.cancellable,
     required this.ondc_location_id,
     required this.name,
     required this.short_description,
@@ -118,6 +120,7 @@ class ProductOndcModel extends Equatable with LogMixin {
     dynamic? transaction_id,
     dynamic? generic_name,
     dynamic? ondc_item_id,
+    dynamic? cancellable,
     dynamic? ondc_location_id,
     dynamic? name,
     dynamic? short_description,
@@ -172,6 +175,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       transaction_id: transaction_id ?? this.transaction_id,
       generic_name: generic_name ?? this.generic_name,
       ondc_item_id: ondc_item_id ?? this.ondc_item_id,
+      cancellable: cancellable ?? this.cancellable,
       ondc_location_id: ondc_location_id ?? this.ondc_location_id,
       name: name ?? this.name,
       short_description: short_description ?? this.short_description,
@@ -277,12 +281,15 @@ class ProductOndcModel extends Equatable with LogMixin {
       'fulfillmentId': fulfillmentId,
       'total': total,
       'generic_name': generic_name,
+      'cancellable': cancellable
     };
   }
 
   factory ProductOndcModel.fromNewMap(Map<String, dynamic> map) {
     return ProductOndcModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
+      cancellable:
+          map['cancellable'] != null ? map['cancellable'] as dynamic : null,
       manufacture_date:
           map['manufacture_date'] != null ? map['manufacture_date'] : null,
       generic_name:
@@ -432,6 +439,7 @@ class ProductOndcModel extends Equatable with LogMixin {
       transaction_id,
       generic_name,
       ondc_item_id,
+      cancellable,
       ondc_location_id,
       name,
       short_description,

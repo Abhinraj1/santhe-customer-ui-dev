@@ -62,10 +62,8 @@ class LoadReasonsForPartialOrderCancelEvent extends ONDCOrderCancelAndReturnEven
     required this.orderNumber,
     required this.previewWidgetModel});
 
-  const LoadReasonsForPartialOrderCancelEvent({required this.orderId,required this.orderNumber});
-
   @override
-  List<Object?> get props => [orderId,orderNumber,orderId];
+  List<Object?> get props => [orderId,orderNumber,previewWidgetModel];
 }
 
 class SelectedCodeEvent extends ONDCOrderCancelAndReturnEvent{

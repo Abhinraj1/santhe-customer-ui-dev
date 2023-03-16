@@ -537,7 +537,8 @@ class _ProductDescriptionOndcMobileState
 
                       callback: () => Get.to(
                         () => ProductLongDescriptionView(
-                            productOndcModel: widget.productOndcModel),
+                          productOndcModel: widget.productOndcModel,
+                        ),
                       ),
                       // callback: (val) {
                       //   Get.to(

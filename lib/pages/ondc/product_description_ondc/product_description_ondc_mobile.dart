@@ -137,6 +137,7 @@ class _ProductDescriptionOndcMobileState
   Widget build(BuildContext context) {
     // warningLog('${widget.productOndcModel.maximum}');
     final cart = RepositoryProvider.of<OndcCartRepository>(context);
+    debugLog('cartCount ${cart.totalCartItemCount}');
     return Scaffold(
       key: _key,
       drawer: const nv.CustomNavigationDrawer(),
@@ -217,6 +218,16 @@ class _ProductDescriptionOndcMobileState
             //       UpdateCartEvent(productOndcModels: state.productOndcModels),
             //     );
           }
+          if (state is ResetCartState) {
+            await RepositoryProvider.of<OndcRepository>(context)
+                .getCartCountMethod(
+              storeLocation_id: widget.productOndcModel.storeLocationId,
+            );
+            setState(() {
+              cartCount =
+                  RepositoryProvider.of<OndcRepository>(context).cartCount;
+            });
+          }
         },
         builder: (context, state) {
           return SingleChildScrollView(
@@ -260,10 +271,13 @@ class _ProductDescriptionOndcMobileState
                                     storeLocation_id:
                                         widget.productOndcModel.storeLocationId,
                                   ),
-                                );
-                                setState(() {
-                                  widget.productOndcModel.quantity;
+                                )?.then((_) {
+                                  setState(() {
+                                    widget.productOndcModel.quantity;
+                                  });
                                 });
+
+                                warningLog('something');
                               },
                               child: CircleAvatar(
                                 radius: 25,

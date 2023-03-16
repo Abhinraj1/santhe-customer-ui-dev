@@ -19,6 +19,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
   List<OndcCartItem> cartItemsWidgets = [];
   List<OndcCartItem> cartFilteredItems = [];
   List<CartitemModel> cartModels = [];
+  OndcCartRepository ondcCartRepository = OndcCartRepository();
   bool doesContain = false;
   String? shopName;
   double total = 0;
@@ -30,15 +31,23 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
   void initState() {
     super.initState();
     cartBloc = context.read<CartBloc>();
+    getShopName();
     cartBloc.add(
       OnAppRefreshEvent(storeLocationId: widget.storeLocation_id),
     );
+
     // getCartList();
     // getApiCartList();
   }
 
   //toDo : method to check if the products are still available to be written
-
+  getShopName() async {
+    List<CartitemModel> productModels1 = await ondcCartRepository.getCart(
+        storeLocationId: widget.storeLocation_id);
+    setState(() {
+      shopName = productModels1.first.store_name;
+    });
+  }
   // getCartList() {
   //   total = 0;
   //   cartBloc.productModelBloc.forEach((value) {
@@ -107,7 +116,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
         if (state is GetCartItemsOfShopState) {
           List<OndcCartItem> cartWidgets = [];
           cartModels = state.products;
-          shopName = state.products.first.store_name;
+
           total = 0;
           for (var element in cartModels) {
             cartWidgets.add(
@@ -244,9 +253,12 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                           CircleAvatar(
                             backgroundColor: AppColors().brandDark,
                             radius: 20,
-                            child: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
+                            child: GestureDetector(
+                              onTap: () => ge.Get.back(),
+                              child: const Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -266,7 +278,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                     shopName == null
                         ? const Text('')
                         : Text(
-                            'Shop Name: $shopName',
+                            'Shop: $shopName',
                             style: TextStyle(
                               color: AppColors().brandDark,
                               fontSize: 16,
@@ -304,8 +316,15 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                         ),
                       ),
                     ),
-                    Column(
-                      children: cartWidget,
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...cartWidget,
+                          const SizedBox(
+                            height: 200,
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -341,12 +360,12 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                             width: 350,
                             child: ElevatedButton(
                               onPressed: () async {
-                                final String message = await Get.to(
-                                  () => OndcCheckoutScreenView(
+                                final String message = await ge.Get.to(() {
+                                  OndcCheckoutScreenView(
                                     storeLocation_id: widget.storeLocation_id,
                                     storeName: shopName,
-                                  ),
-                                );
+                                  );
+                                }, transition: ge.Transition.rightToLeft);
                                 debugLog('there is a message $message');
                                 if (message.contains('rror')) {
                                   setState(() {

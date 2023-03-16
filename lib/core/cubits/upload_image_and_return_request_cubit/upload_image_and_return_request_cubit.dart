@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:santhe/core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_state.dart';
@@ -78,10 +79,19 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
 
     imagesList.forEach((imgFile) async{
 
+      print("######################### openRead ##################### "
+          "${ imgFile!.openRead()}");
+
+      // print("######################### readAsBytes "
+      //     "##################### ${imgFile!.readAsBytes().toString()}");
+
+
       try{
 
+
+
        String imgUrl = await repository.uploadImage(
-            imgInByte: await imgFile!.readAsBytes());
+           imgFile: File(imgFile!.path));
 
        imageUrl.add(imgUrl);
 

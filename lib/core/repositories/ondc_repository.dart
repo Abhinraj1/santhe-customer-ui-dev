@@ -165,7 +165,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      warningLog('product name $productName alsoe $url');
+      warningLog('product name $productName also $url');
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
       final responseBody =

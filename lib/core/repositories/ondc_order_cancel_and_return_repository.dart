@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:async/async.dart';
+import 'package:flutter/services.dart';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:santhe/models/ondc/order_cancel_reasons_model.dart';
@@ -95,14 +98,38 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
    }
  }
 
+ //
+ // print("######################### absolute "
+ // "##################### ${imgFile.absolute}");
+ //
+ // print("######################### INSIDE UPLOAD IMAGE "
+ // "############PATH == ######### ${imgFile.path}");
+
 
 
  Future<String> uploadImage(
-     {required Uint8List imgInByte}) async {
+     {required File imgFile}) async {
 
-   final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/upload/$imgInByte');
 
-   warningLog("Upload Image url $url");
+
+   var bytes = await imgFile.readAsBytes(); ///rootBundle.load(imgFile.path);
+
+   // print("######################### bytes "
+   //     "##################### ${bytes}");
+
+   var buffer = bytes.buffer;
+
+   var imageBytes = buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+
+   // Encode the bytes
+   var base64Image = base64Encode(imageBytes);
+
+   // print("######################### base64Image "
+   //     "##################### ${base64Image}");
+
+   final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/upload/$base64Image');
+
+
 
    final header = {
      'Content-Type': 'application/json',
@@ -110,6 +137,16 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
    };
 
    try {
+     var request =
+     http.MultipartRequest("POST", Uri.parse("http://ondcstaging.santhe.in/santhe/ondc/upload"));
+     request.files.add(http.MultipartFile.fromBytes("picture",
+         File(imgFile.path).readAsBytesSync(),filename: imgFile.path));
+     var res = await request.send();
+
+
+     print("######################### RES "
+         "##################### ${res}");
+
      final response = await http.post(
        url,
        headers: header,
@@ -133,9 +170,10 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
    }
  }
 
- Future<int> requestProductReturn(
+ Future<String> requestReturnOrPartialCancel(
      {required String orderId, required String code,
-       required String quotesId, required List<String> images}) async {
+       required String quotesId, required List<String> images,
+       required String quantity, required bool isReturn}) async {
 
 
    final url = Uri.parse('http://localhost:8081/santhe/ondc/return');
@@ -156,10 +194,13 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
            "cartItemIds":[
              {
                "id": quotesId,
-               "images": images
+               "images": images,
+               "quantity": quantity,
+               "reasonCode": code,
+               "isReturn":isReturn
              }
            ],
-           "reasonCode": code
+
          },
        ),
      );
@@ -170,7 +211,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
      warningLog('$responseBody');
 
-     return response.statusCode;
+     return response.statusCode.toString();
    } catch (e) {
      warningLog(e.toString());
      rethrow;

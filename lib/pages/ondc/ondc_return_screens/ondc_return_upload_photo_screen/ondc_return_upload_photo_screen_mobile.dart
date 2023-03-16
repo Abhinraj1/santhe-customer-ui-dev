@@ -104,6 +104,9 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                           buttonTitle: "RETURN ITEM",
                           onTap: () {
 
+                            BlocProvider.of<UploadImageAndReturnRequestCubit>
+                              (context).uploadImages();
+
                           },
                           isActive: true,
                           width: 160,

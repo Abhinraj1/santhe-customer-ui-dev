@@ -10,7 +10,8 @@ class CustomTitleWithBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return     Padding(
+    return
+      Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 20),
       child: Row(
         children: [
@@ -20,24 +21,25 @@ class CustomTitleWithBackButton extends StatelessWidget {
             },
             child: CircleAvatar(
               backgroundColor: AppColors().brandDark,
-              radius: 18,
+              radius: 13,
               child: const Padding(
-                padding: EdgeInsets.only(left: 10.0),
+                padding: EdgeInsets.only(left: 7.0),
                 child: Icon(
                   Icons.arrow_back_ios,
+                  size: 17,
                   color: Colors.white,
                 ),
               ),
             ),
           ),
-          const SizedBox(
-            width: 100,
-          ),
+          const Spacer(),
+
           Text(
               title,
               style:FontStyleManager().pageTitleStyle
 
-          )
+          ),
+          const Spacer(),
         ],
       ),
     );

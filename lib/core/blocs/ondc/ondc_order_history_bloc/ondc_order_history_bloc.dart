@@ -6,8 +6,8 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../../../models/ondc/single_order_model.dart';
 import '../../../loggers.dart';
 import '../../../repositories/ondc_repository.dart';
-part 'ondc_single_order_details_event.dart';
-part 'ondc_single_order_details_state.dart';
+part 'ondc_order_history_event.dart';
+part 'ondc_order_history_state.dart';
 
 
 
@@ -55,8 +55,6 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
 
        for(var i in orderDetails){
         i.quotes?.forEach((element) {
-
-
           if(DateTime.parse(element.createdAt.toString()).isAfter(startingDate)){
             filteredOrders.add(i);
         } });
@@ -78,7 +76,7 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
             filteredOrders.add(i);
           } });
       }
-      emit(SevenDaysFilterState(orderDetails: filteredOrders));
+      emit(ThirtyDaysFilterState(orderDetails: filteredOrders));
     });
 
 
@@ -92,11 +90,11 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
           if(
           DateTime.parse(element.createdAt.toString()).
           isAfter(
-              (event.selectedDates.first) as DateTime) &&
+              (event.selectedDates.first)!.subtract(const Duration(days: 1))) &&
 
               DateTime.parse(element.createdAt.toString())
                   .isBefore((
-                  event.selectedDates.last) as DateTime)
+                  event.selectedDates.last)!.add(const Duration(days: 1)) )
           ){
             filteredOrders.add(i);
           }

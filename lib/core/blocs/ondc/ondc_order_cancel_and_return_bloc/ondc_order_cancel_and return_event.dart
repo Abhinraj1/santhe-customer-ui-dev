@@ -11,21 +11,23 @@ abstract class ONDCOrderCancelAndReturnEvent extends Equatable {
 
 class LoadReasons extends ONDCOrderCancelAndReturnEvent{}
 
-class CancelSingleOrderEvent extends ONDCOrderCancelAndReturnEvent{
-
-  final String orderId;
-  final String orderNumber;
-
-  const CancelSingleOrderEvent({required this.orderId,required this.orderNumber});
-
-  @override
-  List<Object?> get props => [orderId,orderNumber,orderId];
-}
+// class PartialCancelEvent extends ONDCOrderCancelAndReturnEvent{
+//
+//   final String orderId;
+//   final String orderNumber;
+//
+//   const PartialCancelEvent({required this.orderId,required this.orderNumber});
+//
+//   @override
+//   List<Object?> get props => [orderId,orderNumber,orderId];
+// }
 
 class CancelFullOrderRequestEvent extends ONDCOrderCancelAndReturnEvent{}
 
 
-class CancelPartialOrderRequestEvent extends ONDCOrderCancelAndReturnEvent{}
+class PartialCancelOrderRequestEvent extends ONDCOrderCancelAndReturnEvent{
+
+}
 
 
 class LoadReasonsForFullOrderCancelEvent extends ONDCOrderCancelAndReturnEvent{
@@ -53,8 +55,12 @@ class LoadReasonsForReturnEvent extends ONDCOrderCancelAndReturnEvent{
 class LoadReasonsForPartialOrderCancelEvent extends ONDCOrderCancelAndReturnEvent{
   final String orderId;
   final String orderNumber;
+  final PreviewWidgetModel previewWidgetModel;
 
-  const LoadReasonsForPartialOrderCancelEvent({required this.orderId,required this.orderNumber});
+  const LoadReasonsForPartialOrderCancelEvent({
+    required this.orderId,
+    required this.orderNumber,
+    required this.previewWidgetModel});
 
   @override
   List<Object?> get props => [orderId,orderNumber,orderId];

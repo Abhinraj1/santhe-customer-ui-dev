@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_colors.dart';
-import '../../../../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
+import '../../../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../models/ondc/shop_model.dart';
 import '../../../../models/ondc/single_order_model.dart';
@@ -66,7 +66,9 @@ class _ONDCContactSupportShopContactDetailsScreenState extends State<ONDCContact
             ShopContactSupportCard(model: widget.model),
             CustomButton(
                 verticalPadding: 50,
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                },
                 buttonTitle: "Back")
           ],
         ));

@@ -22,27 +22,22 @@ class InvoiceTable extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
       child: SizedBox(
-        child: Column(
-          children: [
-            SizedBox(
-              height: prices.length*17,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                 itemCount: prices.length,
-                  itemBuilder: (context,index){
-                return customRow(title: prices[index].lable.toString(),
-                         data: "₹${prices[index].value.toString()}");
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+           itemCount: prices.length,
+            itemBuilder: (context,index){
 
-                  }),
-            ),
-            customRow(
-                title: "Total:",
-                data: "₹$totalPrice",
-              isTotalPrice: true
-
-            ),
-          ],
-        ),
+            if(index == prices.length-1){
+              return customRow(
+                  title: "Total:",
+                  data: "₹$totalPrice",
+                  isTotalPrice: true
+              );
+            }else {
+              return customRow(title: prices[index].lable.toString(),
+                  data: "₹${prices[index].value.toString()}");
+            } }),
       )
 
     );

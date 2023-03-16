@@ -3,8 +3,6 @@ import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 
 import '../constants.dart';
-import '../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
-import '../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import 'navigation_drawer_tile.dart';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';

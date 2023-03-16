@@ -185,9 +185,14 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
                   ///CANCEL SINGLE ORDER
                   BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
-                      const LoadReasonsForPartialOrderCancelEvent(
-                          orderId: "",
-                          orderNumber: ''));
+                       LoadReasonsForPartialOrderCancelEvent(
+                          orderId: orderDetails.singleOrderModel!.
+                                  quotes!.first.orderId.toString(),
+
+                          orderNumber: orderDetails.singleOrderModel!.
+                                        orderNumber.toString(),
+
+                           previewWidgetModel: element));
 
                 },
                 child: Text("Cancel",style: FontStyleManager().s14fw700Red,),

@@ -81,6 +81,9 @@ class ExpandableTextState extends State<ExpandableText> {
         } else {
           textSpan = TextSpan(
             text: widget.text,
+            style:  TextStyle(
+                color: widgetColor,
+            )
           );
         }
         return RichText(

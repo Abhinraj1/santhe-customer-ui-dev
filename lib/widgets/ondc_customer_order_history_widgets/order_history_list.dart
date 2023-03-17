@@ -77,10 +77,8 @@ class OrderHistoryCell extends StatelessWidget {
   Widget build(BuildContext context) {
 
     DateTime date = DateTime.parse(orderDetails.quotes!.first.createdAt.toString());
-
-    print("DATE FROM BACEKDN ============================ $date");
     String orderNo = orderDetails.orderNumber.toString(),
-         orderStatus = orderDetails.quotes!.first.status.toString(),
+         orderStatus = orderDetails.status.toString(),
         shopName = orderDetails.storeLocation!.store!.name.toString(),
         orderId = orderDetails.quotes!.first.orderId.toString(),
          orderDate = DateFormat.yMd().format(date);

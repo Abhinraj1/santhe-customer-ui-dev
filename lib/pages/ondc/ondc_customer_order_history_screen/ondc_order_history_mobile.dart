@@ -10,6 +10,7 @@ import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 
 import '../../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
+import '../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../widgets/ondc_customer_order_history_widgets/order_history_list.dart';
 import '../../../widgets/ondc_customer_order_history_widgets/select_date_filter.dart';
 import '../ondc_intro/ondc_intro_view.dart';
@@ -37,12 +38,7 @@ class _ONDCOrderHistoryMobileState extends State<ONDCOrderHistoryMobile> {
 
     return  CustomScaffold(
       backgroundColor: AppColors().grey10,
-        trailingButton:  IconButton(
-            onPressed: (){
-              ///Navigate to Home
-              Get.offAll(()=>const OndcIntroView());
-            },
-            icon: const Icon(Icons.home_filled,size: 28)),
+        trailingButton:  homeIconButton(),
         body: Column(
           children: [
         Padding(

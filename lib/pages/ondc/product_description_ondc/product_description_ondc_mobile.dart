@@ -25,6 +25,7 @@ class _ProductDescriptionOndcMobileState
   List<OndcCartItem> cartWidget = [];
   String cancellable = 'No';
   String returnable = 'No';
+  String sellerPickupReturn = "No";
   int cartCount = 0;
 
   bool isSameValue = false;
@@ -104,6 +105,18 @@ class _ProductDescriptionOndcMobileState
     } else {
       setState(() {
         returnable = 'No';
+      });
+    }
+  }
+
+  yesNoSellerPickUpReturn() {
+    if (widget.productOndcModel.seller_pickup_return == true) {
+      setState(() {
+        sellerPickupReturn = 'Yes';
+      });
+    } else {
+      setState(() {
+        sellerPickupReturn = 'No';
       });
     }
   }
@@ -239,16 +252,7 @@ class _ProductDescriptionOndcMobileState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back(result: widget.value);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_sharp,
-                          color: AppColors().brandDark,
-                          size: 30,
-                        ),
-                      ),
+                      const CustomBackButton(),
                       //! Navigation not allowed for now due to shopmodel trouble
                       Stack(
                         children: [
@@ -434,30 +438,46 @@ class _ProductDescriptionOndcMobileState
                       width: 20,
                     ),
                     widget.productOndcModel.isAddedToCart == true
-                        ? Container(
-                            width: 160,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              color: AppColors().white100,
-                              borderRadius: BorderRadius.circular(10.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors().brandDark,
-                                  offset: Offset(0, 1),
-                                  spreadRadius: 1,
-                                  blurRadius: 10,
+                        ? GestureDetector(
+                      onTap: () async {
+                        await Get.to(
+                          OndcCartView(
+                            storeLocation_id:
+                            widget.productOndcModel.storeLocationId,
+                          ),
+                        )?.then((_) {
+                          setState(() {
+                            widget.productOndcModel.quantity;
+                          });
+                        });
+
+                        warningLog('something');
+                      },
+                       child: Container(
+                              width: 160,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                color: AppColors().white100,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors().brandDark,
+                                    offset: Offset(0, 1),
+                                    spreadRadius: 1,
+                                    blurRadius: 10,
+                                  ),
+                                ],
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'GO TO CART',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              ],
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Go to cart',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
                               ),
                             ),
-                          )
+                        )
                         : GestureDetector(
                             onTap: () async {
                               if (widget.productOndcModel.available >= 1) {
@@ -492,7 +512,7 @@ class _ProductDescriptionOndcMobileState
                               ),
                               child: const Center(
                                 child: Text(
-                                  'Add To Cart',
+                                  'ADD TO CART',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -521,50 +541,58 @@ class _ProductDescriptionOndcMobileState
                           ),
                         ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15, top: 15),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Description : ')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: ExpandableText(
-                      '${widget.productOndcModel.long_description}',
-                      trimLines: 5,
-
-                      callback: () => Get.to(
-                        () => ProductLongDescriptionView(
-                            productOndcModel: widget.productOndcModel),
-                      ),
-                      // callback: (val) {
-                      //   Get.to(
-                      //     () => ProductLongDescriptionView(
-                      //       productOndcModel: widget.productOndcModel,
-                      //     ),
-                      //   );
-                      // },
-                      // style: const TextStyle(fontSize: 15),
-                      // colorClickableText: Colors.pink,
-                      // trimMode: TrimMode.Line,
-                      // trimCollapsedText: 'Show more',
-                      // trimExpandedText: 'Show less',
-                      // lessStyle: const TextStyle(
-                      //   fontSize: 14,
-                      //   fontWeight: FontWeight.bold,
-                      // ),
-                      // moreStyle: const TextStyle(
-                      //   fontSize: 14,
-                      //   fontWeight: FontWeight.bold,
-                      // ),
+                widget.productOndcModel.long_description.toString() != "null" ?
+                Column(
+                  children: [
+                     const Padding(
+                      padding: EdgeInsets.only(left: 15, top: 15),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Description : ')),
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          child: ExpandableText(
+                            '${widget.productOndcModel.long_description}',
+                            trimLines: 5,
+                            callback: () => Get.to(
+                                  () => ProductLongDescriptionView(
+                                  productOndcModel: widget.productOndcModel),
+                            ),
+                            // callback: (val) {
+                            //   Get.to(
+                            //     () => ProductLongDescriptionView(
+                            //       productOndcModel: widget.productOndcModel,
+                            //     ),
+                            //   );
+                            // },
+                            // style: const TextStyle(fontSize: 15),
+                            // colorClickableText: Colors.pink,
+                            // trimMode: TrimMode.Line,
+                            // trimCollapsedText: 'Show more',
+                            // trimExpandedText: 'Show less',
+                            // lessStyle: const TextStyle(
+                            //   fontSize: 14,
+                            //   fontWeight: FontWeight.bold,
+                            // ),
+                            // moreStyle: const TextStyle(
+                            //   fontSize: 14,
+                            //   fontWeight: FontWeight.bold,
+                            // ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ):
+                    const SizedBox(),
+
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
@@ -584,7 +612,7 @@ class _ProductDescriptionOndcMobileState
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
-                      'Cancellable:  ${cancellable.toString().toUpperCase()}',
+                      'Cancellable:  ${cancellable.toString().capitalizeFirst}',
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),
@@ -592,40 +620,46 @@ class _ProductDescriptionOndcMobileState
                 const SizedBox(
                   height: 10,
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: Text(
-                      'Returnable:   ${returnable.toString().toUpperCase()}',
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                ///@Abhi
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(left: 15.0),
+                //     child: Text(
+                //       'Returnable:   ${returnable.toString().toUpperCase()}',
+                //       style: const TextStyle(fontSize: 15),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
                 widget.productOndcModel.returnable
                     ? Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Returnable:   ${returnable.toString().toUpperCase()}',
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Return picked up by seller : ${widget.productOndcModel.seller_pickup_return}',
+                          child: SizedBox(
+                            width: 300,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Returnable:   ${returnable.toString().capitalizeFirst}',
                                   style: const TextStyle(fontSize: 15),
                                 ),
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Return picked up by seller : '
+                                      '$sellerPickupReturn',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+
+
+                              ],
+                            ),
                           ),
                         ),
                       )

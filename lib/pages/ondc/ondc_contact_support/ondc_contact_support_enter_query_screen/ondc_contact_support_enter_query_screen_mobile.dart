@@ -8,6 +8,7 @@ import '../../../../models/ondc/single_order_model.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
+import '../../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../../widgets/ondc_contact_support_widgets/textField_for_query.dart';
 
 class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
@@ -26,6 +27,7 @@ class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
 
     return CustomScaffold(
         backgroundColor: AppColors().grey20,
+        trailingButton: homeIconButton(),
         body: ListView(
           children: [
             const CustomTitleWithBackButton(title: "Contact Support"),

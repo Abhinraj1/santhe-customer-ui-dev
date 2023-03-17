@@ -115,7 +115,8 @@ class _ProductLongDescriptionMobileState
                   child: Text(
                     'Description:',
                     style: TextStyle(
-                      fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
@@ -142,9 +143,9 @@ class _ProductLongDescriptionMobileState
                           ),
                           AutoSizeText(
                             '${widget.productOndcModel.generic_name}',
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                            style:  const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ],
                       ),
@@ -163,9 +164,9 @@ class _ProductLongDescriptionMobileState
                           ),
                           AutoSizeText(
                             '${widget.productOndcModel.net_quantity}',
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                            style:  const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ],
                       ),
@@ -183,7 +184,8 @@ class _ProductLongDescriptionMobileState
                     AutoSizeText(
                       widget.productOndcModel.packer_name,
                       style: const TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600),
+                        fontSize: 15,
+                      ),
                     ),
                   ],
                 ),
@@ -197,10 +199,15 @@ class _ProductLongDescriptionMobileState
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
-                    AutoSizeText(
-                      widget.productOndcModel.packer_address,
-                      style: const TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600),
+
+                    SizedBox(
+                      width: 200,
+                      child: AutoSizeText(
+                        widget.productOndcModel.packer_address,
+                        style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                      ),
                     ),
                   ],
                 ),
@@ -219,8 +226,8 @@ class _ProductLongDescriptionMobileState
                           AutoSizeText(
                             widget.productOndcModel.nutritional_info,
                             style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                              fontSize: 15,
+                            ),
                           ),
                         ],
                       ),
@@ -239,9 +246,9 @@ class _ProductLongDescriptionMobileState
                           ),
                           AutoSizeText(
                             widget.productOndcModel.additives_info,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                            style:  const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ],
                       ),
@@ -261,9 +268,9 @@ class _ProductLongDescriptionMobileState
                           AutoSizeText(
                             widget
                                 .productOndcModel.brand_owner_FSSAI_license_no,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                            style:  const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ],
                       ),
@@ -282,9 +289,9 @@ class _ProductLongDescriptionMobileState
                           ),
                           AutoSizeText(
                             widget.productOndcModel.other_FSSAI_license_no,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                            style:  const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ],
                       ),
@@ -303,9 +310,9 @@ class _ProductLongDescriptionMobileState
                           ),
                           AutoSizeText(
                             widget.productOndcModel.importer_FSSAI_license_no,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                            style:  const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ],
                       ),

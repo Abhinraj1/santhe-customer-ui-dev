@@ -120,9 +120,9 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           builder: (context) {
             CustomerModel currentUser =
                 profileController.customerDetails ?? fallback_error_customer;
-            return RefreshIndicator(
-              onRefresh: () => initFunction(),
-              child: SingleChildScrollView(
+            return SingleChildScrollView(
+              child: RefreshIndicator(
+                onRefresh: () => initFunction(),
                 child: Column(
                   children: [
                     const SizedBox(
@@ -141,85 +141,103 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                       height: 15,
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Column(
-                            children: [
-                              Image.asset('assets/createList.png'),
-                              const Text(
-                                '*Includes waiting for merchants\n to give prices, but you have more\n options here',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(0),
-                                ),
-                                onPressed: () {
-                                  Get.to(
-                                    const MapMerchant(),
-                                    transition: Transition.leftToRight,
-                                  );
-                                },
-                                child: const Text(
-                                  'Create List',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
+                          child: InkWell(
+                            onTap: (){
+                              Get.to(
+                                const MapMerchant(),
+                                transition: Transition.leftToRight,
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Image.asset('assets/createList.png'),
+                                const SizedBox(
+                                  width: 170,
+                                  height: 70,
+                                  child: Text(
+                                    '*Includes waiting for merchants to give prices, but you have more options here',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
-                              )
-                            ],
+
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(0),
+                                  ),
+                                  onPressed: () {
+                                    Get.to(
+                                      const MapMerchant(),
+                                      transition: Transition.leftToRight,
+                                    );
+                                  },
+
+                                  child: const Text(
+                                    'CREATE LIST',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         Expanded(
-                          child: Column(
-                            children: [
-                              Stack(
-                                children: [
-                                  Image.asset('assets/buyfromlocalshop.png'),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 118.0),
-                                    child: Center(
-                                      child: Image.asset(
-                                          'assets/ondctrademark.png'),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const Text(
-                                '*Buy from ONDC registered \n shops near you.\n *You can see prices immediately\n and checkout,but your options\n are limite',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 12),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(0),
-                                ),
-                                onPressed: () {
-                                  Get.to(
+                          child: InkWell(
+                            onTap: (){
+                              Get.to(
                                     () => OndcShopListView(
-                                      customerModel: currentUser,
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Shop Now',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
+                                  customerModel: currentUser,
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Image.asset('assets/ondclist.png'),
+                                // Padding(
+                                //   padding: const EdgeInsets.only(top: 118.0),
+                                //   child: Center(
+                                //     child: Image.asset(
+                                //         'assets/ondctrademark.png'),
+                                //   ),
+                                // ),
+                                const SizedBox(
+                                  width: 170,
+                                  height: 70,
+                                  child: Text(
+                                    '*You can see prices immediately and checkout.',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 12),
                                   ),
                                 ),
-                              )
-                            ],
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(0),
+                                  ),
+                                  onPressed: () {
+                                    Get.to(
+                                          () => OndcShopListView(
+                                        customerModel: currentUser,
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'SHOP NOW',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ],

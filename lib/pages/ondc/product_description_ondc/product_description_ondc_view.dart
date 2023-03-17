@@ -26,6 +26,7 @@ import 'package:santhe/widgets/ondc_widgets/expandable_text.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_cart_item.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_carousel.dart';
 
+import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../product_long_description/product_long_description_view.dart';
 
 part 'product_description_ondc_desktop.dart';

@@ -360,7 +360,10 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                             width: 350,
                             child: ElevatedButton(
                               onPressed: () async {
-                                final String message = await ge.Get.to(() {
+                                print("################################# StoreId = ${widget.storeLocation_id}"
+                                    "========== transId = ${RepositoryProvider.of<OndcRepository>(context).transactionId}");
+                                final String message =
+                                await ge.Get.to(() {
                                   OndcCheckoutScreenView(
                                     storeLocation_id: widget.storeLocation_id,
                                     storeName: shopName,
@@ -378,7 +381,6 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                   });
                                 }
                               },
-                              child: Text('Proceed To Checkout'),
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
@@ -388,6 +390,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 backgroundColor: MaterialStateProperty.all(
                                     AppColors().brandDark),
                               ),
+                              child: Text('Proceed To Checkout'),
                             ),
                           ),
                           Text(

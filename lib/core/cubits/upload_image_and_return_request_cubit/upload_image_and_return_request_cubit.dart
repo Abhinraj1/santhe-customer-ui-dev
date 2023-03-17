@@ -50,6 +50,7 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
       imagesList.add(image);
     });
 
+
     showImages();
 
   }
@@ -88,10 +89,8 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
 
       try{
 
-
-
        String imgUrl = await repository.uploadImage(
-           imgFile: File(imgFile!.path));
+            imgPath: imgFile.path);
 
        imageUrl.add(imgUrl);
 
@@ -101,6 +100,7 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
 
       }
     });
+    imagesList.clear();
   }
 
   sendReturnRequest(){

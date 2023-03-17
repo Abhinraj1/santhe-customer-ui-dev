@@ -108,26 +108,26 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
 
  Future<String> uploadImage(
-     {required File imgFile}) async {
+     {required String imgPath}) async {
 
 
 
-   var bytes = await imgFile.readAsBytes(); ///rootBundle.load(imgFile.path);
+ ///  var bytes = await imgFile.readAsBytes(); ///rootBundle.load(imgFile.path);
 
    // print("######################### bytes "
    //     "##################### ${bytes}");
 
-   var buffer = bytes.buffer;
+  /// var buffer = bytes.buffer;
 
-   var imageBytes = buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+ ///  var imageBytes = buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
 
    // Encode the bytes
-   var base64Image = base64Encode(imageBytes);
+   ///var base64Image = base64Encode(imageBytes);
 
    // print("######################### base64Image "
    //     "##################### ${base64Image}");
 
-   final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/upload/$base64Image');
+
 
 
 
@@ -137,31 +137,30 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
    };
 
    try {
+     final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/upload/');
+
      var request =
-     http.MultipartRequest("POST", Uri.parse("http://ondcstaging.santhe.in/santhe/ondc/upload"));
-     request.files.add(http.MultipartFile.fromBytes("picture",
-         File(imgFile.path).readAsBytesSync(),filename: imgFile.path));
-     var res = await request.send();
+     http.MultipartRequest("POST", url);
 
+     http.MultipartFile multipartFile = await http.MultipartFile.fromString(
+         "file",
+         imgPath);
 
-     print("######################### RES "
-         "##################### ${res}");
+     request.files.add(multipartFile);
+     request.headers.addAll(header);
 
-     final response = await http.post(
-       url,
-       headers: header,
-     );
+     var response = await request.send();
 
-     warningLog('checking for response body ${response.body}');
+   ///  warningLog('checking for response body ${response.body}');
 
-     final responseBody = json.decode(response.body)["message"]["ack"]['status'];
+     ///final responseBody = json.decode(response.statusCode)["message"]["ack"]['status'];
 
-     warningLog("####################################################"
-         "## BODY STATUS ==== $responseBody");
+     // warningLog("####################################################"
+     //     "## BODY STATUS ==== $responseBody");
 
-     final imgUrl = responseBody;
+  ///   final imgUrl = responseBody;
 
-     return imgUrl;
+     return "imgUrl";
 
    } catch (e) {
      throw OrderCancelErrorState(
@@ -169,6 +168,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
      );
    }
  }
+
 
  Future<String> requestReturnOrPartialCancel(
      {required String orderId, required String code,

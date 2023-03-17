@@ -23,6 +23,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
       emit(CheckoutPostLoading());
       debugLog('store id ${event.storeLocation_id}');
       try {
+        print("########################## TRY STARTED");
         final String messageId =
             await ondcCheckoutRepository.proceedToCheckoutMethodPost(
                 transactionId: event.transactionId,

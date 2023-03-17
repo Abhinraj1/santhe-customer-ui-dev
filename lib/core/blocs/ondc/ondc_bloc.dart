@@ -103,10 +103,14 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       }
     });
 
-    on<ClearSearchEventShops>((event, emit) {
-      emit(
-        OndcShopModelsLoaded(shopModels: event.shopModels),
-      );
+    on<ClearSearchEventShops>((event, emit) async {
+      List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
+          transactionIdl: ondcRepository.transactionId
+          //  event.transactionId!,
+          );
+      // revertshopModel = shopModel;
+      // warningLog('$revertshopModel');
+      emit(ClearSearchState(ondcShopModels: shopModel));
     });
 
     on<SearchOndcItemGlobal>((event, emit) async {
@@ -129,11 +133,11 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       }
     });
 
-    on<ClearSearchEventOndc>((event, emit) {
-      emit(
-        OndcProductsOfShopsLoaded(productModels: event.productModels),
-      );
-    });
+    // on<ClearSearchEventOndc>((event, emit) {
+    //   emit(
+    //     OndcProductsOfShopsLoaded(productModels: event.productModels),
+    //   );
+    // });
 
     on<FetchShopModelsGet>((event, emit) async {
       emit(OndcFetchShopLoading());

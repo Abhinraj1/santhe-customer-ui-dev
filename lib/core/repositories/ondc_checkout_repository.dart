@@ -65,6 +65,7 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
+      errorLog('$url, and store id$storeLocation_id');
       final response = await http.post(
         url,
         headers: header,

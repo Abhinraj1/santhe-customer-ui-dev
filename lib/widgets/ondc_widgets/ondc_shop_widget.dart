@@ -60,7 +60,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
         padding: const EdgeInsets.all(15.0),
         child: Container(
           height: 180,
-          width: 355,
+          width: MediaQuery.of(context).size.width * 0.9,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),

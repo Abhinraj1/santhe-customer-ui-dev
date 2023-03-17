@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 part of 'ondc_bloc.dart';
 
 abstract class OndcState extends Equatable {
@@ -27,6 +27,15 @@ class ResetOndcState extends OndcState {
   });
   @override
   List<Object?> get props => [cartCount];
+}
+
+class ClearSearchState extends OndcState {
+  List<ShopModel>? ondcShopModels;
+  ClearSearchState({
+    this.ondcShopModels,
+  });
+  @override
+  List<Object?> get props => [ondcShopModels];
 }
 
 class ErrorFetchingGlobalProducts extends OndcState {

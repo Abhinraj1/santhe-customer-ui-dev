@@ -477,7 +477,7 @@ class _ProductDescriptionOndcMobileState
                                 ),
                               ),
                             ),
-                        )
+                          )
                         : GestureDetector(
                             onTap: () async {
                               if (widget.productOndcModel.available >= 1) {

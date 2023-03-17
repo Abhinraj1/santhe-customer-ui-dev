@@ -360,17 +360,16 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                             width: 350,
                             child: ElevatedButton(
                               onPressed: () async {
-                                print("################################# StoreId = ${widget.storeLocation_id}"
-                                    "========== transId = ${RepositoryProvider.of<OndcRepository>(context).transactionId}");
-                                final String message =
-                                await ge.Get.to(() {
-                                  OndcCheckoutScreenView(
-                                    storeLocation_id: widget.storeLocation_id,
-                                    storeName: shopName,
-                                  );
-                                }, transition: ge.Transition.rightToLeft);
+                                final String message = await ge.Get.to(
+                                    () => OndcCheckoutScreenView(
+                                          storeLocation_id:
+                                              widget.storeLocation_id,
+                                          storeName: shopName,
+                                        ),
+                                    transition: ge.Transition.rightToLeft);
                                 debugLog('there is a message $message');
-                                if (message.contains('rror')) {
+                                if (message.contains('rror') ||
+                                    message.contains('subtype')) {
                                   setState(() {
                                     _showErrorNoResponseFromSeller = true;
                                   });
@@ -390,7 +389,6 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 backgroundColor: MaterialStateProperty.all(
                                     AppColors().brandDark),
                               ),
-                              child: Text('Proceed To Checkout'),
                             ),
                           ),
                           Text(

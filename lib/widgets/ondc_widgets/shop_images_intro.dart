@@ -15,7 +15,7 @@ class ShopImageIntro extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
         height: 102,
-        width: 102,
+        width: MediaQuery.of(context).size.width * 0.2,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),

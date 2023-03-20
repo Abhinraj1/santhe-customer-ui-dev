@@ -623,13 +623,13 @@ class CartItemPrices {
 
 class FinalCosting {
   String? lable;
-  int? value;
+  double? value;
 
   FinalCosting({this.lable, this.value});
 
   FinalCosting.fromJson(Map<String, dynamic> json) {
     lable = json["lable"];
-    value = json["value"];
+    value = json["value"].toDouble();
   }
 
   static List<FinalCosting> fromList(List<Map<String, dynamic>> list) {
@@ -639,7 +639,7 @@ class FinalCosting {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["lable"] = lable;
-    _data["value"] = value;
+    _data["value"] = value?.toDouble();
     return _data;
   }
 }

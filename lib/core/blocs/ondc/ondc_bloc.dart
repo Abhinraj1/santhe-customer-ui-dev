@@ -104,13 +104,22 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
     });
 
     on<ClearSearchEventShops>((event, emit) async {
-      List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
-          transactionIdl: ondcRepository.transactionId
-          //  event.transactionId!,
-          );
-      // revertshopModel = shopModel;
-      // warningLog('$revertshopModel');
-      emit(ClearSearchState(ondcShopModels: shopModel));
+      emit(ClearStateLoading());
+      try {
+        List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
+            transactionIdl: ondcRepository.transactionId
+            //  event.transactionId!,
+            );
+        // revertshopModel = shopModel;
+        // warningLog('$revertshopModel');
+        emit(ClearSearchState(ondcShopModels: shopModel));
+      } catch (e) {
+        emit(
+          ClearStateErrorState(
+            message: e.toString(),
+          ),
+        );
+      }
     });
 
     on<SearchOndcItemGlobal>((event, emit) async {

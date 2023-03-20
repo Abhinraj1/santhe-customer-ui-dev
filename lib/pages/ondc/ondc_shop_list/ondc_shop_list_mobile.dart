@@ -34,6 +34,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   int n = 10;
   String productName = "";
   late LocationModel locationModel;
+  bool _searchedLoaded = false;
 
   _getLocationCity() async {
     final url = Uri.parse(
@@ -290,6 +291,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           setState(() {
             searchedModels = newShopModel;
             searchWidgets = newShopWidget;
+            _searchedLoaded = true;
           });
           errorLog('$searchWidgets');
         }
@@ -302,18 +304,18 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           });
         }
         if (state is ClearSearchState) {
-          // List<OndcShopWidget> ondcShopWidgets = [];
-          // for (var element in state.ondcShopModels) {
-          //   ondcShopWidgets.add(OndcShopWidget(shopModel: element));
-          // }
-          // setState(() {
-          //   shopWidgets = ondcShopWidgets;
-          //   existingShopModels = state.ondcShopModels;
-          // });
-          warningLog('$shopWidgets');
+          List<OndcShopWidget> ondcShopWidgets = [];
+          for (var element in state.ondcShopModels!) {
+            ondcShopWidgets.add(OndcShopWidget(shopModel: element));
+          }
           setState(() {
-            shopWidgets = shopWidgets;
+            shopWidgets = ondcShopWidgets;
+            existingShopModels = state.ondcShopModels!;
           });
+          warningLog('$shopWidgets');
+          // setState(() {
+          //   shopWidgets = shopWidgets;
+          // });
         }
         if (state is OndcShopModelsLoaded) {
           List<OndcShopWidget> ondcShopWidgets = [];
@@ -506,266 +508,293 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                 ],
                               ),
                             )
-                          : SingleChildScrollView(
-                              controller: _shopScroll,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 20,
+                          : state is ClearStateLoading
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(),
+                                      Text(
+                                        'Loading previous shops',
+                                        style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.to(
-                                        () => MapTextView(),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: GestureDetector(
-                                            child: Container(
-                                              color: CupertinoColors
-                                                  .systemBackground,
-                                              height: 30,
-                                              width: 340,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                  top: 8.0,
-                                                  left: 25,
-                                                ),
-                                                child: Text.rich(
-                                                  TextSpan(
-                                                    text: 'Delivery to: ',
-                                                    style:
-                                                        TextStyle(fontSize: 15),
-                                                    children: <TextSpan>[
+                                )
+                              : SingleChildScrollView(
+                                  controller: _shopScroll,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(
+                                            () => MapTextView(),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: GestureDetector(
+                                                child: Container(
+                                                  color: CupertinoColors
+                                                      .systemBackground,
+                                                  height: 30,
+                                                  width: 340,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      top: 8.0,
+                                                      left: 25,
+                                                    ),
+                                                    child: Text.rich(
                                                       TextSpan(
-                                                        text:
-                                                            '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
-                                                        // widget
-                                                        //     .customerModel.address
-                                                        //     .substring(0, 25),
+                                                        text: 'Delivery to: ',
                                                         style: TextStyle(
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                          decorationColor:
-                                                              Color.fromARGB(
-                                                                  255,
-                                                                  77,
-                                                                  81,
-                                                                  84),
-                                                        ),
+                                                            fontSize: 15),
+                                                        children: <TextSpan>[
+                                                          TextSpan(
+                                                            text:
+                                                                '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
+                                                            // widget
+                                                            //     .customerModel.address
+                                                            //     .substring(0, 25),
+                                                            style: TextStyle(
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .underline,
+                                                              decorationColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          77,
+                                                                          81,
+                                                                          84),
+                                                            ),
+                                                          ),
+                                                          // can add more TextSpans here...
+                                                        ],
                                                       ),
-                                                      // can add more TextSpans here...
-                                                    ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            //! add the indicator here
+                                            // GestureDetector(
+                                            //   onTap: () => ge.Get.to(
+                                            //     OndcCartView(),
+                                            //   ),
+                                            //   child: Stack(
+                                            //     children: [
+                                            //       Image.asset(
+                                            //         'assets/newshoppingcartorange.png',
+                                            //         height: 45,
+                                            //         width: 45,
+                                            //       )
+                                            //     ],
+                                            //   ),
+                                            // ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 25.0),
+                                              child: Image.asset(
+                                                  'assets/edit.png'),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0, vertical: 8),
+                                        child: SizedBox(
+                                          height: 50,
+                                          child: TextFormField(
+                                            controller: _textEditingController,
+                                            onFieldSubmitted: (value) {
+                                              context.read<OndcBloc>().add(
+                                                    FetchListOfShopWithSearchedProducts(
+                                                      transactionId:
+                                                          // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
+                                                          RepositoryProvider.of<
+                                                                      OndcRepository>(
+                                                                  context)
+                                                              .transactionId,
+                                                      productName:
+                                                          _textEditingController
+                                                              .text
+                                                              .toString(),
+                                                    ),
+                                                  );
+                                            },
+                                            // initialValue: _textEditingController
+                                            //     .value.text,
+                                            // onChanged: (value) {
+                                            //   _searchList(
+                                            //     searchText: value,
+                                            //     mainOndcShopWidgets: shopWidgets,
+                                            //   );
+                                            // },
+                                            // maxLines: 1,
+                                            decoration: InputDecoration(
+                                              labelText: 'Search Products here',
+                                              isDense: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                              ),
+                                              suffixIcon: state
+                                                      is SearchItemLoaded
+                                                  ? GestureDetector(
+                                                      onTap: () {
+                                                        // setState(() {
+                                                        //   _searchedLoaded = false;
+                                                        // });
+                                                        context
+                                                            .read<OndcBloc>()
+                                                            .add(
+                                                              ClearSearchEventShops(
+                                                                  shopModels:
+                                                                      existingShopModels),
+                                                            );
+                                                        // context
+                                                        //     .read<OndcBloc>()
+                                                        //     .add(
+                                                        //       FetchNearByShops(
+                                                        //         lat: widget
+                                                        //             .customerModel
+                                                        //             .lat,
+                                                        //         lng: widget
+                                                        //             .customerModel
+                                                        //             .lng,
+                                                        //         pincode: widget
+                                                        //             .customerModel
+                                                        //             .pinCode,
+                                                        //         isDelivery: widget
+                                                        //             .customerModel
+                                                        //             .opStats,
+                                                        //       ),
+                                                        //     );
+                                                        _textEditingController
+                                                            .clear();
+                                                      },
+                                                      child: Icon(Icons.cancel),
+                                                    )
+                                                  : null,
+                                              prefixIcon: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 9.0),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    context
+                                                        .read<OndcBloc>()
+                                                        .add(
+                                                          FetchListOfShopWithSearchedProducts(
+                                                            transactionId:
+                                                                // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
+                                                                RepositoryProvider.of<
+                                                                            OndcRepository>(
+                                                                        context)
+                                                                    .transactionId,
+                                                            productName:
+                                                                _textEditingController
+                                                                    .text
+                                                                    .toString(),
+                                                          ),
+                                                        );
+                                                  },
+                                                  child: Icon(
+                                                    CupertinoIcons
+                                                        .search_circle_fill,
+                                                    size: 32,
+                                                    color: Colors.orange,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                        //! add the indicator here
-                                        // GestureDetector(
-                                        //   onTap: () => ge.Get.to(
-                                        //     OndcCartView(),
-                                        //   ),
-                                        //   child: Stack(
-                                        //     children: [
-                                        //       Image.asset(
-                                        //         'assets/newshoppingcartorange.png',
-                                        //         height: 45,
-                                        //         width: 45,
-                                        //       )
-                                        //     ],
-                                        //   ),
-                                        // ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 25.0),
-                                          child: Image.asset('assets/edit.png'),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 8),
-                                    child: SizedBox(
-                                      height: 50,
-                                      child: TextFormField(
-                                        controller: _textEditingController,
-                                        onFieldSubmitted: (value) {
-                                          context.read<OndcBloc>().add(
-                                                FetchListOfShopWithSearchedProducts(
-                                                  transactionId:
-                                                      // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
-                                                      RepositoryProvider.of<
-                                                                  OndcRepository>(
-                                                              context)
-                                                          .transactionId,
-                                                  productName:
-                                                      _textEditingController
-                                                          .text
-                                                          .toString(),
-                                                ),
-                                              );
-                                        },
-                                        // initialValue: _textEditingController
-                                        //     .value.text,
-                                        // onChanged: (value) {
-                                        //   _searchList(
-                                        //     searchText: value,
-                                        //     mainOndcShopWidgets: shopWidgets,
-                                        //   );
-                                        // },
-                                        // maxLines: 1,
-                                        decoration: InputDecoration(
-                                          labelText: 'Search Products here',
-                                          isDense: true,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                          suffixIcon: state is SearchItemLoaded
-                                              ? GestureDetector(
-                                                  onTap: () {
-                                                    context
-                                                        .read<OndcBloc>()
-                                                        .add(
-                                                          ClearSearchEventShops(
-                                                              shopModels:
-                                                                  existingShopModels),
-                                                        );
-                                                    // context
-                                                    //     .read<OndcBloc>()
-                                                    //     .add(
-                                                    //       FetchNearByShops(
-                                                    //         lat: widget
-                                                    //             .customerModel
-                                                    //             .lat,
-                                                    //         lng: widget
-                                                    //             .customerModel
-                                                    //             .lng,
-                                                    //         pincode: widget
-                                                    //             .customerModel
-                                                    //             .pinCode,
-                                                    //         isDelivery: widget
-                                                    //             .customerModel
-                                                    //             .opStats,
-                                                    //       ),
-                                                    //     );
-                                                    _textEditingController
-                                                        .clear();
-                                                  },
-                                                  child: Icon(Icons.cancel),
-                                                )
-                                              : null,
-                                          prefixIcon: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 9.0),
-                                            child: InkWell(
-                                              onTap: () {
-                                                context.read<OndcBloc>().add(
-                                                      FetchListOfShopWithSearchedProducts(
-                                                        transactionId:
-                                                            // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
-                                                            RepositoryProvider
-                                                                    .of<OndcRepository>(
-                                                                        context)
-                                                                .transactionId,
-                                                        productName:
-                                                            _textEditingController
-                                                                .text
-                                                                .toString(),
-                                                      ),
-                                                    );
-                                              },
-                                              child: Icon(
-                                                CupertinoIcons
-                                                    .search_circle_fill,
-                                                size: 32,
-                                                color: Colors.orange,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      state is SearchItemLoaded
+                                          ? Text('')
+                                          : Center(
+                                              child: Text(
+                                                'OR',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 15),
                                               ),
                                             ),
-                                          ),
-                                        ),
+                                      SizedBox(
+                                        height: 10,
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  state is SearchItemLoaded
-                                      ? Text('')
-                                      : Center(
-                                          child: Text(
-                                            'OR',
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 15),
-                                          ),
-                                        ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  state is SearchItemLoaded
-                                      ? searchWidgets.isEmpty
-                                          ? Text('')
+                                      state is SearchItemLoaded
+                                          ? searchWidgets.isEmpty
+                                              ? Text('')
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 25.0),
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                        'Below are the shops that sell "${_textEditingController.text.toString().capitalizeFirst}"'),
+                                                  ),
+                                                )
                                           : Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 25.0),
                                               child: Align(
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
-                                                    'Below are the shops that sell "${_textEditingController.text.toString().capitalizeFirst}"'),
+                                                    'Browse your Local Shops'),
                                               ),
-                                            )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 25.0),
-                                          child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child:
-                                                Text('Browse your Local Shops'),
-                                          ),
-                                        ),
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                  SingleChildScrollView(
-                                    child: state is SearchItemLoaded
-                                        ? searchWidgets.isEmpty
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.all(18.0),
-                                                child: Text(
-                                                  'Unfortunately there are no shops that sell the product you are looking for.\nPlease try search for something different',
-                                                  style: TextStyle(
-                                                    color:
-                                                        AppColors().brandDark,
-                                                    fontSize: 18,
-                                                  ),
-                                                ),
-                                              )
+                                            ),
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      SingleChildScrollView(
+                                        child: state is SearchItemLoaded
+                                            ? searchWidgets.isEmpty
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            18.0),
+                                                    child: Text(
+                                                      'Unfortunately there are no shops that sell the product you are looking for.\nPlease try search for something different',
+                                                      style: TextStyle(
+                                                        color: AppColors()
+                                                            .brandDark,
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Column(
+                                                    children: searchWidgets,
+                                                  )
                                             : Column(
-                                                children: [...searchWidgets],
-                                              )
-                                        : Column(
-                                            children: isSearching
-                                                ? searchWidgets
-                                                : shopWidgets,
-                                          ),
+                                                children: shopWidgets,
+                                              ),
+                                      ),
+                                      _isLoading
+                                          ? CircularProgressIndicator()
+                                          : Text('')
+                                    ],
                                   ),
-                                  _isLoading
-                                      ? CircularProgressIndicator()
-                                      : Text('')
-                                ],
-                              ),
-                            ),
+                                ),
         );
       },
     );

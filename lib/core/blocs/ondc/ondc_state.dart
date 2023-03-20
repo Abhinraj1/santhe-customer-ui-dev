@@ -38,6 +38,17 @@ class ClearSearchState extends OndcState {
   List<Object?> get props => [ondcShopModels];
 }
 
+class ClearStateLoading extends OndcState {}
+
+class ClearStateErrorState extends OndcState {
+  final String message;
+  const ClearStateErrorState({
+    required this.message,
+  });
+  @override
+  List<Object?> get props => [message];
+}
+
 class ErrorFetchingGlobalProducts extends OndcState {
   final String message;
   const ErrorFetchingGlobalProducts({

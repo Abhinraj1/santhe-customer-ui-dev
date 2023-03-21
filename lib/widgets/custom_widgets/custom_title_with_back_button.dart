@@ -10,38 +10,58 @@ class CustomTitleWithBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return     Padding(
+    return
+      Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 20),
       child: Row(
         children: [
-          InkWell(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: CircleAvatar(
-              backgroundColor: AppColors().brandDark,
-              radius: 18,
-              child: const Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 100,
-          ),
+          const CustomBackButton(),
+          const Spacer(),
+
           Text(
               title,
               style:FontStyleManager().pageTitleStyle
 
-          )
+          ),
+          const Spacer(),
         ],
       ),
     );
   }
 }
 
+class CustomBackButton extends StatelessWidget {
+  final bool? invertColors;
+  final double? leftPadding;
+  const CustomBackButton({Key? key, this.invertColors,
+    this.leftPadding}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return  Padding(
+      padding:  EdgeInsets.only(left: leftPadding ?? 10.0),
+      child: InkWell(
+        onTap: (){
+          Navigator.pop(context);
+        },
+        child: CircleAvatar(
+          backgroundColor: invertColors ?? false ?
+          AppColors().white100 :
+           AppColors().brandDark,
+
+          radius: 13,
+          child:  Padding(
+            padding: const EdgeInsets.only(left: 7.0),
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 17,
+              color: invertColors ?? false ?
+              AppColors().brandDark :
+              AppColors().white100
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

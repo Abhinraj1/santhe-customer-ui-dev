@@ -6,7 +6,6 @@ import '../../../../constants.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../models/ondc/shop_model.dart';
-import '../../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 
 
 class ShopContactSupportCard extends StatelessWidget {
@@ -42,9 +41,9 @@ class ShopContactSupportCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: FontStyleManager().s16fw600Grey,),
           SizedBox(
-            width: 120,
+            //width: 120,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
                   backgroundColor: AppColors().brandDark,
@@ -58,9 +57,12 @@ class ShopContactSupportCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(pno,
-                  textAlign: TextAlign.center,
-                  style: FontStyleManager().s16fw500,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Text(pno,
+                    textAlign: TextAlign.center,
+                    style: FontStyleManager().s16fw500,),
+                ),
               ],
             ),
           ),

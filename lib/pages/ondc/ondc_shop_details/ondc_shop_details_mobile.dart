@@ -646,15 +646,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const SizedBox(height: 5),
-                                    Align(
+                                    const Align(
                                       alignment: Alignment.centerLeft,
-                                      child: GestureDetector(
-                                        onTap: () => ge.Get.back(),
-                                        child: Icon(
-                                          Icons.arrow_back,
-                                          color: AppColors().white100,
-                                        ),
-                                      ),
+                                      child: CustomBackButton(invertColors: true),
                                     ),
                                     AutoSizeText(
                                       widget.shopModel.name,
@@ -928,53 +922,40 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                             suffixIcon: state is FetchedItemsInLocalShop
-                                ? GestureDetector(
-                                    onTap: () {
-                                      // context.read<OndcBloc>().add(
-                                      //       ClearSearchEventOndc(
-                                      //         productModels:
-                                      //             existingProductModels,
-                                      //       ),
-                                      //     );
-                                      // _textEditingController.clear();
-                                      context.read<OndcBloc>().add(
-                                            FetchProductsOfShops(
-                                              shopId: widget.shopModel.id,
-                                              transactionId: RepositoryProvider
-                                                      .of<OndcRepository>(
-                                                          context)
-                                                  .transactionId,
-                                            ),
-                                          );
-                                    },
-                                    child: const Icon(Icons.cancel),
-                                  )
+                                ? IconButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      _textEditingController.clear();
+                                    });
+                                    context.read<OndcBloc>().add(
+                                      FetchProductsOfShops(
+                                        shopId: widget.shopModel.id,
+                                        transactionId:
+                                        RepositoryProvider.of<OndcRepository>
+                                          (context).transactionId,
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.cancel),
+
+                                )
                                 : _errorSearchingforProduct
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          // context.read<OndcBloc>().add(
-                                          //       ClearSearchEventOndc(
-                                          //         productModels:
-                                          //             existingProductModels,
-                                          //       ),
-                                          //     );
-                                          // _textEditingController.clear();
-                                          setState(() {
-                                            _errorSearchingforProduct = false;
-                                          });
-                                          context.read<OndcBloc>().add(
-                                                FetchProductsOfShops(
-                                                  shopId: widget.shopModel.id,
-                                                  transactionId:
-                                                      RepositoryProvider.of<
-                                                                  OndcRepository>(
-                                                              context)
-                                                          .transactionId,
-                                                ),
-                                              );
-                                        },
-                                        child: const Icon(Icons.cancel),
-                                      )
+                                    ? IconButton(
+                                      onPressed: (){
+                                      setState(() {
+                                        _errorSearchingforProduct = false;
+                                        _textEditingController.clear();
+                                      });
+                                      FetchProductsOfShops(
+                                        shopId: widget.shopModel.id,
+                                        transactionId:
+                                        RepositoryProvider.of<OndcRepository>
+                                          (context).transactionId,
+                                      );
+                                      },
+                                      icon: const Icon(Icons.cancel),
+
+                                    )
                                     : null,
                             prefixIcon: GestureDetector(
                               onTap: () {
@@ -1020,7 +1001,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                               ),
                             ),
                           )
-                        : Padding(
+                        : !_errorSearchingforProduct ? Padding(
                             padding: const EdgeInsets.only(right: 30.0),
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -1028,7 +1009,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                 '${widget.shopModel.item_count} items available',
                               ),
                             ),
-                          ),
+                          ) :
+                    const SizedBox(),
+
                     state is FetchedItemsInLocalShop
                         ? Container(
                             height: MediaQuery.of(context).size.height * 0.54,
@@ -1036,7 +1019,8 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             child: Padding(
                               padding:
                                   const EdgeInsets.only(left: 20.0, top: 20),
-                              child: Center(
+                              child: Align(
+                                alignment: Alignment.topCenter,
                                 child: GridView.count(
                                   shrinkWrap: true,
                                   physics: const ScrollPhysics(),
@@ -1060,13 +1044,14 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                 color: Colors.transparent,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 20.0, top: 20),
-                                  child: Center(
-                                    child: Column(
-                                      children: const [
-                                        Text(
-                                            'Error Fetching Products, Please try again')
-                                      ],
+                                      left: 20.0, top: 20, right: 20),
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: SizedBox(
+                                      child: Text(
+                                          'No items found for your search.'
+                                              'Please try with a different item name',
+                                      style: FontStyleManager().s14fw700Orange,),
                                     ),
                                   ),
                                 ),

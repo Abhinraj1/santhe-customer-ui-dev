@@ -6,7 +6,7 @@ import '../../models/ondc/single_order_model.dart';
 
 class InvoiceTable extends StatelessWidget {
 
-  final List<CartItemPrices> prices;
+  final List<FinalCosting> prices;
   final String totalPrice;
 
 
@@ -18,50 +18,26 @@ class InvoiceTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String getSubTotal(){
-      int subtotal = 0;
-      for(var i in prices){
-        if(i.type == "item"){
-         int price  = int.parse(i.price.toString());
-         subtotal = subtotal+price.toInt();
-         return subtotal.toString();
-        }
-      }
-      return subtotal.toString();
-    }
-    final String subTotal = getSubTotal();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
       child: SizedBox(
-        child: Column(
-          children: [
-            customRow(
-              title: "Subtotal",
-              data: "₹$subTotal"
-            ),
-            SizedBox(
-              height: prices.length*17,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                 itemCount: prices.length,
-                  itemBuilder: (context,index){
-                   if(prices[index].type != "item"){
-                     return customRow(title: prices[index].title.toString(),
-                         data: "₹${prices[index].price.toString()}");
-                   }else{
-                     return const SizedBox();
-                   }
-                  }),
-            ),
-            customRow(
-                title: "Total:",
-                data: "₹$totalPrice",
-              isTotalPrice: true
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+           itemCount: prices.length,
+            itemBuilder: (context,index){
 
-            ),
-          ],
-        ),
+            if(index == prices.length-1){
+              return customRow(
+                  title: "Total:",
+                  data: "₹$totalPrice",
+                  isTotalPrice: true
+              );
+            }else {
+              return customRow(title: prices[index].lable.toString(),
+                  data: "₹${prices[index].value.toString()}");
+            } }),
       )
 
     );

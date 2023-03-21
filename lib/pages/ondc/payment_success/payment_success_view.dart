@@ -8,7 +8,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
-import 'package:santhe/core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import 'package:santhe/core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'package:santhe/widgets/custom_widgets/custom_button.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;

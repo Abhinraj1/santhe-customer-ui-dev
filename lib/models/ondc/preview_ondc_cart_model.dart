@@ -25,6 +25,7 @@ class PreviewWidgetModel extends Equatable {
   final dynamic tat;
   final dynamic serviceable;
   final dynamic message_id;
+  final dynamic returnable;
   const PreviewWidgetModel({
     required this.id,
     required this.price,
@@ -46,6 +47,7 @@ class PreviewWidgetModel extends Equatable {
     required this.tat,
     required this.serviceable,
     required this.message_id,
+    this.returnable,
   });
 
   PreviewWidgetModel copyWith({
@@ -69,6 +71,7 @@ class PreviewWidgetModel extends Equatable {
     dynamic? tat,
     dynamic? serviceable,
     dynamic? message_id,
+    dynamic? returnable,
   }) {
     return PreviewWidgetModel(
       id: id ?? this.id,
@@ -92,6 +95,7 @@ class PreviewWidgetModel extends Equatable {
       tat: tat ?? this.tat,
       serviceable: serviceable ?? this.serviceable,
       message_id: message_id ?? this.message_id,
+        returnable: returnable ?? this.returnable,
     );
   }
 
@@ -117,6 +121,7 @@ class PreviewWidgetModel extends Equatable {
       'tat': tat,
       'serviceable': serviceable,
       'message_id': message_id,
+      "returnable" : returnable
     };
   }
 
@@ -138,6 +143,7 @@ class PreviewWidgetModel extends Equatable {
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] as dynamic : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as dynamic : null,
       quoteId: map['quoteId'] != null ? map['quoteId'] as dynamic : null,
+      returnable: map['returnable'] != null ? map['returnable'] as dynamic : null,
       deliveryFulfillmentId: map['deliveryFulfillmentId'] != null
           ? map['deliveryFulfillmentId'] as dynamic
           : null,
@@ -205,6 +211,7 @@ class PreviewWidgetModel extends Equatable {
       tat,
       serviceable,
       message_id,
+      returnable
     ];
   }
 }

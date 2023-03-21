@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:santhe/pages/ondc/ondc_return_screens/ondc_return_select_reason_screen/ondc_return_select_reason_screen_mobile.dart';
-
-import '../ondc_order_cancel_screen/ondc_order_cancel_select_reason_screen/ondc_order_cancel_select_reason_screen_mobile.dart';
+import '../ondc_order_cancel_screen/ondc_order_cancel_select_reason_screen/ondc_select_reason_screen_mobile.dart';
 
 class ONDCReturnView extends StatelessWidget {
   const ONDCReturnView({Key? key}) : super(key: key);
@@ -11,7 +9,7 @@ class ONDCReturnView extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Builder(builder: (context) {
       return ScreenTypeLayout(
-          mobile: const ONDCFullOrderCancelScreen()
+          mobile: const ONDCReasonsScreen()
         // desktop: _OndcProductGlobalDesktop(),
         // tablet: _OndcProductGlobalTablet(),
       );

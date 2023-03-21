@@ -2,9 +2,9 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import 'package:santhe/manager/font_manager.dart';
 import '../../../../constants.dart';
+import '../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 
 
 class SelectDateFilter extends StatefulWidget {
@@ -16,12 +16,23 @@ class SelectDateFilter extends StatefulWidget {
 
 class _SelectDateFilterState extends State<SelectDateFilter> {
 
+
   String selectedValue = "";
   String hint = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<OrderHistoryBloc>(context).add(SevenDaysFilterEvent());
+    setState(() {
+      hint = "";
+      selectedValue = "7days";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
-
 
 
 
@@ -86,19 +97,6 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                       MaterialLocalizations.of(context).formatDecimal(date.day),
                       style: textStyle,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 27.5),
-                      child: Container(
-                        height: 4,
-                        width: 4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: isSelected == true
-                              ? Colors.white
-                              : Colors.grey[500],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -109,7 +107,7 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
 
     return Container(
       height: 130,
-      margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 30),
+      margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
       decoration: BoxDecoration(
         color: AppColors().white100,
         borderRadius: BorderRadius.circular(customButtonBorderRadius),
@@ -120,7 +118,7 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
           Padding(
             padding: const EdgeInsets.only(left:20 ,top: 10.0),
             child: SizedBox(
-              width: 300,
+             // width: 300,
               child:
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,7 +176,8 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                   InkWell(
                     onTap: (){
                       setState(() {
-                        BlocProvider.of<OrderHistoryBloc>(context).add(ThirtyDaysFilterEvent());
+                        BlocProvider.of<OrderHistoryBloc>(context).add(
+                            ThirtyDaysFilterEvent());
                         selectedValue = "30days";
                         hint = "";
                       });
@@ -230,11 +229,11 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
 
           ///Custom
           SizedBox(
-            width: 300,
+           // width: 300,
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 12.0,top: 10),
+                padding: const EdgeInsets.only(left: 20.0,top: 10),
 
                 child: InkWell(
                   onTap: ()async {
@@ -251,7 +250,8 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
 
                     if (values != null) {
 
-                      BlocProvider.of<OrderHistoryBloc>(context).add(CustomDaysFilterEvent(
+                      BlocProvider.of<OrderHistoryBloc>(context).add(
+                          CustomDaysFilterEvent(
                           selectedDates: values));
 
                       datePickedController.text = _getValueText(
@@ -264,14 +264,14 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                     }
                   },
                   child: SizedBox(
-                    width: 80,
+                   // width: 80,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                           height: 15,
                           width: 15,
-                          margin: const EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10,left: 0),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
@@ -315,6 +315,7 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                               FontStyleManager().s14fw700Orange:
                               FontStyleManager().s14fw700Grey),
                         ),
+                        const Spacer()
                       ],
                     ),
                   ),
@@ -323,10 +324,10 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0,bottom: 10),
+            padding: const EdgeInsets.only(left: 30,bottom: 10,right: 30),
             child: SizedBox(
               height: 40,
-              width: 250,
+             // width: 250,
               child: TextField(
                 onTap: () async {
                   final values = await showCalendarDatePicker2Dialog(

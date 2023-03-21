@@ -1,7 +1,7 @@
 
 
 
-part of 'ondc_single_order_details_bloc.dart';
+part of 'ondc_order_history_bloc.dart';
 
 
 abstract class OrderHistoryEvent extends Equatable {

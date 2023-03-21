@@ -9,8 +9,6 @@ import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
-
-import '../../models/ondc/past_cart_items_model.dart';
 import '../../models/ondc/single_order_model.dart';
 
 class OndcRepository with LogMixin {
@@ -167,7 +165,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      warningLog('product name $productName alsoe $url');
+      warningLog('product name $productName also $url');
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
       final responseBody =
@@ -310,8 +308,11 @@ class OndcRepository with LogMixin {
     }
   }
 
-  Future<List<SingleOrderModel>> getSingleOrder(
+
+
+  Future<Data> getSingleOrder(
       {required String OrderId}) async {
+
     String orderId = OrderId;
     // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
     //  "e80574c6-32f2-45ce-8b67-d97a89490523";
@@ -331,15 +332,15 @@ class OndcRepository with LogMixin {
 
       warningLog('${response.statusCode}');
 
-      final responseBody = await json.decode(response.body)["data"]["rows"];
+      final responseBody = await json.decode(response.body);
 
       warningLog(' respose here =============############### $responseBody');
 
-      List<SingleOrderModel> data =
-          []; //SingleOrderModel.fromJson(responseBody);
-      data.add(SingleOrderModel.fromJson(responseBody));
+     Data data = Data.fromJson(responseBody);
+     //SingleOrderModel.fromJson(responseBody);
+     /// data.add(SingleOrderModel.fromJson(responseBody));
 
-      warningLog('${data.first.quotes!.first.status}');
+      warningLog('${data.singleOrderModel!.quotes!.first.status}');
 
       return data;
     } catch (e) {
@@ -349,12 +350,16 @@ class OndcRepository with LogMixin {
     }
   }
 
-  Future<List<SingleOrderModel>> getPastOrder() async {
-    final firebaseId = //"8808435978";
-        AppHelpers().getPhoneNumberWithoutCountryCode;
 
-    final url = Uri.parse("http://ondcstaging.santhe.in/santhe/ondc/customer/"
-        "order/list?limit=10&offset=0&firebase_id=$firebaseId&status=PAID");
+  Future<List<SingleOrderModel>> getPastOrder() async {
+
+    final firebaseId = //"8808435978";
+    AppHelpers().getPhoneNumberWithoutCountryCode;
+
+
+    final url = Uri.parse(
+        "http://ondcstaging.santhe.in/santhe/ondc/customer/"
+            "order/list?limit=10&offset=0&firebase_id=$firebaseId&status=PAID");
 
     final header = {
       'Content-Type': 'application/json',

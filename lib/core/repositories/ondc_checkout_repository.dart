@@ -58,6 +58,7 @@ class OndcCheckoutRepository with LogMixin {
   Future<dynamic> proceedToCheckoutMethodPost(
       {required final String transactionId,
       required final String storeLocation_id}) async {
+
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/price/request');
     final header = {
@@ -76,6 +77,7 @@ class OndcCheckoutRepository with LogMixin {
           },
         ),
       );
+
       warningLog('Setter ${response.statusCode}');
       //! need a new statusCode for retry
       final responseBody = json.decode(response.body)['message_id'];

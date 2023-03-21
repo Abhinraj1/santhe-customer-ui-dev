@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_colors.dart';
-import '../../../../core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
+import '../../../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../models/ondc/shop_model.dart';
 import '../../../../models/ondc/single_order_model.dart';
 import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
+import '../../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../../widgets/ondc_contact_support_widgets/shop_contact_support_card.dart';
 
 class ONDCContactSupportShopContactDetailsScreen extends StatefulWidget {
@@ -37,6 +38,7 @@ class _ONDCContactSupportShopContactDetailsScreenState extends State<ONDCContact
 
     return CustomScaffold(
         backgroundColor: AppColors().grey20,
+        trailingButton: homeIconButton(),
         body: Column(
           children: [
             const CustomTitleWithBackButton(title: "Contact Support"),
@@ -66,7 +68,9 @@ class _ONDCContactSupportShopContactDetailsScreenState extends State<ONDCContact
             ShopContactSupportCard(model: widget.model),
             CustomButton(
                 verticalPadding: 50,
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                },
                 buttonTitle: "Back")
           ],
         ));

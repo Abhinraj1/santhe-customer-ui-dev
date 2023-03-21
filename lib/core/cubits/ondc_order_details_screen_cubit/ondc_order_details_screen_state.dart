@@ -13,7 +13,7 @@ class HideCancelButton extends OrderDetailsButtonState{}
 abstract class OrderDetailsScreenState{}
 
 class OrderDetailsDataLoadedState extends OrderDetailsScreenState{
-  final List<SingleOrderModel> orderDetails;
+  final Data orderDetails;
 
   OrderDetailsDataLoadedState({required this.orderDetails});
 

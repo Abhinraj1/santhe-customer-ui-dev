@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/core/blocs/ondc/ondc_order_cancel_bloc/ondc_order_cancel_bloc.dart';
 import 'package:santhe/manager/font_manager.dart';
 import 'package:santhe/models/ondc/order_cancel_reasons_model.dart';
 
+import '../../core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
+
 class ReturnReasonsListTile extends StatefulWidget {
   final List<ReasonsModel> reasons;
+  final bool isReturn;
 
 
-  const ReturnReasonsListTile({Key? key, required this.reasons})
+  const ReturnReasonsListTile({Key? key, required this.reasons,
+    required this.isReturn})
       : super(key: key);
 
   @override
@@ -40,19 +43,26 @@ class _ReturnReasonsListTileState extends State<ReturnReasonsListTile> {
                     child: InkWell(
                       onTap: () {
 
-
                         setInnerState((){
 
                           selectedValue = widget.reasons[index].code.toString();
 
                           setState(() {});
                         });
-                        BlocProvider.of<ONDCOrderCancelBloc>(context).add(
-                          SelectedCodeEvent(
-                              code: selectedValue,
-                          ));
 
+                        if(widget.isReturn){
 
+                          BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
+                              SelectedCodeForReturnEvent(
+                                code: selectedValue,
+                              ));
+
+                        }else{
+                          BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
+                              SelectedCodeEvent(
+                                code: selectedValue,
+                              ));
+                        }
                       },
                       child: // simple usage
 

@@ -117,7 +117,7 @@ class _OndcCheckOutScreenMobileState extends State<OndcCheckOutScreenMobile> {
                       productName: "Bru Original mixed coffee",
                       productDetails: "250gm , 1  units",
                       productPrice: "₹250"),
-                  BottomTextRow(title: "Delivery in", message: "3 Days")
+                //  BottomTextRow(title: "Delivery in", message: "3 Days")
                 ]),
 
                 // InvoiceTable(

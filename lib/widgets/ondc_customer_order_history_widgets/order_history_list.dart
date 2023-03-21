@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/core/blocs/ondc/ondc_single_order_details_bloc/ondc_single_order_details_bloc.dart';
 import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_view.dart';
 
 import '../../../../constants.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../widgets/ondc_order_details_widgets/order_details_table.dart';
+import '../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import '../../core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import '../../models/ondc/single_order_model.dart';
 
@@ -53,7 +53,7 @@ class OrderHistoryList extends StatelessWidget {
 
   Widget listBody({required List<SingleOrderModel> orderDetails}){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SizedBox(
         child: ListView.builder(
             itemCount:  orderDetails.length,
@@ -77,10 +77,8 @@ class OrderHistoryCell extends StatelessWidget {
   Widget build(BuildContext context) {
 
     DateTime date = DateTime.parse(orderDetails.quotes!.first.createdAt.toString());
-
-    print("DATE FROM BACEKDN ============================ $date");
     String orderNo = orderDetails.orderNumber.toString(),
-         orderStatus = orderDetails.quotes!.first.status.toString(),
+         orderStatus = orderDetails.status.toString(),
         shopName = orderDetails.storeLocation!.store!.name.toString(),
         orderId = orderDetails.quotes!.first.orderId.toString(),
          orderDate = DateFormat.yMd().format(date);

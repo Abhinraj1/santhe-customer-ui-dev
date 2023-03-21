@@ -23,25 +23,26 @@ class ONDCReasonsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       trailingButton: homeIconButton(),
-      body: BlocBuilder<ONDCOrderCancelAndReturnReasonsBloc,
-          ONDCOrderCancelAndReturnState>(builder: (context, state) {
+      body: BlocBuilder<ONDCOrderCancelAndReturnReasonsBloc, ONDCOrderCancelAndReturnState>(
+          builder: (context, state) {
         if (state is ReasonsLoadedFullOrderCancelState) {
           return body(
-              title: "Cancel Order",
+            title: "Cancel Order",
               orderNumber: state.orderNumber,
               reasons: state.reasons,
               onTap: () {},
               isActive: false);
         } else if (state is ReasonsLoadedSingleOrderCancelState) {
           return body(
-              title: "Cancel Order",
+            title: "Cancel Order",
               orderNumber: state.orderNumber,
               reasons: state.reasons,
               onTap: () {},
               isActive: false);
         } else if (state is SelectedCodeState) {
+
           return body(
-              title: "Cancel Order",
+            title: "Cancel Order",
               orderNumber: state.orderNumber,
               reasons: state.reasons,
               onTap: () {
@@ -49,32 +50,43 @@ class ONDCReasonsScreen extends StatelessWidget {
                     .add(CancelFullOrderRequestEvent());
               },
               isActive: true);
+
         } else if (state is OrderCancelErrorState) {
+
           return Center(child: Text(state.message));
-        } else if (state is ReasonsLoadedForReturnState) {
-          return body(
-              title: "Return Request",
+
+        } else if(state is ReasonsLoadedForReturnState){
+
+
+          return  body(
+            title: "Return Request",
               orderNumber: state.orderNumber,
               reasons: state.reasons,
               onTap: () {},
               isActive: false,
-              isReturn: true);
-        } else if (state is SelectedCodeForReturnState) {
+            isReturn: true
+          );
+        }
+        else if (state is SelectedCodeForReturnState) {
+
           return body(
-              title: "Return Request",
+            title: "Return Request",
               orderNumber: state.orderNumber,
               reasons: state.reasons,
               onTap: () {
+
                 ///for Return && Navigate to upload image Screen
-                BlocProvider.of<UploadImageAndReturnRequestCubit>(context)
-                    .getPrerequisiteData(
-                        orderId: state.orderId,
-                        orderNumber: state.orderNumber,
-                        returnProduct: state.returnProduct);
+              BlocProvider.of<UploadImageAndReturnRequestCubit>(context).getPrerequisiteData(
+                  orderId: state.orderId, orderNumber: state.orderNumber,
+                  returnProduct: state.returnProduct);
+
               },
               isActive: true,
-              isReturn: true);
-        } else {
+              isReturn: true
+
+          );
+
+        }else {
           return const Center(child: CircularProgressIndicator());
         }
       }),
@@ -83,15 +95,15 @@ class ONDCReasonsScreen extends StatelessWidget {
 
   Widget body(
       {required String orderNumber,
-      required String title,
+        required String title,
       required List<ReasonsModel> reasons,
       required bool isActive,
       required Function() onTap,
       bool? isReturn}) {
     return Column(
       children: [
-        CustomTitleWithBackButton(
-          title: title,
+         CustomTitleWithBackButton(
+          title: title ,
         ),
         Text(
           "Order ID  : $orderNumber",
@@ -112,7 +124,7 @@ class ONDCReasonsScreen extends StatelessWidget {
           height: 210,
           child: ReturnReasonsListTile(
             reasons: reasons,
-            // isReturn: isReturn ?? false,
+            isReturn: isReturn ?? false,
           ),
         ),
         CustomButton(

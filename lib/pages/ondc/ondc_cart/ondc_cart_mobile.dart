@@ -380,7 +380,6 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                   });
                                 }
                               },
-                              child: Text('Proceed To Checkout'),
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
@@ -389,7 +388,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 ),
                                 backgroundColor: MaterialStateProperty.all(
                                     AppColors().brandDark),
-                              ),
+                              ), child: const Text('Proceed To Checkout'),
                             ),
                           ),
                           Text(

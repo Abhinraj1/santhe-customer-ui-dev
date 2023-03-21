@@ -197,6 +197,56 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             result: 'There is an Error',
           );
         }
+        if (state is RetryPostSelectState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  GetCartPriceEventPost(
+                    transactionId:
+                        RepositoryProvider.of<OndcRepository>(context)
+                            .transactionId,
+                    storeLocation_id: widget.storeLocation_id,
+                  ),
+                ),
+          );
+        }
+        if (state is RetryGetSelectState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  GetFinalItemsEvent(
+                    messageId: messageID,
+                    storeLocation_id: widget.storeLocation_id,
+                    transactionId:
+                        RepositoryProvider.of<OndcRepository>(context)
+                            .transactionId,
+                  ),
+                ),
+          );
+        }
+        if (state is RetryGetInitState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  InitializeGetEvent(
+                      order_id:
+                          RepositoryProvider.of<OndcCheckoutRepository>(context)
+                              .orderId),
+                ),
+          );
+        }
+        if (state is RetryPostInitState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  InitializePostEvent(
+                      message_id: messageID,
+                      order_id:
+                          RepositoryProvider.of<OndcCheckoutRepository>(context)
+                              .orderId),
+                ),
+          );
+        }
         if (state is CheckoutPostSuccess) {
           setState(() {
             messageID = state.messageId;

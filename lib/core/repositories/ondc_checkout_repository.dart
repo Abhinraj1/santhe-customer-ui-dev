@@ -77,10 +77,12 @@ class OndcCheckoutRepository with LogMixin {
         ),
       );
       warningLog('Setter ${response.statusCode}');
+      //! need a new statusCode for retry
       final responseBody = json.decode(response.body)['message_id'];
+
       warningLog('$responseBody');
       if (responseBody == null) {
-        throw const CheckoutPostError(message: 'There is no response');
+        throw RetryPostSelectState();
       }
       return responseBody;
     } catch (e) {
@@ -103,8 +105,12 @@ class OndcCheckoutRepository with LogMixin {
       List<CheckoutCartModel> cartCheckoutModels = [];
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
+      //! need a new status code for retry
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
+      if (responseBody.isEmpty) {
+        throw RetryGetSelectState();
+      }
       responseBody.forEach((element) {
         cartCheckoutModels.add(
           CheckoutCartModel.fromMap(element),
@@ -152,6 +158,7 @@ class OndcCheckoutRepository with LogMixin {
           PreviewWidgetModel.fromMap(element),
         );
       }
+      //! finacostingmodel change
       finalCostingModel = FinalCostingModel.fromMap(map);
       warningLog(' cost$finalCostingModel $previewModels');
       if (responseBody['message']
@@ -191,9 +198,11 @@ class OndcCheckoutRepository with LogMixin {
           },
         ),
       );
+      //! need a new statuscode for retry
       warningLog('checking for response body ${response.body}');
       final responseBody = json.decode(response.body);
       final status = responseBody['status'];
+
       return status;
     } catch (e) {
       throw InitializePostErrorState(
@@ -213,7 +222,7 @@ class OndcCheckoutRepository with LogMixin {
       warningLog(url.toString());
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode} and also ${response.body}');
-
+      //! need a new statusCode for retry
       final responseBody = json.decode(response.body);
       final String status = responseBody['data']['status'];
       //!

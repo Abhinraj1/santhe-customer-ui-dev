@@ -349,8 +349,8 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 ),
                                 Text(
                                   '₹ ${total.toString()} *',
-                                  style: const TextStyle(
-                                      color: Colors.black,
+                                  style: TextStyle(
+                                      color: AppColors().brandDark,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],

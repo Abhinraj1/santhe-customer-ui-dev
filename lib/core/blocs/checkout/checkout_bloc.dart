@@ -30,6 +30,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         emit(
           CheckoutPostSuccess(messageId: messageId),
         );
+      } on RetryPostSelectState catch (e) {
+        emit(RetryPostSelectState());
       } on CheckoutPostError catch (e) {
         emit(
           CheckoutPostError(
@@ -49,6 +51,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         emit(
           CheckoutGetSuccess(cartModels: models),
         );
+      } on RetryGetSelectState catch (e) {
+        emit(RetryGetSelectState());
       } on CheckoutGetError catch (e) {
         emit(CheckoutGetError(message: e.message));
       }
@@ -80,6 +84,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         emit(
           InitializePostSuccessState(status: status),
         );
+      } on RetryPostInitState catch (e) {
+        emit(RetryPostInitState());
       } on InitializePostErrorState catch (e) {
         emit(
           InitializePostErrorState(message: e.message),
@@ -96,6 +102,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
         emit(
           InitializeGetSuccessState(status: status),
         );
+      } on RetryGetInitState catch (e) {
+        emit(RetryGetInitState());
       } on InitializeGetErrorState catch (e) {
         emit(InitializeGetErrorState(message: e.message));
       }

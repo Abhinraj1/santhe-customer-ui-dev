@@ -56,8 +56,6 @@ class OndcCheckoutRepository with LogMixin {
     return offer_id;
   }
 
-
-
   Future<dynamic> proceedToCheckoutMethodPost(
       {required final String transactionId,
       required final String storeLocation_id}) async {
@@ -71,11 +69,10 @@ class OndcCheckoutRepository with LogMixin {
       errorLog('$url, and store id$storeLocation_id');
       var response;
 
-      for(int count =0 ; count <= 30 ; count++){
-
+      for (int count = 0; count <= 30; count++) {
         await Future.delayed(Duration(seconds: 1));
 
-         response = await http.post(
+        response = await http.post(
           url,
           headers: header,
           body: json.encode(
@@ -86,17 +83,15 @@ class OndcCheckoutRepository with LogMixin {
           ),
         );
 
-        print("############################# $count");
+        warningLog("############################# $count");
 
-        if( json.decode(response.body)['type'] == "SUCCESS"){
-
-          print("############################# SUCCESS ${response.body}");
+        if (json.decode(response.body)['type'] == "SUCCESS") {
+          warningLog("############################# SUCCESS ${response.body}");
 
           break;
-
         }
-      }  print("############################# POST OUT");
-
+      }
+      warningLog("############################# POST OUT");
 
       warningLog('Setter ${response.statusCode}');
       //! need a new statusCode for retry
@@ -123,29 +118,26 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-
-      print("############## proceedToCheckoutGet ############### CALLED/");
+      warningLog("############## proceedToCheckoutGet ############### CALLED/");
 
       List<CheckoutCartModel> cartCheckoutModels = [];
 
       var response;
 
-      for(int count =0 ; count <= 30 ; count++){
-
+      for (int count = 0; count <= 30; count++) {
         await Future.delayed(Duration(seconds: 1));
 
         response = await http.get(url, headers: header);
 
-        print("############################# $count");
+        warningLog("############################# $count");
 
-        if( json.decode(response.body)['type'] == "SUCCESS"){
-
-          print("############################# SUCCESS ${response.body}");
+        if (json.decode(response.body)['type'] == "SUCCESS") {
+          warningLog("############################# SUCCESS ${response.body}");
 
           break;
-
         }
-      }  print("############################# GET OUT");
+      }
+      warningLog("############################# GET OUT");
 
       warningLog('${response.statusCode}');
       //! need a new status code for retry
@@ -180,25 +172,25 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-
       var response;
 
-      for(int count =0 ; count <= 30 ; count++){
-
-        await Future.delayed(Duration(seconds: 1));
+      for (int count = 0; count <= 30; count++) {
+        await Future.delayed(const Duration(seconds: 1));
 
         response = await http.get(url, headers: header);
-        print("############################# ${json.decode(response.body)['message']}");
-        print("############################# $count");
+        warningLog(
+            "############################# ${json.decode(response.body)['message']}");
+        warningLog("############################# $count");
 
-        if( json.decode(response.body)['message'] == "Cart Items fetched successfully"){
-
-          print("############################# SUCCESS ${response.body}");
+        if (json.decode(response.body)['message'] ==
+            "Cart Items fetched successfully") {
+          warningLog("############################# SUCCESS ${response.body}");
 
           break;
-
         }
-      }  print("############################# proceedToCheckoutFinalCart OUT");
+      }
+      warningLog(
+          "############################# proceedToCheckoutFinalCart OUT");
 
       final responseBody = await json.decode(response.body);
       warningLog('$url $responseBody');
@@ -250,8 +242,7 @@ class OndcCheckoutRepository with LogMixin {
     try {
       var response;
 
-      for(int count =0 ; count <= 30 ; count++){
-
+      for (int count = 0; count <= 30; count++) {
         await Future.delayed(const Duration(seconds: 1));
 
         response = await http.post(
@@ -265,19 +256,18 @@ class OndcCheckoutRepository with LogMixin {
             },
           ),
         );
-        print("############################# ${json.decode(response.body)['message']}");
-        print("############################# $count");
+        warningLog(
+            "############################# ${json.decode(response.body)['message']}");
+        warningLog("############################# $count");
 
         ///CHECK
-        if( json.decode(response.body)['message'] == "Cart Items fetched successfully"){
-
-          print("############################# SUCCESS ${response.body}");
+        if (json.decode(response.body)['type'] == "SUCCESS") {
+          warningLog("############################# SUCCESS ${response.body}");
 
           break;
-
         }
-      }  print("############################# initPost OUT");
-
+      }
+      warningLog("############################# initPost OUT");
 
       //! need a new statuscode for retry
       warningLog('checking for response body ${response.body}');
@@ -303,24 +293,23 @@ class OndcCheckoutRepository with LogMixin {
       warningLog(url.toString());
 
       var response;
-      for(int count =0 ; count <= 30 ; count++){
-
-        await Future.delayed(Duration(seconds: 1));
+      for (int count = 0; count <= 30; count++) {
+        await Future.delayed(const Duration(seconds: 1));
 
         response = await http.get(url, headers: header);
 
-        print("############################# ${json.decode(response.body)['message']}");
-        print("############################# $count");
+        warningLog(
+            "############################# ${json.decode(response.body)['message']}");
+        warningLog("############################# $count");
 
         ///CHECK
-        if( json.decode(response.body)['message'] == "Cart Items fetched successfully"){
-
-          print("############################# SUCCESS ${response.body}");
+        if (json.decode(response.body)['type'] == "SUCCESS") {
+          warningLog("############################# SUCCESS ${response.body}");
 
           break;
-
         }
-      }  print("############################# initPost OUT");
+      }
+      warningLog("############################# initGet OUT");
 
       warningLog('${response.statusCode} and also ${response.body}');
       //! need a new statusCode for retry

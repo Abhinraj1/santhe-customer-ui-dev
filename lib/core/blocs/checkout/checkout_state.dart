@@ -102,7 +102,7 @@ class FinalizeProductErrorState extends CheckoutState {
 }
 
 class FinalizeProductSuccessState extends CheckoutState {
-  final FinalCostingModel? finalCostingModel;
+  final List<FinalCostingModel> finalCostingModel;
   const FinalizeProductSuccessState({
     required this.finalCostingModel,
   });

@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/loggers.dart';
 
@@ -19,28 +21,36 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
       : super(CheckoutInitial()) {
     on<CheckoutEvent>((event, emit) {});
 
-    on<GetCartPriceEventPost>((event, emit) async {
-      emit(CheckoutPostLoading());
-      debugLog('store id ${event.storeLocation_id}');
-      try {
-        print("########################## TRY STARTED");
-        final String messageId =
-            await ondcCheckoutRepository.proceedToCheckoutMethodPost(
-                transactionId: event.transactionId,
-                storeLocation_id: event.storeLocation_id);
-        emit(
-          CheckoutPostSuccess(messageId: messageId),
-        );
-      } on RetryPostSelectState catch (e) {
-        emit(RetryPostSelectState());
-      } on CheckoutPostError catch (e) {
-        emit(
-          CheckoutPostError(
-            message: e.toString(),
-          ),
-        );
-      }
-    });
+    // @override
+    // onChange(change) {
+    //   super.onChange(change);
+    //   errorLog('changes made to bloc$change');
+    // }
+
+    on<GetCartPriceEventPost>(
+      (event, emit) async {
+        emit(CheckoutPostLoading());
+        debugLog('store id ${event.storeLocation_id}');
+        try {
+          print("########################## TRY STARTED");
+          final String messageId =
+              await ondcCheckoutRepository.proceedToCheckoutMethodPost(
+                  transactionId: event.transactionId,
+                  storeLocation_id: event.storeLocation_id);
+          emit(
+            CheckoutPostSuccess(messageId: messageId),
+          );
+        } on CheckoutPostError catch (e) {
+          emit(
+            CheckoutPostError(
+              message: e.toString(),
+            ),
+          );
+        }
+      },
+      // transformer: (events, mapper) =>
+      //     events.throttleTime(const Duration(seconds: 20)).switchMap(mapper),
+    );
 
     on<GetCartPriceEventGet>((event, emit) async {
       emit(CheckoutGetLoading());
@@ -61,7 +71,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
 
     on<GetFinalItemsEvent>((event, emit) async {
       try {
-        final FinalCostingModel? finalCostingModel =
+        final List<FinalCostingModel> finalCostingModel =
             await ondcCheckoutRepository.proceedToCheckoutFinalCart(
           transactionid: event.transactionId,
           storeLocation_id: event.storeLocation_id,

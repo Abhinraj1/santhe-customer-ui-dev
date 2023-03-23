@@ -12,7 +12,7 @@ import 'package:santhe/models/ondc/shipment_segregator_model.dart';
 import 'package:santhe/widgets/ondc_widgets/shipment_segregator.dart';
 
 class OndcCheckoutRepository with LogMixin {
-  FinalCostingModel? finalCostingModel;
+  List<FinalCostingModel> finalCostingModel = [];
   double? finalCost;
   List<dynamic> items = [];
   List<PreviewWidgetModel> previewModels = [];
@@ -58,7 +58,6 @@ class OndcCheckoutRepository with LogMixin {
   Future<dynamic> proceedToCheckoutMethodPost(
       {required final String transactionId,
       required final String storeLocation_id}) async {
-
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/price/request');
     final header = {
@@ -81,7 +80,6 @@ class OndcCheckoutRepository with LogMixin {
       warningLog('Setter ${response.statusCode}');
       //! need a new statusCode for retry
       final responseBody = json.decode(response.body)['message_id'];
-
       warningLog('$responseBody');
       if (responseBody == null) {
         throw RetryPostSelectState();
@@ -110,9 +108,6 @@ class OndcCheckoutRepository with LogMixin {
       //! need a new status code for retry
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
-      if (responseBody.isEmpty) {
-        throw RetryGetSelectState();
-      }
       responseBody.forEach((element) {
         cartCheckoutModels.add(
           CheckoutCartModel.fromMap(element),
@@ -127,7 +122,7 @@ class OndcCheckoutRepository with LogMixin {
     }
   }
 
-  Future<FinalCostingModel?> proceedToCheckoutFinalCart(
+  Future<List<FinalCostingModel>> proceedToCheckoutFinalCart(
       {required final String storeLocation_id,
       required final String transactionid,
       required String messageId}) async {
@@ -146,7 +141,7 @@ class OndcCheckoutRepository with LogMixin {
       final responseBody = await json.decode(response.body);
       warningLog('$url $responseBody');
 
-      dynamic map = responseBody['finalCosting'];
+      List map = responseBody['finalCosting'];
       items = responseBody['data']['quotes'] as List<dynamic>;
       orderIdCart = items.first['orderId'] as String;
       errorLog('checking for orderID $orderIdCart');
@@ -161,7 +156,9 @@ class OndcCheckoutRepository with LogMixin {
         );
       }
       //! finacostingmodel change
-      finalCostingModel = FinalCostingModel.fromMap(map);
+      map.forEach((element) {
+        finalCostingModel.add(FinalCostingModel.fromMap(element));
+      });
       warningLog(' cost$finalCostingModel $previewModels');
       if (responseBody['message']
           .toString()

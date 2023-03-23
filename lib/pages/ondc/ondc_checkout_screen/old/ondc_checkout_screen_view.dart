@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -32,6 +33,7 @@ import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/ondc/map_text/map_text_view.dart';
 import 'package:santhe/pages/ondc/payment_buffer/payment_buffer_view.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
+import 'package:santhe/widgets/ondc_widgets/final_costing_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/shipment_segregator.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';

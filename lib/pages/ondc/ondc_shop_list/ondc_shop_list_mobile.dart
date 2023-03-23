@@ -354,6 +354,24 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
 
       builder: (context, state) {
 
+        fun()async{
+
+          bool status = false;
+
+          for(int count =0 ; count <= 30 ; count++){
+
+            await Future.delayed(Duration(seconds: 1));
+
+            print("############################# $count");
+            if(count == 5){
+              setState(() {
+                status = false;
+              });
+              print("############################# $status");
+
+            }
+          }  print("############################# OUT");
+        }
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
@@ -362,6 +380,8 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           floatingActionButton: FloatingActionButton(
             onPressed: (){
 
+
+              fun();
 
             ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
 

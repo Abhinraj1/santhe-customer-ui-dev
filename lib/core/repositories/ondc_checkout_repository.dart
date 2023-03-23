@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
@@ -55,6 +56,8 @@ class OndcCheckoutRepository with LogMixin {
     return offer_id;
   }
 
+
+
   Future<dynamic> proceedToCheckoutMethodPost(
       {required final String transactionId,
       required final String storeLocation_id}) async {
@@ -66,16 +69,34 @@ class OndcCheckoutRepository with LogMixin {
     };
     try {
       errorLog('$url, and store id$storeLocation_id');
-      final response = await http.post(
-        url,
-        headers: header,
-        body: json.encode(
-          {
-            "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
-            "storeLocation_id": storeLocation_id,
-          },
-        ),
-      );
+      var response;
+
+      for(int count =0 ; count <= 30 ; count++){
+
+        await Future.delayed(Duration(seconds: 1));
+
+         response = await http.post(
+          url,
+          headers: header,
+          body: json.encode(
+            {
+              "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
+              "storeLocation_id": storeLocation_id,
+            },
+          ),
+        );
+
+        print("############################# $count");
+
+        if( json.decode(response.body)['type'] == "SUCCESS"){
+
+          print("############################# SUCCESS ${response.body}");
+
+          break;
+
+        }
+      }  print("############################# POST OUT");
+
 
       warningLog('Setter ${response.statusCode}');
       //! need a new statusCode for retry
@@ -102,8 +123,30 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
+
+      print("############## proceedToCheckoutGet ############### CALLED/");
+
       List<CheckoutCartModel> cartCheckoutModels = [];
-      final response = await http.get(url, headers: header);
+
+      var response;
+
+      for(int count =0 ; count <= 30 ; count++){
+
+        await Future.delayed(Duration(seconds: 1));
+
+        response = await http.get(url, headers: header);
+
+        print("############################# $count");
+
+        if( json.decode(response.body)['type'] == "SUCCESS"){
+
+          print("############################# SUCCESS ${response.body}");
+
+          break;
+
+        }
+      }  print("############################# GET OUT");
+
       warningLog('${response.statusCode}');
       //! need a new status code for retry
       final responseBody =
@@ -137,7 +180,26 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      final response = await http.get(url, headers: header);
+
+      var response;
+
+      for(int count =0 ; count <= 30 ; count++){
+
+        await Future.delayed(Duration(seconds: 1));
+
+        response = await http.get(url, headers: header);
+        print("############################# ${json.decode(response.body)['message']}");
+        print("############################# $count");
+
+        if( json.decode(response.body)['message'] == "Cart Items fetched successfully"){
+
+          print("############################# SUCCESS ${response.body}");
+
+          break;
+
+        }
+      }  print("############################# proceedToCheckoutFinalCart OUT");
+
       final responseBody = await json.decode(response.body);
       warningLog('$url $responseBody');
 
@@ -186,17 +248,37 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      final response = await http.post(
-        url,
-        headers: header,
-        body: json.encode(
-          {
-            "firebase_id": firebaseId,
-            "message_id": messageId,
-            "order_id": order_id
-          },
-        ),
-      );
+      var response;
+
+      for(int count =0 ; count <= 30 ; count++){
+
+        await Future.delayed(const Duration(seconds: 1));
+
+        response = await http.post(
+          url,
+          headers: header,
+          body: json.encode(
+            {
+              "firebase_id": firebaseId,
+              "message_id": messageId,
+              "order_id": order_id
+            },
+          ),
+        );
+        print("############################# ${json.decode(response.body)['message']}");
+        print("############################# $count");
+
+        ///CHECK
+        if( json.decode(response.body)['message'] == "Cart Items fetched successfully"){
+
+          print("############################# SUCCESS ${response.body}");
+
+          break;
+
+        }
+      }  print("############################# initPost OUT");
+
+
       //! need a new statuscode for retry
       warningLog('checking for response body ${response.body}');
       final responseBody = json.decode(response.body);
@@ -219,7 +301,27 @@ class OndcCheckoutRepository with LogMixin {
     };
     try {
       warningLog(url.toString());
-      final response = await http.get(url, headers: header);
+
+      var response;
+      for(int count =0 ; count <= 30 ; count++){
+
+        await Future.delayed(Duration(seconds: 1));
+
+        response = await http.get(url, headers: header);
+
+        print("############################# ${json.decode(response.body)['message']}");
+        print("############################# $count");
+
+        ///CHECK
+        if( json.decode(response.body)['message'] == "Cart Items fetched successfully"){
+
+          print("############################# SUCCESS ${response.body}");
+
+          break;
+
+        }
+      }  print("############################# initPost OUT");
+
       warningLog('${response.statusCode} and also ${response.body}');
       //! need a new statusCode for retry
       final responseBody = json.decode(response.body);

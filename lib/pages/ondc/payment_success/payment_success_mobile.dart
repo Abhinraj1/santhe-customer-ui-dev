@@ -57,7 +57,7 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               const SizedBox(
-                height: 120,
+                height: 50,
               ),
               Lottie.network(
                   'https://assets5.lottiefiles.com/packages/lf20_w8cudppm.json'),
@@ -83,7 +83,7 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
               // ),
               Image.asset('assets/processOrder.png'),
               const SizedBox(
-                height: 120,
+                height: 10,
               ),
               Align(
                 alignment: Alignment.bottomCenter,

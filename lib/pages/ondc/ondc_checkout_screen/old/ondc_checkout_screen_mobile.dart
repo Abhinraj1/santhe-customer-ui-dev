@@ -663,40 +663,59 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         //         () => const MapTextView(),
                         //       );
                         //     }),
-                        Center(
-                          child: Text(
-                            'Payment Details',
-                            style: TextStyle(
-                              color: AppColors().brandDark,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15.0, left: 15.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Billing Address:',
-                              style: TextStyle(
-                                color: AppColors().brandDark,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 15.0, right: 15.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${RepositoryProvider.of<AddressRepository>(context).billingAddressModel?.flat}',
-                              style: TextStyle(
-                                  color: AppColors().grey100, fontSize: 13),
-                            ),
-                          ),
-                        ),
+                        ///
+                        // Center(
+                        //   child: Text(
+                        //     'Payment Details',
+                        //     style: TextStyle(
+                        //       color: AppColors().brandDark,
+                        //       fontWeight: FontWeight.bold,
+                        //       fontSize: 16,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(top: 15.0, left: 15.0),
+                        //   child: Align(
+                        //     alignment: Alignment.centerLeft,
+                        //     child: Text(
+                        //       'Billing Address:',
+                        //       style: TextStyle(
+                        //         color: AppColors().brandDark,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding:
+                        //       const EdgeInsets.only(left: 15.0, right: 15.0),
+                        //   child: Align(
+                        //     alignment: Alignment.centerLeft,
+                        //     child: Text(
+                        //       '${RepositoryProvider.of<AddressRepository>(context).billingAddressModel?.flat}',
+                        //       style: TextStyle(
+                        //           color: AppColors().grey100, fontSize: 13),
+                        //     ),
+                        //   ),
+                        // ),
+
+                        ///
+                        AddressColumn(
+                            title: "Payment Details",
+                            addressType: "Billing Address:",
+                            address: (RepositoryProvider.of<AddressRepository>(context)
+                                .billingModel
+                                ?.flat)
+                                .toString(),
+                            hasEditButton: true,
+                            onTap: () {
+                              isBillingAddress = true;
+
+                              Get.to(
+                                    () => const MapTextView(),
+                              );
+                            }),
+
                         SizedBox(
                           height: 20,
                         ),

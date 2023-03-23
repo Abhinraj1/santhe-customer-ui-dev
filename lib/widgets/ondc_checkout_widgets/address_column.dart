@@ -30,7 +30,7 @@ class AddressColumn extends StatelessWidget {
                 style: FontStyleManager().s16fw600Orange,),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 30.0, right: 30.0,top: 10),
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0,top: 10),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(addressType,
@@ -39,17 +39,17 @@ class AddressColumn extends StatelessWidget {
             ),
 
             Padding(
-              padding: const EdgeInsets.only(left: 30.0),
+              padding: const EdgeInsets.only(left: 10.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: SizedBox(
-                  width: 320,
+                 // width: 320,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       LimitedBox(
-                        maxWidth: 275,
+                        maxWidth: 300,
                         child: Text(address,
                           style: FontStyleManager().s12fw400Grey,),
                       ),
@@ -64,13 +64,16 @@ class AddressColumn extends StatelessWidget {
 
 
                         },
-                        child: SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: AppColors().primaryOrange,
-                            child: Icon(Icons.edit,color: AppColors().white100,size: 14,),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: SizedBox(
+                            width: 25,
+                            height: 25,
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: AppColors().primaryOrange,
+                              child: Icon(Icons.edit,color: AppColors().white100,size: 14,),
+                            ),
                           ),
                         ),
                       ) :

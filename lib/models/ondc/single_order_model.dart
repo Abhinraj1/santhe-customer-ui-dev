@@ -515,6 +515,8 @@ class CartItemPrices {
   dynamic cancellable;
   dynamic symbol;
   dynamic returnable;
+  dynamic isCancelled;
+  dynamic isReturned;
   String? createdAt;
   String? updatedAt;
   dynamic deletedAt;
@@ -522,7 +524,12 @@ class CartItemPrices {
   dynamic deliveryFulfillmentId;
   DeliveryFulfillment? deliveryFulfillment;
 
-  CartItemPrices({this.id, this.price, this.title, this.type, this.quantity, this.ondcItemId, this.status, this.cancellable, this.symbol, this.returnable, this.createdAt, this.updatedAt, this.deletedAt, this.quoteId, this.deliveryFulfillmentId, this.deliveryFulfillment});
+  CartItemPrices({this.id, this.price, this.title,
+    this.type, this.quantity, this.ondcItemId, this.status,
+    this.isCancelled,this.isReturned,
+    this.cancellable, this.symbol, this.returnable, this.createdAt,
+    this.updatedAt, this.deletedAt, this.quoteId, this.deliveryFulfillmentId,
+    this.deliveryFulfillment});
 
   CartItemPrices.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -533,6 +540,8 @@ class CartItemPrices {
     ondcItemId = json["ondc_item_id"];
     status = json["status"];
     cancellable = json["cancellable"];
+    isCancelled = json["isCancelled"];
+    isReturned = json["isReturned"];
     symbol = json["symbol"];
     returnable = json["returnable"];
     createdAt = json["createdAt"];
@@ -559,6 +568,8 @@ class CartItemPrices {
     _data["cancellable"] = cancellable;
     _data["symbol"] = symbol;
     _data["returnable"] = returnable;
+    _data["isReturned"] = isReturned;
+    _data["isCancelled"] = isCancelled;
     _data["createdAt"] = createdAt;
     _data["updatedAt"] = updatedAt;
     _data["deletedAt"] = deletedAt;

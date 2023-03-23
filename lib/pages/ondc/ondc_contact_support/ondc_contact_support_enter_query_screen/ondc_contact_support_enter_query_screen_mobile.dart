@@ -56,7 +56,7 @@ class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
                 verticalPadding: 70,
                 onTap: () {
                   BlocProvider.of<CustomerContactCubit>(context).sendQuery(
-                      orderId: orderId, message: textEditingController.text);
+                      orderNumber: orderId, message: textEditingController.text);
                 },
                 buttonTitle: "SUBMIT")
           ],

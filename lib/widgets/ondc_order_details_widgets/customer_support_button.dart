@@ -14,7 +14,7 @@ class CustomerSupportButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       Padding(
-      padding: const EdgeInsets.only(top: 20,bottom: 5,left: 20,right: 20),
+      padding: const EdgeInsets.only(bottom: 5,left: 20,right: 20),
       child: MaterialButton(
         onPressed: (){
           onTap();

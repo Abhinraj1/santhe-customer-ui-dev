@@ -34,10 +34,15 @@ class FontStyleManager {
       fontSize: 16,
       fontWeight: FontWeight.w700);
 
-  TextStyle s14fw500 = GoogleFonts.mulish(
+  TextStyle s14fw500Brown = GoogleFonts.mulish(
       color: const Color(0xff51453A),
       fontSize: 14,
       fontWeight: FontWeight.w500);
+
+  TextStyle s14fw700Brown = GoogleFonts.mulish(
+      color: const Color(0xff51453A),
+      fontSize: 14,
+      fontWeight: FontWeight.w700);
 
   TextStyle s14fw700White = GoogleFonts.mulish(
       color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700);

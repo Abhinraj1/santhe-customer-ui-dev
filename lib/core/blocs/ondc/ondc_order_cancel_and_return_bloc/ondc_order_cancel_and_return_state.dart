@@ -106,7 +106,7 @@ class SelectedCodeForReturnState extends ONDCOrderCancelAndReturnState{
 
   final String orderNumber;
 
-  final CartItemPrices returnProduct;
+  final PreviewWidgetModel returnProduct;
 
   const SelectedCodeForReturnState({
     required this.code, required this.orderId,

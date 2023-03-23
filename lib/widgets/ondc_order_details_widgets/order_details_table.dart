@@ -26,7 +26,7 @@ class OrderDetailsTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return       Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: horizontalPadding ?? 40.0,
+          horizontal: horizontalPadding ?? 15.0,
           vertical: verticalPadding ?? 0.0
       ),
       child: Table(

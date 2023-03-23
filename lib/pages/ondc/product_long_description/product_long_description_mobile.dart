@@ -172,6 +172,7 @@ class _ProductLongDescriptionMobileState
                       ),
                     )
                   : const Text(''),
+              widget.productOndcModel.packer_name != null ?
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -182,14 +183,17 @@ class _ProductLongDescriptionMobileState
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     AutoSizeText(
-                      widget.productOndcModel.packer_name,
+                      widget.productOndcModel.packer_name ?? "",
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                   ],
                 ),
-              ),
+              ) :
+              SizedBox(),
+
+              widget.productOndcModel.packer_address != null ?
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -203,7 +207,7 @@ class _ProductLongDescriptionMobileState
                     SizedBox(
                       width: 200,
                       child: AutoSizeText(
-                        widget.productOndcModel.packer_address,
+                        widget.productOndcModel.packer_address ?? "",
                         style: const TextStyle(
                         fontSize: 15,
                       ),
@@ -211,7 +215,9 @@ class _ProductLongDescriptionMobileState
                     ),
                   ],
                 ),
-              ),
+              ):
+              SizedBox(),
+
               widget.productOndcModel.nutritional_info != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),

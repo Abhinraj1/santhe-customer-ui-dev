@@ -132,13 +132,31 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     String shopName = orderDetails.singleOrderModel!.storeLocation!.store!.name.toString(),
         orderId = orderDetails.singleOrderModel!.quotes!.first.orderId.toString(),
         orderStatus = orderDetails.singleOrderModel!.status.toString(),
-        paymentStatus = (orderDetails.singleOrderModel!.payment!.paymentStatus).toString(),
         orderNumber = orderDetails.singleOrderModel!.orderNumber.toString();
+
     List<CartItemPrices> products =
-        orderDetails.singleOrderModel!.quotes!.first.cartItemPrices as List<CartItemPrices>;
+        orderDetails.singleOrderModel!.quotes!.first.cartItemPrices
+        as List<CartItemPrices>;
 
+    String? paymentStatusFunction(){
 
-    bool hasInvoice = orderDetails.singleOrderModel!.invoice == null ? false : true;
+      if(orderDetails.singleOrderModel!.
+      payment!.paymentStatus != null ){
+
+        if(
+        (orderDetails.singleOrderModel!.payment!.paymentStatus)
+        as bool != false
+        ){
+          return "Paid";
+        }
+      }
+      return null;
+    }
+
+   String paymentStatus = paymentStatusFunction() ?? "Not Paid";
+
+    bool hasInvoice = orderDetails.singleOrderModel!.invoice == null ?
+                      false : true;
 
     isAllCancellable({required CartItemPrices element}) {
       if (element.cancellable != null &&
@@ -180,8 +198,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 (track.state).toString() == "Pending" ||
                 (track.state).toString() == "Packed") {
 
-              return TextButton(
-                onPressed: (){
+              return InkWell(
+                onTap: (){
 
                   ///CANCEL SINGLE ORDER
                   BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
@@ -208,8 +226,10 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         return null;
       }
     }
+
     isReturnable({required PreviewWidgetModel element}) {
-      if (element.returnable != null &&
+      if (
+      element.returnable != null &&
           element.returnable == true &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.singleOrderModel!.quotes!.first.tracks!) {
@@ -219,8 +239,9 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 (track.state).toString() == "DELIVERED" ||
                 (track.state).toString() == "delivered" ) {
 
-              return TextButton(
-                onPressed: (){
+              return
+                InkWell(
+                onTap: (){
 
                   ///Navigate to upload screen
                   ///change products to previewWidgetModel
@@ -241,10 +262,42 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           }
         }
       } else {
-        return null;
+        return
+          InkWell(
+            onTap: (){
+              ///Navigate to upload screen
+              ///change products to previewWidgetModel
+              BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>
+                (context).add(
+                  LoadReasonsForReturnEvent(
+                      orderId: orderId,
+                      orderNumber: orderNumber,
+                      product: element));
+
+            },
+            child: Text("Return",style: FontStyleManager().s14fw700GreyUnderLne),
+          );
+       /// return null;
       }
     }
 
+    isAlreadyCancelled({required PreviewWidgetModel element}) {
+      if (element.isCancelled != null &&
+          element.isCancelled == true ) {
+
+         return Text("Cancelled",
+           style: FontStyleManager().s14fw700Red,);
+
+      } else if(element.isReturned != null &&
+          element.isReturned == true){
+
+        return Text("Return Approved",
+          style: FontStyleManager().s14fw700Grey,);
+
+      }else {
+       return null;
+      }
+    }
     List<PreviewWidgetOndcItem> previewItems = [];
 
 
@@ -270,6 +323,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                   quantity: element.quantity,
                   quoteId: element.quoteId,
                   returnable: element.returnable,
+                  isReturned: element.isReturned,
+                  isCancelled: element.isCancelled,
                   serviceable: "N/A",
                   provider_name: "N/A",
                   fulfillment_id: element.deliveryFulfillment?.fulfillmentId,
@@ -299,12 +354,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         fourthData: paymentStatus,
         redTextButtonTitle: hasInvoice ? "Download invoice" : "",
       ),
-
-      // Padding(
-      //   padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
-      //   child: Text(message,
-      //     style: FontStyleManager().s16fw500,),
-      // ),
 
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
@@ -363,59 +412,81 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                   ),
                   previewWidgetModel.previewWidgetModel.symbol != null &&
                           previewWidgetModel.previewWidgetModel.symbol != ""
-                      ? Image.network(
-                          previewWidgetModel.previewWidgetModel.symbol,
-                          width: 50,
-                          height: 60,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset(
-                          ImgManager().santheIcon,
-                          width: 50,
-                          height: 60,
-                          fit: BoxFit.cover,
-                        ),
-                  SizedBox(
-                    height: 80,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                            width: 200,
-                            child: AutoSizeText(
-                              previewWidgetModel.previewWidgetModel.title,
-                              style: FontStyleManager().s12fw700Brown,
-                              maxLines: 2,
-                            )),
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                        child: Image.network(
+                            previewWidgetModel.previewWidgetModel.symbol,
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ),
+                      )
+                      : ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                        child: Image.asset(
+                            ImgManager().santheIcon,
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ),
+                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: SizedBox(
+                     // height: 120,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                         /// const Spacer(),
+                          SizedBox(
+                              width: 200,
+                              child: AutoSizeText(
+                                previewWidgetModel.previewWidgetModel.title,
+                                style: FontStyleManager().s14fw700Brown,
+                                maxLines: 4,
+                              )),
 
-                        Text(
-                          '${previewWidgetModel.previewWidgetModel.quantity}',
-                          style: FontStyleManager().s10fw500Brown,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
 
-                        //! new field for cancel...check for tracking status and packing state
-                        isSingleCancellable(element: previewWidgetModel.previewWidgetModel ) ??
-                        const SizedBox(),
-                        isReturnable(element: previewWidgetModel.previewWidgetModel ) ??
-                            const SizedBox(),
+                          Text(
+                            '${previewWidgetModel.previewWidgetModel.quantity} units',
+                            style: FontStyleManager().s10fw500Brown,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
 
-                      ],
+                          //! new field for cancel...check for tracking status and packing state
+                          isSingleCancellable(
+                              element: previewWidgetModel.previewWidgetModel ) ??
+                          const SizedBox(),
+
+                          isReturnable(
+                              element: previewWidgetModel.previewWidgetModel ) ??
+                              const SizedBox(),
+
+                          isAlreadyCancelled(
+                              element:previewWidgetModel.previewWidgetModel) ??
+                              const SizedBox(),
+
+                        ///  const Spacer(),
+                        ],
+                      ),
                     ),
                   ),
                   Center(
-                    child: SizedBox(
-                      width: 50,
-                      child: AutoSizeText(
-                        "₹${previewWidgetModel.previewWidgetModel.price}",
-                        maxFontSize: 16,
-                        minFontSize: 12,
-                        style: FontStyleManager().s16fw600Grey,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 5.0),
+                      child: SizedBox(
+                        width: 50,
+                        child: AutoSizeText(
+                          "₹${previewWidgetModel.previewWidgetModel.price}",
+                          maxFontSize: 16,
+                          minFontSize: 12,
+                          style: FontStyleManager().s16fw600Grey,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
                     ),
                   ),
@@ -432,7 +503,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         totalPrice: orderDetails.singleOrderModel!.quotes!.first.totalPrice.toString(),
       ),
 
-      CustomerSupportButton(onTap: () {
+      CustomerSupportButton(
+          onTap: () {
         BlocProvider.of<CustomerContactCubit>(context)
             .customerContact(model: orderDetails.singleOrderModel!);
         // Get.to(()=>const ONDCContactSupportView());
@@ -456,66 +528,3 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
   }
 }
 
-// ShipmentCard(shipmentNumber: 1, products: [
-//   SizedBox(
-//     height: productsCount() == 1 ? 80 : products.length * 87,
-//     child: ListView.builder(
-//         itemCount: products.length,
-//         itemBuilder: (context, index) {
-//           String productName = products[index].title.toString(),
-//               productDetails = products[index].quantity.toString(),
-//               productPrice = products[index].price.toString(),
-//               productImg = products[index].symbol.toString(),
-//               type = products[index].type.toString();
-//
-//           if(products[index].type == "item"){
-//
-//           }else{}
-//
-//           bool isCancelable =
-//               products[index].type == "item" ?
-//               products[index].cancellable != null &&
-//               products[index].cancellable == true &&
-//                   orderDetails.first.quotes!.first.tracks!.isNotEmpty ?
-//                   (orderDetails.first.quotes!.first.tracks?[index].state).toString() == "PENDING" ||
-//                   (orderDetails.first.quotes!.first.tracks?[index].state).toString() == "PACKED" ||
-//                   (orderDetails.first.quotes!.first.tracks?[index].state).toString() == "Pending" ||
-//                   (orderDetails.first.quotes!.first.tracks?[index].state).toString() == "Packed"
-//               ? true
-//               : false : false : false;
-//
-//           isCancelable
-//               ? BlocProvider.of<OrderDetailsButtonCubit>(context)
-//                   .showCancelButton()
-//               : BlocProvider.of<OrderDetailsButtonCubit>(context)
-//                   .hideCancelButton();
-//
-//           print("############################################# IsCANCEL = $isCancelable");
-//
-//           if (type == "item") {
-//
-//             return
-//
-//               ProductCell(
-//               showStatus: !isCancelable,
-//               productImg: productImg,
-//               status: "$isCancelable",
-//               productName: productName,
-//               productDetails: "$productDetails units",
-//               productPrice: "₹$productPrice",
-//               textButtonTitle: "Cancel",
-//               textButtonOnTap: () {},
-//             );
-//           } else {
-//             return const SizedBox();
-//           }
-//         }),
-//   ),
-//
-//
-//       orderDetails.first.quotes!.first.tracks!.isNotEmpty &&
-//       orderDetails.first.quotes!.first.tracks!.first.state != null ?
-// BottomTextRow(
-//       message: (orderDetails.first.quotes!.first.tracks!.first.state).toString() ) :
-//   const SizedBox(),
-// ]),

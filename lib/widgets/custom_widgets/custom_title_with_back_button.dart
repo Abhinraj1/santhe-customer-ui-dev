@@ -12,18 +12,19 @@ class CustomTitleWithBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const CustomBackButton(),
-          const Spacer(),
+          const Spacer(flex: 2),
 
           Text(
               title,
               style:FontStyleManager().pageTitleStyle
 
           ),
-          const Spacer(),
+          const Spacer(flex: 3),
         ],
       ),
     );
@@ -39,7 +40,7 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Padding(
-      padding:  EdgeInsets.only(left: leftPadding ?? 10.0),
+      padding:  EdgeInsets.only(left: leftPadding ?? 20.0),
       child: InkWell(
         onTap: (){
           Navigator.pop(context);

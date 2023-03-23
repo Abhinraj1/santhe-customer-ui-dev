@@ -4,18 +4,18 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/models/ondc/order_cancel_reasons_model.dart';
-import '../../../../core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
-import '../../../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
-import '../../../../manager/font_manager.dart';
-import '../../../../widgets/custom_widgets/customScaffold.dart';
-import '../../../../widgets/custom_widgets/custom_button.dart';
-import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
-import '../../../../widgets/custom_widgets/home_icon_button.dart';
-import '../../../../widgets/ondc_return_widgets/return_reasons_listTile.dart';
-import '../../ondc_return_screens/ondc_return_upload_photo_screen/ondc_return_upload_photo_screen_mobile.dart';
+import '../../../core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
+import '../../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
+import '../../../manager/font_manager.dart';
+import '../../../widgets/custom_widgets/customScaffold.dart';
+import '../../../widgets/custom_widgets/custom_button.dart';
+import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
+import '../../../widgets/custom_widgets/home_icon_button.dart';
+import '../../../widgets/ondc_return_widgets/return_reasons_listTile.dart';
+import '../ondc_return_screens/ondc_return_upload_photo_screen/ondc_return_upload_photo_screen_mobile.dart';
 
-class ONDCReasonsScreen extends StatelessWidget {
-  const ONDCReasonsScreen({
+class ONDCReasonsScreenMobile extends StatelessWidget {
+  const ONDCReasonsScreenMobile({
     Key? key,
   }) : super(key: key);
 
@@ -76,9 +76,7 @@ class ONDCReasonsScreen extends StatelessWidget {
               onTap: () {
 
                 ///for Return && Navigate to upload image Screen
-              BlocProvider.of<UploadImageAndReturnRequestCubit>(context).getPrerequisiteData(
-                  orderId: state.orderId, orderNumber: state.orderNumber,
-                  returnProduct: state.returnProduct);
+                 Get.to(()=>const ONDCOrderUploadPhotoScreenMobile());
 
               },
               isActive: true,

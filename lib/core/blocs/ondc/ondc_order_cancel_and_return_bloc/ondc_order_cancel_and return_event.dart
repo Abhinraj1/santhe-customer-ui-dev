@@ -41,7 +41,7 @@ class LoadReasonsForFullOrderCancelEvent extends ONDCOrderCancelAndReturnEvent{
 }
 
 class LoadReasonsForReturnEvent extends ONDCOrderCancelAndReturnEvent{
-  final CartItemPrices product;
+  final PreviewWidgetModel product;
   final String orderId;
   final String orderNumber;
 
@@ -79,12 +79,13 @@ class SelectedCodeEvent extends ONDCOrderCancelAndReturnEvent{
   List<Object?> get props => [code];
 }
 class SelectedCodeForReturnEvent extends ONDCOrderCancelAndReturnEvent{
-
+ final BuildContext context;
   final String code;
 
 
   const SelectedCodeForReturnEvent({
     required this.code,
+    required this.context,
   });
 
   @override

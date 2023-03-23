@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/core/repositories/ondc_order_cancel_and_return_repository.dart';
-import 'package:santhe/pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_acknowledgement%20_screen/ondc_order_cancel_acknowledgement_view.dart';
 import '../../../../models/ondc/order_cancel_reasons_model.dart';
 import '../../../../models/ondc/preview_ondc_cart_model.dart';
 import '../../../../models/ondc/single_order_model.dart';
-import '../../../../pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_acknowledgement _screen/ondc_order_cancel_acknowledgement _screen_mobile.dart';
+import '../../../../pages/ondc/ondc_acknowledgement_screen/ondc_acknowledgement_view.dart';
 import '../../../../pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_view.dart';
 import '../../../../pages/ondc/ondc_return_screens/ondc_return_view.dart';
 import '../../../cubits/customer_contact_cubit/customer_contact_cubit.dart';
+import '../../../cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import '../../../loggers.dart';
 import 'package:bloc/bloc.dart';
 import '../../../repositories/ondc_repository.dart';
@@ -29,7 +29,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
     String selectedCode = "";
     String orderId = "";
     String orderNumber = "";
-  late CartItemPrices _product;
+  late PreviewWidgetModel _product;
   late PreviewWidgetModel _partialCancelProduct;
 
   ONDCOrderCancelAndReturnReasonsBloc({
@@ -136,7 +136,15 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
         if(status == "ACK" ){
 
-          Get.to(()=> ONDCOrderCancelAcknowledgementView(orderNumber: orderNumber));
+          Get.to(()=> ONDCAcknowledgementView(
+            title: "Cancel Order",
+              message: "Your cancellation request is received,"
+                  " Once we have received a confirmation from"
+                  " the seller you will get an update from us "
+                  "on your cancellation status and refund details",
+
+              onTap: (){},
+              orderNumber: orderNumber));
 
           emit(FullOrderCancelRequestSentState());
 
@@ -163,7 +171,15 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
       if(status == "ACK" ){
 
-        Get.to(()=> ONDCOrderCancelAcknowledgementView(orderNumber: orderNumber));
+        Get.to(()=> ONDCAcknowledgementView(
+            title: "Cancel Order",
+            message: "Your cancellation request is received,"
+                " Once we have received a confirmation from"
+                " the seller you will get an update from us "
+                "on your cancellation status and refund details",
+
+            onTap: (){},
+            orderNumber: orderNumber));
 
         emit(FullOrderCancelRequestSentState());
 
@@ -197,6 +213,12 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
       if(event.code != "null" || event.code != ""){
         selectedCode = event.code;
 
+        BlocProvider.of<UploadImageAndReturnRequestCubit>
+          (event.context).getPrerequisiteData(
+            orderId: orderId, orderNumber: orderNumber,
+            returnProduct: _product,
+            code: event.code);
+
         emit( SelectedCodeForReturnState(
             code: event.code.toString(),
             orderNumber: orderNumber,
@@ -207,8 +229,4 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
       }
     });
-
-
-
-
   }}

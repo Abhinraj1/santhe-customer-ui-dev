@@ -18,7 +18,8 @@ class ImageGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      BlocBuilder<UploadImageAndReturnRequestCubit,UploadImageAndReturnRequestState>(
+      BlocBuilder<UploadImageAndReturnRequestCubit,
+          UploadImageAndReturnRequestState>(
 
         builder: (context,state) {
 
@@ -30,7 +31,7 @@ class ImageGrid extends StatelessWidget {
               imageFiles: state.imageFiles,
             );
 
-          }  else{
+          } else{
              return const Body();
            }
         }

@@ -26,6 +26,8 @@ class PreviewWidgetModel extends Equatable {
   final dynamic serviceable;
   final dynamic message_id;
   final dynamic returnable;
+  final dynamic isCancelled;
+  final dynamic isReturned;
   const PreviewWidgetModel({
     required this.id,
     required this.price,
@@ -47,7 +49,10 @@ class PreviewWidgetModel extends Equatable {
     required this.tat,
     required this.serviceable,
     required this.message_id,
+    required this.isCancelled,
+    required this.isReturned,
     this.returnable,
+
   });
 
   PreviewWidgetModel copyWith({
@@ -72,6 +77,8 @@ class PreviewWidgetModel extends Equatable {
     dynamic? serviceable,
     dynamic? message_id,
     dynamic? returnable,
+     dynamic? isCancelled,
+     dynamic? isReturned,
   }) {
     return PreviewWidgetModel(
       id: id ?? this.id,
@@ -82,6 +89,8 @@ class PreviewWidgetModel extends Equatable {
       ondc_item_id: ondc_item_id ?? this.ondc_item_id,
       status: status ?? this.status,
       cancellable: cancellable ?? this.cancellable,
+      isCancelled: isCancelled ?? this.isCancelled,
+      isReturned: isReturned ?? this.isReturned,
       symbol: symbol ?? this.symbol,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt ?? this.deletedAt,
@@ -144,6 +153,8 @@ class PreviewWidgetModel extends Equatable {
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as dynamic : null,
       quoteId: map['quoteId'] != null ? map['quoteId'] as dynamic : null,
       returnable: map['returnable'] != null ? map['returnable'] as dynamic : null,
+      isCancelled: map['isCancelled'] != null ? map['isCancelled'] as dynamic : null,
+      isReturned: map['isReturned'] != null ? map['isReturned'] as dynamic : null,
       deliveryFulfillmentId: map['deliveryFulfillmentId'] != null
           ? map['deliveryFulfillmentId'] as dynamic
           : null,
@@ -211,7 +222,9 @@ class PreviewWidgetModel extends Equatable {
       tat,
       serviceable,
       message_id,
-      returnable
+      returnable,
+      isReturned,
+      isCancelled,
     ];
   }
 }

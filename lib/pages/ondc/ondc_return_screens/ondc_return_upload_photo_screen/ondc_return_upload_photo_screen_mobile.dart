@@ -4,6 +4,7 @@ import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 import '../../../../core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import '../../../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import '../../../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_state.dart';
+import '../../../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_state.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
@@ -11,8 +12,8 @@ import '../../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../../widgets/ondc_return_widgets/image_grid.dart';
 
 class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
-  final bool? isFullCancellation;
-  const ONDCOrderUploadPhotoScreenMobile({Key? key, this.isFullCancellation})
+
+  const ONDCOrderUploadPhotoScreenMobile({Key? key,})
       : super(key: key);
 
   @override
@@ -24,7 +25,8 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
     return CustomScaffold(
         trailingButton: homeIconButton(),
         body:
-        BlocBuilder<ONDCOrderCancelAndReturnReasonsBloc,ONDCOrderCancelAndReturnState>(
+        BlocBuilder<ONDCOrderCancelAndReturnReasonsBloc,
+            ONDCOrderCancelAndReturnState>(
 
         builder: (context,state) {
 
@@ -72,7 +74,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         quantity,
-                        style: FontStyleManager().s14fw500,
+                        style: FontStyleManager().s14fw500Brown,
                       ),
                     ),
                   ),
@@ -103,9 +105,8 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                       return CustomButton(
                           buttonTitle: "RETURN ITEM",
                           onTap: () {
-
                             BlocProvider.of<UploadImageAndReturnRequestCubit>
-                              (context).uploadImages();
+                              (context).uploadImages(context);
 
                           },
                           isActive: true,

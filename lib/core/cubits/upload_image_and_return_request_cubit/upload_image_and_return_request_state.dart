@@ -12,7 +12,6 @@ class InitialState extends UploadImageAndReturnRequestState{}
 
 ///class GetImages extends UploadImageAndReturnRequestState{}
 
-///class UploadImages extends UploadImageAndReturnRequestState{}
 
 class ShowImages extends UploadImageAndReturnRequestState{
   final List<File> imageFiles;

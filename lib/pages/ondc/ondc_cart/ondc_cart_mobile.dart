@@ -178,235 +178,286 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
         // }
       },
       builder: (context, state) {
-        return Stack(
-          children: [
-            Scaffold(
-              key: _key,
-              drawer: const nv.CustomNavigationDrawer(),
-              appBar: AppBar(
-                leading: IconButton(
-                  onPressed: () async {
-                    //!something to add
-                    //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode) ;
-                    /*log(await AppHelpers().getToken);
-                        sendNotification('tesst');*/
-                    _key.currentState!.openDrawer();
-                    /*FirebaseAnalytics.instance.logEvent(
-                          name: "select_content",
-                          parameters: {
-                            "content_type": "image",
-                            "item_id": 'itemId',
-                          },
-                        ).then((value) => print('success')).catchError((e) => print(e.toString()));*/
-                  },
-                  splashRadius: 25.0,
-                  icon: SvgPicture.asset(
-                    'assets/drawer_icon.svg',
-                    color: Colors.white,
-                  ),
-                ),
-                shadowColor: Colors.orange.withOpacity(0.5),
-                elevation: 10.0,
-                title: const AutoSizeText(
-                  kAppName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4.5),
-                    child: IconButton(
-                      onPressed: () {
-                        if (Platform.isIOS) {
-                          Share.share(
-                            AppHelpers().appStoreLink,
-                          );
-                        } else {
-                          Share.share(
-                            AppHelpers().playStoreLink,
-                          );
-                        }
-                      },
-                      splashRadius: 25.0,
-                      icon: const Icon(
-                        Icons.share,
-                        color: Colors.white,
-                        size: 27.0,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: AppColors().brandDark,
-                            radius: 20,
-                            child: GestureDetector(
-                              onTap: () => ge.Get.back(),
-                              child: const Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 100,
-                          ),
-                          const Text(
-                            'My Cart',
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: 20),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    shopName == null
-                        ? const Text('')
-                        : Text(
-                            'Shop: $shopName',
-                            style: TextStyle(
-                              color: AppColors().brandDark,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                    _showErrorNoResponseFromSeller
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 48,
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(
-                                  12,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Seller is not responding.Please try later',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ),
-                          )
-                        : const Text(''),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 40.0, top: 10),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '${cartWidget.length} items',
-                          style: TextStyle(color: AppColors().brandDark),
+        return BlocConsumer<CheckoutBloc, CheckoutState>(
+          listener: (context, state) {
+            if (state is CheckoutPostError) {
+              if (state.toString().contains('RetryPostSelectState')) {
+                Timer.periodic(
+                  const Duration(seconds: 5),
+                  (timer) => context.read<CheckoutBloc>().add(
+                        GetCartPriceEventPost(
+                          transactionId:
+                              RepositoryProvider.of<OndcRepository>(context)
+                                  .transactionId,
+                          storeLocation_id: widget.storeLocation_id,
                         ),
                       ),
-                    ),
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          ...cartWidget,
-                          const SizedBox(
-                            height: 200,
-                          )
-                        ],
+                );
+              }
+            }
+          },
+          builder: (context, state) {
+            return Stack(
+              children: [
+                Scaffold(
+                  key: _key,
+                  drawer: const nv.CustomNavigationDrawer(),
+                  appBar: AppBar(
+                    leading: IconButton(
+                      onPressed: () async {
+                        //!something to add
+                        //APIs().updateDeviceToken(AppHelpers().getPhoneNumberWithoutCountryCode) ;
+                        /*log(await AppHelpers().getToken);
+                                sendNotification('tesst');*/
+                        _key.currentState!.openDrawer();
+                        /*FirebaseAnalytics.instance.logEvent(
+                                  name: "select_content",
+                                  parameters: {
+                                    "content_type": "image",
+                                    "item_id": 'itemId',
+                                  },
+                                ).then((value) => print('success')).catchError((e) => print(e.toString()));*/
+                      },
+                      splashRadius: 25.0,
+                      icon: SvgPicture.asset(
+                        'assets/drawer_icon.svg',
+                        color: Colors.white,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              bottomSheet: cartWidget.isNotEmpty
-                  ? SizedBox(
-                      height: 125,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 40.0, vertical: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Total:',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  '₹ ${total.toString()} *',
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
+                    shadowColor: Colors.orange.withOpacity(0.5),
+                    elevation: 10.0,
+                    title: const AutoSizeText(
+                      kAppName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 4.5),
+                        child: IconButton(
+                          onPressed: () {
+                            if (Platform.isIOS) {
+                              Share.share(
+                                AppHelpers().appStoreLink,
+                              );
+                            } else {
+                              Share.share(
+                                AppHelpers().playStoreLink,
+                              );
+                            }
+                          },
+                          splashRadius: 25.0,
+                          icon: const Icon(
+                            Icons.share,
+                            color: Colors.white,
+                            size: 27.0,
                           ),
-                          SizedBox(
-                            width: 350,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final String message = await ge.Get.to(
-                                    () => OndcCheckoutScreenView(
-                                          storeLocation_id:
-                                              widget.storeLocation_id,
-                                          storeName: shopName,
-                                        ),
-                                    transition: ge.Transition.rightToLeft);
-                                debugLog('there is a message $message');
-                                if (message.contains('rror') ||
-                                    message.contains('subtype')) {
-                                  setState(() {
-                                    _showErrorNoResponseFromSeller = true;
-                                  });
-                                } else if (message.contains('seller')) {
-                                  errorLog('true');
-                                  setState(() {
-                                    _showErrorNoResponseFromSeller = true;
-                                  });
-                                }
-                              },
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                        ),
+                      )
+                    ],
+                  ),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: AppColors().brandDark,
+                                radius: 20,
+                                child: GestureDetector(
+                                  onTap: () => ge.Get.back(),
+                                  child: const Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    AppColors().brandDark),
-                              ), child: const Text('Proceed To Checkout'),
+                              ),
+                              const SizedBox(
+                                width: 100,
+                              ),
+                              const Text(
+                                'My Cart',
+                                style: TextStyle(
+                                    color: Colors.black54, fontSize: 20),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        shopName == null
+                            ? const Text('')
+                            : Text(
+                                'Shop: $shopName',
+                                style: TextStyle(
+                                  color: AppColors().brandDark,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                        _showErrorWhen1or2ItemsNotAvailable
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 48,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Server Not responding',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Text(''),
+                        _showErrorNoResponseFromSeller
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 48,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Seller is not responding.Please try later',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Text(''),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 40.0, top: 10),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '${cartWidget.length} items',
+                              style: TextStyle(color: AppColors().brandDark),
                             ),
                           ),
-                          Text(
-                            '* exclusive of additional fees and taxes',
-                            style: TextStyle(
-                                fontSize: 11, color: AppColors().black100),
-                          )
-                        ],
-                      ),
-                    )
-                  : null,
-            ),
-            state is DeleteCartLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : const Text('')
-          ],
+                        ),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ...cartWidget,
+                              const SizedBox(
+                                height: 200,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  bottomSheet: cartWidget.isNotEmpty
+                      ? SizedBox(
+                          height: 125,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 40.0, vertical: 10),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Total:',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      '₹ ${total.toString()} *',
+                                      style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: 350,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    final String message = await ge.Get.to(
+                                        () => OndcCheckoutScreenView(
+                                              storeLocation_id:
+                                                  widget.storeLocation_id,
+                                              storeName: shopName,
+                                            ),
+                                        transition: ge.Transition.rightToLeft);
+                                    debugLog('there is a message $message');
+                                    if (message.contains('rror') ||
+                                        message.contains('subtype')) {
+                                      setState(() {
+                                        _showErrorNoResponseFromSeller = true;
+                                      });
+                                    } else if (message.contains('seller')) {
+                                      errorLog('true');
+                                      setState(() {
+                                        _showErrorNoResponseFromSeller = true;
+                                      });
+                                    } else if (message.contains('an Error')) {
+                                      setState(() {
+                                        _showErrorWhen1or2ItemsNotAvailable =
+                                            true;
+                                      });
+                                    }
+                                  },
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        AppColors().brandDark),
+                                  ),
+                                  child: const Text('Proceed To Checkout'),
+                                ),
+                              ),
+                              Text(
+                                '* exclusive of additional fees and taxes',
+                                style: TextStyle(
+                                    fontSize: 11, color: AppColors().black100),
+                              )
+                            ],
+                          ),
+                        )
+                      : null,
+                ),
+                state is DeleteCartLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : const Text('')
+              ],
+            );
+          },
         );
       },
     );

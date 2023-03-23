@@ -102,13 +102,21 @@ class FinalizeProductErrorState extends CheckoutState {
 }
 
 class FinalizeProductSuccessState extends CheckoutState {
-  final FinalCostingModel? finalCostingModel;
+  final List<FinalCostingModel> finalCostingModel;
   const FinalizeProductSuccessState({
     required this.finalCostingModel,
   });
   @override
   List<Object?> get props => [finalCostingModel];
 }
+
+class RetryPostSelectState extends CheckoutState {}
+
+class RetryGetSelectState extends CheckoutState {}
+
+class RetryPostInitState extends CheckoutState {}
+
+class RetryGetInitState extends CheckoutState {}
 
 class InitializeCartLoadingState extends CheckoutState {}
 

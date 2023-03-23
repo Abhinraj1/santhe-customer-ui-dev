@@ -12,7 +12,7 @@ import 'package:santhe/models/ondc/shipment_segregator_model.dart';
 import 'package:santhe/widgets/ondc_widgets/shipment_segregator.dart';
 
 class OndcCheckoutRepository with LogMixin {
-  FinalCostingModel? finalCostingModel;
+  List<FinalCostingModel> finalCostingModel = [];
   double? finalCost;
   List<dynamic> items = [];
   List<PreviewWidgetModel> previewModels = [];
@@ -58,7 +58,6 @@ class OndcCheckoutRepository with LogMixin {
   Future<dynamic> proceedToCheckoutMethodPost(
       {required final String transactionId,
       required final String storeLocation_id}) async {
-
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/price/request');
     final header = {
@@ -79,10 +78,11 @@ class OndcCheckoutRepository with LogMixin {
       );
 
       warningLog('Setter ${response.statusCode}');
+      //! need a new statusCode for retry
       final responseBody = json.decode(response.body)['message_id'];
       warningLog('$responseBody');
       if (responseBody == null) {
-        throw const CheckoutPostError(message: 'There is no response');
+        throw RetryPostSelectState();
       }
       return responseBody;
     } catch (e) {
@@ -105,6 +105,7 @@ class OndcCheckoutRepository with LogMixin {
       List<CheckoutCartModel> cartCheckoutModels = [];
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
+      //! need a new status code for retry
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
       responseBody.forEach((element) {
@@ -121,7 +122,7 @@ class OndcCheckoutRepository with LogMixin {
     }
   }
 
-  Future<FinalCostingModel?> proceedToCheckoutFinalCart(
+  Future<List<FinalCostingModel>> proceedToCheckoutFinalCart(
       {required final String storeLocation_id,
       required final String transactionid,
       required String messageId}) async {
@@ -140,7 +141,7 @@ class OndcCheckoutRepository with LogMixin {
       final responseBody = await json.decode(response.body);
       warningLog('$url $responseBody');
 
-      dynamic map = responseBody['finalCosting'];
+      List map = responseBody['finalCosting'];
       items = responseBody['data']['quotes'] as List<dynamic>;
       orderIdCart = items.first['orderId'] as String;
       errorLog('checking for orderID $orderIdCart');
@@ -154,7 +155,10 @@ class OndcCheckoutRepository with LogMixin {
           PreviewWidgetModel.fromMap(element),
         );
       }
-      finalCostingModel = FinalCostingModel.fromMap(map);
+      //! finacostingmodel change
+      map.forEach((element) {
+        finalCostingModel.add(FinalCostingModel.fromMap(element));
+      });
       warningLog(' cost$finalCostingModel $previewModels');
       if (responseBody['message']
           .toString()
@@ -193,9 +197,11 @@ class OndcCheckoutRepository with LogMixin {
           },
         ),
       );
+      //! need a new statuscode for retry
       warningLog('checking for response body ${response.body}');
       final responseBody = json.decode(response.body);
       final status = responseBody['status'];
+
       return status;
     } catch (e) {
       throw InitializePostErrorState(
@@ -215,7 +221,7 @@ class OndcCheckoutRepository with LogMixin {
       warningLog(url.toString());
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode} and also ${response.body}');
-
+      //! need a new statusCode for retry
       final responseBody = json.decode(response.body);
       final String status = responseBody['data']['status'];
       //!

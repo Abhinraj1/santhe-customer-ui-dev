@@ -85,7 +85,8 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/circularProgress.png'),
+                Lottie.network(
+                    'https://assets9.lottiefiles.com/packages/lf20_dkz94xcg.json'),
                 const SizedBox(
                   height: 60,
                 ),

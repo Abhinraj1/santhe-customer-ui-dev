@@ -20,7 +20,7 @@ class _OndcCheckoutScreenMobile extends StatefulWidget {
 class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     with LogMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  FinalCostingModel? finalCostingModel;
+  List<FinalCostingModel> finalCostingModel = [];
   late final String messageID;
   double subtotal = 0;
   double deliveryCharges = 0;
@@ -34,11 +34,19 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   late GroupedItemScrollController _controller;
   bool isLoadingInit = false;
   bool isLoadingInitGet = false;
-
+  String? subTotal;
+  String? total;
+  String? tax;
+  String? deliveryCharge;
+  String? convenianceCharge;
+  String? discount;
+  String? packing;
+  String? miscellaneous;
   Razorpay _razorpay = Razorpay();
   bool _showErrorNoResponseFromSeller = false;
   bool _showOneOrMoreItemsAreNotAvailable = false;
   bool _showAllItemsAreNotAvailable = false;
+  List<FinalCostingWidget> finalCostingWidget = [];
 
   bool _isInitBuffer = false;
 
@@ -50,6 +58,20 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     }
     setState(() {
       previewWidgetItems = previewItems;
+    });
+  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   setTimer(state != AppLifecycleState.resumed);
+  // }
+
+  void setTimer(bool isBackground) {
+    int delaySeconds = isBackground ? 5 : 3;
+
+    // Cancelling previous timer, if there was one, and creating a new one
+    Timer.periodic(Duration(seconds: delaySeconds), (t) async {
+      // Not sending a request, if waiting for response
     });
   }
 
@@ -75,7 +97,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   void openCheckout(ProfileController profileCon) async {
     var options = {
       'key': AppHelpers().razorPayApi,
-      'amount': finalCostingModel?.itemCost,
+      'amount': total,
       'name': profileCon.customerDetails?.customerName,
       'order_id': orderId,
       'description': 'Payment',
@@ -197,6 +219,56 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             result: 'There is an Error',
           );
         }
+        if (state is RetryPostSelectState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  GetCartPriceEventPost(
+                    transactionId:
+                        RepositoryProvider.of<OndcRepository>(context)
+                            .transactionId,
+                    storeLocation_id: widget.storeLocation_id,
+                  ),
+                ),
+          );
+        }
+        if (state is RetryGetSelectState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  GetFinalItemsEvent(
+                    messageId: messageID,
+                    storeLocation_id: widget.storeLocation_id,
+                    transactionId:
+                        RepositoryProvider.of<OndcRepository>(context)
+                            .transactionId,
+                  ),
+                ),
+          );
+        }
+        if (state is RetryGetInitState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  InitializeGetEvent(
+                      order_id:
+                          RepositoryProvider.of<OndcCheckoutRepository>(context)
+                              .orderId),
+                ),
+          );
+        }
+        if (state is RetryPostInitState) {
+          Timer.periodic(
+            Duration(seconds: 5),
+            (timer) => context.read<CheckoutBloc>().add(
+                  InitializePostEvent(
+                      message_id: messageID,
+                      order_id:
+                          RepositoryProvider.of<OndcCheckoutRepository>(context)
+                              .orderId),
+                ),
+          );
+        }
         if (state is CheckoutPostSuccess) {
           setState(() {
             messageID = state.messageId;
@@ -296,7 +368,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           debugLog('items $previewItems and $previewWidgetItems');
 
           List<PreviewWidgetModel> previewModels = [];
-
+          finalCostingModel = [];
           previewModels = checkoutRepo.previewFinalModels
               .where((element) => element.type.toString().contains('item'))
               .toList();
@@ -315,9 +387,47 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           warningLog('$previewItems');
           setState(() {
             finalCostingModel = state.finalCostingModel;
+            total = finalCostingModel
+                .firstWhere((element) => element.lable == 'Total Amount')
+                .value
+                .toString();
+            subTotal = finalCostingModel
+                .firstWhere((element) => element.lable == 'Subtotal')
+                .value
+                .toString();
+
+            // deliveryCharge = finalCostingModel
+            //     .where((element) => element.lable == 'Delivery charges')
+            //     .value
+            //     .toString();
+            // tax = finalCostingModel
+            //     .firstWhere((element) => element.lable == 'Tax')
+            //     .value
+            //     .toString();
+            // discount = finalCostingModel
+            //     .firstWhere((element) => element.lable == 'Discount')
+            //     .value
+            //     .toString();
+            // miscellaneous = finalCostingModel
+            //     .firstWhere((element) => element.lable == "miscellaneous")
+            //     .value
+            //     .toString();
+            // convenianceCharge = finalCostingModel
+            //     .firstWhere((element) => element.lable == 'Conveniance')
+            //     .value
+            //     .toString();
+            // packing = finalCostingModel
+            //     .firstWhere((element) => element.lable == 'Packing')
+            //     .value
+            //     .toString();
             previewWidgetItems = previewItems;
             _isLoading = false;
           });
+          for (var element in finalCostingModel) {
+            finalCostingWidget.add(
+              FinalCostingWidget(finalCostingModel: element),
+            );
+          }
         }
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
@@ -796,169 +906,173 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                 ),
                               )
                             : Text(''),
-                        _showAllItemsAreNotAvailable
-                            ? Text('')
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 15.0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Subtotal:',
-                                      style: TextStyle(
-                                        color: AppColors().grey100,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '₹ ${finalCostingModel?.itemCost}',
-                                      style: TextStyle(
-                                          color: AppColors().grey100,
-                                          fontSize: 15),
-                                    )
-                                  ],
-                                ),
-                              ),
-                        //toDo : packaging charges to be added here
-                        _showAllItemsAreNotAvailable
-                            ? Text('')
-                            : finalCostingModel?.discount == 0
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Packing Charges:',
-                                          style: TextStyle(
-                                            color: AppColors().grey100,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        Text(
-                                          '₹ ${finalCostingModel?.discount}',
-                                          style: TextStyle(
-                                              color: AppColors().black100,
-                                              fontSize: 15),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(),
-                        //todo: packaging charges to be added
-                        _showAllItemsAreNotAvailable
-                            ? Text('')
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Delivery Charges:',
-                                      style: TextStyle(
-                                        color: AppColors().grey100,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '₹ ${finalCostingModel?.deliveryCost}',
-                                      style: TextStyle(
-                                        color: AppColors().black100,
-                                        fontSize: 15,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                        _showAllItemsAreNotAvailable
-                            ? Text('')
-                            : finalCostingModel?.miscCost == 0
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Miscellaneous:',
-                                          style: TextStyle(
-                                            color: AppColors().grey100,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        Text(
-                                          '₹ ${finalCostingModel?.miscCost}',
-                                          style: TextStyle(
-                                              color: AppColors().black100,
-                                              fontSize: 15),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(),
-                        _showAllItemsAreNotAvailable
-                            ? Text('')
-                            : finalCostingModel?.discount == 0
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Discount:',
-                                          style: TextStyle(
-                                            color: AppColors().grey100,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        Text(
-                                          '₹ ${finalCostingModel?.discount}',
-                                          style: TextStyle(
-                                              color: AppColors().black100,
-                                              fontSize: 15),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(),
-                        _showAllItemsAreNotAvailable
-                            ? Text('')
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Tax:',
-                                      style: TextStyle(
-                                        color: AppColors().grey100,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '₹ ${finalCostingModel?.tax}',
-                                      style: TextStyle(
-                                          color: AppColors().black100,
-                                          fontSize: 15),
-                                    )
-                                  ],
-                                ),
-                              ),
+                        ...finalCostingWidget,
                         SizedBox(
                           height: 100,
                         ),
+                        // subTotal == null
+                        //     ? Text('')
+                        //     : Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //           horizontal: 15.0,
+                        //         ),
+                        //         child: Row(
+                        //           mainAxisAlignment:
+                        //               MainAxisAlignment.spaceBetween,
+                        //           children: [
+                        //             Text(
+                        //               'Subtotal:',
+                        //               style: TextStyle(
+                        //                 color: AppColors().grey100,
+                        //                 fontSize: 15,
+                        //               ),
+                        //             ),
+                        //             Text(
+                        //               '₹ ${subTotal}',
+                        //               style: TextStyle(
+                        //                   color: AppColors().grey100,
+                        //                   fontSize: 15),
+                        //             )
+                        //           ],
+                        //         ),
+                        //       ),
+                        // // //toDo : packaging charges to be added here
+                        // _showAllItemsAreNotAvailable
+                        //     ? Text('')
+                        //     : packing == null
+                        //         ? Padding(
+                        //             padding: const EdgeInsets.symmetric(
+                        //                 horizontal: 15.0),
+                        //             child: Row(
+                        //               mainAxisAlignment:
+                        //                   MainAxisAlignment.spaceBetween,
+                        //               children: [
+                        //                 Text(
+                        //                   'Packing Charges:',
+                        //                   style: TextStyle(
+                        //                     color: AppColors().grey100,
+                        //                     fontSize: 15,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   '₹ ${packing}',
+                        //                   style: TextStyle(
+                        //                       color: AppColors().black100,
+                        //                       fontSize: 15),
+                        //                 )
+                        //               ],
+                        //             ),
+                        //           )
+                        //         : SizedBox(),
+                        // // //todo: packaging charges to be added
+                        // deliveryCharge == null
+                        //     ? Text('')
+                        //     : Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //             horizontal: 15.0),
+                        //         child: Row(
+                        //           mainAxisAlignment:
+                        //               MainAxisAlignment.spaceBetween,
+                        //           children: [
+                        //             Text(
+                        //               'Delivery Charges:',
+                        //               style: TextStyle(
+                        //                 color: AppColors().grey100,
+                        //                 fontSize: 15,
+                        //               ),
+                        //             ),
+                        //             Text(
+                        //               '₹ ${deliveryCharge}',
+                        //               style: TextStyle(
+                        //                 color: AppColors().black100,
+                        //                 fontSize: 15,
+                        //               ),
+                        //             )
+                        //           ],
+                        //         ),
+                        //       ),
+                        // _showAllItemsAreNotAvailable
+                        //     ? Text('')
+                        //     : miscellaneous == null
+                        //         ? Padding(
+                        //             padding: const EdgeInsets.symmetric(
+                        //                 horizontal: 15.0),
+                        //             child: Row(
+                        //               mainAxisAlignment:
+                        //                   MainAxisAlignment.spaceBetween,
+                        //               children: [
+                        //                 Text(
+                        //                   'Miscellaneous:',
+                        //                   style: TextStyle(
+                        //                     color: AppColors().grey100,
+                        //                     fontSize: 15,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   '₹ ${miscellaneous}',
+                        //                   style: TextStyle(
+                        //                       color: AppColors().black100,
+                        //                       fontSize: 15),
+                        //                 )
+                        //               ],
+                        //             ),
+                        //           )
+                        //         : SizedBox(),
+                        // _showAllItemsAreNotAvailable
+                        //     ? Text('')
+                        //     : discount == null
+                        //         ? Padding(
+                        //             padding: const EdgeInsets.symmetric(
+                        //                 horizontal: 15.0),
+                        //             child: Row(
+                        //               mainAxisAlignment:
+                        //                   MainAxisAlignment.spaceBetween,
+                        //               children: [
+                        //                 Text(
+                        //                   'Discount:',
+                        //                   style: TextStyle(
+                        //                     color: AppColors().grey100,
+                        //                     fontSize: 15,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   '₹ ${discount}',
+                        //                   style: TextStyle(
+                        //                       color: AppColors().black100,
+                        //                       fontSize: 15),
+                        //                 )
+                        //               ],
+                        //             ),
+                        //           )
+                        //         : SizedBox(),
+                        // _showAllItemsAreNotAvailable
+                        //     ? Text('')
+                        //     : Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //             horizontal: 15.0),
+                        //         child: Row(
+                        //           mainAxisAlignment:
+                        //               MainAxisAlignment.spaceBetween,
+                        //           children: [
+                        //             Text(
+                        //               'Tax:',
+                        //               style: TextStyle(
+                        //                 color: AppColors().grey100,
+                        //                 fontSize: 15,
+                        //               ),
+                        //             ),
+                        //             Text(
+                        //               '₹ ${tax}',
+                        //               style: TextStyle(
+                        //                   color: AppColors().black100,
+                        //                   fontSize: 15),
+                        //             )
+                        //           ],
+                        //         ),
+                        //       ),
+                        // SizedBox(
+                        //   height: 100,
+                        // ),
                       ],
                     ),
                   );
@@ -985,7 +1099,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '₹ ${finalCostingModel?.totalCost}',
+                                  '₹ ${total}',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: AppColors().grey100,
@@ -1064,7 +1178,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset('assets/circularProgress.png'),
+                              Lottie.network(
+                                  'https://assets9.lottiefiles.com/packages/lf20_dkz94xcg.json'),
                               const SizedBox(
                                 height: 60,
                               ),
@@ -1103,7 +1218,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image.asset('assets/circularProgress.png'),
+                                  Lottie.network(
+                                      'https://assets9.lottiefiles.com/packages/lf20_dkz94xcg.json'),
                                   const SizedBox(
                                     height: 60,
                                   ),

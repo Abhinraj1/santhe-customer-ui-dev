@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
@@ -148,26 +149,28 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
     //   );
     // });
 
-    on<FetchShopModelsGet>((event, emit) async {
-      emit(OndcFetchShopLoading());
-      try {
-        List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
-            transactionIdl: event.transactionId!
-            //  event.transactionId!,
-            );
-        revertshopModel = shopModel;
-        warningLog('$revertshopModel');
-        emit(
-          OndcShopModelsLoaded(shopModels: shopModel),
-        );
-      } catch (e) {
-        emit(
-          ErrorFetchingShops(
-            message: e.toString(),
-          ),
-        );
-      }
-    });
+    on<FetchShopModelsGet>(
+      (event, emit) async {
+        emit(OndcFetchShopLoading());
+        try {
+          List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
+              transactionIdl: event.transactionId!
+              //  event.transactionId!,
+              );
+          revertshopModel = shopModel;
+          warningLog('$revertshopModel');
+          emit(
+            OndcShopModelsLoaded(shopModels: shopModel),
+          );
+        } catch (e) {
+          emit(
+            ErrorFetchingShops(
+              message: e.toString(),
+            ),
+          );
+        }
+      },
+    );
 
     on<FetchListOfShopWithSearchedProducts>((event, emit) async {
       emit(OndcFetchShopLoading());

@@ -210,9 +210,10 @@ class OndcCheckoutRepository with LogMixin {
         );
       }
       //! finacostingmodel change
-      map.forEach((element) {
+      finalCostingModel = [];
+      for (var element in map) {
         finalCostingModel.add(FinalCostingModel.fromMap(element));
-      });
+      }
       warningLog(' cost$finalCostingModel $previewModels');
       if (responseBody['message']
           .toString()
@@ -221,6 +222,7 @@ class OndcCheckoutRepository with LogMixin {
             message:
                 'Quantity of one or more items items in your cart is updated or are not deliverable anymore.please review before proceeding');
       }
+      errorLog('$finalCostingModel');
       return finalCostingModel;
     } catch (e) {
       throw FinalizeProductErrorState(
@@ -295,9 +297,7 @@ class OndcCheckoutRepository with LogMixin {
       var response;
       for (int count = 0; count <= 30; count++) {
         await Future.delayed(const Duration(seconds: 1));
-
         response = await http.get(url, headers: header);
-
         warningLog(
             "############################# ${json.decode(response.body)['message']}");
         warningLog("############################# $count");
@@ -336,6 +336,7 @@ class OndcCheckoutRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
+      await Future.delayed(const Duration(seconds: 1));
       final response = await http.post(
         url,
         headers: header,
@@ -347,7 +348,7 @@ class OndcCheckoutRepository with LogMixin {
           },
         ),
       );
-      warningLog('${response.statusCode}');
+      warningLog('verify payment url $url ${response.statusCode}');
       final responseBody = await json.decode(response.body);
       warningLog('$responseBody');
       final statusCodeFromApiBody = responseBody['status'];

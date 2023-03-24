@@ -27,6 +27,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   double taxescgst = 0;
   double taxessgst = 0;
   String? orderId;
+  int countNumber = 0;
   bool _isLoading = false;
   List<PreviewWidgetOndcItem> previewWidgetItems = [];
   List<ShipmentSegregatorModel> shipmentSegregatorModels = [];
@@ -120,19 +121,20 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     warningLog(
         'success ${response.orderId} ${response.paymentId} ${response.signature}');
-    Future.delayed(
-      Duration(seconds: 1),
-      () => context.read<CheckoutBloc>().add(
-            VerifyPaymentEvent(
-              razorpayOrderIdFromRazor: response.orderId!,
-              razorpayPaymentIdFromRazor: response.paymentId!,
-              razorpaySignature: response.signature!,
-              messageId: messageID,
-              transactionId:
-                  RepositoryProvider.of<OndcRepository>(context).transactionId,
-            ),
+    // Future.delayed(
+    //   Duration(seconds: 1),
+    //   () =>
+    context.read<CheckoutBloc>().add(
+          VerifyPaymentEvent(
+            razorpayOrderIdFromRazor: response.orderId!,
+            razorpayPaymentIdFromRazor: response.paymentId!,
+            razorpaySignature: response.signature!,
+            messageId: messageID,
+            transactionId:
+                RepositoryProvider.of<OndcRepository>(context).transactionId,
           ),
-    );
+        );
+    // )
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -153,7 +155,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     );
   }
 
-  Widget _getGroupSeparator(PreviewWidgetOndcItem element) {
+  Widget _getGroupSeparator(PreviewWidgetOndcItem element, int countNum) {
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -171,7 +173,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AutoSizeText(
-                  'Shipment No ${element.previewWidgetModel.fulfillment_id}',
+                  'Shipment No ${countNum}',
                   textAlign: TextAlign.left,
                   style: TextStyle(color: AppColors().brandDark),
                 ),
@@ -517,7 +519,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                 width: 100,
                               ),
                               const Text(
-                                'Checkout',
+                                'CHECKOUT',
                                 style: TextStyle(
                                     color: Colors.black54, fontSize: 20),
                               )
@@ -703,16 +705,17 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         AddressColumn(
                             title: "Payment Details",
                             addressType: "Billing Address:",
-                            address: (RepositoryProvider.of<AddressRepository>(context)
-                                .billingModel
-                                ?.flat)
+                            address: (RepositoryProvider.of<AddressRepository>(
+                                        context)
+                                    .billingModel
+                                    ?.flat)
                                 .toString(),
                             hasEditButton: true,
                             onTap: () {
                               isBillingAddress = true;
 
                               Get.to(
-                                    () => const MapTextView(),
+                                () => const MapTextView(),
                               );
                             }),
 
@@ -722,7 +725,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         Padding(
                           padding: const EdgeInsets.only(left: 15.0),
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.center,
                             child: Text(
                               'Items',
                               style: TextStyle(color: AppColors().brandDark),
@@ -800,14 +803,16 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                 },
                                 groupSeparatorBuilder:
                                     (PreviewWidgetOndcItem previewWidget) {
-                                  return _getGroupSeparator(previewWidget);
+                                  countNumber = countNumber + 1;
+                                  return _getGroupSeparator(
+                                      previewWidget, countNumber);
                                 },
                                 itemBuilder: (context, previewWidgetModel) {
                                   warningLog(
                                       'Length passed into builder ${previewWidgetItems.length}');
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
+                                        horizontal: 12, vertical: 5),
                                     child: Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -821,7 +826,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
-                                            width: 5,
+                                            width: 1,
                                           ),
                                           previewWidgetModel.previewWidgetModel
                                                           .symbol !=
@@ -846,49 +851,55 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                 ),
                                           SizedBox(
                                             height: 70,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                    width: 200,
-                                                    child: AutoSizeText(
-                                                      previewWidgetModel
-                                                          .previewWidgetModel
-                                                          .title,
-                                                      style: FontStyleManager()
-                                                          .s12fw700Brown,
-                                                      maxLines: 2,
-                                                    )),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                      width: 200,
+                                                      child: AutoSizeText(
+                                                        previewWidgetModel
+                                                            .previewWidgetModel
+                                                            .title,
+                                                        style:
+                                                            FontStyleManager()
+                                                                .s12fw700Brown,
+                                                        maxLines: 2,
+                                                      )),
 
-                                                Text(
-                                                  '${previewWidgetModel.previewWidgetModel.quantity}',
-                                                  style: FontStyleManager()
-                                                      .s10fw500Brown,
-                                                ),
-                                                //  showStatus ?? false ?
-                                                //  Text(status.toString(),style: FontStyleManager().s12fw500Grey,) :
-                                                //  textButtonTitle != null && textButtonOnTap != null ?
-                                                //      TextButton(
-                                                //          onPressed: (){
-                                                //            textButtonOnTap();
-                                                //          },
-                                                //          child: Text(textButtonTitle,
-                                                //          style: FontStyleManager().s12fw500Red,),) :
-                                                const SizedBox(
-                                                  height: 5,
-                                                ),
-                                              ],
+                                                  Text(
+                                                    '${previewWidgetModel.previewWidgetModel.quantity}',
+                                                    style: FontStyleManager()
+                                                        .s10fw500Brown,
+                                                  ),
+                                                  //  showStatus ?? false ?
+                                                  //  Text(status.toString(),style: FontStyleManager().s12fw500Grey,) :
+                                                  //  textButtonTitle != null && textButtonOnTap != null ?
+                                                  //      TextButton(
+                                                  //          onPressed: (){
+                                                  //            textButtonOnTap();
+                                                  //          },
+                                                  //          child: Text(textButtonTitle,
+                                                  //          style: FontStyleManager().s12fw500Red,),) :
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                           Center(
                                             child: SizedBox(
                                               width: 50,
                                               child: AutoSizeText(
-                                                "${previewWidgetModel.previewWidgetModel.price}",
-                                                maxFontSize: 16,
+                                                "₹ ${previewWidgetModel.previewWidgetModel.price}",
+                                                maxFontSize: 14,
                                                 minFontSize: 12,
                                                 style: FontStyleManager()
                                                     .s16fw600Grey,
@@ -1099,13 +1110,14 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
               ),
               bottomSheet: _showAllItemsAreNotAvailable
                   ? Text('')
-                  : SizedBox(
+                  : Container(
+                      color: CupertinoColors.systemBackground,
                       height: 100,
                       child: Column(
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 10),
+                                horizontal: 20.0, vertical: 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1113,7 +1125,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                 Text(
                                   'Total:',
                                   style: TextStyle(
-                                      color: AppColors().grey100,
+                                      color: AppColors().brandDark,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -1121,7 +1133,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                   '₹ ${total}',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: AppColors().grey100,
+                                      color: AppColors().brandDark,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -1129,7 +1141,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: ElevatedButton(
@@ -1177,7 +1189,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                   color: Colors.grey,
                                                 ),
                                               )
-                                            : Text('Proceed to pay'),
+                                            : Text('PROCEED TO PAY'),
                               ),
                             ),
                           )

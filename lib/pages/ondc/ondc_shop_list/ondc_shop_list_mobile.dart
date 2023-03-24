@@ -270,6 +270,12 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       // bloc: OndcBloc(ondcRepository: app<OndcRepository>()),
       listener: (context, state) {
         warningLog('$state');
+        if (state is ErrorFetchingShops) {
+          Get.to(
+            () => ApiErrorView(),
+          );
+        }
+
         if (state is SearchItemLoaded) {
           List<ShopModel> newShopModel = [];
           List<OndcShopWidget> newShopWidget = [];
@@ -353,37 +359,17 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       },
 
       builder: (context, state) {
-
-        fun()async{
-
-          bool status = false;
-
-          for(int count =0 ; count <= 30 ; count++){
-
-            await Future.delayed(Duration(seconds: 1));
-
-            print("############################# $count");
-            if(count == 5){
-              setState(() {
-                status = false;
-              });
-              print("############################# $status");
-
-            }
-          }  print("############################# OUT");
-        }
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
 
           ///WILL BE REMOVED @ABHI
           floatingActionButton: FloatingActionButton(
-            onPressed: (){
+            onPressed: () {
+              Get.to(() => ApiErrorView());
+              // fun();
 
-
-              fun();
-
-            ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
+              ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
 
               // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
               //      LoadReasonsForReturnEvent(

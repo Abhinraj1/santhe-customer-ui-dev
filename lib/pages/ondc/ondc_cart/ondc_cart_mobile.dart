@@ -259,118 +259,210 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                       )
                     ],
                   ),
-                  body: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: AppColors().brandDark,
-                                radius: 20,
-                                child: GestureDetector(
-                                  onTap: () => ge.Get.back(),
-                                  child: const Icon(
-                                    Icons.arrow_back,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 100,
-                              ),
-                              const Text(
-                                'My Cart',
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 20),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        shopName == null
-                            ? const Text('')
-                            : Text(
-                                'Shop: $shopName',
-                                style: TextStyle(
-                                  color: AppColors().brandDark,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                        _showErrorWhen1or2ItemsNotAvailable
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 48,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(
-                                      12,
-                                    ),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Server Not responding',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : const Text(''),
-                        _showErrorNoResponseFromSeller
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 48,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(
-                                      12,
-                                    ),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Seller is not responding.Please try later',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : const Text(''),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 40.0, top: 10),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '${cartWidget.length} items',
-                              style: TextStyle(color: AppColors().brandDark),
-                            ),
-                          ),
-                        ),
-                        SingleChildScrollView(
+                  body: cartWidget.isEmpty
+                      ? SingleChildScrollView(
                           child: Column(
                             children: [
-                              ...cartWidget,
                               const SizedBox(
-                                height: 200,
+                                height: 15,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: AppColors().brandDark,
+                                      radius: 20,
+                                      child: GestureDetector(
+                                        onTap: () => ge.Get.back(),
+                                        child: const Icon(
+                                          Icons.arrow_back,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 100,
+                                    ),
+                                    const Text(
+                                      'My Cart',
+                                      style: TextStyle(
+                                          color: Colors.black54, fontSize: 20),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              shopName == null
+                                  ? const Text('')
+                                  : Text(
+                                      'Shop: $shopName',
+                                      style: TextStyle(
+                                        color: AppColors().brandDark,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              const Text(
+                                'No Items in your cart. Please go back to \n the shop to add some items',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              Center(
+                                  child: Image.asset('assets/emptyCart.png')),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                      AppColors().brandDark,
+                                    ),
+                                  ),
+                                  onPressed: () => ge.Get.back(),
+                                  child: const Text('BACK'),
+                                ),
                               )
                             ],
                           ),
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: AppColors().brandDark,
+                                      radius: 20,
+                                      child: GestureDetector(
+                                        onTap: () => ge.Get.back(),
+                                        child: const Icon(
+                                          Icons.arrow_back,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 100,
+                                    ),
+                                    const Text(
+                                      'My Cart',
+                                      style: TextStyle(
+                                          color: Colors.black54, fontSize: 20),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              shopName == null
+                                  ? const Text('')
+                                  : Text(
+                                      'Shop: $shopName',
+                                      style: TextStyle(
+                                        color: AppColors().brandDark,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                              _showErrorWhen1or2ItemsNotAvailable
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 48,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8,
+                                        decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Error occurred, Please try again',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : const Text(''),
+                              _showErrorNoResponseFromSeller
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 48,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8,
+                                        decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Seller is not responding.Please try later',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : const Text(''),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 40.0, top: 10),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    '${cartWidget.length} items',
+                                    style:
+                                        TextStyle(color: AppColors().brandDark),
+                                  ),
+                                ),
+                              ),
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    ...cartWidget,
+                                    const SizedBox(
+                                      height: 200,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
                   bottomSheet: cartWidget.isNotEmpty
                       ? SizedBox(
                           height: 125,
@@ -437,7 +529,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                     backgroundColor: MaterialStateProperty.all(
                                         AppColors().brandDark),
                                   ),
-                                  child: const Text('Proceed To Checkout'),
+                                  child: const Text('PROCEED TO CHECKOUT'),
                                 ),
                               ),
                               Text(

@@ -289,11 +289,11 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                   //! remove const
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 100,
                       child: Text(
-                        '${widget.productOndcModel.store_name}',
-                        style: const TextStyle(
+                        'Delivery In',
+                        style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           fontSize: 13,
                           color: Colors.black87,

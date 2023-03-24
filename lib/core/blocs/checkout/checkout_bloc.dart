@@ -71,7 +71,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
 
     on<GetFinalItemsEvent>((event, emit) async {
       try {
-        final List<FinalCostingModel> finalCostingModel =
+        List<FinalCostingModel> finalCostingModel =
             await ondcCheckoutRepository.proceedToCheckoutFinalCart(
           transactionid: event.transactionId,
           storeLocation_id: event.storeLocation_id,
@@ -138,22 +138,24 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
       }
     });
 
-    on<VerifyPaymentEvent>((event, emit) async {
-      emit(FinalizePaymentLoading());
-      try {
-        await ondcCheckoutRepository.verifyPayment(
-          razorpayOrderIDLocal: event.razorpayOrderIdFromRazor,
-          razorpayPaymentId: event.razorpayPaymentIdFromRazor,
-          razorpaySignature: event.razorpaySignature,
-        );
-        await ondcCheckoutRepository.confirmOrder(
-            messageId: event.messageId, transactionId: event.transactionId);
-        emit(FinalizePaymentSuccessState());
-      } on FinalizePaymentErrorState catch (e) {
-        emit(
-          FinalizePaymentErrorState(message: e.message),
-        );
-      }
-    });
+    on<VerifyPaymentEvent>(
+      (event, emit) async {
+        emit(FinalizePaymentLoading());
+        try {
+          await ondcCheckoutRepository.verifyPayment(
+            razorpayOrderIDLocal: event.razorpayOrderIdFromRazor,
+            razorpayPaymentId: event.razorpayPaymentIdFromRazor,
+            razorpaySignature: event.razorpaySignature,
+          );
+          await ondcCheckoutRepository.confirmOrder(
+              messageId: event.messageId, transactionId: event.transactionId);
+          emit(FinalizePaymentSuccessState());
+        } on FinalizePaymentErrorState catch (e) {
+          emit(
+            FinalizePaymentErrorState(message: e.message),
+          );
+        }
+      },
+    );
   }
 }

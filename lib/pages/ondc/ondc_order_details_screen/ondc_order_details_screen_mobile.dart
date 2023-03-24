@@ -241,19 +241,19 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
               return
                 InkWell(
-                onTap: (){
+                  onTap: (){
+                    ///Navigate to upload screen
+                    ///change products to previewWidgetModel
+                    BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>
+                      (context).add(
+                        LoadReasonsForReturnEvent(
+                            orderId: orderId,
+                            orderNumber: orderNumber,
+                            product: element));
 
-                  ///Navigate to upload screen
-                  ///change products to previewWidgetModel
-                  // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
-                  //      LoadReasonsForReturnEvent(
-                  //         orderId: "",
-                  //         orderNumber: '',
-                  //      product: ));
-
-                },
-                child: Text("Return",style: FontStyleManager().s14fw700GreyUnderLne),
-              );
+                  },
+                  child: Text("Return",style: FontStyleManager().s14fw700GreyUnderLne),
+                );
             } else {
               return null;
             }
@@ -262,22 +262,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           }
         }
       } else {
-        return
-          InkWell(
-            onTap: (){
-              ///Navigate to upload screen
-              ///change products to previewWidgetModel
-              BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>
-                (context).add(
-                  LoadReasonsForReturnEvent(
-                      orderId: orderId,
-                      orderNumber: orderNumber,
-                      product: element));
-
-            },
-            child: Text("Return",style: FontStyleManager().s14fw700GreyUnderLne),
-          );
-       /// return null;
+        return null;
       }
     }
 

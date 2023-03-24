@@ -354,66 +354,45 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
 
       builder: (context, state) {
 
-        fun()async{
-
-          bool status = false;
-
-          for(int count =0 ; count <= 30 ; count++){
-
-            await Future.delayed(Duration(seconds: 1));
-
-            print("############################# $count");
-            if(count == 5){
-              setState(() {
-                status = false;
-              });
-              print("############################# $status");
-
-            }
-          }  print("############################# OUT");
-        }
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
 
           ///WILL BE REMOVED @ABHI
-          floatingActionButton: FloatingActionButton(
-            onPressed: (){
-
-
-              fun();
-
-            ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
-
-              // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
-              //      LoadReasonsForReturnEvent(
-              //         orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
-              //             .orderId,
-              //         product: PreviewWidgetModel(
-              //             price: "200Rs",
-              //         title: "Head and Shoulders Shampoo for dandruff. 250 ml",
-              //         quantity: 1,
-              //         quoteId: "",
-              //         tat: "",
-              //         message_id: "",
-              //         category: "",
-              //         fulfillment_id: "",
-              //         provider_name: "",
-              //         serviceable: "",
-              //         status: "",
-              //         type: "",
-              //         ondc_item_id: "",
-              //         deliveryFulfillmentId:"" ,
-              //         cancellable: "",
-              //         createdAt:"" ,
-              //         deletedAt:"" ,
-              //         id:"" ,symbol:"" ,updatedAt:"" ,returnable: "",
-              //             isCancelled: null,
-              //             isReturned: null),
-              //
-              //         orderNumber: "123456",));
-            },
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: (){
+          //
+          //   ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
+          //
+          //     // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
+          //     //      LoadReasonsForReturnEvent(
+          //     //         orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
+          //     //             .orderId,
+          //     //         product: PreviewWidgetModel(
+          //     //             price: "200Rs",
+          //     //         title: "Head and Shoulders Shampoo for dandruff. 250 ml",
+          //     //         quantity: 1,
+          //     //         quoteId: "",
+          //     //         tat: "",
+          //     //         message_id: "",
+          //     //         category: "",
+          //     //         fulfillment_id: "",
+          //     //         provider_name: "",
+          //     //         serviceable: "",
+          //     //         status: "",
+          //     //         type: "",
+          //     //         ondc_item_id: "",
+          //     //         deliveryFulfillmentId:"" ,
+          //     //         cancellable: "",
+          //     //         createdAt:"" ,
+          //     //         deletedAt:"" ,
+          //     //         id:"" ,symbol:"" ,updatedAt:"" ,returnable: "",
+          //     //             isCancelled: null,
+          //     //             isReturned: null),
+          //     //
+          //     //         orderNumber: "123456",));
+          //   },
+          // ),
           backgroundColor: CupertinoColors.systemBackground,
           appBar: AppBar(
             leading: IconButton(

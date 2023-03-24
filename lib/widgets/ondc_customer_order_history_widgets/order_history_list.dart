@@ -12,6 +12,7 @@ import '../../../../widgets/ondc_order_details_widgets/order_details_table.dart'
 import '../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import '../../core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import '../../models/ondc/single_order_model.dart';
+import '../../pages/ondc/api_error/api_error_view.dart';
 
 class OrderHistoryList extends StatelessWidget {
   const OrderHistoryList({Key? key}) : super(key: key);
@@ -20,46 +21,46 @@ class OrderHistoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       Expanded(
-      child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
+        child: BlocConsumer<OrderHistoryBloc, OrderHistoryState>(
+          listener: (context, state) {
+            // TODO: implement listener
 
-        builder: (context,state) {
-         if(state is SingleOrderErrorState){
-           return  Center(child: Text(state.message));
-         }
-         else if(state is PastOrderDataLoadedState){
+            if(state is SingleOrderErrorState){
 
-           return listBody(orderDetails: state.orderDetails);
+              Get.to(()=> const ApiErrorView(),);
 
-         } else if(state is SevenDaysFilterState){
+            }
+          },
+          builder: (context, state) {
 
-           return listBody(orderDetails: state.orderDetails);
-
-         } else if(state is ThirtyDaysFilterState){
-
-           return listBody(orderDetails: state.orderDetails);
-
-         } else if(state is CustomDaysFilterState){
-
-           return listBody(orderDetails: state.orderDetails);
-
-         }else{
-
-           return  const Center(child: CircularProgressIndicator());
-         }
-        }
-      ),
-    );
+                  if (state is SingleOrderErrorState) {
+                    return Center(child: Text(state.message));
+                  }
+                  else if (state is PastOrderDataLoadedState) {
+                    return listBody(orderDetails: state.orderDetails);
+                  } else if (state is SevenDaysFilterState) {
+                    return listBody(orderDetails: state.orderDetails);
+                  } else if (state is ThirtyDaysFilterState) {
+                    return listBody(orderDetails: state.orderDetails);
+                  } else if (state is CustomDaysFilterState) {
+                    return listBody(orderDetails: state.orderDetails);
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+          },
+        ),
+      );
   }
 
-  Widget listBody({required List<SingleOrderModel> orderDetails}){
+  Widget listBody({required List<SingleOrderModel> orderDetails}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SizedBox(
         child: ListView.builder(
-            itemCount:  orderDetails.length,
-            itemBuilder: (context, index){
+            itemCount: orderDetails.length,
+            itemBuilder: (context, index) {
               return OrderHistoryCell(
-                orderDetails:  orderDetails[index],
+                orderDetails: orderDetails[index],
               );
             }),
       ),
@@ -70,21 +71,22 @@ class OrderHistoryList extends StatelessWidget {
 
 class OrderHistoryCell extends StatelessWidget {
   final SingleOrderModel orderDetails;
+
   const OrderHistoryCell({Key? key,
     required this.orderDetails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    DateTime date = DateTime.parse(orderDetails.quotes!.first.createdAt.toString());
+    DateTime date = DateTime.parse(
+        orderDetails.quotes!.first.createdAt.toString());
     String orderNo = orderDetails.orderNumber.toString(),
-         orderStatus = orderDetails.status.toString(),
+        orderStatus = orderDetails.status.toString(),
         shopName = orderDetails.storeLocation!.store!.name.toString(),
         orderId = orderDetails.quotes!.first.orderId.toString(),
-         orderDate = DateFormat.yMd().format(date);
+        orderDate = DateFormat.yMd().format(date);
 
 
-    return   Container(
+    return Container(
       width: 320,
       margin: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
@@ -92,13 +94,14 @@ class OrderHistoryCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(kTextFieldCircularBorderRadius),
       ),
       child: InkWell(
-        onTap: (){
-          print("###################################################3 $orderId");
+        onTap: () {
+          print(
+              "###################################################3 $orderId");
           BlocProvider.of<OrderDetailsScreenCubit>(context)
               .loadOrderDetails(
               orderId: orderId);
 
-          Get.to(()=>const ONDCOrderDetailsView());
+          Get.to(() => const ONDCOrderDetailsView());
         },
         child: OrderDetailsTable(
             firstTitle: "Shop",

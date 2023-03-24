@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 import '../../../../core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import '../../../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
@@ -10,6 +12,7 @@ import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../../widgets/ondc_return_widgets/image_grid.dart';
+import '../../api_error/api_error_view.dart';
 
 class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
 
@@ -25,112 +28,125 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
     return CustomScaffold(
         trailingButton: homeIconButton(),
         body:
-        BlocBuilder<ONDCOrderCancelAndReturnReasonsBloc,
+        BlocConsumer<ONDCOrderCancelAndReturnReasonsBloc,
             ONDCOrderCancelAndReturnState>(
 
-        builder: (context,state) {
+          listener: (context, state) {
+            // TODO: implement listener
 
-          if(state is SelectedCodeForReturnState){
+            if (state is OrderCancelErrorState) {
 
-            String productName = state.returnProduct.title.toString(),
-                   orderNumber = state.orderNumber.toString(),
-                    quantity = "${state.returnProduct.quantity.toString()} units";
+              Get.to(
+                    () => const ApiErrorView(),
+              );
+            }
 
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  const CustomTitleWithBackButton(
-                    title: "Return Request",
-                  ),
-                  Text(
-                    "Order ID  : $orderNumber",
-                    style: FontStyleManager().s16fw700,
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "You wish to return the following item: ",
-                        style: FontStyleManager().s16fw500,
+          },
+          builder: (context, state) {
+                  if (state is SelectedCodeForReturnState) {
+                    String productName = state.returnProduct.title.toString(),
+                        orderNumber = state.orderNumber.toString(),
+                        quantity = "${state.returnProduct.quantity
+                            .toString()} units";
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const CustomTitleWithBackButton(
+                            title: "Return Request",
+                          ),
+                          Text(
+                            "Order ID  : $orderNumber",
+                            style: FontStyleManager().s16fw700,
+                          ),
+                          Padding(
+                            padding:
+                            const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 40),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "You wish to return the following item: ",
+                                style: FontStyleManager().s16fw500,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                            const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 40),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                productName,
+                                style: FontStyleManager().s16fw700Brown,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                quantity,
+                                style: FontStyleManager().s14fw500Brown,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30),
+                            child: Text(
+                              "Upload Pictures",
+                              style: FontStyleManager().s16fw700,
+                            ),
+                          ),
+
+                          const ImageGrid(),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Please upload at least one picture "
+                                    "of the product showing any defects or damage",
+                                style: FontStyleManager().s16fw500,
+                              ),
+                            ),
+                          ),
+                          BlocBuilder<
+                              UploadImageAndReturnRequestCubit,
+                              UploadImageAndReturnRequestState>(
+                              builder: (context, state) {
+                                if (state is ShowImages) {
+                                  return CustomButton(
+                                      buttonTitle: "RETURN ITEM",
+                                      onTap: () {
+                                        BlocProvider.of<
+                                            UploadImageAndReturnRequestCubit>
+                                          (context).uploadImages(context);
+                                      },
+                                      isActive: true,
+                                      width: 160,
+                                      verticalPadding: 20);
+                                } else {
+                                  return CustomButton(
+                                      buttonTitle: "RETURN ITEM",
+                                      onTap: () {},
+                                      isActive: false,
+                                      width: 160,
+                                      verticalPadding: 20);
+                                }
+                              }
+                          )
+                        ],
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        productName,
-                        style: FontStyleManager().s16fw700Brown,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        quantity,
-                        style: FontStyleManager().s14fw500Brown,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Text(
-                      "Upload Pictures",
-                      style: FontStyleManager().s16fw700,
-                    ),
-                  ),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                  const ImageGrid(),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Please upload at least one picture "
-                            "of the product showing any defects or damage",
-                        style: FontStyleManager().s16fw500,
-                      ),
-                    ),
-                  ),
-                  BlocBuilder<UploadImageAndReturnRequestCubit,UploadImageAndReturnRequestState>(
-                    builder: (context,state) {
-                    if(state is ShowImages){
-                      return CustomButton(
-                          buttonTitle: "RETURN ITEM",
-                          onTap: () {
-                            BlocProvider.of<UploadImageAndReturnRequestCubit>
-                              (context).uploadImages(context);
-
-                          },
-                          isActive: true,
-                          width: 160,
-                          verticalPadding: 20);
-                    }else{
-                      return CustomButton(
-                          buttonTitle: "RETURN ITEM",
-                          onTap: () {},
-                          isActive: false,
-                          width: 160,
-                          verticalPadding: 20);
-                    }
-                    }
-                  )
-                ],
-              ),
-            );
-
-          }else{
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          }
+          },
         ));
   }
 }

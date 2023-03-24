@@ -254,9 +254,11 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
   Widget build(BuildContext context) {
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
       if (state is ErrorFetchingProductsOfShops) {
+
         ge.Get.to(
-          () => ApiErrorView(),
+          () => const ApiErrorView(),
         );
+
       }
       if (state is OndcProductsOfShopsLoaded) {
         List<OndcProductWidget> productsWidget = [];

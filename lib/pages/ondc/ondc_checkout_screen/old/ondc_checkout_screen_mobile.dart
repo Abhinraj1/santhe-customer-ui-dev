@@ -835,20 +835,26 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                           .previewWidgetModel
                                                           .symbol !=
                                                       ""
-                                              ? Image.network(
-                                                  previewWidgetModel
-                                                      .previewWidgetModel
-                                                      .symbol,
-                                                  width: 50,
-                                                  height: 60,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.asset(
-                                                  ImgManager().santheIcon,
-                                                  width: 50,
-                                                  height: 60,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                              ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                                child: Image.network(
+                                                    previewWidgetModel
+                                                        .previewWidgetModel
+                                                        .symbol,
+                                                    width: 50,
+                                                    height: 60,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                              )
+                                              : ClipRRect(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                                child: Image.asset(
+                                                    ImgManager().santheIcon,
+                                                    width: 50,
+                                                    height: 60,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                              ),
                                           SizedBox(
                                             height: 70,
                                             child: Padding(

@@ -12,7 +12,9 @@ import '../../../widgets/custom_widgets/custom_button.dart';
 import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../widgets/ondc_return_widgets/return_reasons_listTile.dart';
+import '../api_error/api_error_view.dart';
 import '../ondc_return_screens/ondc_return_upload_photo_screen/ondc_return_upload_photo_screen_mobile.dart';
+
 
 class ONDCReasonsScreenMobile extends StatelessWidget {
   const ONDCReasonsScreenMobile({
@@ -23,85 +25,88 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       trailingButton: homeIconButton(),
-      body: BlocBuilder<ONDCOrderCancelAndReturnReasonsBloc, ONDCOrderCancelAndReturnState>(
-          builder: (context, state) {
-        if (state is ReasonsLoadedFullOrderCancelState) {
-          return body(
-            title: "Cancel Order",
-              orderNumber: state.orderNumber,
-              reasons: state.reasons,
-              onTap: () {},
-              isActive: false);
-        } else if (state is ReasonsLoadedSingleOrderCancelState) {
-          return body(
-            title: "Cancel Order",
-              orderNumber: state.orderNumber,
-              reasons: state.reasons,
-              onTap: () {},
-              isActive: false);
-        } else if (state is SelectedCodeState) {
+      body: BlocConsumer<ONDCOrderCancelAndReturnReasonsBloc,
+          ONDCOrderCancelAndReturnState>(
+        listener: (context, state) {
+          if(state is OrderCancelErrorState){
+            Get.to(
+                  () => const ApiErrorView(),
+            );
+          }
+          // TODO: implement listener
+        },
+        builder: (context, state) {
 
-          return body(
-            title: "Cancel Order",
-              orderNumber: state.orderNumber,
-              reasons: state.reasons,
-              onTap: () {
-                BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context)
-                    .add(CancelFullOrderRequestEvent());
-              },
-              isActive: true);
+                if (state is ReasonsLoadedFullOrderCancelState) {
+                  return body(
+                      title: "Cancel Order",
+                      orderNumber: state.orderNumber,
+                      reasons: state.reasons,
+                      onTap: () {},
+                      isActive: false);
+                } else if (state is ReasonsLoadedSingleOrderCancelState) {
+                  return body(
+                      title: "Cancel Order",
+                      orderNumber: state.orderNumber,
+                      reasons: state.reasons,
+                      onTap: () {},
+                      isActive: false);
+                } else if (state is SelectedCodeState) {
+                  return body(
+                      title: "Cancel Order",
+                      orderNumber: state.orderNumber,
+                      reasons: state.reasons,
+                      onTap: () {
+                        BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(
+                            context)
+                            .add(CancelFullOrderRequestEvent());
+                      },
+                      isActive: true);
+                } else if (state is OrderCancelErrorState) {
+                  return Center(child: Text(state.message));
+                } else if (state is ReasonsLoadedForReturnState) {
+                  return body(
+                      title: "Return Request",
+                      orderNumber: state.orderNumber,
+                      reasons: state.reasons,
+                      onTap: () {},
+                      isActive: false,
+                      isReturn: true
+                  );
+                }
+                else if (state is SelectedCodeForReturnState) {
+                  return body(
+                      title: "Return Request",
+                      orderNumber: state.orderNumber,
+                      reasons: state.reasons,
+                      onTap: () {
 
-        } else if (state is OrderCancelErrorState) {
+                        ///for Return && Navigate to upload image Screen
+                        Get.to(() => const ONDCOrderUploadPhotoScreenMobile());
+                      },
+                      isActive: true,
+                      isReturn: true
 
-          return Center(child: Text(state.message));
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-        } else if(state is ReasonsLoadedForReturnState){
-
-
-          return  body(
-            title: "Return Request",
-              orderNumber: state.orderNumber,
-              reasons: state.reasons,
-              onTap: () {},
-              isActive: false,
-            isReturn: true
-          );
-        }
-        else if (state is SelectedCodeForReturnState) {
-
-          return body(
-            title: "Return Request",
-              orderNumber: state.orderNumber,
-              reasons: state.reasons,
-              onTap: () {
-
-                ///for Return && Navigate to upload image Screen
-                 Get.to(()=>const ONDCOrderUploadPhotoScreenMobile());
-
-              },
-              isActive: true,
-              isReturn: true
-
-          );
-
-        }else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      }),
+        },
+      ),
     );
   }
 
-  Widget body(
-      {required String orderNumber,
-        required String title,
-      required List<ReasonsModel> reasons,
-      required bool isActive,
-      required Function() onTap,
-      bool? isReturn}) {
+  Widget body({required String orderNumber,
+    required String title,
+    required List<ReasonsModel> reasons,
+    required bool isActive,
+    required Function() onTap,
+    bool? isReturn}) {
     return Column(
       children: [
-         CustomTitleWithBackButton(
-          title: title ,
+        CustomTitleWithBackButton(
+          title: title,
         ),
         Text(
           "Order ID  : $orderNumber",
@@ -113,7 +118,7 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               "All items in your order will be cancelled."
-              " Please select a reason for cancelling your order",
+                  " Please select a reason for cancelling your order",
               style: FontStyleManager().s16fw500,
             ),
           ),

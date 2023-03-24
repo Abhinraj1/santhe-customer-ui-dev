@@ -39,7 +39,7 @@ class AddressColumn extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   addressType,
-                  style: FontStyleManager().s12fw400Orange,
+                  style: FontStyleManager().s14Orange,
                 ),
               ),
             ),
@@ -58,7 +58,7 @@ class AddressColumn extends StatelessWidget {
                         maxWidth: 300,
                         child: Text(
                           address,
-                          style: FontStyleManager().s12fw400Grey,
+                          style: FontStyleManager().s13fw500Grey,
                         ),
                       ),
                       hasEditButton ?? false ?

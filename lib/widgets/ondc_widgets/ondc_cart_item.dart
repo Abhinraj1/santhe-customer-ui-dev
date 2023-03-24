@@ -120,25 +120,48 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                 child: Row(
                   children: [
                     widget.productOndcModel.symbol == null
-                        ? Image.asset(
-                            'assets/cart.png',
-                            fit: BoxFit.fill,
-                            height: 90,
-                            width: 70,
-                          )
+                        ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                              'assets/cart.png',
+                              fit: BoxFit.fill,
+                              height: 90,
+                              width: 70,
+                            ),
+                        )
                         : Padding(
                             padding: const EdgeInsets.only(top: 5.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+
+                              ),
+                              child:
+                              CachedNetworkImage(
                                 imageUrl: widget.productOndcModel.symbol,
                                 height: 90,
                                 width: 70,
+                                imageBuilder: (context,imageProvider){
+                                  return Container(
+                                    height: 90,
+                                    width: 70,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover
+                                        )
+                                    ),
+                                  );
+                                },
                                 errorWidget: (context, url, error) =>
-                                    Image.asset(
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
                                   'assets/cart.png',
                                   fit: BoxFit.fill,
                                 ),
+                                    ),
                               ),
                             ),
                           ),

@@ -4,8 +4,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
 import 'package:santhe/models/ondc/single_order_model.dart';
+import 'package:santhe/pages/ondc/api_error/api_error_view.dart';
 import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 import 'package:santhe/widgets/custom_widgets/home_icon_button.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
@@ -42,18 +45,16 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
   late GroupedItemScrollController _controller;
   final bool showCancelButton = true;
 
-  Widget _getGroupSeparator(
-      PreviewWidgetOndcItem element,
+  Widget _getGroupSeparator(PreviewWidgetOndcItem element,
       SingleOrderModel orderDetails,
       String? fulfillmentWidget) {
-
-    bool? isTrackingURLNull(){
+    bool? isTrackingURLNull() {
       if (orderDetails.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.quotes!.first.tracks!) {
           if (track.fulfillmentId.toString() ==
               element.previewWidgetModel.fulfillment_id) {
             if ((track.url).toString() != "" &&
-                 track.url != null) {
+                track.url != null) {
               return true;
             }
           }
@@ -63,11 +64,13 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     }
 
 
-
-  return Align(
+    return Align(
       alignment: Alignment.center,
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.87,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.87,
         decoration: BoxDecoration(
           color: CupertinoColors.systemBackground,
           border: Border.all(
@@ -93,15 +96,15 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             fulfillmentWidget!.isEmpty
                 ? const SizedBox()
                 : SizedBox(
-                    child: BottomTextRow(
-                      message: fulfillmentWidget,
-                      hasTrackingData: isTrackingURLNull() ?? false,
-                      onTap: () {
-                        ///
-                        /// Navigate to map screen
-                      },
-                    ),
-                  )
+              child: BottomTextRow(
+                message: fulfillmentWidget,
+                hasTrackingData: isTrackingURLNull() ?? false,
+                onTap: () {
+                  ///
+                  /// Navigate to map screen
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -113,63 +116,74 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     return CustomScaffold(
         trailingButton: homeIconButton(),
         backgroundColor: CupertinoColors.systemBackground,
-        body: BlocBuilder<OrderDetailsScreenCubit, OrderDetailsScreenState>(
-          builder: (context, state) {
-            if (state is OrderDetailsDataLoadedState) {
-              return body(context, state.orderDetails);
-            } else if (state is OrderDetailsErrorState) {
-              return Text(state.message);
-            } else {
-              return const Center(child: CircularProgressIndicator());
+
+        body: BlocConsumer<OrderDetailsScreenCubit, OrderDetailsScreenState>(
+          listener: (context, state) {
+
+            if(state is OrderDetailsErrorState){
+
+              Get.to(()=>const ApiErrorView());
             }
+            // TODO: implement listener
           },
-        ));
+          builder: (context, state) {
+
+                if (state is OrderDetailsDataLoadedState) {
+                  return body(context, state.orderDetails);
+                } else if (state is OrderDetailsErrorState) {
+                  return Text(state.message);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+          },
+        )
+    );
   }
 
   body(context, Data orderDetails) {
     _controller = GroupedItemScrollController();
 
-    String shopName = orderDetails.singleOrderModel!.storeLocation!.store!.name.toString(),
-        orderId = orderDetails.singleOrderModel!.quotes!.first.orderId.toString(),
+    String shopName = orderDetails.singleOrderModel!.storeLocation!.store!.name
+        .toString(),
+        orderId = orderDetails.singleOrderModel!.quotes!.first.orderId
+            .toString(),
         orderStatus = orderDetails.singleOrderModel!.status.toString(),
         orderNumber = orderDetails.singleOrderModel!.orderNumber.toString();
 
     List<CartItemPrices> products =
-        orderDetails.singleOrderModel!.quotes!.first.cartItemPrices
-        as List<CartItemPrices>;
+    orderDetails.singleOrderModel!.quotes!.first.cartItemPrices
+    as List<CartItemPrices>;
 
-    String? paymentStatusFunction(){
-
-      if(orderDetails.singleOrderModel!.
-      payment!.paymentStatus != null ){
-
-        if(
+    String? paymentStatusFunction() {
+      if (orderDetails.singleOrderModel!.
+      payment!.paymentStatus != null) {
+        if (
         (orderDetails.singleOrderModel!.payment!.paymentStatus)
         as bool != false
-        ){
+        ) {
           return "Paid";
         }
       }
       return null;
     }
 
-   String paymentStatus = paymentStatusFunction() ?? "Not Paid";
+    String paymentStatus = paymentStatusFunction() ?? "Not Paid";
 
     bool hasInvoice = orderDetails.singleOrderModel!.invoice == null ?
-                      false : true;
+    false : true;
 
     isAllCancellable({required CartItemPrices element}) {
       if (element.cancellable != null &&
           element.cancellable == true &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
-        for (var track in orderDetails.singleOrderModel!.quotes!.first.tracks!) {
+        for (var track in orderDetails.singleOrderModel!.quotes!.first
+            .tracks!) {
           if (track.fulfillmentId.toString() ==
               element.deliveryFulfillment!.fulfillmentId.toString()) {
             if ((track.state).toString() == "PENDING" ||
                 (track.state).toString() == "PACKED" ||
                 (track.state).toString() == "Pending" ||
                 (track.state).toString() == "Packed") {
-
               BlocProvider.of<OrderDetailsButtonCubit>(context)
                   .showCancelButton();
             } else {
@@ -190,33 +204,33 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       if (element.cancellable != null &&
           element.cancellable == true &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
-        for (var track in orderDetails.singleOrderModel!.quotes!.first.tracks!) {
+        for (var track in orderDetails.singleOrderModel!.quotes!.first
+            .tracks!) {
           if (track.fulfillmentId.toString() ==
               element.fulfillment_id.toString()) {
             if ((track.state).toString() == "PENDING" ||
                 (track.state).toString() == "PACKED" ||
                 (track.state).toString() == "Pending" ||
                 (track.state).toString() == "Packed") {
-
               return InkWell(
-                onTap: (){
+                onTap: () {
 
                   ///CANCEL SINGLE ORDER
-                  BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
-                       LoadReasonsForPartialOrderCancelEvent(
+                  BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context)
+                      .add(
+                      LoadReasonsForPartialOrderCancelEvent(
                           orderId: orderDetails.singleOrderModel!.
-                                  quotes!.first.orderId.toString(),
+                          quotes!.first.orderId.toString(),
 
                           orderNumber: orderDetails.singleOrderModel!.
-                                        orderNumber.toString(),
+                          orderNumber.toString(),
 
-                           previewWidgetModel: element));
-
+                          previewWidgetModel: element));
                 },
-                child: Text("Cancel",style: FontStyleManager().s14fw700Red,),
+                child: Text("Cancel", style: FontStyleManager().s14fw700Red,),
               );
             } else {
-             return null;
+              return null;
             }
           } else {
             return null;
@@ -232,16 +246,16 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       element.returnable != null &&
           element.returnable == true &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
-        for (var track in orderDetails.singleOrderModel!.quotes!.first.tracks!) {
+        for (var track in orderDetails.singleOrderModel!.quotes!.first
+            .tracks!) {
           if (track.fulfillmentId.toString() ==
               element.fulfillment_id.toString()) {
             if ((track.state).toString() == "Delivered" ||
                 (track.state).toString() == "DELIVERED" ||
-                (track.state).toString() == "delivered" ) {
-
+                (track.state).toString() == "delivered") {
               return
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     ///Navigate to upload screen
                     ///change products to previewWidgetModel
                     BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>
@@ -250,9 +264,9 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                             orderId: orderId,
                             orderNumber: orderNumber,
                             product: element));
-
                   },
-                  child: Text("Return",style: FontStyleManager().s14fw700GreyUnderLne),
+                  child: Text(
+                      "Return", style: FontStyleManager().s14fw700GreyUnderLne),
                 );
             } else {
               return null;
@@ -268,19 +282,15 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
     isAlreadyCancelled({required PreviewWidgetModel element}) {
       if (element.isCancelled != null &&
-          element.isCancelled == true ) {
-
-         return Text("Cancelled",
-           style: FontStyleManager().s14fw700Red,);
-
-      } else if(element.isReturned != null &&
-          element.isReturned == true){
-
+          element.isCancelled == true) {
+        return Text("Cancelled",
+          style: FontStyleManager().s14fw700Red,);
+      } else if (element.isReturned != null &&
+          element.isReturned == true) {
         return Text("Return Approved",
           style: FontStyleManager().s14fw700Grey,);
-
-      }else {
-       return null;
+      } else {
+        return null;
       }
     }
     List<PreviewWidgetOndcItem> previewItems = [];
@@ -364,18 +374,21 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           //! track fullfillment id matches the product fullfillment id ...then we take the track state and send it in the _getgroupSeparator
 
 
-          String? fulfillmentState(){
-            for(var i in orderDetails.singleOrderModel!.quotes!.first.tracks!){
-              if(i.fulfillmentId == previewWidget.previewWidgetModel.fulfillment_id){
-                print("########################################### STATE =${i.state}");
+          String? fulfillmentState() {
+            for (var i in orderDetails.singleOrderModel!.quotes!.first
+                .tracks!) {
+              if (i.fulfillmentId ==
+                  previewWidget.previewWidgetModel.fulfillment_id) {
+                print("########################################### STATE =${i
+                    .state}");
                 return i.state.toString();
-
               }
             }
             return null;
           }
           return _getGroupSeparator(
-              previewWidget, orderDetails.singleOrderModel!, fulfillmentState() ?? "");
+              previewWidget, orderDetails.singleOrderModel!,
+              fulfillmentState() ?? "");
         },
         itemBuilder: (context, previewWidgetModel) {
           print('Length passed into builder ${previewWidgetItems.length}');
@@ -394,36 +407,38 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 children: [
                   const SizedBox(
                     width: 5,
+                    height: 100,
                   ),
                   previewWidgetModel.previewWidgetModel.symbol != null &&
-                          previewWidgetModel.previewWidgetModel.symbol != ""
+                      previewWidgetModel.previewWidgetModel.symbol != ""
                       ? ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                            previewWidgetModel.previewWidgetModel.symbol,
-                            width: 50,
-                            height: 60,
-                            fit: BoxFit.cover,
-                          ),
-                      )
+                    child: Image.network(
+                      previewWidgetModel.previewWidgetModel.symbol,
+                      width: 50,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  )
                       : ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                        child: Image.asset(
-                            ImgManager().santheIcon,
-                            width: 50,
-                            height: 60,
-                            fit: BoxFit.cover,
-                          ),
-                      ),
+                    child: Image.asset(
+                      ImgManager().santheIcon,
+                      width: 50,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: SizedBox(
-                     // height: 120,
+                      // height: 120,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                         /// const Spacer(),
+
+                          /// const Spacer(),
                           SizedBox(
                               width: 200,
                               child: AutoSizeText(
@@ -434,7 +449,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
 
                           Text(
-                            '${previewWidgetModel.previewWidgetModel.quantity} units',
+                            '${previewWidgetModel.previewWidgetModel
+                                .quantity} units',
                             style: FontStyleManager().s10fw500Brown,
                           ),
                           const SizedBox(
@@ -443,18 +459,18 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
                           //! new field for cancel...check for tracking status and packing state
                           isSingleCancellable(
-                              element: previewWidgetModel.previewWidgetModel ) ??
-                          const SizedBox(),
+                              element: previewWidgetModel.previewWidgetModel) ??
+                              const SizedBox(),
 
                           isReturnable(
-                              element: previewWidgetModel.previewWidgetModel ) ??
+                              element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox(),
 
                           isAlreadyCancelled(
-                              element:previewWidgetModel.previewWidgetModel) ??
+                              element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox(),
 
-                        ///  const Spacer(),
+                          ///  const Spacer(),
                         ],
                       ),
                     ),
@@ -485,30 +501,32 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       InvoiceTable(
         prices: orderDetails.finalCosting as List<FinalCosting>,
-        totalPrice: orderDetails.singleOrderModel!.quotes!.first.totalPrice.toString(),
+        totalPrice: orderDetails.singleOrderModel!.quotes!.first.totalPrice
+            .toString(),
       ),
 
       CustomerSupportButton(
           onTap: () {
-        BlocProvider.of<CustomerContactCubit>(context)
-            .customerContact(model: orderDetails.singleOrderModel!);
-        // Get.to(()=>const ONDCContactSupportView());
-      }),
+            BlocProvider.of<CustomerContactCubit>(context)
+                .customerContact(model: orderDetails.singleOrderModel!);
+            // Get.to(()=>const ONDCContactSupportView());
+          }),
 
       BlocBuilder<OrderDetailsButtonCubit, OrderDetailsButtonState>(
           builder: (context, state) {
-        if (state is ShowCancelButton) {
-          return CancelOrderButton(onTap: () {
-            BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
-                LoadReasonsForFullOrderCancelEvent(
-                    orderId: orderId, orderNumber: orderNumber));
-          });
-        } else {
-          return const SizedBox(
-            height: 20,
-          );
-        }
-      })
+            if (state is ShowCancelButton) {
+              return CancelOrderButton(onTap: () {
+                BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context)
+                    .add(
+                    LoadReasonsForFullOrderCancelEvent(
+                        orderId: orderId, orderNumber: orderNumber));
+              });
+            } else {
+              return const SizedBox(
+                height: 20,
+              );
+            }
+          })
     ]);
   }
 }

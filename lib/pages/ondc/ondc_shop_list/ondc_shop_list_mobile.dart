@@ -264,13 +264,16 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
 
   @override
   Widget build(BuildContext context) {
+
     debugLog(
         '${RepositoryProvider.of<AddressRepository>(context).addressModels}');
+
     return BlocConsumer<OndcBloc, OndcState>(
       // bloc: OndcBloc(ondcRepository: app<OndcRepository>()),
       listener: (context, state) {
         warningLog('$state');
         if (state is ErrorFetchingShops) {
+
           Get.to(
             () => ApiErrorView(),
           );
@@ -365,42 +368,41 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           drawer: const CustomNavigationDrawer(),
 
           ///WILL BE REMOVED @ABHI
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Get.to(() => ApiErrorView());
-              // fun();
-
-              ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
-
-              // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
-              //      LoadReasonsForReturnEvent(
-              //         orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
-              //             .orderId,
-              //         product: PreviewWidgetModel(
-              //             price: "200Rs",
-              //         title: "Head and Shoulders Shampoo for dandruff. 250 ml",
-              //         quantity: 1,
-              //         quoteId: "",
-              //         tat: "",
-              //         message_id: "",
-              //         category: "",
-              //         fulfillment_id: "",
-              //         provider_name: "",
-              //         serviceable: "",
-              //         status: "",
-              //         type: "",
-              //         ondc_item_id: "",
-              //         deliveryFulfillmentId:"" ,
-              //         cancellable: "",
-              //         createdAt:"" ,
-              //         deletedAt:"" ,
-              //         id:"" ,symbol:"" ,updatedAt:"" ,returnable: "",
-              //             isCancelled: null,
-              //             isReturned: null),
-              //
-              //         orderNumber: "123456",));
-            },
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+          //     Get.to(() => ApiErrorView());
+          //     // fun();
+          //     ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
+          //
+          //     // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
+          //     //      LoadReasonsForReturnEvent(
+          //     //         orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
+          //     //             .orderId,
+          //     //         product: PreviewWidgetModel(
+          //     //             price: "200Rs",
+          //     //         title: "Head and Shoulders Shampoo for dandruff. 250 ml",
+          //     //         quantity: 1,
+          //     //         quoteId: "",
+          //     //         tat: "",
+          //     //         message_id: "",
+          //     //         category: "",
+          //     //         fulfillment_id: "",
+          //     //         provider_name: "",
+          //     //         serviceable: "",
+          //     //         status: "",
+          //     //         type: "",
+          //     //         ondc_item_id: "",
+          //     //         deliveryFulfillmentId:"" ,
+          //     //         cancellable: "",
+          //     //         createdAt:"" ,
+          //     //         deletedAt:"" ,
+          //     //         id:"" ,symbol:"" ,updatedAt:"" ,returnable: "",
+          //     //             isCancelled: null,
+          //     //             isReturned: null),
+          //     //
+          //     //         orderNumber: "123456",));
+          //   },
+          // ),
           // floatingActionButton: FloatingActionButton(
           //   onPressed: (){
           //
@@ -435,6 +437,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           //     //         orderNumber: "123456",));
           //   },
           // ),
+
           backgroundColor: CupertinoColors.systemBackground,
           appBar: AppBar(
             leading: IconButton(

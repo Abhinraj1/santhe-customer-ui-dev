@@ -11,6 +11,7 @@ import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../../widgets/ondc_contact_support_widgets/textField_for_query.dart';
 
+
 class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
   final SingleOrderModel store;
    ONDCContactSupportEnterQueryScreenMobile(
@@ -52,6 +53,7 @@ class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
               ),
             ),
             TextFieldForQuery(controller: textEditingController),
+
             CustomButton(
                 verticalPadding: 70,
                 onTap: () {

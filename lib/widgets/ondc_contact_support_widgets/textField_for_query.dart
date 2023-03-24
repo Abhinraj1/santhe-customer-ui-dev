@@ -8,11 +8,13 @@ import '../../../../manager/font_manager.dart';
 
 class TextFieldForQuery extends StatelessWidget {
   final TextEditingController controller;
-  const TextFieldForQuery({Key? key, required this.controller}) : super(key: key);
+  const TextFieldForQuery({Key? key, required this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return     Center(
+    return
+      Center(
       child: SizedBox(
         height: 230,
         width: 300,

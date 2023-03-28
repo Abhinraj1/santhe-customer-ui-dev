@@ -16,7 +16,7 @@ class CustomTitleWithBackButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CustomBackButton(),
+          const CustomBackButton(leftPadding: 12),
           const Spacer(flex: 2),
 
           Text(
@@ -40,7 +40,7 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Padding(
-      padding:  EdgeInsets.only(left: leftPadding ?? 20.0),
+      padding:  EdgeInsets.only(left: leftPadding ?? 5.0),
       child: InkWell(
         onTap: (){
           Navigator.pop(context);

@@ -129,13 +129,16 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                       height: 40,
                     ),
                     Center(
-                      child: AutoSizeText(
+                      child:
+                      currentUser.customerName != "X" ?
+                      AutoSizeText(
                         'Welcome ${currentUser.customerName}!',
                         style: const TextStyle(
                           color: Colors.black54,
                           fontSize: 30,
                         ),
-                      ),
+                      ) :
+                      const CircularProgressIndicator(),
                     ),
                     const SizedBox(
                       height: 15,

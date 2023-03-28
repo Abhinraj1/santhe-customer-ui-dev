@@ -127,6 +127,12 @@ class SearchItem extends OndcState {
   List<Object?> get props => [];
 }
 
+class NoItemsFoundState extends OndcState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
 class SearchItemLoaded extends OndcState {
   final List<ShopModel> shopsList;
 

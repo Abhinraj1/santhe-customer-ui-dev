@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
@@ -86,15 +87,24 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
     });
 
     on<SearchOndcItemInLocalShop>((event, emit) async {
+
       emit(OndcFetchProductLoading());
+
       try {
-        List<ProductOndcModel> productModels =
+        List<ProductOndcModel>? productModels =
             await ondcRepository.getProductsOnSearchinLocalShop(
                 shopId: event.storeId,
                 transactionIdLoc: event.transactionId,
-                //  event.transactionId,
-                productName: event.productName);
-        emit(FetchedItemsInLocalShop(productModels: productModels));
+                productName: event.productName,);
+
+        if(productModels != null){
+
+          emit(FetchedItemsInLocalShop(productModels: productModels));
+        }else if(productModels == null){
+
+          emit(NoItemsFoundState());
+        }
+
       } catch (e) {
         emit(
           ErrorFetchingProductsOfShops(
@@ -103,6 +113,8 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
         );
       }
     });
+
+
 
     on<ClearSearchEventShops>((event, emit) async {
       emit(ClearStateLoading());
@@ -122,6 +134,7 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
         );
       }
     });
+
 
     on<SearchOndcItemGlobal>((event, emit) async {
       emit(OndcFetchProductsGlobalLoading());

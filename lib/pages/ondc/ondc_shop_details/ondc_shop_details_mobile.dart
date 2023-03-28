@@ -213,6 +213,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                 transactionId: widget.shopModel.transaction_id,
                                 storeId: widget.shopModel.id,
                                 productName: _textEditingController.text,
+
                               ),
                             );
                         _textEditingController.clear();
@@ -1008,7 +1009,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                               ),
                             ),
                           )
-                        : !_errorSearchingforProduct
+                        : state is !NoItemsFoundState
                             ? Padding(
                                 padding: const EdgeInsets.only(right: 30.0),
                                 child: Align(
@@ -1044,7 +1045,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                               ),
                             ),
                           )
-                        : _errorSearchingforProduct
+                        : state is NoItemsFoundState
                             ? Container(
                                 height:
                                     MediaQuery.of(context).size.height * 0.54,

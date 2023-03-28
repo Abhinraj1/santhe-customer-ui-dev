@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/app_helpers.dart';
@@ -10,6 +11,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 import '../../models/ondc/single_order_model.dart';
+import '../blocs/ondc/ondc_bloc.dart';
 
 class OndcRepository with LogMixin {
   String? transactionid;
@@ -140,7 +142,7 @@ class OndcRepository with LogMixin {
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode} and ${response.body}');
       final responseBody =
-          await json.decode(response.body)['data'] as List<dynamic>;
+          await json.decode(response.body)['data']["rows"] as List<dynamic>;
       warningLog('$responseBody');
       // _shopProductCount =
       //     await json.decode(response.body)['data']['count'] as int;
@@ -154,12 +156,15 @@ class OndcRepository with LogMixin {
     }
   }
 
-  Future<List<ProductOndcModel>> getProductsOnSearchinLocalShop(
+ Future<List<ProductOndcModel>?> getProductsOnSearchinLocalShop(
       {required String shopId,
       required String transactionIdLoc,
-      required String productName}) async {
+      required String productName,
+      }) async {
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id=$transactionIdLoc&storeLocation_id=$shopId&search=%$productName%&limit=100&offset=0');
+        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id'
+            '=$transactionIdLoc&storeLocation_id=$shopId&search=%$productName%&limit'
+            '=100&offset=0');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -168,19 +173,52 @@ class OndcRepository with LogMixin {
       warningLog('product name $productName also $url');
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
-      final responseBody =
-          await json.decode(response.body)['data'] as List<dynamic>;
-      warningLog('$responseBody');
-      // _searchProductCountInLocalShop =
-      //     await json.decode(response.body)['data']['count'] as int;
-      List<ProductOndcModel> searchedProducts =
-          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
-      warningLog('$searchedProducts');
-      return searchedProducts;
+
+      warningLog('################ ROW IS ${json.decode(response.body)
+      ['data']["count"]}');
+
+      warningLog('################ TYPE IS ${json.decode(response.body)
+      ['type']}');
+
+
+      if(json.decode(response.body)['type'] == "SUCCESS"&&
+          json.decode(response.body)['data']["count"] as int != 0){
+
+        final responseBody =
+        await json.decode(response.body)['data']['rows'] as List<dynamic>;
+
+        warningLog('$responseBody');
+        // _searchProductCountInLocalShop =
+        //     await json.decode(response.body)['data']['count'] as int;
+
+         List<ProductOndcModel> searchedProducts =
+        responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
+        warningLog('$searchedProducts');
+
+
+        return searchedProducts;
+
+      }else if(json.decode(response.body)['type'] == "SUCCESS" &&
+          json.decode(response.body)['data']["count"] as int == 0){
+
+        return null;
+
+      }
+      return null;
+
+      // else{
+      //   BlocProvider.of<OndcBloc>(context).add(ErrorFetchingProductsOfShopsEvent(
+      //     message: json.decode(response.body)["message"]
+      //   ));
+      // }
+
     } catch (e) {
+
       warningLog(e.toString());
+
       rethrow;
     }
+
   }
 
   Future<List<ProductOndcModel>> searchProductsOnGlobal(
@@ -192,7 +230,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      warningLog('global search product $productName');
+      warningLog('globall search product $productName');
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
 
@@ -252,7 +290,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      warningLog('global search product $url');
+      warningLog('globalll search product $url');
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
       final responseBody =
@@ -262,8 +300,10 @@ class OndcRepository with LogMixin {
       _shopsListCount =
           await json.decode(response.body)['data']['count'] as int;
       warningLog('checking for count of global items $_shopsListCount');
+
       List<ShopModel> shopsWithSearchedProduct =
           responseBody.map((e) => ShopModel.fromMap(e)).toList();
+
       warningLog('Searched shops $shopsWithSearchedProduct');
       return shopsWithSearchedProduct;
     } catch (e) {

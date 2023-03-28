@@ -252,7 +252,9 @@ class _ProductDescriptionOndcMobileState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const CustomBackButton(),
+                      const CustomBackButton(leftPadding: 5),
+
+
                       //! Navigation not allowed for now due to shopmodel trouble
                       Stack(
                         children: [
@@ -392,8 +394,8 @@ class _ProductDescriptionOndcMobileState
                             child: Container(
                               width: 160,
                               height: 45,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
+                              decoration:  const BoxDecoration(
+                                color: Colors.white12,
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(15.0),
                                   bottomRight: Radius.circular(15.0),

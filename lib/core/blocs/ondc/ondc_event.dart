@@ -45,10 +45,12 @@ class SearchOndcItemInLocalShop extends OndcEvent {
   final String transactionId;
   final String storeId;
   final String productName;
+
   const SearchOndcItemInLocalShop({
     required this.transactionId,
     required this.storeId,
     required this.productName,
+
   });
   @override
   List<Object> get props => [transactionId, storeId, productName];
@@ -113,3 +115,7 @@ class FetchListOfShopWithSearchedProducts extends OndcEvent {
   @override
   List<Object> get props => [transactionId, productName];
 }
+
+
+
+//

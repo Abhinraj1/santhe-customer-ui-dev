@@ -406,47 +406,46 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(
-                    width: 5,
                     height: 100,
                   ),
                   previewWidgetModel.previewWidgetModel.symbol != null &&
                       previewWidgetModel.previewWidgetModel.symbol != ""
                       ? ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(
+                        child: Image.network(
                       previewWidgetModel.previewWidgetModel.symbol,
-                      width: 50,
-                      height: 60,
+                      width: 70,
+                      height: 70,
                       fit: BoxFit.cover,
                     ),
                   )
                       : ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
+                        child: Image.asset(
                       ImgManager().santheIcon,
-                      width: 50,
-                      height: 60,
+                      width: 70,
+                      height: 70,
                       fit: BoxFit.cover,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: SizedBox(
-                      // height: 120,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
-                          /// const Spacer(),
                           SizedBox(
                               width: 200,
                               child: AutoSizeText(
                                 previewWidgetModel.previewWidgetModel.title,
                                 style: FontStyleManager().s14fw700Brown,
-                                maxLines: 4,
-                              )),
-
+                                minFontSize: 12,
+                                maxFontSize: 14,
+                                maxLines: 2,
+                              )
+                          ),
 
                           Text(
                             '${previewWidgetModel.previewWidgetModel
@@ -470,7 +469,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                               element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox(),
 
-                          ///  const Spacer(),
                         ],
                       ),
                     ),
@@ -481,7 +479,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       child: SizedBox(
                         width: 50,
                         child: AutoSizeText(
-                          "₹${previewWidgetModel.previewWidgetModel.price}",
+                          "₹${previewWidgetModel.previewWidgetModel.price.
+                          toString().characters.take(5)}",
                           maxFontSize: 16,
                           minFontSize: 12,
                           style: FontStyleManager().s16fw600Grey,

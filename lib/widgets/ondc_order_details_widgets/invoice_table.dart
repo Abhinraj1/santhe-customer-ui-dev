@@ -18,7 +18,6 @@ class InvoiceTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
       child: SizedBox(
@@ -36,14 +35,18 @@ class InvoiceTable extends StatelessWidget {
               );
             }else {
               return customRow(title: prices[index].lable.toString(),
-                  data: "₹${prices[index].value.toString()}");
+                  data: "₹${prices[index].value.
+                  toString().characters.take(5)}");
             } }),
       )
 
     );
   }
 
-Widget customRow({required String title, required String data, bool? isTotalPrice}){
+Widget customRow({
+  required String title,
+  required String data,
+  bool? isTotalPrice}){
 
     return
       SizedBox(
@@ -53,7 +56,7 @@ Widget customRow({required String title, required String data, bool? isTotalPric
         children: [
 
         Text(title,style: isTotalPrice ?? false ?
-            FontStyleManager().s18fw700Black :
+            FontStyleManager().s18fw700Orange :
             FontStyleManager().s14fw800Grey,),
                   Text(data,style: isTotalPrice ?? false ?
                         FontStyleManager().s20fw700Orange:

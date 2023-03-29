@@ -43,7 +43,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
     on<LoadReasonsForFullOrderCancelEvent>((event, emit) async {
 
 
-      Get.offAll(()=> const ONDCOrderCancelView());
+      Get.to(()=> const ONDCOrderCancelView());
 
 
       emit(Loading());
@@ -87,7 +87,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
         if(state is ReasonsLoadedPartialOrderCancelState){
 
-          Get.offAll(()=> const ONDCOrderCancelView());
+          Get.to(()=> const ONDCOrderCancelView());
         }
 
       }catch(e){
@@ -103,7 +103,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
       _product = event.product;
 
-      Get.offAll(()=> const ONDCOrderCancelView());
+      Get.to(()=> const ONDCOrderCancelView());
 
       emit(Loading());
 
@@ -151,7 +151,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
           emit(OrderCancelRequestSentState());
 
           if(state is OrderCancelRequestSentState ){
-            Get.off(()=> ONDCAcknowledgementView(
+            Get.to(()=> ONDCAcknowledgementView(
                 title: "Cancel Order",
                 message: "Your cancellation request is received,"
                     " Once we have received a confirmation from"
@@ -159,7 +159,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
                     "on your cancellation status and refund details",
 
                 onTap: (){
-                  Get.offAll(()=>const OndcIntroView());
+                  Get.to(()=>const OndcIntroView());
                 },
                 orderNumber: orderNumber));
           }
@@ -188,7 +188,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
 
          if(status == "SUCCESS" ){
-        Get.offAll(()=> ONDCAcknowledgementView(
+        Get.to(()=> ONDCAcknowledgementView(
             title: "Cancel Order",
             message: "Your cancellation request is received,"
                 " Once we have received a confirmation from"
@@ -196,7 +196,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
                 "on your cancellation status and refund details",
 
             onTap: (){
-              Get.offAll(()=>const OndcIntroView());
+              Get.to(()=>const OndcIntroView());
 
             },
             orderNumber: orderNumber));

@@ -14,18 +14,44 @@ class TermsAndConditionsPage extends StatefulWidget {
 class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   bool isLoading = true;
 
-  @override
-  void initState() {
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
-    super.initState();
-  }
+
+
+
+
+
+  // @override
+  // void initState() {
+  //   if (Platform.isAndroid) controller.platform = AndroidWebView();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
+
     double screenHeight = MediaQuery.of(context).size.height / 100;
-    if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
+
+    // if (Platform.isAndroid) {
+    //   controller.platform = ;
+    //   WebView.platform = SurfaceAndroidWebView();
+    // }
+
+    WebViewController controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {
+            setState(() {
+              isLoading = false;
+            });
+          },
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..loadRequest(Uri.parse('https://santhe.in/terms-and-condition/app'));
 
     return Scaffold(
       appBar: AppBar(
@@ -56,15 +82,16 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
           Expanded(
               child: Stack(
             children: [
-              WebView(
-                initialUrl: 'https://santhe.in/terms-and-condition/app',
-                javascriptMode: JavascriptMode.unrestricted,
-                onPageFinished: (finish) {
-                  setState(() {
-                    isLoading = false;
-                  });
-                },
-              ),
+              WebViewWidget(controller: controller),
+              // WebView(
+              //   initialUrl: 'https://santhe.in/terms-and-condition/app',
+              //   javascriptMode: JavascriptMode.unrestricted,
+              //   onPageFinished: (finish) {
+              //     setState(() {
+              //       isLoading = false;
+              //     });
+              //   },
+              // ),
               Visibility(
                 visible: isLoading,
                 child: const Center(

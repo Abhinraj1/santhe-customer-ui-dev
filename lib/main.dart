@@ -34,6 +34,7 @@ import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_
 import 'core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
+import 'core/cubits/webview_cubit/webview_cubit.dart';
 import 'core/repositories/ondc_order_cancel_and_return_repository.dart';
 import 'pages/ondc/ondc_webview_screen/ondc_webview_screen_mobile.dart';
 
@@ -120,6 +121,11 @@ class MyApp extends StatelessWidget {
             BlocProvider<CustomerContactCubit>(
                 create: (context) => CustomerContactCubit()),
 
+            BlocProvider<WebviewCubit>(
+                create: (context) => WebviewCubit(
+
+                )),
+
             BlocProvider<UploadImageAndReturnRequestCubit>(
                 create: (context) => UploadImageAndReturnRequestCubit(
                   repository: context.read<ONDCOrderCancelAndReturnRepository>(),
@@ -155,8 +161,13 @@ class MyApp extends StatelessWidget {
                     selectionHandleColor: Colors.transparent,
                   ),
                 ),
-            home: const SplashToHome(),
-
+            home:  const SplashToHome(),
+            // ONDCWebviewScreenMobile(
+            //   title: "TESTIGN",
+            //   url: "https://jiw-ozed-as-staging.azurewebsites.net"
+            //       "/invoice/8aceb47f-a4eb-4816-9e66-716f4cd24b1f/download",
+            //
+            // )
           ),
         ),
       ),

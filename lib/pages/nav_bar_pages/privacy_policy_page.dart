@@ -14,6 +14,25 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    WebViewController controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {
+            setState(() {
+              isLoading = false;
+            });
+          },
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..loadRequest(Uri.parse('https://santhe.in/privacy-policy/app'));
+
     double screenHeight = MediaQuery.of(context).size.height / 100;
 
     return Scaffold(
@@ -45,14 +64,14 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           Expanded(
             child: Stack(
               children: [
-                WebView(
-                  initialUrl: 'https://santhe.in/privacy-policy/app',
-                  javascriptMode: JavascriptMode.unrestricted,
-                  onPageFinished: (finish) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                  },
+                WebViewWidget(
+                  controller: controller,
+                  // initialUrl: 'https://santhe.in/privacy-policy/app',
+                  // javascriptMode: JavascriptMode.unrestricted,
+                  // onPageFinished: (finish) {
+                  //   setState(() {
+                  //     isLoading = false;
+                  //   });},
                 ),
                 Visibility(
                   visible: isLoading,

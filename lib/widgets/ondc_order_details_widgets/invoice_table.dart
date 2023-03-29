@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../manager/font_manager.dart';
 import '../../models/ondc/single_order_model.dart';
+import '../../utils/priceFormatter.dart';
 
 
 class InvoiceTable extends StatelessWidget {
@@ -36,7 +37,7 @@ class InvoiceTable extends StatelessWidget {
             }else {
               return customRow(title: prices[index].lable.toString(),
                   data: "₹${prices[index].value.
-                  toString().characters.take(5)}");
+                  toString()}");
             } }),
       )
 
@@ -55,7 +56,8 @@ Widget customRow({
         mainAxisAlignment:MainAxisAlignment.spaceBetween,
         children: [
 
-        Text(title,style: isTotalPrice ?? false ?
+        Text(priceFormatter(value:title),
+          style: isTotalPrice ?? false ?
             FontStyleManager().s18fw700Orange :
             FontStyleManager().s14fw800Grey,),
                   Text(data,style: isTotalPrice ?? false ?

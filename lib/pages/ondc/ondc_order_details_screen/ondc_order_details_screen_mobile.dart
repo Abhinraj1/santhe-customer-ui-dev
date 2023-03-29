@@ -19,6 +19,7 @@ import '../../../core/cubits/ondc_order_details_screen_cubit/ondc_order_details_
 import '../../../manager/font_manager.dart';
 import '../../../manager/imageManager.dart';
 import '../../../models/ondc/preview_ondc_cart_model.dart';
+import '../../../utils/priceFormatter.dart';
 import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../widgets/ondc_order_details_widgets/cancel_order_button.dart';
 import '../../../widgets/ondc_order_details_widgets/customer_support_button.dart';
@@ -179,6 +180,9 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     isAllCancellable({required CartItemPrices element}) {
       if (element.cancellable != null &&
           element.cancellable == true &&
+          element.status != "Cancelled" &&
+          element.status != "CANCEL_REQUESTED" &&
+          element.status != "Completed" &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
@@ -204,18 +208,30 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       }
     }
 
+
     isSingleCancellable({required PreviewWidgetModel element}) {
+
+      print("####################################################"
+          "STATUS IN ISSINGLE CANCELLALE = ${element.status}");
+
       if (element.cancellable != null &&
           element.cancellable == true &&
+          element.status != "Cancelled" &&
+          element.status != "CANCEL_REQUESTED" &&
+          element.status != "Completed" &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
+
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
+
           if (track.fulfillmentId.toString() ==
               element.fulfillment_id.toString()) {
+
             if ((track.state).toString() == "PENDING" ||
                 (track.state).toString() == "PACKED" ||
                 (track.state).toString() == "Pending" ||
                 (track.state).toString() == "Packed") {
+
               return InkWell(
                 onTap: () {
 
@@ -249,6 +265,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       if (
       element.returnable != null &&
           element.returnable == true &&
+          element.status != "Cancelled" &&
+          element.status != "CANCEL_REQUESTED" &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
@@ -318,7 +336,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                   ondc_item_id: element.ondcItemId,
                   type: element.type,
                   price: element.price,
-                  status: element.status,
+                  status: orderDetails.singleOrderModel!.status,
                   quantity: element.quantity,
                   quoteId: element.quoteId,
                   returnable: element.returnable,
@@ -416,6 +434,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 children: [
                   const SizedBox(
                     height: 100,
+                    width: 5,
                   ),
                   previewWidgetModel.previewWidgetModel.symbol != null &&
                       previewWidgetModel.previewWidgetModel.symbol != ""
@@ -437,6 +456,9 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
+                  const SizedBox(
+                    width: 5,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: SizedBox(
@@ -446,10 +468,10 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                         children: [
 
                           SizedBox(
-                              width: 200,
+                              width: 190,
                               child: AutoSizeText(
                                 previewWidgetModel.previewWidgetModel.title,
-                                style: FontStyleManager().s14fw700Brown,
+                                style: FontStyleManager().s14fw500Brown,
                                 minFontSize: 12,
                                 maxFontSize: 14,
                                 maxLines: 2,
@@ -488,10 +510,10 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       child: SizedBox(
                         width: 50,
                         child: AutoSizeText(
-                          "₹${previewWidgetModel.previewWidgetModel.price.
-                          toString().characters.take(5)}",
+                          "₹${priceFormatter(value: previewWidgetModel.previewWidgetModel.price.
+                          toString())}",
                           maxFontSize: 16,
-                          minFontSize: 12,
+                          minFontSize: 10,
                           style: FontStyleManager().s16fw600Grey,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -537,5 +559,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           })
     ]);
   }
+
 }
 

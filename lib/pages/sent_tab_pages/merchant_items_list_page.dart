@@ -1,8 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
+
 import 'package:intl/intl.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';

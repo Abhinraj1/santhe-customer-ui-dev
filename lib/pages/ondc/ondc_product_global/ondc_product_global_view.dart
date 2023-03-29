@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' as ge;
 import 'package:http/http.dart' as http;

@@ -630,19 +630,16 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                             // ),
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  right: 25.0),
+                                                  right: 25.0, bottom: 20),
                                               child: Image.asset(
                                                   'assets/edit.png'),
                                             )
                                           ],
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0, vertical: 8),
+                                            horizontal: 20.0, vertical: 1),
                                         child: SizedBox(
                                           height: 50,
                                           child: TextFormField(

@@ -367,7 +367,10 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(
-                () => PaymentSuccessView(),
+                () => PaymentBufferView(
+                  messageId: 'sodifodifgod',
+                  transactionId: 'sadjkdjfhkdj',
+                ),
               );
               // fun();
 

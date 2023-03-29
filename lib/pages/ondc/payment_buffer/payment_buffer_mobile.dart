@@ -91,7 +91,7 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
                   height: 60,
                 ),
                 Text(
-                  'Processing your Payment',
+                  'Processing your Order',
                   style: TextStyle(
                     color: AppColors().brandDark,
                     fontSize: 18,
@@ -102,7 +102,7 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
                   height: 20,
                 ),
                 const Text(
-                  'Please wait while we are processing your payment',
+                  'Please wait while we process your Order',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                 )

@@ -3,7 +3,7 @@ import 'package:resize/resize.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
 
-class ServerErrorPage extends StatelessWidget{
+class ServerErrorPage extends StatelessWidget {
   const ServerErrorPage({Key? key}) : super(key: key);
 
   @override
@@ -15,73 +15,75 @@ class ServerErrorPage extends StatelessWidget{
         height: screenSize.height,
         width: screenSize.width,
         padding: EdgeInsets.all(15.sp),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: screenSize.width,
-              height: screenSize.height * 2 / 3,
-              child: Image.asset(
-                'assets/server_error.png',
-                fit: BoxFit.contain,
-              ),
-            ),
-            SizedBox(
-              width: screenSize.width,
-              child: Text(
-                'Error!!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22.sp,
-                  fontFamily: 'Mulish',
-                  color: AppColors().grey100,
-                  fontWeight: FontWeight.w700,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: screenSize.width,
+                height: screenSize.height * 2 / 3,
+                child: Image.asset(
+                  'assets/server_error.png',
+                  fit: BoxFit.contain,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10.sp,
-            ),
-            SizedBox(
-              width: screenSize.width,
-              child: Text(
-                'Something went wrong.\nPlease try again.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontFamily: 'Mulish',
-                  color: AppColors().grey100,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 60.sp,
-            ),
-            InkWell(
-              onTap: () => Get.back(),
-              splashColor: AppColors().white100,
-              child: Container(
-                height: 50.sp,
-                width: screenSize.width/3,
-                decoration: BoxDecoration(
-                  color: AppColors().brandDark,
-                  borderRadius: const BorderRadius.all(Radius.circular(10))
-                ),
-                alignment: Alignment.center,
+              SizedBox(
+                width: screenSize.width,
                 child: Text(
-                  'Go Back',
+                  'Error!!',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors().white100,
+                    fontSize: 22.sp,
                     fontFamily: 'Mulish',
-                    fontSize: 18.sp,
+                    color: AppColors().grey100,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10.sp,
+              ),
+              SizedBox(
+                width: screenSize.width,
+                child: Text(
+                  'Something went wrong.\nPlease try again.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontFamily: 'Mulish',
+                    color: AppColors().grey100,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 60.sp,
+              ),
+              InkWell(
+                onTap: () => Get.back(),
+                splashColor: AppColors().white100,
+                child: Container(
+                  height: 50.sp,
+                  width: screenSize.width / 3,
+                  decoration: BoxDecoration(
+                      color: AppColors().brandDark,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10))),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Go Back',
+                    style: TextStyle(
+                      color: AppColors().white100,
+                      fontFamily: 'Mulish',
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -176,12 +176,13 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                         children: [
                           Container(
                             width: 200,
+                            height: 23,
                             color: Colors.white,
                             child: Text(
                               '${widget.productOndcModel.item_name}',
                               style: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 15,
+                                  fontSize: 11,
                                   overflow: TextOverflow.ellipsis),
                             ),
                           ),

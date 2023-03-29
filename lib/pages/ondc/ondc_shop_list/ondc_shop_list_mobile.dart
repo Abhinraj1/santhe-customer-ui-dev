@@ -489,7 +489,11 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                   },
                   splashRadius: 25.0,
                   icon: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      ge.Get.to(
+                        () => OndcIntroView(),
+                      );
+                    },
                     child: const Icon(
                       Icons.home,
                       color: Colors.white,
@@ -600,7 +604,10 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                 child: Container(
                                                   color: CupertinoColors
                                                       .systemBackground,
-                                                  height: 30,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.15,
                                                   width: 340,
                                                   child: Padding(
                                                     padding:
@@ -620,6 +627,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                             // widget
                                                             //     .customerModel.address
                                                             //     .substring(0, 25),
+
                                                             style: TextStyle(
                                                               decoration:
                                                                   TextDecoration

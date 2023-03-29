@@ -12,6 +12,7 @@ import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/delete_account_page.dart';
 import 'package:santhe/pages/map_merch.dart';
+import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -627,7 +628,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             await profileController
                                                 .getOperationalStatus();
                                             Get.offAll(
-                                                () => const MapMerchant(),
+                                                () => const OndcIntroView(),
                                                 transition:
                                                     Transition.leftToRight);
                                             // Navigator.push(

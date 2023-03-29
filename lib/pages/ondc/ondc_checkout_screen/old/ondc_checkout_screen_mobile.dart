@@ -46,6 +46,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   Razorpay _razorpay = Razorpay();
   bool _showErrorNoResponseFromSeller = false;
   bool _showOneOrMoreItemsAreNotAvailable = false;
+  String? billingAddress;
   bool _showAllItemsAreNotAvailable = false;
   List<FinalCostingWidget> finalCostingWidget = [];
 
@@ -190,6 +191,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     super.initState();
     setState(() {
       _isLoading = true;
+      billingAddress =
+          RepositoryProvider.of<AddressRepository>(context).billingModel?.flat;
     });
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -507,21 +510,22 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundColor: AppColors().brandDark,
-                                radius: 20,
-                                child: const Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              // CircleAvatar(
+                              //   backgroundColor: AppColors().brandDark,
+                              //   radius: 20,
+                              //   child: const Icon(
+                              //     Icons.arrow_back,
+                              //     color: Colors.white,
+                              //   ),
+                              // ),
+                              const CustomBackButton(),
                               const SizedBox(
-                                width: 100,
+                                width: 80,
                               ),
-                              const Text(
+                              Text(
                                 'CHECKOUT',
                                 style: TextStyle(
-                                    color: Colors.black54, fontSize: 20),
+                                    color: AppColors().brandDark, fontSize: 20),
                               )
                             ],
                           ),
@@ -705,18 +709,23 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         AddressColumn(
                             title: "Payment Details",
                             addressType: "Billing Address:",
-                            address: (RepositoryProvider.of<AddressRepository>(
-                                        context)
-                                    .billingModel
-                                    ?.flat)
-                                .toString(),
+                            address: '$billingAddress',
                             hasEditButton: true,
-                            onTap: () {
+                            onTap: () async {
                               isBillingAddress = true;
 
-                              Get.to(
+                              final String address = await Get.to(
                                 () => const MapTextView(),
                               );
+                              setState(() {
+                                billingAddress =
+                                    RepositoryProvider.of<AddressRepository>(
+                                            context)
+                                        .billingModel
+                                        ?.flat;
+                              });
+                              warningLog(
+                                  'Checking for vague message $billingAddress');
                             }),
 
                         SizedBox(

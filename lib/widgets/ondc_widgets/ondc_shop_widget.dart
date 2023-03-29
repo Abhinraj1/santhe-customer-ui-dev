@@ -27,6 +27,7 @@ class OndcShopWidget extends StatefulWidget {
 class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
   List<String> images = [];
   List<ShopImageIntro> networkImages = [];
+  double distanceD = 0;
   getImagesOfShops() {
     warningLog('${widget.shopModel.items.length}');
     for (var i = 0; i < widget.shopModel.items.length - 1; i++) {
@@ -40,10 +41,25 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
     }
   }
 
+  getDistance() {
+    if (widget.shopModel.distance != null) {
+      double d = widget.shopModel.distance;
+      String? distance = d.toStringAsFixed(1);
+      setState(() {
+        distanceD = double.parse(distance);
+      });
+    } else {
+      setState(() {
+        distanceD = 0.0;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getImagesOfShops();
+    getDistance();
   }
 
   @override
@@ -120,7 +136,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
                   children: [
                     Expanded(
                       child: Text(
-                        '${widget.shopModel.distance.toString().characters.take(5)} kms',
+                        '${distanceD} kms',
                         style: TextStyle(
                           color: AppColors().grey80,
                         ),

@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/core/app_helpers.dart';
@@ -231,7 +230,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      warningLog('globall search product $productName');
+      warningLog('global search product $productName');
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
 
@@ -291,7 +290,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     try {
-      warningLog('globalll search product $url');
+      warningLog('global search product $url');
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
       final responseBody =
@@ -349,11 +348,7 @@ class OndcRepository with LogMixin {
     }
   }
 
-
-
-  Future<Data> getSingleOrder(
-      {required String OrderId}) async {
-
+  Future<Data> getSingleOrder({required String OrderId}) async {
     String orderId = OrderId;
     // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
     //  "e80574c6-32f2-45ce-8b67-d97a89490523";
@@ -377,9 +372,9 @@ class OndcRepository with LogMixin {
 
       warningLog(' respose here =============############### $responseBody');
 
-     Data data = Data.fromJson(responseBody);
-     //SingleOrderModel.fromJson(responseBody);
-     /// data.add(SingleOrderModel.fromJson(responseBody));
+      Data data = Data.fromJson(responseBody);
+      //SingleOrderModel.fromJson(responseBody);
+      /// data.add(SingleOrderModel.fromJson(responseBody));
 
       warningLog('${data.singleOrderModel!.quotes!.first.status}');
 
@@ -391,16 +386,12 @@ class OndcRepository with LogMixin {
     }
   }
 
-
   Future<List<SingleOrderModel>> getPastOrder() async {
-
     final firebaseId = //"8808435978";
-    AppHelpers().getPhoneNumberWithoutCountryCode;
+        AppHelpers().getPhoneNumberWithoutCountryCode;
 
-
-    final url = Uri.parse(
-        "http://ondcstaging.santhe.in/santhe/ondc/customer/"
-            "order/list?limit=10&offset=0&firebase_id=$firebaseId&status=PAID");
+    final url = Uri.parse("http://ondcstaging.santhe.in/santhe/ondc/customer/"
+        "order/list?limit=10&offset=0&firebase_id=$firebaseId&status=PAID");
 
     final header = {
       'Content-Type': 'application/json',

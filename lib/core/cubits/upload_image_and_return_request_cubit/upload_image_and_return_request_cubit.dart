@@ -134,7 +134,7 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
       String response = await repository.requestReturnOrPartialCancel(
           orderId: _orderId,
           code: _code,
-          quotesId: _returnProduct.quoteId.toString(),
+          cartItemPricesId: _returnProduct.quoteId.toString(),
           images: imageUrl,
           quantity: _returnProduct.quantity.toString(),
           isReturn: true

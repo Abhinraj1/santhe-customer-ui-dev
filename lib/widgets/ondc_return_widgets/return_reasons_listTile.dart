@@ -9,10 +9,12 @@ import '../../core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cance
 class ReturnReasonsListTile extends StatefulWidget {
   final List<ReasonsModel> reasons;
   final bool isReturn;
+  final bool isPartialCancel;
 
 
   const ReturnReasonsListTile({Key? key, required this.reasons,
-    required this.isReturn})
+    required this.isReturn,
+  required this.isPartialCancel})
       : super(key: key);
 
   @override
@@ -56,6 +58,12 @@ class _ReturnReasonsListTileState extends State<ReturnReasonsListTile> {
                               SelectedCodeForReturnEvent(
                                 code: selectedValue,
                                 context: context
+                              ));
+
+                        }else if(widget.isPartialCancel){
+                          BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
+                              SelectedCodeForPartialOrderCancelEvent(
+                                code: selectedValue,
                               ));
 
                         }else{

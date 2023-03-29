@@ -44,13 +44,15 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
                       reasons: state.reasons,
                       onTap: () {},
                       isActive: false);
-                } else if (state is ReasonsLoadedSingleOrderCancelState) {
+                } else if (state is ReasonsLoadedPartialOrderCancelState) {
                   return body(
                       title: "Cancel Order",
                       orderNumber: state.orderNumber,
                       reasons: state.reasons,
                       onTap: () {},
-                      isActive: false);
+                      isActive: false,
+                  isPartialCancel: true);
+
                 } else if (state is SelectedCodeState) {
                   return body(
                       title: "Cancel Order",
@@ -64,6 +66,7 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
                       isActive: true);
                 } else if (state is OrderCancelErrorState) {
                   return Center(child: Text(state.message));
+
                 } else if (state is ReasonsLoadedForReturnState) {
                   return body(
                       title: "Return Request",
@@ -88,7 +91,21 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
                       isReturn: true
 
                   );
-                } else {
+                } else if (state is SelectedCodeForPartialOrderCancelState) {
+                  return body(
+                      title: "Cancel Order",
+                      orderNumber: state.orderNumber,
+                      reasons: state.reasons,
+                      onTap: () {
+                        BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(
+                            context)
+                            .add(PartialCancelOrderRequestEvent());
+                      },
+                      isActive: true,
+                      isPartialCancel: true,
+                  );
+                }else {
+
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -102,7 +119,8 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
     required List<ReasonsModel> reasons,
     required bool isActive,
     required Function() onTap,
-    bool? isReturn}) {
+    bool? isReturn,
+  bool? isPartialCancel}) {
     return Column(
       children: [
         CustomTitleWithBackButton(
@@ -128,6 +146,7 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
           child: ReturnReasonsListTile(
             reasons: reasons,
             isReturn: isReturn ?? false,
+            isPartialCancel: isPartialCancel ?? false,
           ),
         ),
         CustomButton(

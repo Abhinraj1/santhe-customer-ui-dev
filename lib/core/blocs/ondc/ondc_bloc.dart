@@ -100,9 +100,11 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
         if(productModels != null){
 
           emit(FetchedItemsInLocalShop(productModels: productModels));
+
         }else if(productModels == null){
 
           emit(NoItemsFoundState());
+
         }
 
       } catch (e) {

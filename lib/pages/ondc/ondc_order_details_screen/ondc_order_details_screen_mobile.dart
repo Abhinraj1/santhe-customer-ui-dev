@@ -44,10 +44,12 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
   List<PreviewWidgetOndcItem> previewWidgetItems = [];
   late GroupedItemScrollController _controller;
   final bool showCancelButton = true;
+  int countNumber = 0;
 
   Widget _getGroupSeparator(PreviewWidgetOndcItem element,
       SingleOrderModel orderDetails,
-      String? fulfillmentWidget) {
+      String? fulfillmentWidget,
+      int countNum) {
     bool? isTrackingURLNull() {
       if (orderDetails.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.quotes!.first.tracks!) {
@@ -85,7 +87,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
-                'Shipment No ${element.previewWidgetModel.fulfillment_id}',
+                'Shipment No $countNumber',
                 textAlign: TextAlign.left,
                 style: TextStyle(color: AppColors().brandDark),
               ),
@@ -96,7 +98,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             fulfillmentWidget!.isEmpty
                 ? const SizedBox()
                 : SizedBox(
-              child: BottomTextRow(
+                    child: BottomTextRow(
                 message: fulfillmentWidget,
                 hasTrackingData: isTrackingURLNull() ?? false,
                 onTap: () {
@@ -171,6 +173,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
     bool hasInvoice = orderDetails.singleOrderModel!.invoice == null ?
     false : true;
+    print("##############################################################3"
+        " INSIDE INVOICE = ${orderDetails.singleOrderModel!.invoice}");
 
     isAllCancellable({required CartItemPrices element}) {
       if (element.cancellable != null &&
@@ -221,11 +225,11 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       LoadReasonsForPartialOrderCancelEvent(
                           orderId: orderDetails.singleOrderModel!.
                           quotes!.first.orderId.toString(),
-
                           orderNumber: orderDetails.singleOrderModel!.
                           orderNumber.toString(),
 
                           previewWidgetModel: element));
+
                 },
                 child: Text("Cancel", style: FontStyleManager().s14fw700Red,),
               );
@@ -280,7 +284,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       }
     }
 
-    isAlreadyCancelled({required PreviewWidgetModel element}) {
+    isAlreadyCancelledOrReturned({required PreviewWidgetModel element}) {
       if (element.isCancelled != null &&
           element.isCancelled == true) {
         return Text("Cancelled",
@@ -348,6 +352,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         fourthTitle: "Payment status",
         fourthData: paymentStatus,
         redTextButtonTitle: hasInvoice ? "Download invoice" : "",
+        invoiceUrl: hasInvoice ?  orderDetails.singleOrderModel!.invoice.toString() :
+                        "",
       ),
 
       Padding(
@@ -386,9 +392,12 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             }
             return null;
           }
+          countNumber = countNumber + 1;
           return _getGroupSeparator(
               previewWidget, orderDetails.singleOrderModel!,
-              fulfillmentState() ?? "");
+              fulfillmentState() ?? "",
+              countNumber
+          );
         },
         itemBuilder: (context, previewWidgetModel) {
           print('Length passed into builder ${previewWidgetItems.length}');
@@ -465,7 +474,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                               element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox(),
 
-                          isAlreadyCancelled(
+                          isAlreadyCancelledOrReturned(
                               element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox(),
 

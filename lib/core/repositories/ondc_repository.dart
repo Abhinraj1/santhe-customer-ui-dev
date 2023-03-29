@@ -174,7 +174,7 @@ class OndcRepository with LogMixin {
       final response = await http.get(url, headers: header);
       warningLog('${response.statusCode}');
 
-      warningLog('################ ROW IS ${json.decode(response.body)
+      warningLog('################ ROW COUNT = ${json.decode(response.body)
       ['data']["count"]}');
 
       warningLog('################ TYPE IS ${json.decode(response.body)
@@ -187,7 +187,8 @@ class OndcRepository with LogMixin {
         final responseBody =
         await json.decode(response.body)['data']['rows'] as List<dynamic>;
 
-        warningLog('$responseBody');
+        warningLog('RESPONSE BODY = $responseBody');
+
         // _searchProductCountInLocalShop =
         //     await json.decode(response.body)['data']['count'] as int;
 

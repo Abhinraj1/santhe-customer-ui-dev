@@ -63,19 +63,6 @@ class ReasonsLoaded extends ONDCOrderCancelAndReturnState {
 }
 
 
-class ReasonsLoadedSingleOrderCancelState extends ONDCOrderCancelAndReturnState{
-
-  final List<ReasonsModel> reasons;
-
-  final String orderId;
-
-  final String orderNumber;
-
-  const ReasonsLoadedSingleOrderCancelState( {required this.reasons ,required this.orderId, required this.orderNumber,});
-  @override
-  List<Object?> get props => [reasons,orderNumber,orderId];
-}
-
 
 class SelectedCodeState extends ONDCOrderCancelAndReturnState{
 
@@ -88,6 +75,25 @@ class SelectedCodeState extends ONDCOrderCancelAndReturnState{
   final String orderNumber;
 
   const SelectedCodeState({
+    required this.code, required this.orderId,
+    required this.orderNumber, required this.reasons
+  });
+
+  @override
+  List<Object?> get props => [code,reasons,orderNumber,orderId];
+}
+
+class SelectedCodeForPartialOrderCancelState extends ONDCOrderCancelAndReturnState{
+
+  final String code;
+
+  final List<ReasonsModel> reasons;
+
+  final String orderId;
+
+  final String orderNumber;
+
+  const SelectedCodeForPartialOrderCancelState({
     required this.code, required this.orderId,
     required this.orderNumber, required this.reasons
   });
@@ -121,7 +127,7 @@ class SelectedCodeForReturnState extends ONDCOrderCancelAndReturnState{
 
 
 
-class FullOrderCancelRequestSentState extends ONDCOrderCancelAndReturnState{}
+class OrderCancelRequestSentState extends ONDCOrderCancelAndReturnState{}
 
 class OrderCancelErrorState extends ONDCOrderCancelAndReturnState{
   final String message;

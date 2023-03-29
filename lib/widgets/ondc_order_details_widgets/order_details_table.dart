@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/manager/font_manager.dart';
+
+import '../../pages/ondc/ondc_webview_screen/ondc_webview_screen_view.dart';
 
 class OrderDetailsTable extends StatelessWidget {
   final String redTextButtonTitle,
@@ -7,6 +11,8 @@ class OrderDetailsTable extends StatelessWidget {
       secondTitle,secondData,
       thirdTitle,thirdData,
       fourthTitle,fourthData;
+
+  final String? invoiceUrl;
 
   final TextStyle? thirdDataTextStyle;
   final double? horizontalPadding,
@@ -20,7 +26,8 @@ class OrderDetailsTable extends StatelessWidget {
     required this.fourthTitle, required this.fourthData,
 
      this.horizontalPadding,
-     this.verticalPadding, this.thirdDataTextStyle}) : super(key: key);
+     this.verticalPadding, this.thirdDataTextStyle,
+    this.invoiceUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +88,17 @@ class OrderDetailsTable extends StatelessWidget {
           TableRow(
               children: [
                 const SizedBox(),
-
-                Text(redTextButtonTitle,
-                    style: FontStyleManager().s12fw500Red,
-                    textAlign: TextAlign.right)
+                InkWell(
+                  onTap: (){
+                    Get.off(()=>ONDCWebviewView(
+                      url: invoiceUrl ?? "",
+                      title: "DownLoad Invoice",
+                    ));
+                  },
+                  child: Text(redTextButtonTitle,
+                      style: FontStyleManager().s12fw500Red,
+                      textAlign: TextAlign.right),
+                )
 
               ]
           ),

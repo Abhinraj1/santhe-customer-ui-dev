@@ -8,6 +8,7 @@ import '../../../../models/ondc/order_cancel_reasons_model.dart';
 import '../../../../models/ondc/preview_ondc_cart_model.dart';
 import '../../../../models/ondc/single_order_model.dart';
 import '../../../../pages/ondc/ondc_acknowledgement_screen/ondc_acknowledgement_view.dart';
+import '../../../../pages/ondc/ondc_intro/ondc_intro_view.dart';
 import '../../../../pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_view.dart';
 import '../../../../pages/ondc/ondc_return_screens/ondc_return_view.dart';
 import '../../../cubits/customer_contact_cubit/customer_contact_cubit.dart';
@@ -42,7 +43,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
     on<LoadReasonsForFullOrderCancelEvent>((event, emit) async {
 
 
-      Get.to(()=> const ONDCOrderCancelView());
+      Get.offAll(()=> const ONDCOrderCancelView());
 
 
       emit(Loading());
@@ -69,7 +70,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
     on<LoadReasonsForPartialOrderCancelEvent>((event, emit) async {
 
-      Get.to(()=> const ONDCOrderCancelView());
+
 
       emit(Loading());
 
@@ -84,7 +85,13 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
             orderId: event.orderId,
             orderNumber: event.orderNumber));
 
+        if(state is ReasonsLoadedPartialOrderCancelState){
+
+          Get.offAll(()=> const ONDCOrderCancelView());
+        }
+
       }catch(e){
+
         emit(OrderCancelErrorState(message: e.toString()));
       }
 
@@ -96,7 +103,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
       _product = event.product;
 
-      Get.to(()=> const ONDCOrderCancelView());
+      Get.offAll(()=> const ONDCOrderCancelView());
 
       emit(Loading());
 
@@ -118,35 +125,44 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
     on<PartialCancelOrderRequestEvent>((event, emit) async{
 
-      print("Selected code iss ############################################## $selectedCode");
+      print("Selected code iss ##############################"
+          "################ $selectedCode");
 
       emit(Loading());
 
       try{
-
+  print("#################### orderId = $orderId QuoteId = "
+    "${_partialCancelProduct.quoteId} ");
 
         String status =
         await orderCancelRepository.requestReturnOrPartialCancel(
             code: selectedCode,
             orderId: orderId,
-            quotesId: _partialCancelProduct.quoteId.toString(),
-            images: _partialCancelProduct.symbol.toList(),
-            quantity: '',
+            cartItemPricesId: _partialCancelProduct.id.toString(),
+            images: [],
+            quantity: _partialCancelProduct.quantity.toString(),
             isReturn: false);
 
-        if(status == "ACK" ){
+        print("#####################################"
+            "###############3 STATUS IS $status");
 
-          Get.to(()=> ONDCAcknowledgementView(
-            title: "Cancel Order",
-              message: "Your cancellation request is received,"
-                  " Once we have received a confirmation from"
-                  " the seller you will get an update from us "
-                  "on your cancellation status and refund details",
+        if(status == "SUCCESS" ){
 
-              onTap: (){},
-              orderNumber: orderNumber));
+          emit(OrderCancelRequestSentState());
 
-          emit(FullOrderCancelRequestSentState());
+          if(state is OrderCancelRequestSentState ){
+            Get.off(()=> ONDCAcknowledgementView(
+                title: "Cancel Order",
+                message: "Your cancellation request is received,"
+                    " Once we have received a confirmation from"
+                    " the seller you will get an update from us "
+                    "on your cancellation status and refund details",
+
+                onTap: (){
+                  Get.offAll(()=>const OndcIntroView());
+                },
+                orderNumber: orderNumber));
+          }
 
         }
 
@@ -158,7 +174,8 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
   on<CancelFullOrderRequestEvent>((event, emit) async{
 
-    print("Selected code iss ############################################## $selectedCode");
+    print("Selected code iss #########################"
+        "##################### $selectedCode");
 
     emit(Loading());
 
@@ -169,19 +186,22 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
           code: selectedCode,
           orderId: orderId);
 
-      if(status == "ACK" ){
 
-        Get.to(()=> ONDCAcknowledgementView(
+         if(status == "SUCCESS" ){
+        Get.offAll(()=> ONDCAcknowledgementView(
             title: "Cancel Order",
             message: "Your cancellation request is received,"
                 " Once we have received a confirmation from"
                 " the seller you will get an update from us "
                 "on your cancellation status and refund details",
 
-            onTap: (){},
+            onTap: (){
+              Get.offAll(()=>const OndcIntroView());
+
+            },
             orderNumber: orderNumber));
 
-        emit(FullOrderCancelRequestSentState());
+        emit(OrderCancelRequestSentState());
 
       }
 
@@ -198,6 +218,21 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
         selectedCode = event.code;
 
         emit( SelectedCodeState(
+            code: event.code.toString(),
+            orderNumber: orderNumber,
+            orderId:orderId,
+            reasons: reasons
+        ));
+
+      }
+    });
+
+    on<SelectedCodeForPartialOrderCancelEvent>((event, emit) {
+
+      if(event.code != "null" || event.code != ""){
+        selectedCode = event.code;
+
+        emit( SelectedCodeForPartialOrderCancelState(
             code: event.code.toString(),
             orderNumber: orderNumber,
             orderId:orderId,

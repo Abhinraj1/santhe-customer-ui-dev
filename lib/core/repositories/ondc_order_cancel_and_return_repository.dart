@@ -82,14 +82,16 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
      warningLog('checking for response body ${response.body}');
 
-     final responseBody = json.decode(response.body)["message"]["ack"]['status'];
+     ///final responseBody = json.decode(response.body)["message"]["ack"]['status'];
+
+     final responseBody = json.decode(response.body)["type"];
 
      warningLog("####################################################"
          "##3 BODY STATUS ==== $responseBody");
 
      final status = responseBody;
 
-     return status;
+     return status.toString();
 
    } catch (e) {
      throw OrderCancelErrorState(
@@ -144,7 +146,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
  Future<String> requestReturnOrPartialCancel(
      {required String orderId, required String code,
-       required String quotesId, required List<String> images,
+       required String cartItemPricesId, required List<String> images,
        required String quantity, required bool isReturn}) async {
 
 
@@ -165,7 +167,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
            "order_id": orderId,
            "cartItemIds":[
              {
-               "id": quotesId,
+               "id": cartItemPricesId,
                "images": images,
                "quantity": quantity,
                "reasonCode": code,
@@ -179,11 +181,11 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
      warningLog('${response.statusCode}');
 
-     final responseBody = await json.decode(response.body);
+     final responseBody = await json.decode(response.body)["type"];
 
-     warningLog('$responseBody');
+     warningLog('RESPONSE BODY IS $responseBody');
 
-     return response.statusCode.toString();
+     return responseBody;
    } catch (e) {
      warningLog(e.toString());
      rethrow;

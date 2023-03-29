@@ -91,3 +91,15 @@ class SelectedCodeForReturnEvent extends ONDCOrderCancelAndReturnEvent{
   @override
   List<Object?> get props => [code];
 }
+
+class SelectedCodeForPartialOrderCancelEvent extends ONDCOrderCancelAndReturnEvent{
+  final String code;
+
+
+  const SelectedCodeForPartialOrderCancelEvent({
+    required this.code,
+  });
+
+  @override
+  List<Object?> get props => [code];
+}

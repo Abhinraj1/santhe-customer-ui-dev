@@ -155,7 +155,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     );
   }
 
-  Widget _getGroupSeparator(PreviewWidgetOndcItem element, int countNum) {
+  Widget _getGroupSeparator(PreviewWidgetOndcItem element,int countNum) {
     return Align(
       alignment: Alignment.center,
       child: Container(

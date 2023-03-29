@@ -42,9 +42,7 @@ class AddressRepository with LogMixin {
     required String address_id,
     required String deliveryName,
     String? howtoReach,
-
   }) async {
-
     final url =
         Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/address/update');
     final header = {
@@ -54,10 +52,7 @@ class AddressRepository with LogMixin {
 
     errorLog('$flat, and also id $address_id');
 
-
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
-
-
 
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
@@ -87,10 +82,7 @@ class AddressRepository with LogMixin {
       errorLog('${response.statusCode}');
       final responseBody = json.decode(response.body);
 
-      isBillingAddress = false;
-
       errorLog('$responseBody');
-
 
       return responseBody['message'];
     } catch (e) {
@@ -98,8 +90,7 @@ class AddressRepository with LogMixin {
     }
   }
 
- Future<List<AddressOndcModel>> getAddressList() async {
-
+  Future<List<AddressOndcModel>> getAddressList() async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
 
     warningLog('Firebase Id being sent IN GET ADDRESS LIST $firebaseId');
@@ -117,6 +108,7 @@ class AddressRepository with LogMixin {
       errorLog('${response.statusCode}');
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
+
       ///
       errorLog('################ RAW DATA  HEREE $responseBody');
       addressOndcModels =
@@ -129,8 +121,8 @@ class AddressRepository with LogMixin {
         (element) => element.address_name.toString().contains('Delivery'),
       );
 
-     billingAddressModel = addressOndcModels.firstWhere(
-            (element) => element.address_name.toString().contains('Billing'),
+      billingAddressModel = addressOndcModels.firstWhere(
+        (element) => element.address_name.toString().contains('Billing'),
       );
       errorLog('$deliveryAddressModel');
 

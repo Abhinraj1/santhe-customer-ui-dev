@@ -59,8 +59,7 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
               const SizedBox(
                 height: 50,
               ),
-              Lottie.network(
-                  'https://assets5.lottiefiles.com/packages/lf20_w8cudppm.json'),
+              Lottie.asset('assets/successlottie.json'),
               // Stack(
               //   children: [
               //     Center(
@@ -77,11 +76,32 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
               const SizedBox(
                 height: 10,
               ),
-              Image.asset('assets/successOrder.png'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'Your order has been successfully placed',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors().brandDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
               // const SizedBox(
               //   height: 20,
               // ),
-              Image.asset('assets/processOrder.png'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'Thank you,We are processing your order',
+                    style: TextStyle(color: AppColors().grey80, fontSize: 15),
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 10,
               ),

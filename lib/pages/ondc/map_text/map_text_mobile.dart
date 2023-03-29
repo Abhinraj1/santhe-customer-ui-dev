@@ -300,8 +300,11 @@ class _MapTextMobileState extends State<_MapTextMobile> {
                                   fontSize: 17),
                             )),
                       ),
-                      Text(
-                          '${RepositoryProvider.of<AddressRepository>(context).deliveryAddressModel?.flat}')
+                      isBillingAddress
+                          ? Text(
+                              '${RepositoryProvider.of<AddressRepository>(context).billingModel?.flat}')
+                          : Text(
+                              '${RepositoryProvider.of<AddressRepository>(context).deliveryAddressModel?.flat}')
                     ],
                   ),
                 ),

@@ -129,11 +129,12 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                         : Padding(
                             padding: const EdgeInsets.only(top: 5.0),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(15),
                               child: CachedNetworkImage(
                                 imageUrl: widget.productOndcModel.symbol,
                                 height: 90,
                                 width: 70,
+                                fit: BoxFit.fill,
                                 errorWidget: (context, url, error) =>
                                     Image.asset(
                                   'assets/cart.png',
@@ -153,12 +154,13 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                         children: [
                           Container(
                             width: 200,
+                            height: 23,
                             color: Colors.white,
                             child: Text(
                               '${widget.productOndcModel.item_name}',
                               style: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 15,
+                                  fontSize: 11,
                                   overflow: TextOverflow.ellipsis),
                             ),
                           ),

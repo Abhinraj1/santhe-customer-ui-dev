@@ -96,8 +96,23 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
               content: Text('Delivery address updated!'),
             ),
           );
-          ge.Get.to(() => OndcShopListView(customerModel: currentUser),
+          ge.Get.off(() => OndcShopListView(customerModel: currentUser),
               transition: ge.Transition.leftToRight);
+        }
+        if (state is OndcBillingAddressUpdated) {
+          setState(() {
+            isBillingAddress = false;
+          });
+          context.read<AddressBloc>().add(GetAddressListBillingEvent());
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Billing address updated!'),
+            ),
+          );
+        }
+        if (state is GotAddressListBillingState) {
+          ge.Get.back();
+          ge.Get.back(result: 'Billing Address Change');
         }
       },
       builder: (context, state) {
@@ -304,7 +319,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                                       ? context
                                                           .read<AddressBloc>()
                                                           .add(
-                                                            UpdateAddressEvent(
+                                                            UpdateBillingAddressEvent(
                                                                 lat: lat,
                                                                 lng: lng,
                                                                 deliveryName:
@@ -375,16 +390,27 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                               ),
                                             ),
                                           ),
-                                          child: const Text(
-                                            "Save",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontStyle: FontStyle.normal,
-                                              color: Color(0xFFFFFFFF),
-                                              fontSize: 19,
-                                              // height: 19/19,
-                                            ),
-                                          ),
+                                          child: state
+                                                  is OndcBillingAddressLoading
+                                              ? const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                      Colors.white,
+                                                    ),
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  "Save",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontStyle: FontStyle.normal,
+                                                    color: Color(0xFFFFFFFF),
+                                                    fontSize: 19,
+                                                    // height: 19/19,
+                                                  ),
+                                                ),
                                         ),
                                       )
                                     ],

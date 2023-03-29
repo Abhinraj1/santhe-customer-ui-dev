@@ -33,10 +33,39 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
       }
     });
 
+    on<UpdateBillingAddressEvent>((event, emit) async {
+      emit(OndcBillingAddressLoading());
+      try {
+        final String message = await addressRepository.updateAddress(
+          lat: event.lat,
+          lng: event.lng,
+          flat: event.flat,
+          deliveryName: event.deliveryName.toString(),
+          address_id: event.address_id,
+        );
+        emit(OndcBillingAddressUpdated(message: message));
+      } on OndcUpdateAddressErrorState catch (e) {
+        emit(
+          OndcUpdateAddressErrorState(message: e.message),
+        );
+      }
+    });
+
     on<GetAddressListEvent>((event, emit) async {
       try {
         await addressRepository.getAddressList();
         emit(GotAddressListAndIdState());
+      } on ErrorGettingAddressState catch (e) {
+        emit(
+          ErrorGettingAddressState(message: e.message),
+        );
+      }
+    });
+    on<GetAddressListBillingEvent>((event, emit) async {
+      emit(OndcBillingAddressLoading());
+      try {
+        await addressRepository.getAddressList();
+        emit(GotAddressListBillingState());
       } on ErrorGettingAddressState catch (e) {
         emit(
           ErrorGettingAddressState(message: e.message),

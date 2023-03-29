@@ -239,19 +239,13 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                         padding: const EdgeInsets.only(right: 4.5),
                         child: IconButton(
                           onPressed: () {
-                            if (Platform.isIOS) {
-                              Share.share(
-                                AppHelpers().appStoreLink,
-                              );
-                            } else {
-                              Share.share(
-                                AppHelpers().playStoreLink,
-                              );
-                            }
+                            ge.Get.off(
+                              () => const OndcIntroView(),
+                            );
                           },
                           splashRadius: 25.0,
                           icon: const Icon(
-                            Icons.share,
+                            Icons.home,
                             color: Colors.white,
                             size: 27.0,
                           ),
@@ -271,24 +265,28 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                     horizontal: 15.0),
                                 child: Row(
                                   children: [
-                                    CircleAvatar(
-                                      backgroundColor: AppColors().brandDark,
-                                      radius: 20,
-                                      child: GestureDetector(
-                                        onTap: () => ge.Get.back(),
-                                        child: const Icon(
-                                          Icons.arrow_back,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
+                                    // CircleAvatar(
+                                    //   backgroundColor: AppColors().brandDark,
+                                    //   radius: 20,
+                                    //   child: GestureDetector(
+                                    //     onTap: () => ge.Get.back(),
+                                    //     child: const Icon(
+                                    //       Icons.arrow_back,
+                                    //       color: Colors.white,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    const CustomBackButton(),
                                     const SizedBox(
                                       width: 100,
                                     ),
-                                    const Text(
+                                    Text(
                                       'My Cart',
                                       style: TextStyle(
-                                          color: Colors.black54, fontSize: 20),
+                                        color: AppColors().brandDark,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -351,28 +349,32 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 height: 15,
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 1.0),
                                 child: Row(
                                   children: [
-                                    CircleAvatar(
-                                      backgroundColor: AppColors().brandDark,
-                                      radius: 20,
-                                      child: GestureDetector(
-                                        onTap: () => ge.Get.back(),
-                                        child: const Icon(
-                                          Icons.arrow_back,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
+                                    // CircleAvatar(
+                                    //   backgroundColor: AppColors().brandDark,
+                                    //   radius: 20,
+                                    //   child: GestureDetector(
+                                    //     onTap: () => ge.Get.back(),
+                                    //     child: const Icon(
+                                    //       Icons.arrow_back,
+                                    //       color: Colors.white,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    const CustomBackButton(),
                                     const SizedBox(
                                       width: 100,
                                     ),
-                                    const Text(
+                                    Text(
                                       'My Cart',
                                       style: TextStyle(
-                                          color: Colors.black54, fontSize: 20),
+                                        color: AppColors().brandDark,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -439,8 +441,10 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                     )
                                   : const Text(''),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 40.0, top: 10),
+                                padding: EdgeInsets.only(
+                                    right: MediaQuery.of(context).size.width *
+                                        0.075,
+                                    top: 10),
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
@@ -470,7 +474,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 40.0, vertical: 10),
+                                    horizontal: 25.0, vertical: 10),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   mainAxisAlignment:

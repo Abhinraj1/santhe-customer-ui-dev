@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
 import 'package:santhe/core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'package:santhe/widgets/custom_widgets/custom_button.dart';

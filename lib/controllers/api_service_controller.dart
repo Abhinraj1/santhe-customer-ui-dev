@@ -886,18 +886,20 @@ class APIs extends GetxController with LogMixin {
     var data = {'id': AppHelpers().getPhoneNumberWithoutCountryCode};
 
     // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
+    warningLog('hitting node url getCustomerInfo $nodeUrl');
     var response = await http.post(Uri.parse(nodeUrl),
         body: json.encode(data), headers: header);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      errorLog('$data');
+      errorLog('Checking for data in GetCustomerInfo$data');
       if (data['data'] != null) {
         var jsonData = data['data'];
         final profileController = Get.find<ProfileController>();
         profileController.getCustomerDetails = CustomerModel.fromJson(jsonData);
         profileController.isOperational.value =
             profileController.customerDetails!.opStats;
-        warningLog('${profileController.customerDetails}');
+        errorLog(
+            'Checking for profileModel ${profileController.customerDetails}');
         return 1;
       } else {
         log('Request failed with status: ${response.statusCode}.');
@@ -967,6 +969,7 @@ class APIs extends GetxController with LogMixin {
       "locality": getfinalAddress.locality,
       "lat": updatedUser.lat,
       "lng": updatedUser.lng,
+      "custId": updatedUser.phoneNumber.toString(),
       "emailId": updatedUser.emailId,
       "phoneNumber": updatedUser.phoneNumber,
       "pincode": updatedUser.pincode,
@@ -976,15 +979,17 @@ class APIs extends GetxController with LogMixin {
     };
 
     // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
+    errorLog('Checking for node url $data $nodeUrl');
     var response = await http.post(Uri.parse(nodeUrl),
         body: json.encode(data), headers: header);
 
     // var response = await callApi(
     //     mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
-
+    errorLog(
+        'StatusCode CheckUpdateUser${response.statusCode} ${response.body} json  body ${json.encode(data)}');
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      log(data.toString());
+      errorLog('Checking for responseData ${data.toString()}');
       // getCustomerInfo(custId);
       log('SUCCESS');
       return 1;

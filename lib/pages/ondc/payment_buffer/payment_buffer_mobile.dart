@@ -103,6 +103,7 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
                 ),
                 const Text(
                   'Please wait while we are processing your payment',
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                 )
               ],

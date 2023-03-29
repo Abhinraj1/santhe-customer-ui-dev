@@ -18,13 +18,13 @@ class ShopImageIntro extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.2,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
           child: CachedNetworkImage(
             imageUrl: image,
-            fit: BoxFit.contain,
+            fit: BoxFit.fill,
             errorWidget: (context, url, error) => Image.asset(
               'assets/cart.png',
               fit: BoxFit.fill,

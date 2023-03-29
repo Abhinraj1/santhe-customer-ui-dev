@@ -100,7 +100,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
         ),
         child: Container(
           width: 330,
-          height: 125,
+          height: 150,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
             color: Colors.white,
@@ -113,216 +113,212 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
               )
             ],
           ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    widget.productOndcModel.symbol == null
-                        ? Image.asset(
-                            'assets/cart.png',
-                            fit: BoxFit.fill,
-                            height: 90,
-                            width: 70,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: CachedNetworkImage(
-                                imageUrl: widget.productOndcModel.symbol,
-                                height: 90,
-                                width: 70,
-                                fit: BoxFit.fill,
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                  'assets/cart.png',
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      widget.productOndcModel.symbol == null
+                          ? Image.asset(
+                              'assets/cart.png',
+                              fit: BoxFit.fill,
+                              height: 90,
+                              width: 70,
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.productOndcModel.symbol,
+                                  height: 90,
+                                  width: 70,
                                   fit: BoxFit.fill,
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    'assets/cart.png',
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 200,
-                            height: 23,
-                            color: Colors.white,
-                            child: Text(
-                              '${widget.productOndcModel.item_name}',
-                              style: const TextStyle(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 200,
+                              height: 25,
+                              color: Colors.white,
+                              child: AutoSizeText(
+                                '${widget.productOndcModel.item_name}',
+                                minFontSize: 11,
+                                style: const TextStyle(
                                   color: Colors.black,
+                                  overflow: TextOverflow.clip,
                                   fontSize: 11,
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                width: 100,
-                                color: Colors.white,
-                                child: Text(
-                                  //! make a check here as to what should be put in
-                                  '${widget.productOndcModel.quantity}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                  ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                            ],
-                          ),
-                          //! do a conditional check once data is available
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  width: 90,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 100,
                                   color: Colors.white,
-                                  child: Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: minus,
-                                        child: const Icon(
-                                          Icons.remove,
-                                          size: 18,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      const VerticalDivider(
-                                        color: Colors.black,
-                                        thickness: 1,
-                                      ),
-                                      Text(
-                                        '${widget.productOndcModel.quantity}',
-                                        style: TextStyle(
-                                          color: AppColors().brandDark,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const VerticalDivider(
-                                        color: Colors.black,
-                                        thickness: 1,
-                                      ),
-                                      GestureDetector(
-                                        onTap: add,
-                                        child: const Icon(
-                                          Icons.add,
-                                          color: Colors.grey,
-                                          size: 18,
-                                        ),
-                                      )
-                                    ],
+                                  child: Text(
+                                    //! make a check here as to what should be put in
+                                    '${widget.productOndcModel.quantity}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 11,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 40,
-                              ),
-                              SizedBox(
-                                width: 100,
-                                child: Align(
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                              ],
+                            ),
+                            //! do a conditional check once data is available
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Align(
                                   alignment: Alignment.centerRight,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: AutoSizeText(
-                                          '₹ ${widget.productOndcModel.maximum_value}',
-                                          style: TextStyle(
-                                              color: AppColors().brandDark,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.bold,
-                                              overflow: TextOverflow.ellipsis,
-                                              decoration:
-                                                  TextDecoration.lineThrough),
+                                  child: Container(
+                                    width: 90,
+                                    color: Colors.white,
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: minus,
+                                          child: const Icon(
+                                            Icons.remove,
+                                            size: 18,
+                                            color: Colors.grey,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      Expanded(
-                                        child: AutoSizeText(
-                                          '₹ ${widget.productOndcModel.value}',
-                                          style: TextStyle(
-                                              color: AppColors().brandDark,
-                                              fontSize: 11,
-                                              overflow: TextOverflow.ellipsis,
-                                              fontWeight: FontWeight.bold),
+                                        const VerticalDivider(
+                                          color: Colors.black,
+                                          thickness: 1,
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          '${widget.productOndcModel.quantity}',
+                                          style: TextStyle(
+                                            color: AppColors().brandDark,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const VerticalDivider(
+                                          color: Colors.black,
+                                          thickness: 1,
+                                        ),
+                                        GestureDetector(
+                                          onTap: add,
+                                          child: const Icon(
+                                            Icons.add,
+                                            color: Colors.grey,
+                                            size: 18,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                                const SizedBox(
+                                  width: 40,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                AutoSizeText(
+                                  '₹ ${widget.productOndcModel.maximum_value}',
+                                  style: TextStyle(
+                                      color: AppColors().brandDark,
+                                      fontSize: 8,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.lineThrough),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                AutoSizeText(
+                                  '₹ ${widget.productOndcModel.value}',
+                                  style: TextStyle(
+                                      color: AppColors().brandDark,
+                                      fontSize: 8,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 13.0, bottom: 3),
-                child: Row(
-                  //! remove const
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text(
-                        'Delivery In',
-                        style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 13,
-                          color: Colors.black87,
+                const SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 13.0, bottom: 3),
+                  child: Row(
+                    //! remove const
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 100,
+                        child: Text(
+                          'Delivery In',
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 13,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15.0),
-                      child: SizedBox(
-                        width: 100,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '${widget.productOndcModel.time_to_ship}',
-                            style: const TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 13,
-                              color: Colors.black87,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: SizedBox(
+                          width: 100,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '${widget.productOndcModel.time_to_ship}',
+                              style: const TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 13,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

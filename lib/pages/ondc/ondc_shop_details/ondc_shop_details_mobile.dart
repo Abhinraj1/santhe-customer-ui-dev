@@ -87,7 +87,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       final response = await http.get(url);
       warningLog('${response.statusCode} and url $url');
       final responseBody =
-          await json.decode(response.body)['data'] as List<dynamic>;
+          await json.decode(response.body)['data']['rows'] as List<dynamic>;
       warningLog('$responseBody');
       List<ProductOndcModel> newSearchedProduct =
           responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
@@ -133,7 +133,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       final response = await http.get(url);
       warningLog('${response.statusCode}');
       final responseBody =
-          await json.decode(response.body)['data'] as List<dynamic>;
+          await json.decode(response.body)['data']['rows'] as List<dynamic>;
       warningLog('$responseBody');
       List<ProductOndcModel> newProductList =
           responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
@@ -1108,7 +1108,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                   ),
                                 ],
                               )
-                            : const Text('')
+                            : const SizedBox(
+                                height: 60,
+                              )
                   ],
                 ),
               ),

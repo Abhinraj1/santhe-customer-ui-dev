@@ -1270,7 +1270,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                     height: 60,
                                   ),
                                   Text(
-                                    'Initiating Payment',
+                                    'Redirecting to Payment',
                                     style: TextStyle(
                                       color: AppColors().brandDark,
                                       fontSize: 18,
@@ -1280,10 +1280,13 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  const Text(
-                                    'Connecting to razorPay',
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 15),
+                                  Center(
+                                    child: const Text(
+                                      'Please wait while we bring up the payment options',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 15),
+                                    ),
                                   )
                                 ],
                               ),

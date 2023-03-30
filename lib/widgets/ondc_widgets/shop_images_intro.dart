@@ -24,7 +24,7 @@ class ShopImageIntro extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
           child: CachedNetworkImage(
             imageUrl: image,
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
             errorWidget: (context, url, error) => Image.asset(
               'assets/cart.png',
               fit: BoxFit.fill,

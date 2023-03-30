@@ -264,16 +264,13 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
 
   @override
   Widget build(BuildContext context) {
-
     debugLog(
         '${RepositoryProvider.of<AddressRepository>(context).addressModels}');
-
     return BlocConsumer<OndcBloc, OndcState>(
       // bloc: OndcBloc(ondcRepository: app<OndcRepository>()),
       listener: (context, state) {
         warningLog('$state');
         if (state is ErrorFetchingShops) {
-
           Get.to(
             () => ApiErrorView(),
           );
@@ -362,7 +359,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       },
 
       builder: (context, state) {
-
         return Scaffold(
           key: _key,
           drawer: const CustomNavigationDrawer(),
@@ -438,6 +434,37 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           //   },
           // ),
 
+              ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
+
+              // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
+              //      LoadReasonsForReturnEvent(
+              //         orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
+              //             .orderId,
+              //         product: PreviewWidgetModel(
+              //             price: "200Rs",
+              //         title: "Head and Shoulders Shampoo for dandruff. 250 ml",
+              //         quantity: 1,
+              //         quoteId: "",
+              //         tat: "",
+              //         message_id: "",
+              //         category: "",
+              //         fulfillment_id: "",
+              //         provider_name: "",
+              //         serviceable: "",
+              //         status: "",
+              //         type: "",
+              //         ondc_item_id: "",
+              //         deliveryFulfillmentId:"" ,
+              //         cancellable: "",
+              //         createdAt:"" ,
+              //         deletedAt:"" ,
+              //         id:"" ,symbol:"" ,updatedAt:"" ,returnable: "",
+              //             isCancelled: null,
+              //             isReturned: null),
+              //
+              //         orderNumber: "123456",));
+          //   },
+          // ),
           backgroundColor: CupertinoColors.systemBackground,
           appBar: AppBar(
             leading: IconButton(
@@ -666,19 +693,16 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                             // ),
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  right: 25.0),
+                                                  right: 25.0, bottom: 20),
                                               child: Image.asset(
                                                   'assets/edit.png'),
                                             )
                                           ],
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0, vertical: 8),
+                                            horizontal: 20.0, vertical: 1),
                                         child: SizedBox(
                                           height: 50,
                                           child: TextFormField(

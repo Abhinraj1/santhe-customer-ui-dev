@@ -122,19 +122,20 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
 
 
   sendReturnRequest() async{
+
     print("############################## sendReturnRequest calleddddd");
     try{
       print("############################## INSIDE TRY");
 
       print("############################## orderId = $_orderId "
-          "########_code = $_code ########## quotesId = ${_returnProduct.quoteId} "
+          "########_code = $_code ########## CartPriceId = ${_returnProduct.status} "
           "####### quantity = ${_returnProduct.quantity}");
 
 
       String response = await repository.requestReturnOrPartialCancel(
           orderId: _orderId,
           code: _code,
-          cartItemPricesId: _returnProduct.quoteId.toString(),
+          cartItemPricesId: _returnProduct.id,
           images: imageUrl,
           quantity: _returnProduct.quantity.toString(),
           isReturn: true

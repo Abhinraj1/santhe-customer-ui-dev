@@ -180,12 +180,13 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     isAllCancellable({required CartItemPrices element}) {
       if (element.cancellable != null &&
           element.cancellable == true &&
-          element.status != "Cancelled" &&
-          element.status != "CANCEL_REQUESTED" &&
-          element.status != "Completed" &&
-          orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
+          // (element.status == "null" ||
+          //     element.status == "") &&
+          orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
+      ) {
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
+
           if (track.fulfillmentId.toString() ==
               element.deliveryFulfillment!.fulfillmentId.toString()) {
             if ((track.state).toString() == "PENDING" ||
@@ -216,10 +217,12 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if (element.cancellable != null &&
           element.cancellable == true &&
-          element.status != "Cancelled" &&
-          element.status != "CANCEL_REQUESTED" &&
-          element.status != "Completed" &&
-          orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
+          element.status == "Accepted" &&
+          orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
+          // &&
+          //     (element.cartPriceItemStatus == "null" ||
+          //       element.cartPriceItemStatus == "")
+      ) {
 
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
@@ -267,6 +270,10 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           element.returnable == true &&
           element.status != "Cancelled" &&
           element.status != "CANCEL_REQUESTED" &&
+
+          // (element.cartPriceItemStatus == "null" ||
+          //     element.cartPriceItemStatus == "") &&
+
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
@@ -279,7 +286,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 InkWell(
                   onTap: () {
                     ///Navigate to upload screen
-                    ///change products to previewWidgetModel
+
                     BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>
                       (context).add(
                         LoadReasonsForReturnEvent(
@@ -303,17 +310,25 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     }
 
     isAlreadyCancelledOrReturned({required PreviewWidgetModel element}) {
-      if (element.isCancelled != null &&
-          element.isCancelled == true) {
-        return Text("Cancelled",
-          style: FontStyleManager().s14fw700Red,);
-      } else if (element.isReturned != null &&
-          element.isReturned == true) {
-        return Text("Return Approved",
-          style: FontStyleManager().s14fw700Grey,);
-      } else {
-        return null;
+
+      // if (element.isCancelled != null &&
+      //     element.isCancelled == true) {
+      //   return Text("Cancelled",
+      //     style: FontStyleManager().s14fw700Red,);
+      // } else if (element.isReturned != null &&
+      //     element.isReturned == true) {
+      //   return Text("Return Approved",
+      //     style: FontStyleManager().s14fw700Grey,);
+      // } else if(){}else {
+      //   return null;
+      // }
+
+      if(element.cartPriceItemStatus.toString() != "null" &&
+          element.cartPriceItemStatus.toString() != ""){
+        return Text(element.cartPriceItemStatus.toString(),
+                style: FontStyleManager().s12fw700Grey,);
       }
+      return null;
     }
     List<PreviewWidgetOndcItem> previewItems = [];
 
@@ -347,6 +362,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                   fulfillment_id: element.deliveryFulfillment?.fulfillmentId,
                   category: "N/A",
                   message_id: "N/A",
+                  cartPriceItemStatus: element.status,
                   tat: "N/A")),
         );
       }
@@ -488,13 +504,19 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                           ),
 
                           //! new field for cancel...check for tracking status and packing state
-                          isSingleCancellable(
-                              element: previewWidgetModel.previewWidgetModel) ??
-                              const SizedBox(),
 
+
+
+
+                          isAlreadyCancelledOrReturned(element: previewWidgetModel.previewWidgetModel) == null ?
+                             isSingleCancellable(
+                              element: previewWidgetModel.previewWidgetModel) ??
+                              const SizedBox() : const SizedBox(),
+
+                          isAlreadyCancelledOrReturned(element: previewWidgetModel.previewWidgetModel) == null ?
                           isReturnable(
                               element: previewWidgetModel.previewWidgetModel) ??
-                              const SizedBox(),
+                              const SizedBox() : const SizedBox(),
 
                           isAlreadyCancelledOrReturned(
                               element: previewWidgetModel.previewWidgetModel) ??
@@ -510,7 +532,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       child: SizedBox(
                         width: 50,
                         child: AutoSizeText(
-                          "₹${priceFormatter(value: previewWidgetModel.previewWidgetModel.price.
+                          "₹${priceFormatter(value: previewWidgetModel.
+                          previewWidgetModel.price.
                           toString())}",
                           maxFontSize: 16,
                           minFontSize: 10,
@@ -521,6 +544,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(),
                 ],
               ),
             ),

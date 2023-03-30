@@ -28,6 +28,7 @@ class PreviewWidgetModel extends Equatable {
   final dynamic returnable;
   final dynamic isCancelled;
   final dynamic isReturned;
+  final dynamic cartPriceItemStatus;
   const PreviewWidgetModel({
     required this.id,
     required this.price,
@@ -51,6 +52,7 @@ class PreviewWidgetModel extends Equatable {
     required this.message_id,
     required this.isCancelled,
     required this.isReturned,
+    this.cartPriceItemStatus,
     this.returnable,
 
   });
@@ -79,6 +81,7 @@ class PreviewWidgetModel extends Equatable {
     dynamic? returnable,
      dynamic? isCancelled,
      dynamic? isReturned,
+    dynamic? cartPriceItemStatus
   }) {
     return PreviewWidgetModel(
       id: id ?? this.id,
@@ -105,6 +108,7 @@ class PreviewWidgetModel extends Equatable {
       serviceable: serviceable ?? this.serviceable,
       message_id: message_id ?? this.message_id,
         returnable: returnable ?? this.returnable,
+        cartPriceItemStatus :cartPriceItemStatus ?? this.cartPriceItemStatus
     );
   }
 
@@ -130,7 +134,8 @@ class PreviewWidgetModel extends Equatable {
       'tat': tat,
       'serviceable': serviceable,
       'message_id': message_id,
-      "returnable" : returnable
+      "returnable" : returnable,
+      "cartPriceItemStatus":cartPriceItemStatus
     };
   }
 
@@ -155,6 +160,9 @@ class PreviewWidgetModel extends Equatable {
       returnable: map['returnable'] != null ? map['returnable'] as dynamic : null,
       isCancelled: map['isCancelled'] != null ? map['isCancelled'] as dynamic : null,
       isReturned: map['isReturned'] != null ? map['isReturned'] as dynamic : null,
+      cartPriceItemStatus : map['cartPriceItemStatus'] != null ?
+      map['cartPriceItemStatus'] as dynamic : null,
+
       deliveryFulfillmentId: map['deliveryFulfillmentId'] != null
           ? map['deliveryFulfillmentId'] as dynamic
           : null,
@@ -225,6 +233,7 @@ class PreviewWidgetModel extends Equatable {
       returnable,
       isReturned,
       isCancelled,
+      cartPriceItemStatus
     ];
   }
 }

@@ -104,6 +104,8 @@ class OrderDetailsTable extends StatelessWidget {
                     style: FontStyleManager().s12fw500Red,
                     textAlign: TextAlign.right),
 
+
+
               ]
           ),
         ],

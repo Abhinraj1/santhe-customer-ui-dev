@@ -114,6 +114,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
             ],
           ),
           child: SingleChildScrollView(
+
             child: Column(
               children: [
                 Padding(
@@ -321,6 +322,6 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
           ),
           ),
         ),
-    )
+    );
   }
 }

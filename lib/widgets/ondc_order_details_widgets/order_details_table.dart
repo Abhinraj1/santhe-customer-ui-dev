@@ -88,17 +88,21 @@ class OrderDetailsTable extends StatelessWidget {
           TableRow(
               children: [
                 const SizedBox(),
+                invoiceUrl != null ?
                 InkWell(
                   onTap: (){
-                    Get.off(()=>ONDCWebviewView(
-                      url: invoiceUrl ?? "",
-                      title: "DownLoad Invoice",
-                    ));
+                   Get.off(()=>ONDCWebviewView(
+                     url: invoiceUrl ?? "",
+                     title: "DownLoad Invoice",
+                   ));
                   },
                   child: Text(redTextButtonTitle,
                       style: FontStyleManager().s12fw500Red,
                       textAlign: TextAlign.right),
-                )
+                ):
+                Text(redTextButtonTitle,
+                    style: FontStyleManager().s12fw500Red,
+                    textAlign: TextAlign.right),
 
               ]
           ),

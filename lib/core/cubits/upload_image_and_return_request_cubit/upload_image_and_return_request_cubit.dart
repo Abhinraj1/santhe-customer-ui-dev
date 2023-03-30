@@ -152,7 +152,7 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
           orderNumber: _orderNumber,
 
           onTap: (){
-            Get.offAll(const ONDCOrderDetailsView());
+            Get.to(const ONDCOrderDetailsView());
           },) );
 
       }

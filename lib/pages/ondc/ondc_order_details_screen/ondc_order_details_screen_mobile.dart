@@ -46,6 +46,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
   late GroupedItemScrollController _controller;
   final bool showCancelButton = true;
   int countNumber = 0;
+  int numberOfProducts = 0;
 
   Widget _getGroupSeparator(PreviewWidgetOndcItem element,
       SingleOrderModel orderDetails,
@@ -177,13 +178,19 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     print("##############################################################3"
         " INSIDE INVOICE = ${orderDetails.singleOrderModel!.invoice}");
 
+
+
     isAllCancellable({required CartItemPrices element}) {
+
+
       if (element.cancellable != null &&
           element.cancellable == true &&
-          // (element.status == "null" ||
-          //     element.status == "") &&
+          element.status == null &&
+
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
       ) {
+
+
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
 
@@ -193,6 +200,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 (track.state).toString() == "PACKED" ||
                 (track.state).toString() == "Pending" ||
                 (track.state).toString() == "Packed") {
+
               BlocProvider.of<OrderDetailsButtonCubit>(context)
                   .showCancelButton();
             } else {
@@ -207,6 +215,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       } else {
         BlocProvider.of<OrderDetailsButtonCubit>(context).hideCancelButton();
       }
+   ///   BlocProvider.of<OrderDetailsButtonCubit>(context).hideCancelButton();
     }
 
 
@@ -218,10 +227,9 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       if (element.cancellable != null &&
           element.cancellable == true &&
           element.status == "Accepted" &&
+          numberOfProducts != 1 &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
-          // &&
-          //     (element.cartPriceItemStatus == "null" ||
-          //       element.cartPriceItemStatus == "")
+
       ) {
 
         for (var track in orderDetails.singleOrderModel!.quotes!.first
@@ -234,6 +242,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 (track.state).toString() == "PACKED" ||
                 (track.state).toString() == "Pending" ||
                 (track.state).toString() == "Packed") {
+
 
               return InkWell(
                 onTap: () {
@@ -270,9 +279,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           element.returnable == true &&
           element.status != "Cancelled" &&
           element.status != "CANCEL_REQUESTED" &&
-
-          // (element.cartPriceItemStatus == "null" ||
-          //     element.cartPriceItemStatus == "") &&
 
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.singleOrderModel!.quotes!.first
@@ -328,14 +334,22 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         return Text(element.cartPriceItemStatus.toString(),
                 style: FontStyleManager().s12fw700Grey,);
       }
+
       return null;
     }
     List<PreviewWidgetOndcItem> previewItems = [];
 
 
     for (var element in products) {
+
       if (element.type == "item") {
+
+        numberOfProducts++;
+        print("#######################################################"
+            "Number OF PRODUCTS IS = $numberOfProducts");
+
         isAllCancellable(element: element);
+
 
         previewItems.add(
           PreviewWidgetOndcItem(
@@ -508,12 +522,14 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
 
 
-                          isAlreadyCancelledOrReturned(element: previewWidgetModel.previewWidgetModel) == null ?
+                          isAlreadyCancelledOrReturned(
+                              element: previewWidgetModel.previewWidgetModel) == null ?
                              isSingleCancellable(
                               element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox() : const SizedBox(),
 
-                          isAlreadyCancelledOrReturned(element: previewWidgetModel.previewWidgetModel) == null ?
+                          isAlreadyCancelledOrReturned(
+                              element: previewWidgetModel.previewWidgetModel) == null ?
                           isReturnable(
                               element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox() : const SizedBox(),
@@ -521,7 +537,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                           isAlreadyCancelledOrReturned(
                               element: previewWidgetModel.previewWidgetModel) ??
                               const SizedBox(),
-
                         ],
                       ),
                     ),
@@ -565,6 +580,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 .customerContact(model: orderDetails.singleOrderModel!);
             // Get.to(()=>const ONDCContactSupportView());
           }),
+
 
       BlocBuilder<OrderDetailsButtonCubit, OrderDetailsButtonState>(
           builder: (context, state) {

@@ -8,7 +8,7 @@ import '../../repositories/ondc_repository.dart';
 
 class OrderDetailsButtonCubit extends Cubit<OrderDetailsButtonState>{
   OrderDetailsButtonCubit() :
-        super(ShowCancelButton());
+        super(HideCancelButton());
 
 
   hideCancelButton(){
@@ -20,6 +20,7 @@ class OrderDetailsButtonCubit extends Cubit<OrderDetailsButtonState>{
   }
 
 }
+
 
 class OrderDetailsScreenCubit extends Cubit<OrderDetailsScreenState>{
   final OndcRepository ondcRepository;

@@ -100,7 +100,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
         ),
         child: Container(
           width: 330,
-          height: 150,
+          height: 110,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
             color: Colors.white,
@@ -187,15 +187,6 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                 const SizedBox(
                                   width: 20,
                                 ),
-                              ],
-                            ),
-                            //! do a conditional check once data is available
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Container(
@@ -239,37 +230,49 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 40,
-                                ),
                               ],
                             ),
+                            //! do a conditional check once data is available
+                            const SizedBox(
+                              height: 10,
+                            ),
+
                             const SizedBox(
                               height: 5,
                             ),
-                            Row(
-                              children: [
-                                AutoSizeText(
-                                  '₹ ${widget.productOndcModel.maximum_value}',
-                                  style: TextStyle(
-                                      color: AppColors().brandDark,
-                                      fontSize: 8,
-                                      overflow: TextOverflow.ellipsis,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.lineThrough),
+                            Container(
+                              height: 20,
+                              width: 200,
+                              color: Colors.white,
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    AutoSizeText(
+                                      '₹ ${widget.productOndcModel.maximum_value}',
+                                      style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontSize: 8,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                              TextDecoration.lineThrough),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    AutoSizeText(
+                                      '₹ ${widget.productOndcModel.value}',
+                                      style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontSize: 8,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                AutoSizeText(
-                                  '₹ ${widget.productOndcModel.value}',
-                                  style: TextStyle(
-                                      color: AppColors().brandDark,
-                                      fontSize: 8,
-                                      overflow: TextOverflow.ellipsis,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                              ),
                             )
                           ],
                         ),
@@ -277,46 +280,46 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 13.0, bottom: 3),
-                  child: Row(
-                    //! remove const
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(
-                        width: 100,
-                        child: Text(
-                          'Delivery In',
-                          style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 13,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: SizedBox(
-                          width: 100,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '${widget.productOndcModel.time_to_ship}',
-                              style: const TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 13,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                // const SizedBox(
+                //   height: 8,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 13.0, bottom: 3),
+                //   child: Row(
+                //     //! remove const
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       const SizedBox(
+                //         width: 100,
+                //         child: Text(
+                //           'Delivery In',
+                //           style: TextStyle(
+                //             overflow: TextOverflow.ellipsis,
+                //             fontSize: 13,
+                //             color: Colors.black87,
+                //           ),
+                //         ),
+                //       ),
+                //       Padding(
+                //         padding: const EdgeInsets.only(right: 15.0),
+                //         child: SizedBox(
+                //           width: 100,
+                //           child: Align(
+                //             alignment: Alignment.centerRight,
+                //             child: Text(
+                //               '${widget.productOndcModel.time_to_ship}',
+                //               style: const TextStyle(
+                //                 overflow: TextOverflow.ellipsis,
+                //                 fontSize: 13,
+                //                 color: Colors.black87,
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // )
               ],
             ),
           ),

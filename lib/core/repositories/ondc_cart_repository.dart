@@ -41,7 +41,7 @@ class OndcCartRepository with LogMixin {
 
   deleteCartItem({required CartitemModel productOndcModelLocal}) async {
     final url =
-        Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/cart/delete/item');
+        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/cart/delete/item');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -78,14 +78,19 @@ class OndcCartRepository with LogMixin {
       {required ProductOndcModel productOndcModel,
       List<ProductOndcModel>? productList}) async {
     final url =
-        Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/cart/add/item');
+        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/cart/add/item');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     final dynamic firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
-    warningLog(
-        '$firebaseID,quantity ${productOndcModel.quantity}, item_id ${productOndcModel.id}, store id${productOndcModel.storeLocationId} ');
+    final body = json.encode({
+      "quantity": productOndcModel.quantity,
+      "firebase_id": firebaseID,
+      "item_id": productOndcModel.id,
+      "storeLocation_id": productOndcModel.storeLocationId,
+    });
+    warningLog('$body and url $url ');
     try {
       final response = await http.post(
         url,
@@ -174,7 +179,7 @@ class OndcCartRepository with LogMixin {
 
   updateQuantityOfItems({required CartitemModel productOndcModel}) async {
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/cart/update/quantity');
+        'https://ondcstaging.santhe.in/santhe/ondc/cart/update/quantity');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

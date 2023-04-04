@@ -133,7 +133,6 @@ class _OndcProductLocalMobileState extends State<_OndcProductLocalMobile>
                         );
                         context.read<OndcBloc>().add(
                               SearchOndcItemInLocalShop(
-                                transactionId: widget.shopModel.transaction_id,
                                 storeId: widget.shopModel.id,
                                 productName: _textEditingController.text,
                               ),

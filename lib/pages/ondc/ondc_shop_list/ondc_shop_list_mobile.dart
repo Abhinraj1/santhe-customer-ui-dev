@@ -54,13 +54,10 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
     }
   }
 
-  getNewShops(
-      {required String transactionIdl,
-      required List<OndcShopWidget> shops,
-      required int limit}) async {
+  getNewShops({required List<OndcShopWidget> shops, required int limit}) async {
     final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/nearby?transaction_id=$transactionIdl&limit=$limit&offset=0&firebase_id=$firebaseID');
+        'https://ondcstaging.santhe.in/santhe/ondc/store/nearby?limit=20&offset=0&firebase_id=$firebaseID');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -165,11 +162,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                       onTap: () {
                         context.read<OndcBloc>().add(
                               FetchListOfShopWithSearchedProducts(
-                                transactionId:
-                                    // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
-                                    RepositoryProvider.of<OndcRepository>(
-                                            context)
-                                        .transactionId,
                                 productName: _textEditingController.text,
                               ),
                             );
@@ -216,14 +208,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   @override
   void initState() {
     super.initState();
-    context.read<OndcBloc>().add(
-          FetchNearByShops(
-            lat: widget.customerModel.lat,
-            lng: widget.customerModel.lng,
-            pincode: widget.customerModel.pinCode,
-            isDelivery: widget.customerModel.opStats,
-          ),
-        );
+    context.read<OndcBloc>().add(FetchShopModelsGet());
     context.read<AddressBloc>().add(
           GetAddressListEvent(),
         );
@@ -234,8 +219,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           n = n + 10;
         });
         getNewShops(
-          transactionIdl:
-              RepositoryProvider.of<OndcRepository>(context).transactionId,
           shops: shopWidgets,
           limit: n,
         );
@@ -305,7 +288,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           //toDo: change this timing for actual physical device to 2 seconds
           Future.delayed(Duration(seconds: 5), () {
             context.read<OndcBloc>().add(
-                  FetchShopModelsGet(transactionId: state.transactionId),
+                  FetchShopModelsGet(),
                 );
           });
         }
@@ -434,35 +417,35 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           //   },
           // ),
 
-              ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
+          ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
 
-              // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
-              //      LoadReasonsForReturnEvent(
-              //         orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
-              //             .orderId,
-              //         product: PreviewWidgetModel(
-              //             price: "200Rs",
-              //         title: "Head and Shoulders Shampoo for dandruff. 250 ml",
-              //         quantity: 1,
-              //         quoteId: "",
-              //         tat: "",
-              //         message_id: "",
-              //         category: "",
-              //         fulfillment_id: "",
-              //         provider_name: "",
-              //         serviceable: "",
-              //         status: "",
-              //         type: "",
-              //         ondc_item_id: "",
-              //         deliveryFulfillmentId:"" ,
-              //         cancellable: "",
-              //         createdAt:"" ,
-              //         deletedAt:"" ,
-              //         id:"" ,symbol:"" ,updatedAt:"" ,returnable: "",
-              //             isCancelled: null,
-              //             isReturned: null),
-              //
-              //         orderNumber: "123456",));
+          // BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(context).add(
+          //      LoadReasonsForReturnEvent(
+          //         orderId: RepositoryProvider.of<OndcCheckoutRepository>(context)
+          //             .orderId,
+          //         product: PreviewWidgetModel(
+          //             price: "200Rs",
+          //         title: "Head and Shoulders Shampoo for dandruff. 250 ml",
+          //         quantity: 1,
+          //         quoteId: "",
+          //         tat: "",
+          //         message_id: "",
+          //         category: "",
+          //         fulfillment_id: "",
+          //         provider_name: "",
+          //         serviceable: "",
+          //         status: "",
+          //         type: "",
+          //         ondc_item_id: "",
+          //         deliveryFulfillmentId:"" ,
+          //         cancellable: "",
+          //         createdAt:"" ,
+          //         deletedAt:"" ,
+          //         id:"" ,symbol:"" ,updatedAt:"" ,returnable: "",
+          //             isCancelled: null,
+          //             isReturned: null),
+          //
+          //         orderNumber: "123456",));
           //   },
           // ),
           backgroundColor: CupertinoColors.systemBackground,
@@ -710,12 +693,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                             onFieldSubmitted: (value) {
                                               context.read<OndcBloc>().add(
                                                     FetchListOfShopWithSearchedProducts(
-                                                      transactionId:
-                                                          // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
-                                                          RepositoryProvider.of<
-                                                                      OndcRepository>(
-                                                                  context)
-                                                              .transactionId,
                                                       productName:
                                                           _textEditingController
                                                               .text
@@ -787,12 +764,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                         .read<OndcBloc>()
                                                         .add(
                                                           FetchListOfShopWithSearchedProducts(
-                                                            transactionId:
-                                                                // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
-                                                                RepositoryProvider.of<
-                                                                            OndcRepository>(
-                                                                        context)
-                                                                    .transactionId,
                                                             productName:
                                                                 _textEditingController
                                                                     .text

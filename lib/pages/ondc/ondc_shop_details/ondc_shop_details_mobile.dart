@@ -38,8 +38,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
     context.read<OndcBloc>().add(
           FetchProductsOfShops(
             shopId: widget.shopModel.id,
-            transactionId:
-                RepositoryProvider.of<OndcRepository>(context).transactionId,
           ),
         );
     _scrollController.addListener(() {
@@ -64,7 +62,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
         warningLog('new search items and limit $nsearch');
         fetchNewSearchItems(
           shopId: widget.shopModel.id,
-          transactionIdLocalIn: widget.shopModel.transaction_id,
           productName: _textEditingController.text,
           searchProductLocal: searchWidgets,
         );
@@ -74,11 +71,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
 
   fetchNewSearchItems(
       {required String shopId,
-      required String transactionIdLocalIn,
       required String productName,
       required List<OndcProductWidget> searchProductLocal}) async {
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id=$transactionIdLocalIn&store_id=$shopId&search=%$productName%&limit=$nsearch&offset=0');
+        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=%$productName%&limit=12&offset=0');
     setState(() {
       _searchLoading = true;
     });
@@ -125,7 +121,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       required String shopId,
       required List<OndcProductWidget> productWidgetsLocal}) async {
     final Uri url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?transaction_id=$transactionIdLocal&storeLocation_id=$shopId&search=%%&limit=$n&offset=0');
+        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=%%&limit=$n&offset=0');
     setState(() {
       _loading = true;
     });
@@ -210,10 +206,8 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                         );
                         context.read<OndcBloc>().add(
                               SearchOndcItemInLocalShop(
-                                transactionId: widget.shopModel.transaction_id,
                                 storeId: widget.shopModel.id,
                                 productName: _textEditingController.text,
-
                               ),
                             );
                         _textEditingController.clear();
@@ -255,11 +249,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
   Widget build(BuildContext context) {
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
       if (state is ErrorFetchingProductsOfShops) {
-
         ge.Get.to(
           () => const ApiErrorView(),
         );
-
       }
       if (state is OndcProductsOfShopsLoaded) {
         List<OndcProductWidget> productsWidget = [];
@@ -913,8 +905,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             );
                             context.read<OndcBloc>().add(
                                   SearchOndcItemInLocalShop(
-                                    transactionId:
-                                        widget.shopModel.transaction_id,
                                     storeId: widget.shopModel.id,
                                     productName: _textEditingController.text,
                                   ),
@@ -939,10 +929,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       context.read<OndcBloc>().add(
                                             FetchProductsOfShops(
                                               shopId: widget.shopModel.id,
-                                              transactionId: RepositoryProvider
-                                                      .of<OndcRepository>(
-                                                          context)
-                                                  .transactionId,
                                             ),
                                           );
                                     },
@@ -957,9 +943,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                           });
                                           FetchProductsOfShops(
                                             shopId: widget.shopModel.id,
-                                            transactionId: RepositoryProvider
-                                                    .of<OndcRepository>(context)
-                                                .transactionId,
                                           );
                                         },
                                         icon: const Icon(Icons.cancel),
@@ -975,8 +958,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                 );
                                 context.read<OndcBloc>().add(
                                       SearchOndcItemInLocalShop(
-                                        transactionId:
-                                            widget.shopModel.transaction_id,
                                         storeId: widget.shopModel.id,
                                         productName:
                                             _textEditingController.text,
@@ -1009,7 +990,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                               ),
                             ),
                           )
-                        : state is !NoItemsFoundState
+                        : state is! NoItemsFoundState
                             ? Padding(
                                 padding: const EdgeInsets.only(right: 30.0),
                                 child: Align(

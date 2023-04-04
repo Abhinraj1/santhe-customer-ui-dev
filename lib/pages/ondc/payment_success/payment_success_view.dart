@@ -17,6 +17,7 @@ import '../../../constants.dart';
 import '../../../core/loggers.dart';
 import '../../../core/repositories/ondc_checkout_repository.dart';
 import '../ondc_order_details_screen/ondc_order_details_view.dart';
+import '../ondc_shop_list/ondc_shop_list_view.dart';
 
 part 'payment_success_mobile.dart';
 part 'payment_success_tablet.dart';

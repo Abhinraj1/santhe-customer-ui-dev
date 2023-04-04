@@ -96,6 +96,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
               content: Text('Delivery address updated!'),
             ),
           );
+          customerModel = currentUser;
           ge.Get.off(() => OndcShopListView(customerModel: currentUser),
               transition: ge.Transition.leftToRight);
         }

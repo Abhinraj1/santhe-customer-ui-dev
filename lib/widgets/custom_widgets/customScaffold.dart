@@ -24,6 +24,8 @@ class CustomScaffold extends StatelessWidget {
 
   final Color? backgroundColor;
 
+  final Function()? onBackButtonTap;
+
    CustomScaffold({Key? key,
 
      required this.body,
@@ -32,7 +34,9 @@ class CustomScaffold extends StatelessWidget {
 
      this.trailingButton,
 
-     this.backgroundColor
+     this.backgroundColor,
+
+     this.onBackButtonTap
 
    }) : super(key: key);
 
@@ -41,62 +45,72 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      key: _key,
-      drawer: const CustomNavigationDrawer(),
+    return WillPopScope(
+      onWillPop: () async{
+        if(onBackButtonTap != null){
+          onBackButtonTap!();
+        }else{
+          Navigator.pop(context);
+        }
+        return false;
+      },
+      child: Scaffold(
+        key: _key,
+        drawer: const CustomNavigationDrawer(),
 
-      backgroundColor: backgroundColor ?? AppColors().white100,
+        backgroundColor: backgroundColor ?? AppColors().white100,
 
-      appBar: AppBar(
-        backgroundColor: AppColors().primaryOrange,
-        elevation: 10.0,
-        title:  AutoSizeText(
-          kAppName,
-          style: FontStyleManager().kAppNameStyle
-        ),
-          leading: IconButton(
-            onPressed: () async {
-              _key.currentState!.openDrawer();
-            },
-            splashRadius: 25.0,
-            icon: SvgPicture.asset(
-              ImgManager().drawerIcon,
-              color: Colors.white,
-            ),
+        appBar: AppBar(
+          backgroundColor: AppColors().primaryOrange,
+          elevation: 10.0,
+          title:  AutoSizeText(
+            kAppName,
+            style: FontStyleManager().kAppNameStyle
           ),
-        shadowColor: AppColors().appBarShadow,
-        actions: [
-          hasShareButton ?? false ?
-          Padding(
-            padding: const EdgeInsets.only(right: 4.5),
-            child: IconButton(
-              onPressed: () {
-
-                if (Platform.isIOS) {
-                  Share.share(
-                    AppHelpers().appStoreLink,
-                  );
-                } else {
-                  Share.share(
-                    AppHelpers().playStoreLink,
-                  );
-                }
+            leading: IconButton(
+              onPressed: () async {
+                _key.currentState!.openDrawer();
               },
               splashRadius: 25.0,
-              icon: const Icon(
-                Icons.share,
+              icon: SvgPicture.asset(
+                ImgManager().drawerIcon,
                 color: Colors.white,
-                size: 27.0,
               ),
             ),
-          ) :
-             const SizedBox(),
-             Padding(
-             padding: const EdgeInsets.only(right: 4.5),
-             child: trailingButton,)
-        ],
+          shadowColor: AppColors().appBarShadow,
+          actions: [
+            hasShareButton ?? false ?
+            Padding(
+              padding: const EdgeInsets.only(right: 4.5),
+              child: IconButton(
+                onPressed: () {
+
+                  if (Platform.isIOS) {
+                    Share.share(
+                      AppHelpers().appStoreLink,
+                    );
+                  } else {
+                    Share.share(
+                      AppHelpers().playStoreLink,
+                    );
+                  }
+                },
+                splashRadius: 25.0,
+                icon: const Icon(
+                  Icons.share,
+                  color: Colors.white,
+                  size: 27.0,
+                ),
+              ),
+            ) :
+               const SizedBox(),
+               Padding(
+               padding: const EdgeInsets.only(right: 4.5),
+               child: trailingButton,)
+          ],
+        ),
+        body: body,
       ),
-      body: body,
     );
   }
 }

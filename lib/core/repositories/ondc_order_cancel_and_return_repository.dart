@@ -21,10 +21,10 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
     final url = isReturn ?? false ?
 
           Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/return/reasons') :
+        'https://ondcstaging.santhe.in/santhe/ondc/return/reasons') :
 
           Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/cancel/reasons');
+        'https://ondcstaging.santhe.in/santhe/ondc/cancel/reasons');
 
     final header = {
       'Content-Type': 'application/json',
@@ -64,8 +64,8 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
  Future<String> fullOrderCancelPost(
      {required String code, required String orderId}) async {
 
-   final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/'
-       'cancel?orderId=$orderId&code=$code');
+   final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/cancel?orderId='
+       '$orderId&code=$code');
 
    warningLog("Reason Code $code also orderId $orderId and url $url");
 
@@ -111,7 +111,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
    };
 
    try {
-     final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/upload/');
+     final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/upload');
 
      var request =
      http.MultipartRequest("POST", url);
@@ -150,7 +150,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
        required String quantity, required bool isReturn}) async {
 
 
-   final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/update');
+   final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/update');
 
    final header = {
      'Content-Type': 'application/json',

@@ -5,8 +5,9 @@ import '../../manager/font_manager.dart';
 
 class CustomTitleWithBackButton extends StatelessWidget {
  final String title;
+ final Function()? onTapBackButton;
   const CustomTitleWithBackButton({Key? key,
-  required this.title}) : super(key: key);
+  required this.title,this.onTapBackButton}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,15 @@ class CustomTitleWithBackButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CustomBackButton(leftPadding: 12),
+           CustomBackButton(
+              leftPadding: 12,
+              onTap: (){
+                if(onTapBackButton != null){
+                  onTapBackButton!();
+                }else{
+                  return null;
+                }
+              }),
           const Spacer(flex: 2),
 
           Text(
@@ -34,8 +43,10 @@ class CustomTitleWithBackButton extends StatelessWidget {
 class CustomBackButton extends StatelessWidget {
   final bool? invertColors;
   final double? leftPadding;
+  final Function()? onTap;
   const CustomBackButton({Key? key, this.invertColors,
-    this.leftPadding}) : super(key: key);
+    this.leftPadding,
+  this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +54,11 @@ class CustomBackButton extends StatelessWidget {
       padding:  EdgeInsets.only(left: leftPadding ?? 5.0),
       child: InkWell(
         onTap: (){
-          Navigator.pop(context);
+          if(onTap != null){
+            onTap!();
+          }else{
+            Navigator.pop(context);
+          }
         },
         child: CircleAvatar(
           backgroundColor: invertColors ?? false ?

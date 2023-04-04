@@ -195,6 +195,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                         Expanded(
                           child: InkWell(
                             onTap: (){
+                              customerModel = currentUser;
                               Get.to(
                                     () => OndcShopListView(
                                   customerModel: currentUser,
@@ -225,6 +226,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                                     elevation: MaterialStateProperty.all(0),
                                   ),
                                   onPressed: () {
+                                    customerModel = currentUser;
                                     Get.to(
                                           () => OndcShopListView(
                                         customerModel: currentUser,

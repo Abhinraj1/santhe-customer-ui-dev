@@ -5,7 +5,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_view.dart';
-
 import '../../../../constants.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../widgets/ondc_order_details_widgets/order_details_table.dart';
@@ -101,8 +100,9 @@ class OrderHistoryCell extends StatelessWidget {
               .loadOrderDetails(
               orderId: orderId);
 
-          Get.to(() => const ONDCOrderDetailsView());
+          Get.to(() =>  const ONDCOrderDetailsView());
         },
+
         child: OrderDetailsTable(
             firstTitle: "Shop",
             firstData: shopName,

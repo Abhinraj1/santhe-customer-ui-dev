@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:santhe/core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
 
 import '../../../models/ondc/single_order_model.dart';
+import '../../../models/user_profile/customer_model.dart';
 import '../../repositories/ondc_repository.dart';
 
 
@@ -32,6 +33,10 @@ class OrderDetailsScreenCubit extends Cubit<OrderDetailsScreenState>{
  late Data orderDetails ;
 
 
+
+
+
+///RepositoryProvider.of<OndcCheckoutRepository>(context).orderId
   loadOrderDetails({required String orderId}) async{
 
     emit(OrderDetailsDataLoadingState());

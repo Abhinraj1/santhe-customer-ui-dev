@@ -116,7 +116,11 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
                                         context)
                                     .orderId);
 
-                    Get.to(() => const ONDCOrderDetailsView());
+                    Get.offAll(() =>  ONDCOrderDetailsView(
+                      onBackButtonTap: (){
+                        Get.to(OndcShopListView(customerModel: customerModel,));
+                      },
+                    ));
                   },
                   horizontalPadding: 20,
                   width: 300,

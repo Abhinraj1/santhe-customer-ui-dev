@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'models/user_profile/customer_model.dart';
+
 const String kAppName = "Santhe";
 const Color kTextFieldGrey = Color(0xffD1D1D1);
 const Color kTextGrey = Color(0xff8B8B8B);
@@ -10,6 +12,9 @@ const double queryTextFieldBorderRadius = 20;
 
 /// TO update billing address
 bool isBillingAddress = false;
+
+///
+late CustomerModel customerModel;
 
 class Constant {
   static Color bgColor = const Color(0xffF89522);

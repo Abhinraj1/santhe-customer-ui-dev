@@ -4,13 +4,20 @@ import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_s
 
 
 class ONDCOrderDetailsView extends StatelessWidget {
-  const ONDCOrderDetailsView({Key? key}) : super(key: key);
+  final Function()? onBackButtonTap;
+  const ONDCOrderDetailsView({Key? key,
+     this.onBackButtonTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
-        mobile: const ONDCOrderDetailsScreen(),
+        mobile:  ONDCOrderDetailsScreen(
+            onBackButtonTap: (){
+              if(onBackButtonTap != null){
+                onBackButtonTap!();
+              }
+        }),
         // desktop: _OndcProductGlobalDesktop(),
         // tablet: _OndcProductGlobalTablet(),
       );

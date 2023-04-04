@@ -29,7 +29,9 @@ import '../../../widgets/ondc_order_details_widgets/shipments_card.dart';
 import '../../../widgets/ondc_widgets/preview_widget.dart';
 
 class ONDCOrderDetailsScreen extends StatefulWidget {
-  const ONDCOrderDetailsScreen({Key? key}) : super(key: key);
+  final Function()? onBackButtonTap;
+  const ONDCOrderDetailsScreen({Key? key,
+   this.onBackButtonTap}) : super(key: key);
 
   @override
   State<ONDCOrderDetailsScreen> createState() => _ONDCOrderDetailsScreenState();
@@ -120,6 +122,11 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     return CustomScaffold(
         trailingButton: homeIconButton(),
         backgroundColor: CupertinoColors.systemBackground,
+        onBackButtonTap: (){
+          if(widget.onBackButtonTap != null){
+            widget.onBackButtonTap!();
+          }
+        },
 
         body: BlocConsumer<OrderDetailsScreenCubit, OrderDetailsScreenState>(
           listener: (context, state) {
@@ -189,9 +196,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
       ) {
-
-
-
 
         for (var track in orderDetails.singleOrderModel!.quotes!.first
             .tracks!) {
@@ -387,9 +391,17 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     previewWidgetItems = previewItems;
 
 
-    return ListView(children: [
-      const CustomTitleWithBackButton(
+    return ListView(
+        children: [
+       CustomTitleWithBackButton(
         title: "ORDER DETAILS",
+        onTapBackButton: (){
+          if(widget.onBackButtonTap != null){
+            widget.onBackButtonTap!();
+          }
+
+        },
+
       ),
 
       OrderDetailsTable(

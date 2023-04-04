@@ -9,9 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:santhe/core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_state.dart';
 import 'package:santhe/pages/ondc/ondc_acknowledgement_screen/ondc_acknowledgement_view.dart';
 import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_view.dart';
+import '../../../constants.dart';
 import '../../../models/ondc/preview_ondc_cart_model.dart';
 import '../../../models/ondc/single_order_model.dart';
 import '../../../pages/ondc/ondc_return_screens/ondc_return_upload_photo_screen/ondc_return_upload_photo_screen_mobile.dart';
+import '../../../pages/ondc/ondc_shop_list/ondc_shop_list_view.dart';
 import '../../repositories/ondc_checkout_repository.dart';
 import '../../repositories/ondc_order_cancel_and_return_repository.dart';
 import '../ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
@@ -115,7 +117,12 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
         BlocProvider.of<OrderDetailsScreenCubit>(context)
             .loadOrderDetails(
             orderId: _orderId);
-        Get.offAll(()=>const ONDCOrderDetailsView());
+
+        Get.offAll(()=> ONDCOrderDetailsView(
+          onBackButtonTap: (){
+            Get.to(OndcShopListView(customerModel: customerModel,));
+          },
+        ));
       },));
   }
 
@@ -152,7 +159,11 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
           orderNumber: _orderNumber,
 
           onTap: (){
-            Get.to(const ONDCOrderDetailsView());
+            Get.offAll( ONDCOrderDetailsView(
+              onBackButtonTap: (){
+                Get.to(OndcShopListView(customerModel: customerModel,));
+              },
+            ));
           },) );
 
       }

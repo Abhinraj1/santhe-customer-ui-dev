@@ -80,11 +80,6 @@ class _SearchViewState extends State<SearchView> {
                         onTap: () {
                           context.read<OndcBloc>().add(
                                 FetchListOfShopWithSearchedProducts(
-                                  transactionId:
-                                      // '8a707e34-02a7-4ed5-89f1-66bdcc485f87',
-                                      RepositoryProvider.of<OndcRepository>(
-                                              context)
-                                          .transactionId,
                                   productName: _textEditingController.text,
                                 ),
                               );

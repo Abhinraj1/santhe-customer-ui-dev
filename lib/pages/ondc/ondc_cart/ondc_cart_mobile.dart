@@ -180,21 +180,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
       builder: (context, state) {
         return BlocConsumer<CheckoutBloc, CheckoutState>(
           listener: (context, state) {
-            if (state is CheckoutPostError) {
-              if (state.toString().contains('RetryPostSelectState')) {
-                Timer.periodic(
-                  const Duration(seconds: 5),
-                  (timer) => context.read<CheckoutBloc>().add(
-                        GetCartPriceEventPost(
-                          transactionId:
-                              RepositoryProvider.of<OndcRepository>(context)
-                                  .transactionId,
-                          storeLocation_id: widget.storeLocation_id,
-                        ),
-                      ),
-                );
-              }
-            }
+            if (state is CheckoutPostError) {}
           },
           builder: (context, state) {
             return Stack(

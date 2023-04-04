@@ -57,10 +57,9 @@ class OndcCheckoutRepository with LogMixin {
   }
 
   Future<dynamic> proceedToCheckoutMethodPost(
-      {required final String transactionId,
-      required final String storeLocation_id}) async {
+      {required final String storeLocation_id}) async {
     final url =
-        Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/price/request');
+        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/price/request');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -82,7 +81,7 @@ class OndcCheckoutRepository with LogMixin {
             },
           ),
         );
-
+        warningLog('checking for response body ${response.body}');
         warningLog("############################# $count");
 
         if (json.decode(response.body)['type'] == "SUCCESS") {
@@ -95,7 +94,7 @@ class OndcCheckoutRepository with LogMixin {
 
       warningLog('Setter ${response.statusCode}');
       //! need a new statusCode for retry
-      final responseBody = json.decode(response.body)['message_id'];
+      final responseBody = json.decode(response.body)['order_id'];
       warningLog('$responseBody');
       if (responseBody == null) {
         throw RetryPostSelectState();
@@ -112,7 +111,7 @@ class OndcCheckoutRepository with LogMixin {
       {required final String transactionId,
       required final String messageId}) async {
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/price/request?message_id=$messageId');
+        'https://ondcstaging.santhe.in/santhe/ondc/price/request?order_id=$messageId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -159,13 +158,12 @@ class OndcCheckoutRepository with LogMixin {
 
   Future<List<FinalCostingModel>> proceedToCheckoutFinalCart(
       {required final String storeLocation_id,
-      required final String transactionid,
       required String messageId}) async {
     final String firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     warningLog("finalcart$messageId $firebaseId and also $storeLocation_id");
 
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/cart/items?message_id=$messageId&firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
+        'https://ondcstaging.santhe.in/santhe/ondc/cart/items?firebase_id=$firebaseId&order_id=$messageId&storeLocation_id=$storeLocation_id');
     warningLog("finalcart  $url");
     final header = {
       'Content-Type': 'application/json',
@@ -231,12 +229,10 @@ class OndcCheckoutRepository with LogMixin {
     }
   }
 
-  Future<dynamic> initPost(
-      {required String messageId, required String order_id}) async {
-    final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/init');
+  Future<dynamic> initPost({required String order_id}) async {
+    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/init');
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
-    warningLog(
-        "message id $messageId also orderId $order_id firebase id $firebaseId and url $url");
+    warningLog("also orderId $order_id firebase id $firebaseId and url $url");
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -251,11 +247,7 @@ class OndcCheckoutRepository with LogMixin {
           url,
           headers: header,
           body: json.encode(
-            {
-              "firebase_id": firebaseId,
-              "message_id": messageId,
-              "order_id": order_id
-            },
+            {"order_id": order_id},
           ),
         );
         warningLog(
@@ -286,7 +278,7 @@ class OndcCheckoutRepository with LogMixin {
 
   Future<String> initGet({required String order_Id}) async {
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/init/response?order_id=$order_Id');
+        'https://ondcstaging.santhe.in/santhe/ondc/init/response?order_id=$order_Id');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -330,7 +322,7 @@ class OndcCheckoutRepository with LogMixin {
       required String razorpayPaymentId,
       required String razorpaySignature}) async {
     final url =
-        Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/payment/verify');
+        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/payment/verify');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -362,10 +354,9 @@ class OndcCheckoutRepository with LogMixin {
     }
   }
 
-  confirmOrder(
-      {required String messageId, required String transactionId}) async {
+  confirmOrder({required String messageId}) async {
     final url =
-        Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/confirm/order');
+        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/confirm/order');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -375,7 +366,9 @@ class OndcCheckoutRepository with LogMixin {
         url,
         headers: header,
         body: json.encode(
-          {"transaction_id": transactionId, "message_id": messageId},
+          {
+            "order_id": messageId,
+          },
         ),
       );
       final responseBody = json.decode(response.body);
@@ -400,7 +393,7 @@ class OndcCheckoutRepository with LogMixin {
     required String messageId,
   }) async {
     final url =
-        Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/payment/checkout');
+        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/payment/checkout');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -412,8 +405,7 @@ class OndcCheckoutRepository with LogMixin {
         headers: header,
         body: json.encode(
           {
-            "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
-            "message_id": messageId,
+            "order_id": messageId,
           },
         ),
       );

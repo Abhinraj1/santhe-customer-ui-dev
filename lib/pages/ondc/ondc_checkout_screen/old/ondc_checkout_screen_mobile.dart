@@ -17,6 +17,7 @@ class _OndcCheckoutScreenMobile extends StatefulWidget {
       _OndcCheckoutScreenMobileOldState();
 }
 
+//! messageID variable is now containing the value of order_id please keep that in mind
 class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     with LogMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -131,8 +132,6 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             razorpayPaymentIdFromRazor: response.paymentId!,
             razorpaySignature: response.signature!,
             messageId: messageID,
-            transactionId:
-                RepositoryProvider.of<OndcRepository>(context).transactionId,
           ),
         );
     // )
@@ -156,7 +155,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     );
   }
 
-  Widget _getGroupSeparator(PreviewWidgetOndcItem element,int countNum) {
+  Widget _getGroupSeparator(PreviewWidgetOndcItem element, int countNum) {
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -199,8 +198,6 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     context.read<CheckoutBloc>().add(
           GetCartPriceEventPost(
-            transactionId:
-                RepositoryProvider.of<OndcRepository>(context).transactionId,
             storeLocation_id: widget.storeLocation_id,
           ),
         );
@@ -229,9 +226,6 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
             Duration(seconds: 5),
             (timer) => context.read<CheckoutBloc>().add(
                   GetCartPriceEventPost(
-                    transactionId:
-                        RepositoryProvider.of<OndcRepository>(context)
-                            .transactionId,
                     storeLocation_id: widget.storeLocation_id,
                   ),
                 ),
@@ -244,9 +238,6 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                   GetFinalItemsEvent(
                     messageId: messageID,
                     storeLocation_id: widget.storeLocation_id,
-                    transactionId:
-                        RepositoryProvider.of<OndcRepository>(context)
-                            .transactionId,
                   ),
                 ),
           );
@@ -266,11 +257,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           Timer.periodic(
             Duration(seconds: 5),
             (timer) => context.read<CheckoutBloc>().add(
-                  InitializePostEvent(
-                      message_id: messageID,
-                      order_id:
-                          RepositoryProvider.of<OndcCheckoutRepository>(context)
-                              .orderId),
+                  InitializePostEvent(order_id: messageID),
                 ),
           );
         }
@@ -278,17 +265,13 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           setState(() {
             messageID = state.messageId;
           });
-          warningLog(
-              "MESSAGEID RECEIVED HERE ###################### $messageID");
+          warningLog("ORDERID RECEIVED HERE ###################### $messageID");
           Future.delayed(
             Duration(seconds: 5),
             () => context.read<CheckoutBloc>().add(
                   GetFinalItemsEvent(
                     messageId: state.messageId,
                     storeLocation_id: widget.storeLocation_id,
-                    transactionId:
-                        RepositoryProvider.of<OndcRepository>(context)
-                            .transactionId,
                   ),
                 ),
           );
@@ -317,10 +300,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           Future.delayed(
             Duration(seconds: 5),
             () => context.read<CheckoutBloc>().add(
-                  InitializeGetEvent(
-                      order_id:
-                          RepositoryProvider.of<OndcCheckoutRepository>(context)
-                              .orderId),
+                  InitializeGetEvent(order_id: messageID),
                 ),
           );
         }
@@ -845,8 +825,10 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                           .symbol !=
                                                       ""
                                               ? ClipRRect(
-                                            borderRadius: BorderRadius.circular(10.0),
-                                                child: Image.network(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child: Image.network(
                                                     previewWidgetModel
                                                         .previewWidgetModel
                                                         .symbol,
@@ -854,16 +836,18 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                     height: 60,
                                                     fit: BoxFit.cover,
                                                   ),
-                                              )
+                                                )
                                               : ClipRRect(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                                child: Image.asset(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child: Image.asset(
                                                     ImgManager().santheIcon,
                                                     width: 50,
                                                     height: 60,
                                                     fit: BoxFit.cover,
                                                   ),
-                                              ),
+                                                ),
                                           SizedBox(
                                             height: 70,
                                             child: Padding(
@@ -877,7 +861,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(
-                                                      width: 200,
+                                                      width: 180,
                                                       child: AutoSizeText(
                                                         previewWidgetModel
                                                             .previewWidgetModel
@@ -911,7 +895,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                           ),
                                           Center(
                                             child: SizedBox(
-                                              width: 50,
+                                              width: 70,
                                               child: AutoSizeText(
                                                 "₹ ${previewWidgetModel.previewWidgetModel.price}",
                                                 maxFontSize: 14,
@@ -1165,14 +1149,11 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                     isLoadingInit = true;
                                     _isInitBuffer = true;
                                   });
+                                  //! messageId is actually orderId please keep that in mind
                                   Future.delayed(Duration(seconds: 5), () {
                                     context.read<CheckoutBloc>().add(
                                           InitializePostEvent(
-                                              message_id: messageID,
-                                              order_id: RepositoryProvider.of<
-                                                          OndcCheckoutRepository>(
-                                                      context)
-                                                  .orderId),
+                                              order_id: messageID),
                                         );
                                   });
                                 },

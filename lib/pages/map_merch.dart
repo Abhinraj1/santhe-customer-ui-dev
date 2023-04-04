@@ -146,12 +146,14 @@ class _MapMerchantState extends State<MapMerchant>
       final token = tokenHandler.urlToken;
       final header = {"authorization": 'Bearer $token'};
       log(header.toString());
+      errorLog('User details $customerLat and $customerLong');
       final url = Uri.parse(
         AppUrl.GET_MERCHANTS(customerModel!.lat, customerModel!.lng),
       );
+      errorLog('url being hit $url');
       try {
         final response = await http.get(url, headers: header);
-        warningLog('${response.statusCode}');
+        warningLog('${response.statusCode} and ${response.body}');
         final responseBody =
             json.decode(response.body)['data'] as List<dynamic>;
         warningLog('$responseBody');

@@ -42,18 +42,15 @@ class GoBackStore extends OndcEvent {
 }
 
 class SearchOndcItemInLocalShop extends OndcEvent {
-  final String transactionId;
   final String storeId;
   final String productName;
 
   const SearchOndcItemInLocalShop({
-    required this.transactionId,
     required this.storeId,
     required this.productName,
-
   });
   @override
-  List<Object> get props => [transactionId, storeId, productName];
+  List<Object> get props => [storeId, productName];
 }
 
 class ClearSearchEventOndc extends OndcEvent {
@@ -85,35 +82,24 @@ class SearchOndcItemGlobal extends OndcEvent {
   List<Object> get props => [transactionId, productName];
 }
 
-class FetchShopModelsGet extends OndcEvent {
-  final String? transactionId;
-  const FetchShopModelsGet({
-    required this.transactionId,
-  });
-  @override
-  List<Object?> get props => [transactionId];
-}
+class FetchShopModelsGet extends OndcEvent {}
 
 class FetchProductsOfShops extends OndcEvent {
   final String shopId;
-  final String transactionId;
   const FetchProductsOfShops({
     required this.shopId,
-    required this.transactionId,
   });
   @override
-  List<Object?> get props => [transactionId, shopId];
+  List<Object?> get props => [shopId];
 }
 
 class FetchListOfShopWithSearchedProducts extends OndcEvent {
-  final String transactionId;
   final String productName;
   const FetchListOfShopWithSearchedProducts({
-    required this.transactionId,
     required this.productName,
   });
   @override
-  List<Object> get props => [transactionId, productName];
+  List<Object> get props => [productName];
 }
 
 

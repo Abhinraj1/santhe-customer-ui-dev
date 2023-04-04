@@ -35,7 +35,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
           print("########################## TRY STARTED");
           final String messageId =
               await ondcCheckoutRepository.proceedToCheckoutMethodPost(
-                  transactionId: event.transactionId,
                   storeLocation_id: event.storeLocation_id);
           emit(
             CheckoutPostSuccess(messageId: messageId),
@@ -73,7 +72,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
       try {
         List<FinalCostingModel> finalCostingModel =
             await ondcCheckoutRepository.proceedToCheckoutFinalCart(
-          transactionid: event.transactionId,
           storeLocation_id: event.storeLocation_id,
           messageId: event.messageId,
         );
@@ -90,8 +88,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
     on<InitializePostEvent>((event, emit) async {
       emit(InitializePostLoadingState());
       try {
-        final dynamic status = await ondcCheckoutRepository.initPost(
-            messageId: event.message_id, order_id: event.order_id);
+        final dynamic status =
+            await ondcCheckoutRepository.initPost(order_id: event.order_id);
         emit(
           InitializePostSuccessState(status: status),
         );
@@ -147,8 +145,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> with LogMixin {
             razorpayPaymentId: event.razorpayPaymentIdFromRazor,
             razorpaySignature: event.razorpaySignature,
           );
-          await ondcCheckoutRepository.confirmOrder(
-              messageId: event.messageId, transactionId: event.transactionId);
+          await ondcCheckoutRepository.confirmOrder(messageId: event.messageId);
           emit(FinalizePaymentSuccessState());
         } on FinalizePaymentErrorState catch (e) {
           emit(

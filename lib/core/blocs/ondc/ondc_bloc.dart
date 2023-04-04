@@ -62,16 +62,16 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
     on<FetchProductsOfShops>((event, emit) async {
       emit(OndcFetchProductLoading());
       try {
+        List<ProductOndcModel> productModels =
+            await ondcRepository.getProductsOfShop(
+          shopId: event.shopId,
+          // event.transactionId,
+        );
         int shopCartCount = await ondcRepository.getCartCountMethod(
             storeLocation_id: event.shopId);
         warningLog('Getting cartCount $shopCartCount');
-        List<ProductOndcModel> productModels =
-            await ondcRepository.getProductsOfShop(
-                shopId: event.shopId, transactionIdLoc: event.transactionId
-                // event.transactionId,
-                );
         emit(OndcProductsOfShopsLoaded(productModels: productModels));
-      } catch (e) {
+      } on ErrorFetchingProductsOfShops catch (e) {
         emit(
           ErrorFetchingProductsOfShops(
             message: e.toString(),
@@ -87,26 +87,20 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
     });
 
     on<SearchOndcItemInLocalShop>((event, emit) async {
-
       emit(OndcFetchProductLoading());
 
       try {
         List<ProductOndcModel>? productModels =
             await ondcRepository.getProductsOnSearchinLocalShop(
-                shopId: event.storeId,
-                transactionIdLoc: event.transactionId,
-                productName: event.productName,);
+          shopId: event.storeId,
+          productName: event.productName,
+        );
 
-        if(productModels != null){
-
+        if (productModels != null) {
           emit(FetchedItemsInLocalShop(productModels: productModels));
-
-        }else if(productModels == null){
-
+        } else if (productModels == null) {
           emit(NoItemsFoundState());
-
         }
-
       } catch (e) {
         emit(
           ErrorFetchingProductsOfShops(
@@ -116,13 +110,10 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       }
     });
 
-
-
     on<ClearSearchEventShops>((event, emit) async {
       emit(ClearStateLoading());
       try {
         List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
-            transactionIdl: ondcRepository.transactionId
             //  event.transactionId!,
             );
         // revertshopModel = shopModel;
@@ -136,7 +127,6 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
         );
       }
     });
-
 
     on<SearchOndcItemGlobal>((event, emit) async {
       emit(OndcFetchProductsGlobalLoading());
@@ -169,7 +159,6 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
         emit(OndcFetchShopLoading());
         try {
           List<ShopModel> shopModel = await ondcRepository.getNearByShopsModel(
-              transactionIdl: event.transactionId!
               //  event.transactionId!,
               );
           revertshopModel = shopModel;
@@ -192,8 +181,8 @@ class OndcBloc extends Bloc<OndcEvent, OndcState> with LogMixin {
       try {
         List<ShopModel> shopsList =
             await ondcRepository.getListOfShopsForSearchedProduct(
-                productName: event.productName,
-                transactionIdLocal: event.transactionId);
+          productName: event.productName,
+        );
         warningLog("${shopsList}");
         emit(SearchItemLoaded(shopsList: shopsList));
       } catch (e) {

@@ -49,6 +49,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   bool _showOneOrMoreItemsAreNotAvailable = false;
   String? billingAddress;
   bool _showAllItemsAreNotAvailable = false;
+  bool _showPriceHasChanged = false;
   List<FinalCostingWidget> finalCostingWidget = [];
 
   bool _isInitBuffer = false;
@@ -89,7 +90,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
 //      !_controller.position.outOfRange) {
 //    setState(() {//you can do anything here
 //    });
-//  }
+//  }WHA
 //  if (_controller.offset <= _controller.position.minScrollExtent &&
 //     !_controller.position.outOfRange) {
 //    setState(() {//you can do anything here
@@ -98,11 +99,18 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
 // }
 
   void openCheckout(ProfileController profileCon) async {
+    String newTotal = priceFormatter2(value: '133.333333333');
+    errorLog('new total formatted${double.parse(newTotal)}');
+    double totalAmount = double.parse(newTotal);
+    double subTotal = totalAmount * 100;
+    // int finalTotal = int.parse(subtotal.toString());
+    errorLog('Checking for total $totalAmount and total $subTotal');
     var options = {
       'key': AppHelpers().razorPayApi,
-      'amount': total,
+      'amount': subTotal,
       'name': profileCon.customerDetails?.customerName,
       'order_id': orderId,
+      "currency": "INR",
       'description': 'Payment',
       'prefill': {
         'contact': '${profileCon.customerDetails?.phoneNumber}',
@@ -139,9 +147,10 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
 
   void _handlePaymentError(PaymentFailureResponse response) {
     warningLog('error ${response.message}');
+    Get.back(result: 'Error');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${response.message}'),
+        content: Text('Error ${response.message}'),
       ),
     );
   }
@@ -286,11 +295,19 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
           });
         }
         if (state is InitializeGetErrorState) {
-          setState(() {
-            _showErrorNoResponseFromSeller = true;
-            isLoadingInitGet = false;
-            _isInitBuffer = false;
-          });
+          if (state.message.toString().contains('Cart price')) {
+            setState(() {
+              _showPriceHasChanged = true;
+              isLoadingInitGet = false;
+              _isInitBuffer = false;
+            });
+          } else {
+            setState(() {
+              _showErrorNoResponseFromSeller = true;
+              isLoadingInitGet = false;
+              _isInitBuffer = false;
+            });
+          }
         }
         if (state is InitializePostSuccessState) {
           setState(() {
@@ -427,8 +444,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
 
           Get.off(PaymentBufferView(
             messageId: messageID,
-            transactionId:
-                RepositoryProvider.of<OndcRepository>(context).transactionId,
+            // transactionId:
+            //     RepositoryProvider.of<OndcRepository>(context).transactionId,
           ));
         }
       },
@@ -499,8 +516,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                               //   ),
                               // ),
                               const CustomBackButton(),
-                              const SizedBox(
-                                width: 80,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.28,
                               ),
                               Text(
                                 'CHECKOUT',
@@ -524,6 +541,28 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         SizedBox(
                           height: 10,
                         ),
+                        _showPriceHasChanged
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 48,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Cart Prices Have Changed, Try again',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Text(''),
                         _showErrorNoResponseFromSeller
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -834,7 +873,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                         .symbol,
                                                     width: 50,
                                                     height: 60,
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.contain,
                                                   ),
                                                 )
                                               : ClipRRect(

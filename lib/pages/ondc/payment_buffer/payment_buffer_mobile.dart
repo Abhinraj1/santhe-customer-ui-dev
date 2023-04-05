@@ -3,10 +3,8 @@ part of payment_buffer_view;
 
 class _PaymentBufferMobile extends StatefulWidget {
   final String messageID;
-  final String transactionId;
   _PaymentBufferMobile({
     required this.messageID,
-    required this.transactionId,
   });
 
   @override
@@ -39,7 +37,11 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
             ),
           );
         } else if (state.message.contains('SYSTEM_ERROR')) {
-          errorLog('Check sequence of apis called');
+          Get.off(
+            () => ErrorNackView(
+              message: state.message,
+            ),
+          );
         }
       }
     }, builder: (context, state) {

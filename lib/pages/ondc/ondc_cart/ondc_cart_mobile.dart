@@ -266,12 +266,15 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                     const SizedBox(
                                       width: 100,
                                     ),
-                                    Text(
-                                      'My Cart',
-                                      style: TextStyle(
-                                        color: AppColors().brandDark,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'My Cart',
+                                        style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -351,8 +354,9 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                     //   ),
                                     // ),
                                     const CustomBackButton(),
-                                    const SizedBox(
-                                      width: 100,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.32,
                                     ),
                                     Text(
                                       'My Cart',

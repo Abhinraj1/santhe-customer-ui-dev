@@ -24,11 +24,9 @@ part 'payment_buffer_tablet.dart';
 
 class PaymentBufferView extends StatelessWidget {
   final String messageId;
-  final String transactionId;
   const PaymentBufferView({
     Key? key,
     required this.messageId,
-    required this.transactionId,
   }) : super(key: key);
 
   @override
@@ -37,7 +35,6 @@ class PaymentBufferView extends StatelessWidget {
       return ScreenTypeLayout(
         mobile: _PaymentBufferMobile(
           messageID: messageId,
-          transactionId: transactionId,
         ),
         desktop: _PaymentBufferDesktop(),
         tablet: _PaymentBufferTablet(),

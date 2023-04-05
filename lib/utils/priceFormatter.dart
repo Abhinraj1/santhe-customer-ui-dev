@@ -11,7 +11,7 @@ String priceFormatter({required String value}){
 
     if(split[1].length > 2){
 
-      String finalOutput =  split[0]+split[1].toString().substring(0,1);
+      String finalOutput =  "${split[0]}.${split[1].toString().substring(0,2)}";
 
       return finalOutput;
     }

@@ -287,6 +287,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                       const SizedBox(
                                         height: 10,
                                       ),
+
                                       SizedBox(
                                         height: 50,
                                         width:
@@ -326,7 +327,8 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                                                 deliveryName:
                                                                     "Billing",
                                                                 address_id:
-                                                                    '${RepositoryProvider.of<AddressRepository>(context).billingAddressId}',
+                                                                    '${RepositoryProvider.of
+                                                                    <AddressRepository>(context).billingAddressId}',
                                                                 flat:
                                                                     textController
                                                                         .text),

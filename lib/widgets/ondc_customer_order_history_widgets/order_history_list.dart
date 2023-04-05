@@ -95,12 +95,16 @@ class OrderHistoryCell extends StatelessWidget {
       child: InkWell(
         onTap: () {
           print(
-              "###################################################3 $orderId");
+              "################################################### $orderId");
           BlocProvider.of<OrderDetailsScreenCubit>(context)
               .loadOrderDetails(
               orderId: orderId);
 
-          Get.to(() =>  const ONDCOrderDetailsView());
+          Get.to(() =>   ONDCOrderDetailsView(
+            onBackButtonTap: (){
+            Navigator.pop(context);
+            return true;
+          },));
         },
 
         child: OrderDetailsTable(

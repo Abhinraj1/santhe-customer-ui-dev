@@ -99,7 +99,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
 // }
 
   void openCheckout(ProfileController profileCon) async {
-    String newTotal = priceFormatter2(value: '133.333333333');
+    String newTotal = priceFormatter(value: '133.333333333');
     errorLog('new total formatted${double.parse(newTotal)}');
     double totalAmount = double.parse(newTotal);
     double subTotal = totalAmount * 100;

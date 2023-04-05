@@ -293,6 +293,13 @@ class OndcCheckoutRepository with LogMixin {
         warningLog(
             "############################# ${json.decode(response.body)['message']}");
         warningLog("############################# $count");
+        if (json
+            .decode(response.body)['message']
+            .toString()
+            .contains('Cart price has been changed')) {
+          throw const InitializeGetErrorState(
+              message: 'Cart price has been changed');
+        }
 
         ///CHECK
         if (json.decode(response.body)['type'] == "SUCCESS") {
@@ -398,7 +405,7 @@ class OndcCheckoutRepository with LogMixin {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
-    warningLog('$messageId $firebaseId');
+    warningLog('$messageId $firebaseId and url $url');
     try {
       final response = await http.post(
         url,

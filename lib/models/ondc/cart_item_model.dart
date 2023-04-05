@@ -15,9 +15,11 @@ class CartitemModel extends Equatable {
   final dynamic short_description;
   final dynamic time_to_ship;
   final dynamic store_name;
-  final dynamic value;
-  final dynamic maximum_value;
-  int quantityL;
+  dynamic value;
+  double? valueM;
+  double? maximum_valueM;
+  dynamic maximum_value;
+  double quantityL;
   CartitemModel({
     required this.symbol,
     required this.quantity,
@@ -27,6 +29,8 @@ class CartitemModel extends Equatable {
     required this.time_to_ship,
     required this.store_name,
     required this.value,
+    this.valueM,
+    this.maximum_valueM,
     required this.maximum_value,
     required this.quantityL,
   });
@@ -40,8 +44,10 @@ class CartitemModel extends Equatable {
     dynamic? time_to_ship,
     dynamic? store_name,
     dynamic? value,
+    double? valueM,
+    double? maximum_valueM,
     dynamic? maximum_value,
-    int? quantityL,
+    double? quantityL,
   }) {
     return CartitemModel(
       symbol: symbol ?? this.symbol,
@@ -52,6 +58,8 @@ class CartitemModel extends Equatable {
       time_to_ship: time_to_ship ?? this.time_to_ship,
       store_name: store_name ?? this.store_name,
       value: value ?? this.value,
+      valueM: valueM ?? this.valueM,
+      maximum_valueM: maximum_valueM ?? this.maximum_valueM,
       maximum_value: maximum_value ?? this.maximum_value,
       quantityL: quantityL ?? this.quantityL,
     );
@@ -88,28 +96,47 @@ class CartitemModel extends Equatable {
           map['time_to_ship'] != null ? map['time_to_ship'] as dynamic : null,
       store_name:
           map['store_name'] != null ? map['store_name'] as dynamic : null,
-      quantityL: map['quantityL'] != null ? map['quantityL'] as dynamic : 0,
+      quantityL: map['quantityl'] != null
+          ? double.parse(map['quantityl']) as dynamic
+          : 0,
     );
   }
 
   add() {
-    log('add $quantity', name: 'cart item model');
+    log('add $quantity $value $maximum_value', name: 'cart item model');
     // quantityL = int.parse(quantity);
     // log('$quantity and also $quantityL', name: 'cart item model');
     quantity++;
-    getTotal();
+    valueM = 0;
+    maximum_valueM = 0;
+    valueM = double.parse(value.toString()) * double.parse(quantity.toString());
+    maximum_valueM = double.parse(maximum_value.toString()) *
+        double.parse(quantity.toString());
+    // getTotal();
+    log('Checking for values $valueM $maximum_valueM',
+        name: 'Cart_Item_Model.dart');
   }
 
   getTotal() {
-    quantityL = quantity * value;
+    quantityL =
+        double.parse(quantity.toString()) * double.parse(value.toString());
     log('$quantityL', name: 'cart_item_model.dart');
   }
 
   minus() {
     if (quantity != 1) {
-      log('$quantity', name: 'cart item model');
+      log('minus $quantity', name: 'cart item model');
       quantity--;
+      log('after minus $quantity');
+      valueM = 0;
+      maximum_valueM = 0;
+      valueM =
+          double.parse(value.toString()) * double.parse(quantity.toString());
+      maximum_valueM = double.parse(maximum_value.toString()) *
+          double.parse(quantity.toString());
       getTotal();
+      log('Checking for values Minus $valueM $maximum_valueM',
+          name: 'Cart_Item_Model.dart');
     }
   }
 
@@ -129,6 +156,8 @@ class CartitemModel extends Equatable {
       time_to_ship,
       store_name,
       value,
+      valueM,
+      maximum_valueM,
       maximum_value,
       quantityL,
     ];

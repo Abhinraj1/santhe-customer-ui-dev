@@ -32,6 +32,7 @@ import 'package:santhe/models/ondc/shipment_segregator_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/ondc/map_text/map_text_view.dart';
 import 'package:santhe/pages/ondc/payment_buffer/payment_buffer_view.dart';
+import 'package:santhe/utils/priceFormatter.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/final_costing_widget.dart';
 import 'package:santhe/widgets/ondc_widgets/preview_widget.dart';

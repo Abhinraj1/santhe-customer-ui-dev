@@ -31,6 +31,17 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
     cartBloc = context.read<CartBloc>();
   }
 
+  getInitialValues() {
+    widget.productOndcModel.valueM = 0;
+    widget.productOndcModel.maximum_valueM = 0;
+    widget.productOndcModel.valueM =
+        double.parse(widget.productOndcModel.value.toString()) *
+            double.parse(widget.productOndcModel.quantity.toString());
+    widget.productOndcModel.maximum_valueM =
+        double.parse(widget.productOndcModel.maximum_value.toString()) *
+            double.parse(widget.productOndcModel.quantity.toString());
+  }
+
   add() {
     setState(() {
       widget.productOndcModel.add();
@@ -54,6 +65,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
   @override
   Widget build(BuildContext context) {
     final cart = RepositoryProvider.of<OndcCartRepository>(context);
+    getInitialValues();
     warningLog('${widget.productOndcModel} also ');
     return Padding(
       padding: const EdgeInsets.all(15.0),
@@ -128,14 +140,14 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                               width: 70,
                             )
                           : Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
+                              padding: const EdgeInsets.only(top: 1.0),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
                                 child: CachedNetworkImage(
                                   imageUrl: widget.productOndcModel.symbol,
-                                  height: 90,
+                                  height: 100,
                                   width: 70,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.contain,
                                   errorWidget: (context, url, error) =>
                                       Image.asset(
                                     'assets/cart.png',
@@ -148,22 +160,26 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                         height: 10,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left: 8, top: 8),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 200,
-                              height: 25,
-                              color: Colors.white,
-                              child: AutoSizeText(
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Container(
+                                width: 200,
+                                height: 25,
+                                color: Colors.white,
+                                child: AutoSizeText(
                                   '${widget.productOndcModel.item_name}',
                                   style: const TextStyle(
-                                      color: Colors.black,
-                                      overflow: TextOverflow.clip,
-                                      fontSize: 11,
-                                    ),minFontSize: 11,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.clip,
+                                    fontSize: 11,
+                                  ),
+                                  minFontSize: 11,
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -249,7 +265,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     AutoSizeText(
-                                      '₹ ${widget.productOndcModel.maximum_value}',
+                                      '₹ ${widget.productOndcModel.maximum_valueM}',
                                       style: TextStyle(
                                           color: AppColors().brandDark,
                                           fontSize: 8,
@@ -262,7 +278,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                       width: 10,
                                     ),
                                     AutoSizeText(
-                                      '₹ ${widget.productOndcModel.value}',
+                                      '₹ ${widget.productOndcModel.valueM}',
                                       style: TextStyle(
                                           color: AppColors().brandDark,
                                           fontSize: 8,

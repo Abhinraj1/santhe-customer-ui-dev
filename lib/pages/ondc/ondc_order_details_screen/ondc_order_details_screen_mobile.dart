@@ -28,6 +28,7 @@ import '../../../widgets/ondc_order_details_widgets/order_details_table.dart';
 import '../../../widgets/ondc_order_details_widgets/shipments_card.dart';
 import '../../../widgets/ondc_widgets/preview_widget.dart';
 
+
 class ONDCOrderDetailsScreen extends StatefulWidget {
   final Function()? onBackButtonTap;
   const ONDCOrderDetailsScreen({Key? key,
@@ -192,8 +193,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if (element.cancellable != null &&
           element.cancellable == true &&
-          element.status == null &&
-
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
       ) {
 
@@ -202,20 +201,15 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
           if (track.fulfillmentId.toString() ==
               element.deliveryFulfillment!.fulfillmentId.toString()) {
-            if ((track.state).toString() == "PENDING" ||
-                (track.state).toString() == "PACKED" ||
-                (track.state).toString() == "Pending" ||
-                (track.state).toString() == "Packed") {
 
               BlocProvider.of<OrderDetailsButtonCubit>(context)
                   .showCancelButton();
-            } else {
-              BlocProvider.of<OrderDetailsButtonCubit>(context)
-                  .hideCancelButton();
-            }
+
           } else {
             BlocProvider.of<OrderDetailsButtonCubit>(context)
                 .hideCancelButton();
+
+            break;
           }
         }
       } else {
@@ -232,10 +226,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if (element.cancellable != null &&
           element.cancellable == true &&
-          element.status == "Accepted" &&
           numberOfProducts != 1 &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
-
       ) {
 
         for (var track in orderDetails.singleOrderModel!.quotes!.first
@@ -243,12 +235,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
           if (track.fulfillmentId.toString() ==
               element.fulfillment_id.toString()) {
-
-            if ((track.state).toString() == "PENDING" ||
-                (track.state).toString() == "PACKED" ||
-                (track.state).toString() == "Pending" ||
-                (track.state).toString() == "Packed") {
-
 
               return InkWell(
                 onTap: () {
@@ -267,9 +253,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 },
                 child: Text("Cancel", style: FontStyleManager().s14fw700Red,),
               );
-            } else {
-              return null;
-            }
+
           } else {
             return null;
           }
@@ -278,6 +262,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         return null;
       }
     }
+
 
     isReturnable({required PreviewWidgetModel element}) {
       if (
@@ -336,9 +321,9 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       // }
 
       if(element.cartPriceItemStatus.toString() != "null" &&
-          element.cartPriceItemStatus.toString() != ""){
-        return Text(element.cartPriceItemStatus.toString(),
-                style: FontStyleManager().s12fw700Grey,);
+          element.cartPriceItemStatus.toString() != "" ){
+            return Text(element.cartPriceItemStatus.toString(),
+              style: FontStyleManager().s12fw700Grey,);
       }
 
       return null;
@@ -351,6 +336,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       if (element.type == "item") {
 
         numberOfProducts++;
+
         print("#######################################################"
             "Number OF PRODUCTS IS = $numberOfProducts");
 
@@ -522,10 +508,24 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                               )
                           ),
 
-                          Text(
-                            '${previewWidgetModel.previewWidgetModel
-                                .quantity} units',
-                            style: FontStyleManager().s10fw500Brown,
+
+                          /// Row to Show Net Quantity and Units
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                false ?
+                                '${previewWidgetModel.previewWidgetModel
+                                    .status} , ' :
+                                "",
+                                style: FontStyleManager().s10fw500Brown,
+                              ),
+                              Text(
+                                '${previewWidgetModel.previewWidgetModel
+                                    .quantity} units',
+                                style: FontStyleManager().s10fw500Brown,
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 5,

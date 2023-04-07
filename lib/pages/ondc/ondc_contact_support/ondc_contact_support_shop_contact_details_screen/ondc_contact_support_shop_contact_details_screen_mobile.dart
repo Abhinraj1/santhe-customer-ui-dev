@@ -42,10 +42,11 @@ class _ONDCContactSupportShopContactDetailsScreenState extends State<ONDCContact
     String orderId = widget.model.orderNumber.toString();
 
     goBack(){
-      Get.to(() =>   ONDCOrderDetailsView(
-        onBackButtonTap: (){
-         Navigator.pop(context);
-        },),transition: ge.Transition.leftToRight);
+      Navigator.pop(context);
+      // Get.to(() =>   ONDCOrderDetailsView(
+      //   onBackButtonTap: (){
+      //    Navigator.pop(context);
+      //   },),transition: ge.Transition.leftToRight);
     }
     return CustomScaffold(
         backgroundColor: AppColors().grey20,

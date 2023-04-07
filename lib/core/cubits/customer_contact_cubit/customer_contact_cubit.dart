@@ -65,6 +65,7 @@ class CustomerContactCubit extends Cubit<CustomerContactState>{
 
       Get.to(()=>  ONDCContactSupportShopContactDetailsScreen(
         model: model,
+
       ));
 
     }else{

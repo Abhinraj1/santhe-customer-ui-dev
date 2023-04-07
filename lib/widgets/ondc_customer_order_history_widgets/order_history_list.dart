@@ -102,7 +102,7 @@ class OrderHistoryCell extends StatelessWidget {
 
           Get.to(() =>   ONDCOrderDetailsView(
             onBackButtonTap: (){
-            Navigator.pop(context);
+              Get.back();
             return true;
           },));
         },

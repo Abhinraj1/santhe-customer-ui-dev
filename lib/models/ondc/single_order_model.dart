@@ -517,6 +517,7 @@ class CartItemPrices {
   dynamic returnable;
   dynamic isCancelled;
   dynamic isReturned;
+  dynamic netQuantity;
   String? createdAt;
   String? updatedAt;
   dynamic deletedAt;
@@ -528,6 +529,7 @@ class CartItemPrices {
     this.type, this.quantity, this.ondcItemId, this.status,
     this.isCancelled,this.isReturned,
     this.cancellable, this.symbol, this.returnable, this.createdAt,
+    this.netQuantity,
     this.updatedAt, this.deletedAt, this.quoteId, this.deliveryFulfillmentId,
     this.deliveryFulfillment});
 
@@ -542,6 +544,7 @@ class CartItemPrices {
     cancellable = json["cancellable"];
     isCancelled = json["isCancelled"];
     isReturned = json["isReturned"];
+    netQuantity = json["net_quantity"];
     symbol = json["symbol"];
     returnable = json["returnable"];
     createdAt = json["createdAt"];
@@ -570,6 +573,7 @@ class CartItemPrices {
     _data["returnable"] = returnable;
     _data["isReturned"] = isReturned;
     _data["isCancelled"] = isCancelled;
+    _data["net_quantity"] = netQuantity;
     _data["createdAt"] = createdAt;
     _data["updatedAt"] = updatedAt;
     _data["deletedAt"] = deletedAt;

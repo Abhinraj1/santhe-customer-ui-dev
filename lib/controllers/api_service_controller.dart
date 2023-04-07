@@ -979,7 +979,7 @@ class APIs extends GetxController with LogMixin {
     };
 
     // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
-    errorLog('Checking for node url $data $nodeUrl');
+    errorLog('Checking for node url $nodeUrl $data ');
     var response = await http.post(Uri.parse(nodeUrl),
         body: json.encode(data), headers: header);
 

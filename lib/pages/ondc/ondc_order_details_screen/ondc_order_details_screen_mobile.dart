@@ -514,9 +514,10 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                false ?
+                                previewWidgetModel.previewWidgetModel
+                                    .net_quantity != null ?
                                 '${previewWidgetModel.previewWidgetModel
-                                    .status} , ' :
+                                    .net_quantity.toString()} , ' :
                                 "",
                                 style: FontStyleManager().s10fw500Brown,
                               ),

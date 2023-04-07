@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:santhe/constants.dart';
@@ -173,7 +174,30 @@ class _HomePageState extends State<HomePage>
                 size: 27.0,
               ),
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 1.5),
+            child: IconButton(
+              onPressed: () {
+                // if (Platform.isIOS) {
+                //   Share.share(
+                //     AppHelpers().appStoreLink,
+                //   );
+                // } else {
+                //   Share.share(
+                //     AppHelpers().playStoreLink,
+                //   );
+                // }
+                Get.off(() => const OndcIntroView());
+              },
+              splashRadius: 25.0,
+              icon: const Icon(
+                Icons.home,
+                color: Colors.white,
+                size: 27.0,
+              ),
+            ),
+          ),
         ],
         bottom: TabBar(
           controller: _homeController.homeTabController,

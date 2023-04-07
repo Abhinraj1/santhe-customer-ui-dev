@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_question_mark
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_question_mark, must_be_immutable
 import 'dart:convert';
 import 'dart:developer';
 
@@ -28,8 +28,9 @@ class PreviewWidgetModel extends Equatable {
   final dynamic returnable;
   final dynamic isCancelled;
   final dynamic isReturned;
+  dynamic net_quantity;
   final dynamic cartPriceItemStatus;
-  const PreviewWidgetModel({
+  PreviewWidgetModel({
     required this.id,
     required this.price,
     required this.title,
@@ -50,11 +51,11 @@ class PreviewWidgetModel extends Equatable {
     required this.tat,
     required this.serviceable,
     required this.message_id,
+    this.returnable,
     required this.isCancelled,
     required this.isReturned,
+    this.net_quantity,
     this.cartPriceItemStatus,
-    this.returnable,
-
   });
 
   PreviewWidgetModel copyWith({
@@ -79,9 +80,10 @@ class PreviewWidgetModel extends Equatable {
     dynamic? serviceable,
     dynamic? message_id,
     dynamic? returnable,
-     dynamic? isCancelled,
-     dynamic? isReturned,
-    dynamic? cartPriceItemStatus
+    dynamic? isCancelled,
+    dynamic? isReturned,
+    dynamic? net_quantity,
+    dynamic? cartPriceItemStatus,
   }) {
     return PreviewWidgetModel(
       id: id ?? this.id,
@@ -92,8 +94,6 @@ class PreviewWidgetModel extends Equatable {
       ondc_item_id: ondc_item_id ?? this.ondc_item_id,
       status: status ?? this.status,
       cancellable: cancellable ?? this.cancellable,
-      isCancelled: isCancelled ?? this.isCancelled,
-      isReturned: isReturned ?? this.isReturned,
       symbol: symbol ?? this.symbol,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt ?? this.deletedAt,
@@ -107,8 +107,11 @@ class PreviewWidgetModel extends Equatable {
       tat: tat ?? this.tat,
       serviceable: serviceable ?? this.serviceable,
       message_id: message_id ?? this.message_id,
-        returnable: returnable ?? this.returnable,
-        cartPriceItemStatus :cartPriceItemStatus ?? this.cartPriceItemStatus
+      returnable: returnable ?? this.returnable,
+      isCancelled: isCancelled ?? this.isCancelled,
+      isReturned: isReturned ?? this.isReturned,
+      net_quantity: net_quantity ?? this.net_quantity,
+      cartPriceItemStatus: cartPriceItemStatus ?? this.cartPriceItemStatus,
     );
   }
 
@@ -134,13 +137,14 @@ class PreviewWidgetModel extends Equatable {
       'tat': tat,
       'serviceable': serviceable,
       'message_id': message_id,
-      "returnable" : returnable,
-      "cartPriceItemStatus":cartPriceItemStatus
+      "returnable": returnable,
+      "cartPriceItemStatus": cartPriceItemStatus,
+      'net_quantity': net_quantity
     };
   }
 
   factory PreviewWidgetModel.fromMap(Map<String, dynamic> map) {
-    // log('$map', name: 'PreviewWidgetModel.fromMap');
+    log('$map', name: 'PreviewWidgetModel.fromMap');
     return PreviewWidgetModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
       symbol: map['symbol'] != null ? map['symbol'] as dynamic : null,
@@ -157,15 +161,20 @@ class PreviewWidgetModel extends Equatable {
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] as dynamic : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as dynamic : null,
       quoteId: map['quoteId'] != null ? map['quoteId'] as dynamic : null,
-      returnable: map['returnable'] != null ? map['returnable'] as dynamic : null,
-      isCancelled: map['isCancelled'] != null ? map['isCancelled'] as dynamic : null,
-      isReturned: map['isReturned'] != null ? map['isReturned'] as dynamic : null,
-      cartPriceItemStatus : map['cartPriceItemStatus'] != null ?
-      map['cartPriceItemStatus'] as dynamic : null,
-
+      returnable:
+          map['returnable'] != null ? map['returnable'] as dynamic : null,
+      isCancelled:
+          map['isCancelled'] != null ? map['isCancelled'] as dynamic : null,
+      isReturned:
+          map['isReturned'] != null ? map['isReturned'] as dynamic : null,
+      cartPriceItemStatus: map['cartPriceItemStatus'] != null
+          ? map['cartPriceItemStatus'] as dynamic
+          : null,
       deliveryFulfillmentId: map['deliveryFulfillmentId'] != null
           ? map['deliveryFulfillmentId'] as dynamic
           : null,
+      net_quantity:
+          map['net_quantity'] != null ? map['net_quantity'] as dynamic : null,
       fulfillment_id: map['deliveryFulfillment'] != null
           ? map['deliveryFulfillment']['fulfillment_id'] != null
               ? map['deliveryFulfillment']['fulfillment_id'] as dynamic
@@ -231,9 +240,10 @@ class PreviewWidgetModel extends Equatable {
       serviceable,
       message_id,
       returnable,
-      isReturned,
       isCancelled,
-      cartPriceItemStatus
+      isReturned,
+      net_quantity,
+      cartPriceItemStatus,
     ];
   }
 }

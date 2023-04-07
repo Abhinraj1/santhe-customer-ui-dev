@@ -187,18 +187,24 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  width: 100,
-                                  color: Colors.white,
-                                  child: Text(
-                                    //! make a check here as to what should be put in
-                                    '${widget.productOndcModel.quantity}',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ),
+                                widget.productOndcModel.net_quantity == null
+                                    ? Container(
+                                        width: 100,
+                                        color: Colors.white,
+                                        child: const Text(''),
+                                      )
+                                    : Container(
+                                        width: 100,
+                                        color: Colors.white,
+                                        child: Text(
+                                          //! make a check here as to what should be put in
+                                          '${widget.productOndcModel.net_quantity}',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ),
                                 const SizedBox(
                                   width: 20,
                                 ),

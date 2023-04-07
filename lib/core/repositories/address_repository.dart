@@ -57,7 +57,21 @@ class AddressRepository with LogMixin {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       final getfinalAddress = placemarks[0];
-      warningLog('$getfinalAddress');
+      final body = json.encode({
+        "firebase_id": firebaseId,
+        "address_name": deliveryName,
+        "lat": lat,
+        "lng": lng,
+        "flat": flat,
+        "locality": flat,
+        "city": getfinalAddress.locality,
+        "state": getfinalAddress.administrativeArea,
+        "country": getfinalAddress.country,
+        "pincode": getfinalAddress.postalCode,
+        "address_id": address_id,
+        "howToReach": "$howtoReach"
+      });
+      warningLog('$url $body');
       final response = await http.post(
         url,
         headers: header,

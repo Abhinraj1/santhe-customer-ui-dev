@@ -120,7 +120,7 @@ class AppUrl {
       '$_baseCloudFunctions/customers/$userId/deviceToken';
 
   static String GET_MERCHANTS(String customerLat, String customerLong) =>
-      '$_baseCloudFunctions/app/customer/nearby/merchants?lat=$customerLat&lng=$customerLong';
+      '$_baseCloudFunctions/app/customer/nearby/merchants?lat=$customerLat&lng=$customerLong&radius=20';
 
   static String ACCEPT_OFFER(String listId, String listEventId) =>
       '$_baseCloudFunctions/offers/$listId/$listEventId/accept';

@@ -33,6 +33,7 @@ import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/home_page.dart';
 import 'package:santhe/pages/new_tab_pages/new_tab_page.dart';
+import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
@@ -306,7 +307,7 @@ class _MapMerchantState extends State<MapMerchant>
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 4.5),
+            padding: const EdgeInsets.only(right: 1.0),
             child: IconButton(
               onPressed: () {
                 if (Platform.isIOS) {
@@ -326,7 +327,30 @@ class _MapMerchantState extends State<MapMerchant>
                 size: 27.0,
               ),
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 1.5),
+            child: IconButton(
+              onPressed: () {
+                // if (Platform.isIOS) {
+                //   Share.share(
+                //     AppHelpers().appStoreLink,
+                //   );
+                // } else {
+                //   Share.share(
+                //     AppHelpers().playStoreLink,
+                //   );
+                // }
+                Get.off(() => const OndcIntroView());
+              },
+              splashRadius: 25.0,
+              icon: const Icon(
+                Icons.home,
+                color: Colors.white,
+                size: 27.0,
+              ),
+            ),
+          ),
         ],
       ),
       body: _hasData

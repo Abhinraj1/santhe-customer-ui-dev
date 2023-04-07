@@ -15,6 +15,7 @@ class CartitemModel extends Equatable {
   final dynamic short_description;
   final dynamic time_to_ship;
   final dynamic store_name;
+  final dynamic net_quantity;
   dynamic value;
   double? valueM;
   double? maximum_valueM;
@@ -28,6 +29,7 @@ class CartitemModel extends Equatable {
     required this.short_description,
     required this.time_to_ship,
     required this.store_name,
+    required this.net_quantity,
     required this.value,
     this.valueM,
     this.maximum_valueM,
@@ -43,6 +45,7 @@ class CartitemModel extends Equatable {
     dynamic? short_description,
     dynamic? time_to_ship,
     dynamic? store_name,
+    dynamic? net_quantity,
     dynamic? value,
     double? valueM,
     double? maximum_valueM,
@@ -57,6 +60,7 @@ class CartitemModel extends Equatable {
       short_description: short_description ?? this.short_description,
       time_to_ship: time_to_ship ?? this.time_to_ship,
       store_name: store_name ?? this.store_name,
+      net_quantity: net_quantity ?? this.net_quantity,
       value: value ?? this.value,
       valueM: valueM ?? this.valueM,
       maximum_valueM: maximum_valueM ?? this.maximum_valueM,
@@ -76,6 +80,7 @@ class CartitemModel extends Equatable {
       'store_name': store_name,
       'maximum_value': maximum_value,
       'value': value,
+      'net_quantity': net_quantity,
       'quantityL': quantityL
     };
   }
@@ -99,6 +104,8 @@ class CartitemModel extends Equatable {
       quantityL: map['quantityl'] != null
           ? double.parse(map['quantityl']) as dynamic
           : 0,
+      net_quantity:
+          map['net_quantity'] != null ? map['net_quantity'] as dynamic : null,
     );
   }
 
@@ -155,6 +162,7 @@ class CartitemModel extends Equatable {
       short_description,
       time_to_ship,
       store_name,
+      net_quantity,
       value,
       valueM,
       maximum_valueM,

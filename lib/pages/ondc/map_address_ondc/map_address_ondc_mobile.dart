@@ -100,6 +100,13 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
           ge.Get.off(() => OndcShopListView(customerModel: currentUser),
               transition: ge.Transition.leftToRight);
         }
+        if (state is OndcUpdateAddressErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not update address at the moment'),
+            ),
+          );
+        }
         if (state is OndcBillingAddressUpdated) {
           setState(() {
             isBillingAddress = false;

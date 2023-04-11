@@ -57,7 +57,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   getNewShops({required List<OndcShopWidget> shops, required int limit}) async {
     final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/store/nearby?limit=20&offset=0&firebase_id=$firebaseID');
+        'https://ondcstaging.santhe.in/santhe/ondc/store/nearby?limit=$n&offset=0&firebase_id=$firebaseID');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -419,7 +419,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
           //   },
           // ),
 
-              ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
+          ///  Get.to(()=>ErrorNackView(message: 'TEAT',));
 
           backgroundColor: CupertinoColors.systemBackground,
           appBar: AppBar(

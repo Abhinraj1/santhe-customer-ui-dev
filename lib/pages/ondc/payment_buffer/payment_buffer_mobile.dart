@@ -42,6 +42,10 @@ class _PaymentBufferMobileState extends State<_PaymentBufferMobile>
               message: state.message,
             ),
           );
+        } else if (state.message.contains('Seller is not responding')) {
+          Get.off(
+            () => const PaymentSuccessView(),
+          );
         }
       }
     }, builder: (context, state) {

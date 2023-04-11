@@ -13,21 +13,20 @@ class ShopImageIntro extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Container(
-        height: 102,
-        width: MediaQuery.of(context).size.width * 0.2,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: CachedNetworkImage(
-            imageUrl: image,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => Image.asset(
-              'assets/cart.png',
-              fit: BoxFit.fill,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: SizedBox(
+          height: 102,
+          width: MediaQuery.of(context).size.width * 0.2,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: CachedNetworkImage(
+              imageUrl: image,
+              fit: BoxFit.contain,
+              errorWidget: (context, url, error) => Image.asset(
+                'assets/cart.png',
+                fit: BoxFit.fill,
+              ),
             ),
           ),
         ),

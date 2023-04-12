@@ -61,7 +61,7 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
                       onTap: () {
                         BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(
                             context)
-                            .add(CancelFullOrderRequestEvent());
+                            .add(CancelFullOrderRequestEvent(context: context));
                       },
                       isActive: true);
                 } else if (state is OrderCancelErrorState) {
@@ -99,7 +99,7 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
                       onTap: () {
                         BlocProvider.of<ONDCOrderCancelAndReturnReasonsBloc>(
                             context)
-                            .add(PartialCancelOrderRequestEvent());
+                            .add(PartialCancelOrderRequestEvent(context: context));
                       },
                       isActive: true,
                       isPartialCancel: true,

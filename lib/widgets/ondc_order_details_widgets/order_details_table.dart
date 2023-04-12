@@ -91,7 +91,7 @@ class OrderDetailsTable extends StatelessWidget {
                 invoiceUrl != null ?
                 InkWell(
                   onTap: (){
-                   Get.off(()=>ONDCWebviewView(
+                   Get.to(()=>ONDCWebviewView(
                      url: invoiceUrl ?? "",
                      title: "DownLoad Invoice",
                    ));

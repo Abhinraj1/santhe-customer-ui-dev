@@ -12,6 +12,8 @@ import '../../../../pages/ondc/ondc_intro/ondc_intro_view.dart';
 import '../../../../pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_view.dart';
 import '../../../../pages/ondc/ondc_return_screens/ondc_return_view.dart';
 import '../../../cubits/customer_contact_cubit/customer_contact_cubit.dart';
+import '../../../cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
+import '../../../cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
 import '../../../cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import '../../../loggers.dart';
 import 'package:bloc/bloc.dart';
@@ -131,8 +133,8 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
       emit(Loading());
 
       try{
-  print("#################### orderId = $orderId QuoteId = "
-    "${_partialCancelProduct.quoteId} ");
+  print("#################### orderId = $orderId CartPriceItemId = "
+    "${_partialCancelProduct.id} ");
 
         String status =
         await orderCancelRepository.requestReturnOrPartialCancel(
@@ -164,6 +166,12 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
                 orderNumber: orderNumber));
           }
 
+        }else if (status.toString().
+        contains("Seller is not responding , Please try later")){
+          Get.back();
+          BlocProvider.of<OrderDetailsScreenCubit>(event.context).
+          sellerNotResponded(
+              message: "Seller is not responding , Please try later");
         }
 
       }catch(e){
@@ -171,6 +179,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
       }
 
     });
+
 
   on<CancelFullOrderRequestEvent>((event, emit) async{
 
@@ -203,7 +212,13 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
         emit(OrderCancelRequestSentState());
 
-      }
+      }else if (status.toString().
+         contains("Seller is not responding , Please try later")){
+           Get.back();
+           BlocProvider.of<OrderDetailsScreenCubit>(event.context).
+           sellerNotResponded(
+               message: "Seller is not responding , Please try later");
+         }
 
     }catch(e){
       emit(OrderCancelErrorState(message: e.toString()));

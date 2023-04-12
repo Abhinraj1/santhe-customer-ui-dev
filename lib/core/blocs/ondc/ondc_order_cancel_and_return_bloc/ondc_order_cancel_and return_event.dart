@@ -22,10 +22,15 @@ class LoadReasons extends ONDCOrderCancelAndReturnEvent{}
 //   List<Object?> get props => [orderId,orderNumber,orderId];
 // }
 
-class CancelFullOrderRequestEvent extends ONDCOrderCancelAndReturnEvent{}
+class CancelFullOrderRequestEvent extends ONDCOrderCancelAndReturnEvent{
+  final BuildContext context;
+  const CancelFullOrderRequestEvent({required this.context});
+}
 
 
 class PartialCancelOrderRequestEvent extends ONDCOrderCancelAndReturnEvent{
+  final BuildContext context;
+  const PartialCancelOrderRequestEvent({required this.context});
 
 }
 

@@ -25,3 +25,12 @@ class OrderDetailsErrorState extends OrderDetailsScreenState{
   final String message;
   OrderDetailsErrorState({required this.message});
 }
+
+class OrderDetailsSellerNotRespondedErrorState extends OrderDetailsScreenState{
+  final String message;
+  final Data orderDetails;
+  OrderDetailsSellerNotRespondedErrorState({
+    required this.message,
+    required this.orderDetails
+  });
+}

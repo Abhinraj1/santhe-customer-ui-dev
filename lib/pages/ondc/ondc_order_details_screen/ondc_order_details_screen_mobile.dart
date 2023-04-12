@@ -19,6 +19,7 @@ import '../../../core/cubits/ondc_order_details_screen_cubit/ondc_order_details_
 import '../../../manager/font_manager.dart';
 import '../../../manager/imageManager.dart';
 import '../../../models/ondc/preview_ondc_cart_model.dart';
+import '../../../utils/format_status_with_under_score.dart';
 import '../../../utils/priceFormatter.dart';
 import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../widgets/ondc_order_details_widgets/cancel_order_button.dart';
@@ -26,6 +27,7 @@ import '../../../widgets/ondc_order_details_widgets/customer_support_button.dart
 import '../../../widgets/ondc_order_details_widgets/invoice_table.dart';
 import '../../../widgets/ondc_order_details_widgets/order_details_table.dart';
 import '../../../widgets/ondc_order_details_widgets/shipments_card.dart';
+import '../../../widgets/ondc_widgets/error_container_widget.dart';
 import '../../../widgets/ondc_widgets/preview_widget.dart';
 
 
@@ -141,10 +143,17 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           builder: (context, state) {
 
                 if (state is OrderDetailsDataLoadedState) {
-                  return body(context, state.orderDetails);
+                  return body(context: context, orderDetails: state.orderDetails);
                 } else if (state is OrderDetailsErrorState) {
                   return Text(state.message);
-                } else {
+                } else if(state is OrderDetailsSellerNotRespondedErrorState){
+                  return body(
+                    context: context,
+                    orderDetails: state.orderDetails,
+                    errorMessage: state.message
+                  );
+                }
+                else {
                   return const Center(child: CircularProgressIndicator());
                 }
           },
@@ -152,7 +161,11 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     );
   }
 
-  body(context, Data orderDetails) {
+  body({
+    required BuildContext context,
+    required Data orderDetails,
+    String? errorMessage}) {
+
     _controller = GroupedItemScrollController();
 
     String shopName = orderDetails.singleOrderModel!.storeLocation!.store!.name
@@ -183,7 +196,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
     bool hasInvoice = orderDetails.singleOrderModel!.invoice == null ?
     false : true;
-    print("##############################################################3"
+    print("##############################################################"
         " INSIDE INVOICE = ${orderDetails.singleOrderModel!.invoice}");
 
 
@@ -226,7 +239,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if (element.cancellable != null &&
           element.cancellable == true &&
-          numberOfProducts != 1 &&
+         numberOfProducts != 1 &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
       ) {
 
@@ -335,11 +348,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if (element.type == "item") {
 
-        numberOfProducts++;
-
-        print("#######################################################"
-            "Number OF PRODUCTS IS = $numberOfProducts");
-
         isAllCancellable(element: element);
 
 
@@ -375,7 +383,10 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     }
 
     previewWidgetItems = previewItems;
+    numberOfProducts = previewItems.length;
 
+    print("#######################################################"
+        "Number OF PRODUCTS IS = $numberOfProducts");
 
     return ListView(
         children: [
@@ -385,7 +396,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           if(widget.onBackButtonTap != null){
             widget.onBackButtonTap!();
           }
-
         },
 
       ),
@@ -396,13 +406,17 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         secondTitle: "Oder ID",
         secondData: orderNumber,
         thirdTitle: "Order status",
-        thirdData: orderStatus,
+        thirdData: statusFormatter(value: orderStatus),
         fourthTitle: "Payment status",
         fourthData: paymentStatus,
         redTextButtonTitle: hasInvoice ? "Download invoice" : "",
         invoiceUrl: hasInvoice ?  orderDetails.singleOrderModel!.invoice.toString() :
                         "",
       ),
+
+      errorMessage != null ?
+          ErrorContainerWidget(message: errorMessage,):
+        const SizedBox(),
 
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),

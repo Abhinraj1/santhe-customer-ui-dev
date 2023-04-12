@@ -9,8 +9,8 @@ String statusFormatter({required String value}){
 
     value = value.replaceAll("_", " ");
     array = value.split(" ");
-    value = "${array[0].toString().capitalizeFirst}"
-        " ${array[1].capitalizeFirst}";
+    value = "${array[0].toString().toLowerCase().capitalizeFirst}"
+        " ${array[1].toLowerCase().capitalizeFirst}";
   return value;
 
   }

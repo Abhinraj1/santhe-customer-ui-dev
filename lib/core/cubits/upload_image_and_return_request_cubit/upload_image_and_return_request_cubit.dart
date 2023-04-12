@@ -148,7 +148,7 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
           isReturn: true
       );
 
-      if(response == "200"){
+      if(response == "SUCCESS"){
         Get.to(()=> ONDCAcknowledgementView(
           title: "Return Request",
           message: "Your return request is received,"

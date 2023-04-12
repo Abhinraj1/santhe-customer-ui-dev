@@ -8,6 +8,7 @@ import 'package:santhe/models/ondc/order_cancel_reasons_model.dart';
 import '../app_helpers.dart';
 import '../blocs/checkout/checkout_bloc.dart';
 import '../blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
+import '../cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
 import '../loggers.dart';
 
 
@@ -84,14 +85,33 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
      ///final responseBody = json.decode(response.body)["message"]["ack"]['status'];
 
-     final responseBody = json.decode(response.body)["type"];
+     String responseString = "";
 
-     warningLog("####################################################"
-         "##3 BODY STATUS ==== $responseBody");
+     final responseType = await json.decode(response.body)["type"];
 
-     final status = responseBody;
+     final responseMessage = await json.decode(response.body)["message"];
 
-     return status.toString();
+     warningLog('RESPONSE TYPE IS $responseType');
+
+     warningLog('RESPONSE MESSAGE IS $responseMessage');
+
+     if(responseType.toString() == "SUCCESS"){
+
+       responseString = responseType.toString();
+
+       return responseString;
+
+     }else if(responseMessage.toString().
+     contains("Seller is not responding , Please try later")){
+
+       responseString = responseMessage.toString();
+
+       return responseString;
+     }else{
+       responseString = responseMessage.toString();
+       throw(OrderCancelErrorState(message: responseString));
+     }
+
 
    } catch (e) {
      throw OrderCancelErrorState(
@@ -181,11 +201,32 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
      warningLog('${response.statusCode}');
 
-     final responseBody = await json.decode(response.body)["type"];
+      String responseString = "";
 
-     warningLog('RESPONSE BODY IS $responseBody');
+     final responseType = await json.decode(response.body)["type"];
 
-     return responseBody;
+     final responseMessage = await json.decode(response.body)["message"];
+
+     warningLog('RESPONSE TYPE IS $responseType');
+
+     warningLog('RESPONSE MESSAGE IS $responseMessage');
+
+     if(responseType.toString() == "SUCCESS"){
+
+       responseString = responseType.toString();
+
+       return responseString;
+
+     }else if(responseMessage.toString().
+     contains("Seller is not responding , Please try later")){
+
+       responseString = responseMessage.toString();
+
+       return responseString;
+     }else{
+       responseString = responseMessage.toString();
+       throw(OrderCancelErrorState(message: responseString));
+     }
    } catch (e) {
      warningLog(e.toString());
      rethrow;

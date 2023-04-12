@@ -54,4 +54,9 @@ class OrderDetailsScreenCubit extends Cubit<OrderDetailsScreenState>{
       emit(OrderDetailsErrorState(message: e.toString()));
     }
   }
+
+  sellerNotResponded({required String message}){
+    emit(OrderDetailsSellerNotRespondedErrorState(
+        message: message, orderDetails: orderDetails));
+  }
 }

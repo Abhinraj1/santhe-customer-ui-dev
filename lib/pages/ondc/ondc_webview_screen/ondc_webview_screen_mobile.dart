@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:resize/resize.dart';
@@ -20,26 +22,36 @@ class ONDCWebviewScreenMobile extends StatefulWidget {
 }
 
 class _ONDCWebviewScreenMobileState extends State<ONDCWebviewScreenMobile> {
-
-
-  @override
-  Widget build(BuildContext context) {
-    var controller = WebViewController()
+  var controller;
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.white)
       ..setNavigationDelegate(
+
         NavigationDelegate(
+
           onProgress: (int progress) {
             // Update loading bar.
           },
           onPageStarted: (String url) {},
           onPageFinished: (String url) {
+
             BlocProvider.of<WebviewCubit>(context).webviewLoaded();
           },
           onWebResourceError: (WebResourceError error) {},
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
+
+   /// if (Platform.isAndroid) controller.platform = SurfaceAndroidWebView();
+  }
+  @override
+  Widget build(BuildContext context) {
+
 
     double screenHeight = MediaQuery
         .of(context)
@@ -50,6 +62,7 @@ class _ONDCWebviewScreenMobileState extends State<ONDCWebviewScreenMobile> {
       builder: (context, state) {
         if(state is WebviewLoadedState){
           return CustomScaffold(
+            resizeToAvoidBottomInset: false,
             trailingButton: homeIconButton(),
             body: WebViewWidget(
               controller: controller,
@@ -57,6 +70,7 @@ class _ONDCWebviewScreenMobileState extends State<ONDCWebviewScreenMobile> {
           );
         }else{
           return  CustomScaffold(
+            resizeToAvoidBottomInset: false,
               trailingButton: homeIconButton(),
               body: const Center(child: CircularProgressIndicator()));
         }

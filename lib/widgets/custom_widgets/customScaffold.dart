@@ -22,6 +22,8 @@ class CustomScaffold extends StatelessWidget {
 
   final Widget body;
 
+  final bool? resizeToAvoidBottomInset;
+
   final Color? backgroundColor;
 
   final Function()? onBackButtonTap;
@@ -36,7 +38,9 @@ class CustomScaffold extends StatelessWidget {
 
      this.backgroundColor,
 
-     this.onBackButtonTap
+     this.onBackButtonTap,
+
+     this.resizeToAvoidBottomInset
 
    }) : super(key: key);
 
@@ -56,6 +60,7 @@ class CustomScaffold extends StatelessWidget {
       },
       child: Scaffold(
         key: _key,
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset ?? false,
         drawer: const CustomNavigationDrawer(),
 
         backgroundColor: backgroundColor ?? AppColors().white100,

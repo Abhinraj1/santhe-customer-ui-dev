@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
 import 'ondc_acknowledgement_screen_mobile.dart';
 
 
@@ -30,8 +29,6 @@ class ONDCAcknowledgementView extends StatelessWidget {
               onTap();
             },
           ),
-
-
           // desktop: _OndcProductGlobalDesktop(),
           // tablet: _OndcProductGlobalTablet(),
         );

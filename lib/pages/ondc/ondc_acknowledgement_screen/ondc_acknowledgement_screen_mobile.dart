@@ -24,14 +24,15 @@ class ONDCAcknowledgementScreenMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
-
     return CustomScaffold(
         trailingButton: homeIconButton(),
         body: Column(
           children: [
             CustomTitleWithBackButton(
               title: title,
+              onTapBackButton: (){
+                onTap();
+              },
             ),
             Text(
               "Order ID  : $orderNumber",

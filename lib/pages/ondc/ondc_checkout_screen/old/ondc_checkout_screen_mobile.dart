@@ -433,6 +433,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
               FinalCostingWidget(finalCostingModel: element),
             );
           }
+          //! this method might need a fix
           setState(() {
             finalCostingWidget.removeWhere((element) => element
                 .finalCostingModel.lable

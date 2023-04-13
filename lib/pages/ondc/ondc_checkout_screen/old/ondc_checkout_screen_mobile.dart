@@ -165,30 +165,33 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   }
 
   Widget _getGroupSeparator(PreviewWidgetOndcItem element, int countNum) {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.87,
-        decoration: BoxDecoration(
-          color: CupertinoColors.systemBackground,
-          border: Border.all(
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.87,
+          decoration: BoxDecoration(
             color: CupertinoColors.systemBackground,
+            border: Border.all(
+              color: CupertinoColors.systemBackground,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                  'Shipment No ${countNum}',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: AppColors().brandDark),
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AutoSizeText(
+                    'Shipment No ${countNum}',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: AppColors().brandDark),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -430,6 +433,13 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
               FinalCostingWidget(finalCostingModel: element),
             );
           }
+          //! this method might need a fix
+          setState(() {
+            finalCostingWidget.removeWhere((element) => element
+                .finalCostingModel.lable
+                .toString()
+                .contains('Total Amount'));
+          });
         }
         if (state is InitializeCartSuccessState) {
           orderId = state.orderId;
@@ -506,6 +516,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               // CircleAvatar(
                               //   backgroundColor: AppColors().brandDark,
@@ -516,13 +527,16 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                               //   ),
                               // ),
                               const CustomBackButton(),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.28,
-                              ),
+
                               Text(
                                 'CHECKOUT',
                                 style: TextStyle(
                                     color: AppColors().brandDark, fontSize: 20),
+                              ),
+                              const Icon(
+                                Icons.abc,
+                                color: Colors.transparent,
+                                size: 17,
                               )
                             ],
                           ),
@@ -531,16 +545,14 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                           height: 10,
                         ),
                         Text(
-                          'Shop Name: ${widget.storeName}',
+                          'Shop: ${widget.storeName}',
                           style: TextStyle(
                             color: AppColors().brandDark,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         _showPriceHasChanged
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -562,7 +574,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                   ),
                                 ),
                               )
-                            : const Text(''),
+                            : const SizedBox(),
                         _showErrorNoResponseFromSeller
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -584,10 +596,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                   ),
                                 ),
                               )
-                            : const Text(''),
-                        SizedBox(
-                          height: 20,
-                        ),
+                            : const SizedBox(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
@@ -787,7 +796,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                   ),
                                 ),
                               )
-                            : Text(''),
+                            : SizedBox(),
                         _showOneOrMoreItemsAreNotAvailable
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -814,7 +823,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                   ),
                                 ),
                               )
-                            : Text(''),
+                            : SizedBox(),
                         //! add the shipment logic here
                         _showAllItemsAreNotAvailable
                             ? Text('')
@@ -855,6 +864,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                         children: [
                                           SizedBox(
                                             width: 1,
+                                            height: 100,
                                           ),
                                           previewWidgetModel.previewWidgetModel
                                                           .symbol !=
@@ -871,9 +881,9 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                     previewWidgetModel
                                                         .previewWidgetModel
                                                         .symbol,
-                                                    width: 50,
-                                                    height: 60,
-                                                    fit: BoxFit.contain,
+                                                    width: 70,
+                                                    height: 70,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 )
                                               : ClipRRect(
@@ -882,8 +892,8 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                           10.0),
                                                   child: Image.asset(
                                                     ImgManager().santheIcon,
-                                                    width: 50,
-                                                    height: 60,
+                                                    width: 70,
+                                                    height: 70,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -912,7 +922,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                       )),
 
                                                   Text(
-                                                    '${previewWidgetModel.previewWidgetModel.quantity}',
+                                                    '${previewWidgetModel.previewWidgetModel.quantity} units',
                                                     style: FontStyleManager()
                                                         .s10fw500Brown,
                                                   ),
@@ -932,17 +942,26 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                               ),
                                             ),
                                           ),
-                                          Center(
-                                            child: SizedBox(
-                                              width: 70,
-                                              child: AutoSizeText(
-                                                "₹ ${previewWidgetModel.previewWidgetModel.price}",
-                                                maxFontSize: 14,
-                                                minFontSize: 12,
-                                                style: FontStyleManager()
-                                                    .s16fw600Grey,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 5.0),
+                                            child: Center(
+                                              child: SizedBox(
+                                                width: 70,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: AutoSizeText(
+                                                    "₹ ${previewWidgetModel.previewWidgetModel.price}",
+                                                    maxFontSize: 14,
+                                                    minFontSize: 12,
+                                                    style: FontStyleManager()
+                                                        .s16fw600Grey,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),

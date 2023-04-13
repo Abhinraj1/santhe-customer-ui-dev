@@ -20,7 +20,6 @@ class OndcRepository with LogMixin {
   int _searchProductCountInLocalShop = 0;
   int cartCount = 0;
 
-
   int get productGlobalCount {
     return _productGlobalCount;
   }
@@ -129,7 +128,7 @@ class OndcRepository with LogMixin {
 
   getProductsOfShop({required String shopId}) async {
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=%%&limit=12&offset=0');
+        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=12&offset=0');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -302,7 +301,6 @@ class OndcRepository with LogMixin {
 
   Future<int> sendContactSupportQuery(
       {required String orderId, required String message}) async {
-
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
 
     final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/support');
@@ -336,7 +334,6 @@ class OndcRepository with LogMixin {
   }
 
   Future<Data> getSingleOrder({required String OrderId}) async {
-
     // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
     //  "e80574c6-32f2-45ce-8b67-d97a89490523";
 
@@ -377,7 +374,8 @@ class OndcRepository with LogMixin {
     final firebaseId = //"8808435978";
         AppHelpers().getPhoneNumberWithoutCountryCode;
 
-    final url = Uri.parse("https://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&"
+    final url = Uri.parse(
+        "https://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&"
         "firebase_id=$firebaseId");
 
     final header = {

@@ -581,6 +581,8 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                           );
                                         },
                                         child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: GestureDetector(
@@ -612,9 +614,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                             //     .substring(0, 25),
 
                                                             style: TextStyle(
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .underline,
                                                               decorationColor:
                                                                   Color
                                                                       .fromARGB(
@@ -649,7 +648,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                             // ),
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  right: 25.0, bottom: 20),
+                                                  right: 20, top: 5),
                                               child: Image.asset(
                                                   'assets/edit.png'),
                                             )

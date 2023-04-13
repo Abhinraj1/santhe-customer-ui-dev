@@ -112,7 +112,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
         ),
         child: Container(
           width: 330,
-          height: 110,
+          height: 115,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
             color: Colors.white,
@@ -139,19 +139,21 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                               height: 90,
                               width: 70,
                             )
-                          : Padding(
-                              padding: const EdgeInsets.only(top: 1.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.productOndcModel.symbol,
-                                  height: 100,
-                                  width: 70,
-                                  fit: BoxFit.contain,
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(
-                                    'assets/cart.png',
-                                    fit: BoxFit.fill,
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: SizedBox(
+                                height: 70,
+                                width: 70,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.productOndcModel.symbol,
+                                    fit: BoxFit.cover,
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      'assets/cart.png',
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -169,16 +171,16 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                               padding: const EdgeInsets.only(top: 10.0),
                               child: Container(
                                 width: 200,
-                                height: 25,
+                                height: 35,
                                 color: Colors.white,
                                 child: AutoSizeText(
                                   '${widget.productOndcModel.item_name}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     overflow: TextOverflow.clip,
-                                    fontSize: 11,
+                                    fontSize: 14,
                                   ),
-                                  minFontSize: 11,
+                                  minFontSize: 13,
                                 ),
                               ),
                             ),

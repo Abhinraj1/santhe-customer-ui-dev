@@ -11,6 +11,7 @@ import 'package:santhe/core/app_colors.dart';
 
 import 'package:santhe/models/ondc/product_ondc.dart';
 
+import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../widgets/navigation_drawer_widget.dart' as nv;
 
 part 'product_long_description_desktop.dart';

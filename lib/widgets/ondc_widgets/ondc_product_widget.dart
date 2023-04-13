@@ -72,7 +72,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
         children: [
           Container(
             width: 160,
-            height: 220,
+            height: 230,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
               color: Colors.white,
@@ -138,7 +138,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Container(
-                      height: 25,
+                      height: 30,
                       color: Colors.white,
                       child: Text(
                         widget.productOndcModel.name,

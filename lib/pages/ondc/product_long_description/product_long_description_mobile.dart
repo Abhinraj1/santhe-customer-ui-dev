@@ -38,7 +38,7 @@ class _ProductLongDescriptionMobileState
             splashRadius: 25.0,
             icon: SvgPicture.asset(
               'assets/drawer_icon.svg',
-              color: Colors.white,
+              color: Colors.transparent,
             ),
           ),
           shadowColor: Colors.orange.withOpacity(0.5),
@@ -67,7 +67,7 @@ class _ProductLongDescriptionMobileState
                 splashRadius: 25.0,
                 icon: const Icon(
                   Icons.home,
-                  color: Colors.white,
+                  color: Colors.transparent,
                   size: 27.0,
                 ),
               ),
@@ -80,19 +80,9 @@ class _ProductLongDescriptionMobileState
               const SizedBox(
                 height: 10,
               ),
-              Align(
+              const Align(
                 alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () => Get.back(),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Icon(
-                      Icons.arrow_back_sharp,
-                      color: AppColors().brandDark,
-                      size: 30,
-                    ),
-                  ),
-                ),
+                child: const CustomBackButton(),
               ),
               const SizedBox(
                 height: 10,
@@ -115,9 +105,7 @@ class _ProductLongDescriptionMobileState
                   child: Text(
                     'Description:',
                     style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold
-                    ),
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -133,194 +121,243 @@ class _ProductLongDescriptionMobileState
               widget.productOndcModel.generic_name != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const AutoSizeText(
-                            'Generic Name: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          AutoSizeText(
-                            '${widget.productOndcModel.generic_name}',
-                            style:  const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Generic Name : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.generic_name}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
                     )
                   : const Text(''),
               widget.productOndcModel.net_quantity != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const AutoSizeText(
-                            'Net Quantity: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          AutoSizeText(
-                            '${widget.productOndcModel.net_quantity}',
-                            style:  const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Net quantity : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.net_quantity}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
                     )
                   : const Text(''),
-              widget.productOndcModel.packer_name != null ?
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    const AutoSizeText(
-                      'Manufacturer name : ',
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-                    AutoSizeText(
-                      widget.productOndcModel.packer_name ?? "",
-                      style: const TextStyle(
-                        fontSize: 15,
+              widget.productOndcModel.packer_name != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Manufacturer Name: ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.packer_name}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ) :
-              SizedBox(),
-
-              widget.productOndcModel.packer_address != null ?
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    const AutoSizeText(
-                      'Manufacturer Address : ',
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-
-                    SizedBox(
-                      width: 200,
-                      child: AutoSizeText(
-                        widget.productOndcModel.packer_address ?? "",
-                        style: const TextStyle(
-                        fontSize: 15,
+                    )
+                  : const SizedBox(),
+              widget.productOndcModel.packer_address != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Manufacturer Address : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.packer_address}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
-                      ),
-                    ),
-                  ],
-                ),
-              ):
-              SizedBox(),
-
+                    )
+                  : const SizedBox(),
               widget.productOndcModel.nutritional_info != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const AutoSizeText(
-                            'Nutritional Info: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          AutoSizeText(
-                            widget.productOndcModel.nutritional_info,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Nutritional Info : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.nutritional_info}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
                     )
                   : const Text(''),
               widget.productOndcModel.additives_info != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const AutoSizeText(
-                            'Additives Info: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          AutoSizeText(
-                            widget.productOndcModel.additives_info,
-                            style:  const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Additives Info : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.additives_info}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
                     )
                   : const Text(''),
               widget.productOndcModel.brand_owner_FSSAI_license_no != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const AutoSizeText(
-                            'Brand Owner FSSAI LICENSE NUMBER: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          AutoSizeText(
-                            widget
-                                .productOndcModel.brand_owner_FSSAI_license_no,
-                            style:  const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Brand Owner FSSAI License Number : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.brand_owner_FSSAI_license_no}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
                     )
                   : const Text(''),
               widget.productOndcModel.other_FSSAI_license_no != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const AutoSizeText(
-                            'Other FSSAI License Number: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          AutoSizeText(
-                            widget.productOndcModel.other_FSSAI_license_no,
-                            style:  const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Other FSSAI License Number : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.other_FSSAI_license_no}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
                     )
                   : const Text(''),
               widget.productOndcModel.importer_FSSAI_license_no != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const AutoSizeText(
-                            'Importer FSSAI License Number: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          AutoSizeText(
-                            widget.productOndcModel.importer_FSSAI_license_no,
-                            style:  const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                        child: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                              text: 'Importer FSSAI license Number : ',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${widget.productOndcModel.importer_FSSAI_license_no}',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ]),
+                        ),
                       ),
                     )
                   : const Text(''),

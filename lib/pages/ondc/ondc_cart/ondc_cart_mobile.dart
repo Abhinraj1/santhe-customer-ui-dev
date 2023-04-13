@@ -250,6 +250,8 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15.0),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     // CircleAvatar(
                                     //   backgroundColor: AppColors().brandDark,
@@ -263,19 +265,21 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                     //   ),
                                     // ),
                                     const CustomBackButton(),
-                                    const SizedBox(
-                                      width: 100,
-                                    ),
                                     Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        'My Cart',
+                                        'MY CART',
                                         style: TextStyle(
                                           color: AppColors().brandDark,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                    ),
+                                    const Icon(
+                                      Icons.abc,
+                                      color: Colors.transparent,
+                                      size: 17,
                                     )
                                   ],
                                 ),
@@ -341,6 +345,8 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 1.0),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     // CircleAvatar(
                                     //   backgroundColor: AppColors().brandDark,
@@ -354,18 +360,19 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                     //   ),
                                     // ),
                                     const CustomBackButton(),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.32,
-                                    ),
                                     Text(
-                                      'My Cart',
+                                      'MY CART',
                                       style: TextStyle(
                                         color: AppColors().brandDark,
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    )
+                                    ),
+                                    const Icon(
+                                      Icons.abc,
+                                      color: Colors.transparent,
+                                      size: 17,
+                                    ),
                                   ],
                                 ),
                               ),

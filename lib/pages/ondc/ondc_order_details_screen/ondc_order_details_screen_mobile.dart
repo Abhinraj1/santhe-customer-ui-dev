@@ -206,6 +206,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if (element.cancellable != null &&
           element.cancellable == true &&
+          element.status == "Pending" || element.status == "Packed" &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
       ) {
 
@@ -214,10 +215,18 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
           if (track.fulfillmentId.toString() ==
               element.deliveryFulfillment!.fulfillmentId.toString()) {
+            if ((track.state).toString() == "Pending" ||
+                (track.state).toString() == "Packed" ) {
 
               BlocProvider.of<OrderDetailsButtonCubit>(context)
                   .showCancelButton();
 
+            }else{
+              BlocProvider.of<OrderDetailsButtonCubit>(context)
+                  .hideCancelButton();
+              break;
+
+            }
           } else {
             BlocProvider.of<OrderDetailsButtonCubit>(context)
                 .hideCancelButton();
@@ -248,6 +257,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
           if (track.fulfillmentId.toString() ==
               element.fulfillment_id.toString()) {
+            if ((track.state).toString() == "Pending" ||
+                (track.state).toString() == "Packed" ) {
 
               return InkWell(
                 onTap: () {
@@ -266,7 +277,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 },
                 child: Text("Cancel", style: FontStyleManager().s14fw700Red,),
               );
-
+            }
           } else {
             return null;
           }
@@ -281,8 +292,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       if (
       element.returnable != null &&
           element.returnable == true &&
-          element.status != "Cancelled" &&
-          element.status != "CANCEL_REQUESTED" &&
 
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty) {
         for (var track in orderDetails.singleOrderModel!.quotes!.first
@@ -321,6 +330,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
     isAlreadyCancelledOrReturned({required PreviewWidgetModel element}) {
 
+      //ToDo:Remove Below comments
       // if (element.isCancelled != null &&
       //     element.isCancelled == true) {
       //   return Text("Cancelled",

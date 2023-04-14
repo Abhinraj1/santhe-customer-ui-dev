@@ -34,7 +34,16 @@ class InvoiceTable extends StatelessWidget {
                   data: "₹$totalPrice",
                   isTotalPrice: true
               );
-            }else {
+            }else if(prices[index].lable.
+            toString().contains("Tax")){
+              if(prices[index].value.toString() != "0"){
+                return customRow(title: prices[index].lable.toString(),
+                    data: "₹${prices[index].value.
+                    toString()}");
+              }else{
+                return const SizedBox();
+              }
+            }else{
               return customRow(title: prices[index].lable.toString(),
                   data: "₹${prices[index].value.
                   toString()}");

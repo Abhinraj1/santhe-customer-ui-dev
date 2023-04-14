@@ -29,6 +29,7 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
           ONDCOrderCancelAndReturnState>(
         listener: (context, state) {
           if(state is OrderCancelErrorState){
+            print("ERROR### =${state.message}");
             Get.to(
                   () => const ApiErrorView(),
             );
@@ -64,9 +65,6 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
                             .add(CancelFullOrderRequestEvent(context: context));
                       },
                       isActive: true);
-                } else if (state is OrderCancelErrorState) {
-                  return Center(child: Text(state.message));
-
                 } else if (state is ReasonsLoadedForReturnState) {
                   return body(
                       title: "Return Request",

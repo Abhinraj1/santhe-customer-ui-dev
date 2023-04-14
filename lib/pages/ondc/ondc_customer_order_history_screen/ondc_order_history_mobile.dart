@@ -43,7 +43,7 @@ class _ONDCOrderHistoryMobileState extends State<ONDCOrderHistoryMobile> {
           children: [
         Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 20),
-      child: Row(
+             child: Row(
         children: [
           InkWell(
             onTap: (){
@@ -73,13 +73,7 @@ class _ONDCOrderHistoryMobileState extends State<ONDCOrderHistoryMobile> {
         ],
       ),
     ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 40.0,
-            //       vertical: 30
-            //   ),
-            //   child: Text("Below are the orders your have placed on Santhe",
-            //   style: FontStyleManager().s14fw700Orange,),
-            // ),
+
             Divider(
               thickness: 1,
               color: AppColors().grey40,

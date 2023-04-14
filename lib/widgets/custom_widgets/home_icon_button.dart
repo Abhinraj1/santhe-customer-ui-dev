@@ -13,7 +13,7 @@ Widget homeIconButton(){
         onPressed: (){
           ///Navigate to Home
           Get.offAll(()=>const OndcIntroView(),
-          transition: Transition.leftToRight);
+          transition: Transition.rightToLeft);
         },
         icon: const Icon( Icons.home,size: 28));
 }

@@ -26,6 +26,8 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
     //     productDetails = "250gm , 1  units";
 
     return CustomScaffold(
+
+      onBackButtonTap: (){},
         trailingButton: homeIconButton(),
         body:
         BlocConsumer<ONDCOrderCancelAndReturnReasonsBloc,
@@ -36,6 +38,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
 
             if (state is OrderCancelErrorState) {
 
+              print("ERROR### =${state.message}");
               Get.to(
                     () => const ApiErrorView(),
               );

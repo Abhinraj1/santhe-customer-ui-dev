@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/core/repositories/ondc_order_cancel_and_return_repository.dart';
+import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 import '../../../../models/ondc/order_cancel_reasons_model.dart';
 import '../../../../models/ondc/preview_ondc_cart_model.dart';
 import '../../../../models/ondc/single_order_model.dart';
@@ -161,7 +162,7 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
                     "on your cancellation status and refund details",
 
                 onTap: (){
-                  Get.to(()=>const OndcIntroView());
+                  Get.off(()=>const ONDCOrderHistoryView());
                 },
                 orderNumber: orderNumber));
           }
@@ -204,8 +205,9 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
                 " the seller you will get an update from us "
                 "on your cancellation status and refund details",
 
+
             onTap: (){
-              Get.to(()=>const OndcIntroView());
+              Get.off(()=>const ONDCOrderHistoryView());
 
             },
             orderNumber: orderNumber));

@@ -135,7 +135,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           listener: (context, state) {
 
             if(state is OrderDetailsErrorState){
-
+              print("ERROR### =${state.message}");
               Get.to(()=>const ApiErrorView());
             }
             // TODO: implement listener
@@ -144,8 +144,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
                 if (state is OrderDetailsDataLoadedState) {
                   return body(context: context, orderDetails: state.orderDetails);
-                } else if (state is OrderDetailsErrorState) {
-                  return Text(state.message);
                 } else if(state is OrderDetailsSellerNotRespondedErrorState){
                   return body(
                     context: context,
@@ -298,9 +296,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             .tracks!) {
           if (track.fulfillmentId.toString() ==
               element.fulfillment_id.toString()) {
-            if ((track.state).toString() == "Delivered" ||
-                (track.state).toString() == "DELIVERED" ||
-                (track.state).toString() == "delivered") {
+            if ((track.state).toString() == "Order-delivered") {
               return
                 InkWell(
                   onTap: () {

@@ -206,7 +206,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if (element.cancellable != null &&
           element.cancellable == true &&
-          element.status == "Pending" || element.status == "Packed" &&
           orderDetails.singleOrderModel!.quotes!.first.tracks!.isNotEmpty
       ) {
 
@@ -215,8 +214,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
           if (track.fulfillmentId.toString() ==
               element.deliveryFulfillment!.fulfillmentId.toString()) {
-            if ((track.state).toString() == "Pending" ||
-                (track.state).toString() == "Packed" ) {
+            if (track.state.toString() == "Pending" ||
+                track.state.toString() == "Packed" ) {
 
               BlocProvider.of<OrderDetailsButtonCubit>(context)
                   .showCancelButton();
@@ -224,9 +223,10 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             }else{
               BlocProvider.of<OrderDetailsButtonCubit>(context)
                   .hideCancelButton();
-              break;
 
+              break;
             }
+
           } else {
             BlocProvider.of<OrderDetailsButtonCubit>(context)
                 .hideCancelButton();
@@ -562,6 +562,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
 
                           isAlreadyCancelledOrReturned(
+
                               element: previewWidgetModel.previewWidgetModel) == null ?
                              isSingleCancellable(
                               element: previewWidgetModel.previewWidgetModel) ??
@@ -580,21 +581,19 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       ),
                     ),
                   ),
+                  const Spacer(),
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 5.0),
-                      child: SizedBox(
-                        width: 50,
-                        child: AutoSizeText(
-                          "₹${priceFormatter(value: previewWidgetModel.
-                          previewWidgetModel.price.
-                          toString())}",
-                          maxFontSize: 16,
-                          minFontSize: 10,
-                          style: FontStyleManager().s16fw600Grey,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
+                      padding: const EdgeInsets.only(right: 6.0),
+                      child: AutoSizeText(
+                        "₹${priceFormatter(value: previewWidgetModel.
+                        previewWidgetModel.price.
+                        toString())}",
+                        maxFontSize: 16,
+                        minFontSize: 10,
+                        style: FontStyleManager().s16fw600Grey,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                   ),

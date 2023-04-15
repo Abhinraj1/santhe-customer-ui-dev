@@ -1063,12 +1063,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 5,
                                       mainAxisSpacing: 15,
-                                      childAspectRatio: 0.95,
+                                      childAspectRatio: 0.9,
                                       children: [
                                         ...productWidget,
-                                        const SizedBox(
-                                          height: 60,
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -1093,7 +1090,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                 ],
                               )
                             : const SizedBox(
-                                height: 60,
+                                height: 100,
                               )
                   ],
                 ),

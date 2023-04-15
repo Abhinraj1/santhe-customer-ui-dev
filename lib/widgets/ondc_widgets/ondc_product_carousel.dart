@@ -40,9 +40,10 @@ class _OndcProductCarouselImageState extends State<OndcProductCarouselImage>
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: CachedNetworkImage(
-            errorWidget: (context, url, error) => const Icon(Icons.shopping_cart),
+            errorWidget: (context, url, error) =>
+                const Icon(Icons.shopping_cart),
             imageUrl: widget.imageUrl,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
       ),

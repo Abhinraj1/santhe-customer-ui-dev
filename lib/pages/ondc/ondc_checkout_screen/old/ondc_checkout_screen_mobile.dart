@@ -910,7 +910,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(
-                                                      width: 180,
+                                                      width: 120,
                                                       child: AutoSizeText(
                                                         previewWidgetModel
                                                             .previewWidgetModel

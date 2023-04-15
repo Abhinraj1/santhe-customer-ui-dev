@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -69,63 +70,65 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
     warningLog('${widget.productOndcModel} also ');
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Dismissible(
-        key: UniqueKey(),
-        onDismissed: (direction) async {
-          // widget.productOndcModel.removeFromCart();
-          // await cart.deleteCartItem(
-          //   productOndcModelLocal: widget.productOndcModel,
-          // );
-          Future.delayed(const Duration(milliseconds: 50), () {
+      child: SizedBox(
+        child: Dismissible(
+          key: ValueKey(widget.productOndcModel.id),
+          behavior: HitTestBehavior.values.first,
+          onDismissed: (direction) async {
             // widget.productOndcModel.removeFromCart();
-            context.read<CartBloc>().add(
-                  DeleteCartItemEvent(
-                      productOndcModel: widget.productOndcModel),
-                );
-            // context.read<CartBloc>().add(
-            //       DeleteCartItemEvent(
-            //           productOndcModel: widget.productOndcModel),
-            //     );
-          });
-        },
-        direction: DismissDirection.endToStart,
-        background: Container(
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 50, top: 50),
-          color: Colors.white,
-          child: Column(
-            children: [
-              Icon(
-                Icons.delete,
-                color: AppColors().brandDark,
-                size: 25,
-              ),
-              Text(
-                'Delete',
-                style: TextStyle(
-                  color: AppColors().brandDark,
-                  fontSize: 15,
-                ),
-              )
-            ],
-          ),
-        ),
-        child: Container(
-          width: 330,
-          height: 115,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
+            // await cart.deleteCartItem(
+            //   productOndcModelLocal: widget.productOndcModel,
+            // );
+            warningLog('Called to dismiss');
+            Future.delayed(const Duration(milliseconds: 50), () {
+              // widget.productOndcModel.removeFromCart();
+              context.read<CartBloc>().add(
+                    DeleteCartItemEvent(
+                        productOndcModel: widget.productOndcModel),
+                  );
+              // context.read<CartBloc>().add(
+              //       DeleteCartItemEvent(
+              //           productOndcModel: widget.productOndcModel),
+              //     );
+            });
+          },
+          direction: DismissDirection.endToStart,
+          background: Container(
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: 50, top: 50),
             color: Colors.white,
-            boxShadow: const [
-              BoxShadow(
-                offset: Offset(0, 2),
-                blurRadius: 10,
-                spreadRadius: 1,
-                color: Colors.grey,
-              )
-            ],
+            child: Column(
+              children: [
+                Icon(
+                  Icons.delete,
+                  color: AppColors().brandDark,
+                  size: 25,
+                ),
+                Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: AppColors().brandDark,
+                    fontSize: 15,
+                  ),
+                )
+              ],
+            ),
           ),
-          child: SingleChildScrollView(
+          child: Container(
+            width: 330,
+            height: 115,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(0, 2),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                  color: Colors.grey,
+                )
+              ],
+            ),
             child: Column(
               children: [
                 Padding(
@@ -260,9 +263,6 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                               height: 10,
                             ),
 
-                            const SizedBox(
-                              height: 5,
-                            ),
                             Container(
                               height: 20,
                               width: 200,

@@ -241,6 +241,7 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                   ),
                   body: cartWidget.isEmpty
                       ? SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
                           child: Column(
                             children: [
                               const SizedBox(
@@ -335,53 +336,55 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                             ],
                           ),
                         )
-                      : SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 1.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    // CircleAvatar(
-                                    //   backgroundColor: AppColors().brandDark,
-                                    //   radius: 20,
-                                    //   child: GestureDetector(
-                                    //     onTap: () => ge.Get.back(),
-                                    //     child: const Icon(
-                                    //       Icons.arrow_back,
-                                    //       color: Colors.white,
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    const CustomBackButton(),
-                                    Text(
-                                      'MY CART',
-                                      style: TextStyle(
-                                        color: AppColors().brandDark,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                      : ListView(
+                          shrinkWrap: true,
+                          physics: const ScrollPhysics(),
+                          children: [
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 1.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // CircleAvatar(
+                                  //   backgroundColor: AppColors().brandDark,
+                                  //   radius: 20,
+                                  //   child: GestureDetector(
+                                  //     onTap: () => ge.Get.back(),
+                                  //     child: const Icon(
+                                  //       Icons.arrow_back,
+                                  //       color: Colors.white,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  const CustomBackButton(),
+                                  Text(
+                                    'MY CART',
+                                    style: TextStyle(
+                                      color: AppColors().brandDark,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    const Icon(
-                                      Icons.abc,
-                                      color: Colors.transparent,
-                                      size: 17,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  const Icon(
+                                    Icons.abc,
+                                    color: Colors.transparent,
+                                    size: 17,
+                                  ),
+                                ],
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              shopName == null
-                                  ? const Text('')
-                                  : Text(
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            shopName == null
+                                ? const SizedBox()
+                                : Center(
+                                    child: Text(
                                       'Shop: $shopName',
                                       style: TextStyle(
                                         color: AppColors().brandDark,
@@ -389,80 +392,70 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                              _showErrorWhen1or2ItemsNotAvailable
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 48,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black),
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            'Error occurred, Please try again',
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : const Text(''),
-                              _showErrorNoResponseFromSeller
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 48,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black),
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            'Seller is not responding.Please try later',
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : const Text(''),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    right: MediaQuery.of(context).size.width *
-                                        0.075,
-                                    top: 10),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    '${cartWidget.length} items',
-                                    style:
-                                        TextStyle(color: AppColors().brandDark),
                                   ),
+                            _showErrorWhen1or2ItemsNotAvailable
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: 48,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black),
+                                        borderRadius: BorderRadius.circular(
+                                          12,
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'Error occurred, Please try again',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            _showErrorNoResponseFromSeller
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: 48,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black),
+                                        borderRadius: BorderRadius.circular(
+                                          12,
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'Seller is not responding.Please try later',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  right:
+                                      MediaQuery.of(context).size.width * 0.075,
+                                  top: 10),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '${cartWidget.length} items',
+                                  style:
+                                      TextStyle(color: AppColors().brandDark),
                                 ),
                               ),
-                              SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    ...cartWidget,
-                                    const SizedBox(
-                                      height: 200,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            ...cartWidget,
+                            const SizedBox(
+                              height: 200,
+                            )
+                          ],
                         ),
                   bottomSheet: cartWidget.isNotEmpty
                       ? SizedBox(

@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -72,7 +73,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
         children: [
           Container(
             width: 160,
-            height: 230,
+            height: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
               color: Colors.white,
@@ -104,7 +105,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                 widget.productOndcModel.symbol == null
                     ? SizedBox(
                         height: 102,
-                        width: 102,
+                        width: 90,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15.0),
                           child: Image.asset(
@@ -117,7 +118,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(
                           height: 102,
-                          width: 102,
+                          width: 90,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: CachedNetworkImage(
@@ -131,21 +132,20 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                           ),
                         ),
                       ),
-                const SizedBox(
-                  height: 8,
-                ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 8.0, top: 1),
                     child: Container(
-                      height: 30,
+                      height: 35,
                       color: Colors.white,
-                      child: Text(
+                      child: AutoSizeText(
                         widget.productOndcModel.name,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.black,
                             overflow: TextOverflow.values.first,
                             fontSize: 11),
+                        minFontSize: 8,
                       ),
                     ),
                   ),

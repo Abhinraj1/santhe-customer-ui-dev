@@ -1018,7 +1018,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                   crossAxisSpacing: 5,
                                   controller: _searchScrollController,
                                   mainAxisSpacing: 15,
-                                  childAspectRatio: 0.9,
+                                  childAspectRatio: 0.1,
                                   children: [
                                     ...searchWidgets,
                                   ],
@@ -1066,6 +1066,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       childAspectRatio: 0.95,
                                       children: [
                                         ...productWidget,
+                                        const SizedBox(
+                                          height: 60,
+                                        ),
                                       ],
                                     ),
                                   ),

@@ -66,6 +66,7 @@ class _ProductDescriptionOndcMobileState
   getImages() {
     for (var i = 0; i < widget.productOndcModel.images!.length; i++) {
       final string = widget.productOndcModel.images![i]['image_url'];
+      errorLog('$string');
       images.add(
         OndcProductCarouselImage(imageUrl: string),
       );
@@ -254,7 +255,6 @@ class _ProductDescriptionOndcMobileState
                     children: [
                       const CustomBackButton(leftPadding: 5),
 
-
                       //! Navigation not allowed for now due to shopmodel trouble
                       Stack(
                         children: [
@@ -394,7 +394,7 @@ class _ProductDescriptionOndcMobileState
                             child: Container(
                               width: 160,
                               height: 45,
-                              decoration:  const BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.white12,
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(15.0),
@@ -441,21 +441,21 @@ class _ProductDescriptionOndcMobileState
                     ),
                     widget.productOndcModel.isAddedToCart == true
                         ? GestureDetector(
-                      onTap: () async {
-                        await Get.to(
-                          OndcCartView(
-                            storeLocation_id:
-                            widget.productOndcModel.storeLocationId,
-                          ),
-                        )?.then((_) {
-                          setState(() {
-                            widget.productOndcModel.quantity;
-                          });
-                        });
+                            onTap: () async {
+                              await Get.to(
+                                OndcCartView(
+                                  storeLocation_id:
+                                      widget.productOndcModel.storeLocationId,
+                                ),
+                              )?.then((_) {
+                                setState(() {
+                                  widget.productOndcModel.quantity;
+                                });
+                              });
 
-                        warningLog('something');
-                      },
-                       child: Container(
+                              warningLog('something');
+                            },
+                            child: Container(
                               width: 160,
                               height: 45,
                               decoration: BoxDecoration(
@@ -543,57 +543,58 @@ class _ProductDescriptionOndcMobileState
                           ),
                         ),
                 ),
-                widget.productOndcModel.long_description.toString() != "null" ?
-                Column(
-                  children: [
-                     const Padding(
-                      padding: EdgeInsets.only(left: 15, top: 15),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Description : ')),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: SizedBox(
-                          child: ExpandableText(
-                            '${widget.productOndcModel.long_description}',
-                            trimLines: 5,
-                            callback: () => Get.to(
-                                  () => ProductLongDescriptionView(
-                                  productOndcModel: widget.productOndcModel),
-                            ),
-                            // callback: (val) {
-                            //   Get.to(
-                            //     () => ProductLongDescriptionView(
-                            //       productOndcModel: widget.productOndcModel,
-                            //     ),
-                            //   );
-                            // },
-                            // style: const TextStyle(fontSize: 15),
-                            // colorClickableText: Colors.pink,
-                            // trimMode: TrimMode.Line,
-                            // trimCollapsedText: 'Show more',
-                            // trimExpandedText: 'Show less',
-                            // lessStyle: const TextStyle(
-                            //   fontSize: 14,
-                            //   fontWeight: FontWeight.bold,
-                            // ),
-                            // moreStyle: const TextStyle(
-                            //   fontSize: 14,
-                            //   fontWeight: FontWeight.bold,
-                            // ),
+                widget.productOndcModel.long_description.toString() != "null"
+                    ? Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 15, top: 15),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Description : ')),
                           ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ):
-                    const SizedBox(),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: SizedBox(
+                                child: ExpandableText(
+                                  '${widget.productOndcModel.long_description}',
+                                  trimLines: 5,
+                                  callback: () => Get.to(
+                                    () => ProductLongDescriptionView(
+                                        productOndcModel:
+                                            widget.productOndcModel),
+                                  ),
+                                  // callback: (val) {
+                                  //   Get.to(
+                                  //     () => ProductLongDescriptionView(
+                                  //       productOndcModel: widget.productOndcModel,
+                                  //     ),
+                                  //   );
+                                  // },
+                                  // style: const TextStyle(fontSize: 15),
+                                  // colorClickableText: Colors.pink,
+                                  // trimMode: TrimMode.Line,
+                                  // trimCollapsedText: 'Show more',
+                                  // trimExpandedText: 'Show less',
+                                  // lessStyle: const TextStyle(
+                                  //   fontSize: 14,
+                                  //   fontWeight: FontWeight.bold,
+                                  // ),
+                                  // moreStyle: const TextStyle(
+                                  //   fontSize: 14,
+                                  //   fontWeight: FontWeight.bold,
+                                  // ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
 
                 Align(
                   alignment: Alignment.centerLeft,
@@ -622,6 +623,7 @@ class _ProductDescriptionOndcMobileState
                 const SizedBox(
                   height: 10,
                 ),
+
                 ///@Abhi
                 // Align(
                 //   alignment: Alignment.centerLeft,
@@ -655,11 +657,9 @@ class _ProductDescriptionOndcMobileState
                                 ),
                                 Text(
                                   'Return picked up by seller : '
-                                      '$sellerPickupReturn',
+                                  '$sellerPickupReturn',
                                   style: const TextStyle(fontSize: 15),
                                 ),
-
-
                               ],
                             ),
                           ),

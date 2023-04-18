@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../core/app_colors.dart';
 import '../../manager/font_manager.dart';
 
@@ -23,7 +25,7 @@ class CustomTitleWithBackButton extends StatelessWidget {
                 if(onTapBackButton != null){
                   onTapBackButton!();
                 }else{
-                  return null;
+                  Get.back();
                 }
               }),
           const Spacer(flex: 2),
@@ -57,7 +59,7 @@ class CustomBackButton extends StatelessWidget {
           if(onTap != null){
             onTap!();
           }else{
-            Navigator.pop(context);
+            Get.back();
           }
         },
         child: CircleAvatar(

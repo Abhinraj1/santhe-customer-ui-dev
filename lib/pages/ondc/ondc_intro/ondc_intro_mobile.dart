@@ -118,8 +118,10 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           init: profileController,
           id: 'navDrawer',
           builder: (context) {
+
             CustomerModel currentUser =
                 profileController.customerDetails ?? fallback_error_customer;
+            customerModel = currentUser;
             return SingleChildScrollView(
               child: RefreshIndicator(
                 onRefresh: () => initFunction(),
@@ -195,7 +197,6 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                         Expanded(
                           child: InkWell(
                             onTap: (){
-                              customerModel = currentUser;
                               Get.to(
                                     () => OndcShopListView(
                                   customerModel: currentUser,

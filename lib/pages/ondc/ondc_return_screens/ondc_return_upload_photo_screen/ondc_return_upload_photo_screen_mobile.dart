@@ -12,6 +12,7 @@ import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../../widgets/ondc_return_widgets/image_grid.dart';
+import '../../../../widgets/ondc_widgets/error_container_widget.dart';
 import '../../api_error/api_error_view.dart';
 
 class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
@@ -26,8 +27,6 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
     //     productDetails = "250gm , 1  units";
 
     return CustomScaffold(
-
-      onBackButtonTap: (){},
         trailingButton: homeIconButton(),
         body:
         BlocConsumer<ONDCOrderCancelAndReturnReasonsBloc,
@@ -55,6 +54,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                     return SingleChildScrollView(
                       child: Column(
                         children: [
+
                           const CustomTitleWithBackButton(
                             title: "Return Request",
                           ),
@@ -117,6 +117,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                               ),
                             ),
                           ),
+
                           BlocBuilder<
                               UploadImageAndReturnRequestCubit,
                               UploadImageAndReturnRequestState>(
@@ -132,7 +133,38 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                                       isActive: true,
                                       width: 160,
                                       verticalPadding: 20);
-                                } else {
+                                } else if(state is ImagesLimitReached) {
+                                  return Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const ErrorContainerWidget(
+                                          message: "Please Select Maximum Of 4 Images"),
+
+                                      CustomButton(
+                                          buttonTitle: "RETURN ITEM",
+                                          onTap: () {
+
+                                          },
+                                          isActive: false,
+                                          width: 160,
+                                          verticalPadding: 20),
+                                    ],
+                                  );
+                                } else if(state is HideAddImagesButton){
+                                  return CustomButton(
+                                      buttonTitle: "RETURN ITEM",
+                                      onTap: () {
+                                        BlocProvider.of<
+                                            UploadImageAndReturnRequestCubit>
+                                          (context).uploadImages(context);
+                                      },
+                                      isActive: true,
+                                      width: 160,
+                                      verticalPadding: 20);
+
+                                }else {
                                   return CustomButton(
                                       buttonTitle: "RETURN ITEM",
                                       onTap: () {},

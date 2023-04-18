@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:santhe/core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
 import 'package:santhe/models/ondc/single_order_model.dart';
 import 'package:santhe/pages/ondc/api_error/api_error_view.dart';
@@ -165,13 +166,16 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     String? errorMessage}) {
 
     _controller = GroupedItemScrollController();
+    DateTime createdDate = DateTime.parse(
+        orderDetails.singleOrderModel!.createdAt.toString());
 
     String shopName = orderDetails.singleOrderModel!.storeLocation!.store!.name
         .toString(),
         orderId = orderDetails.singleOrderModel!.quotes!.first.orderId
             .toString(),
         orderStatus = orderDetails.singleOrderModel!.status.toString(),
-        orderNumber = orderDetails.singleOrderModel!.orderNumber.toString();
+        orderNumber = orderDetails.singleOrderModel!.orderNumber.toString(),
+        orderDate = DateFormat.yMd().format(createdDate);
 
     List<CartItemPrices> products =
     orderDetails.singleOrderModel!.quotes!.first.cartItemPrices
@@ -388,6 +392,13 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       }
     }
 
+    ///sort products based on prices
+    previewItems.sort(((a, b) {
+       return  double.parse(
+           a.previewWidgetModel.price).
+       compareTo(double.parse(b.previewWidgetModel.price));
+    }));
+
     previewWidgetItems = previewItems;
     numberOfProducts = previewItems.length;
 
@@ -407,6 +418,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       ),
 
       OrderDetailsTable(
+        date: orderDate,
         firstTitle: "Shop",
         firstData: shopName,
         secondTitle: "Oder ID",

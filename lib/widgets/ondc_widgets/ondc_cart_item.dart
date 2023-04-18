@@ -65,7 +65,9 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
 
   @override
   Widget build(BuildContext context) {
-    final cart = RepositoryProvider.of<OndcCartRepository>(context);
+    // final cart = RepositoryProvider.of<OndcCartRepository>(context);
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     getInitialValues();
     warningLog('${widget.productOndcModel} also ');
     return Padding(
@@ -115,8 +117,8 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
             ),
           ),
           child: Container(
-            width: 330,
-            height: 115,
+            width: width * 0.9,
+            height: height * 0.18,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
               color: Colors.white,
@@ -145,13 +147,13 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: SizedBox(
-                                height: 70,
-                                width: 70,
+                                height: height * 0.09831461,
+                                width: width * 0.194444,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
                                     imageUrl: widget.productOndcModel.symbol,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain,
                                     errorWidget: (context, url, error) =>
                                         Image.asset(
                                       'assets/cart.png',
@@ -171,35 +173,36 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                              padding: EdgeInsets.only(top: height * 0.01356),
                               child: Container(
-                                width: 200,
-                                height: 35,
+                                width: width * 0.6,
+                                height: height * 0.04,
                                 color: Colors.white,
                                 child: AutoSizeText(
                                   '${widget.productOndcModel.item_name}',
                                   style: const TextStyle(
                                     color: Colors.black,
-                                    overflow: TextOverflow.clip,
+                                    overflow: TextOverflow.ellipsis,
                                     fontSize: 14,
                                   ),
                                   minFontSize: 13,
+                                  maxLines: 2,
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
+                            SizedBox(
+                              height: height * 0.016,
                             ),
                             Row(
                               children: [
                                 widget.productOndcModel.net_quantity == null
                                     ? Container(
-                                        width: 100,
+                                        width: width * 0.3,
                                         color: Colors.white,
                                         child: const Text(''),
                                       )
                                     : Container(
-                                        width: 100,
+                                        width: width * 0.3,
                                         color: Colors.white,
                                         child: Text(
                                           //! make a check here as to what should be put in
@@ -210,13 +213,13 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                           ),
                                         ),
                                       ),
-                                const SizedBox(
-                                  width: 20,
+                                SizedBox(
+                                  width: width * 0.06,
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Container(
-                                    width: 90,
+                                    width: width * 0.28,
                                     color: Colors.white,
                                     child: Row(
                                       children: [
@@ -259,13 +262,12 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                               ],
                             ),
                             //! do a conditional check once data is available
-                            const SizedBox(
-                              height: 10,
+                            SizedBox(
+                              height: height * 0.03,
                             ),
-
                             Container(
-                              height: 20,
-                              width: 200,
+                              height: height * 0.04,
+                              width: width * 0.6,
                               color: Colors.white,
                               child: Align(
                                 alignment: Alignment.topRight,

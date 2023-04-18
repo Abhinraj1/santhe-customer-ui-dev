@@ -627,7 +627,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              currentUser.address,
+                              '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
                               style: TextStyle(
                                   color: AppColors().grey100, fontSize: 13),
                             ),

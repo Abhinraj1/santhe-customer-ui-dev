@@ -394,6 +394,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         ),
                                       ),
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     AutoSizeText(
                                       widget.shopModel.name,
                                       minFontSize: 16,
@@ -650,6 +653,9 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       alignment: Alignment.centerLeft,
                                       child:
                                           CustomBackButton(invertColors: true),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
                                     AutoSizeText(
                                       widget.shopModel.name,
@@ -1015,10 +1021,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                   physics: const ScrollPhysics(),
                                   scrollDirection: Axis.vertical,
                                   crossAxisCount: 2,
-                                  crossAxisSpacing: 5,
+                                  crossAxisSpacing: 4,
                                   controller: _searchScrollController,
-                                  mainAxisSpacing: 15,
-                                  childAspectRatio: 0.1,
+                                  mainAxisSpacing: 13,
+                                  childAspectRatio: 1.0,
                                   children: [
                                     ...searchWidgets,
                                   ],
@@ -1061,11 +1067,14 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       scrollDirection: Axis.vertical,
                                       controller: _scrollController,
                                       crossAxisCount: 2,
-                                      crossAxisSpacing: 5,
-                                      mainAxisSpacing: 15,
-                                      childAspectRatio: 0.9,
+                                      crossAxisSpacing: 4,
+                                      mainAxisSpacing: 13,
+                                      childAspectRatio: 1.0,
                                       children: [
                                         ...productWidget,
+                                        const SizedBox(
+                                          height: 50,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -1090,8 +1099,11 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                 ],
                               )
                             : const SizedBox(
-                                height: 100,
-                              )
+                                height: 60,
+                              ),
+                    const SizedBox(
+                      height: 50,
+                    ),
                   ],
                 ),
               ),

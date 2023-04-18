@@ -10,8 +10,15 @@ abstract class UploadImageAndReturnRequestState{}
 
 class InitialState extends UploadImageAndReturnRequestState{}
 
-///class GetImages extends UploadImageAndReturnRequestState{}
+class LoadingState extends UploadImageAndReturnRequestState{}
 
+class ImagesLimitReached extends UploadImageAndReturnRequestState{}
+
+class HideAddImagesButton extends UploadImageAndReturnRequestState{
+  final List<File> imageFiles;
+
+  HideAddImagesButton({required this.imageFiles});
+}
 
 class ShowImages extends UploadImageAndReturnRequestState{
   final List<File> imageFiles;

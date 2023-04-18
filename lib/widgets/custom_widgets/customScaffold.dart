@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../constants.dart';
@@ -54,7 +56,7 @@ class CustomScaffold extends StatelessWidget {
         if(onBackButtonTap != null){
           onBackButtonTap!();
         }else{
-          Navigator.pop(context);
+         Get.back();
         }
         return false;
       },

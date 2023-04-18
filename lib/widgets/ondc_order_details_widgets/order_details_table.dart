@@ -10,7 +10,7 @@ class OrderDetailsTable extends StatelessWidget {
       firstTitle,firstData,
       secondTitle,secondData,
       thirdTitle,thirdData,
-      fourthTitle,fourthData;
+      fourthTitle,fourthData,date;
 
   final String? invoiceUrl;
 
@@ -24,6 +24,7 @@ class OrderDetailsTable extends StatelessWidget {
     required this.secondTitle, required this.secondData,
     required this.thirdTitle, required this.thirdData,
     required this.fourthTitle, required this.fourthData,
+    required this.date,
 
      this.horizontalPadding,
      this.verticalPadding, this.thirdDataTextStyle,
@@ -31,13 +32,24 @@ class OrderDetailsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return       Padding(
+    return
+      Padding(
       padding: EdgeInsets.symmetric(
           horizontal: horizontalPadding ?? 15.0,
           vertical: verticalPadding ?? 0.0
       ),
       child: Table(
         children: [
+          TableRow(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text("Date",style: FontStyleManager().s14fw800Grey,),
+                ),
+                Text(date ?? " ",style: FontStyleManager().s14fw700Grey,textAlign: TextAlign.right),
+
+              ]
+          ),
           TableRow(
               children: [
                 Padding(

@@ -50,14 +50,21 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
   getImagesFromGallery()async{
 
     // Pick an image
-    final List<XFile?> images = await _picker.pickMultiImage();
+    final XFile? images = await _picker.pickImage(source: ImageSource.gallery);
 
-    images.forEach((image) {
-      imagesList.add(image);
-    });
+    imagesList.add(images);
 
 
-    showImages();
+  if(imagesList.length.isEqual(4)){
+     showImages(hideAddImgButton: true);
+
+   }else if(imagesList.length.isGreaterThan(4)){
+     imagesList.clear();
+     emit(ImagesLimitReached());
+   }else{
+      showImages(hideAddImgButton: false);
+    }
+
 
   }
 
@@ -66,10 +73,18 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     imagesList.add(image);
 
-    showImages();
+    if(imagesList.length.isEqual(4)){
+      showImages(hideAddImgButton: true);
+
+    }else if(imagesList.length.isGreaterThan(4)){
+      imagesList.clear();
+      emit(ImagesLimitReached());
+    }else{
+      showImages(hideAddImgButton: false);
+    }
   }
 
-  showImages(){
+  showImages({bool? hideAddImgButton}){
     List<File> imageFiles = [File("do not remove")];
     for(var data in imagesList){
 
@@ -79,10 +94,19 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
 
     }
 
-    emit(ShowImages(imageFiles: imageFiles));
+    if(hideAddImgButton ?? false){
+
+      emit(HideAddImagesButton(imageFiles: imageFiles));
+
+    }else{
+      emit(ShowImages(imageFiles: imageFiles));
+    }
+
   }
 
   uploadImages(BuildContext context) async{
+
+    emit(LoadingState());
 
     for (var imgFile in imagesList) {
 
@@ -124,6 +148,7 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
           },
         ));
       },));
+    emit(InitialState());
   }
 
 
@@ -178,4 +203,8 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
     }
   }
 
+  clearImages(){
+    imagesList.clear();
+    imageUrl.clear();
+  }
 }

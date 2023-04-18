@@ -76,13 +76,13 @@ class OrderHistoryCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime.parse(
+    DateTime createdDate = DateTime.parse(
         orderDetails.quotes!.first.createdAt.toString());
     String orderNo = orderDetails.orderNumber.toString(),
         orderStatus = orderDetails.status.toString(),
         shopName = orderDetails.storeLocation!.store!.name.toString(),
         orderId = orderDetails.quotes!.first.orderId.toString(),
-        orderDate = DateFormat.yMd().format(date);
+        orderDate = DateFormat.yMd().format(createdDate);
 
 
     return Container(
@@ -108,6 +108,7 @@ class OrderHistoryCell extends StatelessWidget {
         },
 
         child: OrderDetailsTable(
+          date: orderDate,
             firstTitle: "Shop",
             firstData: shopName,
             secondTitle: "Oder ID",

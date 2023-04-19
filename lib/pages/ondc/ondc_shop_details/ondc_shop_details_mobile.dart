@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, unnecessary_string_interpolations
 
 part of ondc_shop_details_view;
 
@@ -428,6 +428,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                           '${widget.shopModel.address}',
                                           textAlign: TextAlign.center,
                                           minFontSize: 10,
+                                          maxLines: 3,
                                           style: TextStyle(
                                             color: AppColors().white100,
                                             fontSize: 13,
@@ -438,7 +439,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                             //     ? 20
                                             //     : 30,
                                             fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.values.first,
+                                            overflow: TextOverflow.clip,
                                           ),
                                         ),
                                       ),
@@ -671,7 +672,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       height: 20,
                                     ),
                                     AutoSizeText(
-                                      widget.shopModel.name,
+                                      '${widget.shopModel.name}',
                                       minFontSize: 16,
                                       style: TextStyle(
                                         color: AppColors().white100,
@@ -691,9 +692,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0),
                                         child: AutoSizeText(
-                                          widget.shopModel.address.toString(),
+                                          '${widget.shopModel.address.toString()}',
                                           textAlign: TextAlign.center,
                                           minFontSize: 10,
+                                          maxLines: 3,
                                           style: TextStyle(
                                             color: AppColors().white100,
                                             fontSize: 13,
@@ -704,7 +706,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                             //     ? 20
                                             //     : 30,
                                             fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.values.first,
+                                            overflow: TextOverflow.clip,
                                           ),
                                         ),
                                       ),

@@ -247,6 +247,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
 
   @override
   Widget build(BuildContext context) {
+    warningLog('${widget.shopModel.address.toString().length}');
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
       if (state is ErrorFetchingProductsOfShops) {
         ge.Get.to(
@@ -366,13 +367,19 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                       children: [
                         Image.asset(
                           'assets/bannerondc.png',
-                          height: 185,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           fit: BoxFit.fill,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Container(
                           color: Colors.transparent,
-                          height: 180,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10.0, left: 5),
@@ -398,7 +405,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       height: 20,
                                     ),
                                     AutoSizeText(
-                                      widget.shopModel.name,
+                                      '${widget.shopModel.name}',
                                       minFontSize: 16,
                                       style: TextStyle(
                                         color: AppColors().white100,
@@ -418,7 +425,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0),
                                         child: AutoSizeText(
-                                          widget.shopModel.address,
+                                          '${widget.shopModel.address}',
                                           textAlign: TextAlign.center,
                                           minFontSize: 10,
                                           style: TextStyle(
@@ -631,13 +638,19 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                       children: [
                         Image.asset(
                           'assets/bannerondc.png',
-                          height: 180,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           fit: BoxFit.fill,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Container(
                           color: Colors.transparent,
-                          height: 180,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10.0, left: 5),

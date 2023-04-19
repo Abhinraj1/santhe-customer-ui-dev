@@ -136,6 +136,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       widget.productOndcModel.symbol == null
                           ? Image.asset(
@@ -147,7 +148,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: SizedBox(
-                                height: height * 0.09831461,
+                                height: height * 0.1,
                                 width: width * 0.194444,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -173,7 +174,7 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: height * 0.01356),
+                              padding: EdgeInsets.only(top: height * 0.013588),
                               child: Container(
                                 width: width * 0.6,
                                 height: height * 0.04,

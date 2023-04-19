@@ -61,7 +61,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    warningLog('$height $width');
+
     return GestureDetector(
       onTap: () async {
         dynamic result = await Get.to(

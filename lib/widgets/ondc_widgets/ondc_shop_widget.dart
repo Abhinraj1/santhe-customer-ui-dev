@@ -100,6 +100,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
                       width: 200,
                       child: Text(
                         widget.shopModel.name.toString(),
+                        maxLines: 2,
                         style: TextStyle(
                             color: AppColors().brandDark,
                             fontWeight: FontWeight.bold,

@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, unnecessary_string_interpolations
 
 part of ondc_shop_details_view;
 
@@ -247,6 +247,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
 
   @override
   Widget build(BuildContext context) {
+    warningLog('${widget.shopModel.address.toString().length}');
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
       if (state is ErrorFetchingProductsOfShops) {
         ge.Get.to(
@@ -366,13 +367,19 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                       children: [
                         Image.asset(
                           'assets/bannerondc.png',
-                          height: 185,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           fit: BoxFit.fill,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Container(
                           color: Colors.transparent,
-                          height: 180,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10.0, left: 5),
@@ -394,8 +401,11 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         ),
                                       ),
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     AutoSizeText(
-                                      widget.shopModel.name,
+                                      '${widget.shopModel.name}',
                                       minFontSize: 16,
                                       style: TextStyle(
                                         color: AppColors().white100,
@@ -415,9 +425,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0),
                                         child: AutoSizeText(
-                                          widget.shopModel.address,
+                                          '${widget.shopModel.address}',
                                           textAlign: TextAlign.center,
                                           minFontSize: 10,
+                                          maxLines: 3,
                                           style: TextStyle(
                                             color: AppColors().white100,
                                             fontSize: 13,
@@ -428,7 +439,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                             //     ? 20
                                             //     : 30,
                                             fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.values.first,
+                                            overflow: TextOverflow.clip,
                                           ),
                                         ),
                                       ),
@@ -628,13 +639,19 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                       children: [
                         Image.asset(
                           'assets/bannerondc.png',
-                          height: 180,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           fit: BoxFit.fill,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Container(
                           color: Colors.transparent,
-                          height: 180,
+                          height:
+                              widget.shopModel.address.toString().length > 75
+                                  ? 200
+                                  : 180,
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10.0, left: 5),
@@ -651,8 +668,11 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       child:
                                           CustomBackButton(invertColors: true),
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     AutoSizeText(
-                                      widget.shopModel.name,
+                                      '${widget.shopModel.name}',
                                       minFontSize: 16,
                                       style: TextStyle(
                                         color: AppColors().white100,
@@ -672,9 +692,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0),
                                         child: AutoSizeText(
-                                          widget.shopModel.address.toString(),
+                                          '${widget.shopModel.address.toString()}',
                                           textAlign: TextAlign.center,
                                           minFontSize: 10,
+                                          maxLines: 3,
                                           style: TextStyle(
                                             color: AppColors().white100,
                                             fontSize: 13,
@@ -685,7 +706,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                             //     ? 20
                                             //     : 30,
                                             fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.values.first,
+                                            overflow: TextOverflow.clip,
                                           ),
                                         ),
                                       ),
@@ -1015,10 +1036,10 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                   physics: const ScrollPhysics(),
                                   scrollDirection: Axis.vertical,
                                   crossAxisCount: 2,
-                                  crossAxisSpacing: 5,
+                                  crossAxisSpacing: 4,
                                   controller: _searchScrollController,
-                                  mainAxisSpacing: 15,
-                                  childAspectRatio: 0.1,
+                                  mainAxisSpacing: 13,
+                                  childAspectRatio: 1.0,
                                   children: [
                                     ...searchWidgets,
                                   ],
@@ -1061,11 +1082,14 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       scrollDirection: Axis.vertical,
                                       controller: _scrollController,
                                       crossAxisCount: 2,
-                                      crossAxisSpacing: 5,
-                                      mainAxisSpacing: 15,
-                                      childAspectRatio: 0.9,
+                                      crossAxisSpacing: 4,
+                                      mainAxisSpacing: 13,
+                                      childAspectRatio: 1.0,
                                       children: [
                                         ...productWidget,
+                                        const SizedBox(
+                                          height: 50,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -1090,8 +1114,11 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                 ],
                               )
                             : const SizedBox(
-                                height: 100,
-                              )
+                                height: 60,
+                              ),
+                    const SizedBox(
+                      height: 50,
+                    ),
                   ],
                 ),
               ),

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:santhe/models/ondc/final_costing.dart';
+import 'package:santhe/utils/priceFormatter.dart';
 
 class FinalCostingWidget extends StatelessWidget {
   final FinalCostingModel finalCostingModel;
@@ -20,7 +21,8 @@ class FinalCostingWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('${finalCostingModel.lable}:'),
-            Text('₹ ${finalCostingModel.value}')
+            Text(
+                '₹ ${priceFormatter(value: finalCostingModel.value.toString())}')
           ],
         ),
       ),

@@ -59,6 +59,9 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () async {
         dynamic result = await Get.to(
@@ -72,8 +75,8 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
       child: Stack(
         children: [
           Container(
-            width: 160,
-            height: 200,
+            width: width * 0.444,
+            height: height * 0.28089,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
               color: Colors.white,
@@ -104,7 +107,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                 ),
                 widget.productOndcModel.symbol == null
                     ? SizedBox(
-                        height: 102,
+                        height: height * 0.1264,
                         width: 90,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15.0),
@@ -117,8 +120,8 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(
-                          height: 102,
-                          width: 90,
+                          height: height * 0.1264,
+                          width: width * 0.25,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: CachedNetworkImage(
@@ -134,15 +137,20 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                       ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, top: 1),
-                    child: AutoSizeText(
-                      widget.productOndcModel.name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.black,
-                          overflow: TextOverflow.values.last,
-                          fontSize: 11),
-                      minFontSize: 8,
+                    padding: const EdgeInsets.only(left: 8.0, top: 2),
+                    child: Container(
+                      height: height * 0.042134,
+                      color: Colors.white,
+                      child: AutoSizeText(
+                        widget.productOndcModel.name,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 11),
+                        minFontSize: 8,
+                      ),
                     ),
                   ),
                 ),

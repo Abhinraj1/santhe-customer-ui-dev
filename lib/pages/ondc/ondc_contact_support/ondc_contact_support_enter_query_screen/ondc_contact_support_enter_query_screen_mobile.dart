@@ -9,7 +9,9 @@ import '../../../../widgets/custom_widgets/customScaffold.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
 import '../../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../../../../widgets/custom_widgets/home_icon_button.dart';
-import '../../../../widgets/ondc_contact_support_widgets/textField_for_query.dart';
+import '../../../../widgets/custom_widgets/custom_testField.dart';
+import '../../../../widgets/ondc_contact_support_widgets/drop_down_button.dart';
+import '../../../../widgets/ondc_contact_support_widgets/image_attachment_textButton.dart';
 
 
 class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
@@ -52,15 +54,71 @@ class ONDCContactSupportEnterQueryScreenMobile extends StatelessWidget {
                 ),
               ),
             ),
-            TextFieldForQuery(controller: textEditingController),
+          //  TextFieldForQuery(controller: textEditingController),
+            CustomDropDownButton(
+              title: "Category",
+              options: [
+                "help",
+                "need",
+                "start",
+                "end",
+                "finish"
+              ],
+              onChanged: (selected){
+
+              },
+            ),
+            CustomDropDownButton(
+              title: "Subcategory",
+              options: [
+                "help",
+                "need",
+                "start",
+                "end",
+                "finish"
+              ],
+              onChanged: (selected){
+
+              },
+            ),
+            CustomDropDownButton(
+              title: "Fulfilment ID",
+              options: [
+                "help",
+                "need",
+                "start",
+                "end",
+                "finish"
+              ],
+              onChanged: (selected){
+
+              },
+            ),
+            CustomTextField(
+              controller: TextEditingController(),
+              hintText: " ",
+              labelText: "Description",
+              readOnly: false,
+              maxLines: 10,
+              validate: (String? val ) {
+                if(val == ""){
+                  return "Please Enter Description";
+                }
+              },
+            ),
+
+            const ImageAttachmentTextButton(),
 
             CustomButton(
-                verticalPadding: 70,
                 onTap: () {
                   BlocProvider.of<CustomerContactCubit>(context).sendQuery(
                       orderNumber: orderId, message: textEditingController.text);
                 },
-                buttonTitle: "SUBMIT")
+                buttonTitle: "SUBMIT"),
+
+           const SizedBox(
+             height: 40,
+           )
           ],
         ));
   }

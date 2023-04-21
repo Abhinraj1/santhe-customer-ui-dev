@@ -123,6 +123,8 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
                                           context)
                                       .orderId);
 
+                      isFromMyOrders(value: false);
+
                       Get.offAll(() => ONDCOrderDetailsView(
                             onBackButtonTap: () {
                               Get.to(OndcShopListView(

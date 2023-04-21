@@ -16,6 +16,9 @@ bool isBillingAddress = false;
 ///
 late CustomerModel customerModel;
 
+///
+bool? isUserFromMyOrders;
+
 class Constant {
   static Color bgColor = const Color(0xffF89522);
   static Color white = const Color(0xffffffff);

@@ -10,8 +10,10 @@ import '../../../../manager/font_manager.dart';
 import '../../../../widgets/ondc_order_details_widgets/order_details_table.dart';
 import '../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import '../../core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
+import '../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import '../../models/ondc/single_order_model.dart';
 import '../../pages/ondc/api_error/api_error_view.dart';
+import '../../utils/order_details_screen_routing_logic.dart';
 
 class OrderHistoryList extends StatelessWidget {
   const OrderHistoryList({Key? key}) : super(key: key);
@@ -100,11 +102,9 @@ class OrderHistoryCell extends StatelessWidget {
               .loadOrderDetails(
               orderId: orderId);
 
-          Get.to(() =>   ONDCOrderDetailsView(
-            onBackButtonTap: (){
-              Get.back();
-            return true;
-          },));
+          isFromMyOrders();
+
+          Get.to(() =>    ONDCOrderDetailsView());
         },
 
         child: OrderDetailsTable(

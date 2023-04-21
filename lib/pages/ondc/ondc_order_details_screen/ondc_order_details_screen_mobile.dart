@@ -77,10 +77,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     return Align(
       alignment: Alignment.center,
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.87,
+      margin: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
           color: CupertinoColors.systemBackground,
           border: Border.all(
@@ -418,6 +415,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
       ),
 
       OrderDetailsTable(
+        horizontalPadding: 8,
         date: orderDate,
         firstTitle: "Shop",
         firstData: shopName,
@@ -490,7 +488,6 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 borderRadius: BorderRadius.circular(6.0),
               ),
               elevation: 8.0,
-              margin: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -512,100 +509,102 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       : ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                         child: Image.asset(
-                      ImgManager().santheIcon,
+                      ImgManager().emptyCart,
                       width: 70,
                       height: 70,
                       fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(
-                    width: 5,
+                    width: 4,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: SizedBox(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                          SizedBox(
-                              width: 190,
-                              child: AutoSizeText(
-                                previewWidgetModel.previewWidgetModel.title,
-                                style: FontStyleManager().s14fw500Brown,
-                                minFontSize: 12,
-                                maxFontSize: 14,
-                                maxLines: 2,
-                              )
-                          ),
+                        LimitedBox(
+                            maxWidth: 185,
+                            child: AutoSizeText(
+                              previewWidgetModel.previewWidgetModel.title,
+                              style: FontStyleManager().s14fw500Brown,
+                              minFontSize: 12,
+                              maxFontSize: 14,
+                              maxLines: 2,
+                            )
+                        ),
 
 
-                          /// Row to Show Net Quantity and Units
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                previewWidgetModel.previewWidgetModel
-                                    .net_quantity != null ?
-                                '${previewWidgetModel.previewWidgetModel
-                                    .net_quantity.toString()} , ' :
-                                "",
-                                style: FontStyleManager().s10fw500Brown,
-                              ),
-                              Text(
-                                '${previewWidgetModel.previewWidgetModel
-                                    .quantity} units',
-                                style: FontStyleManager().s10fw500Brown,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                        /// Row to Show Net Quantity and Units
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              previewWidgetModel.previewWidgetModel
+                                  .net_quantity != null ?
+                              '${previewWidgetModel.previewWidgetModel
+                                  .net_quantity.toString()} , ' :
+                              "",
+                              style: FontStyleManager().s10fw500Brown,
+                            ),
+                            Text(
+                              '${previewWidgetModel.previewWidgetModel
+                                  .quantity} units',
+                              style: FontStyleManager().s10fw500Brown,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
 
-                          //! new field for cancel...check for tracking status and packing state
-
+                        //! new field for cancel...check for tracking status and packing state
 
 
 
-                          isAlreadyCancelledOrReturned(
 
-                              element: previewWidgetModel.previewWidgetModel) == null ?
-                             isSingleCancellable(
-                              element: previewWidgetModel.previewWidgetModel) ??
-                              const SizedBox() : const SizedBox(),
+                        isAlreadyCancelledOrReturned(
 
-                          isAlreadyCancelledOrReturned(
-                              element: previewWidgetModel.previewWidgetModel) == null ?
-                          isReturnable(
-                              element: previewWidgetModel.previewWidgetModel) ??
-                              const SizedBox() : const SizedBox(),
+                            element: previewWidgetModel.previewWidgetModel) == null ?
+                           isSingleCancellable(
+                            element: previewWidgetModel.previewWidgetModel) ??
+                            const SizedBox() : const SizedBox(),
 
-                          isAlreadyCancelledOrReturned(
-                              element: previewWidgetModel.previewWidgetModel) ??
-                              const SizedBox(),
-                        ],
-                      ),
+                        isAlreadyCancelledOrReturned(
+                            element: previewWidgetModel.previewWidgetModel) == null ?
+                        isReturnable(
+                            element: previewWidgetModel.previewWidgetModel) ??
+                            const SizedBox() : const SizedBox(),
+
+                        isAlreadyCancelledOrReturned(
+                            element: previewWidgetModel.previewWidgetModel) ??
+                            const SizedBox(),
+                      ],
                     ),
                   ),
-                  const Spacer(),
-                  Center(
+
+                  Expanded(
+                    flex: 6,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 6.0),
-                      child: AutoSizeText(
-                        "₹${priceFormatter(value: previewWidgetModel.
-                        previewWidgetModel.price.
-                        toString())}",
-                        maxFontSize: 16,
-                        minFontSize: 10,
-                        style: FontStyleManager().s16fw600Grey,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      padding: const EdgeInsets.only(left: 2.0,right: 5),
+                      child: SizedBox(
+                        width: 50,
+                        child: AutoSizeText(
+                         "₹${priceFormatter(value: previewWidgetModel.
+                         previewWidgetModel.price.
+                          toString())}",
+                          maxFontSize: 16,
+                          minFontSize: 10,
+                          style: FontStyleManager().s16fw600Grey,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(),
+                 // const SizedBox(width: 6),
                 ],
               ),
             ),

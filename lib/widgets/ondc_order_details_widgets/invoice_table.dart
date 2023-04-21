@@ -20,7 +20,7 @@ class InvoiceTable extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 20),
       child: SizedBox(
         child: ListView.builder(
           shrinkWrap: true,

@@ -41,7 +41,7 @@ class _ReturnReasonsListTileState extends State<ReturnReasonsListTile> {
                   builder: (stateContext, setInnerState) {
                     return Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
                     child: InkWell(
                       onTap: () {
 
@@ -102,6 +102,7 @@ class _ReturnReasonsListTileState extends State<ReturnReasonsListTile> {
                             width: 280,
                             child: Text(
                               widget.reasons[index].reason.toString(),
+                              maxLines: 3,
                               style: isSelected ?
                               FontStyleManager().s16fw600Orange :
                               FontStyleManager().s16fw500

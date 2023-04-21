@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' as ge;
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,8 +12,10 @@ import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_v
 import '../../../constants.dart';
 import '../../../models/ondc/preview_ondc_cart_model.dart';
 import '../../../models/ondc/single_order_model.dart';
+import '../../../pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 import '../../../pages/ondc/ondc_return_screens/ondc_return_upload_photo_screen/ondc_return_upload_photo_screen_mobile.dart';
 import '../../../pages/ondc/ondc_shop_list/ondc_shop_list_view.dart';
+import '../../../utils/order_details_screen_routing_logic.dart';
 import '../../repositories/ondc_checkout_repository.dart';
 import '../../repositories/ondc_order_cancel_and_return_repository.dart';
 import '../ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
@@ -43,9 +45,10 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
     _orderId = orderId;
     _orderNumber = orderNumber;
     _returnProduct = returnProduct;
-    _code = code;
+    _code = code;}
 
-  }
+
+
 
   getImagesFromGallery()async{
 
@@ -144,11 +147,12 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
 
         Get.offAll(()=> ONDCOrderDetailsView(
           onBackButtonTap: (){
-            Get.to(OndcShopListView(customerModel: customerModel,));
+            orderDetailsScreenRoutingLogic();
           },
-        ));
+        ),
+        transition: ge.Transition.leftToRight);
       },));
-    emit(InitialState());
+
   }
 
 
@@ -186,12 +190,14 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
           onTap: (){
             Get.offAll( ONDCOrderDetailsView(
               onBackButtonTap: (){
-                Get.to(OndcShopListView(customerModel: customerModel,));
-              },
-            ));
+                orderDetailsScreenRoutingLogic();
+                },
+            ),
+                transition: ge.Transition.leftToRight);
           },) );
 
       }
+      emit(InitialState());
 
       print("####################################################"
           "RESPONSE AFTER RETURN REQUEST = $response");

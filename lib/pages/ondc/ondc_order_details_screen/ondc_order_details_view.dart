@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_screen_mobile.dart';
 
@@ -16,6 +18,8 @@ class ONDCOrderDetailsView extends StatelessWidget {
             onBackButtonTap: (){
               if(onBackButtonTap != null){
                 onBackButtonTap!();
+              }else{
+                Get.back();
               }
         }),
         // desktop: _OndcProductGlobalDesktop(),

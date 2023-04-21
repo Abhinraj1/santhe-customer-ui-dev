@@ -46,9 +46,14 @@ class ImageGrid extends StatelessWidget {
                  height: 200,
                  width: 200,
                  child: Center(child: CircularProgressIndicator()));
-           }else{
+           }else if(state is InitialState){
              return
                const Body();
+           }else{
+             return const SizedBox(
+                 height: 200,
+                 width: 200,
+                 child: Center(child: CircularProgressIndicator()));
            }
         }
       );

@@ -1,17 +1,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' as ge;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:santhe/core/repositories/ondc_order_cancel_and_return_repository.dart';
 import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
+import '../../../../constants.dart';
 import '../../../../models/ondc/order_cancel_reasons_model.dart';
 import '../../../../models/ondc/preview_ondc_cart_model.dart';
 import '../../../../models/ondc/single_order_model.dart';
 import '../../../../pages/ondc/ondc_acknowledgement_screen/ondc_acknowledgement_view.dart';
 import '../../../../pages/ondc/ondc_intro/ondc_intro_view.dart';
 import '../../../../pages/ondc/ondc_order_cancel_screen/ondc_order_cancel_view.dart';
+import '../../../../pages/ondc/ondc_order_details_screen/ondc_order_details_view.dart';
 import '../../../../pages/ondc/ondc_return_screens/ondc_return_view.dart';
+import '../../../../pages/ondc/ondc_shop_list/ondc_shop_list_view.dart';
+import '../../../../utils/order_details_screen_routing_logic.dart';
 import '../../../cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import '../../../cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import '../../../cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
@@ -164,8 +168,25 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
                     "on your cancellation status and refund details",
 
                 onTap: (){
-                  Get.off(()=>const ONDCOrderHistoryView());
+
+                  BlocProvider.of<OrderDetailsScreenCubit>(event.context)
+                      .loadOrderDetails(
+                      orderId: orderId);
+
+                  Get.offAll(()=> ONDCOrderDetailsView(
+                    onBackButtonTap: (){
+                      orderDetailsScreenRoutingLogic();
+                    },
+                  ),
+                      transition: ge.Transition.leftToRight);
+
+                  // if(isUserFromMyOrders ?? false){
+                  //   Get.to(()=>const ONDCOrderHistoryView());
+                  // }else{
+                  //   Get.to(OndcShopListView(customerModel: customerModel,));
+                  // }
                 },
+
                 orderNumber: orderNumber));
           }
 
@@ -209,8 +230,23 @@ class ONDCOrderCancelAndReturnReasonsBloc extends Bloc<ONDCOrderCancelAndReturnE
 
 
             onTap: (){
-              Get.off(()=>const ONDCOrderHistoryView());
+              BlocProvider.of<OrderDetailsScreenCubit>(event.context)
+                  .loadOrderDetails(
+                  orderId: orderId);
 
+              Get.offAll(()=> ONDCOrderDetailsView(
+                onBackButtonTap: (){
+                  orderDetailsScreenRoutingLogic();
+                },
+              ),
+                  transition: ge.Transition.leftToRight);
+
+              // if(isUserFromMyOrders ?? false){
+              //
+              //   Get.to(()=>const ONDCOrderHistoryView());
+              // }else{
+              //   Get.to(OndcShopListView(customerModel: customerModel,));
+              // }
             },
             orderNumber: orderNumber));
 

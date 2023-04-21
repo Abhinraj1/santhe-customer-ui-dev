@@ -7,7 +7,8 @@ import '../../../../manager/font_manager.dart';
 
 class CustomerSupportButton extends StatelessWidget {
   final Function() onTap;
-  const CustomerSupportButton({Key? key, required this.onTap,
+  final String? title;
+  const CustomerSupportButton({Key? key, required this.onTap, this.title,
   }) : super(key: key);
 
   @override
@@ -28,7 +29,7 @@ class CustomerSupportButton extends StatelessWidget {
             )
         ),
         minWidth: 250,
-        child: Text("CONTACT SUPPORT",
+        child: Text(title ?? "CONTACT SUPPORT",
           style:
           FontStyleManager().s14fw700Grey,
         ),

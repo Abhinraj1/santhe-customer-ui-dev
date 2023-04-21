@@ -79,13 +79,6 @@ class _ONDCOrderHistoryMobileState extends State<ONDCOrderHistoryMobile> {
               color: AppColors().grey40,
             ),
 
-            ///Need to be removed
-            // ElevatedButton(
-            //     onPressed: (){
-            //
-            //     },
-            //     child: Text("PRESS")),
-
 
             const SelectDateFilter(),
             const OrderHistoryList()

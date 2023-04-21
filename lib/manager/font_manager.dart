@@ -54,11 +54,16 @@ class FontStyleManager {
       color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w700);
 
   TextStyle s12fw700Grey = GoogleFonts.mulish(
-      color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w700);
+      color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w700);
 
   TextStyle s14fw700GreyUnderLne = GoogleFonts.mulish(
       color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w700,
       decoration: TextDecoration.underline
+  );
+
+  TextStyle s20fw700Grey = GoogleFonts.mulish(
+      color: Colors.grey, fontSize: 20, fontWeight: FontWeight.w700,
+
   );
 
   TextStyle s14fw700Blue = GoogleFonts.mulish(

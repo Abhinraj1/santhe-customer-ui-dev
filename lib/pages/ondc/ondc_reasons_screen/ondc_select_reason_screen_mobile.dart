@@ -129,7 +129,7 @@ class ONDCReasonsScreenMobile extends StatelessWidget {
           style: FontStyleManager().s16fw700,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(

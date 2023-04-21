@@ -18,13 +18,16 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
   OrderHistoryBloc({
     required this.ondcRepository,
 
-  }) : super(LoadingState()) {
+  }) : super(LoadDataState()) {
 
     List<SingleOrderModel> orderDetails = [];
 
     on<OrderHistoryEvent> ((event, emit) {});
 
-
+    if(state is LoadDataState) {
+      emit(
+        PastOrderDataLoadedState(orderDetails: orderDetails));
+    }
 
     on<LoadPastOrderDataEvent>((event, emit) async {
 

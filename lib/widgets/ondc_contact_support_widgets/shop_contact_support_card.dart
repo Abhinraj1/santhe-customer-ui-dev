@@ -15,10 +15,10 @@ class ShopContactSupportCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String pno = (model.storeLocation?.store?.phone).toString(),
-        shopName = (model.storeLocation?.store?.name).toString(),
-        address = (model.storeLocation?.address).toString(),
-        mailId = (model.storeLocation?.store?.email).toString();
+    String pno = (model.storeLocation?.store?.phone) ?? "N/A",
+        shopName = (model.storeLocation?.store?.name)?? "N/A",
+        address = (model.storeLocation?.address) ?? "N/A",
+        mailId = (model.storeLocation?.store?.email) ?? "N/A";
 
     return
       Container(

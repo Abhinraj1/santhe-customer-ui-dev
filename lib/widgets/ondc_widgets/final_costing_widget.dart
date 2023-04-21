@@ -21,7 +21,8 @@ class FinalCostingWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('${finalCostingModel.lable}:'),
-            Text('₹ ${priceFormatter(value: finalCostingModel.value)}')
+            Text(
+                '₹ ${priceFormatter(value: finalCostingModel.value.toString())}')
           ],
         ),
       ),

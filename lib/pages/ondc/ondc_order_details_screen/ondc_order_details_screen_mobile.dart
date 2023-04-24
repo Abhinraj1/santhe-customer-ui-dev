@@ -74,45 +74,49 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     }
 
 
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          color: CupertinoColors.systemBackground,
-          border: Border.all(
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.87,
+       // margin: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
             color: CupertinoColors.systemBackground,
+            border: Border.all(
+              color: CupertinoColors.systemBackground,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                'Shipment No $countNumber',
-                textAlign: TextAlign.left,
-                style: TextStyle(color: AppColors().brandDark),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  'Shipment No $countNumber',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: AppColors().brandDark),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            fulfillmentWidget!.isEmpty
-                ? const SizedBox()
-                : SizedBox(
-                    child: BottomTextRow(
-                message: fulfillmentWidget,
-                hasTrackingData: isTrackingURLNull() ?? false,
-                onTap: () {
-                  ///
-                  /// Navigate to map screen
-                },
+              const SizedBox(
+                height: 10,
               ),
-            )
-          ],
+              fulfillmentWidget!.isEmpty
+                  ? const SizedBox()
+                  : SizedBox(
+                      child: BottomTextRow(
+                  message: fulfillmentWidget,
+                  hasTrackingData: isTrackingURLNull() ?? false,
+                  onTap: () {
+                    ///
+                    /// Navigate to map screen
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -525,8 +529,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
-                        LimitedBox(
-                            maxWidth: 185,
+                        SizedBox(
+                            width: 185,
                             child: AutoSizeText(
                               previewWidgetModel.previewWidgetModel.title,
                               style: FontStyleManager().s14fw500Brown,

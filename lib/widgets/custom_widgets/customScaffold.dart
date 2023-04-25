@@ -12,6 +12,7 @@ import '../../core/app_colors.dart';
 import '../../core/app_helpers.dart';
 import '../../manager/font_manager.dart';
 import '../../manager/imageManager.dart';
+import '../navigation_drawer_widget.dart';
 
 
 class CustomScaffold extends StatelessWidget {
@@ -67,7 +68,7 @@ class CustomScaffold extends StatelessWidget {
       child: Scaffold(
         key: _key,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset ?? false,
-       /// drawer: const CustomNavigationDrawer(),
+        drawer: const CustomNavigationDrawer(),
 
         backgroundColor: backgroundColor ?? AppColors().white100,
 

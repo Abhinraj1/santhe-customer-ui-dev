@@ -72,7 +72,7 @@ class ConnectivityController extends GetxController {
   Widget _getLandingScreen() {
     passedInitialScreen = true;
     if (!AppSharedPreference().loadSignUpScreen) {
-      return const OnBoardingPage();
+      return const LoginScreen();
     }
     if (!AppSharedPreference().checkForLogin) {
       return const LoginScreen();

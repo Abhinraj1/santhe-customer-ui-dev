@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
+import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/onboarding_page.dart';
 
 import '../controllers/api_service_controller.dart';
@@ -22,7 +23,7 @@ class _SplashToOnboardingState extends State<SplashToOnboarding> {
 
   void bootHome() {
     Future.delayed(const Duration(milliseconds: 4000), () {
-      Get.off(() => const OnBoardingPage(), transition: Transition.fadeIn);
+      Get.off(() => const LoginScreen(), transition: Transition.fadeIn);
       log('called!');
     });
   }

@@ -15,6 +15,7 @@ import 'package:santhe/core/app_shared_preference.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/santhe_user_model.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
+import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/onboarding_page.dart';
 import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
@@ -499,7 +500,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                                       transition: Transition.fadeIn);
                                 } else {
                                   log('error occurred');
-                                  Get.offAll(() => const OnBoardingPage());
+                                  Get.offAll(() => const LoginScreen());
                                 }
                               }
                               setState(() {

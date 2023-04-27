@@ -16,11 +16,13 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
+import 'package:santhe/core/blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
+import 'package:santhe/core/repositories/hyperlocal_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
@@ -101,6 +103,9 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<ONDCOrderCancelAndReturnRepository>(
             create: (context) => ONDCOrderCancelAndReturnRepository(),
           ),
+          RepositoryProvider<HyperLocalRepository>(
+            create: (context) => HyperLocalRepository(),
+          )
         ],
         child: MultiBlocProvider(
           providers: [
@@ -125,22 +130,15 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<CustomerContactCubit>(
                 create: (context) => CustomerContactCubit()),
-
-            BlocProvider<WebviewCubit>(
-                create: (context) => WebviewCubit(
-
-                )),
-
+            BlocProvider<WebviewCubit>(create: (context) => WebviewCubit()),
             BlocProvider<UploadImageAndReturnRequestCubit>(
                 create: (context) => UploadImageAndReturnRequestCubit(
-                  repository: context.read<ONDCOrderCancelAndReturnRepository>(),
-                )),
-
+                      repository:
+                          context.read<ONDCOrderCancelAndReturnRepository>(),
+                    )),
             BlocProvider<OrderDetailsScreenCubit>(
                 create: (context) => OrderDetailsScreenCubit(
-                    ondcRepository: context.read<OndcRepository>()
-                )),
-
+                    ondcRepository: context.read<OndcRepository>())),
             BlocProvider<OrderDetailsButtonCubit>(
                 create: (context) => OrderDetailsButtonCubit()),
             BlocProvider<ONDCOrderCancelAndReturnReasonsBloc>(
@@ -150,6 +148,11 @@ class MyApp extends StatelessWidget {
             BlocProvider<OrderHistoryBloc>(
               create: (context) => OrderHistoryBloc(
                   ondcRepository: context.read<OndcRepository>()),
+            ),
+            BlocProvider<HyperlocalShopBloc>(
+              create: (context) => HyperlocalShopBloc(
+                hyperLocalRepository: context.read<HyperLocalRepository>(),
+              ),
             )
           ],
           child: gets.GetMaterialApp(
@@ -166,9 +169,10 @@ class MyApp extends StatelessWidget {
                     selectionHandleColor: Colors.transparent,
                   ),
                 ),
-            home:  const SplashToHome(),
-          ///  ONDCContactSupportView(orderModel: SingleOrderModel(),)
-          ///  ONDCContactSupportTicketScreenMobile()
+            home: const SplashToHome(),
+
+            ///  ONDCContactSupportView(orderModel: SingleOrderModel(),)
+            ///  ONDCContactSupportTicketScreenMobile()
             // ONDCWebviewScreenMobile(
             //   title: "TESTIGN",
             //   url: "https://google.com"

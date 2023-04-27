@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:santhe/utils/check_refund_amount.dart';
 
 import '../../../../manager/font_manager.dart';
 import '../../models/ondc/single_order_model.dart';
@@ -9,11 +10,13 @@ class InvoiceTable extends StatelessWidget {
 
   final List<FinalCosting> prices;
   final String totalPrice;
+  final String amountInCents;
 
 
 
   const InvoiceTable({Key? key,
-    required this.prices, required this.totalPrice
+    required this.prices, required this.totalPrice,
+    required this.amountInCents
   }) : super(key: key);
 
   @override
@@ -28,11 +31,28 @@ class InvoiceTable extends StatelessWidget {
            itemCount: prices.length,
             itemBuilder: (context,index){
 
-            if(index == prices.length-1){
-              return customRow(
-                  title: "Total:",
-                  data: "₹$totalPrice",
-                  isTotalPrice: true
+            if(index == prices.length-1)
+            {
+              return Column(
+                children: [
+                  customRow(
+                      title: "Total:",
+                      data: "₹$totalPrice",
+                      isTotalPrice: true
+                  ),
+                 checkRefundAmount(
+                     amountInCents: amountInCents,
+                     totalAmount: totalPrice
+                 ) != false ?
+                 customRow(
+                     isTotalPrice: true,
+                     title: "Refunded Amount",
+                      data: checkRefundAmount(
+                          amountInCents: amountInCents,
+                          totalAmount: totalPrice
+                      )) :
+                     SizedBox()
+                ],
               );
             }else if(prices[index].lable.
             toString().contains("Tax")){

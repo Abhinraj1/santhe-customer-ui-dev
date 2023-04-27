@@ -589,22 +589,21 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                     ),
                   ),
 
-                  Expanded(
-                    flex: 6,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 2.0,right: 5),
-                      child: SizedBox(
-                        width: 50,
-                        child: AutoSizeText(
-                         "₹${priceFormatter(value: previewWidgetModel.
-                         previewWidgetModel.price.
-                          toString())}",
-                          maxFontSize: 16,
-                          minFontSize: 10,
-                          style: FontStyleManager().s16fw600Grey,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
+                 const Spacer(),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2.0,right: 5),
+                    child: SizedBox(
+                      width: 50,
+                      child: AutoSizeText(
+                       "₹${priceFormatter(value: previewWidgetModel.
+                       previewWidgetModel.price.
+                        toString())}",
+                        maxFontSize: 16,
+                        minFontSize: 10,
+                        style: FontStyleManager().s16fw600Grey,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                   ),
@@ -621,6 +620,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         prices: orderDetails.finalCosting as List<FinalCosting>,
         totalPrice: orderDetails.singleOrderModel!.quotes!.first.totalPrice
             .toString(),
+        amountInCents: orderDetails.singleOrderModel!.payment!.amountInCents.toString(),
       ),
 
       CustomerSupportButton(

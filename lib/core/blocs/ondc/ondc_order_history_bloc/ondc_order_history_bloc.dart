@@ -1,4 +1,5 @@
 
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
@@ -32,10 +33,22 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
     on<LoadPastOrderDataEvent>((event, emit) async {
 
 
-      emit(LoadingState());
+      //orderDetails = event.alreadyFetchedList;
+
+     event.offset == "0" ? emit(LoadingState()) : null;
 
       try{
-        orderDetails = await ondcRepository.getPastOrder();
+
+        List<SingleOrderModel> fetchedList  = await ondcRepository.getPastOrder(
+            offset: event.offset);
+
+        if(fetchedList.isNotEmpty){
+
+          fetchedList.forEach((e){
+            orderDetails.add(e);
+          });
+        }
+
 
         emit(PastOrderDataLoadedState(
             orderDetails: orderDetails

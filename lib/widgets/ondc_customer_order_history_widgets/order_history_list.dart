@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -15,9 +17,28 @@ import '../../models/ondc/single_order_model.dart';
 import '../../pages/ondc/api_error/api_error_view.dart';
 import '../../utils/order_details_screen_routing_logic.dart';
 
-class OrderHistoryList extends StatelessWidget {
+class OrderHistoryList extends StatefulWidget {
   const OrderHistoryList({Key? key}) : super(key: key);
 
+  @override
+  State<OrderHistoryList> createState() => _OrderHistoryListState();
+}
+
+class _OrderHistoryListState extends State<OrderHistoryList> {
+  ScrollController scrollController = ScrollController();
+  List<SingleOrderModel> orderDetails = [];
+  bool isLoading = false;
+  int offset = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    scrollController.addListener(listener);
+    BlocProvider.of<OrderHistoryBloc>(context).add
+      (LoadPastOrderDataEvent(offset: "0",alreadyFetchedList: []));
+  }
   @override
   Widget build(BuildContext context) {
     return
@@ -38,13 +59,19 @@ class OrderHistoryList extends StatelessWidget {
                     return Center(child: Text(state.message));
                   }
                   else if (state is PastOrderDataLoadedState) {
-                    return listBody(orderDetails: state.orderDetails);
+                    orderDetails = state.orderDetails;
+
+                    return listBody(orderDetails: state.orderDetails,
+                        isLoading: isLoading);
                   } else if (state is SevenDaysFilterState) {
-                    return listBody(orderDetails: state.orderDetails);
+                    return listBody(orderDetails: state.orderDetails,
+                        isLoading: isLoading);
                   } else if (state is ThirtyDaysFilterState) {
-                    return listBody(orderDetails: state.orderDetails);
+                    return listBody(orderDetails: state.orderDetails,
+                        isLoading: isLoading);
                   } else if (state is CustomDaysFilterState) {
-                    return listBody(orderDetails: state.orderDetails);
+                    return listBody(orderDetails: state.orderDetails,
+                        isLoading: isLoading);
                   } else {
                     return const Center(child: CircularProgressIndicator());
                   }
@@ -53,19 +80,50 @@ class OrderHistoryList extends StatelessWidget {
       );
   }
 
-  Widget listBody({required List<SingleOrderModel> orderDetails}) {
+  Widget listBody({required List<SingleOrderModel> orderDetails,
+    required bool isLoading}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SizedBox(
         child: ListView.builder(
-            itemCount: orderDetails.length,
+          controller: scrollController,
+            itemCount:
+            isLoading ?
+            orderDetails.length + 1 :
+            orderDetails.length,
+
             itemBuilder: (context, index) {
-              return OrderHistoryCell(
+            if(index < orderDetails.length) {
+              return  OrderHistoryCell(
                 orderDetails: orderDetails[index],
               );
+
+            }else {
+              return
+                const Center(child: CircularProgressIndicator(
+                ));
+            }
             }),
       ),
     );
+  }
+  listener(){
+
+    if(isLoading) return;
+    if(scrollController.position.pixels ==
+       scrollController.position.maxScrollExtent){
+      setState(() {
+        isLoading = true;
+      });
+      offset = offset  + 10;
+      BlocProvider.of<OrderHistoryBloc>(context).add
+        ( LoadPastOrderDataEvent(offset: offset.toString(),
+          alreadyFetchedList:orderDetails));
+      setState(() {
+        isLoading = false;
+      });
+
+    }
   }
 }
 
@@ -124,6 +182,8 @@ class OrderHistoryCell extends StatelessWidget {
       ),
     );
   }
+
+
 }
 
 

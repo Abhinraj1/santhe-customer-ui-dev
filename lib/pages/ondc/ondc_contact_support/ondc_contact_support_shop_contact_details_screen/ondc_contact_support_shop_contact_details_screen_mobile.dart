@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../core/app_colors.dart';
 import '../../../../core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
+import '../../../../core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import '../../../../manager/font_manager.dart';
 import '../../../../models/ondc/shop_model.dart';
 import '../../../../models/ondc/single_order_model.dart';
@@ -93,7 +94,10 @@ class _ONDCContactSupportShopContactDetailsScreenState extends State<ONDCContact
 
             CustomerSupportButton(
               onTap: (){
-                Get.to(ONDCContactSupportEnterQueryScreenMobile(store: widget.model,));
+                BlocProvider.of<CustomerContactCubit>(context).
+                getAllCategories(orderNumber: orderId);
+                Get.to(ONDCContactSupportEnterQueryScreenMobile(
+                  store: widget.model,));
               },
               title: "CONTACT SANTHE SUPPORT",
             ),

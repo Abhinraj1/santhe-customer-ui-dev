@@ -18,11 +18,13 @@ import '../../../pages/ondc/ondc_shop_list/ondc_shop_list_view.dart';
 import '../../../utils/order_details_screen_routing_logic.dart';
 import '../../repositories/ondc_checkout_repository.dart';
 import '../../repositories/ondc_order_cancel_and_return_repository.dart';
+import '../customer_contact_cubit/customer_contact_cubit.dart';
 import '../ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 
 
 
-class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequestState>{
+class UploadImageAndReturnRequestCubit extends
+Cubit<UploadImageAndReturnRequestState>{
   final ONDCOrderCancelAndReturnRepository repository;
 
   UploadImageAndReturnRequestCubit({required this.repository}) :
@@ -87,7 +89,9 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
     }
   }
 
-  showImages({bool? hideAddImgButton}){
+
+
+   showImages({bool? hideAddImgButton}){
     List<File> imageFiles = [File("do not remove")];
     for(var data in imagesList){
 
@@ -107,7 +111,7 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
 
   }
 
-  uploadImages(BuildContext context) async{
+  uploadImages({required BuildContext context}) async{
 
     emit(LoadingState());
 
@@ -130,30 +134,31 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
       }
     }
     imagesList.clear();
-    sendReturnRequest();
-    Get.to(()=> ONDCAcknowledgementView(
-      title: "Return Request",
-      message: "Your return request is received,"
-          " Once we have received a confirmation "
-          "from the seller you will get an update "
-          "from us on the return  status and refund details",
+      sendReturnRequest();
+      Get.to(()=> ONDCAcknowledgementView(
+        title: "Return Request",
+        message: "Your return request is received,"
+            " Once we have received a confirmation "
+            "from the seller you will get an update "
+            "from us on the return  status and refund details",
 
-      orderNumber: _orderNumber,
+        orderNumber: _orderNumber,
 
-      onTap: (){
-        BlocProvider.of<OrderDetailsScreenCubit>(context)
-            .loadOrderDetails(
-            orderId: _orderId);
+        onTap: (){
+          BlocProvider.of<OrderDetailsScreenCubit>(context)
+              .loadOrderDetails(
+              orderId: _orderId);
 
-        Get.offAll(()=> ONDCOrderDetailsView(
-          onBackButtonTap: (){
-            orderDetailsScreenRoutingLogic();
-          },
-        ),
-        transition: ge.Transition.leftToRight);
-      },));
+          Get.offAll(()=> ONDCOrderDetailsView(
+            onBackButtonTap: (){
+              orderDetailsScreenRoutingLogic();
+            },
+          ),
+              transition: ge.Transition.leftToRight);
+        },));
 
   }
+
 
 
 
@@ -213,4 +218,31 @@ class UploadImageAndReturnRequestCubit extends Cubit<UploadImageAndReturnRequest
     imagesList.clear();
     imageUrl.clear();
   }
+
+  getImageString() async{
+
+    emit(LoadingState());
+
+    for (var imgFile in imagesList) {
+
+      try{
+
+        String imgUrl = await repository.uploadImage(
+            imgPath: imgFile!.path);
+
+        imageListForContactSupport.add(imgUrl);
+
+        print("####################################################"
+            "IMAGE URL ADDED = ${imgUrl}");
+
+      }catch(e){
+
+        emit(UploadImageAndReturnRequestErrorState(message: e.toString()));
+
+      }
+    }
+    imagesList.clear();
+
+  }
+
 }

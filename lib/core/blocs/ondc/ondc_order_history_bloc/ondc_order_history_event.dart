@@ -14,7 +14,11 @@ abstract class OrderHistoryEvent extends Equatable {
 
 
 class LoadPastOrderDataEvent extends OrderHistoryEvent{
-  const LoadPastOrderDataEvent();
+  final String offset;
+  List<SingleOrderModel> alreadyFetchedList = [];
+   LoadPastOrderDataEvent({
+     required this.offset,
+     required this.alreadyFetchedList});
 }
 
 

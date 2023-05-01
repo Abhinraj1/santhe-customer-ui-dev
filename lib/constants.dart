@@ -19,6 +19,9 @@ late CustomerModel customerModel;
 ///
 bool? isUserFromMyOrders;
 
+///
+List<String> imageListForContactSupport = [];
+
 class Constant {
   static Color bgColor = const Color(0xffF89522);
   static Color white = const Color(0xffffffff);

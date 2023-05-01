@@ -13,6 +13,7 @@ import '../../core/cubits/upload_image_and_return_request_cubit/upload_image_and
 import '../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_state.dart';
 import '../../manager/font_manager.dart';
 import '../../pages/new_tab_pages/image_page.dart';
+import '../custom_widgets/select_image_source_dialog.dart';
 
 
 class ImageGrid extends StatelessWidget {
@@ -95,38 +96,8 @@ class Body extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return SimpleDialog(
-                              title: Text('Select One',
-                                  style: FontStyleManager().s16fw600Orange),
+                            return const SelectImageSourceDialog();
 
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                  child: ElevatedButton(
-                                      onPressed: (){
-                                        BlocProvider.of<UploadImageAndReturnRequestCubit>
-                                          (context).
-                                        getImagesFromCamera();
-                                        Navigator.pop(context);
-                                      },
-                                      child:Text("Camera",
-                                        style: FontStyleManager().
-                                        s14fw700White,)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                  child: ElevatedButton(
-                                      onPressed: (){
-                                        BlocProvider.of<UploadImageAndReturnRequestCubit>
-                                          (context).
-                                        getImagesFromGallery();
-                                        Navigator.pop(context);
-                                      },
-                                      child:Text("Gallery",
-                                        style: FontStyleManager().s14fw700White,)),
-                                ),
-                              ],
-                            );
                           }
                       );
                     },

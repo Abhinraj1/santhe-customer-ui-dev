@@ -1,8 +1,13 @@
 import "package:flutter/cupertino.dart";
 import"package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 import "package:santhe/core/app_colors.dart";
 
+import "../../constants.dart";
+import "../../core/cubits/customer_contact_cubit/customer_contact_cubit.dart";
+import "../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart";
 import "../../manager/font_manager.dart";
+import "../custom_widgets/select_image_source_dialog.dart";
     
 
 class ImageAttachmentTextButton extends StatelessWidget {
@@ -12,8 +17,16 @@ class ImageAttachmentTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () async{
+       await showDialog(
+            context: context,
+            builder: (context) {
+              return const SelectImageSourceDialog();
+            }
+        );
 
+        BlocProvider.of<UploadImageAndReturnRequestCubit>
+          (context).getImageString();
       },
       child: Align(
         alignment: Alignment.centerLeft,

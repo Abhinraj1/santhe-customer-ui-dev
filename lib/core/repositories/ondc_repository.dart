@@ -10,6 +10,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 import '../../models/ondc/single_order_model.dart';
+import '../../models/ondc/support_contact_models.dart';
 import '../blocs/ondc/ondc_bloc.dart';
 
 class OndcRepository with LogMixin {
@@ -300,39 +301,6 @@ class OndcRepository with LogMixin {
     }
   }
 
-  Future<int> sendContactSupportQuery(
-      {required String orderId, required String message}) async {
-    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
-
-    final url = Uri.parse('http://ondcstaging.santhe.in/santhe/ondc/support');
-
-    final header = {
-      'Content-Type': 'application/json',
-      "authorization": 'Bearer ${await AppHelpers().authToken}'
-    };
-
-    try {
-      warningLog('Send Message Customer Contact url = $url');
-      final response = await http.post(
-        url,
-        headers: header,
-        body: json.encode(
-          {"order_id": orderId, "firebase_id": firebaseId, "message": message},
-        ),
-      );
-
-      warningLog('${response.statusCode}');
-
-      final responseBody = await json.decode(response.body);
-
-      warningLog('$responseBody');
-
-      return response.statusCode;
-    } catch (e) {
-      warningLog(e.toString());
-      rethrow;
-    }
-  }
 
   Future<Data> getSingleOrder({required String OrderId}) async {
     // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
@@ -371,12 +339,13 @@ class OndcRepository with LogMixin {
     }
   }
 
-  Future<List<SingleOrderModel>> getPastOrder() async {
+  Future<List<SingleOrderModel>> getPastOrder({required String offset}) async {
     final firebaseId = //"8808435978";
         AppHelpers().getPhoneNumberWithoutCountryCode;
 
     final url = Uri.parse(
-        "https://ondcstaging.santhe.in/santhe/ondc/customer/order/list?limit=10&offset=0&"
+        "https://ondcstaging.santhe.in/santhe/ondc/customer/"
+            "order/list?limit=10&offset=$offset&"
         "firebase_id=$firebaseId");
 
     final header = {
@@ -385,6 +354,7 @@ class OndcRepository with LogMixin {
     };
 
     try {
+
       warningLog('GET Past ODER DETAILS $url');
 
       final response = await http.get(url, headers: header);
@@ -397,12 +367,132 @@ class OndcRepository with LogMixin {
 
       List<SingleOrderModel> data = SingleOrderModel.fromList(responseBody);
 
-      warningLog('${data.first.quotes!.first.status}');
+      //warningLog('${data.first.quotes!.first.status}');
 
       return data;
+
     } catch (e) {
       warningLog(e.toString());
 
+      rethrow;
+    }
+  }
+
+  Future<List<CategoryModel>> getCategoryForContactSupport() async {
+
+
+    final url = Uri.parse('https://ondcstaging.santhe.in/santhe'
+        '/ondc/issue/category');
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
+    try {
+      warningLog('Get Category Customer Contact url = $url');
+      final response = await http.get(
+        url,
+        headers: header,
+      );
+
+      warningLog('${response.statusCode}');
+
+      final responseBody = await json.decode(response.body)["data"]["rows"];
+
+     List<CategoryModel> list =  CategoryModel.fromList(responseBody);
+
+      warningLog('$responseBody');
+
+      return list;
+    } catch (e) {
+      warningLog(e.toString());
+      rethrow;
+    }
+  }
+
+
+  Future<List<CategoryModel>> getSubCategoryForContactSupport() async {
+
+
+    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/'
+        'ondc/issue/subcategory?category=ORDER');
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
+    try {
+      warningLog('Get Sub Category Customer Contact url = $url');
+      final response = await http.get(
+        url,
+        headers: header,
+      );
+
+      warningLog('${response.statusCode}');
+
+      final responseBody = await json.decode(response.body)["data"]["rows"];
+
+      List<CategoryModel> list =  CategoryModel.fromList(responseBody);
+
+      warningLog('$responseBody');
+
+      return list;
+    } catch (e) {
+      warningLog(e.toString());
+      rethrow;
+    }
+  }
+
+
+
+  Future<String> raiseIssue(
+      {required String orderId, required String longDescription,
+        required List<String> cartItemPricesId, required List<String> images,
+         String? shortDescription, required String categoryCode,
+        required String subCategoryCode}) async {
+
+
+    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/update');
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
+    try {
+      warningLog('requestReturnOrPartialCancel isReturn and url = $url');
+      final response = await http.post(
+        url,
+        headers: header,
+        body: json.encode(
+            {
+              "order_id": orderId,
+              "long_description": longDescription,
+              "category_code": categoryCode,
+              "sub_category_code": subCategoryCode,
+              "short_description":" ",
+              "imagesArr":images,
+              "cartItemIds":cartItemPricesId
+            }
+        ),
+      );
+
+      warningLog('${response.statusCode}');
+
+      final responseType = await json.decode(response.body);
+
+      final responseMessage = await json.decode(response.body)["type"];
+
+      warningLog('RESPONSE Body IS $responseType');
+
+      warningLog('RESPONSE type IS $responseMessage');
+
+      return responseMessage;
+
+    } catch (e) {
+      warningLog(e.toString());
       rethrow;
     }
   }

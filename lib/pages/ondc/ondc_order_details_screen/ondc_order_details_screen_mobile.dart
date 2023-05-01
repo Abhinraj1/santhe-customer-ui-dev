@@ -95,7 +95,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
-                  'Shipment No $countNumber',
+                   'Shipment No $countNumber',
                   textAlign: TextAlign.left,
                   style: TextStyle(color: AppColors().brandDark),
                 ),

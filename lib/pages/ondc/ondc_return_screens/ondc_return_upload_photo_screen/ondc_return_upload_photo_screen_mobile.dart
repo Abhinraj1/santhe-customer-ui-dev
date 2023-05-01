@@ -128,7 +128,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                                       onTap: () {
                                         BlocProvider.of<
                                             UploadImageAndReturnRequestCubit>
-                                          (context).uploadImages(context);
+                                          (context).uploadImages(context: context);
                                       },
                                       isActive: true,
                                       width: 160,
@@ -158,7 +158,7 @@ class ONDCOrderUploadPhotoScreenMobile extends StatelessWidget {
                                       onTap: () {
                                         BlocProvider.of<
                                             UploadImageAndReturnRequestCubit>
-                                          (context).uploadImages(context);
+                                          (context).uploadImages(context: context);
                                       },
                                       isActive: true,
                                       width: 160,

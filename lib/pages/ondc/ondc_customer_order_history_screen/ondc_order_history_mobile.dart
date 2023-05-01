@@ -16,23 +16,9 @@ import '../../../widgets/ondc_customer_order_history_widgets/select_date_filter.
 import '../ondc_intro/ondc_intro_view.dart';
 
 
-class ONDCOrderHistoryMobile extends StatefulWidget {
+class ONDCOrderHistoryMobile extends StatelessWidget {
   const ONDCOrderHistoryMobile({Key? key}) : super(key: key);
 
-  @override
-  State<ONDCOrderHistoryMobile> createState() => _ONDCOrderHistoryMobileState();
-}
-
-class _ONDCOrderHistoryMobileState extends State<ONDCOrderHistoryMobile> {
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    BlocProvider.of<OrderHistoryBloc>(context).add
-      (const LoadPastOrderDataEvent());
-  }
   @override
   Widget build(BuildContext context) {
 

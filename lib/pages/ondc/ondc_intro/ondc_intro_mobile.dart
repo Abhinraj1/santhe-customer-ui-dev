@@ -118,7 +118,6 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           init: profileController,
           id: 'navDrawer',
           builder: (context) {
-
             CustomerModel currentUser =
                 profileController.customerDetails ?? fallback_error_customer;
             customerModel = currentUser;
@@ -131,16 +130,15 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                       height: 40,
                     ),
                     Center(
-                      child:
-                      currentUser.customerName != "X" ?
-                      AutoSizeText(
-                        'Welcome ${currentUser.customerName}!',
-                        style: const TextStyle(
-                          color: Colors.black54,
-                          fontSize: 30,
-                        ),
-                      ) :
-                      const CircularProgressIndicator(),
+                      child: currentUser.customerName != "X"
+                          ? AutoSizeText(
+                              'Welcome ${currentUser.customerName}!',
+                              style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 30,
+                              ),
+                            )
+                          : const CircularProgressIndicator(),
                     ),
                     const SizedBox(
                       height: 15,
@@ -150,7 +148,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               Get.to(
                                 const MapMerchant(),
                                 transition: Transition.leftToRight,
@@ -170,18 +168,19 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                                     ),
                                   ),
                                 ),
-
                                 ElevatedButton(
                                   style: ButtonStyle(
                                     elevation: MaterialStateProperty.all(0),
                                   ),
                                   onPressed: () {
                                     Get.to(
-                                      const MapMerchant(),
+                                      HyperlocalShophomeView(
+                                        lat: currentUser.lat,
+                                        lng: currentUser.lng,
+                                      ),
                                       transition: Transition.leftToRight,
                                     );
                                   },
-
                                   child: const Text(
                                     'CREATE LIST',
                                     style: TextStyle(
@@ -196,9 +195,9 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               Get.to(
-                                    () => OndcShopListView(
+                                () => OndcShopListView(
                                   customerModel: currentUser,
                                 ),
                               );
@@ -229,7 +228,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                                   onPressed: () {
                                     customerModel = currentUser;
                                     Get.to(
-                                          () => OndcShopListView(
+                                      () => OndcShopListView(
                                         customerModel: currentUser,
                                       ),
                                     );

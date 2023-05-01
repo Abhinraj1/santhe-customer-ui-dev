@@ -26,8 +26,8 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
   final ScrollController _searchScrollController = ScrollController();
   bool _loading = false;
   bool _searchLoading = false;
-  int n = 100;
-  int nsearch = 100;
+  int n = 0;
+  int nsearch = 0;
   int cartCount = 0;
   String productNameLocal = '';
   bool _errorSearchingforProduct = false;
@@ -73,42 +73,42 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       {required String shopId,
       required String productName,
       required List<OndcProductWidget> searchProductLocal}) async {
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=%$productName%&limit=12&offset=0');
+        'https://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=$productName&limit=10&offset=$nsearch&firebase_id=$firebaseId');
     setState(() {
       _searchLoading = true;
     });
     try {
       warningLog('product name $productName');
-      final response = await http.get(url);
-      warningLog('${response.statusCode} and url $url');
-      final responseBody =
-          await json.decode(response.body)['data']['rows'] as List<dynamic>;
-      warningLog('$responseBody');
-      List<ProductOndcModel> newSearchedProduct =
-          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
-      warningLog('new search products${newSearchedProduct.length}');
-      List<ProductOndcModel> differenceModels = newSearchedProduct
-          .toSet()
-          .difference(searchExistingModels.toSet())
-          .toList();
-      warningLog(
-          'difference of models${differenceModels.length} $differenceModels');
-      List<OndcProductWidget> addableItems = [];
-      for (var model in differenceModels) {
-        addableItems.add(
-          OndcProductWidget(productOndcModel: model),
-        );
-      }
-      warningLog('addable items${addableItems.length}');
-      searchProductLocal.addAll(addableItems);
-      infoLog('searched ${searchProductLocal.length}');
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        setState(() {
-          addableItems.clear();
-          searchWidgets = searchProductLocal;
-          searchExistingModels.addAll(differenceModels);
-          _searchLoading = false;
+      await Future.delayed(const Duration(seconds: 2), () async {
+        final response = await http.get(url);
+        warningLog('${response.statusCode} and url $url');
+        final responseBody =
+            await json.decode(response.body)['data']['rows'] as List<dynamic>;
+        warningLog('$responseBody');
+        List<ProductOndcModel> newSearchedProduct =
+            responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
+        warningLog('new search products${newSearchedProduct.length}');
+        List<ProductOndcModel> differenceModels = newSearchedProduct.toList();
+        warningLog(
+            'difference of models${differenceModels.length} $differenceModels');
+        List<OndcProductWidget> addableItems = [];
+        for (var model in differenceModels) {
+          addableItems.add(
+            OndcProductWidget(productOndcModel: model),
+          );
+        }
+        warningLog('addable items${addableItems.length}');
+        searchProductLocal.addAll(addableItems);
+        infoLog('searched ${searchProductLocal.length}');
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          setState(() {
+            addableItems.clear();
+            searchWidgets = searchProductLocal;
+            searchExistingModels.addAll(differenceModels);
+            _searchLoading = false;
+          });
         });
       });
     } catch (e) {
@@ -120,42 +120,42 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       {required String transactionIdLocal,
       required String shopId,
       required List<OndcProductWidget> productWidgetsLocal}) async {
+    final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final Uri url = Uri.parse(
-        'http://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=%%&limit=$n&offset=0');
+        'https://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=10&offset=$n&firebase_id=$firebaseId');
     setState(() {
       _loading = true;
     });
     try {
-      final response = await http.get(url);
-      warningLog('${response.statusCode}');
-      final responseBody =
-          await json.decode(response.body)['data']['rows'] as List<dynamic>;
-      warningLog('$responseBody');
-      List<ProductOndcModel> newProductList =
-          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
-      warningLog('new models $newProductList');
-      infoLog('${existingProductModels.length}');
-      List<ProductOndcModel> differenceModels = newProductList
-          .toSet()
-          .difference(existingProductModels.toSet())
-          .toList();
-      warningLog(
-          'difference of models${differenceModels.length} $differenceModels');
-      List<OndcProductWidget> addableItems = [];
-      for (var model in differenceModels) {
-        addableItems.add(
-          OndcProductWidget(productOndcModel: model),
-        );
-      }
-      warningLog('addable items${addableItems.length}');
-      productWidgetsLocal.addAll(addableItems);
-      warningLog('new length${productWidgetsLocal.length}');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          addableItems.clear();
-          productWidget = productWidgetsLocal;
-          existingProductModels.addAll(differenceModels);
-          _loading = false;
+      await Future.delayed(const Duration(seconds: 2), () async {
+        warningLog('Additional data $url');
+        final response = await http.get(url);
+        warningLog('${response.statusCode}');
+        final responseBody =
+            await json.decode(response.body)['data']['rows'] as List<dynamic>;
+        List<ProductOndcModel> newProductList =
+            responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
+        warningLog('new models ${newProductList.length}');
+        warningLog('${existingProductModels.length}');
+        List<ProductOndcModel> differenceModels = newProductList.toList();
+        warningLog(
+            'difference of models${differenceModels.length} $differenceModels');
+        List<OndcProductWidget> addableItems = [];
+        for (var model in differenceModels) {
+          addableItems.add(
+            OndcProductWidget(productOndcModel: model),
+          );
+        }
+        errorLog('addable items${addableItems.length}');
+        productWidgetsLocal.addAll(addableItems);
+        errorLog('new length${productWidgetsLocal.length}');
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            addableItems.clear();
+            productWidget = productWidgetsLocal;
+            existingProductModels.addAll(differenceModels);
+            _loading = false;
+          });
         });
       });
     } catch (e) {
@@ -247,7 +247,6 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
 
   @override
   Widget build(BuildContext context) {
-    warningLog('${widget.shopModel.address.toString().length}');
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
       if (state is ErrorFetchingProductsOfShops) {
         ge.Get.to(

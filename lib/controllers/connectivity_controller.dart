@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
@@ -12,7 +13,7 @@ import '../pages/login_pages/phone_number_login_page.dart';
 import '../pages/onboarding_page.dart';
 import 'notification_controller.dart';
 
-class ConnectivityController extends GetxController {
+class ConnectivityController extends GetxController with LogMixin {
   bool hasInternet = true;
 
   bool inInternetErrorScreen = false;
@@ -71,10 +72,12 @@ class ConnectivityController extends GetxController {
 
   Widget _getLandingScreen() {
     passedInitialScreen = true;
-    if (!AppSharedPreference().loadSignUpScreen) {
-      return const OnBoardingPage();
-    }
+    // if (!AppSharedPreference().loadSignUpScreen) {
+    //   errorLog('Called LoadSignUp');
+    //   return const LoginScreen();
+    // }
     if (!AppSharedPreference().checkForLogin) {
+      errorLog('Called For checkLogin');
       return const LoginScreen();
     }
     final NotificationController notificationController = Get.find();

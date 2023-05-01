@@ -10,18 +10,27 @@ abstract class HyperlocalShopState extends Equatable {
 
 class HyperlocalShopInitial extends HyperlocalShopState {}
 
-class HyperLocalGetShopsState extends HyperlocalShopState {}
+class HyperLocalGetShopsState extends HyperlocalShopState {
+  final List<HyperLocalShopModel> hyperLocalShopModels;
+  const HyperLocalGetShopsState({
+    required this.hyperLocalShopModels,
+  });
+  @override
+  List<Object> get props => [hyperLocalShopModels];
+}
 
 class HyperLocalGetLoadingState extends HyperlocalShopState {}
 
-class HyperLocalGetShopErrorState extends HyperLocalGetShopsState {
+class HyperLocalGetShopErrorState extends HyperlocalShopState {
   final String message;
-  HyperLocalGetShopErrorState({
+  const HyperLocalGetShopErrorState({
     required this.message,
   });
   @override
   List<Object> get props => [message];
 }
+
+class HyperLocalSearchItemLoadedState extends HyperlocalShopState {}
 
 class HyperLocalGetShopSearchState extends HyperlocalShopState {}
 

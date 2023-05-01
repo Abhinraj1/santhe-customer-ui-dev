@@ -19,6 +19,8 @@ class HyperLocalGetShopEvent extends HyperlocalShopEvent {
   List<Object> get props => [lat, lng];
 }
 
+class HyperLocalClearSearchEventShops extends HyperlocalShopEvent {}
+
 class HyperLocalGetShopSearchEvent extends HyperlocalShopEvent {}
 
 class HyperLocalGetProductOfShopEvent extends HyperlocalShopEvent {}

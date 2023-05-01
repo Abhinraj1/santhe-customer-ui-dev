@@ -31,7 +31,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   List<ShopModel> searchedModels = [];
   List<ShopModel> existingShopModels = [];
   String? noShopsMessage;
-  int n = 10;
+  int n = 0;
   String productName = "";
   late LocationModel locationModel;
   bool _searchedLoaded = false;
@@ -41,14 +41,14 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
         'http://www.postalpincode.in/api/pincode/${widget.customerModel.pinCode}');
     try {
       final response = await http.get(url);
-      warningLog('${response.statusCode}');
+      // warningLog('${response.statusCode}');
       final responseBody =
           await json.decode(response.body)['PostOffice'] as List<dynamic>;
-      warningLog('$responseBody');
+      // warningLog('$responseBody');
       locationModel = LocationModel.fromMap(
         responseBody[0],
       );
-      warningLog('$locationModel');
+      // warningLog('$locationModel');
     } catch (e) {
       rethrow;
     }
@@ -56,8 +56,9 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
 
   getNewShops({required List<OndcShopWidget> shops, required int limit}) async {
     final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
+
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/store/nearby?limit=$n&offset=0&firebase_id=$firebaseID');
+        'https://ondcstaging.santhe.in/santhe/ondc/store/nearby?limit=10&offset=$n&firebase_id=$firebaseID');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -78,8 +79,8 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       warningLog('limit check $limit $shopModel');
       List<ShopModel> differenceShopModels =
           shopModel.toSet().difference(existingShopModels.toSet()).toList();
-      warningLog(
-          'difference shops length${differenceShopModels.length} $differenceShopModels');
+      // warningLog(
+      // 'difference shops length${differenceShopModels.length} $differenceShopModels');
       List<OndcShopWidget> addableItems = [];
       for (var shopModelData in differenceShopModels) {
         addableItems.add(OndcShopWidget(shopModel: shopModelData));
@@ -216,7 +217,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       if (_shopScroll.position.pixels == _shopScroll.position.maxScrollExtent) {
         warningLog('called');
         setState(() {
-          n = n + 10;
+          n = n + 5;
         });
         getNewShops(
           shops: shopWidgets,

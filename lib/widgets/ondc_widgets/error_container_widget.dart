@@ -3,7 +3,8 @@ import 'package:santhe/core/app_colors.dart';
 
 class ErrorContainerWidget extends StatelessWidget {
   final String message;
-  const ErrorContainerWidget({Key? key, required this.message}) : super(key: key);
+  const ErrorContainerWidget({Key? key,
+    required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

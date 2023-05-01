@@ -10,7 +10,8 @@ import '../../../utils/priceFormatter.dart';
 
 class SelectProductScreen extends StatelessWidget {
   final SingleOrderModel store;
-  const SelectProductScreen({Key? key, required this.store}) : super(key: key);
+  const SelectProductScreen({Key? key,
+    required this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +23,18 @@ class SelectProductScreen extends StatelessWidget {
           child: ListView.builder(
               itemBuilder: (context, index){
 
+                print("index ========================= $index");
              CartItemPrices item =  store.quotes!.first.cartItemPrices![index];
+
              print("INSIDE LISTVIEW BUILDER =============== "
                  "${item.type} ${store.quotes!.first.
-             cartItemPrices.se.toString()}");
+             cartItemPrices!.length}");
 
 
             if(item.type.toString() == "item"){
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric
+                  (horizontal: 10, vertical: 10),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6.0),
@@ -47,7 +51,7 @@ class SelectProductScreen extends StatelessWidget {
                          item.symbol != ""
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
+                            child: Image.network(
                           item.symbol,
                           width: 70,
                           height: 70,
@@ -56,7 +60,7 @@ class SelectProductScreen extends StatelessWidget {
                       )
                           : ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.asset(
+                            child: Image.asset(
                           ImgManager().emptyCart,
                           width: 70,
                           height: 70,

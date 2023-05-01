@@ -7,7 +7,8 @@ class Data {
   String? type;
   List<FinalCosting>? finalCosting;
 
-  Data({this.status, this.singleOrderModel, this.message, this.type, this.finalCosting});
+  Data({this.status, this.singleOrderModel,
+    this.message, this.type, this.finalCosting});
 
   Data.fromJson(Map<String, dynamic> json) {
     status = json["status"];
@@ -56,8 +57,14 @@ class SingleOrderModel {
   StoreLocation? storeLocation;
   Address? address;
   Payment? payment;
+  Support? support;
 
-  SingleOrderModel({this.id, this.status, this.transactionId, this.messageId, this.invoice, this.supportPhone, this.supportEmail, this.orderNumber, this.createdAt, this.updatedAt, this.deletedAt, this.addressId, this.customerId, this.storeLocationId, this.quotes, this.storeLocation, this.address, this.payment});
+  SingleOrderModel({this.id, this.status, this.transactionId,
+    this.messageId, this.invoice, this.supportPhone,
+    this.supportEmail, this.orderNumber, this.createdAt,
+    this.updatedAt, this.deletedAt, this.addressId, this.customerId,
+    this.storeLocationId, this.quotes, this.storeLocation, this.address,
+    this.payment, this.support});
 
   SingleOrderModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -78,6 +85,7 @@ class SingleOrderModel {
     storeLocation = json["storeLocation"] == null ? null : StoreLocation.fromJson(json["storeLocation"]);
     address = json["address"] == null ? null : Address.fromJson(json["address"]);
     payment = json["payment"] == null ? null : Payment.fromJson(json["payment"]);
+    support = json["support"] == null ? null : Support.fromJson(json["support"]);
   }
 
   static List<SingleOrderModel> fromList(List<dynamic> list) {
@@ -111,6 +119,9 @@ class SingleOrderModel {
     }
     if(payment != null) {
       _data["payment"] = payment?.toJson();
+    }
+    if(support != null) {
+      _data["support"] = support?.toJson();
     }
     return _data;
   }
@@ -635,6 +646,115 @@ class CartItemPrices {
 
   }
 
+class Support {
+  String? id;
+  String? category;
+  String? subCategory;
+  String? shortDescription;
+  String? longDescription;
+  String? issueType;
+  String? status;
+  List<String>? itemId;
+  dynamic organisationName;
+  dynamic organisationPhone;
+  dynamic organisationEmail;
+  dynamic resolutionSupportEmail;
+  dynamic resolutionSupportChatLink;
+  dynamic resolutionSupportPhone;
+  dynamic groPhone;
+  dynamic groName;
+  dynamic groEmail;
+  dynamic resolution;
+  dynamic resolutionRemarks;
+  dynamic actionTriggered;
+  dynamic refundAmount;
+  dynamic resolutionAction;
+  String? createdAt;
+  String? updatedAt;
+  dynamic deletedAt;
+  String? customerId;
+  String? orderId;
+  List<dynamic>? images;
+  List<dynamic>? issueActions;
+
+  Support({this.id, this.category, this.subCategory, this.shortDescription, this.longDescription, this.issueType, this.status, this.itemId, this.organisationName, this.organisationPhone, this.organisationEmail, this.resolutionSupportEmail, this.resolutionSupportChatLink, this.resolutionSupportPhone, this.groPhone, this.groName, this.groEmail, this.resolution, this.resolutionRemarks, this.actionTriggered, this.refundAmount, this.resolutionAction, this.createdAt, this.updatedAt, this.deletedAt, this.customerId, this.orderId, this.images, this.issueActions});
+
+  Support.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    category = json["category"];
+    subCategory = json["sub_category"];
+    shortDescription = json["short_description"];
+    longDescription = json["long_description"];
+    issueType = json["issue_type"];
+    status = json["status"];
+    itemId = json["itemId"] == null ? null : List<String>.from(json["itemId"]);
+    organisationName = json["organisation_name"];
+    organisationPhone = json["organisation_phone"];
+    organisationEmail = json["organisation_email"];
+    resolutionSupportEmail = json["resolution_support_email"];
+    resolutionSupportChatLink = json["resolution_support_chat_link"];
+    resolutionSupportPhone = json["resolution_support_phone"];
+    groPhone = json["gro_phone"];
+    groName = json["gro_name"];
+    groEmail = json["gro_email"];
+    resolution = json["resolution"];
+    resolutionRemarks = json["resolution_remarks"];
+    actionTriggered = json["action_triggered"];
+    refundAmount = json["refund_amount"];
+    resolutionAction = json["resolution_action"];
+    createdAt = json["createdAt"];
+    updatedAt = json["updatedAt"];
+    deletedAt = json["deletedAt"];
+    customerId = json["customerId"];
+    orderId = json["orderId"];
+    images = json["images"] ?? [];
+    issueActions = json["issueActions"] ?? [];
+  }
+
+  static List<Support> fromList(List<Map<String, dynamic>> list) {
+    return list.map((map) => Support.fromJson(map)).toList();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["category"] = category;
+    _data["sub_category"] = subCategory;
+    _data["short_description"] = shortDescription;
+    _data["long_description"] = longDescription;
+    _data["issue_type"] = issueType;
+    _data["status"] = status;
+    if(itemId != null) {
+      _data["itemId"] = itemId;
+    }
+    _data["organisation_name"] = organisationName;
+    _data["organisation_phone"] = organisationPhone;
+    _data["organisation_email"] = organisationEmail;
+    _data["resolution_support_email"] = resolutionSupportEmail;
+    _data["resolution_support_chat_link"] = resolutionSupportChatLink;
+    _data["resolution_support_phone"] = resolutionSupportPhone;
+    _data["gro_phone"] = groPhone;
+    _data["gro_name"] = groName;
+    _data["gro_email"] = groEmail;
+    _data["resolution"] = resolution;
+    _data["resolution_remarks"] = resolutionRemarks;
+    _data["action_triggered"] = actionTriggered;
+    _data["refund_amount"] = refundAmount;
+    _data["resolution_action"] = resolutionAction;
+    _data["createdAt"] = createdAt;
+    _data["updatedAt"] = updatedAt;
+    _data["deletedAt"] = deletedAt;
+    _data["customerId"] = customerId;
+    _data["orderId"] = orderId;
+    if(images != null) {
+      _data["images"] = images;
+    }
+    if(issueActions != null) {
+      _data["issueActions"] = issueActions;
+    }
+    return _data;
+  }
+}
 
 class FinalCosting {
    dynamic lable;

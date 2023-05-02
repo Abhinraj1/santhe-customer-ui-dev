@@ -455,7 +455,7 @@ class OndcRepository with LogMixin {
         required String subCategoryCode}) async {
 
 
-    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/update');
+    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/issue/raise');
 
     final header = {
       'Content-Type': 'application/json',
@@ -463,7 +463,7 @@ class OndcRepository with LogMixin {
     };
 
     try {
-      warningLog('requestReturnOrPartialCancel isReturn and url = $url');
+      warningLog('Raise Issue URL = $url');
       final response = await http.post(
         url,
         headers: header,

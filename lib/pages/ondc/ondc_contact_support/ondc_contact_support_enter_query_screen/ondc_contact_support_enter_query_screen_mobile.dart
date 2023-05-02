@@ -87,9 +87,7 @@ class _ONDCContactSupportEnterQueryScreenMobileState extends State<ONDCContactSu
                     title: "Subcategory",
                     list: state.subCategory,
                     selectedCode: (selected) {
-                      setState(() {
-                        selectedSubCatCode = selected;
-                      });
+                      selectedSubCatCode = selected;
                     },
                   ),
                   AddItems(
@@ -147,7 +145,7 @@ class _ONDCContactSupportEnterQueryScreenMobileState extends State<ONDCContactSu
                             first.orderId.toString(),
                             
                             longDescription: descriptionController.text,
-                            cartItemPricesId: [],
+                            cartItemPricesId: selectedCartItemPriceId,
                             images: imageListForContactSupport,
                             categoryCode: selectedCatCode,
                             subCategoryCode: selectedSubCatCode);

@@ -22,6 +22,9 @@ bool? isUserFromMyOrders;
 ///
 List<String> imageListForContactSupport = [];
 
+///
+List<String> selectedCartItemPriceId = [];
+
 class Constant {
   static Color bgColor = const Color(0xffF89522);
   static Color white = const Color(0xffffffff);

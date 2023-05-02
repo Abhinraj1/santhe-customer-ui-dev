@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:santhe/constants.dart';
 import '../../../models/ondc/shop_model.dart';
 import '../../../models/ondc/single_order_model.dart';
 import '../../../models/ondc/support_contact_models.dart';
@@ -84,6 +85,9 @@ class CustomerContactCubit extends Cubit<CustomerContactState>{
           subCategoryCode: subCategoryCode);
 
       if(response == "SUCCESS"){
+
+        selectedCartItemPriceId.clear();
+
 
         Get.to(()=> ONDCAcknowledgementScreenMobile(
           title: "Contact Support",

@@ -24,16 +24,16 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
   dynamic distanceD = 0;
 
   getImagesOfShops() {
-    warningLog('${widget.hyperLocalShopModel.images.length}');
-    for (var i = 0; i < widget.hyperLocalShopModel.images.length - 1; i++) {
-      final string = widget.hyperLocalShopModel.images[i]['image_url'];
-      errorLog('Image being added to the list $string');
-      images.add(string);
-    }
-    for (var element in images) {
-      networkImages.add(
-        ShopImageIntro(image: element),
-      );
+    if (widget.hyperLocalShopModel.images.length != null) {
+      for (var i = 0; i < widget.hyperLocalShopModel.images.length - 1; i++) {
+        final string = widget.hyperLocalShopModel.images[i]['display_image'];
+        images.add(string);
+      }
+      for (var element in images) {
+        networkImages.add(
+          ShopImageIntro(image: element),
+        );
+      }
     }
   }
 

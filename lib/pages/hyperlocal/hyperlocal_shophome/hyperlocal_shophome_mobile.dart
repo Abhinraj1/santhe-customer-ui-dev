@@ -17,6 +17,7 @@ class _HyperlocalShophomeMobile extends StatefulWidget {
 class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
     with LogMixin {
   CustomerModel? customerModel;
+  String flat = '';
   String? lat;
   String? lng;
   NetworkCall networkcall = NetworkCall();
@@ -50,7 +51,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
   @override
   Widget build(BuildContext context) {
     debugLog(
-        '${RepositoryProvider.of<AddressRepository>(context).addressModels}');
+        '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}');
     return BlocConsumer<HyperlocalShopBloc, HyperlocalShopState>(
       listener: (context, state) {
         warningLog('Current State $state');
@@ -184,27 +185,47 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
                                       top: 8.0,
                                       left: 25,
                                     ),
-                                    child: Text.rich(
-                                      TextSpan(
-                                        text: 'Delivery to: ',
-                                        style: const TextStyle(fontSize: 15),
-                                        children: <TextSpan>[
+                                    child:
+                                        BlocConsumer<AddressBloc, AddressState>(
+                                      listener: (context, state) {
+                                        errorLog(
+                                            'Address Bloc in hyperLocal$state');
+                                        if (state is GotAddressListAndIdState) {
+                                          setState(() {
+                                            flat = RepositoryProvider.of<
+                                                    AddressRepository>(context)
+                                                .deliveryModel
+                                                ?.flat;
+                                          });
+                                        }
+                                      },
+                                      builder: (context, state) {
+                                        return Text.rich(
                                           TextSpan(
-                                            text:
-                                                '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
-                                            // widget
-                                            //     .customerModel.address
-                                            //     .substring(0, 25),
+                                            text: 'Delivery to: ',
+                                            style:
+                                                const TextStyle(fontSize: 15),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text:
+                                                    '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
+                                                // widget
+                                                //     .customerModel.address
+                                                //     .substring(0, 25),
 
-                                            style: const TextStyle(
-                                              decorationColor: Color.fromARGB(
-                                                  255, 77, 81, 84),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                                style: const TextStyle(
+                                                  decorationColor:
+                                                      Color.fromARGB(
+                                                          255, 77, 81, 84),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              // can add more TextSpans here...
+                                            ],
                                           ),
-                                          // can add more TextSpans here...
-                                        ],
-                                      ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),

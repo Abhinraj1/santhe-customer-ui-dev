@@ -118,8 +118,11 @@ class OndcRepository with LogMixin {
           json.decode(response.body)['data']['rows'] as List<dynamic>;
       final count = json.decode(response.body);
       warningLog('shops$count $responseBody ');
-      List<ShopModel> shopModel =
-          responseBody.map((e) => ShopModel.fromMap(e)).toList();
+      List<ShopModel> shopModel = responseBody
+          .map((e) => ShopModel.fromMap(e))
+          .toList()
+          .where((element) => element.item_count != 0)
+          .toList();
       warningLog('shopModels $shopModel');
       return shopModel;
     } catch (e) {
@@ -186,7 +189,9 @@ class OndcRepository with LogMixin {
 
         // _searchProductCountInLocalShop =
         //     await json.decode(response.body)['data']['count'] as int;
-
+        _searchProductCountInLocalShop = 0;
+        _searchProductCountInLocalShop =
+            json.decode(response.body)['data']["count"];
         List<ProductOndcModel> searchedProducts =
             responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
         warningLog('$searchedProducts');

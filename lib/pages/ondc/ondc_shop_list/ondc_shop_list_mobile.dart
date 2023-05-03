@@ -30,8 +30,12 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   List<ProductOndcModel> existingModels = [];
   List<ShopModel> searchedModels = [];
   List<ShopModel> existingShopModels = [];
+  List<ShopModel> existingShopNewModels = [];
+  String searchTerm = '';
+
   String? noShopsMessage;
   int n = 0;
+  int nSearch = 0;
   String productName = "";
   late LocationModel locationModel;
   bool _searchedLoaded = false;
@@ -54,6 +58,49 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
     }
   }
 
+  getSearchNewShop(
+      {required List<OndcShopWidget> shops, required int limit}) async {
+    final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
+    final url = Uri.parse(
+        'https://ondcstaging.santhe.in/santhe/ondc/item/nearby?search=$productName&limit=10&offset=$nSearch&firebase_id=$firebaseID');
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      Future.delayed(Duration(seconds: 2), () async {
+        warningLog('Search Scroll used $url');
+        final response = await http.get(url, headers: header);
+        final responseBody =
+            json.decode(response.body)['data']['rows'] as List<dynamic>;
+        List<ShopModel> shopModel = responseBody
+            .map((e) => ShopModel.fromMap(e))
+            .toList()
+            .where((element) => element.item_count != 0)
+            .toList();
+        List<OndcShopWidget> addableItems = [];
+        for (var searchShopModel in shopModel) {
+          addableItems.add(OndcShopWidget(shopModel: searchShopModel));
+        }
+        warningLog('shopModels $addableItems');
+        shops.addAll(addableItems);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            addableItems.clear();
+            existingShopNewModels.addAll(shopModel);
+            shopWidgets = shops;
+            _isLoading = false;
+          });
+        });
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   getNewShops({required List<OndcShopWidget> shops, required int limit}) async {
     final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
 
@@ -67,40 +114,40 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       _isLoading = true;
     });
     try {
-      final response = await http.get(url, headers: header);
-      warningLog(
-          ' url $url checking for shop model via transcationid $response checking for existing shops length${shops.length}');
-      final responseBody =
-          json.decode(response.body)['data']['rows'] as List<dynamic>;
+      Future.delayed(Duration(seconds: 2), () async {
+        final response = await http.get(url, headers: header);
+        warningLog(
+            ' url $url checking for shop model via transcationid $response checking for existing shops length${shops.length}');
+        final responseBody =
+            json.decode(response.body)['data']['rows'] as List<dynamic>;
 
-      List<ShopModel> shopModel =
-          responseBody.map((e) => ShopModel.fromMap(e)).toList();
-      // .sublist(existingShopModels.length);
-      warningLog('limit check $limit $shopModel');
-      List<ShopModel> differenceShopModels =
-          shopModel.toSet().difference(existingShopModels.toSet()).toList();
-      // warningLog(
-      // 'difference shops length${differenceShopModels.length} $differenceShopModels');
-      List<OndcShopWidget> addableItems = [];
-      for (var shopModelData in differenceShopModels) {
-        addableItems.add(OndcShopWidget(shopModel: shopModelData));
-      }
-      warningLog('shopModels $addableItems');
-      shops.addAll(
-        addableItems.where(
-          (shopwidget) => shops.every((shopwidgetmain) =>
-              shopwidget.shopModel.id != shopwidgetmain.shopModel.id),
-        ),
-      );
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          addableItems.clear();
-          existingShopModels.addAll(differenceShopModels);
-          shopWidgets = shops;
-          _isLoading = false;
+        List<ShopModel> shopModel = responseBody
+            .map((e) => ShopModel.fromMap(e))
+            .toList()
+            .where((element) => element.item_count != 0)
+            .toList();
+        // .sublist(existingShopModels.length);
+        warningLog('limit check $limit ${shopModel.length}');
+        List<ShopModel> differenceShopModels = shopModel;
+        // .toSet().difference(existingShopModels.toSet())
+        // warningLog(
+        // 'difference shops length${differenceShopModels.length} $differenceShopModels');
+        List<OndcShopWidget> addableItems = [];
+        for (var shopModelData in differenceShopModels) {
+          addableItems.add(OndcShopWidget(shopModel: shopModelData));
+        }
+        warningLog('shopModels $addableItems');
+        shops.addAll(addableItems);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            addableItems.clear();
+            existingShopModels.addAll(differenceShopModels);
+            shopWidgets = shops;
+            _isLoading = false;
+          });
         });
+        warningLog('new exisiting models length ${existingShopModels.length}');
       });
-      warningLog('new exisiting models length ${existingShopModels.length}');
     } catch (e) {
       rethrow;
     }
@@ -217,12 +264,21 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       if (_shopScroll.position.pixels == _shopScroll.position.maxScrollExtent) {
         warningLog('called');
         setState(() {
-          n = n + 5;
+          n = n + 10;
         });
         getNewShops(
           shops: shopWidgets,
           limit: n,
         );
+      }
+    });
+    _controller.addListener(() {
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        warningLog('Search Scroll Called');
+        setState(() {
+          nSearch = nSearch + 10;
+        });
+        getSearchNewShop(shops: searchWidgets, limit: nSearch);
       }
     });
     _getLocationCity();
@@ -569,7 +625,9 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                   ),
                                 )
                               : SingleChildScrollView(
-                                  controller: _shopScroll,
+                                  controller: state is SearchItemLoaded
+                                      ? _controller
+                                      : _shopScroll,
                                   child: Column(
                                     children: [
                                       SizedBox(
@@ -587,46 +645,36 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                           children: [
                                             Expanded(
                                               child: GestureDetector(
-                                                child: Container(
-                                                  color: CupertinoColors
-                                                      .systemBackground,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.15,
-                                                  width: 340,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      top: 8.0,
-                                                      left: 25,
-                                                    ),
-                                                    child: Text.rich(
-                                                      TextSpan(
-                                                        text: 'Delivery to: ',
-                                                        style: TextStyle(
-                                                            fontSize: 15),
-                                                        children: <TextSpan>[
-                                                          TextSpan(
-                                                            text:
-                                                                '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
-                                                            // widget
-                                                            //     .customerModel.address
-                                                            //     .substring(0, 25),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    top: 8.0,
+                                                    left: 25,
+                                                  ),
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                      text: 'Delivery to: ',
+                                                      style: TextStyle(
+                                                          fontSize: 15),
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                          text:
+                                                              '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
+                                                          // widget
+                                                          //     .customerModel.address
+                                                          //     .substring(0, 25),
 
-                                                            style: TextStyle(
-                                                              decorationColor:
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          77,
-                                                                          81,
-                                                                          84),
-                                                            ),
+                                                          style: TextStyle(
+                                                            decorationColor:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    77,
+                                                                    81,
+                                                                    84),
                                                           ),
-                                                          // can add more TextSpans here...
-                                                        ],
-                                                      ),
+                                                        ),
+                                                        // can add more TextSpans here...
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
@@ -658,7 +706,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0, vertical: 1),
+                                            horizontal: 20.0, vertical: 20),
                                         child: SizedBox(
                                           height: 50,
                                           child: TextFormField(
@@ -672,6 +720,9 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                               .toString(),
                                                     ),
                                                   );
+                                              searchTerm =
+                                                  _textEditingController.text;
+                                              _textEditingController.clear();
                                             },
                                             // initialValue: _textEditingController
                                             //     .value.text,
@@ -743,6 +794,11 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                                     .toString(),
                                                           ),
                                                         );
+                                                    searchTerm =
+                                                        _textEditingController
+                                                            .text;
+                                                    _textEditingController
+                                                        .clear();
                                                   },
                                                   child: Icon(
                                                     CupertinoIcons
@@ -783,7 +839,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                        'Below are the shops that sell "${_textEditingController.text.toString().capitalizeFirst}"'),
+                                                        'Below are the shops that sell "${searchTerm.capitalizeFirst}"'),
                                                   ),
                                                 )
                                           : Padding(

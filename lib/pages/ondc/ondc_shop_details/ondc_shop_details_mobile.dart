@@ -22,6 +22,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
   List<OndcProductWidget> searchWidgets = [];
   List<ProductOndcModel> existingProductModels = [];
   List<ProductOndcModel> searchExistingModels = [];
+  int searchItemCount = 0;
   final ScrollController _scrollController = ScrollController();
   final ScrollController _searchScrollController = ScrollController();
   bool _loading = false;
@@ -270,6 +271,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       }
       if (state is FetchedItemsInLocalShop) {
         //searched State
+        searchItemCount = 0;
         List<OndcProductWidget> productsWidget = [];
         for (var productModel in state.productModels) {
           productsWidget.add(
@@ -280,6 +282,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
         setState(() {
           searchExistingModels = state.productModels;
           searchWidgets = productsWidget;
+          searchItemCount = state.productModels.length;
         });
       }
       if (state is ResetOndcState) {
@@ -1006,7 +1009,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                '${state.productModels.length} items available',
+                                '${RepositoryProvider.of<OndcRepository>(context).searchProductCountInLocalShop} items available',
                               ),
                             ),
                           )
@@ -1041,6 +1044,12 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                   childAspectRatio: 1.0,
                                   children: [
                                     ...searchWidgets,
+                                    _searchLoading
+                                        ? const Align(
+                                            alignment: Alignment.center,
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        : const SizedBox(height: 60)
                                   ],
                                 ),
                               ),
@@ -1086,9 +1095,14 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                       childAspectRatio: 1.0,
                                       children: [
                                         ...productWidget,
-                                        const SizedBox(
-                                          height: 50,
-                                        ),
+                                        _loading
+                                            ? const Align(
+                                                alignment: Alignment.center,
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : const SizedBox(
+                                                height: 80,
+                                              )
                                       ],
                                     ),
                                   ),
@@ -1098,7 +1112,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                         ? Column(
                             children: const [
                               Center(
-                                heightFactor: 0.8,
+                                // heightFactor: 0.8,
                                 child: CircularProgressIndicator(),
                               ),
                             ],
@@ -1107,7 +1121,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                             ? Column(
                                 children: const [
                                   Center(
-                                    heightFactor: 0.8,
+                                    // heightFactor: 0.8,
                                     child: CircularProgressIndicator(),
                                   ),
                                 ],

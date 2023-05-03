@@ -110,7 +110,7 @@ class HyperLocalShopModel extends Equatable {
       address: map['address'] != null ? map['address'] as dynamic : null,
       display_image:
           map['display_image'] != null ? map['display_image'] as dynamic : null,
-      images: map['images'] != null ? map['images'] as dynamic : null,
+      images: map['products'] != null ? map['products'] as dynamic : null,
       itemCount: map['itemCount'] != null ? map['itemCount'] as dynamic : null,
     );
   }
@@ -124,7 +124,7 @@ class HyperLocalShopModel extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,

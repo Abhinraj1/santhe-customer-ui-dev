@@ -25,7 +25,7 @@ class ONDCAcknowledgementView extends StatelessWidget {
             title: title,
             message: message,
             orderNumber: orderNumber,
-            onTap: (){
+            onBack: (){
               onTap();
             },
           ),

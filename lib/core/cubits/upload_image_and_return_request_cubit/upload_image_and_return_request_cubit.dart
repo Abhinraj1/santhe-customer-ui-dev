@@ -21,14 +21,12 @@ import '../../repositories/ondc_order_cancel_and_return_repository.dart';
 import '../customer_contact_cubit/customer_contact_cubit.dart';
 import '../ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 
-
-
-class UploadImageAndReturnRequestCubit extends
-Cubit<UploadImageAndReturnRequestState>{
+class UploadImageAndReturnRequestCubit
+    extends Cubit<UploadImageAndReturnRequestState> {
   final ONDCOrderCancelAndReturnRepository repository;
 
-  UploadImageAndReturnRequestCubit({required this.repository}) :
-        super(InitialState());
+  UploadImageAndReturnRequestCubit({required this.repository})
+      : super(InitialState());
 
   String _orderId = "";
   String _orderNumber = "";
@@ -38,140 +36,104 @@ Cubit<UploadImageAndReturnRequestState>{
   List<String> imageUrl = [];
   String _code = "";
 
-  getPrerequisiteData({ required String orderId,
+  getPrerequisiteData({
+    required String orderId,
     required String orderNumber,
-  required PreviewWidgetModel returnProduct,
+    required PreviewWidgetModel returnProduct,
     required String code,
-  }){
-
+  }) {
     _orderId = orderId;
     _orderNumber = orderNumber;
     _returnProduct = returnProduct;
-    _code = code;}
+    _code = code;
+  }
 
-
-
-
-  getImagesFromGallery()async{
-
+  getImagesFromGallery() async {
     // Pick an image
     final XFile? images = await _picker.pickImage(source: ImageSource.gallery);
 
     imagesList.add(images);
 
-
-  if(imagesList.length.isEqual(4)){
-     showImages(hideAddImgButton: true);
-
-   }else if(imagesList.length.isGreaterThan(4)){
-     imagesList.clear();
-     emit(ImagesLimitReached());
-   }else{
+    if (imagesList.length.isEqual(4)) {
+      showImages(hideAddImgButton: true);
+    } else if (imagesList.length.isGreaterThan(4)) {
+      imagesList.clear();
+      emit(ImagesLimitReached());
+    } else {
       showImages(hideAddImgButton: false);
     }
-
-
   }
 
-  getImagesFromCamera()async{
-
+  getImagesFromCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     imagesList.add(image);
 
-    if(imagesList.length.isEqual(4)){
+    if (imagesList.length.isEqual(4)) {
       showImages(hideAddImgButton: true);
-
-    }else if(imagesList.length.isGreaterThan(4)){
+    } else if (imagesList.length.isGreaterThan(4)) {
       imagesList.clear();
       emit(ImagesLimitReached());
-    }else{
+    } else {
       showImages(hideAddImgButton: false);
     }
   }
 
-
-
-   showImages({bool? hideAddImgButton}){
+  showImages({bool? hideAddImgButton}) {
     List<File> imageFiles = [File("do not remove")];
-    for(var data in imagesList){
-
-      if(data != null){
+    for (var data in imagesList) {
+      if (data != null) {
         imageFiles.add(File(data.path));
       }
-
     }
 
-    if(hideAddImgButton ?? false){
-
+    if (hideAddImgButton ?? false) {
       emit(HideAddImagesButton(imageFiles: imageFiles));
-
-    }else{
+    } else {
       emit(ShowImages(imageFiles: imageFiles));
     }
-
   }
 
-  uploadImages({required BuildContext context}) async{
-
+  uploadImages({required BuildContext context}) async {
     emit(LoadingState());
 
     for (var imgFile in imagesList) {
+      try {
+        String imgUrl = await repository.uploadImage(imgPath: imgFile!.path);
 
-      try{
+        imageUrl.add(imgUrl);
 
-       String imgUrl = await repository.uploadImage(
-           imgPath: imgFile!.path);
-
-       imageUrl.add(imgUrl);
-
-       print("####################################################"
-           "IMAGE URL ADDED = ${imgUrl}");
-
-      }catch(e){
-
+        print("####################################################"
+            "IMAGE URL ADDED = ${imgUrl}");
+      } catch (e) {
         emit(UploadImageAndReturnRequestErrorState(message: e.toString()));
-
       }
     }
     imagesList.clear();
-      sendReturnRequest();
-      Get.to(()=> ONDCAcknowledgementView(
-        title: "Return Request",
-        message: "Your return request is received,"
-            " Once we have received a confirmation "
-            "from the seller you will get an update "
-            "from us on the return  status and refund details",
+    sendReturnRequest();
+    // Get.to(() => ONDCAcknowledgementView(
+    //       title: "Return Request",
+    //       message: "Your return request is received,"
+    //           " Once we have received a confirmation "
+    //           "from the seller you will get an update "
+    //           "from us on the return  status and refund details",
+    //       orderNumber: _orderNumber,
+    //       onTap: () {
+    //         BlocProvider.of<OrderDetailsScreenCubit>(context)
+    //             .loadOrderDetails(orderId: _orderId);
 
-        orderNumber: _orderNumber,
-
-        onTap: (){
-          BlocProvider.of<OrderDetailsScreenCubit>(context)
-              .loadOrderDetails(
-              orderId: _orderId);
-
-          Get.offAll(()=> ONDCOrderDetailsView(
-            onBackButtonTap: (){
-              orderDetailsScreenRoutingLogic();
-            },
-          ),
-              transition: ge.Transition.leftToRight);
-        },));
-
+    //          Get.close(3);
+    //       },
+    //     ));
   }
 
-
-
-
-  sendReturnRequest() async{
-
+  sendReturnRequest() async {
     print("############################## sendReturnRequest calleddddd");
-    try{
+    try {
       print("############################## INSIDE TRY");
 
       print("############################## orderId = $_orderId "
           "########_code = $_code ########## CartPriceId = ${_returnProduct.status} "
           "####### quantity = ${_returnProduct.quantity}");
-
 
       String response = await repository.requestReturnOrPartialCancel(
           orderId: _orderId,
@@ -179,70 +141,50 @@ Cubit<UploadImageAndReturnRequestState>{
           cartItemPricesId: _returnProduct.id,
           images: imageUrl,
           quantity: _returnProduct.quantity.toString(),
-          isReturn: true
-      );
+          isReturn: true);
 
-      if(response == "SUCCESS"){
-        Get.to(()=> ONDCAcknowledgementView(
-          title: "Return Request",
-          message: "Your return request is received,"
-              " Once we have received a confirmation "
-              "from the seller you will get an update "
-              "from us on the return  status and refund details",
-
-          orderNumber: _orderNumber,
-
-          onTap: (){
-            Get.offAll( ONDCOrderDetailsView(
-              onBackButtonTap: (){
-                orderDetailsScreenRoutingLogic();
-                },
-            ),
-                transition: ge.Transition.leftToRight);
-          },) );
-
+      if (response == "SUCCESS") {
+        Get.to(() => ONDCAcknowledgementView(
+              title: "Return Request",
+              message: "Your return request is received,"
+                  " Once we have received a confirmation "
+                  "from the seller you will get an update "
+                  "from us on the return  status and refund details",
+              orderNumber: _orderNumber,
+              onTap: () {
+             Get.close(3);
+              },
+            ));
       }
       emit(InitialState());
 
       print("####################################################"
           "RESPONSE AFTER RETURN REQUEST = $response");
-
-    }catch(e){
-
+    } catch (e) {
       emit(UploadImageAndReturnRequestErrorState(message: e.toString()));
-
     }
   }
 
-  clearImages(){
+  clearImages() {
     imagesList.clear();
     imageUrl.clear();
   }
 
-  getImageString() async{
-
+  getImageString() async {
     emit(LoadingState());
 
     for (var imgFile in imagesList) {
-
-      try{
-
-        String imgUrl = await repository.uploadImage(
-            imgPath: imgFile!.path);
+      try {
+        String imgUrl = await repository.uploadImage(imgPath: imgFile!.path);
 
         imageListForContactSupport.add(imgUrl);
 
         print("####################################################"
             "IMAGE URL ADDED = ${imgUrl}");
-
-      }catch(e){
-
+      } catch (e) {
         emit(UploadImageAndReturnRequestErrorState(message: e.toString()));
-
       }
     }
     imagesList.clear();
-
   }
-
 }

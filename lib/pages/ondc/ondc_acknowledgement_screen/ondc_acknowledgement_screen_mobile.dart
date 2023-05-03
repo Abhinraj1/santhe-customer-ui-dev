@@ -12,12 +12,12 @@ class ONDCAcknowledgementScreenMobile extends StatelessWidget {
   final String message;
   final String title;
   final String orderNumber;
-  final Function() onTap;
+  final Function() onBack;
 
   const ONDCAcknowledgementScreenMobile({Key? key,
     required this.message,
     required this.title,
-    required this.onTap,
+    required this.onBack,
     required this.orderNumber})
       : super(key: key);
 
@@ -31,7 +31,7 @@ class ONDCAcknowledgementScreenMobile extends StatelessWidget {
             CustomTitleWithBackButton(
               title: title,
               onTapBackButton: (){
-                onTap();
+                onBack();
               },
             ),
             Text(
@@ -51,7 +51,7 @@ class ONDCAcknowledgementScreenMobile extends StatelessWidget {
             const Spacer(),
             CustomButton(
               onTap: () {
-                onTap();
+                onBack();
               },
               width: 160,
               verticalPadding: 40,

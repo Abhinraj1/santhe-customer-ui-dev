@@ -36,114 +36,102 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
     super.initState();
 
     scrollController.addListener(listener);
-    BlocProvider.of<OrderHistoryBloc>(context).add
-      (LoadPastOrderDataEvent(offset: "0",alreadyFetchedList: []));
+    BlocProvider.of<OrderHistoryBloc>(context)
+        .add(LoadPastOrderDataEvent(offset: "0", alreadyFetchedList: []));
   }
+
   @override
   Widget build(BuildContext context) {
-    return
-      Expanded(
-        child: BlocConsumer<OrderHistoryBloc, OrderHistoryState>(
-          listener: (context, state) {
-            // TODO: implement listener
+    return Expanded(
+      child: BlocConsumer<OrderHistoryBloc, OrderHistoryState>(
+        listener: (context, state) {
+          // TODO: implement listener
 
-            if(state is SingleOrderErrorState){
+          if (state is SingleOrderErrorState) {
+            Get.to(
+              () => const ApiErrorView(),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is SingleOrderErrorState) {
+            return Center(child: Text(state.message));
+          } else if (state is PastOrderDataLoadedState) {
+            orderDetails = state.orderDetails;
 
-              Get.to(()=> const ApiErrorView(),);
-
-            }
-          },
-          builder: (context, state) {
-
-                  if (state is SingleOrderErrorState) {
-                    return Center(child: Text(state.message));
-                  }
-                  else if (state is PastOrderDataLoadedState) {
-                    orderDetails = state.orderDetails;
-
-                    return listBody(orderDetails: state.orderDetails,
-                        isLoading: isLoading);
-                  } else if (state is SevenDaysFilterState) {
-                    return listBody(orderDetails: state.orderDetails,
-                        isLoading: isLoading);
-                  } else if (state is ThirtyDaysFilterState) {
-                    return listBody(orderDetails: state.orderDetails,
-                        isLoading: isLoading);
-                  } else if (state is CustomDaysFilterState) {
-                    return listBody(orderDetails: state.orderDetails,
-                        isLoading: isLoading);
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-          },
-        ),
-      );
+            return listBody(
+                orderDetails: state.orderDetails, isLoading: isLoading);
+          } else if (state is SevenDaysFilterState) {
+            return listBody(
+                orderDetails: state.orderDetails, isLoading: isLoading);
+          } else if (state is ThirtyDaysFilterState) {
+            return listBody(
+                orderDetails: state.orderDetails, isLoading: isLoading);
+          } else if (state is CustomDaysFilterState) {
+            return listBody(
+                orderDetails: state.orderDetails, isLoading: isLoading);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
   }
 
-  Widget listBody({required List<SingleOrderModel> orderDetails,
-    required bool isLoading}) {
+  Widget listBody(
+      {required List<SingleOrderModel> orderDetails, required bool isLoading}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SizedBox(
         child: ListView.builder(
-          controller: scrollController,
+            controller: scrollController,
             itemCount:
-            isLoading ?
-            orderDetails.length + 1 :
-            orderDetails.length,
-
+                isLoading ? orderDetails.length + 1 : orderDetails.length,
             itemBuilder: (context, index) {
-            if(index < orderDetails.length) {
-              return  OrderHistoryCell(
-                orderDetails: orderDetails[index],
-              );
-
-            }else {
-              return
-                const Center(child: CircularProgressIndicator(
-                ));
-            }
+              if (index < orderDetails.length) {
+                return OrderHistoryCell(
+                  orderDetails: orderDetails[index],
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
             }),
       ),
     );
   }
-  listener(){
 
-    if(isLoading) return;
-    if(scrollController.position.pixels ==
-       scrollController.position.maxScrollExtent){
+  listener() {
+    if (isLoading) return;
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       setState(() {
         isLoading = true;
       });
-      offset = offset  + 10;
-      BlocProvider.of<OrderHistoryBloc>(context).add
-        ( LoadPastOrderDataEvent(offset: offset.toString(),
-          alreadyFetchedList:orderDetails));
+      offset = offset + 10;
+      BlocProvider.of<OrderHistoryBloc>(context).add(LoadPastOrderDataEvent(
+          offset: offset.toString(), alreadyFetchedList: orderDetails));
       setState(() {
         isLoading = false;
       });
-
     }
   }
 }
 
-
 class OrderHistoryCell extends StatelessWidget {
   final SingleOrderModel orderDetails;
 
-  const OrderHistoryCell({Key? key,
-    required this.orderDetails}) : super(key: key);
+  const OrderHistoryCell({Key? key, required this.orderDetails})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    DateTime createdDate = DateTime.parse(
-        orderDetails.quotes!.first.createdAt.toString());
+    DateTime createdDate =
+        DateTime.parse(orderDetails.quotes!.first.createdAt.toString());
     String orderNo = orderDetails.orderNumber.toString(),
         orderStatus = orderDetails.status.toString(),
         shopName = orderDetails.storeLocation!.store!.name.toString(),
         orderId = orderDetails.quotes!.first.orderId.toString(),
         orderDate = DateFormat.yMd().format(createdDate);
-
 
     return Container(
       width: 320,
@@ -154,19 +142,14 @@ class OrderHistoryCell extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          print(
-              "################################################### $orderId");
+          print("################################################### $orderId");
           BlocProvider.of<OrderDetailsScreenCubit>(context)
-              .loadOrderDetails(
-              orderId: orderId);
+              .loadOrderDetails(orderId: orderId);
 
-          isFromMyOrders();
-
-          Get.to(() =>    ONDCOrderDetailsView());
+          Get.to(() => ONDCOrderDetailsView());
         },
-
         child: OrderDetailsTable(
-          date: orderDate,
+            date: orderDate,
             firstTitle: "Shop",
             firstData: shopName,
             secondTitle: "Oder ID",
@@ -177,14 +160,8 @@ class OrderHistoryCell extends StatelessWidget {
             fourthData: orderDate,
             redTextButtonTitle: "Details",
             horizontalPadding: 15,
-            verticalPadding: 10.0
-        ),
+            verticalPadding: 10.0),
       ),
     );
   }
-
-
 }
-
-
-

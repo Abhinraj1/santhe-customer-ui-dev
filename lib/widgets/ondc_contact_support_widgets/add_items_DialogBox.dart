@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:santhe/constants.dart';
 import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 
 import '../../core/app_colors.dart';
@@ -29,7 +30,7 @@ class AddItems extends StatelessWidget {
         InkWell(
           onTap: (){
 
-            print("STORE CART IDTE,S ====================================="
+            print("STORE CART ID,S length ====================================="
             "${store.quotes!.first.cartItemPrices!.length}");
             Get.to(()=>SelectProductScreen(store: store,));
 
@@ -46,9 +47,12 @@ class AddItems extends StatelessWidget {
                 color: AppColors().white100
             ),
             margin: const EdgeInsets.symmetric(
-                horizontal: 20,vertical: 10),),
+                horizontal: 20,vertical: 10),
+          child: selectedCartItemPriceId.isNotEmpty ?
+          Text("You Selected ${selectedCartItemPriceId.length} Products",
+          style: FontStyleManager().s16fw700,):
+            null,),
         ),
-
       ],
     );
   }

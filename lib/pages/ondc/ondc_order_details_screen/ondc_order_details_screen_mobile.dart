@@ -30,6 +30,8 @@ import '../../../widgets/ondc_order_details_widgets/order_details_table.dart';
 import '../../../widgets/ondc_order_details_widgets/shipments_card.dart';
 import '../../../widgets/ondc_widgets/error_container_widget.dart';
 import '../../../widgets/ondc_widgets/preview_widget.dart';
+import '../ondc_contact_support/ondc_contact_support_enter_query_screen/ondc_contact_support_enter_query_screen_mobile.dart';
+import '../ondc_contact_support/ondc_contact_support_ticket_screen/ondc_contact_support_ticket_screen_mobile.dart';
 
 
 class ONDCOrderDetailsScreen extends StatefulWidget {
@@ -150,7 +152,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                   return body(
                     context: context,
                     orderDetails: state.orderDetails,
-                    errorMessage: state.message
+                    errorMessage: state.message,
+
                   );
                 }
                 else {
@@ -181,6 +184,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     List<CartItemPrices> products =
     orderDetails.singleOrderModel!.quotes!.first.cartItemPrices
     as List<CartItemPrices>;
+
+    String? message = orderDetails.message;
 
     String? paymentStatusFunction() {
       if (orderDetails.singleOrderModel!.
@@ -315,7 +320,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                             product: element));
                   },
                   child: Text(
-                      "Return", style: FontStyleManager().s14fw700GreyUnderLne),
+                      "Return", style: FontStyleManager()
+                      .s14fw700GreyUnderLne),
                 );
             } else {
               return null;
@@ -346,7 +352,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
       if(element.cartPriceItemStatus.toString() != "null" &&
           element.cartPriceItemStatus.toString() != "" ){
-            return Text(element.cartPriceItemStatus.toString(),
+            return Text(statusFormatter(value: element.cartPriceItemStatus.toString()),
               style: FontStyleManager().s12fw700Grey,);
       }
 
@@ -384,7 +390,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                   isCancelled: element.isCancelled,
                   serviceable: "N/A",
                   provider_name: "N/A",
-                  fulfillment_id: element.deliveryFulfillment?.fulfillmentId,
+                  fulfillment_id: element.deliveryFulfillment?.fulfillmentId ?? "",
                   category: "N/A",
                   message_id: "N/A",
                   cartPriceItemStatus: element.status,
@@ -438,6 +444,12 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           ErrorContainerWidget(message: errorMessage,):
         const SizedBox(),
 
+          message != null && message != ""?
+          ErrorContainerWidget(
+            message: message,
+            nonErrorMessage: true,):
+          const SizedBox(),
+
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
         child: Center(
@@ -454,9 +466,9 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
         itemScrollController: _controller,
         stickyHeaderBackgroundColor: CupertinoColors.systemBackground,
         groupBy: (PreviewWidgetOndcItem previewWidget) {
-          log('${previewWidget.previewWidgetModel.deliveryFulfillmentId}',
+          log('${previewWidget.previewWidgetModel.deliveryFulfillmentId ?? ""}',
               name: 'Sorting method Order_Detail_Screen.Dart');
-          return previewWidget.previewWidgetModel.deliveryFulfillmentId;
+          return previewWidget.previewWidgetModel.deliveryFulfillmentId ?? "";
         },
         groupSeparatorBuilder: (PreviewWidgetOndcItem previewWidget) {
           //! track fullfillment id matches the product fullfillment id ...then we take the track state and send it in the _getgroupSeparator
@@ -553,6 +565,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                               "",
                               style: FontStyleManager().s10fw500Brown,
                             ),
+
                             Text(
                               '${previewWidgetModel.previewWidgetModel
                                   .quantity} units',
@@ -622,16 +635,25 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
             .toString(),
         amountInCents: orderDetails.singleOrderModel!.payment!.amountInCents.toString(),
       ),
-
+          orderDetails.singleOrderModel!.support == null ?
       CustomerSupportButton(
           onTap: () {
             BlocProvider.of<CustomerContactCubit>(context)
                 .customerContact(model: orderDetails.singleOrderModel!);
             // Get.to(()=>const ONDCContactSupportView());
-          }),
+          }) : SizedBox(),
 
+          orderDetails.singleOrderModel!.support != null ?
+          CustomerSupportButton(
+            onTap: (){
+          Get.to(ONDCContactSupportTicketScreenMobile(
+            support: orderDetails.singleOrderModel!.support!,));
+            },
+            title: "CONTACT SANTHE SUPPORT",
+          ) : SizedBox(),
 
-      BlocBuilder<OrderDetailsButtonCubit, OrderDetailsButtonState>(
+    orderDetails.singleOrderModel!.support == null ?
+    BlocBuilder<OrderDetailsButtonCubit, OrderDetailsButtonState>(
           builder: (context, state) {
             if (state is ShowCancelButton) {
               return CancelOrderButton(onTap: () {
@@ -645,7 +667,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
                 height: 20,
               );
             }
-          })
+          }) :
+        SizedBox()
     ]);
   }
 

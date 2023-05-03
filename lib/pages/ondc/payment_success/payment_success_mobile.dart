@@ -19,8 +19,6 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
       return WillPopScope(
         onWillPop: () async {
           Get.back();
-          Get.back();
-          Get.back();
           return true;
         },
         child: Scaffold(
@@ -123,13 +121,9 @@ class _PaymentSuccessMobileState extends State<_PaymentSuccessMobile>
                                           context)
                                       .orderId);
 
-                      isFromMyOrders(value: false);
-
-                      Get.offAll(() => ONDCOrderDetailsView(
+                      Get.to(() => ONDCOrderDetailsView(
                             onBackButtonTap: () {
-                              Get.to(OndcShopListView(
-                                customerModel: customerModel,
-                              ));
+                              Get.close(5);
                             },
                           ));
                     },

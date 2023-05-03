@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz_unsafe.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
@@ -10,115 +9,93 @@ import '../../../repositories/ondc_repository.dart';
 part 'ondc_order_history_event.dart';
 part 'ondc_order_history_state.dart';
 
-
-
 class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
     with LogMixin {
   final OndcRepository ondcRepository;
 
   OrderHistoryBloc({
     required this.ondcRepository,
-
   }) : super(LoadDataState()) {
-
     List<SingleOrderModel> orderDetails = [];
 
-    on<OrderHistoryEvent> ((event, emit) {});
+    on<OrderHistoryEvent>((event, emit) {});
 
-    if(state is LoadDataState) {
-      emit(
-        PastOrderDataLoadedState(orderDetails: orderDetails));
+    if (state is LoadDataState) {
+      emit(PastOrderDataLoadedState(orderDetails: orderDetails));
     }
 
     on<LoadPastOrderDataEvent>((event, emit) async {
-
-
       //orderDetails = event.alreadyFetchedList;
 
-     event.offset == "0" ? emit(LoadingState()) : null;
+      event.offset == "0" ? emit(LoadingState()) : null;
 
-      try{
+      try {
+        List<SingleOrderModel> fetchedList =
+            await ondcRepository.getPastOrder(offset: event.offset);
 
-        List<SingleOrderModel> fetchedList  = await ondcRepository.getPastOrder(
-            offset: event.offset);
-
-        if(fetchedList.isNotEmpty){
-
-          fetchedList.forEach((e){
+        if (fetchedList.isNotEmpty) {
+          fetchedList.forEach((e) {
             orderDetails.add(e);
           });
         }
 
-
-        emit(PastOrderDataLoadedState(
-            orderDetails: orderDetails
-        ));
-
-      }catch(e){
-
+        emit(PastOrderDataLoadedState(orderDetails: orderDetails));
+      } catch (e) {
         emit(SingleOrderErrorState(message: e.toString()));
-
       }
-
     });
 
     on<SevenDaysFilterEvent>((event, emit) {
-
       DateTime today = DateTime.now();
       DateTime startingDate = today.subtract(const Duration(days: 8));
 
       List<SingleOrderModel> filteredOrders = [];
 
-       for(var i in orderDetails){
+      for (var i in orderDetails) {
         i.quotes?.forEach((element) {
-          if(DateTime.parse(element.createdAt.toString()).isAfter(startingDate)){
+          if (DateTime.parse(element.createdAt.toString())
+              .isAfter(startingDate)) {
             filteredOrders.add(i);
-        } });
-       }
+          }
+        });
+      }
 
       emit(SevenDaysFilterState(orderDetails: filteredOrders));
     });
 
     on<ThirtyDaysFilterEvent>((event, emit) {
-
       DateTime today = DateTime.now();
       DateTime startingDate = today.subtract(const Duration(days: 31));
 
       List<SingleOrderModel> filteredOrders = [];
 
-      for(var i in orderDetails){
+      for (var i in orderDetails) {
         i.quotes?.forEach((element) {
-          if(DateTime.parse(element.createdAt.toString()).isAfter(startingDate)){
-            filteredOrders.add(i);
-          } });
-      }
-      emit(ThirtyDaysFilterState(orderDetails: filteredOrders));
-    });
-
-
-
-    on<CustomDaysFilterEvent>((event, emit) {
-      List<SingleOrderModel> filteredOrders = [];
-
-      for(var i in orderDetails){
-        i.quotes?.forEach((element) {
-
-          if(
-          DateTime.parse(element.createdAt.toString()).
-          isAfter(
-              (event.selectedDates.first)!.subtract(const Duration(days: 1))) &&
-
-              DateTime.parse(element.createdAt.toString())
-                  .isBefore((
-                  event.selectedDates.last)!.add(const Duration(days: 1)) )
-          ){
+          if (DateTime.parse(element.createdAt.toString())
+              .isAfter(startingDate)) {
             filteredOrders.add(i);
           }
         });
       }
-    //  print("################################################ CustomDaysFilterEvent ${filteredOrders.length} ");
-      emit(SevenDaysFilterState(orderDetails: filteredOrders));
+      emit(ThirtyDaysFilterState(orderDetails: filteredOrders));
     });
 
+    on<CustomDaysFilterEvent>((event, emit) {
+      List<SingleOrderModel> filteredOrders = [];
+
+      for (var i in orderDetails) {
+        i.quotes?.forEach((element) {
+          if (DateTime.parse(element.createdAt.toString()).isAfter(
+                  (event.selectedDates.first)!
+                      .subtract(const Duration(days: 1))) &&
+              DateTime.parse(element.createdAt.toString()).isBefore(
+                  (event.selectedDates.last)!.add(const Duration(days: 1)))) {
+            filteredOrders.add(i);
+          }
+        });
+      }
+      //  print("################################################ CustomDaysFilterEvent ${filteredOrders.length} ");
+      emit(SevenDaysFilterState(orderDetails: filteredOrders));
+    });
   }
 }

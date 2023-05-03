@@ -95,31 +95,6 @@ class _ONDCContactSupportEnterQueryScreenMobileState extends State<ONDCContactSu
                   ),
 
 
-                  //ToDo remove below code
-                  // Obx(
-                  //    () {
-                  //      if(showFulfillment.value){
-                  //        return CustomDropDownButton(
-                  //          title: "Fulfilment ID",
-                  //          options: [
-                  //            "help",
-                  //            "need",
-                  //            "start",
-                  //            "end",
-                  //            "finish"
-                  //          ],
-                  //          selectedCode: (selected) {
-                  //
-                  //          },
-                  //        );
-                  //      }else{
-                  //      return  const SizedBox();
-                  //      }
-                  //
-                  //   }
-                  // ),
-
-
                   CustomTextField(
                     controller: descriptionController,
                     hintText: " ",
@@ -136,21 +111,34 @@ class _ONDCContactSupportEnterQueryScreenMobileState extends State<ONDCContactSu
 
                   const ImageAttachmentTextButton(),
 
-                  CustomButton(
-                      onTap: () {
+                  Obx(
+                     () {
+                       if(isImageLoading.value){
+                         return const Center(
+                           child: CircularProgressIndicator(),
+                         );
+                       }else{
+                         return
+                           CustomButton(
+                             onTap: () {
 
-                        BlocProvider.of<CustomerContactCubit>(context)
-                            .submitContactSupportDetails(
-                            orderId: widget.store.quotes!.
-                            first.orderId.toString(),
-                            
-                            longDescription: descriptionController.text,
-                            cartItemPricesId: selectedCartItemPriceId,
-                            images: imageListForContactSupport,
-                            categoryCode: selectedCatCode,
-                            subCategoryCode: selectedSubCatCode);
-                      },
-                      buttonTitle: "SUBMIT"),
+                               BlocProvider.of<CustomerContactCubit>(context)
+                                   .submitContactSupportDetails(
+                                   orderId: widget.store.quotes!.
+                                   first.orderId.toString(),
+
+                                   longDescription: descriptionController.text,
+                                   cartItemPricesId: selectedCartItemPriceId,
+                                   images: imageListForContactSupport,
+                                   categoryCode: selectedCatCode,
+                                   subCategoryCode: selectedSubCatCode);
+                             },
+                             buttonTitle: "SUBMIT");
+                       }
+                    }
+                  ),
+
+
 
                   const SizedBox(
                     height: 40,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'models/user_profile/customer_model.dart';
 
@@ -23,7 +24,10 @@ bool? isUserFromMyOrders;
 List<String> imageListForContactSupport = [];
 
 ///
-List<String> selectedCartItemPriceId = [];
+var isImageLoading = false.obs;
+
+///
+var selectedCartItemPriceId = <String>[].obs;
 
 class Constant {
   static Color bgColor = const Color(0xffF89522);

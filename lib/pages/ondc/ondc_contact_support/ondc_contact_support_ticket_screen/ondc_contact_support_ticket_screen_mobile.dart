@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:santhe/models/ondc/single_order_model.dart';
 import 'package:santhe/widgets/custom_widgets/customScaffold.dart';
 import 'package:santhe/widgets/custom_widgets/custom_title_with_back_button.dart';
@@ -6,6 +7,7 @@ import 'package:santhe/widgets/custom_widgets/table_generator.dart';
 
 import '../../../../manager/font_manager.dart';
 import '../../../../widgets/custom_widgets/custom_button.dart';
+import '../../../../widgets/custom_widgets/home_icon_button.dart';
 import '../../../../widgets/ondc_contact_support_widgets/images_list_textButton.dart';
 
 class ONDCContactSupportTicketScreenMobile extends StatelessWidget {
@@ -15,11 +17,13 @@ class ONDCContactSupportTicketScreenMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String description = "Item was received in damaged status "
-        "and is not usable and some extended description about the issue as"
-        " reported by the customer will be shown here in multiple lines  ";
 
-    return CustomScaffold(
+List<String> img = [];
+support.images!.forEach((element) {
+  img.add(  element.toString());
+});
+     return CustomScaffold(
+        trailingButton: homeIconButton(),
         body: ListView(
       children: [
         const CustomTitleWithBackButton(
@@ -28,10 +32,11 @@ class ONDCContactSupportTicketScreenMobile extends StatelessWidget {
         TableGenerator(
           tableRows: [
             TableModel(title: "Order ID :", data: support.orderId.toString()),
-            TableModel(title: "Ticket ID :", data: "data"),
+            TableModel(title: "Ticket ID :", data: support.id ?? "N/A"),
             TableModel(title: "Category :", data: support.category),
             TableModel(title: "Subcategory :", data: support.subCategory),
-            TableModel(title: "Description :"),
+            TableModel(title:support.longDescription != null
+                ? "Description :" : ""),
           ],
         ),
         support.longDescription != null
@@ -52,8 +57,12 @@ class ONDCContactSupportTicketScreenMobile extends StatelessWidget {
                   style: FontStyleManager().s14fw600Grey,
                 ),
               )
+            : const SizedBox(),
+
+        support.images!.isNotEmpty ?
+         ImagesListTextButton(imgList:  img,)
             : SizedBox(),
-        support.images!.isNotEmpty ? const ImagesListTextButton() : SizedBox(),
+
         TableGenerator(
           tableRows: [
             TableModel(

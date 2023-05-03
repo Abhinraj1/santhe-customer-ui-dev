@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../constants.dart';
 import '../../core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import '../../manager/font_manager.dart';
 
@@ -21,6 +22,8 @@ class SelectImageSourceDialog extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: ElevatedButton(
               onPressed: (){
+                isImageLoading.value = true;
+
                 BlocProvider.of<UploadImageAndReturnRequestCubit>
                   (context).
                 getImagesFromCamera();
@@ -34,6 +37,8 @@ class SelectImageSourceDialog extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: ElevatedButton(
               onPressed: (){
+                isImageLoading.value = true;
+
                 BlocProvider.of<UploadImageAndReturnRequestCubit>
                   (context).
                 getImagesFromGallery();

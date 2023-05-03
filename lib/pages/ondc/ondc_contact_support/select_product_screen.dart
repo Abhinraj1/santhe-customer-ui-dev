@@ -21,7 +21,7 @@ class SelectProductScreen extends StatefulWidget {
 }
 
 class _SelectProductScreenState extends State<SelectProductScreen> {
-  bool isSelected = false;
+  List<bool> isSelected = [];
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -37,8 +37,15 @@ class _SelectProductScreenState extends State<SelectProductScreen> {
 
                   itemBuilder: (context, index){
 
+                  isSelected.addAll(List.generate( widget.store.quotes!.
+                  first.cartItemPrices!.length, (index) => false
+                  ));
+
                  CartItemPrices item =  widget.store.quotes!.
                  first.cartItemPrices![index];
+
+                 isSelected[index] = selectedCartItemPriceId.value.
+                                        contains(item.id.toString());
 
 
                 if(item.type.toString() == "item"){
@@ -53,13 +60,13 @@ class _SelectProductScreenState extends State<SelectProductScreen> {
                           onTap: (){
 
                             setInnerState((){
-                              isSelected = !isSelected;
+                              isSelected[index] = !isSelected[index];
                               setState(() {});
                             });
 
 
 
-                            if(isSelected){
+                            if(isSelected[index]){
                               ///
                               selectedCartItemPriceId.add(item.id.toString());
                             }else{
@@ -76,7 +83,7 @@ class _SelectProductScreenState extends State<SelectProductScreen> {
                           child: Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6.0),
-                              side: isSelected ? BorderSide(color: Colors.green,width: 2):
+                              side: isSelected[index] ? BorderSide(color: Colors.green,width: 2):
                                   BorderSide.none
                             ),
                             elevation: 8.0,
@@ -181,7 +188,8 @@ class _SelectProductScreenState extends State<SelectProductScreen> {
                                      const SizedBox(width: 6),
                                   ],
                                 ),
-                              isSelected ?  Positioned(
+                              isSelected[index] ?
+                              const Positioned(
                                   top: 2,
                                     right: 2,
                                     child: Icon(

@@ -48,10 +48,27 @@ class AddItems extends StatelessWidget {
             ),
             margin: const EdgeInsets.symmetric(
                 horizontal: 20,vertical: 10),
-          child: selectedCartItemPriceId.isNotEmpty ?
-          Text("You Selected ${selectedCartItemPriceId.length} Products",
-          style: FontStyleManager().s16fw700,):
-            null,),
+          child:
+          Obx(
+             () {
+              return SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 13.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      selectedCartItemPriceId.value.isNotEmpty ?
+                      "You Selected ${selectedCartItemPriceId.
+                    value.length} Products" :
+                      " ",
+                    style:  FontStyleManager().s20fw700Black,
+                 ),
+                  ),
+                ),
+              );
+            }
+          )),
         ),
       ],
     );

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -16,6 +15,8 @@ import '../../core/cubits/upload_image_and_return_request_cubit/upload_image_and
 import '../../models/ondc/single_order_model.dart';
 import '../../pages/ondc/api_error/api_error_view.dart';
 import '../../utils/order_details_screen_routing_logic.dart';
+
+
 
 class OrderHistoryList extends StatefulWidget {
   const OrderHistoryList({Key? key}) : super(key: key);
@@ -117,7 +118,7 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
           offset: offset.toString(),
               alreadyFetchedList: orderDetails));
 
-      Future.delayed(Duration(seconds: 1)).then((value) {
+      Future.delayed(const Duration(seconds: 1)).then((value) {
         myOrdersLoading.value = false;
       });
 

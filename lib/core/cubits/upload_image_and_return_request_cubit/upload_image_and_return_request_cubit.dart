@@ -179,6 +179,8 @@ class UploadImageAndReturnRequestCubit
 
         imageListForContactSupport.add(imgUrl);
 
+        isImageLoading.value = false;
+
         print("####################################################"
             "IMAGE URL ADDED = ${imgUrl}");
       } catch (e) {

@@ -27,7 +27,7 @@ class OrderHistoryList extends StatefulWidget {
 class _OrderHistoryListState extends State<OrderHistoryList> {
   ScrollController scrollController = ScrollController();
   List<SingleOrderModel> orderDetails = [];
-  bool isLoading = false;
+
   int offset = 0;
 
   @override
@@ -37,7 +37,8 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
 
     scrollController.addListener(listener);
     BlocProvider.of<OrderHistoryBloc>(context)
-        .add(LoadPastOrderDataEvent(offset: "0", alreadyFetchedList: []));
+        .add(LoadPastOrderDataEvent(offset: "0",
+        alreadyFetchedList: []));
   }
 
   @override
@@ -60,16 +61,16 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
             orderDetails = state.orderDetails;
 
             return listBody(
-                orderDetails: state.orderDetails, isLoading: isLoading);
+                orderDetails: state.orderDetails, );
           } else if (state is SevenDaysFilterState) {
             return listBody(
-                orderDetails: state.orderDetails, isLoading: isLoading);
+                orderDetails: state.orderDetails, );
           } else if (state is ThirtyDaysFilterState) {
             return listBody(
-                orderDetails: state.orderDetails, isLoading: isLoading);
+                orderDetails: state.orderDetails, );
           } else if (state is CustomDaysFilterState) {
             return listBody(
-                orderDetails: state.orderDetails, isLoading: isLoading);
+                orderDetails: state.orderDetails, );
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -79,14 +80,14 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
   }
 
   Widget listBody(
-      {required List<SingleOrderModel> orderDetails, required bool isLoading}) {
+      {required List<SingleOrderModel> orderDetails,
+       }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SizedBox(
         child: ListView.builder(
             controller: scrollController,
-            itemCount:
-                isLoading ? orderDetails.length + 1 : orderDetails.length,
+            itemCount: orderDetails.length,
             itemBuilder: (context, index) {
               if (index < orderDetails.length) {
                 return OrderHistoryCell(
@@ -101,18 +102,29 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
   }
 
   listener() {
-    if (isLoading) return;
+    if (myOrdersLoading.value) return;
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      setState(() {
-        isLoading = true;
-      });
+
+        myOrdersLoading.value = true;
+
+        print("LOADING VALUE IS ================================ "
+            " AFTER TRUE IS ${myOrdersLoading.value}");
+
       offset = offset + 10;
-      BlocProvider.of<OrderHistoryBloc>(context).add(LoadPastOrderDataEvent(
-          offset: offset.toString(), alreadyFetchedList: orderDetails));
-      setState(() {
-        isLoading = false;
+      BlocProvider.of<OrderHistoryBloc>(context).add(
+          LoadPastOrderDataEvent(
+          offset: offset.toString(),
+              alreadyFetchedList: orderDetails));
+
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        myOrdersLoading.value = false;
       });
+
+        setState(() {
+
+        });
+
     }
   }
 }

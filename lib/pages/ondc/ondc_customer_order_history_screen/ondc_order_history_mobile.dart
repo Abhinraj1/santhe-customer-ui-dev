@@ -67,7 +67,21 @@ class ONDCOrderHistoryMobile extends StatelessWidget {
 
 
             const SelectDateFilter(),
-            const OrderHistoryList()
+            const OrderHistoryList(),
+
+            Obx( () {
+              if(myOrdersLoading.value){
+                return const Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: CircularProgressIndicator(),
+                );
+              }else{
+                return SizedBox();
+              }
+
+              }
+            ),
+           // CircularProgressIndicator()
           ],
         )
     );

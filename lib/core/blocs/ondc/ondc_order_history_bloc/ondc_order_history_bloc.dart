@@ -9,6 +9,11 @@ import '../../../repositories/ondc_repository.dart';
 part 'ondc_order_history_event.dart';
 part 'ondc_order_history_state.dart';
 
+
+
+var myOrdersLoading = false.obs;
+
+
 class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
     with LogMixin {
   final OndcRepository ondcRepository;
@@ -35,11 +40,13 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>
 
         if (fetchedList.isNotEmpty) {
           fetchedList.forEach((e) {
-            orderDetails.add(e);
+           event.alreadyFetchedList.add(e);
           });
         }
+        orderDetails.clear();
+        orderDetails.addAll(event.alreadyFetchedList);
 
-        emit(PastOrderDataLoadedState(orderDetails: orderDetails));
+        emit(PastOrderDataLoadedState(orderDetails: event.alreadyFetchedList));
       } catch (e) {
         emit(SingleOrderErrorState(message: e.toString()));
       }

@@ -11,6 +11,9 @@ const double customButtonBorderRadius = 10;
 const double imageCellBorderRadius = 8;
 const double queryTextFieldBorderRadius = 20;
 
+final TextEditingController globalSearchtextEditingController =
+    TextEditingController();
+
 /// TO update billing address
 bool isBillingAddress = false;
 

@@ -396,7 +396,13 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: GestureDetector(
-                                        onTap: () => ge.Get.back(),
+                                        onTap: () {
+                                          warningLog(
+                                              'Checking for search term before exiting${globalSearchtextEditingController.text}');
+                                          globalSearchtextEditingController
+                                              .clear();
+                                          ge.Get.back();
+                                        },
                                         child: Icon(
                                           Icons.arrow_back,
                                           color: AppColors().white100,

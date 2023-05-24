@@ -4,11 +4,13 @@ part of map_address_ondc_view;
 class _MapAddressOndcMobile extends StatefulWidget {
   final double lat;
   final double lng;
-
+  final String? whichScreen;
   _MapAddressOndcMobile({
+    Key? key,
     required this.lat,
     required this.lng,
-  });
+    this.whichScreen,
+  }) : super(key: key);
 
   @override
   State<_MapAddressOndcMobile> createState() => _MapAddressOndcMobileState();
@@ -97,8 +99,16 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
             ),
           );
           customerModel = currentUser;
-          ge.Get.off(() => OndcShopListView(customerModel: currentUser),
-              transition: ge.Transition.leftToRight);
+          errorLog('Which Screen? ${widget.whichScreen}');
+          widget.whichScreen == 'Hyperlocal'
+              ? ge.Get.off(
+                  () => HyperlocalShophomeView(
+                        lat: currentUser.lat,
+                        lng: currentUser.lng,
+                      ),
+                  transition: ge.Transition.leftToRight)
+              : ge.Get.off(() => OndcShopListView(customerModel: currentUser),
+                  transition: ge.Transition.leftToRight);
         }
         if (state is OndcUpdateAddressErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -294,7 +304,6 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                       const SizedBox(
                                         height: 10,
                                       ),
-
                                       SizedBox(
                                         height: 50,
                                         width:
@@ -334,8 +343,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
                                                                 deliveryName:
                                                                     "Billing",
                                                                 address_id:
-                                                                    '${RepositoryProvider.of
-                                                                    <AddressRepository>(context).billingAddressId}',
+                                                                    '${RepositoryProvider.of<AddressRepository>(context).billingAddressId}',
                                                                 flat:
                                                                     textController
                                                                         .text),

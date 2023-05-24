@@ -32,14 +32,96 @@ class HyperLocalGetShopErrorState extends HyperlocalShopState {
 
 class HyperLocalSearchItemLoadedState extends HyperlocalShopState {}
 
-class HyperLocalGetShopSearchState extends HyperlocalShopState {}
+class HyperLocalGetShopSearchState extends HyperlocalShopState {
+  final List<HyperLocalShopModel> searchModels;
+  const HyperLocalGetShopSearchState({
+    required this.searchModels,
+  });
+  @override
+  List<Object> get props => [searchModels];
+}
+
+class HyperLocalGetShopSearchClearLoadingState extends HyperlocalShopState {}
+
+class HyperLocalGetShopSearchClearErrorState extends HyperlocalShopState {
+  final String message;
+  const HyperLocalGetShopSearchClearErrorState({
+    required this.message,
+  });
+  @override
+  List<Object> get props => [message];
+}
+
+class HyperLocalGetResetState extends HyperlocalShopState {}
+
+class HyperLocalGetShopSearchClearState extends HyperlocalShopState {
+  final List<HyperLocalShopModel> previousModels;
+  const HyperLocalGetShopSearchClearState({
+    required this.previousModels,
+  });
+  @override
+  List<Object> get props => [previousModels];
+}
 
 class HyperLocalGetShopSearchLoadingState extends HyperlocalShopState {}
 
-class HyperLocalGetShopSearchErrorState extends HyperlocalShopState {}
+class HyperLocalGetShopSearchErrorState extends HyperlocalShopState {
+  final String message;
+  const HyperLocalGetShopSearchErrorState({
+    required this.message,
+  });
+  @override
+  List<Object> get props => [message];
+}
 
-class HyperLocalGetProductsOfShopState extends HyperlocalShopState {}
+class HyperLocalGetProductsOfShopState extends HyperlocalShopState {
+  final List<HyperLocalProductModel> hyperLocalProductModels;
+  const HyperLocalGetProductsOfShopState({
+    required this.hyperLocalProductModels,
+  });
+  @override
+  List<Object> get props => [hyperLocalProductModels];
+}
 
 class HyperLocalGetProductsOfShopLoadingState extends HyperlocalShopState {}
 
-class HyperLocalGetProductsOfShopErrorState extends HyperlocalShopState {}
+class HyperLocalGetProductsOfShopErrorState extends HyperlocalShopState {
+  final String message;
+  const HyperLocalGetProductsOfShopErrorState({
+    required this.message,
+  });
+  @override
+  List<Object> get props => [message];
+}
+
+class HyperLocalGetSearchProductsOfShopState extends HyperlocalShopState {
+  final List<HyperLocalProductModel> hyperLocalProductModels;
+  const HyperLocalGetSearchProductsOfShopState({
+    required this.hyperLocalProductModels,
+  });
+  @override
+  List<Object> get props => [hyperLocalProductModels];
+}
+
+class HyperLocalGetSearchProductsOfShopLoadingState
+    extends HyperlocalShopState {}
+
+class HyperLocalGetSearchProductsOfShopErrorState extends HyperlocalShopState {
+  final String message;
+  const HyperLocalGetSearchProductsOfShopErrorState({
+    required this.message,
+  });
+  @override
+  List<Object> get props => [message];
+}
+
+class HyperLocalClearShopSearchLoadingState extends HyperlocalShopState {}
+
+class HyperLocalClearShopSearchProductState extends HyperlocalShopState {
+  final List<HyperLocalProductModel> hyperLocalProductModels;
+  const HyperLocalClearShopSearchProductState({
+    required this.hyperLocalProductModels,
+  });
+  @override
+  List<Object> get props => [hyperLocalProductModels];
+}

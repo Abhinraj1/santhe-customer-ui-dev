@@ -28,6 +28,8 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
   List<HyperLocalShopModel> shopModels = [];
   List<HyperLocalShopModel> searchModels = [];
   List<HyperLocalShopModel> existingShopModels = [];
+  bool _showBrowseShops = false;
+  bool _showSearchText = false;
   @override
   void initState() {
     super.initState();
@@ -69,6 +71,38 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
           warningLog('$localShops');
           setState(() {
             shopWidgets = localShops;
+            existingShopModels = shopModels;
+            _showBrowseShops = true;
+            _showSearchText = false;
+          });
+        }
+        if (state is HyperLocalGetShopSearchState) {
+          List<HyperLocalShopWidget> searchShops = [];
+          searchModels = state.searchModels;
+          for (var element in searchModels) {
+            searchShops.add(
+              HyperLocalShopWidget(hyperLocalShopModel: element),
+            );
+          }
+          setState(() {
+            searchWidgets = searchShops;
+            _showBrowseShops = false;
+            _showSearchText = true;
+          });
+          // context.read<HyperlocalShopBloc>().add(HyperLocalGetResetEvent());
+        }
+        if (state is HyperLocalGetShopSearchClearState) {
+          shopModels = [];
+          List<HyperLocalShopWidget> shops = [];
+          shopModels = state.previousModels;
+          for (var element in shopModels) {
+            shops.add(HyperLocalShopWidget(hyperLocalShopModel: element));
+          }
+          setState(() {
+            shopWidgets = shops;
+            existingShopModels = shopModels;
+            _showBrowseShops = true;
+            _showSearchText = false;
           });
         }
       },
@@ -113,16 +147,6 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
                 padding: const EdgeInsets.only(right: 4.5),
                 child: IconButton(
                   onPressed: () {
-                    // if (Platform.isIOS) {
-                    //   Share.share(
-                    //     AppHelpers().appStoreLink,
-                    //   );
-                    // } else {
-                    //   Share.share(
-                    //     AppHelpers().playStoreLink,
-                    //   );
-                    // }
-                    /// ge.Get.back();
                     Get.to(OndcCheckOutScreenMobile());
                   },
                   splashRadius: 25.0,
@@ -158,223 +182,337 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
                     ],
                   ),
                 )
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            () => const MapTextView(),
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                child: Container(
-                                  color: CupertinoColors.systemBackground,
-                                  height: MediaQuery.of(context).size.height *
-                                      0.125,
-                                  width: 340,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 8.0,
-                                      left: 25,
-                                    ),
-                                    child:
-                                        BlocConsumer<AddressBloc, AddressState>(
-                                      listener: (context, state) {
-                                        errorLog(
-                                            'Address Bloc in hyperLocal$state');
-                                        if (state is GotAddressListAndIdState) {
-                                          setState(() {
-                                            flat = RepositoryProvider.of<
-                                                    AddressRepository>(context)
-                                                .deliveryModel
-                                                ?.flat;
-                                          });
-                                        }
-                                      },
-                                      builder: (context, state) {
-                                        return Text.rich(
-                                          TextSpan(
-                                            text: 'Delivery to: ',
-                                            style:
-                                                const TextStyle(fontSize: 15),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
-                                                // widget
-                                                //     .customerModel.address
-                                                //     .substring(0, 25),
-
-                                                style: const TextStyle(
-                                                  decorationColor:
-                                                      Color.fromARGB(
-                                                          255, 77, 81, 84),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              // can add more TextSpans here...
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            //! add the indicator here
-                            // GestureDetector(
-                            //   onTap: () => ge.Get.to(
-                            //     OndcCartView(),
-                            //   ),
-                            //   child: Stack(
-                            //     children: [
-                            //       Image.asset(
-                            //         'assets/newshoppingcartorange.png',
-                            //         height: 45,
-                            //         width: 45,
-                            //       )
-                            //     ],
-                            //   ),
-                            // ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20, top: 5),
-                              child: Image.asset('assets/edit.png'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 1),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: TextFormField(
-                            controller: _textEditingController,
-                            onFieldSubmitted: (value) {
-                              // context.read<OndcBloc>().add(
-                              //       FetchListOfShopWithSearchedProducts(
-                              //         productName: _textEditingController.text
-                              //             .toString(),
-                              //       ),
-                              //     );
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Search Products here',
-                              isDense: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              suffixIcon:
-                                  state is HyperLocalSearchItemLoadedState
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            // setState(() {
-                                            //   _searchedLoaded = false;
-                                            // });
-                                            // context.read<HyperlocalShopBloc>().add(
-                                            //       ClearSearchEventShops(
-                                            //           shopModels:
-                                            //               existingShopModels),
-                                            //     );
-                                            // context
-                                            //     .read<OndcBloc>()
-                                            //     .add(
-                                            //       FetchNearByShops(
-                                            //         lat: widget
-                                            //             .customerModel
-                                            //             .lat,
-                                            //         lng: widget
-                                            //             .customerModel
-                                            //             .lng,
-                                            //         pincode: widget
-                                            //             .customerModel
-                                            //             .pinCode,
-                                            //         isDelivery: widget
-                                            //             .customerModel
-                                            //             .opStats,
-                                            //       ),
-                                            //     );
-                                            _textEditingController.clear();
-                                          },
-                                          child: const Icon(Icons.cancel),
-                                        )
-                                      : null,
-                              prefixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 9.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    // context.read<OndcBloc>().add(
-                                    //       FetchListOfShopWithSearchedProducts(
-                                    //         productName: _textEditingController
-                                    //             .text
-                                    //             .toString(),
-                                    //       ),
-                                    //     );
-                                  },
-                                  child: const Icon(
-                                    CupertinoIcons.search_circle_fill,
-                                    size: 32,
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                              ),
+              : state is HyperLocalGetShopSearchClearLoadingState
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          Text(
+                            'Loading Previous Shops',
+                            style: TextStyle(
+                              color: AppColors().brandDark,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      state is HyperLocalSearchItemLoadedState
-                          ? Text('')
-                          : Center(
-                              child: Text(
-                                'OR',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 15),
+                    )
+                  : state is HyperLocalGetShopSearchLoadingState
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(),
+                              Text(
+                                'Getting shops servicing your search',
+                                style: TextStyle(
+                                  color: AppColors().brandDark,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      // state is HyperLocalSearchItemLoadedState
-                      //     ? searchWidgets.isEmpty
-                      //         ? Text('')
-                      //         : Padding(
-                      //             padding:
-                      //                 const EdgeInsets.only(
-                      //                     left: 25.0),
-                      //             child: Align(
-                      //               alignment:
-                      //                   Alignment.centerLeft,
-                      //               child: Text(
-                      //                   'Below are the shops that sell "${_textEditingController.text.toString().capitalizeFirst}"'),
-                      //             ),
-                      //           )
-                      //     : Padding(
-                      //         padding: const EdgeInsets.only(
-                      //             left: 25.0),
-                      //         child: Align(
-                      //           alignment: Alignment.centerLeft,
-                      //           child: Text(
-                      //               'Browse your Local Shops'),
-                      //         ),
-                      //       ),
-                      ...shopWidgets
-                    ],
-                  ),
-                ),
+                            ],
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(
+                                    () => const MapTextView(
+                                      whichScreen: 'Hyperlocal',
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: GestureDetector(
+                                        child: Container(
+                                          color:
+                                              CupertinoColors.systemBackground,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.125,
+                                          width: 340,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 8.0,
+                                              left: 25,
+                                            ),
+                                            child: BlocConsumer<AddressBloc,
+                                                AddressState>(
+                                              listener: (context, state) {
+                                                errorLog(
+                                                    'Address Bloc in hyperLocal$state');
+                                                if (state
+                                                    is GotAddressListAndIdState) {
+                                                  setState(() {
+                                                    flat = RepositoryProvider
+                                                            .of<AddressRepository>(
+                                                                context)
+                                                        .deliveryModel
+                                                        ?.flat;
+                                                  });
+                                                }
+                                              },
+                                              builder: (context, state) {
+                                                return Text.rich(
+                                                  TextSpan(
+                                                    text: 'Delivery to: ',
+                                                    style: const TextStyle(
+                                                        fontSize: 15),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}',
+                                                        // widget
+                                                        //     .customerModel.address
+                                                        //     .substring(0, 25),
+
+                                                        style: const TextStyle(
+                                                          decorationColor:
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  77,
+                                                                  81,
+                                                                  84),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                      // can add more TextSpans here...
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    //! add the indicator here
+                                    // GestureDetector(
+                                    //   onTap: () => ge.Get.to(
+                                    //     OndcCartView(),
+                                    //   ),
+                                    //   child: Stack(
+                                    //     children: [
+                                    //       Image.asset(
+                                    //         'assets/newshoppingcartorange.png',
+                                    //         height: 45,
+                                    //         width: 45,
+                                    //       )
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 20, top: 5),
+                                      child: Image.asset('assets/edit.png'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 1),
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  child: TextFormField(
+                                    controller: _textEditingController,
+                                    onFieldSubmitted: (value) {
+                                      context.read<HyperlocalShopBloc>().add(
+                                            HyperLocalGetShopSearchEvent(
+                                                lat: widget.lat,
+                                                lng: widget.lng,
+                                                itemName: _textEditingController
+                                                    .text),
+                                          );
+                                    },
+                                    decoration: InputDecoration(
+                                      labelText: 'Search Products here',
+                                      isDense: true,
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      suffixIcon: state
+                                              is HyperLocalGetShopSearchState
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                context
+                                                    .read<HyperlocalShopBloc>()
+                                                    .add(
+                                                      HyperLocalClearSearchEventShops(
+                                                          previousModels:
+                                                              existingShopModels,
+                                                          lat: widget.lat,
+                                                          lng: widget.lng),
+                                                    );
+                                                // setState(() {
+                                                //   _searchedLoaded = false;
+                                                // });
+                                                // context.read<HyperlocalShopBloc>().add(
+                                                //       ClearSearchEventShops(
+                                                //           shopModels:
+                                                //               existingShopModels),
+                                                //     );
+                                                // context
+                                                //     .read<OndcBloc>()
+                                                //     .add(
+                                                //       FetchNearByShops(
+                                                //         lat: widget
+                                                //             .customerModel
+                                                //             .lat,
+                                                //         lng: widget
+                                                //             .customerModel
+                                                //             .lng,
+                                                //         pincode: widget
+                                                //             .customerModel
+                                                //             .pinCode,
+                                                //         isDelivery: widget
+                                                //             .customerModel
+                                                //             .opStats,
+                                                //       ),
+                                                //     );
+                                                _textEditingController.clear();
+                                              },
+                                              child: const Icon(Icons.cancel),
+                                            )
+                                          : null,
+                                      prefixIcon: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 9.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            context
+                                                .read<HyperlocalShopBloc>()
+                                                .add(
+                                                  HyperLocalGetShopSearchEvent(
+                                                    lat: widget.lat,
+                                                    lng: widget.lng,
+                                                    itemName:
+                                                        _textEditingController
+                                                            .text,
+                                                  ),
+                                                );
+                                          },
+                                          child: const Icon(
+                                            CupertinoIcons.search_circle_fill,
+                                            size: 32,
+                                            color: Colors.orange,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              state is HyperLocalSearchItemLoadedState
+                                  ? Text('')
+                                  : Center(
+                                      child: Text(
+                                        'OR',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 15),
+                                      ),
+                                    ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              _showSearchText
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 25.0),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                            'Below are the shops that sell "${_textEditingController.text.toString().capitalizeFirst}"'),
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              _showBrowseShops
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 25.0),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Browse your local Shops',
+                                          style: TextStyle(
+                                            color: AppColors().black100,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              // state is HyperLocalSearchItemLoadedState
+                              //     ? searchWidgets.isEmpty
+                              //         ? Text('')
+
+                              //     : Padding(
+                              //         padding: const EdgeInsets.only(
+                              //             left: 25.0),
+                              //         child: Align(
+                              //           alignment: Alignment.centerLeft,
+                              //           child: Text(
+                              //               'Browse your Local Shops'),
+                              //         ),
+                              //       ),
+                              SingleChildScrollView(
+                                child: state is HyperLocalGetShopSearchState
+                                    ? searchWidgets.isEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(18.0),
+                                            child: Text(
+                                              'Unfortunately there are no shops that sell the product you are looking for.Please try to search for something different',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: AppColors().brandDark,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          )
+                                        : Column(
+                                            children: searchWidgets,
+                                          )
+                                    : state is HyperLocalGetShopSearchClearLoadingState
+                                        ? Center(
+                                            child: Column(
+                                              children: [
+                                                CircularProgressIndicator(),
+                                                Text(
+                                                  'Loading Previous Shops',
+                                                  style: TextStyle(
+                                                    color:
+                                                        AppColors().brandDark,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Column(
+                                            children: shopWidgets,
+                                          ),
+                              ),
+                            ],
+                          ),
+                        ),
         );
       },
     );

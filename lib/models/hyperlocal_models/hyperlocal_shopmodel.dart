@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_question_mark
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 
@@ -18,6 +19,7 @@ class HyperLocalShopModel extends Equatable {
   final dynamic display_image;
   final dynamic images;
   final dynamic itemCount;
+  final dynamic distance;
   const HyperLocalShopModel({
     required this.id,
     required this.name,
@@ -33,6 +35,7 @@ class HyperLocalShopModel extends Equatable {
     required this.display_image,
     required this.images,
     required this.itemCount,
+    required this.distance,
   });
 
   HyperLocalShopModel copyWith({
@@ -50,6 +53,7 @@ class HyperLocalShopModel extends Equatable {
     dynamic? display_image,
     dynamic? images,
     dynamic? itemCount,
+    dynamic? distance,
   }) {
     return HyperLocalShopModel(
       id: id ?? this.id,
@@ -66,6 +70,7 @@ class HyperLocalShopModel extends Equatable {
       display_image: display_image ?? this.display_image,
       images: images ?? this.images,
       itemCount: itemCount ?? this.itemCount,
+      distance: distance ?? this.distance,
     );
   }
 
@@ -89,6 +94,7 @@ class HyperLocalShopModel extends Equatable {
   }
 
   factory HyperLocalShopModel.fromMap(Map<String, dynamic> map) {
+    log('$map', name: 'HyperLocalShopModel.fromMap');
     return HyperLocalShopModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
       name: map['name'] != null ? map['name'] as dynamic : null,
@@ -112,6 +118,7 @@ class HyperLocalShopModel extends Equatable {
           map['display_image'] != null ? map['display_image'] as dynamic : null,
       images: map['products'] != null ? map['products'] as dynamic : null,
       itemCount: map['itemCount'] != null ? map['itemCount'] as dynamic : null,
+      distance: map['distance'] != null ? map['distance'] as dynamic : null,
     );
   }
 
@@ -140,6 +147,7 @@ class HyperLocalShopModel extends Equatable {
       display_image,
       images,
       itemCount,
+      distance,
     ];
   }
 }

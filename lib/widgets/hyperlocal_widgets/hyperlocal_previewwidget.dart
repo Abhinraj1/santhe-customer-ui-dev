@@ -5,7 +5,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/loggers.dart';
+import 'package:santhe/core/repositories/hyperlocal_checkoutrepository.dart';
 import 'package:santhe/manager/font_manager.dart';
 import 'package:santhe/manager/imageManager.dart';
 
@@ -44,6 +47,8 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
 
   @override
   Widget build(BuildContext context) {
+    warningLog(
+        'Order Status ${RepositoryProvider.of<HyperLocalCheckoutRepository>(context).shopOrderStatus} ');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       child: Card(
@@ -116,16 +121,31 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                     //          child: Text(textButtonTitle,
                     //          style: FontStyleManager().s12fw500Red,),) :
                     const SizedBox(
-                      height: 5,
+                      height: 3,
                     ),
                     widget.hyperLocalPreviewModel.status
                             .toString()
                             .contains('Created')
                         ? const SizedBox()
-                        : Text(
-                            'Status: ${widget.hyperLocalPreviewModel.status}',
-                            style: const TextStyle(fontSize: 12),
+                        : Container(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: Text(
+                              'Status: ${widget.hyperLocalPreviewModel.status}',
+                              style: FontStyleManager().s10fw500Brown,
+                            ),
+                          ),
+
+                    widget.hyperLocalPreviewModel.status
+                                .toString()
+                                .contains('Delivered') &&
+                            widget.hyperLocalPreviewModel.returnable
+                                .toString()
+                                .contains('true')
+                        ? Expanded(
+                            child: Text('Return',
+                                style: FontStyleManager().s14fwUnderline),
                           )
+                        : const SizedBox()
                   ],
                 ),
               ),

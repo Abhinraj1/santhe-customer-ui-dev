@@ -13,7 +13,9 @@ class FontStyleManager {
       color: Color(0xffFF9800), fontSize: 14, fontWeight: FontWeight.w700);
 
   TextStyle s14Orange = const TextStyle(
-      color: Color(0xffFF9800), fontSize: 14,);
+    color: Color(0xffFF9800),
+    fontSize: 14,
+  );
 
   TextStyle s20fw700Orange = const TextStyle(
       color: Color(0xffFF9800), fontSize: 20, fontWeight: FontWeight.w700);
@@ -57,19 +59,22 @@ class FontStyleManager {
       color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w700);
 
   TextStyle s14fw700GreyUnderLne = GoogleFonts.mulish(
-      color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w700,
-      decoration: TextDecoration.underline
-  );
+      color: Colors.grey,
+      fontSize: 14,
+      fontWeight: FontWeight.w700,
+      decoration: TextDecoration.underline);
 
   TextStyle s20fw700Black = GoogleFonts.mulish(
-      color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w700,
-
+    color: Colors.black54,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
   );
 
   TextStyle s14fw700Blue = GoogleFonts.mulish(
-      color: Color(0xff0246F6), fontSize: 14, fontWeight: FontWeight.w700,
+      color: Color(0xff0246F6),
+      fontSize: 14,
+      fontWeight: FontWeight.w700,
       decoration: TextDecoration.underline);
-
 
   TextStyle s14fw800Grey = GoogleFonts.mulish(
       color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w800);
@@ -86,6 +91,13 @@ class FontStyleManager {
   TextStyle s14fw700Red = GoogleFonts.mulish(
     color: const Color(0xffF24E1E),
     fontSize: 14,
+    fontWeight: FontWeight.w700,
+  );
+
+  TextStyle s14fwUnderline = GoogleFonts.mulish(
+    color: const Color(0xff51453A),
+    fontSize: 12,
+    decoration: TextDecoration.underline,
     fontWeight: FontWeight.w700,
   );
 
@@ -113,7 +125,6 @@ class FontStyleManager {
     fontWeight: FontWeight.w500,
   );
 
-
   TextStyle s13fw500Grey = GoogleFonts.mulish(
     color: Colors.grey,
     fontSize: 13,
@@ -124,7 +135,6 @@ class FontStyleManager {
     fontSize: 12,
     fontWeight: FontWeight.w400,
   );
-
 
   TextStyle s16fw600Orange = GoogleFonts.mulish(
       color: AppColors().primaryOrange,

@@ -106,7 +106,8 @@ class HyperLocalPreviewModel extends Equatable {
 
   factory HyperLocalPreviewModel.fromMap(Map<String, dynamic> map) {
     List states = map['states'] as List;
-    log('$states', name: 'HyperLocalPreviewModel.fromMap');
+    // log('$states returnable ${map['returnable']}',
+    //     name: 'HyperLocalPreviewModel.fromMap');
     return HyperLocalPreviewModel(
         id: map['id'] != null ? map['id'] as dynamic : null,
         units: map['units'] != null ? map['units'] as dynamic : null,
@@ -161,7 +162,7 @@ class HyperLocalPreviewModel extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       units,

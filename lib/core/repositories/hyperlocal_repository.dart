@@ -53,12 +53,13 @@ class HyperLocalRepository with LogMixin {
     try {
       debugLog('HyperLocal Url for Shops $url');
       final response = await http.get(url);
-      warningLog('${response.statusCode} and body ${response.body}');
-      final responseBody =
-          json.decode(response.body)['data']['rows'] as List<dynamic>;
-      warningLog('Response Body $responseBody');
+      warningLog(
+          'Response Structure ${response.statusCode} and body ${response.body}');
+      final responseBody = json.decode(response.body)['data'] as List;
+      warningLog('Response Body Structure $responseBody');
       localHyperLocalShopModel = [];
       for (var element in responseBody) {
+        // errorLog('Checking for data in getHyperlocalShops $element');
         localHyperLocalShopModel.add(HyperLocalShopModel.fromMap(element));
       }
       warningLog('$localHyperLocalShopModel');

@@ -22,10 +22,20 @@ class _HyperlocalShopdetailsMobileState
   List<HyperLocalProductWidget> searchWidgets = [];
   List<HyperLocalProductModel> searchModels = [];
   List<HyperLocalProductModel> existingModels = [];
+  dynamic homeDeliveryGlo;
+
+  getHomeDelivery() {
+    final homeDelivery =
+        json.decode(widget.hyperLocalShopModel.fulfillment_type.toString());
+    warningLog('Home Delivery $homeDelivery');
+    homeDeliveryGlo = homeDelivery['home_delivery'];
+    warningLog('HomeDeliveryFormatted $homeDeliveryGlo');
+  }
 
   @override
   void initState() {
     super.initState();
+    getHomeDelivery();
     context.read<HyperlocalShopBloc>().add(
           HyperLocalGetProductOfShopEvent(
               shopId: widget.hyperLocalShopModel.id,
@@ -142,13 +152,14 @@ class _HyperlocalShopdetailsMobileState
                   padding: const EdgeInsets.only(right: 4.5),
                   child: IconButton(
                     onPressed: () {
-                      Get.to(const OndcCheckOutScreenMobile());
+                      ge.Get.to(const OndcCheckOutScreenMobile());
                     },
                     splashRadius: 25.0,
                     icon: InkWell(
                       onTap: () {
-                        Get.to(
+                        ge.Get.to(
                           () => const OndcIntroView(),
+                          transition: ge.Transition.rightToLeft,
                         );
                       },
                       child: const Icon(
@@ -240,13 +251,15 @@ class _HyperlocalShopdetailsMobileState
                                                   globalSearchtextEditingController
                                                       .clear();
 
-                                                  Get.off(
+                                                  ge.Get.off(
                                                     () =>
                                                         HyperlocalShophomeView(
                                                             lat: customerModel
                                                                 .lat,
                                                             lng: customerModel
                                                                 .lng),
+                                                    transition: ge
+                                                        .Transition.leftToRight,
                                                   );
                                                 },
                                                 child: Icon(
@@ -275,7 +288,8 @@ class _HyperlocalShopdetailsMobileState
                                               ),
                                             ),
 //! this is actually address the api returns address inside the email parameter so keep that in mind
-                                            widget.hyperLocalShopModel.email ==
+                                            widget.hyperLocalShopModel
+                                                        .address ==
                                                     null
                                                 ? Padding(
                                                     padding:
@@ -289,11 +303,6 @@ class _HyperlocalShopdetailsMobileState
                                                           CrossAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Image.asset(
-                                                          'assets/emailpng.png',
-                                                          height: 25,
-                                                          width: 25,
-                                                        ),
                                                         const SizedBox(
                                                           width: 8,
                                                         ),
@@ -314,7 +323,7 @@ class _HyperlocalShopdetailsMobileState
                                                     child: Expanded(
                                                       child: Center(
                                                         child: Text(
-                                                          '${widget.hyperLocalShopModel.email}',
+                                                          '${widget.hyperLocalShopModel.address}',
                                                           maxLines: 2,
                                                           textAlign:
                                                               TextAlign.center,
@@ -330,7 +339,8 @@ class _HyperlocalShopdetailsMobileState
                                                       ),
                                                     ),
                                                   ),
-                                            widget.hyperLocalShopModel.upi_id ==
+                                            widget.hyperLocalShopModel
+                                                        .phone_number ==
                                                     null
                                                 ? Padding(
                                                     padding:
@@ -384,7 +394,7 @@ class _HyperlocalShopdetailsMobileState
                                                           width: 8,
                                                         ),
                                                         AutoSizeText(
-                                                          '${widget.hyperLocalShopModel.upi_id}',
+                                                          '${widget.hyperLocalShopModel.phone_number}',
                                                           style: TextStyle(
                                                             color: AppColors()
                                                                 .white100,
@@ -394,13 +404,15 @@ class _HyperlocalShopdetailsMobileState
                                                       ],
                                                     ),
                                                   ),
-                                            //! this is the email but it is interchanged with address in api response
+
                                             Center(
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 20.0),
                                                 child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
@@ -410,10 +422,10 @@ class _HyperlocalShopdetailsMobileState
                                                       width: 25,
                                                     ),
                                                     const SizedBox(
-                                                      width: 8,
+                                                      width: 6,
                                                     ),
                                                     AutoSizeText(
-                                                      '${widget.hyperLocalShopModel.address}',
+                                                      '${widget.hyperLocalShopModel.email}',
                                                       textAlign:
                                                           TextAlign.center,
                                                       minFontSize: 10,
@@ -442,12 +454,7 @@ class _HyperlocalShopdetailsMobileState
 
                                             //! change this to delivery
                                             AutoSizeText(
-                                              widget.hyperLocalShopModel
-                                                              .address !=
-                                                          null &&
-                                                      widget.hyperLocalShopModel
-                                                              .address ==
-                                                          true
+                                              homeDeliveryGlo == true
                                                   ? "Home Delivery Available"
                                                   : "",
                                               minFontSize: 10,
@@ -498,12 +505,14 @@ class _HyperlocalShopdetailsMobileState
                                           onTap: () {
                                             errorLog(
                                                 '${widget.hyperLocalShopModel.id}');
-                                            Get.to(
-                                              () => HyperlocalCartView(
-                                                storeDescriptionId: widget
-                                                    .hyperLocalShopModel.id,
-                                              ),
-                                            );
+                                            ge.Get.to(
+                                                () => HyperlocalCartView(
+                                                      storeDescriptionId: widget
+                                                          .hyperLocalShopModel
+                                                          .id,
+                                                    ),
+                                                transition:
+                                                    ge.Transition.rightToLeft);
                                           },
                                           child: badges.Badge(
                                             position:
@@ -667,8 +676,7 @@ class _HyperlocalShopdetailsMobileState
                                   )
                                 : productWidgets.isEmpty
                                     ? const Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 30.0),
+                                        padding: EdgeInsets.only(right: 30.0),
                                         child: Align(
                                           alignment: Alignment.centerRight,
                                           child: Text(

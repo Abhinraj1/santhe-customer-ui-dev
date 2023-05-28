@@ -88,7 +88,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
       _isInitBuffer = true;
     });
     Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(seconds: 5),
       () => context.read<HyperlocalCheckoutBloc>().add(
             VerifyPaymentEventHyperlocal(
                 razorPayOrderId: response.orderId,
@@ -187,7 +187,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
           );
         }
         if (state is VerifyPaymentHyperlocalErrorState) {
-          Get.to(() => const HyperlocalErrornackView());
+          Get.off(() => const HyperlocalErrornackView());
         }
         if (state is VerifyPaymentHyperlocalErrorState) {
           setState(() {

@@ -20,6 +20,7 @@ class HyperLocalShopModel extends Equatable {
   final dynamic images;
   final dynamic itemCount;
   final dynamic distance;
+  final dynamic phone_number;
   const HyperLocalShopModel({
     required this.id,
     required this.name,
@@ -36,6 +37,7 @@ class HyperLocalShopModel extends Equatable {
     required this.images,
     required this.itemCount,
     required this.distance,
+    required this.phone_number,
   });
 
   HyperLocalShopModel copyWith({
@@ -54,6 +56,7 @@ class HyperLocalShopModel extends Equatable {
     dynamic? images,
     dynamic? itemCount,
     dynamic? distance,
+    dynamic? phone_number,
   }) {
     return HyperLocalShopModel(
       id: id ?? this.id,
@@ -71,6 +74,7 @@ class HyperLocalShopModel extends Equatable {
       images: images ?? this.images,
       itemCount: itemCount ?? this.itemCount,
       distance: distance ?? this.distance,
+      phone_number: phone_number ?? this.phone_number,
     );
   }
 
@@ -90,36 +94,42 @@ class HyperLocalShopModel extends Equatable {
       'display_image': display_image,
       'images': images,
       'itemCount': itemCount,
+      'phone_number': phone_number
     };
   }
 
   factory HyperLocalShopModel.fromMap(Map<String, dynamic> map) {
-    log('$map', name: 'HyperLocalShopModel.fromMap');
+    // log('$map', name: 'HyperLocalShopModel.fromMap');
     return HyperLocalShopModel(
-      id: map['id'] != null ? map['id'] as dynamic : null,
-      name: map['name'] != null ? map['name'] as dynamic : null,
-      upi_id: map['upi_id'] != null ? map['upi_id'] as dynamic : null,
-      bank_account_no: map['bank_account_no'] != null
-          ? map['bank_account_no'] as dynamic
-          : null,
-      bank_ifsc: map['bank_ifsc'] != null ? map['bank_ifsc'] as dynamic : null,
-      beneficiary_name: map['beneficiary_name'] != null
-          ? map['beneficiary_name'] as dynamic
-          : null,
-      gstin: map['gstin'] != null ? map['gstin'] as dynamic : null,
-      fulfillment_type: map['fulfillment_type'] != null
-          ? map['fulfillment_type'] as dynamic
-          : null,
-      description:
-          map['description'] != null ? map['description'] as dynamic : null,
-      email: map['email'] != null ? map['email'] as dynamic : null,
-      address: map['address'] != null ? map['address'] as dynamic : null,
-      display_image:
-          map['display_image'] != null ? map['display_image'] as dynamic : null,
-      images: map['products'] != null ? map['products'] as dynamic : null,
-      itemCount: map['itemCount'] != null ? map['itemCount'] as dynamic : null,
-      distance: map['distance'] != null ? map['distance'] as dynamic : null,
-    );
+        id: map['id'] != null ? map['id'] as dynamic : null,
+        name: map['name'] != null ? map['name'] as dynamic : null,
+        upi_id: map['upi_id'] != null ? map['upi_id'] as dynamic : null,
+        bank_account_no: map['bank_account_no'] != null
+            ? map['bank_account_no'] as dynamic
+            : null,
+        bank_ifsc:
+            map['bank_ifsc'] != null ? map['bank_ifsc'] as dynamic : null,
+        beneficiary_name: map['beneficiary_name'] != null
+            ? map['beneficiary_name'] as dynamic
+            : null,
+        gstin: map['gstin'] != null ? map['gstin'] as dynamic : null,
+        fulfillment_type: map['fulfillment_type'] != null
+            ? map['fulfillment_type'] as dynamic
+            : null,
+        description:
+            map['description'] != null ? map['description'] as dynamic : null,
+        email: map['email'] != null ? map['email'] as dynamic : null,
+        address: map['address'] != null ? map['address'] as dynamic : null,
+        display_image: map['display_image'] != null
+            ? map['display_image'] as dynamic
+            : null,
+        images: map['products'] != null ? map['products'] as dynamic : null,
+        itemCount:
+            map['itemCount'] != null ? map['itemCount'] as dynamic : null,
+        distance: map['distance'] != null ? map['distance'] as dynamic : null,
+        phone_number: map['phone_number'] != null
+            ? map['phone_number'] as dynamic
+            : null);
   }
 
   String toJson() => json.encode(toMap());
@@ -148,6 +158,7 @@ class HyperLocalShopModel extends Equatable {
       images,
       itemCount,
       distance,
+      phone_number,
     ];
   }
 }

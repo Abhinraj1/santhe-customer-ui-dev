@@ -14,11 +14,11 @@ class HyperLocalProductModel extends Equatable with LogMixin {
   final dynamic inventory;
   final dynamic mrp;
   final dynamic offer_price;
-  final dynamic home_delivery;
-  final dynamic self_pickup;
-  final dynamic santhe_delivery;
-  final dynamic self_delivery;
-  final dynamic delivery_time;
+  // final dynamic home_delivery;
+  // final dynamic self_pickup;
+  // final dynamic santhe_delivery;
+  // final dynamic self_delivery;
+  // final dynamic delivery_time;
   final dynamic lat;
   final dynamic lang;
   final dynamic radius;
@@ -43,11 +43,11 @@ class HyperLocalProductModel extends Equatable with LogMixin {
     required this.inventory,
     required this.mrp,
     required this.offer_price,
-    required this.home_delivery,
-    required this.self_pickup,
-    required this.santhe_delivery,
-    required this.self_delivery,
-    required this.delivery_time,
+    // required this.home_delivery,
+    // required this.self_pickup,
+    // required this.santhe_delivery,
+    // required this.self_delivery,
+    // required this.delivery_time,
     required this.lat,
     required this.lang,
     required this.radius,
@@ -74,7 +74,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
     dynamic? inventory,
     dynamic? mrp,
     dynamic? offer_price,
-    dynamic? home_delivery,
+    // dynamic? home_delivery,
     dynamic? self_pickup,
     dynamic? santhe_delivery,
     dynamic? self_delivery,
@@ -104,11 +104,11 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       inventory: inventory ?? this.inventory,
       mrp: mrp ?? this.mrp,
       offer_price: offer_price ?? this.offer_price,
-      home_delivery: home_delivery ?? this.home_delivery,
-      self_pickup: self_pickup ?? this.self_pickup,
-      santhe_delivery: santhe_delivery ?? this.santhe_delivery,
-      self_delivery: self_delivery ?? this.self_delivery,
-      delivery_time: delivery_time ?? this.delivery_time,
+      // home_delivery: home_delivery ?? this.home_delivery,
+      // self_pickup: self_pickup ?? this.self_pickup,
+      // santhe_delivery: santhe_delivery ?? this.santhe_delivery,
+      // self_delivery: self_delivery ?? this.self_delivery,
+      // delivery_time: delivery_time ?? this.delivery_time,
       lat: lat ?? this.lat,
       lang: lang ?? this.lang,
       radius: radius ?? this.radius,
@@ -137,11 +137,11 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       'inventory': inventory,
       'mrp': mrp,
       'offer_price': offer_price,
-      'home_delivery': home_delivery,
-      'self_pickup': self_pickup,
-      'santhe_delivery': santhe_delivery,
-      'self_delivery': self_delivery,
-      'delivery_time': delivery_time,
+      // 'home_delivery': home_delivery,
+      // 'self_pickup': self_pickup,
+      // 'santhe_delivery': santhe_delivery,
+      // 'self_delivery': self_delivery,
+      // 'delivery_time': delivery_time,
       'lat': lat,
       'lang': lang,
       'radius': radius,
@@ -177,41 +177,41 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       inventory: map['inventory'] != null ? map['inventory'] as dynamic : null,
       mrp: map['mrp'] != null ? map['mrp'] as dynamic : null,
       offer_price: map['offer_price'] ? map['offer_price'] as dynamic : null,
-      home_delivery: map['fulfillment_type'] != null
-          ? map['fulfillment_type']['home_delivery'] != null
-              ? map['fulfillment_type']['home_delivery'] as dynamic
-              : null
-          : null,
-      self_pickup: map['fulfillment_type'] != null
-          ? map['fulfillment_type']['self_pickup'] != null
-              ? map['fulfillment_type']['self_pickup'] as dynamic
-              : null
-          : null,
-      santhe_delivery: map['fulfillment_type'] != null
-          ? map['fulfillment_type']['home_delivery_type'] != null
-              ? map['fulfillment_type']['home_delivery_type']
-                          ['santhe_delivery'] !=
-                      null
-                  ? map['fulfillment_type']['home_delivery_type']
-                      ['santhe_delivery'] as dynamic
-                  : null
-              : null
-          : null,
-      self_delivery: map['fulfillment_type'] != null
-          ? map['fulfillment_type']['home_delivery_type'] != null
-              ? map['fulfillment_type']['home_delivery_type']
-                          ['self_delivery'] !=
-                      null
-                  ? map['fulfillment_type']['home_delivery_type']
-                      ['self_delivery'] as dynamic
-                  : null
-              : null
-          : null,
-      delivery_time: map['fulfillment_type'] != null
-          ? map['fulfillment_type']['delivery_time'] != null
-              ? map['fulfillment_type']['delivery_time'] as dynamic
-              : null
-          : null,
+      // home_delivery: map['fulfillment_type'] != null
+      //     ? map['fulfillment_type']['home_delivery'] != null
+      //         ? map['fulfillment_type']['home_delivery'] as dynamic
+      //         : null
+      //     : null,
+      // self_pickup: map['fulfillment_type'] != null
+      //     ? map['fulfillment_type']['self_pickup'] != null
+      //         ? map['fulfillment_type']['self_pickup'] as dynamic
+      //         : null
+      //     : null,
+      // santhe_delivery: map['fulfillment_type'] != null
+      //     ? map['fulfillment_type']['home_delivery_type'] != null
+      //         ? map['fulfillment_type']['home_delivery_type']
+      //                     ['santhe_delivery'] !=
+      //                 null
+      //             ? map['fulfillment_type']['home_delivery_type']
+      //                 ['santhe_delivery'] as dynamic
+      //             : null
+      //         : null
+      //     : null,
+      // self_delivery: map['fulfillment_type'] != null
+      //     ? map['fulfillment_type']['home_delivery_type'] != null
+      //         ? map['fulfillment_type']['home_delivery_type']
+      //                     ['self_delivery'] !=
+      //                 null
+      //             ? map['fulfillment_type']['home_delivery_type']
+      //                 ['self_delivery'] as dynamic
+      //             : null
+      //         : null
+      //     : null,
+      // delivery_time: map['fulfillment_type'] != null
+      //     ? map['fulfillment_type']['delivery_time'] != null
+      //         ? map['fulfillment_type']['delivery_time'] as dynamic
+      //         : null
+      //     : null,
       lat: map['lat'] != null ? map['lat'] as dynamic : null,
       lang: map['lang'] != null ? map['lang'] as dynamic : null,
       radius: map['radius'] != null ? map['radius'] as dynamic : null,
@@ -297,11 +297,11 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       inventory,
       mrp,
       offer_price,
-      home_delivery,
-      self_pickup,
-      santhe_delivery,
-      self_delivery,
-      delivery_time,
+      // home_delivery,
+      // self_pickup,
+      // santhe_delivery,
+      // self_delivery,
+      // delivery_time,
       lat,
       lang,
       radius,
@@ -330,11 +330,11 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       'inventory': inventory,
       'mrp': mrp,
       'offer_price': offer_price,
-      'home_delivery': home_delivery,
-      'self_pickup': self_pickup,
-      'santhe_delivery': santhe_delivery,
-      'self_delivery': self_delivery,
-      'delivery_time': delivery_time,
+      // 'home_delivery': home_delivery,
+      // 'self_pickup': self_pickup,
+      // 'santhe_delivery': santhe_delivery,
+      // 'self_delivery': self_delivery,
+      // 'delivery_time': delivery_time,
       'lat': lat,
       'lang': lang,
       'radius': radius,
@@ -360,29 +360,31 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       inventory: map['inventory'] as dynamic,
       mrp: map['mrp'] as dynamic,
       offer_price: map['offer_price'] as dynamic,
-      home_delivery: map['fulfillment_type']['home_delivery'] as dynamic,
-      self_pickup: map['fulfillment_type']['self_pickup'] as dynamic,
-      santhe_delivery: map['fulfillment_type'] != null
-          ? map['fulfillment_type']['home_delivery_type'] != null
-              ? map['fulfillment_type']['home_delivery_type']
-                          ['santhe_delivery'] !=
-                      null
-                  ? map['fulfillment_type']['home_delivery_type']
-                      ['santhe_delivery'] as dynamic
-                  : null
-              : null
-          : null,
-      self_delivery: map['fulfillment_type'] != null
-          ? map['fulfillment_type']['home_delivery_type'] != null
-              ? map['fulfillment_type']['home_delivery_type']
-                          ['self_delivery'] !=
-                      null
-                  ? map['fulfillment_type']['home_delivery_type']
-                      ['self_delivery'] as dynamic
-                  : null
-              : null
-          : null,
-      delivery_time: map['fulfillment_type']['delivery_time'] as dynamic,
+      // home_delivery: map['fulfillment_type']['home_delivery'] as dynamic,
+      // self_pickup: map['fulfillment_type']['self_pickup'] as dynamic,
+      // santhe_delivery: map['fulfillment_type'] != null
+      //     ? map['fulfillment_type']['home_delivery_type'] != null
+      //         ? map['fulfillment_type']['home_delivery_type']
+      //                     ['santhe_delivery'] !=
+      //                 null
+      //             ? map['fulfillment_type']['home_delivery_type']
+      //                 ['santhe_delivery'] as dynamic
+      //             : null
+      //         : null
+      //     : null,
+      // self_delivery: map['fulfillment_type'] != null
+      //     ? map['fulfillment_type']['home_delivery_type'] != null
+      //         ? map['fulfillment_type']['home_delivery_type']
+      //                     ['self_delivery'] !=
+      //                 null
+      //             ? map['fulfillment_type']['home_delivery_type']
+      //                 ['self_delivery'] as dynamic
+      //             : null
+      //         : null
+      //     : null,
+      // delivery_time: map['fulfillment_type']['delivery_time'] != null
+      //     ? map['fulfillment_type']['delivery_time'] as dynamic
+      //     : null,
       lat: map['lat'] as dynamic,
       lang: map['lang'] as dynamic,
       radius: map['radius'] as dynamic,

@@ -24,9 +24,19 @@ class HyperLocalCheckoutRepository with LogMixin {
   dynamic shopHomeDeliveryLoc;
   dynamic homeDeliveryLoc;
   dynamic deliveryStatesLoc;
+  dynamic supportLoc;
+  dynamic userReadableOrderIdLoc;
   List<HyperLocalPreviewModel> previewModels = [];
 
   late HyperlocalPaymentInfoModel paymentModelLoc;
+
+  dynamic get userOrderId {
+    return userReadableOrderIdLoc;
+  }
+
+  dynamic get support {
+    return supportLoc;
+  }
 
   dynamic get deliveryState {
     return deliveryStatesLoc;
@@ -155,11 +165,14 @@ class HyperLocalCheckoutRepository with LogMixin {
       shopAddressOrderLoc = responseBody['storeDescription']['address'];
       shopOrderDateLoc = '';
       shopOrderDateLoc = responseBody['storeDescription']['createdAt'];
-
+      supportLoc = '';
+      supportLoc = responseBody['support'];
       homeDeliveryLoc = '';
       homeDeliveryLoc = responseBody['storeDescription']['fulfillment_type'];
       shopOrderIdloc = '';
       shopOrderIdloc = responseBody['id'];
+      userReadableOrderIdLoc = '';
+      userReadableOrderIdLoc = responseBody['order_id'];
       shopPaymentStatusLoc = '';
       shopPaymentStatusLoc = responseBody['payment'] != null
           ? responseBody['payment']['payment_status']
@@ -170,7 +183,7 @@ class HyperLocalCheckoutRepository with LogMixin {
       shopOrderStatusLoc = states.first['title'];
 
       errorLog(
-          'order info values $shopPaymentStatusLoc, $shopOrderStatusLoc, $shopAddressOrderLoc order id find $orderId, $shopOrderIdloc ');
+          'order info values $shopPaymentStatusLoc, $shopOrderStatusLoc, $shopAddressOrderLoc order id find $orderId, $shopOrderIdloc and support $support userOrderId $userReadableOrderIdLoc');
       final orderItems = responseBody['orderItems'] as List;
       warningLog('Checking for order Items $orderItems');
       for (var element in orderItems) {
@@ -249,6 +262,10 @@ class HyperLocalCheckoutRepository with LogMixin {
         throw const VerifyPaymentHyperlocalErrorState(
             message: 'Unable to verify razorpayment');
       }
+      // if (responseBody['message'].toString().contains('Razorpay Issue')) {
+      //   throw VerifyPaymentHyperlocalErrorState(
+      //       message: responseBody['message']);
+      // }
       String message = responseBody['message'];
       return message;
     } catch (e) {

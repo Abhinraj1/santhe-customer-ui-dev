@@ -600,7 +600,7 @@ class _HyperlocalProductdescriptionMobileState
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
-                      'Delivery By: ${widget.hyperLocalProductModel.delivery_time}',
+                      'Delivery By: ${widget.hyperLocalProductModel.window}',
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),
@@ -637,6 +637,7 @@ class _HyperlocalProductdescriptionMobileState
                 // const SizedBox(
                 //   height: 10,
                 // ),
+
                 widget.hyperLocalProductModel.returnable == true
                     ? Align(
                         alignment: Alignment.centerLeft,
@@ -651,6 +652,13 @@ class _HyperlocalProductdescriptionMobileState
                                   'Returnable:   ${returnable.toString().capitalizeFirst}',
                                   style: const TextStyle(fontSize: 15),
                                 ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                widget.hyperLocalProductModel.window != null
+                                    ? Text(
+                                        'Return Window : ${widget.hyperLocalProductModel.window}')
+                                    : const SizedBox(),
                                 const SizedBox(
                                   height: 10,
                                 ),

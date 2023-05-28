@@ -497,7 +497,8 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
           print('Length passed into builder ${previewWidgetItems.length}');
 
           //! preview widget ui start
-          return Padding(
+          return 
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Card(
               shape: RoundedRectangleBorder(
@@ -583,11 +584,11 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
 
 
                         isAlreadyCancelledOrReturned(
-
                             element: previewWidgetModel.previewWidgetModel) == null ?
                            isSingleCancellable(
                             element: previewWidgetModel.previewWidgetModel) ??
                             const SizedBox() : const SizedBox(),
+
 
                         isAlreadyCancelledOrReturned(
                             element: previewWidgetModel.previewWidgetModel) == null ?

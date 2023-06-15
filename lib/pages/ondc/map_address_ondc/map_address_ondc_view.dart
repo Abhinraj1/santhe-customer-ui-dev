@@ -21,10 +21,9 @@ import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
-import 'package:santhe/pages/ondc/ondc_checkout_screen/old/ondc_checkout_screen_view.dart';
+import 'package:santhe/pages/hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'package:santhe/pages/ondc/ondc_shop_list/ondc_shop_list_view.dart';
 
-import '../../../core/blocs/ondc/ondc_bloc.dart';
 import '../../../widgets/registration_widgets/textFieldRegistration.dart';
 
 part 'map_address_ondc_desktop.dart';
@@ -34,10 +33,12 @@ part 'map_address_ondc_tablet.dart';
 class MapAddressOndcView extends StatelessWidget {
   final double lat;
   final double lng;
+  final String? whichScreen;
   const MapAddressOndcView({
     Key? key,
     required this.lat,
     required this.lng,
+    this.whichScreen,
   }) : super(key: key);
 
   @override
@@ -47,6 +48,7 @@ class MapAddressOndcView extends StatelessWidget {
         mobile: _MapAddressOndcMobile(
           lat: lat,
           lng: lng,
+          whichScreen: whichScreen,
         ),
         desktop: _MapAddressOndcDesktop(),
         tablet: _MapAddressOndcTablet(),

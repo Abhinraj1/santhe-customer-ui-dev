@@ -16,34 +16,27 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
+import 'package:santhe/core/blocs/hyperlocal/hyperlocal_cart/hyperlocal_cart_bloc.dart';
+import 'package:santhe/core/blocs/hyperlocal/hyperlocal_checkout/hyperlocal_checkout_bloc.dart';
 import 'package:santhe/core/blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
+import 'package:santhe/core/repositories/hyperlocal_cartrepo.dart';
+import 'package:santhe/core/repositories/hyperlocal_checkoutrepository.dart';
 import 'package:santhe/core/repositories/hyperlocal_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
-import 'package:santhe/models/ondc/shop_model.dart';
-import 'package:santhe/models/ondc/single_order_model.dart';
-import 'package:santhe/pages/ondc/ondc_checkout_screen/new/ondc_checkout_screen_mobile.dart';
-import 'package:santhe/pages/ondc/ondc_contact_support/ondc_contact_support_enter_query_screen/ondc_contact_support_enter_query_screen_mobile.dart';
-import 'package:santhe/pages/ondc/ondc_contact_support/ondc_contact_support_shop_contact_details_screen/ondc_contact_support_shop_contact_details_screen_mobile.dart';
-import 'package:santhe/pages/ondc/ondc_contact_support/ondc_contact_support_ticket_screen/ondc_contact_support_ticket_screen_mobile.dart';
-import 'package:santhe/pages/ondc/ondc_contact_support/ondc_contact_support_view.dart';
-import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_mobile.dart';
-import 'package:santhe/pages/ondc/ondc_order_details_screen/ondc_order_details_screen_mobile.dart';
 import 'package:santhe/pages/splash_to_home.dart';
-import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
 import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import 'core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import 'core/cubits/webview_cubit/webview_cubit.dart';
 import 'core/repositories/ondc_order_cancel_and_return_repository.dart';
-import 'pages/ondc/ondc_webview_screen/ondc_webview_screen_mobile.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -105,7 +98,13 @@ class MyApp extends StatelessWidget {
           ),
           RepositoryProvider<HyperLocalRepository>(
             create: (context) => HyperLocalRepository(),
-          )
+          ),
+          RepositoryProvider<HyperLocalCartRepository>(
+            create: (context) => HyperLocalCartRepository(),
+          ),
+          RepositoryProvider<HyperLocalCheckoutRepository>(
+            create: (context) => HyperLocalCheckoutRepository(),
+          ),
         ],
         child: MultiBlocProvider(
           providers: [
@@ -153,7 +152,18 @@ class MyApp extends StatelessWidget {
               create: (context) => HyperlocalShopBloc(
                 hyperLocalRepository: context.read<HyperLocalRepository>(),
               ),
-            )
+            ),
+            BlocProvider<HyperlocalCartBloc>(
+              create: (context) => HyperlocalCartBloc(
+                  hyperLocalCartRepository:
+                      context.read<HyperLocalCartRepository>()),
+            ),
+            BlocProvider<HyperlocalCheckoutBloc>(
+              create: (context) => HyperlocalCheckoutBloc(
+                hyperLocalCheckoutRepository:
+                    context.read<HyperLocalCheckoutRepository>(),
+              ),
+            ),
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,

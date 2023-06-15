@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 library product_description_ondc_view;
 
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';

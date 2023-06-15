@@ -23,7 +23,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
   bool isProductthere = false;
   bool _loading = false;
   bool _isLoading = false;
-  final TextEditingController _textEditingController = TextEditingController();
+
   final ScrollController _controller = ScrollController();
   final ScrollController _shopScroll = ScrollController();
   List<OndcProductWidget> productWidget = [];
@@ -178,11 +178,11 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                 height: 70,
                 child: TextFormField(
                   maxLength: 50,
-                  controller: _textEditingController,
+                  controller: globalSearchtextEditingController,
                   onChanged: (value) {
                     if (value.length >= 3) {
                       setState(() {
-                        productName = _textEditingController.text;
+                        productName = globalSearchtextEditingController.text;
                       });
                       // context.read<OndcBloc>().add(
                       //   FetchListOfShopWithSearchedProducts(
@@ -191,7 +191,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                       //     RepositoryProvider.of<OndcRepository>(
                       //         context)
                       //         .transactionId,
-                      //     productName: _textEditingController.text,
+                      //     productName: globalSearchtextEditingController.text,
                       //   ),
                       // );
                     }
@@ -210,13 +210,14 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                       onTap: () {
                         context.read<OndcBloc>().add(
                               FetchListOfShopWithSearchedProducts(
-                                productName: _textEditingController.text,
+                                productName:
+                                    globalSearchtextEditingController.text,
                               ),
                             );
                         setState(() {
-                          productName = _textEditingController.text;
+                          productName = globalSearchtextEditingController.text;
                         });
-                        _textEditingController.clear();
+
                         ge.Get.back(
                           result: productName,
                         );
@@ -710,21 +711,22 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                         child: SizedBox(
                                           height: 50,
                                           child: TextFormField(
-                                            controller: _textEditingController,
+                                            controller:
+                                                globalSearchtextEditingController,
                                             onFieldSubmitted: (value) {
                                               context.read<OndcBloc>().add(
                                                     FetchListOfShopWithSearchedProducts(
                                                       productName:
-                                                          _textEditingController
+                                                          globalSearchtextEditingController
                                                               .text
                                                               .toString(),
                                                     ),
                                                   );
                                               searchTerm =
-                                                  _textEditingController.text;
-                                              _textEditingController.clear();
+                                                  globalSearchtextEditingController
+                                                      .text;
                                             },
-                                            // initialValue: _textEditingController
+                                            // initialValue: globalSearchtextEditingController
                                             //     .value.text,
                                             // onChanged: (value) {
                                             //   _searchList(
@@ -772,8 +774,6 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                         //             .opStats,
                                                         //       ),
                                                         //     );
-                                                        _textEditingController
-                                                            .clear();
                                                       },
                                                       child: Icon(Icons.cancel),
                                                     )
@@ -789,15 +789,15 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
                                                         .add(
                                                           FetchListOfShopWithSearchedProducts(
                                                             productName:
-                                                                _textEditingController
+                                                                globalSearchtextEditingController
                                                                     .text
                                                                     .toString(),
                                                           ),
                                                         );
                                                     searchTerm =
-                                                        _textEditingController
+                                                        globalSearchtextEditingController
                                                             .text;
-                                                    _textEditingController
+                                                    globalSearchtextEditingController
                                                         .clear();
                                                   },
                                                   child: Icon(

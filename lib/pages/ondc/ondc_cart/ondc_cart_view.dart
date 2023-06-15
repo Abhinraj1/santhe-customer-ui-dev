@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 library ondc_cart_view;
 
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +16,6 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
-import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/cart_item_model.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;

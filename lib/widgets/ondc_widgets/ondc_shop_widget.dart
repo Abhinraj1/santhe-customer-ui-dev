@@ -71,6 +71,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
         Get.to(
           OndcShopDetailsView(shopModel: widget.shopModel),
         );
+        setState(() {});
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),

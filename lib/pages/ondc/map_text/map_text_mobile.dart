@@ -3,7 +3,12 @@ part of map_text_view;
 
 class _MapTextMobile extends StatefulWidget {
   final AddressOndcModel? addressOndcModel;
-  _MapTextMobile({this.addressOndcModel});
+  final String? whichscreen;
+  _MapTextMobile({
+    Key? key,
+    this.addressOndcModel,
+    this.whichscreen,
+  }) : super(key: key);
 
   @override
   State<_MapTextMobile> createState() => _MapTextMobileState();
@@ -230,6 +235,7 @@ class _MapTextMobileState extends State<_MapTextMobile> {
                           Get.to(() => MapAddressOndcView(
                                 lat: value!.latitude,
                                 lng: value.longitude,
+                                whichScreen: widget.whichscreen,
                               ));
                           _isFetchingLocation = false;
                         });

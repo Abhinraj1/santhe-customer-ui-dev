@@ -385,6 +385,7 @@ class _ProductDescriptionOndcMobileState
                 const SizedBox(
                   height: 10,
                 ),
+                //! copied
                 Row(
                   children: [
                     widget.productOndcModel.isAddedToCart!

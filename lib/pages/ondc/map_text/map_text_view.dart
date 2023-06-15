@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
 import 'package:santhe/API/addressSearchAPI.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/location_controller.dart';
@@ -22,16 +23,21 @@ part 'map_text_tablet.dart';
 
 class MapTextView extends StatelessWidget {
   final AddressOndcModel? addressOndcModel;
+  final String? whichScreen;
   const MapTextView({
     Key? key,
     this.addressOndcModel,
+    this.whichScreen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
-        mobile: _MapTextMobile(addressOndcModel: addressOndcModel),
+        mobile: _MapTextMobile(
+          addressOndcModel: addressOndcModel,
+          whichscreen: whichScreen,
+        ),
         desktop: _MapTextDesktop(),
         tablet: _MapTextTablet(),
       );

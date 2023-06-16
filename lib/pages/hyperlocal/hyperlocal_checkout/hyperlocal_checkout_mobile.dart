@@ -50,6 +50,26 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
   late HyperlocalPaymentInfoModel paymentInfoModel;
 
   bool _isInitBuffer = false;
+  dynamic homeDelivery = '';
+  int cancellableCount = 0;
+  dynamic formattedDate;
+
+  getHomeDelivery() {
+    errorLog(
+        'Checking for home Deliver${RepositoryProvider.of<HyperLocalCheckoutRepository>(context).homeDelivery}');
+    final dynamic homeDeli = json.decode(
+        RepositoryProvider.of<HyperLocalCheckoutRepository>(context)
+            .homeDelivery);
+
+    warningLog('Home Delivery $homeDeli');
+    if (homeDeli['home_delivery'].toString().contains('true')) {
+      errorLog('Triggered0');
+      homeDelivery = 'Yes';
+    } else {
+      homeDelivery = 'No';
+    }
+    errorLog('Home Delivery Check $homeDelivery');
+  }
 
   void openCheckout(ProfileController profileCon) async {
     // String newTotal = priceFormatter(value: '133.333333333');
@@ -83,7 +103,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     warningLog(
-        'success orderId ${response.orderId} paymentId ${response.paymentId} Signature ${response.signature}');
+        'success orderId ${response.orderId} paymentId ${response.paymentId} Signature ${response.signature} ');
     setState(() {
       _isInitBuffer = true;
     });
@@ -91,9 +111,10 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
       const Duration(seconds: 5),
       () => context.read<HyperlocalCheckoutBloc>().add(
             VerifyPaymentEventHyperlocal(
-                razorPayOrderId: response.orderId,
-                razorPayPaymentId: response.paymentId,
-                razorPaySignature: response.signature),
+              razorPayOrderId: response.orderId,
+              razorPayPaymentId: response.paymentId,
+              razorPaySignature: response.signature,
+            ),
           ),
     );
   }
@@ -153,6 +174,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
   @override
   void initState() {
     super.initState();
+
     setState(() {
       _isLoading = true;
       billingAddress =
@@ -209,6 +231,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
           setState(() {
             _showPriceHasChanged = true;
           });
+          Get.back(result: '500 error');
         }
         if (state is GetOrderInfoPostSuccessState) {
           setState(() {
@@ -247,6 +270,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
               HyperlocalPreviewWidget(hyperLocalPreviewModel: element),
             );
           }
+          getHomeDelivery();
           warningLog('Preview Widgets $previewWidgetsLocal');
           setState(() {
             _isLoading = false;
@@ -550,6 +574,18 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
                                   'Checking for vague message $billingAddress');
                             }),
 
+                        homeDelivery.toString().contains('No')
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 25.0, vertical: 15),
+                                child: Text(
+                                  'This is a Self Pickup Order. You will be contacted by Shop to pick up your order, alternately you can contact the shop too. ',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: AppColors().grey100, fontSize: 15),
+                                ),
+                              )
+                            : const SizedBox(),
                         const SizedBox(
                           height: 20,
                         ),

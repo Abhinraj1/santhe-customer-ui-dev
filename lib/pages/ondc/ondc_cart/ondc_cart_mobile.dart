@@ -73,7 +73,10 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
 
   @override
   Widget build(BuildContext context) {
-    debugLog('store id${widget.storeLocation_id}');
+    final ProfileController profileController =
+        ge.Get.find<ProfileController>();
+    debugLog(
+        'store id${widget.storeLocation_id} and profile controller ${profileController.customerDetails}');
     return BlocConsumer<CartBloc, CartState>(
       bloc: cartBloc,
       listener: (context, state) {
@@ -225,9 +228,12 @@ class _OndcCartMobileState extends State<_OndcCartMobile> with LogMixin {
                         padding: const EdgeInsets.only(right: 4.5),
                         child: IconButton(
                           onPressed: () {
-                            ge.Get.off(
-                              () => const OndcIntroView(),
-                            );
+                            // ge.Get.off(
+                            //   () => const OndcIntroView(),
+                            // );
+                            ge.Get.off(HyperlocalShophomeView(
+                                lat: profileController.customerDetails!.lat,
+                                lng: profileController.customerDetails!.lng));
                           },
                           splashRadius: 25.0,
                           icon: const Icon(

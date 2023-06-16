@@ -34,6 +34,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
   bool? isAddedToCart = false;
   dynamic quantity = 1;
   dynamic total;
+  dynamic discountpercent;
   HyperLocalProductModel({
     required this.id,
     required this.name,
@@ -269,7 +270,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
 
   removeFromCart() {
     isAddedToCart = false;
-    quantity = 0;
+    // quantity = 0;
   }
 
   getTotal() {

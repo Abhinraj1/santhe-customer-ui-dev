@@ -4,11 +4,16 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:santhe/controllers/api_service_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/controllers/home_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/map_merch.dart';
 import '../controllers/connectivity_controller.dart';
 import '../controllers/notification_controller.dart';
+import 'package:flutter/services.dart' as sv;
 import '../core/app_initialisations.dart';
 import 'chat/chat_screen.dart';
 import 'home_page.dart';
@@ -22,7 +27,13 @@ class SplashToHome extends StatefulWidget {
   State<SplashToHome> createState() => _SplashToHomeState();
 }
 
-class _SplashToHomeState extends State<SplashToHome> with LogMixin {
+class _SplashToHomeState extends State<SplashToHome>
+    with LogMixin, TickerProviderStateMixin {
+  // final AllListController _allListController = Get.find();
+  // final ProfileController _profileController = Get.find();
+  // final HomeController _homeController = Get.find();
+  // final NotificationController _notificationController = Get.find();
+  // final APIs apiController = Get.find();
   Future<void> bootHome() async {
     await AppInitialisations().initialiseApplication();
     await Notifications().fcmInit();
@@ -68,6 +79,29 @@ class _SplashToHomeState extends State<SplashToHome> with LogMixin {
   _intialiseToken() async {
     await AppHelpers.bearerToken;
   }
+
+  // initFunction() async {
+  //   _homeController.homeTabController =
+  //       TabController(length: 3, vsync: this, initialIndex: 0);
+  //   sv.SystemChrome.setSystemUIOverlayStyle(const sv.SystemUiOverlayStyle(
+  //     systemNavigationBarColor: Colors.white,
+  //     systemNavigationBarIconBrightness: Brightness.dark,
+  //     statusBarColor: Colors.white,
+  //     statusBarBrightness: Brightness.dark,
+  //   ));
+  //   await _profileController.initialise();
+  //   await _profileController.getOperationalStatus();
+  //   _allListController.getAllList();
+  //   _allListController.checkSubPlan();
+  //   /*Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
+  //       _connectivityController.listenConnectivity(result));*/
+  //   APIs().updateDeviceToken(
+  //     AppHelpers()
+  //         .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber),
+  //   );
+  //   apiController.searchedItemResult('potato');
+  //   _notificationController.fromNotification = false;
+  // }
 
   @override
   void initState() {

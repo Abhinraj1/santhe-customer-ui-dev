@@ -27,7 +27,7 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
 
   getImagesOfShops() {
     if (widget.hyperLocalShopModel.images.length != null) {
-      for (var i = 0; i < widget.hyperLocalShopModel.images.length - 1; i++) {
+      for (var i = 0; i < widget.hyperLocalShopModel.images.length; i++) {
         final string = widget.hyperLocalShopModel.images[i]['display_image'];
         if (string.toString().contains('null')) {
           images.add('assets/cart.png');

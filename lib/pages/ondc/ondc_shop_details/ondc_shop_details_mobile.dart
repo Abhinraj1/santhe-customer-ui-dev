@@ -248,6 +248,8 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController =
+        ge.Get.find<ProfileController>();
     return BlocConsumer<OndcBloc, OndcState>(listener: (context, state) {
       if (state is ErrorFetchingProductsOfShops) {
         ge.Get.to(
@@ -347,9 +349,12 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
                 },
                 splashRadius: 25.0,
                 icon: GestureDetector(
-                  onTap: () => ge.Get.to(
-                    () => const OndcIntroView(),
-                  ),
+                  // onTap: () => ge.Get.to(
+                  //   () => const OndcIntroView(),
+                  // ),
+                  onTap: () => ge.Get.off(HyperlocalShophomeView(
+                      lat: profileController.customerDetails!.lat,
+                      lng: profileController.customerDetails!.lng)),
                   child: const Icon(
                     Icons.home,
                     color: Colors.white,

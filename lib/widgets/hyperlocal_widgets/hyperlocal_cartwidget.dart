@@ -160,11 +160,11 @@ class _HyperLocalCartWidgetState extends State<HyperLocalCartWidget>
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
                                     imageUrl: widget.hyperLocalCartModel.symbol,
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                     errorWidget: (context, url, error) =>
                                         Image.asset(
                                       'assets/cart.png',
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),

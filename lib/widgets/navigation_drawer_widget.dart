@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:santhe/pages/hyperlocal/hyperlocal_previousorders/hyperlocal_previousorders_view.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 
@@ -22,8 +23,6 @@ import '../pages/nav_bar_pages/about_us_page.dart';
 import '../pages/nav_bar_pages/contact_us_page.dart';
 import '../pages/nav_bar_pages/faq_page.dart';
 import '../pages/nav_bar_pages/terms_condition_page.dart';
-
-
 
 class CustomNavigationDrawer extends StatelessWidget {
   const CustomNavigationDrawer({Key? key}) : super(key: key);
@@ -153,10 +152,12 @@ class CustomNavigationDrawer extends StatelessWidget {
             onPress: () {
               // Navigator.pop(context);
 
-                // BlocProvider.of<SingleOrderDetailsBloc>(context).add
-                //   (const LoadPastOrderDataEvent());
+              // BlocProvider.of<SingleOrderDetailsBloc>(context).add
+              //   (const LoadPastOrderDataEvent());
 
-              Get.to(() => const ONDCOrderHistoryView());
+              Get.off(
+                () => const HyperlocalPreviousordersView(),
+              );
             },
           ),
           NavigationDrawerTile(

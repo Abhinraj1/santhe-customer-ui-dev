@@ -50,7 +50,7 @@ class AddressRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
 
-    errorLog('$flat, and also id $address_id');
+    errorLog('$flat, and also id $address_id also the keyWord $deliveryName');
 
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
 
@@ -124,10 +124,10 @@ class AddressRepository with LogMixin {
           json.decode(response.body)['data']['rows'] as List<dynamic>;
 
       ///
-      errorLog('################ RAW DATA  HEREE $responseBody');
+      errorLog('################ RAW DATA  HEREE also url $url $responseBody');
       addressOndcModels =
           responseBody.map((e) => AddressOndcModel.fromMap(e)).toList();
-      errorLog('${addressOndcModels}');
+      errorLog('Fetching address ${addressOndcModels}');
 
       ///
       warningLog("################################# body ${addressOndcModels}");
@@ -138,7 +138,7 @@ class AddressRepository with LogMixin {
       billingAddressModel = addressOndcModels.firstWhere(
         (element) => element.address_name.toString().contains('Billing'),
       );
-      errorLog('$deliveryAddressModel');
+      errorLog('Delivery ${deliveryAddressModel?.flat}');
 
       deliveryAddressId = deliveryAddressModel?.id;
 

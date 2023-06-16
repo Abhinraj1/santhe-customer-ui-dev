@@ -72,5 +72,8 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         );
       }
     });
+    on<ResetAddressEvent>((event, emit) {
+      emit(AddressInitial());
+    });
   }
 }

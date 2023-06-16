@@ -30,6 +30,8 @@ class UpdateAddressEvent extends AddressEvent {
 
 class GetAddressListBillingEvent extends AddressEvent {}
 
+class ResetAddressEvent extends AddressEvent {}
+
 class UpdateBillingAddressEvent extends AddressEvent {
   final double lat;
   final double lng;

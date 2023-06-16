@@ -22,6 +22,7 @@ class _HyperlocalProductdescriptionMobileState
   String returnable = 'No';
   String sellerPickupReturn = "No";
   int cartCount = 0;
+  double discount = 0;
 
   bool isSameValue = false;
   buildPageIndicator() {
@@ -40,6 +41,15 @@ class _HyperlocalProductdescriptionMobileState
     } else {
       return list;
     }
+  }
+
+  getDiscount() {
+    discount = 0;
+    discount = (widget.hyperLocalProductModel.mrp -
+            widget.hyperLocalProductModel.offer_price) /
+        widget.hyperLocalProductModel.mrp *
+        100;
+    warningLog('Discount $discount');
   }
 
   Widget _indicator(bool isActive) {
@@ -142,6 +152,7 @@ class _HyperlocalProductdescriptionMobileState
         .cartTotalCountLocal;
     getImages();
     checkValue();
+    getDiscount();
     yesNoCancellable();
     yesNoReturnable();
   }
@@ -274,11 +285,14 @@ class _HyperlocalProductdescriptionMobileState
                                   (_) {
                                     setState(() {
                                       widget.hyperLocalProductModel.quantity;
+                                      widget.hyperLocalProductModel
+                                          .removeFromCart();
                                     });
                                   },
                                 );
 
-                                warningLog('something');
+                                warningLog(
+                                    '${widget.hyperLocalProductModel.isAddedToCart}');
                               },
                               child: CircleAvatar(
                                 radius: 25,
@@ -327,6 +341,22 @@ class _HyperlocalProductdescriptionMobileState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: buildPageIndicator(),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '${discount.toString().split('.').first}% off',
+                      style: TextStyle(
+                          color: AppColors().green100,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 15),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0, top: 15),
@@ -446,10 +476,13 @@ class _HyperlocalProductdescriptionMobileState
                               )?.then((_) {
                                 setState(() {
                                   widget.hyperLocalProductModel.quantity;
+                                  widget.hyperLocalProductModel
+                                      .removeFromCart();
                                 });
                               });
 
-                              warningLog('something');
+                              warningLog(
+                                  '${widget.hyperLocalProductModel.isAddedToCart}');
                             },
                             child: Container(
                               width: 160,

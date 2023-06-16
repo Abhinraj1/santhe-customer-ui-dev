@@ -43,7 +43,7 @@ class _OndcProductCarouselImageState extends State<OndcProductCarouselImage>
             errorWidget: (context, url, error) =>
                 const Icon(Icons.shopping_cart),
             imageUrl: widget.imageUrl,
-            fit: BoxFit.contain,
+            fit: BoxFit.cover,
           ),
         ),
       ),

@@ -25,6 +25,7 @@ import '../../controllers/api_service_controller.dart';
 import '../../controllers/location_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
+import '../hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'mapSearchScreen.dart';
 
 class UserRegistrationPage extends StatefulWidget {
@@ -495,8 +496,17 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                                       .then((value) => log(
                                           'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
-                                  Get.offAll(() => const OndcIntroView(),
-                                      //! previous const MapMerchant(),
+                                  // Get.offAll(() => const OndcIntroView(),
+                                  //     //! previous const MapMerchant(),
+                                  //     transition: Transition.fadeIn);
+                                  Get.offAll(
+                                      () => HyperlocalShophomeView(
+                                            lat: profileController
+                                                .customerDetails!.lat,
+                                            lng: profileController
+                                                .customerDetails!.lng,
+                                          ),
+                                      //!previous const MapMerchant(),
                                       transition: Transition.fadeIn);
                                 } else {
                                   log('error occurred');

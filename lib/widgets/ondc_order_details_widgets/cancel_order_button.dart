@@ -9,28 +9,29 @@ class CancelOrderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return     Column(
+    return Column(
       children: [
-        Text("OR",
-          style: FontStyleManager().s12fw600Grey60,
-        ),
+        // Text("OR",
+        //   style: FontStyleManager().s12fw600Grey60,
+        // ),
         Padding(
-          padding: const EdgeInsets.only(top: 5,bottom: 20,left: 20,right: 20),
+          padding:
+              const EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
           child: MaterialButton(
             color: Colors.white,
             elevation: 2,
-            onPressed: (){
+            onPressed: () {
               onTap();
             },
             height: 40,
             shape: RoundedRectangleBorder(
-              borderRadius:BorderRadius.circular(customButtonBorderRadius),
+              borderRadius: BorderRadius.circular(customButtonBorderRadius),
             ),
             minWidth: 250,
             child: Center(
-              child: Text("CANCEL ORDER",
-                style:
-                FontStyleManager().s14fw700Red,
+              child: Text(
+                "CANCEL ORDER",
+                style: FontStyleManager().s14fw700Red,
               ),
             ),
           ),
@@ -39,4 +40,3 @@ class CancelOrderButton extends StatelessWidget {
     );
   }
 }
-

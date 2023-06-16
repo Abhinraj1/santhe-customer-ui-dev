@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 library hyperlocal_shophome_view;
 
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:santhe/constants.dart';
+import 'package:flutter/services.dart' as sv;
+import 'package:santhe/controllers/api_service_controller.dart';
+import 'package:santhe/controllers/getx/all_list_controller.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/controllers/home_controller.dart';
+import 'package:santhe/controllers/notification_controller.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:http/http.dart' as http;
+import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/address/address_bloc.dart';
 
 import 'package:santhe/core/blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_bloc.dart';
@@ -24,6 +34,7 @@ import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 
 import 'package:santhe/widgets/hyperlocal_widgets/hyperlocal_shopwidget.dart';
 
+import '../../../core/blocs/hyperlocal/hyperlocal_orderhistory/hyperlocal_orderhistory_bloc.dart';
 import '../../../widgets/navigation_drawer_widget.dart';
 
 part 'hyperlocal_shophome_desktop.dart';
@@ -31,12 +42,12 @@ part 'hyperlocal_shophome_mobile.dart';
 part 'hyperlocal_shophome_tablet.dart';
 
 class HyperlocalShophomeView extends StatelessWidget {
-  final String lat;
-  final String lng;
+  final String? lat;
+  final String? lng;
   const HyperlocalShophomeView({
     Key? key,
-    required this.lat,
-    required this.lng,
+    this.lat,
+    this.lng,
   }) : super(key: key);
 
   @override

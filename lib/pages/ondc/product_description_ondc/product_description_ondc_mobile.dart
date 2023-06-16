@@ -280,10 +280,12 @@ class _ProductDescriptionOndcMobileState
                                 )?.then((_) {
                                   setState(() {
                                     widget.productOndcModel.quantity;
+                                    widget.productOndcModel.removeFromCart();
                                   });
                                 });
 
-                                warningLog('something');
+                                warningLog(
+                                    'Added to Cart ${widget.productOndcModel.isAddedToCart}');
                               },
                               child: CircleAvatar(
                                 radius: 25,
@@ -451,10 +453,12 @@ class _ProductDescriptionOndcMobileState
                               )?.then((_) {
                                 setState(() {
                                   widget.productOndcModel.quantity;
+                                  widget.productOndcModel.removeFromCart();
                                 });
                               });
 
-                              warningLog('something');
+                              warningLog(
+                                  'Checking for addedtoCart ${widget.productOndcModel.isAddedToCart}');
                             },
                             child: Container(
                               width: 160,

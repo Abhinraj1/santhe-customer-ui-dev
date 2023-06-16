@@ -104,7 +104,7 @@ class HyperLocalRepository with LogMixin {
       required String lat,
       required String lng}) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/product/list?store_description_id=$storeId&limit=7&offset=0&lat=$lat&lang=$lng');
+        'https://ondcstaging.santhe.in/santhe/hyperlocal/product/list?store_description_id=$storeId&limit=10&offset=0&lat=$lat&lang=$lng');
     try {
       final response = await http.get(url);
       warningLog('statusCode of Get ${response.statusCode} and url $url');

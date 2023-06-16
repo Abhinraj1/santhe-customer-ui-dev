@@ -16,6 +16,7 @@ import '../../core/app_shared_preference.dart';
 import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 import '../customer_registration_pages/customer_registration.dart';
+import '../hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -316,7 +317,14 @@ class _OtpScreenState extends State<OtpScreen> with LogMixin {
       AppSharedPreference().setLogin(true);
       apiController.updateDeviceToken(widget.phoneNumber.toString());
       await profileController.initialise();
-      Get.offAll(() => const OndcIntroView(),
+      // Get.offAll(() => const OndcIntroView(),
+      //     //!previous const MapMerchant(),
+      //     transition: Transition.fadeIn);
+      Get.offAll(
+          () => HyperlocalShophomeView(
+                lat: profileController.customerDetails!.lat,
+                lng: profileController.customerDetails!.lng,
+              ),
           //!previous const MapMerchant(),
           transition: Transition.fadeIn);
     }

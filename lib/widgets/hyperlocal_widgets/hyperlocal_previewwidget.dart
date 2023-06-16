@@ -108,7 +108,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                         )),
 
                     Text(
-                      '$mapQuantity',
+                      '${widget.hyperLocalPreviewModel.units} * $mapQuantity',
                       style: FontStyleManager().s10fw500Brown,
                     ),
                     //  showStatus ?? false ?

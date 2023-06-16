@@ -22,14 +22,111 @@ class _HyperlocalShopdetailsMobileState
   List<HyperLocalProductWidget> searchWidgets = [];
   List<HyperLocalProductModel> searchModels = [];
   List<HyperLocalProductModel> existingModels = [];
+  List<HyperLocalProductModel> searchExistingModels = [];
+  final ScrollController _scrollController = ScrollController();
+  final ScrollController _searchScrollController = ScrollController();
+  final profileController = ge.Get.find<ProfileController>();
+  int n = 0;
+  int nsearch = 0;
   dynamic homeDeliveryGlo;
-
+  bool _isLoading = false;
+  bool _isSearchLoading = false;
   getHomeDelivery() {
     final homeDelivery =
         json.decode(widget.hyperLocalShopModel.fulfillment_type.toString());
     warningLog('Home Delivery $homeDelivery');
     homeDeliveryGlo = homeDelivery['home_delivery'];
     warningLog('HomeDeliveryFormatted $homeDeliveryGlo');
+  }
+
+  fetchData({
+    required List<HyperLocalProductWidget> productWidgetsLocal,
+    required String shopId,
+  }) async {
+    final url = Uri.parse(
+        'https://ondcstaging.santhe.in/santhe/hyperlocal/product/list?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final response = await http.get(url);
+      warningLog('statusCode of Get ${response.statusCode} and url $url');
+      final responseBody =
+          json.decode(response.body)['data']['rows'] as List<dynamic>;
+      dynamic _itemCount = json.decode(response.body)['data']['count'];
+      debugLog('Body of the products ${responseBody.length}');
+      List<HyperLocalProductModel> localHyperLocalProductModel = [];
+      // final HyperLocalShopModel hyperLocal =
+      //     HyperLocalShopModel.fromMap(responseBody.first);
+      // warningLog('Checking for ${hyperLocal}');
+      for (var element in responseBody) {
+        localHyperLocalProductModel.add(
+          HyperLocalProductModel.fromMap(element),
+        );
+      }
+      List<HyperLocalProductWidget> addableItems = [];
+      for (var element in localHyperLocalProductModel) {
+        addableItems
+            .add(HyperLocalProductWidget(hyperLocalProductModel: element));
+      }
+      warningLog('Addable Items $addableItems');
+      productWidgetsLocal.addAll(addableItems);
+      productModels.addAll(localHyperLocalProductModel);
+      setState(() {
+        productWidgets = productWidgetsLocal;
+        existingModels = productModels;
+        _isLoading = false;
+      });
+    } catch (e) {
+      throw HyperLocalGetProductsOfShopErrorState(
+        message: e.toString(),
+      );
+    }
+  }
+
+  fetchNewSearchItems(
+      {required List<HyperLocalProductWidget> searchProductLocal,
+      required String shopId,
+      required String productName}) async {
+    final url = Uri.parse(
+        'https://ondcstaging.santhe.in/santhe/hyperlocal/product/search?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&item_name=$productName&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+    setState(() {
+      _isSearchLoading = true;
+    });
+    try {
+      final response = await http.get(url);
+      warningLog('statusCode of Get ${response.statusCode} and url $url');
+      final responseBody =
+          json.decode(response.body)['data']['rows'] as List<dynamic>;
+      int _itemCount = json.decode(response.body)['data']['count'];
+      debugLog('Body of the products ${responseBody.length}');
+      List<HyperLocalProductModel> localHyperLocalProductModel = [];
+      // final HyperLocalShopModel hyperLocal =
+      //     HyperLocalShopModel.fromMap(responseBody.first);
+      // warningLog('Checking for ${hyperLocal}');
+      for (var element in responseBody) {
+        localHyperLocalProductModel.add(
+          HyperLocalProductModel.fromMap(element),
+        );
+      }
+      List<HyperLocalProductWidget> addableItems = [];
+      for (var element in localHyperLocalProductModel) {
+        addableItems
+            .add(HyperLocalProductWidget(hyperLocalProductModel: element));
+      }
+      warningLog('Addable Items $addableItems');
+      searchProductLocal.addAll(addableItems);
+      searchModels.addAll(localHyperLocalProductModel);
+      setState(() {
+        searchWidgets = searchProductLocal;
+        searchExistingModels.addAll(searchModels);
+        _isSearchLoading = false;
+      });
+    } catch (e) {
+      throw HyperLocalGetSearchProductsOfShopErrorState(
+        message: e.toString(),
+      );
+    }
   }
 
   @override
@@ -39,15 +136,48 @@ class _HyperlocalShopdetailsMobileState
     context.read<HyperlocalShopBloc>().add(
           HyperLocalGetProductOfShopEvent(
               shopId: widget.hyperLocalShopModel.id,
-              lat: customerModel.lat,
-              lng: customerModel.lng),
+              lat: RepositoryProvider.of<AddressRepository>(context)
+                  .deliveryModel!
+                  .lat,
+              lng: RepositoryProvider.of<AddressRepository>(context)
+                  .deliveryModel!
+                  .lng),
         );
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        setState(() {
+          n = n + 10;
+        });
+        warningLog('new search items and limit $n');
+        fetchData(
+          productWidgetsLocal: productWidgets,
+          shopId: widget.hyperLocalShopModel.id,
+        );
+      }
+    });
+    _searchScrollController.addListener(() {
+      if (_searchScrollController.position.pixels ==
+          _searchScrollController.position.maxScrollExtent) {
+        setState(() {
+          nsearch = nsearch + 10;
+        });
+        warningLog('new search items and limit $nsearch');
+        fetchNewSearchItems(
+          shopId: widget.hyperLocalShopModel.id,
+          productName: _textEditingController.text,
+          searchProductLocal: searchWidgets,
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController =
+        ge.Get.find<ProfileController>();
     warningLog(
-        'checking for customer info${customerModel.lat} ${customerModel.lng}');
+        'checking for customer info${profileController.customerDetails!.lat} ${profileController.customerDetails!.lng}');
     return BlocConsumer<HyperlocalShopBloc, HyperlocalShopState>(
       listener: (context, state) {
         errorLog('$state');
@@ -88,7 +218,7 @@ class _HyperlocalShopdetailsMobileState
           List<HyperLocalProductWidget> productWidgetsLocal = [];
           productModels = [];
           productModels = state.hyperLocalProductModels;
-          existingModels = [];
+          warningLog('Product Models ${state.hyperLocalProductModels}');
           for (var element in productModels) {
             productWidgetsLocal.add(
               HyperLocalProductWidget(hyperLocalProductModel: element),
@@ -152,16 +282,19 @@ class _HyperlocalShopdetailsMobileState
                   padding: const EdgeInsets.only(right: 4.5),
                   child: IconButton(
                     onPressed: () {
-                      ge.Get.to(const OndcCheckOutScreenMobile());
+                      // ge.Get.to(
+                      //   () => const OndcIntroView(),
+                      //   transition: ge.Transition.rightToLeft,
+                      // );
+                      ge.Get.off(
+                          HyperlocalShophomeView(
+                              lat: profileController.customerDetails!.lat,
+                              lng: profileController.customerDetails!.lng),
+                          transition: ge.Transition.rightToLeft);
                     },
                     splashRadius: 25.0,
                     icon: InkWell(
-                      onTap: () {
-                        ge.Get.to(
-                          () => const OndcIntroView(),
-                          transition: ge.Transition.rightToLeft,
-                        );
-                      },
+                      onTap: () {},
                       child: const Icon(
                         Icons.home,
                         color: Colors.white,
@@ -215,8 +348,8 @@ class _HyperlocalShopdetailsMobileState
                                               .toString()
                                               .length >
                                           75
-                                      ? 200
-                                      : 180,
+                                      ? 215
+                                      : 195,
                                   fit: BoxFit.fill,
                                   width: MediaQuery.of(context).size.width,
                                 ),
@@ -226,8 +359,8 @@ class _HyperlocalShopdetailsMobileState
                                               .toString()
                                               .length >
                                           75
-                                      ? 200
-                                      : 180,
+                                      ? 215
+                                      : 195,
                                   width: MediaQuery.of(context).size.width,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -252,12 +385,13 @@ class _HyperlocalShopdetailsMobileState
                                                       .clear();
 
                                                   ge.Get.off(
-                                                    () =>
-                                                        HyperlocalShophomeView(
-                                                            lat: customerModel
-                                                                .lat,
-                                                            lng: customerModel
-                                                                .lng),
+                                                    () => HyperlocalShophomeView(
+                                                        lat: profileController
+                                                            .customerDetails!
+                                                            .lat,
+                                                        lng: profileController
+                                                            .customerDetails!
+                                                            .lng),
                                                     transition: ge
                                                         .Transition.leftToRight,
                                                   );
@@ -320,7 +454,12 @@ class _HyperlocalShopdetailsMobileState
                                                     padding:
                                                         const EdgeInsets.only(
                                                             top: 2.0),
-                                                    child: Expanded(
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.9,
                                                       child: Center(
                                                         child: Text(
                                                           '${widget.hyperLocalShopModel.address}',
@@ -453,23 +592,28 @@ class _HyperlocalShopdetailsMobileState
                                             //! reatest
 
                                             //! change this to delivery
-                                            AutoSizeText(
-                                              homeDeliveryGlo == true
-                                                  ? "Home Delivery Available"
-                                                  : "",
-                                              minFontSize: 10,
-                                              style: TextStyle(
-                                                color: AppColors().white100,
-                                                fontSize: 13,
-                                                // fontFamily: ,
-                                                // fontSize: widget.hyperLocalShopModel.name
-                                                //             .toString()
-                                                //             .length >
-                                                //         60
-                                                //     ? 20
-                                                //     : 30,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5.0),
+                                              child: AutoSizeText(
+                                                homeDeliveryGlo == true
+                                                    ? "Home Delivery Available"
+                                                    : "No Home Delivery",
+                                                minFontSize: 10,
+                                                style: TextStyle(
+                                                  color: AppColors().white100,
+                                                  fontSize: 13,
+                                                  // fontFamily: ,
+                                                  // fontSize: widget.hyperLocalShopModel.name
+                                                  //             .toString()
+                                                  //             .length >
+                                                  //         60
+                                                  //     ? 20
+                                                  //     : 30,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -569,13 +713,20 @@ class _HyperlocalShopdetailsMobileState
                                     );
                                     context.read<HyperlocalShopBloc>().add(
                                           HyperLocalGetSearchProductsOfShopEvent(
-                                            shopId:
-                                                widget.hyperLocalShopModel.id,
-                                            productName:
-                                                _textEditingController.text,
-                                            lat: customerModel.lat,
-                                            lng: customerModel.lng,
-                                          ),
+                                              shopId:
+                                                  widget.hyperLocalShopModel.id,
+                                              productName:
+                                                  _textEditingController.text,
+                                              lat: RepositoryProvider.of<
+                                                          AddressRepository>(
+                                                      context)
+                                                  .deliveryModel!
+                                                  .lat,
+                                              lng: RepositoryProvider.of<
+                                                          AddressRepository>(
+                                                      context)
+                                                  .deliveryModel!
+                                                  .lng),
                                         );
                                   },
                                   // onTap: () {
@@ -599,8 +750,16 @@ class _HyperlocalShopdetailsMobileState
                                                         shopId: widget
                                                             .hyperLocalShopModel
                                                             .id,
-                                                        lat: customerModel.lat,
-                                                        lng: customerModel.lng),
+                                                        lat: RepositoryProvider
+                                                                .of<AddressRepository>(
+                                                                    context)
+                                                            .deliveryModel!
+                                                            .lat,
+                                                        lng: RepositoryProvider
+                                                                .of<AddressRepository>(
+                                                                    context)
+                                                            .deliveryModel!
+                                                            .lng),
                                                   );
                                               _textEditingController.clear();
                                             },
@@ -617,9 +776,15 @@ class _HyperlocalShopdetailsMobileState
                                                             shopId: widget
                                                                 .hyperLocalShopModel
                                                                 .id,
-                                                            lat: customerModel
+                                                            lat: RepositoryProvider
+                                                                    .of<AddressRepository>(
+                                                                        context)
+                                                                .deliveryModel!
                                                                 .lat,
-                                                            lng: customerModel
+                                                            lng: RepositoryProvider
+                                                                    .of<AddressRepository>(
+                                                                        context)
+                                                                .deliveryModel!
                                                                 .lng),
                                                       );
                                                   _textEditingController
@@ -638,13 +803,21 @@ class _HyperlocalShopdetailsMobileState
                                         );
                                         context.read<HyperlocalShopBloc>().add(
                                               HyperLocalGetSearchProductsOfShopEvent(
-                                                shopId: widget
-                                                    .hyperLocalShopModel.id,
-                                                productName:
-                                                    _textEditingController.text,
-                                                lat: customerModel.lat,
-                                                lng: customerModel.lng,
-                                              ),
+                                                  shopId: widget
+                                                      .hyperLocalShopModel.id,
+                                                  productName:
+                                                      _textEditingController
+                                                          .text,
+                                                  lat: RepositoryProvider.of<
+                                                              AddressRepository>(
+                                                          context)
+                                                      .deliveryModel!
+                                                      .lat,
+                                                  lng: RepositoryProvider.of<
+                                                              AddressRepository>(
+                                                          context)
+                                                      .deliveryModel!
+                                                      .lng),
                                             );
                                       },
                                       child: const Padding(
@@ -723,16 +896,20 @@ class _HyperlocalShopdetailsMobileState
                                               scrollDirection: Axis.vertical,
                                               crossAxisCount: 2,
                                               crossAxisSpacing: 4,
+                                              controller:
+                                                  _searchScrollController,
                                               mainAxisSpacing: 13,
                                               childAspectRatio: 1.0,
                                               children: [
                                                 ...searchWidgets,
-                                                // _searchLoading
-                                                //     ? const Align(
-                                                //         alignment: Alignment.center,
-                                                //         child: CircularProgressIndicator(),
-                                                //       )
-                                                //     : const SizedBox(height: 60)
+                                                _isSearchLoading
+                                                    ? const Align(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : const SizedBox(height: 60)
                                               ],
                                             ),
                                           ),
@@ -767,20 +944,38 @@ class _HyperlocalShopdetailsMobileState
                                               crossAxisCount: 2,
                                               crossAxisSpacing: 4,
                                               mainAxisSpacing: 13,
+                                              controller: _scrollController,
                                               childAspectRatio: 1.0,
                                               children: [
                                                 ...productWidgets,
-                                                // _searchLoading
-                                                //     ? const Align(
-                                                //         alignment: Alignment.center,
-                                                //         child: CircularProgressIndicator(),
-                                                //       )
-                                                //     : const SizedBox(height: 60)
+                                                _isLoading
+                                                    ? const Align(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : const SizedBox(height: 60)
                                               ],
                                             ),
                                           ),
                                         ),
-                                      )
+                                      ),
+                            _isLoading
+                                ? Column(
+                                    children: const [
+                                      Center(
+                                        // heightFactor: 0.8,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox(
+                                    height: 60,
+                                  ),
+                            const SizedBox(
+                              height: 50,
+                            ),
                           ],
                         ),
                       ),

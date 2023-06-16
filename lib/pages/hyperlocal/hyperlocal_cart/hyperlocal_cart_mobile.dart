@@ -23,6 +23,7 @@ class _HyperlocalCartMobileState extends State<_HyperlocalCartMobile>
   List<HyperLocalCartWidget> cartWidget = [];
   dynamic total = 0;
   String? shopName;
+  dynamic homeDeliveryLoc;
   getShopName() async {
     List<HyperLocalCartModel> productModels1 =
         await RepositoryProvider.of<HyperLocalCartRepository>(context)
@@ -44,6 +45,7 @@ class _HyperlocalCartMobileState extends State<_HyperlocalCartMobile>
 
   @override
   Widget build(BuildContext context) {
+    final profileController = ge.Get.find<ProfileController>();
     return BlocConsumer<HyperlocalCartBloc, HyperlocalCartState>(
       listener: (context, state) {
         if (state is GotHyperLocalCartState) {
@@ -139,9 +141,16 @@ class _HyperlocalCartMobileState extends State<_HyperlocalCartMobile>
                     padding: const EdgeInsets.only(right: 4.5),
                     child: IconButton(
                       onPressed: () {
+                        // ge.Get.off(
+                        //   () => const OndcIntroView(),
+                        // );
                         ge.Get.off(
-                          () => const OndcIntroView(),
-                        );
+                            () => HyperlocalShophomeView(
+                                  lat: profileController.customerDetails!.lat,
+                                  lng: profileController.customerDetails!.lng,
+                                ),
+                            //!previous const MapMerchant(),
+                            transition: ge.Transition.fadeIn);
                       },
                       splashRadius: 25.0,
                       icon: const Icon(
@@ -396,12 +405,19 @@ class _HyperlocalCartMobileState extends State<_HyperlocalCartMobile>
                             width: 350,
                             child: ElevatedButton(
                               onPressed: () async {
-                                ge.Get.to(
+                                final String? message = await ge.Get.to(
                                   () => HyperlocalCheckoutView(
-                                      storeDescription_id:
-                                          widget.storeDescriptionId,
-                                      storeName: shopName!),
+                                    storeDescription_id:
+                                        widget.storeDescriptionId,
+                                    storeName: shopName!,
+                                  ),
                                 );
+                                warningLog('error message $message');
+                                if (message.toString().contains('500')) {
+                                  setState(() {
+                                    _showErrorNoResponseFromSeller = true;
+                                  });
+                                }
                                 // final String message = await ge.Get.to(
                                 //     () => OndcCheckoutScreenView(
                                 //           storeLocation_id:

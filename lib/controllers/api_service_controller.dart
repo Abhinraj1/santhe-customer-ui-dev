@@ -822,13 +822,13 @@ class APIs extends GetxController with LogMixin {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(user.lat, user.lng);
     final getfinalAddress = placemarks[0];
-    debugLog('$getfinalAddress');
+    debugLog('Checkinf for address data ${user.address} $getfinalAddress');
     var data = {
       "custName": user.custName,
       "address": user.address,
       "state": getfinalAddress.administrativeArea,
       "city": getfinalAddress.locality,
-      "flat": getfinalAddress.street,
+      "flat": user.address,
       "locality": getfinalAddress.locality,
       "lat": user.lat,
       "lng": user.lng,
@@ -840,6 +840,21 @@ class APIs extends GetxController with LogMixin {
       "howToReach": user.howToReach,
       "custLoginTime": formattedDate,
     };
+
+    // final newAddressData = json.encode({
+    //   "firebase_id": user.phoneNumber,
+    //   "address_name": 'Delivery',
+    //   "lat": user.lat,
+    //   "lng": user.lng,
+    //   "flat": getfinalAddress.street,
+    //   "locality": getfinalAddress.locality,
+    //   "city": getfinalAddress.locality,
+    //   "state": getfinalAddress.administrativeArea,
+    //   "country": getfinalAddress.country,
+    //   "pincode": getfinalAddress.postalCode,
+    //   "address_id": "",
+    //   "howToReach": ""
+    // });
 
     var rawResponse = await http.post(Uri.parse(AppUrl.updateCustomer),
         body: json.encode(data), headers: headers);
@@ -958,6 +973,7 @@ class APIs extends GetxController with LogMixin {
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    errorLog('Checking for Placemarks data$placemarks');
 
     //! update user method
     var data = {
@@ -965,7 +981,7 @@ class APIs extends GetxController with LogMixin {
       "address": updatedUser.address,
       "state": getfinalAddress.administrativeArea,
       "city": getfinalAddress.locality,
-      "flat": getfinalAddress.street,
+      "flat": updatedUser.address,
       "locality": getfinalAddress.locality,
       "lat": updatedUser.lat,
       "lng": updatedUser.lng,

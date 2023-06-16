@@ -12,6 +12,9 @@ import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 
+import '../../../controllers/getx/profile_controller.dart';
+import '../../hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
+
 part 'api_error_mobile.dart';
 part 'api_error_tablet.dart';
 part 'api_error_desktop.dart';

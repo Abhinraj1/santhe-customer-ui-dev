@@ -92,6 +92,8 @@ class HyperlocalShopBloc
         final List<HyperLocalProductModel> products =
             await hyperLocalRepository.getProductsOfShop(
                 storeId: event.shopId, lat: event.lat, lng: event.lng);
+        log('products on clear ${products}',
+            name: 'HyperLocalGetSearchProductsClearEvent');
         emit(HyperLocalClearShopSearchProductState(
             hyperLocalProductModels: products));
       } on HyperLocalGetProductsOfShopErrorState catch (e) {

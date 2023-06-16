@@ -1,8 +1,11 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:santhe/constants.dart';
+import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/error_pages/no_internet_page.dart';
+import 'package:santhe/pages/hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'package:santhe/pages/map_merch.dart';
 import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 
@@ -21,6 +24,8 @@ class ConnectivityController extends GetxController with LogMixin {
   bool passedInitialScreen = false;
 
   ConnectivityResult connectivityResult = ConnectivityResult.none;
+
+  // final profileController = Get.find<ProfileController>();
 
   void listenConnectivity(ConnectivityResult result) {
     connectivityResult = result;
@@ -84,7 +89,10 @@ class ConnectivityController extends GetxController with LogMixin {
     if (notificationController.fromNotification) {
       //_notificationController.fromNotification = false;
       if (notificationController.landingScreen == 'new') {
-        return const OndcIntroView();
+        // return const OndcIntroView();
+        warningLog(
+            'Checking for profile controller in connectivity controller${customerModel.lat}');
+        return const HyperlocalShophomeView();
         //!previous
         //return const MapMerchant();
       } else if (notificationController.landingScreen == 'answered') {
@@ -104,7 +112,8 @@ class ConnectivityController extends GetxController with LogMixin {
         );
       }
     }
-    return const OndcIntroView();
+    // return const OndcIntroView();
+    return const HyperlocalShophomeView();
     //!previous
     // return MapMerchant();
   }

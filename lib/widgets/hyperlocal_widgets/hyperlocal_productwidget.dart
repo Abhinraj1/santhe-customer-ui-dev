@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
+import 'package:santhe/core/loggers.dart';
 
 import 'package:santhe/models/hyperlocal_models/hyperlocal_productmodel.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_productdescription/hyperlocal_productdescription_view.dart';
@@ -20,8 +21,10 @@ class HyperLocalProductWidget extends StatefulWidget {
       _HyperLocalProductWidgetState();
 }
 
-class _HyperLocalProductWidgetState extends State<HyperLocalProductWidget> {
+class _HyperLocalProductWidgetState extends State<HyperLocalProductWidget>
+    with LogMixin {
   bool isSameValue = false;
+  double discount = 0;
 
   checkValue() {
     if (widget.hyperLocalProductModel.mrp !=
@@ -36,10 +39,20 @@ class _HyperLocalProductWidgetState extends State<HyperLocalProductWidget> {
     }
   }
 
+  getDiscountPrice() {
+    discount = 0;
+    discount = (widget.hyperLocalProductModel.mrp -
+            widget.hyperLocalProductModel.offer_price) /
+        widget.hyperLocalProductModel.mrp *
+        100;
+    warningLog('Discount $discount');
+  }
+
   @override
   void initState() {
     super.initState();
     checkValue();
+    getDiscountPrice();
   }
 
   int n = 0;
@@ -127,7 +140,7 @@ class _HyperLocalProductWidgetState extends State<HyperLocalProductWidget> {
                             child: CachedNetworkImage(
                               imageUrl:
                                   widget.hyperLocalProductModel.display_image,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                               errorWidget: (context, url, error) => Image.asset(
                                 'assets/cart.png',
                                 fit: BoxFit.fill,
@@ -155,6 +168,14 @@ class _HyperLocalProductWidgetState extends State<HyperLocalProductWidget> {
                     ),
                   ),
                 ),
+                Expanded(
+                    child: AutoSizeText(
+                  '${discount.toString().split('.').first}% off',
+                  minFontSize: 9,
+                  maxFontSize: 10,
+                  style: TextStyle(
+                      color: AppColors().green100, fontWeight: FontWeight.bold),
+                )),
                 isSameValue
                     ? Expanded(
                         child: Padding(

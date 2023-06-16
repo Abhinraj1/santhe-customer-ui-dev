@@ -155,7 +155,8 @@ class _MapTextMobileState extends State<_MapTextMobile> {
                                                     placeApiProvider
                                                         .getPlaceDetailFromIdv2(
                                                             snapshot.data[index]
-                                                                .placeId);
+                                                                .placeId,
+                                                            widget.whichscreen);
                                                   },
                                                   child: Container(
                                                     padding:

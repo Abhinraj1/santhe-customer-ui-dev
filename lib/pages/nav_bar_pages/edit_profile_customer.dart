@@ -26,6 +26,7 @@ import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
 import '../../models/santhe_user_model.dart';
 import '../customer_registration_pages/mapSearchScreen.dart';
+import '../hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import '../login_pages/phone_number_login_page.dart';
 
 class EditCustomerProfile extends StatefulWidget {
@@ -627,10 +628,18 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
 
                                             await profileController
                                                 .getOperationalStatus();
+                                            // Get.offAll(
+                                            //     () => const OndcIntroView(),
+                                            //     transition:
+                                            //         Transition.leftToRight);
                                             Get.offAll(
-                                                () => const OndcIntroView(),
-                                                transition:
-                                                    Transition.leftToRight);
+                                              () => HyperlocalShophomeView(
+                                                lat: profileController
+                                                    .customerDetails!.lat,
+                                                lng: profileController
+                                                    .customerDetails!.lng,
+                                              ),
+                                            );
                                             // Navigator.push(
                                             //   context,
                                             //   MaterialPageRoute(

@@ -11,6 +11,7 @@ class _ApiErrorMobileState extends State<_ApiErrorMobile> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find<ProfileController>();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -49,7 +50,12 @@ class _ApiErrorMobileState extends State<_ApiErrorMobile> {
             padding: const EdgeInsets.only(right: 4.5),
             child: IconButton(
               onPressed: () {
-                Get.off(() => const OndcIntroView());
+                // Get.off(() => const OndcIntroView());
+                Get.off(
+                  HyperlocalShophomeView(
+                      lat: profileController.customerDetails!.lat,
+                      lng: profileController.customerDetails!.lng),
+                );
               },
               splashRadius: 25.0,
               icon: const Icon(

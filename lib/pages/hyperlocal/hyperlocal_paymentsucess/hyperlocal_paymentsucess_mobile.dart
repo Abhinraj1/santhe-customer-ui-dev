@@ -134,6 +134,10 @@ class _HyperlocalPaymentsucessMobileState
                     Get.to(
                       () => HyperlocalOrderdetailView(
                         storeDescriptionId: widget.storeDescriptionId,
+                        orderId:
+                            RepositoryProvider.of<HyperLocalCheckoutRepository>(
+                                    context)
+                                .shopOrderId,
                       ),
                     );
                   },

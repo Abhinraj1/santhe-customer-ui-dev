@@ -60,7 +60,7 @@ class PlaceApiProvider {
     }
   }
 
-  void getPlaceDetailFromIdv2(String placeId) async {
+  void getPlaceDetailFromIdv2(String placeId, String? whichScreen) async {
     final request =
         'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=$apiKey';
     final response = await client.get(Uri.parse(request));
@@ -69,7 +69,11 @@ class PlaceApiProvider {
       if (result['status'] == 'OK') {
         var lat = result['results'][0]['geometry']['location']['lat'];
         var lng = result['results'][0]['geometry']['location']['lng'];
-        Get.to(() => MapAddressOndcView(lat: lat, lng: lng));
+        Get.to(() => MapAddressOndcView(
+              lat: lat,
+              lng: lng,
+              whichScreen: whichScreen,
+            ));
       }
       //throw Exception(result['error_message']);
     } else {

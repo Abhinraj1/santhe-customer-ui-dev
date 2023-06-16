@@ -82,6 +82,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
 
   @override
   Widget build(BuildContext context) {
+    warningLog('from which screen is it coming ${widget.whichScreen}');
     final LocationController locationController = ge.Get.find();
     final RegistrationController registrationController = ge.Get.find();
     final ProfileController profileController =

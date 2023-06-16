@@ -26,9 +26,19 @@ class HyperLocalCheckoutRepository with LogMixin {
   dynamic deliveryStatesLoc;
   dynamic supportLoc;
   dynamic userReadableOrderIdLoc;
+  dynamic phoneNumberLoc;
   List<HyperLocalPreviewModel> previewModels = [];
+  dynamic orderInvoiceLoc;
 
   late HyperlocalPaymentInfoModel paymentModelLoc;
+
+  dynamic get orderInvoice {
+    return orderInvoiceLoc;
+  }
+
+  dynamic get shopPhoneNumber {
+    return phoneNumberLoc;
+  }
 
   dynamic get userOrderId {
     return userReadableOrderIdLoc;
@@ -157,6 +167,8 @@ class HyperLocalCheckoutRepository with LogMixin {
       subTotalLoc = responseBody['sub_total'];
       totalAmount = '';
       totalAmount = responseBody['total_amount'];
+      orderInvoiceLoc = '';
+      orderInvoiceLoc = responseBody['customerInvoice'];
       shopNameOrderLoc = '';
       shopNameOrderLoc = responseBody['storeDescription']['name'];
       shopEmailOrderLoc = '';
@@ -164,11 +176,14 @@ class HyperLocalCheckoutRepository with LogMixin {
       shopAddressOrderLoc = '';
       shopAddressOrderLoc = responseBody['storeDescription']['address'];
       shopOrderDateLoc = '';
-      shopOrderDateLoc = responseBody['storeDescription']['createdAt'];
+      shopOrderDateLoc = responseBody['createdAt'];
       supportLoc = '';
       supportLoc = responseBody['support'];
       homeDeliveryLoc = '';
       homeDeliveryLoc = responseBody['storeDescription']['fulfillment_type'];
+      phoneNumberLoc = '';
+      phoneNumberLoc =
+          responseBody['storeDescription']['customer']['phone_number'];
       shopOrderIdloc = '';
       shopOrderIdloc = responseBody['id'];
       userReadableOrderIdLoc = '';

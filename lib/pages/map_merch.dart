@@ -32,6 +32,7 @@ import 'package:santhe/models/new_list/user_list_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/home_page.dart';
+import 'package:santhe/pages/hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'package:santhe/pages/new_tab_pages/new_tab_page.dart';
 import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
@@ -341,7 +342,14 @@ class _MapMerchantState extends State<MapMerchant>
                 //     AppHelpers().playStoreLink,
                 //   );
                 // }
-                Get.off(() => const OndcIntroView());
+                // Get.off(() => const OndcIntroView());
+                Get.off(
+                    () => HyperlocalShophomeView(
+                          lat: profileController.customerDetails!.lat,
+                          lng: profileController.customerDetails!.lng,
+                        ),
+                    //!previous const MapMerchant(),
+                    transition: Transition.fadeIn);
               },
               splashRadius: 25.0,
               icon: const Icon(

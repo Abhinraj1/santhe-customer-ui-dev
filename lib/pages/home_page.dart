@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:resize/resize.dart';
+import 'package:santhe/pages/hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -103,6 +104,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find<ProfileController>();
     return Scaffold(
       key: _key,
       drawer: const CustomNavigationDrawer(),
@@ -188,7 +190,14 @@ class _HomePageState extends State<HomePage>
                 //     AppHelpers().playStoreLink,
                 //   );
                 // }
-                Get.off(() => const OndcIntroView());
+                // Get.off(() => const OndcIntroView());
+                Get.off(
+                    () => HyperlocalShophomeView(
+                          lat: profileController.customerDetails!.lat,
+                          lng: profileController.customerDetails!.lng,
+                        ),
+                    //!previous const MapMerchant(),
+                    transition: Transition.fadeIn);
               },
               splashRadius: 25.0,
               icon: const Icon(

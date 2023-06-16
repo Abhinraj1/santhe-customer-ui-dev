@@ -16,16 +16,20 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/app_theme.dart';
 import 'package:santhe/core/blocs/address/address_bloc.dart';
 import 'package:santhe/core/blocs/checkout/checkout_bloc.dart';
+import 'package:santhe/core/blocs/hyperlocal/hyperlocal_cancelReturn/hyperlocal_cancel_return_bloc.dart';
 import 'package:santhe/core/blocs/hyperlocal/hyperlocal_cart/hyperlocal_cart_bloc.dart';
 import 'package:santhe/core/blocs/hyperlocal/hyperlocal_checkout/hyperlocal_checkout_bloc.dart';
+import 'package:santhe/core/blocs/hyperlocal/hyperlocal_orderhistory/hyperlocal_orderhistory_bloc.dart';
 import 'package:santhe/core/blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_bloc.dart';
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
+import 'package:santhe/core/repositories/hyperlocal_cancel_return_repo.dart';
 import 'package:santhe/core/repositories/hyperlocal_cartrepo.dart';
 import 'package:santhe/core/repositories/hyperlocal_checkoutrepository.dart';
+import 'package:santhe/core/repositories/hyperlocal_orderhistoryrepo.dart';
 import 'package:santhe/core/repositories/hyperlocal_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
@@ -105,6 +109,12 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<HyperLocalCheckoutRepository>(
             create: (context) => HyperLocalCheckoutRepository(),
           ),
+          RepositoryProvider<HyperLocalOrderHistoryRepository>(
+            create: (context) => HyperLocalOrderHistoryRepository(),
+          ),
+          RepositoryProvider<HyperlocalCancelReturnRepository>(
+            create: (context) => HyperlocalCancelReturnRepository(),
+          ),
         ],
         child: MultiBlocProvider(
           providers: [
@@ -162,6 +172,18 @@ class MyApp extends StatelessWidget {
               create: (context) => HyperlocalCheckoutBloc(
                 hyperLocalCheckoutRepository:
                     context.read<HyperLocalCheckoutRepository>(),
+              ),
+            ),
+            BlocProvider<HyperlocalOrderhistoryBloc>(
+              create: (context) => HyperlocalOrderhistoryBloc(
+                hyperLocalOrderHistoryRepository:
+                    context.read<HyperLocalOrderHistoryRepository>(),
+              ),
+            ),
+            BlocProvider<HyperlocalCancelReturnBloc>(
+              create: (context) => HyperlocalCancelReturnBloc(
+                hyperlocalCancelReturnRepository:
+                    context.read<HyperlocalCancelReturnRepository>(),
               ),
             ),
           ],

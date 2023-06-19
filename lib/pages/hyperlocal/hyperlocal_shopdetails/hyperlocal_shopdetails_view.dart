@@ -21,6 +21,7 @@ import 'package:http/http.dart' as http;
 import 'package:santhe/core/repositories/hyperlocal_repository.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_productmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_shopmodel.dart';
+import 'package:santhe/models/hyperlocal_models/text_formatter.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_cart/hyperlocal_cart_view.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';

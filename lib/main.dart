@@ -37,6 +37,7 @@ import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import 'core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
+import 'core/cubits/hyperlocal_image_return_request_cubit/hyperlocal_image_return_request_cubit.dart';
 import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import 'core/cubits/webview_cubit/webview_cubit.dart';
@@ -184,6 +185,11 @@ class MyApp extends StatelessWidget {
               create: (context) => HyperlocalCancelReturnBloc(
                 hyperlocalCancelReturnRepository:
                     context.read<HyperlocalCancelReturnRepository>(),
+              ),
+            ),
+            BlocProvider<HyperlocalImageReturnRequestCubit>(
+              create: (context) => HyperlocalImageReturnRequestCubit(
+                repository: context.read<HyperlocalCancelReturnRepository>(),
               ),
             ),
           ],

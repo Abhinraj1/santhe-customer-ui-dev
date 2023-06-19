@@ -31,6 +31,18 @@ class HyperlocalCancelReturnBloc
         emit(GetHyperlocalCancelReasonsErrorState(message: e.message));
       }
     });
+    on<GetHyperlocalReturnReasonsEvent>((event, emit) async {
+      emit(GetHyperlocalReturnReasonsLoadingState());
+      try {
+        List<HyperlocalCancelModel> returnModels = [];
+        returnModels =
+            await hyperlocalCancelReturnRepository.getReturnReasons();
+        emit(
+            GetHyperlocalReturnReasonsSuccessState(returnModels: returnModels));
+      } on GetHyperlocalReturnReasonsErrorState catch (e) {
+        emit(GetHyperlocalReturnReasonsErrorState(message: e.message));
+      }
+    });
     on<PostHyperlocalCancelReasonsEvent>((event, emit) async {
       emit(PostHyperlocalCancelReasonLoadingState());
       try {

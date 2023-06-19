@@ -26,6 +26,7 @@ import 'package:santhe/core/blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_blo
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_shopmodel.dart';
+import 'package:santhe/models/hyperlocal_models/text_formatter.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/ondc/map_text/map_text_view.dart';

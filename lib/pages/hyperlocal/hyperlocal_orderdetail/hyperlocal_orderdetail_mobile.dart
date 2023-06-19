@@ -397,6 +397,27 @@ class _HyperlocalOrderdetailMobileState
                           height: 8,
                         ),
                         //! shop and order details end
+                        RepositoryProvider.of<HyperLocalCheckoutRepository>(
+                                        context)
+                                    .returnMessage !=
+                                null
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 8.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '${RepositoryProvider.of<HyperLocalCheckoutRepository>(context).returnMessage}',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: AppColors().grey100,
+                                          fontSize: 15),
+                                    ),
+                                    const SizedBox(height: 8)
+                                  ],
+                                ),
+                              )
+                            : SizedBox(),
                         homeDelivery.toString().contains('No')
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(

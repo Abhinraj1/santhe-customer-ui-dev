@@ -703,6 +703,9 @@ class _HyperlocalShopdetailsMobileState
                                 height: 50,
                                 child: TextFormField(
                                   controller: _textEditingController,
+                                  inputFormatters: [
+                                    NoLeadingSpaceFormatter(),
+                                  ],
                                   onChanged: (value) {},
                                   onFieldSubmitted: (value) {
                                     setState(

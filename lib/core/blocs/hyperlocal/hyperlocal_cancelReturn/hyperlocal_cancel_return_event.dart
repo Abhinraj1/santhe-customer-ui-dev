@@ -10,6 +10,19 @@ abstract class HyperlocalCancelReturnEvent extends Equatable {
 
 class GetHyperlocalCancelReasonsEvent extends HyperlocalCancelReturnEvent {}
 
+class GetHyperlocalReturnReasonsEvent extends HyperlocalCancelReturnEvent {}
+
+class PostHyperlocalReturnReasonsEvent extends HyperlocalCancelReturnEvent {
+  final String orderId;
+  final String reason;
+  const PostHyperlocalReturnReasonsEvent({
+    required this.orderId,
+    required this.reason,
+  });
+  @override
+  List<Object> get props => [orderId, reason];
+}
+
 class PostHyperlocalCancelReasonsEvent extends HyperlocalCancelReturnEvent {
   final String orderID;
   final String reason;

@@ -27,10 +27,15 @@ class HyperLocalCheckoutRepository with LogMixin {
   dynamic supportLoc;
   dynamic userReadableOrderIdLoc;
   dynamic phoneNumberLoc;
+  dynamic returnMessageLoc;
   List<HyperLocalPreviewModel> previewModels = [];
   dynamic orderInvoiceLoc;
 
   late HyperlocalPaymentInfoModel paymentModelLoc;
+
+  dynamic get returnMessage {
+    return returnMessageLoc;
+  }
 
   dynamic get orderInvoice {
     return orderInvoiceLoc;
@@ -155,6 +160,7 @@ class HyperLocalCheckoutRepository with LogMixin {
       warningLog('Get order ${response.statusCode} and url $url');
       final responseBody = json.decode(response.body)['data'];
       warningLog('Body $responseBody');
+      returnMessageLoc = json.decode(response.body)['message'];
       warningLog('OrderInfo Response Body $responseBody');
       previewModels = [];
       deliveryChargeLoc = '';

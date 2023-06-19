@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/hyperlocal_checkoutrepository.dart';
@@ -13,6 +14,7 @@ import 'package:santhe/manager/font_manager.dart';
 import 'package:santhe/manager/imageManager.dart';
 
 import 'package:santhe/models/hyperlocal_models/hyperlocal_previewmodel.dart';
+import 'package:santhe/pages/hyperlocal/hyperlocal_returnreason/hyperlocal_returnreason_view.dart';
 
 class HyperlocalPreviewWidget extends StatefulWidget {
   final HyperLocalPreviewModel hyperLocalPreviewModel;
@@ -48,7 +50,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
   @override
   Widget build(BuildContext context) {
     warningLog(
-        'Order Status ${RepositoryProvider.of<HyperLocalCheckoutRepository>(context).shopOrderStatus} ');
+        'Order Status ${RepositoryProvider.of<HyperLocalCheckoutRepository>(context).shopOrderStatus} checking for returnable ${widget.hyperLocalPreviewModel.returnable} and checking for status ${widget.hyperLocalPreviewModel.status}');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       child: Card(
@@ -99,6 +101,18 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    widget.hyperLocalPreviewModel.status
+                                .toString()
+                                .contains('Delivered') &&
+                            widget.hyperLocalPreviewModel.returnable
+                                .toString()
+                                .contains('true')
+                        ? const SizedBox(
+                            height: 10,
+                          )
+                        : const SizedBox(
+                            height: 10,
+                          ),
                     SizedBox(
                         width: 120,
                         child: AutoSizeText(
@@ -127,7 +141,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                             .toString()
                             .contains('Created')
                         ? const SizedBox()
-                        : Container(
+                        : SizedBox(
                             width: MediaQuery.of(context).size.width * 0.45,
                             child: Text(
                               'Status: ${widget.hyperLocalPreviewModel.status}',
@@ -142,8 +156,18 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                                 .toString()
                                 .contains('true')
                         ? Expanded(
-                            child: Text('Return',
-                                style: FontStyleManager().s14fwUnderline),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  HyperlocalReturnreasonView(
+                                    hyperlocalPreviewModel:
+                                        widget.hyperLocalPreviewModel,
+                                  ),
+                                );
+                              },
+                              child: Text('Return',
+                                  style: FontStyleManager().s14fwUnderline),
+                            ),
                           )
                         : const SizedBox()
                   ],

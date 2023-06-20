@@ -417,7 +417,7 @@ class _HyperlocalOrderdetailMobileState
                                   ],
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         homeDelivery.toString().contains('No')
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(

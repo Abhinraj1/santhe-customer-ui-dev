@@ -148,7 +148,17 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                               style: FontStyleManager().s10fw500Brown,
                             ),
                           ),
-
+                    widget.hyperLocalPreviewModel.reason != null
+                        ? Expanded(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: AutoSizeText(
+                                '${widget.hyperLocalPreviewModel.reason}',
+                                style: TextStyle(color: AppColors().grey100),
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
                     widget.hyperLocalPreviewModel.status
                                 .toString()
                                 .contains('Delivered') &&

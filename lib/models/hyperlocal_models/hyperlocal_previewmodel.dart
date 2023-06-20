@@ -23,6 +23,7 @@ class HyperLocalPreviewModel extends Equatable {
   final dynamic active;
   final dynamic storeDescriptionId;
   final dynamic status;
+  final dynamic reason;
   const HyperLocalPreviewModel({
     required this.id,
     required this.units,
@@ -42,6 +43,7 @@ class HyperLocalPreviewModel extends Equatable {
     required this.active,
     required this.storeDescriptionId,
     required this.status,
+    required this.reason,
   });
 
   HyperLocalPreviewModel copyWith({
@@ -63,6 +65,7 @@ class HyperLocalPreviewModel extends Equatable {
     dynamic? active,
     dynamic? storeDescriptionId,
     dynamic? status,
+    dynamic? reason,
   }) {
     return HyperLocalPreviewModel(
       id: id ?? this.id,
@@ -83,6 +86,7 @@ class HyperLocalPreviewModel extends Equatable {
       active: active ?? this.active,
       storeDescriptionId: storeDescriptionId ?? this.storeDescriptionId,
       status: status ?? this.status,
+      reason: reason ?? this.reason,
     );
   }
 
@@ -101,6 +105,8 @@ class HyperLocalPreviewModel extends Equatable {
       'productId': productId,
       'symbol': symbol,
       'title': title,
+      'status': status,
+      'reason': reason
     };
   }
 
@@ -149,7 +155,8 @@ class HyperLocalPreviewModel extends Equatable {
         storeDescriptionId: map['product']['storeDescriptionId'] != null
             ? map['product']['storeDescriptionId'] as dynamic
             : null,
-        status: states.first['title'] as dynamic);
+        status: states.first['title'] as dynamic,
+        reason: states.first['reason'] as dynamic);
   }
 
   String toJson() => json.encode(toMap());
@@ -182,6 +189,7 @@ class HyperLocalPreviewModel extends Equatable {
       active,
       storeDescriptionId,
       status,
+      reason,
     ];
   }
 }

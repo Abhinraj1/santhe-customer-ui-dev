@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, unused_field
+
 part of hyperlocal_previousorders_view;
 
 class _HyperlocalPreviousordersMobile extends StatefulWidget {
@@ -13,20 +15,68 @@ class _HyperlocalPreviousordersMobileState
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   List<HyperlocalOrderDetailWidget> orderList = [];
   List<HyperlocalOrderDetailModel> orderModels = [];
+  List<HyperlocalOrderDetailWidget> originalList = [];
+  List<HyperlocalOrderDetailModel> originalModels = [];
+  final ScrollController _sevenScrollController = ScrollController();
+  final ScrollController _thirtyScrollController = ScrollController();
+  final ScrollController _customScrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+  bool customControllerSelected = false;
+  bool sevenControllerSelected = false;
+  bool thirtyControllerSelected = false;
   bool _isLoading = false;
+  int nSeven = 0;
+  int nThirty = 0;
+  int nCustom = 0;
   String selectedValue = "";
   String hint = "";
   bool _isEmpty = false;
+  dynamic selectedDates;
 
   @override
   void initState() {
     super.initState();
     _isLoading = true;
-    warningLog('called on rebuild');
-
-    context
-        .read<HyperlocalOrderhistoryBloc>()
-        .add(GetHyperlocalOrderHistoryEvent());
+    errorLog('called on rebuild');
+    context.read<HyperlocalOrderhistoryBloc>().add(
+          SevenDaysFilterHyperLocalOrderEvent(nSeven: nSeven),
+        );
+    _sevenScrollController.addListener(() {
+      if (_sevenScrollController.position.pixels ==
+          _sevenScrollController.position.maxScrollExtent) {
+        setState(() {
+          nSeven = nSeven + 10;
+        });
+        warningLog('new search items and limit Seven $nSeven');
+        context
+            .read<HyperlocalOrderhistoryBloc>()
+            .add(SevenDaysFilterHyperlocalOrderScrollEvent(nSeven: nSeven));
+      }
+    });
+    _thirtyScrollController.addListener(() {
+      if (_thirtyScrollController.position.pixels ==
+          _thirtyScrollController.position.maxScrollExtent) {
+        setState(() {
+          nThirty = nThirty + 10;
+        });
+        warningLog('new search items and limit Thirty $nThirty');
+        context
+            .read<HyperlocalOrderhistoryBloc>()
+            .add(ThirtyDaysFilterScrollHyperlocalOrderEvent(nthirty: nThirty));
+      }
+    });
+    _customScrollController.addListener(() {
+      if (_customScrollController.position.pixels ==
+          _customScrollController.position.maxScrollExtent) {
+        setState(() {
+          nCustom = nCustom + 10;
+        });
+        warningLog('new search items and limit Custom $nCustom');
+        context.read<HyperlocalOrderhistoryBloc>().add(
+            CustomDaysScrollFilterHyperlocalOrderEvent(
+                nCustom: nCustom, selectedDates: selectedDates));
+      }
+    });
   }
 
   String _getValueText2(
@@ -57,105 +107,6 @@ class _HyperlocalPreviousordersMobileState
     }
 
     return valueText;
-  }
-
-  sevenDayFilter({required List<HyperlocalOrderDetailModel> orderModels7}) {
-    DateTime today = DateTime.now();
-    DateTime startingDate = today.subtract(const Duration(days: 8));
-    List<HyperlocalOrderDetailModel> filteredModels = [];
-    List<HyperlocalOrderDetailWidget> filteredWidget = [];
-
-    for (var element in orderModels7) {
-      warningLog(
-          'Order Models ${orderModels7.length} Starting Date $startingDate and parse  ${DateTime.parse(element.createdAt.toString())} condition check ${DateTime.parse(element.createdAt.toString()).isAfter(startingDate)}');
-      if (DateTime.parse(element.createdAt.toString()).isAfter(startingDate)) {
-        filteredModels.add(element);
-      }
-    }
-    for (var element in filteredModels) {
-      filteredWidget.add(
-          HyperlocalOrderDetailWidget(hyperlocalOrderDetailModel: element));
-    }
-    warningLog('$filteredWidget');
-    setState(() {
-      orderList = filteredWidget;
-    });
-    if (orderList.isEmpty) {
-      setState(() {
-        _isEmpty = true;
-      });
-    } else {
-      setState(() {
-        _isEmpty = false;
-      });
-    }
-  }
-
-  thirtyDayFilter({required List<HyperlocalOrderDetailModel> orderModels30}) {
-    DateTime today = DateTime.now();
-    DateTime startingDate = today.subtract(const Duration(days: 31));
-    List<HyperlocalOrderDetailModel> filteredModels = [];
-    List<HyperlocalOrderDetailWidget> filteredWidget = [];
-    for (var element in orderModels30) {
-      if (DateTime.parse(element.createdAt.toString()).isAfter(startingDate)) {
-        filteredModels.add(element);
-      }
-    }
-    for (var element in filteredModels) {
-      filteredWidget.add(
-          HyperlocalOrderDetailWidget(hyperlocalOrderDetailModel: element));
-    }
-    warningLog('Order Models ${orderModels30.length}, Thirty $filteredWidget');
-    setState(() {
-      orderList = filteredWidget;
-    });
-    if (orderList.isEmpty) {
-      setState(() {
-        _isEmpty = true;
-      });
-    } else {
-      _isEmpty = false;
-    }
-  }
-
-  customDateFilter(
-      {required List<DateTime?>? valuesLoc,
-      required List<HyperlocalOrderDetailModel> orderDetailsCustom}) {
-    List<HyperlocalOrderDetailModel> filteredModels = [];
-    List<HyperlocalOrderDetailWidget> filteredWidget = [];
-    for (var element in orderDetailsCustom) {
-      if (DateTime.parse(element.createdAt.toString())
-                  .isAfter((valuesLoc!.first)!) ==
-              true &&
-          DateTime.parse(element.createdAt.toString())
-                  .isBefore((valuesLoc.last)!.add(const Duration(days: 1))) ==
-              true) {
-        warningLog(
-            'Date vals${valuesLoc.first} and last ${valuesLoc.last} Custom ${DateTime.parse(element.createdAt.toString())} condition check ${DateTime.parse(element.createdAt.toString()).isAfter((valuesLoc.first)!)} and before time stamp ${DateTime.parse(element.createdAt.toString()).isBefore((valuesLoc.last)!.subtract(const Duration(days: 1)))}');
-        filteredModels.add(element);
-        warningLog(
-            'element added ${element.createdAt}} to models ${filteredModels.length}');
-      }
-    }
-    for (var element in filteredModels) {
-      filteredWidget.add(
-          HyperlocalOrderDetailWidget(hyperlocalOrderDetailModel: element));
-    }
-    warningLog(
-        'Order Models ${orderDetailsCustom.length} Custom${filteredWidget}');
-    setState(() {
-      orderList = filteredWidget;
-    });
-    if (orderList.isEmpty) {
-      setState(() {
-        _isEmpty = true;
-      });
-    } else {
-      setState(() {
-        _isEmpty = false;
-      });
-    }
-    warningLog('Custom Widget$orderList');
   }
 
   @override
@@ -233,41 +184,24 @@ class _HyperlocalPreviousordersMobileState
         HyperlocalOrderhistoryState>(
       listener: (context, state) {
         debugLog('$state');
-        if (state is GetHyperlocalOrderHistorySuccessState) {
-          List<HyperlocalOrderDetailModel> locModels = [];
-          List<HyperlocalOrderDetailWidget> locWidgets = [];
-          locModels = state.orderDetail;
-          for (var element in locModels) {
-            locWidgets.add(HyperlocalOrderDetailWidget(
-                hyperlocalOrderDetailModel: element));
-          }
-          setState(() {
-            orderModels = locModels;
-            orderList = locWidgets;
-            _isLoading = false;
-            selectedValue = "7days";
-          });
-          warningLog('OrderList $orderList');
-          if (orderList.isEmpty) {
-            setState(() {
-              _isEmpty = true;
-            });
-          } else {
-            setState(() {
-              sevenDayFilter(orderModels7: orderModels);
-            });
-          }
-
-          // context.read<HyperlocalOrderhistoryBloc>().add(
-          //     SevenDaysFilterHyperLocalOrderEvent(orderModels: orderModels));
-        }
         if (state is SevenDaysFilterHyperlocalOrderState) {
           List<HyperlocalOrderDetailWidget> locWidgets = [];
+          orderModels = [];
+          orderList.clear();
+          orderModels.clear();
+          orderModels = state.orderDetailsModels;
           for (var element in state.orderDetailsModels) {
-            locWidgets.add(HyperlocalOrderDetailWidget(
-                hyperlocalOrderDetailModel: element));
+            locWidgets.add(
+              HyperlocalOrderDetailWidget(hyperlocalOrderDetailModel: element),
+            );
           }
           setState(() {
+            _isLoading = false;
+            selectedValue = "7days";
+            sevenControllerSelected = true;
+            customControllerSelected = false;
+            thirtyControllerSelected = false;
+            orderModels = state.orderDetailsModels;
             orderList = locWidgets;
           });
           warningLog('Seven days${orderList.length}');
@@ -275,13 +209,35 @@ class _HyperlocalPreviousordersMobileState
               .read<HyperlocalOrderhistoryBloc>()
               .add(ResetOrderHistoryEvent());
         }
+        if (state is SevenDaysFilterHyperlocalOrderScrollState) {
+          List<HyperlocalOrderDetailWidget> locWidgets = [];
+          for (var element in state.orderDetailsModels) {
+            locWidgets.add(
+              HyperlocalOrderDetailWidget(hyperlocalOrderDetailModel: element),
+            );
+          }
+          setState(() {
+            orderModels.addAll(state.orderDetailsModels);
+            orderList.addAll(locWidgets);
+          });
+          context
+              .read<HyperlocalOrderhistoryBloc>()
+              .add(ResetOrderHistoryEvent());
+          errorLog('seven${orderList.length}');
+        }
         if (state is ThirtyDaysFilterHyperlocalOrderState) {
           List<HyperlocalOrderDetailWidget> locWidgets = [];
+          orderModels.clear();
+          orderList.clear();
           for (var element in state.orderDetailsModels) {
             locWidgets.add(HyperlocalOrderDetailWidget(
                 hyperlocalOrderDetailModel: element));
           }
           setState(() {
+            sevenControllerSelected = false;
+            thirtyControllerSelected = true;
+            customControllerSelected = false;
+            orderModels = state.orderDetailsModels;
             orderList = locWidgets;
           });
           warningLog('ThirtyDays ${orderList.length}');
@@ -289,19 +245,59 @@ class _HyperlocalPreviousordersMobileState
               .read<HyperlocalOrderhistoryBloc>()
               .add(ResetOrderHistoryEvent());
         }
-        if (state is CustomDaysFilterHyperlocalOrderState) {
+        if (state is ThirtyDaysFilterHyperlocalOrderScrollState) {
           List<HyperlocalOrderDetailWidget> locWidgets = [];
           for (var element in state.orderDetailsModels) {
+            locWidgets.add(
+              HyperlocalOrderDetailWidget(hyperlocalOrderDetailModel: element),
+            );
+          }
+          setState(() {
+            orderModels.addAll(state.orderDetailsModels);
+            orderList.addAll(locWidgets);
+          });
+          context
+              .read<HyperlocalOrderhistoryBloc>()
+              .add(ResetOrderHistoryEvent());
+          errorLog('thirty${orderList.length}');
+        }
+        if (state is CustomDaysFilterHyperlocalOrderState) {
+          List<HyperlocalOrderDetailWidget> locWidgets = [];
+          orderList.clear();
+          orderModels.clear();
+          orderModels = state.orderDetailsModels;
+          errorLog('CustomDaysFilterHyperlocalOrderState ${orderList.length}');
+          for (var element in orderModels) {
             locWidgets.add(HyperlocalOrderDetailWidget(
                 hyperlocalOrderDetailModel: element));
           }
           setState(() {
+            sevenControllerSelected = false;
+            thirtyControllerSelected = false;
+            customControllerSelected = true;
+            orderModels = state.orderDetailsModels;
             orderList = locWidgets;
           });
           warningLog('customNav ${orderList.length}');
           context
               .read<HyperlocalOrderhistoryBloc>()
               .add(ResetOrderHistoryEvent());
+        }
+        if (state is CustomScrollFilterHyperlocalState) {
+          List<HyperlocalOrderDetailWidget> locWidgets = [];
+          for (var element in state.orderDetailsModels) {
+            locWidgets.add(
+              HyperlocalOrderDetailWidget(hyperlocalOrderDetailModel: element),
+            );
+          }
+          setState(() {
+            orderModels.addAll(state.orderDetailsModels);
+            orderList.addAll(locWidgets);
+          });
+          context
+              .read<HyperlocalOrderhistoryBloc>()
+              .add(ResetOrderHistoryEvent());
+          errorLog('custom${orderList.length}');
         }
       },
       builder: (context, state) {
@@ -360,6 +356,11 @@ class _HyperlocalPreviousordersMobileState
           body: Stack(
             children: [
               SingleChildScrollView(
+                controller: customControllerSelected == true
+                    ? _customScrollController
+                    : thirtyControllerSelected == true
+                        ? _thirtyScrollController
+                        : _sevenScrollController,
                 child: Column(
                   children: [
                     const SizedBox(
@@ -401,16 +402,17 @@ class _HyperlocalPreviousordersMobileState
                                   InkWell(
                                     onTap: () {
                                       // BlocProvider.of<OrderHistoryBloc>(context).add(SevenDaysFilterEvent());
-                                      // context
-                                      //     .read<HyperlocalOrderhistoryBloc>()
-                                      //     .add(
-                                      //       SevenDaysFilterHyperLocalOrderEvent(
-                                      //           orderModels: orderModels),
-                                      //     );
-                                      sevenDayFilter(orderModels7: orderModels);
+                                      context
+                                          .read<HyperlocalOrderhistoryBloc>()
+                                          .add(
+                                            SevenDaysFilterHyperLocalOrderEvent(
+                                                nSeven: nSeven),
+                                          );
+                                      // sevenDayFilter(orderModels7: orderModels);
                                       setState(() {
                                         hint = "";
                                         selectedValue = "7days";
+                                        nSeven = 0;
                                       });
                                     },
                                     child: SizedBox(
@@ -466,18 +468,19 @@ class _HyperlocalPreviousordersMobileState
                                   ///30 Days
                                   InkWell(
                                     onTap: () {
-                                      thirtyDayFilter(
-                                          orderModels30: orderModels);
+                                      // thirtyDayFilter(
+                                      //     orderModels30: orderModels);
                                       setState(() {
-                                        // context
-                                        //     .read<HyperlocalOrderhistoryBloc>()
-                                        //     .add(
-                                        //       ThirtyDaysFilterHyperLocalOrderEvent(
-                                        //           orderModels: orderModels),
-                                        //     );
                                         selectedValue = "30days";
                                         hint = "";
+                                        nThirty = 0;
                                       });
+                                      context
+                                          .read<HyperlocalOrderhistoryBloc>()
+                                          .add(
+                                            ThirtyDaysFilterHyperLocalOrderEvent(
+                                                nthirty: nThirty),
+                                          );
                                     },
                                     child: SizedBox(
                                       width: 125,
@@ -544,8 +547,10 @@ class _HyperlocalPreviousordersMobileState
                                   onTap: () async {
                                     setState(() {
                                       selectedValue = "custom";
+                                      selectedDates = '';
+                                      nCustom = 0;
                                     });
-                                    final values =
+                                    selectedDates =
                                         await showCalendarDatePicker2Dialog(
                                       context: context,
                                       config: config,
@@ -553,18 +558,25 @@ class _HyperlocalPreviousordersMobileState
                                       borderRadius: BorderRadius.circular(15),
                                       dialogBackgroundColor: Colors.white,
                                     );
-                                    if (values != null) {
-                                      customDateFilter(
-                                          valuesLoc: values,
-                                          orderDetailsCustom: orderModels);
+                                    if (selectedDates != null) {
+                                      context
+                                          .read<HyperlocalOrderhistoryBloc>()
+                                          .add(
+                                            CustomDaysFilterHyperLocalOrderEvent(
+                                                selectedDates: selectedDates,
+                                                nCustom: nCustom),
+                                          );
+                                      // customDateFilter(
+                                      //     valuesLoc: values,
+                                      //     orderDetailsCustom: orderModels);
                                       datePickedController.text =
                                           _getValueText2(
                                         config.calendarType,
-                                        values,
+                                        selectedDates,
                                       );
                                       hint = _getValueText2(
                                         config.calendarType,
-                                        values,
+                                        selectedDates,
                                       );
                                     }
                                   },
@@ -603,8 +615,10 @@ class _HyperlocalPreviousordersMobileState
                                           onTap: () async {
                                             setState(() {
                                               selectedValue = "custom";
+                                              selectedDates = '';
+                                              nCustom = 0;
                                             });
-                                            final values =
+                                            selectedDates =
                                                 await showCalendarDatePicker2Dialog(
                                               context: context,
                                               config: config,
@@ -614,19 +628,28 @@ class _HyperlocalPreviousordersMobileState
                                               dialogBackgroundColor:
                                                   Colors.white,
                                             );
-                                            if (values != null) {
-                                              customDateFilter(
-                                                  valuesLoc: values,
-                                                  orderDetailsCustom:
-                                                      orderModels);
+                                            if (selectedDates != null) {
+                                              // customDateFilter(
+                                              //     valuesLoc: values,
+                                              //     orderDetailsCustom:
+                                              //         orderModels);
+                                              context
+                                                  .read<
+                                                      HyperlocalOrderhistoryBloc>()
+                                                  .add(
+                                                    CustomDaysFilterHyperLocalOrderEvent(
+                                                        selectedDates:
+                                                            selectedDates,
+                                                        nCustom: nCustom),
+                                                  );
                                               datePickedController.text =
                                                   _getValueText2(
                                                 config.calendarType,
-                                                values,
+                                                selectedDates,
                                               );
                                               hint = _getValueText2(
                                                 config.calendarType,
-                                                values,
+                                                selectedDates,
                                               );
                                             }
                                           },
@@ -653,7 +676,11 @@ class _HyperlocalPreviousordersMobileState
                               // width: 250,
                               child: TextField(
                                 onTap: () async {
-                                  final values =
+                                  setState(() {
+                                    selectedDates = '';
+                                    nCustom = 0;
+                                  });
+                                  selectedDates =
                                       await showCalendarDatePicker2Dialog(
                                     context: context,
                                     config: config,
@@ -662,23 +689,28 @@ class _HyperlocalPreviousordersMobileState
                                     dialogBackgroundColor: Colors.white,
                                   );
 
-                                  if (values != null) {
+                                  if (selectedDates != null) {
                                     // BlocProvider.of<OrderHistoryBloc>(context).add(CustomDaysFilterEvent(
                                     //     selectedDates: values));
+                                    context
+                                        .read<HyperlocalOrderhistoryBloc>()
+                                        .add(
+                                          CustomDaysFilterHyperLocalOrderEvent(
+                                              selectedDates: selectedDates,
+                                              nCustom: nCustom),
+                                        );
 
                                     setState(() {
                                       selectedValue = "custom";
-                                      customDateFilter(
-                                          valuesLoc: values,
-                                          orderDetailsCustom: orderModels);
+
                                       datePickedController.text =
                                           _getValueText2(
                                         config.calendarType,
-                                        values,
+                                        selectedDates,
                                       );
                                       hint = _getValueText2(
                                         config.calendarType,
-                                        values,
+                                        selectedDates,
                                       );
                                     });
                                   }
@@ -729,7 +761,63 @@ class _HyperlocalPreviousordersMobileState
                     const SizedBox(
                       height: 10,
                     ),
-                    ...orderList,
+                    state is ThirtyDaysLoadingState
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              Text(
+                                "Loading",
+                                style: TextStyle(color: AppColors().brandDark),
+                              )
+                            ],
+                          )
+                        : state is CustomDaysLoadingState
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  Text(
+                                    "Loading",
+                                    style:
+                                        TextStyle(color: AppColors().brandDark),
+                                  )
+                                ],
+                              )
+                            : state is SevenDaysLoadingState
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      Text(
+                                        "Loading",
+                                        style: TextStyle(
+                                            color: AppColors().brandDark),
+                                      )
+                                    ],
+                                  )
+                                : Column(
+                                    children: orderList,
+                                  ),
+                    state is SevenDaysFilterHyperlocalLoadingSrollState
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : state is ThirtyDaysFilterHyperlocalOrderScrollLoadingState
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : state is CustomScrollFilterHyperlocalLoadingState
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : const SizedBox(),
                   ],
                 ),
               ),
@@ -746,7 +834,7 @@ class _HyperlocalPreviousordersMobileState
                         )
                       ],
                     )
-                  : const SizedBox()
+                  : const SizedBox(),
             ],
           ),
         );

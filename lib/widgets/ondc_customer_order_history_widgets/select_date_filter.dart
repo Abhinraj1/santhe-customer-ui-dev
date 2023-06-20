@@ -4,8 +4,6 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santhe/core/app_colors.dart';
-import 'package:santhe/core/repositories/hyperlocal_checkoutrepository.dart';
-import 'package:santhe/core/repositories/hyperlocal_orderhistoryrepo.dart';
 import 'package:santhe/manager/font_manager.dart';
 import '../../../../constants.dart';
 import '../../core/blocs/hyperlocal/hyperlocal_orderhistory/hyperlocal_orderhistory_bloc.dart';
@@ -514,13 +512,9 @@ class _SelectDateFilter2State extends State<SelectDateFilter2> {
                   InkWell(
                     onTap: () {
                       // BlocProvider.of<OrderHistoryBloc>(context).add(SevenDaysFilterEvent());
-                      context.read<HyperlocalOrderhistoryBloc>().add(
-                            SevenDaysFilterHyperLocalOrderEvent(
-                                orderModels: RepositoryProvider.of<
-                                            HyperLocalOrderHistoryRepository>(
-                                        context)
-                                    .orderDetails),
-                          );
+                      // context.read<HyperlocalOrderhistoryBloc>().add(
+                      //       SevenDaysFilterHyperLocalOrderEvent(n),
+                      //     );
                       setState(() {
                         hint = "";
                         selectedValue = "7days";
@@ -569,13 +563,9 @@ class _SelectDateFilter2State extends State<SelectDateFilter2> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        context.read<HyperlocalOrderhistoryBloc>().add(
-                              ThirtyDaysFilterHyperLocalOrderEvent(
-                                  orderModels: RepositoryProvider.of<
-                                              HyperLocalOrderHistoryRepository>(
-                                          context)
-                                      .orderDetails),
-                            );
+                        // context.read<HyperlocalOrderhistoryBloc>().add(
+                        //       ThirtyDaysFilterHyperLocalOrderEvent(),
+                        //     );
                         selectedValue = "30days";
                         hint = "";
                       });
@@ -647,14 +637,11 @@ class _SelectDateFilter2State extends State<SelectDateFilter2> {
                       // BlocProvider.of<OrderHistoryBloc>(context).add(
                       //     CustomDaysFilterEvent(
                       //     selectedDates: values));
-                      context.read<HyperlocalOrderhistoryBloc>().add(
-                            CustomDaysFilterHyperLocalOrderEvent(
-                              orderModels: RepositoryProvider.of<
-                                      HyperLocalOrderHistoryRepository>(context)
-                                  .orderDetails,
-                              selectedDates: values,
-                            ),
-                          );
+                      // context.read<HyperlocalOrderhistoryBloc>().add(
+                      //       CustomDaysFilterHyperLocalOrderEvent(
+                      //         selectedDates: values,
+                      //       ),
+                      //     );
 
                       datePickedController.text = _getValueText2(
                         config.calendarType,

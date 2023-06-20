@@ -18,6 +18,8 @@ final HyperlocalContactSupportRepository repo;
 
     try{
 
+      emit(ContactSupportLoading());
+
     String type =  await HyperlocalContactSupportRepository().postRaiseTicket(
           reason: reason, orderId: orderId, );
 
@@ -29,6 +31,7 @@ final HyperlocalContactSupportRepository repo;
           message: "Something Went Wrong. Please Try Later.");
     }
 
+    emit(ContactSupportInitial());
     }catch(e){
 
       print("ERROR IN ContactSupportCubit = $e");

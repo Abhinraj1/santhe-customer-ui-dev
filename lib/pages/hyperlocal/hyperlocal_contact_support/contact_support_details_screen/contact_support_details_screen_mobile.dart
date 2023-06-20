@@ -118,18 +118,18 @@ class HyperlocalContactSupportDetailsScreenMobile extends StatelessWidget {
               buttonTitle: "BACK",
               width: 180,
             ),
-            _showRequestUpdateButton(support: support) ?
-            CustomButton(
-              verticalPadding: 10,
-              isActive: false,
-              onTapEvenIfActiveIsFalse: true,
-              onTap: () {
-                Navigator.pop(context);
-              },
-              buttonTitle: "REQUEST UPDATE",
-              width: 180,
-            ) :
-                const SizedBox(),
+            // _showRequestUpdateButton(support: support) ?
+            // CustomButton(
+            //   verticalPadding: 10,
+            //   isActive: false,
+            //   onTapEvenIfActiveIsFalse: true,
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //   },
+            //   buttonTitle: "REQUEST UPDATE",
+            //   width: 180,
+            // ) :
+            //     const SizedBox(),
 
             Padding(
               padding:
@@ -153,6 +153,7 @@ class HyperlocalContactSupportDetailsScreenMobile extends StatelessWidget {
     if(today.isAfter(createdAt.add(Duration(days: 2))) &&
         support.status.toString() != "Resolved"){
       return true;
+
     }else{
       return false;
     }

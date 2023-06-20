@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 part of hyperlocal_orderdetail_view;
 
 class _HyperlocalOrderdetailMobile extends StatefulWidget {
@@ -186,10 +187,10 @@ class _HyperlocalOrderdetailMobileState
                                 child: InkWell(
                                   onTap: () {
                                     // ge.Get.back();
-                                    ge.Get.off(
+                                    Get.off(
                                       () =>
                                           const HyperlocalPreviousordersView(),
-                                      transition: ge.Transition.leftToRight,
+                                      transition:ge.Transition.leftToRight,
                                     );
                                   },
                                   child: CircleAvatar(
@@ -633,48 +634,66 @@ class _HyperlocalOrderdetailMobileState
                                         },
                                       )
                             : const SizedBox(),
-                        RepositoryProvider.of<HyperLocalCheckoutRepository>(
-                                        context)
-                                    .shopOrderStatus
-                                    .toString()
-                                    .contains('Delivered') &&
-                                RepositoryProvider.of<
-                                                HyperLocalCheckoutRepository>(
-                                            context)
-                                        .support ==
-                                    null
-                            ? CustomerSupportButton(onTap: () {})
-                            : RepositoryProvider.of<
-                                                HyperLocalCheckoutRepository>(
-                                            context)
-                                        .shopOrderStatus
-                                        .toString()
-                                        .contains('Delivered') &&
-                                    RepositoryProvider.of<
-                                                    HyperLocalCheckoutRepository>(
-                                                context)
-                                            .support !=
-                                        null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 5, left: 20, right: 20),
-                                    child: MaterialButton(
-                                      onPressed: () {},
-                                      height: 40,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              customButtonBorderRadius),
-                                          side: BorderSide(
-                                              color: AppColors().grey40,
-                                              width: 1)),
-                                      minWidth: 250,
-                                      child: Text(
-                                        "Support Ticket",
-                                        style: FontStyleManager().s14fw700Grey,
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(),
+
+                        // RepositoryProvider.of<HyperLocalCheckoutRepository>(
+                        //                 context)
+                        //             .shopOrderStatus
+                        //             .toString()
+                        //             .contains('Delivered') &&
+                        //         RepositoryProvider.of<
+                        //                         HyperLocalCheckoutRepository>(
+                        //                     context)
+                        //                 .support ==
+                        //             null
+                        //     ? CustomerSupportButton(onTap: () {})
+                        //     : RepositoryProvider.of<
+                        //                         HyperLocalCheckoutRepository>(
+                        //                     context)
+                        //                 .shopOrderStatus
+                        //                 .toString()
+                        //                 .contains('Delivered') &&
+                        //             RepositoryProvider.of<
+                        //                             HyperLocalCheckoutRepository>(
+                        //                         context)
+                        //                     .support !=
+                        //                 null
+                        //         ? Padding(
+                        //             padding: const EdgeInsets.only(
+                        //                 bottom: 5, left: 20, right: 20),
+                        //             child: MaterialButton(
+                        //               onPressed: () {},
+                        //               height: 40,
+                        //               shape: RoundedRectangleBorder(
+                        //                   borderRadius: BorderRadius.circular(
+                        //                       customButtonBorderRadius),
+                        //                   side: BorderSide(
+                        //                       color: AppColors().grey40,
+                        //                       width: 1)),
+                        //               minWidth: 250,
+                        //               child: Text(
+                        //                 "Support Ticket",
+                        //                 style: FontStyleManager().s14fw700Grey,
+                        //               ),
+                        //             ),
+                        //           )
+                        //         : const SizedBox(),
+                        _showContactSupportButton() ?
+                        CustomerSupportButton(
+                          title:_showSupportTicketButton() ?
+                          "SUPPORT TICKET" : null,
+                            onTap: () {
+                            if(_showSupportTicketButton()){
+                              Get.to(()=> const HyperlocalContactSupportDetailsScreenMobile(),
+                                  transition: ge.Transition.rightToLeft);
+                            }else{
+                              Get.to(()=> OpenSupportTicketScreenMobile(
+                                orderId: widget.orderId,
+                              ),
+                              transition: ge.Transition.rightToLeft);
+                            }
+                            }) :
+                        const SizedBox(),
+
                       ],
                     ),
                   ),
@@ -690,5 +709,36 @@ class _HyperlocalOrderdetailMobileState
         );
       },
     );
+  }
+
+  bool _showContactSupportButton(){
+  DateTime createdAt = DateTime.parse(
+      RepositoryProvider.of<HyperLocalCheckoutRepository>(context)
+      .shopOrderDate);
+
+    DateTime today = DateTime.now();
+
+    String orderStatus = RepositoryProvider.of<HyperLocalCheckoutRepository>(context).shopOrderStatus;
+    if(orderStatus.contains("Return") ||
+        orderStatus.contains("Delivered") && (
+            today.isAfter(createdAt.add(const Duration(days: 2))) &&
+            today.isBefore(createdAt.add(const Duration(days: 30))))){
+
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  bool _showSupportTicketButton(){
+    model.OrderInfo orderInfo = RepositoryProvider.of
+    <HyperLocalCheckoutRepository>(context).orderInfo;
+
+    if(orderInfo.data!.support != null){
+      return true;
+
+    }else{
+      return false;
+    }
   }
 }

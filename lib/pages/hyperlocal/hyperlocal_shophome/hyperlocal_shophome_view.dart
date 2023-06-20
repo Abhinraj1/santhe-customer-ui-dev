@@ -26,6 +26,7 @@ import 'package:santhe/core/blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_blo
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_shopmodel.dart';
+import 'package:santhe/models/ondc/single_order_model.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/network_call/network_call.dart';
 import 'package:santhe/pages/ondc/map_text/map_text_view.dart';
@@ -36,6 +37,9 @@ import 'package:santhe/widgets/hyperlocal_widgets/hyperlocal_shopwidget.dart';
 
 import '../../../core/blocs/hyperlocal/hyperlocal_orderhistory/hyperlocal_orderhistory_bloc.dart';
 import '../../../widgets/navigation_drawer_widget.dart';
+import '../hyperlocal_contact_support/contact_confirmation_screen/contact_confirmation_screen_mobile.dart';
+import '../hyperlocal_contact_support/contact_support_details_screen/contact_support_details_screen_mobile.dart';
+import '../hyperlocal_contact_support/open_support_ticket_screen/open_support_ticket_screen_mobile.dart';
 
 part 'hyperlocal_shophome_desktop.dart';
 part 'hyperlocal_shophome_mobile.dart';

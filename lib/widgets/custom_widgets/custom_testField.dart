@@ -74,7 +74,6 @@ class CustomTextField extends StatelessWidget {
                   ),
                 ),
               ) : null,
-
               hintText: hintText,
               hintStyle: kHintStyle,
               focusedBorder: AppTheme().focusedBorderStyle,

@@ -6,6 +6,8 @@ class AppColors{
 
   Color get brandDark => const Color(0xFFF89522);
 
+  Color get backgroundGrey => const Color(0xffE5E5E5);
+
   Color get white100 => Colors.white;
 
   Color get black100 => Colors.black;

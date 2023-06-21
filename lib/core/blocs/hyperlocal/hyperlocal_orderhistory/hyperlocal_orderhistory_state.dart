@@ -22,6 +22,8 @@ class GetHyperlocalOrderHistorySuccessState
   List<Object> get props => [orderDetail];
 }
 
+class ResetlocalOrderhistoryState extends HyperlocalOrderhistoryState {}
+
 class GetHyperlocalOrderHistoryErrorState extends HyperlocalOrderhistoryState {
   final String message;
   const GetHyperlocalOrderHistoryErrorState({required this.message});
@@ -38,6 +40,40 @@ class SevenDaysFilterHyperlocalOrderState extends HyperlocalOrderhistoryState {
   List<Object> get props => [orderDetailsModels];
 }
 
+class SevenDaysLoadingState extends HyperlocalOrderhistoryState {}
+
+class SevenDaysFilterHyperlocalOrderErrorState
+    extends HyperlocalOrderhistoryState {
+  final String message;
+
+  const SevenDaysFilterHyperlocalOrderErrorState({required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class SevenDaysFilterHyperlocalOrderScrollState
+    extends HyperlocalOrderhistoryState {
+  List<HyperlocalOrderDetailModel> orderDetailsModels;
+  SevenDaysFilterHyperlocalOrderScrollState({
+    required this.orderDetailsModels,
+  });
+  @override
+  List<Object> get props => [orderDetailsModels];
+}
+
+class SevenDaysFilterHyperlocalLoadingSrollState
+    extends HyperlocalOrderhistoryState {}
+
+class SevenDaysFilterHyperlocalLoadingScrollErrorState
+    extends HyperlocalOrderhistoryState {
+  final String message;
+
+  const SevenDaysFilterHyperlocalLoadingScrollErrorState(
+      {required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
 class ThirtyDaysFilterHyperlocalOrderState extends HyperlocalOrderhistoryState {
   List<HyperlocalOrderDetailModel> orderDetailsModels;
   ThirtyDaysFilterHyperlocalOrderState({
@@ -47,9 +83,75 @@ class ThirtyDaysFilterHyperlocalOrderState extends HyperlocalOrderhistoryState {
   List<Object> get props => [orderDetailsModels];
 }
 
+class ThirtyDaysFilterHyperlocalOrderScrollState
+    extends HyperlocalOrderhistoryState {
+  List<HyperlocalOrderDetailModel> orderDetailsModels;
+  ThirtyDaysFilterHyperlocalOrderScrollState({
+    required this.orderDetailsModels,
+  });
+  @override
+  List<Object> get props => [orderDetailsModels];
+}
+
+class ThirtyDaysFilterHyperlocalOrderScrollLoadingState
+    extends HyperlocalOrderhistoryState {}
+
+class ThirtyDaysFilterHyperlocalOrderScrollErrorState
+    extends HyperlocalOrderhistoryState {
+  final String message;
+
+  const ThirtyDaysFilterHyperlocalOrderScrollErrorState(
+      {required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class ThirtyDaysFilterHyperlocalOrderErrorState
+    extends HyperlocalOrderhistoryState {
+  final String message;
+
+  const ThirtyDaysFilterHyperlocalOrderErrorState({required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class ThirtyDaysLoadingState extends HyperlocalOrderhistoryState {}
+
 class CustomDaysFilterHyperlocalOrderState extends HyperlocalOrderhistoryState {
   List<HyperlocalOrderDetailModel> orderDetailsModels;
   CustomDaysFilterHyperlocalOrderState({
+    required this.orderDetailsModels,
+  });
+  @override
+  List<Object> get props => [orderDetailsModels];
+}
+
+class CustomDaysFilterHyperlocalOrderErrorState
+    extends HyperlocalOrderhistoryState {
+  final String message;
+
+  const CustomDaysFilterHyperlocalOrderErrorState({required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class CustomDaysLoadingState extends HyperlocalOrderhistoryState {}
+
+class CustomScrollFilterHyperlocalLoadingState
+    extends HyperlocalOrderhistoryState {}
+
+class CustomScrollFilterHyperlocalErrorState
+    extends HyperlocalOrderhistoryState {
+  final String message;
+
+  const CustomScrollFilterHyperlocalErrorState({required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class CustomScrollFilterHyperlocalState extends HyperlocalOrderhistoryState {
+  List<HyperlocalOrderDetailModel> orderDetailsModels;
+  CustomScrollFilterHyperlocalState({
     required this.orderDetailsModels,
   });
   @override

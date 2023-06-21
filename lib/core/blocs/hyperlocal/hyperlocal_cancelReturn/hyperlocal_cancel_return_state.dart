@@ -31,6 +31,26 @@ class GetHyperlocalCancelReasonsErrorState extends HyperlocalCancelReturnState {
 class GetHyperlocalCancelReasonsLoadingState
     extends HyperlocalCancelReturnState {}
 
+class GetHyperlocalReturnReasonsLoadingState
+    extends HyperlocalCancelReturnState {}
+
+class GetHyperlocalReturnReasonsErrorState extends HyperlocalCancelReturnState {
+  String message;
+  GetHyperlocalReturnReasonsErrorState({
+    required this.message,
+  });
+  @override
+  List<Object> get props => [message];
+}
+
+class GetHyperlocalReturnReasonsSuccessState
+    extends HyperlocalCancelReturnState {
+  List<HyperlocalCancelModel> returnModels;
+  GetHyperlocalReturnReasonsSuccessState({required this.returnModels});
+  @override
+  List<Object> get props => [returnModels];
+}
+
 class PostHyperlocalCancelReasonLoadingState
     extends HyperlocalCancelReturnState {}
 

@@ -196,6 +196,11 @@ class MyApp extends StatelessWidget {
                     context.read<HyperlocalCancelReturnRepository>(),
               ),
             ),
+            BlocProvider<HyperlocalImageReturnRequestCubit>(
+              create: (context) => HyperlocalImageReturnRequestCubit(
+                repository: context.read<HyperlocalCancelReturnRepository>(),
+              ),
+            ),
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,

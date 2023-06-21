@@ -11,32 +11,55 @@ abstract class HyperlocalOrderhistoryEvent extends Equatable {
 class GetHyperlocalOrderHistoryEvent extends HyperlocalOrderhistoryEvent {}
 
 class SevenDaysFilterHyperLocalOrderEvent extends HyperlocalOrderhistoryEvent {
-  final List<HyperlocalOrderDetailModel> orderModels;
-  const SevenDaysFilterHyperLocalOrderEvent({
-    required this.orderModels,
-  });
+  final int nSeven;
+  const SevenDaysFilterHyperLocalOrderEvent({required this.nSeven});
   @override
-  List<Object> get props => [orderModels];
+  List<Object> get props => [nSeven];
 }
 
-class ThirtyDaysFilterHyperLocalOrderEvent
-    extends GetHyperlocalOrderHistoryEvent {
-  final List<HyperlocalOrderDetailModel> orderModels;
-  ThirtyDaysFilterHyperLocalOrderEvent({
-    required this.orderModels,
-  });
+class SevenDaysFilterHyperlocalOrderScrollEvent
+    extends HyperlocalOrderhistoryEvent {
+  final int nSeven;
+
+  const SevenDaysFilterHyperlocalOrderScrollEvent({required this.nSeven});
   @override
-  List<Object> get props => [orderModels];
+  List<Object> get props => [nSeven];
 }
 
-class CustomDaysFilterHyperLocalOrderEvent
-    extends GetHyperlocalOrderHistoryEvent {
-  final List<HyperlocalOrderDetailModel> orderModels;
+class ThirtyDaysFilterHyperLocalOrderEvent extends HyperlocalOrderhistoryEvent {
+  final int nthirty;
+  const ThirtyDaysFilterHyperLocalOrderEvent({required this.nthirty});
+  @override
+  List<Object> get props => [nthirty];
+}
+
+class ThirtyDaysFilterScrollHyperlocalOrderEvent
+    extends HyperlocalOrderhistoryEvent {
+  final int nthirty;
+  const ThirtyDaysFilterScrollHyperlocalOrderEvent({required this.nthirty});
+  @override
+  List<Object> get props => [nthirty];
+}
+
+class CustomDaysFilterHyperLocalOrderEvent extends HyperlocalOrderhistoryEvent {
   final List<DateTime?> selectedDates;
-  CustomDaysFilterHyperLocalOrderEvent(
-      {required this.orderModels, required this.selectedDates});
+  final int nCustom;
+  const CustomDaysFilterHyperLocalOrderEvent(
+      {required this.selectedDates, required this.nCustom});
   @override
-  List<Object> get props => [orderModels, selectedDates];
+  List<Object> get props => [selectedDates, nCustom];
 }
 
-class ResetOrderHistoryEvent extends GetHyperlocalOrderHistoryEvent {}
+class CustomDaysScrollFilterHyperlocalOrderEvent
+    extends HyperlocalOrderhistoryEvent {
+  final List<DateTime?> selectedDates;
+  final int nCustom;
+  const CustomDaysScrollFilterHyperlocalOrderEvent({
+    required this.selectedDates,
+    required this.nCustom,
+  });
+  @override
+  List<Object> get props => [selectedDates, nCustom];
+}
+
+class ResetOrderHistoryEvent extends HyperlocalOrderhistoryEvent {}

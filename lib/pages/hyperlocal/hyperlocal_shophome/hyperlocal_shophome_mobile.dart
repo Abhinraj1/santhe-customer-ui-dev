@@ -528,6 +528,9 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
                                               0.9,
                                           child: TextFormField(
                                             controller: _textEditingController,
+                                            inputFormatters: [
+                                              NoLeadingSpaceFormatter(),
+                                            ],
                                             onFieldSubmitted: (value) {
                                               context
                                                   .read<HyperlocalShopBloc>()

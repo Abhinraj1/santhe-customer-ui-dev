@@ -16,68 +16,107 @@ class HyperlocalOrderhistoryBloc
     on<HyperlocalOrderhistoryEvent>((event, emit) {
       // TODO: implement event handler
     });
-    on<GetHyperlocalOrderHistoryEvent>((event, emit) async {
-      log('Called', name: 'GetHyperlocalOrderHistoryEvent');
-      emit(GetHyperlocalOrderHistoryLoadingState());
-      try {
-        List<HyperlocalOrderDetailModel> orderDetail =
-            await hyperLocalOrderHistoryRepository.getOrderList();
-        emit(
-          GetHyperlocalOrderHistorySuccessState(orderDetail: orderDetail),
-        );
-      } on GetHyperlocalOrderHistoryErrorState catch (e) {
-        emit(GetHyperlocalOrderHistoryErrorState(message: e.message));
-      }
-    });
+    // on<GetHyperlocalOrderHistoryEvent>((event, emit) async {
+    //   log('Called', name: 'GetHyperlocalOrderHistoryEvent');
+    //   emit(GetHyperlocalOrderHistoryLoadingState());
+    //   try {
+    //     List<HyperlocalOrderDetailModel> orderDetail =
+    //         await hyperLocalOrderHistoryRepository.getOrderList();
+    //     emit(
+    //       GetHyperlocalOrderHistorySuccessState(orderDetail: orderDetail),
+    //     );
+    //   } on GetHyperlocalOrderHistoryErrorState catch (e) {
+    //     emit(GetHyperlocalOrderHistoryErrorState(message: e.message));
+    //   }
+    // });
 
     on<ResetOrderHistoryEvent>((event, emit) {
-      emit(HyperlocalOrderhistoryInitial());
+      emit(ResetlocalOrderhistoryState());
     });
 
-    on<SevenDaysFilterHyperLocalOrderEvent>((event, emit) {
-      DateTime today = DateTime.now();
-      DateTime startingDate = today.subtract(const Duration(days: 8));
+    on<SevenDaysFilterHyperLocalOrderEvent>((event, emit) async {
       List<HyperlocalOrderDetailModel> filteredModels = [];
-      for (var element in event.orderModels) {
-        if (DateTime.parse(element.createdAt.toString())
-            .isAfter(startingDate)) {
-          filteredModels.add(element);
-        }
+      emit(SevenDaysLoadingState());
+      try {
+        filteredModels = await hyperLocalOrderHistoryRepository
+            .getSevenDaysOrderList(nSeven: event.nSeven);
+        emit(SevenDaysFilterHyperlocalOrderState(
+            orderDetailsModels: filteredModels));
+      } on SevenDaysFilterHyperlocalOrderErrorState catch (e) {
+        emit(SevenDaysFilterHyperlocalOrderErrorState(message: e.message));
       }
-      emit(SevenDaysFilterHyperlocalOrderState(
-          orderDetailsModels: filteredModels));
     });
 
-    on<ThirtyDaysFilterHyperLocalOrderEvent>((event, emit) {
-      DateTime today = DateTime.now();
-      DateTime startingDate = today.subtract(const Duration(days: 31));
+    on<SevenDaysFilterHyperlocalOrderScrollEvent>((event, emit) async {
+      emit(SevenDaysFilterHyperlocalLoadingSrollState());
       List<HyperlocalOrderDetailModel> filteredModels = [];
-      for (var element in event.orderModels) {
-        if (DateTime.parse(element.createdAt.toString())
-            .isAfter(startingDate)) {
-          filteredModels.add(element);
-        }
+      try {
+        filteredModels = await hyperLocalOrderHistoryRepository
+            .getSevenDaysOrderList(nSeven: event.nSeven);
+        emit(
+          SevenDaysFilterHyperlocalOrderScrollState(
+              orderDetailsModels: filteredModels),
+        );
+      } on SevenDaysFilterHyperlocalOrderErrorState catch (e) {
+        emit(SevenDaysFilterHyperlocalLoadingScrollErrorState(
+            message: e.message));
       }
-      emit(ThirtyDaysFilterHyperlocalOrderState(
-          orderDetailsModels: filteredModels));
     });
 
-    on<CustomDaysFilterHyperLocalOrderEvent>((event, emit) {
+    on<ThirtyDaysFilterHyperLocalOrderEvent>((event, emit) async {
       List<HyperlocalOrderDetailModel> filteredModels = [];
-      for (var element in event.orderModels) {
-        if (DateTime.parse(element.createdAt.toString()).isAfter(
-                (event.selectedDates.first)!
-                    .subtract(const Duration(days: 1))) &&
-            DateTime.parse(element.createdAt.toString()).isBefore(
-                (event.selectedDates.last)!
-                    .subtract(const Duration(days: 1)))) {
-          filteredModels.add(element);
-        }
+      emit(ThirtyDaysLoadingState());
+      try {
+        filteredModels = await hyperLocalOrderHistoryRepository
+            .getThirtyDaysOrderList(nThirty: event.nthirty);
+        emit(ThirtyDaysFilterHyperlocalOrderState(
+            orderDetailsModels: filteredModels));
+      } on ThirtyDaysFilterHyperlocalOrderErrorState catch (e) {
+        emit(ThirtyDaysFilterHyperlocalOrderErrorState(message: e.message));
       }
-      emit(
-        CustomDaysFilterHyperlocalOrderState(
-            orderDetailsModels: filteredModels),
-      );
+    });
+
+    on<ThirtyDaysFilterScrollHyperlocalOrderEvent>((event, emit) async {
+      List<HyperlocalOrderDetailModel> filteredModels = [];
+      emit(ThirtyDaysFilterHyperlocalOrderScrollLoadingState());
+      try {
+        filteredModels = await hyperLocalOrderHistoryRepository
+            .getThirtyDaysOrderList(nThirty: event.nthirty);
+        emit(ThirtyDaysFilterHyperlocalOrderScrollState(
+            orderDetailsModels: filteredModels));
+      } on ThirtyDaysFilterHyperlocalOrderErrorState catch (e) {
+        emit(ThirtyDaysFilterHyperlocalOrderScrollErrorState(
+            message: e.message));
+      }
+    });
+
+    on<CustomDaysFilterHyperLocalOrderEvent>((event, emit) async {
+      List<HyperlocalOrderDetailModel> filteredModels = [];
+      emit(ThirtyDaysLoadingState());
+      try {
+        filteredModels =
+            await hyperLocalOrderHistoryRepository.getCustomDaysOrderList(
+                valuesLoc: event.selectedDates, nCustom: event.nCustom);
+        emit(
+          CustomDaysFilterHyperlocalOrderState(
+              orderDetailsModels: filteredModels),
+        );
+      } on CustomDaysFilterHyperlocalOrderErrorState catch (e) {
+        emit(CustomDaysFilterHyperlocalOrderErrorState(message: e.message));
+      }
+    });
+    on<CustomDaysScrollFilterHyperlocalOrderEvent>((event, emit) async {
+      emit(CustomScrollFilterHyperlocalLoadingState());
+      List<HyperlocalOrderDetailModel> filteredModels = [];
+      try {
+        filteredModels =
+            await hyperLocalOrderHistoryRepository.getCustomDaysOrderList(
+                valuesLoc: event.selectedDates, nCustom: event.nCustom);
+        emit(CustomScrollFilterHyperlocalState(
+            orderDetailsModels: filteredModels));
+      } on CustomDaysFilterHyperlocalOrderErrorState catch (e) {
+        emit(CustomScrollFilterHyperlocalErrorState(message: e.message));
+      }
     });
   }
 }

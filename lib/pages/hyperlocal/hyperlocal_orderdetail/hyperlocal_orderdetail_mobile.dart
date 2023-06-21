@@ -152,6 +152,7 @@ class _HyperlocalOrderdetailMobileState
                         color: Colors.white,
                       ),
                     ),
+
                     shadowColor: Colors.orange.withOpacity(0.5),
                     elevation: 10.0,
                     title: const AutoSizeText(
@@ -718,7 +719,8 @@ class _HyperlocalOrderdetailMobileState
 
     DateTime today = DateTime.now();
 
-    String orderStatus = RepositoryProvider.of<HyperLocalCheckoutRepository>(context).shopOrderStatus;
+    String orderStatus = RepositoryProvider.of<
+        HyperLocalCheckoutRepository>(context).shopOrderStatus.toString();
     if(orderStatus.contains("Return") ||
         orderStatus.contains("Delivered") && (
             today.isAfter(createdAt.add(const Duration(days: 2))) &&

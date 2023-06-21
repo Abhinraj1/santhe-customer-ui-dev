@@ -37,10 +37,12 @@ import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/pages/splash_to_home.dart';
 import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import 'core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
+import 'core/cubits/hyperlocal_deals_cubit/hyperlocal_contact_support_cubit/contact_support_cubit.dart';
 import 'core/cubits/hyperlocal_image_return_request_cubit/hyperlocal_image_return_request_cubit.dart';
 import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import 'core/cubits/webview_cubit/webview_cubit.dart';
+import 'core/repositories/hyperlocal_contact_support.dart';
 import 'core/repositories/ondc_order_cancel_and_return_repository.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -55,6 +57,7 @@ void main() async {
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runZonedGuarded<Future<void>>(
     () async {
       FlutterError.onError =
@@ -116,6 +119,9 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<HyperlocalCancelReturnRepository>(
             create: (context) => HyperlocalCancelReturnRepository(),
           ),
+          RepositoryProvider<HyperlocalContactSupportRepository>(
+            create: (context) => HyperlocalContactSupportRepository(),
+          )
         ],
         child: MultiBlocProvider(
           providers: [
@@ -151,6 +157,11 @@ class MyApp extends StatelessWidget {
                     ondcRepository: context.read<OndcRepository>())),
             BlocProvider<OrderDetailsButtonCubit>(
                 create: (context) => OrderDetailsButtonCubit()),
+            BlocProvider<ContactSupportCubit>(
+                create: (context) => ContactSupportCubit(
+                  repo:  context.read<
+                      HyperlocalContactSupportRepository>()
+                )),
             BlocProvider<ONDCOrderCancelAndReturnReasonsBloc>(
                 create: (context) => ONDCOrderCancelAndReturnReasonsBloc(
                     orderCancelRepository:

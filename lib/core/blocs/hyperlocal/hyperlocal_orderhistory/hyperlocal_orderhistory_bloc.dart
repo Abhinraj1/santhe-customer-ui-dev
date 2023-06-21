@@ -40,6 +40,7 @@ class HyperlocalOrderhistoryBloc
       try {
         filteredModels = await hyperLocalOrderHistoryRepository
             .getSevenDaysOrderList(nSeven: event.nSeven);
+
         emit(SevenDaysFilterHyperlocalOrderState(
             orderDetailsModels: filteredModels));
       } on SevenDaysFilterHyperlocalOrderErrorState catch (e) {

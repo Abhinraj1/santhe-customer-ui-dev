@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:santhe/models/hyperlocal_models/hyperlocal_paymentmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_previewmodel.dart';
 
+import '../../models/hyperlocal_models/hyperlocal_orders_model.dart';
+
 class HyperLocalCheckoutRepository with LogMixin {
   dynamic deliveryChargeLoc;
   dynamic taxLoc;
@@ -30,6 +32,7 @@ class HyperLocalCheckoutRepository with LogMixin {
   dynamic returnMessageLoc;
   List<HyperLocalPreviewModel> previewModels = [];
   dynamic orderInvoiceLoc;
+  late OrderInfo _orderInfo;
 
   late HyperlocalPaymentInfoModel paymentModelLoc;
 
@@ -39,6 +42,10 @@ class HyperLocalCheckoutRepository with LogMixin {
 
   dynamic get orderInvoice {
     return orderInvoiceLoc;
+  }
+
+  dynamic get orderInfo {
+    return _orderInfo;
   }
 
   dynamic get shopPhoneNumber {
@@ -162,6 +169,7 @@ class HyperLocalCheckoutRepository with LogMixin {
       warningLog('Body $responseBody');
       returnMessageLoc = json.decode(response.body)['message'];
       warningLog('OrderInfo Response Body $responseBody');
+      _orderInfo = OrderInfo.fromJson(json.decode(response.body));
       previewModels = [];
       deliveryChargeLoc = '';
       deliveryChargeLoc = responseBody['delivery_charge'];

@@ -151,9 +151,9 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                     widget.hyperLocalPreviewModel.reason != null
                         ? Expanded(
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.45,
+                              width: MediaQuery.of(context).size.width * 0.50,
                               child: AutoSizeText(
-                                '${widget.hyperLocalPreviewModel.reason}',
+                                'Reason: ${widget.hyperLocalPreviewModel.reason}',
                                 style: TextStyle(color: AppColors().grey100),
                               ),
                             ),

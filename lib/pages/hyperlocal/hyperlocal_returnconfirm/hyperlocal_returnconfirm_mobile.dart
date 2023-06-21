@@ -65,9 +65,10 @@ class _HyperlocalReturnconfirmMobileState
                     padding: const EdgeInsets.only(left: 5.0),
                     child: InkWell(
                       onTap: () {
-                        ge.Get.back();
-                        ge.Get.back();
-                        ge.Get.back(result: 'Returned');
+                        _onBack();
+                        // ge.Get.back();
+                        // ge.Get.back();
+                        // ge.Get.back(result: 'Returned');
                       },
                       child: CircleAvatar(
                         backgroundColor: AppColors().brandDark,
@@ -115,7 +116,6 @@ class _HyperlocalReturnconfirmMobileState
                         'Your return request is received, Once we have received a confirmation from the seller/shop you will get an update from us on the return status',
                         style: TextStyle(
                           color: AppColors().grey100,
-                          decoration: TextDecoration.underline,
                           fontSize: 18,
                         ),
                       ),
@@ -140,10 +140,12 @@ class _HyperlocalReturnconfirmMobileState
                     ),
                     Expanded(
                       child: Text(
-                        'Please be aware that the Shop doesn’t pick up return items, so if return is approved you will have to ship the items to shop at your own cost',
+                        'Please be aware that if the shop doesn’t pick up return items,'
+                            ' you will have to ship the'
+                            ' items to shop at your own cost. Please contact the '
+                            'shop to arrange for returns.',
                         style: TextStyle(
                           color: AppColors().grey100,
-                          decoration: TextDecoration.underline,
                           fontSize: 18,
                         ),
                       ),
@@ -159,7 +161,7 @@ class _HyperlocalReturnconfirmMobileState
                 child: Row(
                   children: [
                     Text(
-                      '2.',
+                      '3.',
                       style: TextStyle(
                         color: AppColors().grey100,
                         fontSize: 18,
@@ -167,10 +169,9 @@ class _HyperlocalReturnconfirmMobileState
                     ),
                     Expanded(
                       child: Text(
-                        'Terms of Return Policy Applies',
+                        'Terms and Conditions Applies',
                         style: TextStyle(
                           color: AppColors().grey100,
-                          decoration: TextDecoration.underline,
                           fontSize: 18,
                         ),
                       ),
@@ -186,8 +187,9 @@ class _HyperlocalReturnconfirmMobileState
                 color: AppColors().brandDark,
                 elevation: 2,
                 onPressed: () {
-                  ge.Get.back();
-                  ge.Get.back(result: 'Cancelled');
+                  _onBack();
+                  // ge.Get.back();
+                  // ge.Get.back(result: 'Cancelled');
                 },
                 height: 40,
                 shape: RoundedRectangleBorder(
@@ -206,5 +208,13 @@ class _HyperlocalReturnconfirmMobileState
         ),
       ),
     );
+  }
+  _onBack(){
+    ge.Get.close(4);
+    ge.Get.to(()=> HyperlocalOrderdetailView(
+      orderId:RepositoryProvider.of<HyperLocalCheckoutRepository>(context)
+          .shopOrderId,
+      storeDescriptionId: "",
+    ));
   }
 }

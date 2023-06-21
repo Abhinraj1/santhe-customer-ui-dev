@@ -34,6 +34,18 @@ class FontStyleManager {
       fontSize: 16,
       fontWeight: FontWeight.w500);
 
+  TextStyle s14fw400ItalicGrey = GoogleFonts.mulish(
+      color: const Color(0xff8B8B8B),
+      fontSize: 14,
+      fontStyle: FontStyle.italic,
+      fontWeight: FontWeight.w400);
+
+  TextStyle s18fw400ItalicGrey = GoogleFonts.mulish(
+      color: const Color(0xff8B8B8B),
+      fontSize: 18,
+      fontStyle: FontStyle.italic,
+      fontWeight: FontWeight.w400);
+
   TextStyle s16fw700Brown = GoogleFonts.mulish(
       color: const Color(0xff51453A),
       fontSize: 16,
@@ -91,6 +103,18 @@ class FontStyleManager {
   TextStyle s14fw700Red = GoogleFonts.mulish(
     color: const Color(0xffF24E1E),
     fontSize: 14,
+    fontWeight: FontWeight.w700,
+  );
+
+  TextStyle s18fw700Red = GoogleFonts.mulish(
+  color: const Color(0xffF24E1E),
+  fontSize: 18,
+  fontWeight: FontWeight.w700,
+  );
+
+  TextStyle s18fw700Green = GoogleFonts.mulish(
+    color:  Colors.green,
+    fontSize: 18,
     fontWeight: FontWeight.w700,
   );
 

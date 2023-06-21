@@ -4,6 +4,7 @@ import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 
 import '../constants.dart';
+import '../pages/ondc/ondc_webview_screen/ondc_webview_screen_view.dart';
 import 'navigation_drawer_tile.dart';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -173,7 +174,11 @@ class CustomNavigationDrawer extends StatelessWidget {
             tileText: 'Contact Us/Feedback',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const ContactUsPage());
+              Get.to(() => const ONDCWebviewView(
+                title: "Contact Us/FeedBack",
+              url: "https://santhe.in/contact/",)
+             // const ContactUsPage()
+              );
             },
           ),
           NavigationDrawerTile(

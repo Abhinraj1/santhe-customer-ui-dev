@@ -27,6 +27,7 @@ class _HyperlocalOrderdetailMobileState
   dynamic formattedDate;
   bool _isloading = false;
   bool _isCancelled = false;
+  String supportId = "";
 
   getHomeDelivery() {
     errorLog(
@@ -94,6 +95,7 @@ class _HyperlocalOrderdetailMobileState
             orderId: widget.orderId,
           ),
         );
+    BlocProvider.of<ContactSupportCubit>(context).resetContactSupportCubit();
   }
 
   Future<void> getUpdatedOrderINfo() async {
@@ -455,17 +457,18 @@ class _HyperlocalOrderdetailMobileState
                                 ),
                               )
                             : const SizedBox(),
-                        _isCancelled
-                            ? Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Text(
-                                  'You cancelled this order. Refund will be initiated in next 48 hours',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: AppColors().grey100, fontSize: 15),
-                                ),
-                              )
-                            : const SizedBox(),
+                        // _isCancelled
+                        //     ? Padding(
+                        //         padding: const EdgeInsets.all(20.0),
+                        //         child: Text(
+                        //           'You cancelled this order. '
+                        //               'Refund will be initiated in next 72 hours',
+                        //           textAlign: TextAlign.center,
+                        //           style: TextStyle(
+                        //               color: AppColors().grey100, fontSize: 15),
+                        //         ),
+                        //       )
+                        //     : const SizedBox(),
 
                         Padding(
                           padding: const EdgeInsets.only(left: 15.0),
@@ -703,15 +706,23 @@ class _HyperlocalOrderdetailMobileState
                         CustomerSupportButton(
                           title:_showSupportTicketButton() ?
                           "SUPPORT TICKET" : null,
-                            onTap: () {
+                            onTap: () async{
                             if(_showSupportTicketButton()){
-                              Get.to(()=> const HyperlocalContactSupportDetailsScreenMobile(),
+
+                              Get.to(()=> HyperlocalContactSupportDetailsScreenMobile(
+                              supportId: supportId,
+                              ),
                                   transition: ge.Transition.rightToLeft);
                             }else{
-                              Get.to(()=> OpenSupportTicketScreenMobile(
+                              String data = await Get.to(()=>
+                                  OpenSupportTicketScreenMobile(
                                 orderId: widget.orderId,
                               ),
                               transition: ge.Transition.rightToLeft);
+
+                              if(data.isNotEmpty){
+                                getUpdatedOrderINfo();
+                              }
                             }
                             }) :
                         const SizedBox(),
@@ -734,9 +745,11 @@ class _HyperlocalOrderdetailMobileState
   }
 
   bool _showContactSupportButton(){
-  DateTime createdAt = DateTime.parse(
+  DateTime createdAt = RepositoryProvider.of<HyperLocalCheckoutRepository>(context)
+      .shopOrderDate!= null ?
+        DateTime.parse(
       RepositoryProvider.of<HyperLocalCheckoutRepository>(context)
-      .shopOrderDate);
+      .shopOrderDate) : DateTime.now();
 
     DateTime today = DateTime.now();
 
@@ -758,6 +771,7 @@ class _HyperlocalOrderdetailMobileState
     <HyperLocalCheckoutRepository>(context).orderInfo;
 
     if(orderInfo.data!.support != null){
+      supportId = orderInfo.data!.support!.id.toString();
       return true;
 
     }else{

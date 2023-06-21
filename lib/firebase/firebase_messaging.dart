@@ -19,20 +19,20 @@ class FCM{
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  getFirebaseMessagingToken() async{
-
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-
-    // if(merchantModel.customer != null) {
-    //   merchantModel.customer!.fbiid = fcmToken.toString();
-    // }
-    // if(merchantModel.customer == null){
-    //   merchantModel.customer = Customer(
-    //       fbiid: fcmToken.toString()
-    //   );
-    // }
-    
-  }
+  // getFirebaseMessagingToken() async{
+  //
+  //   final fcmToken = await FirebaseMessaging.instance.getToken();
+  //
+  //   // if(merchantModel.customer != null) {
+  //   //   merchantModel.customer!.fbiid = fcmToken.toString();
+  //   // }
+  //   // if(merchantModel.customer == null){
+  //   //   merchantModel.customer = Customer(
+  //   //       fbiid: fcmToken.toString()
+  //   //   );
+  //   // }
+  //
+  // }
 
   firebaseMessageInit() async{
 
@@ -85,7 +85,8 @@ class FCM{
   void _handleMessage(RemoteMessage message) {
 
     if(message.data["type"] == "customer_order"){
-      if(Get.currentRoute.toString().contains("HyperlocalOrderdetailView") ){
+
+      if(Get.currentRoute.toString().contains("HyperlocalOrderdetailView")){
           Get.close(1);
       }
       Get.to(()=>HyperlocalOrderdetailView(
@@ -102,13 +103,16 @@ class FCM{
 
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings("@mipmap/ic_launcher");
+
     const DarwinInitializationSettings darwinInitializationSettings =
         DarwinInitializationSettings();
+
     const InitializationSettings initializationSettings =
         InitializationSettings(
           android: androidInitializationSettings,
           iOS: darwinInitializationSettings
         );
+
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
         "notifications", "Notifications",
     description: "THIS IS THE DESCRIPTION",
@@ -118,7 +122,9 @@ class FCM{
     ledColor: Color(0xFFF89522));
 
     _createChannel(channel);
+
     localNotificationsPlugin.initialize(initializationSettings);
+
     listen(channel);
   }
 

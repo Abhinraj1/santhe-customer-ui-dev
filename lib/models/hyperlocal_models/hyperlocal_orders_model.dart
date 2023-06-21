@@ -1,6 +1,12 @@
 
 
 
+import 'package:santhe/models/hyperlocal_models/hyperlocal_orders_model.dart';
+
+import 'hyperlocal_orders_model.dart';
+import 'hyperlocal_orders_model.dart';
+import 'hyperlocal_orders_model.dart';
+
 class OrderInfo {
   OrderInfo({
     required this.status,
@@ -535,6 +541,8 @@ class OrderInfoSupport {
     required this.customerId,
     required this.orderId,
     required this.santheOrderId,
+    required this.images,
+    required this.supportState,
   });
 
   final String? id;
@@ -565,6 +573,8 @@ class OrderInfoSupport {
   final String? customerId;
   final dynamic orderId;
   final String? santheOrderId;
+  final List<dynamic> images;
+  final List<SupportState> supportState;
 
   factory OrderInfoSupport.fromJson(Map<String, dynamic> json){
     return OrderInfoSupport(
@@ -596,6 +606,50 @@ class OrderInfoSupport {
       customerId: json["customerId"],
       orderId: json["orderId"],
       santheOrderId: json["santheOrderId"],
+      images: json["images"] == null ? [] : List<dynamic>.from(json["images"]!.map((x) => x)),
+      supportState: json["states"] == null ? [] : List<SupportState>.from(json["states"]!.map((x) => SupportState.fromJson(x))),
+
+    );
+  }
+}
+
+class SupportState {
+  SupportState({
+    required this.id,
+    required this.title,
+    required this.createdBy,
+    required this.reason,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deletedAt,
+    required this.orderItemId,
+    required this.santheOrderId,
+    required this.supportId,
+  });
+
+  final String? id;
+  final String? title;
+  final String? createdBy;
+  final dynamic reason;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final dynamic deletedAt;
+  final dynamic orderItemId;
+  final dynamic santheOrderId;
+  final String? supportId;
+
+  factory SupportState.fromJson(Map<String, dynamic> json){
+    return SupportState(
+      id: json["id"],
+      title: json["title"],
+      createdBy: json["createdBy"],
+      reason: json["reason"],
+      createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
+      updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+      deletedAt: json["deletedAt"],
+      orderItemId: json["orderItemId"],
+      santheOrderId: json["santheOrderId"],
+      supportId: json["supportId"],
     );
   }
 

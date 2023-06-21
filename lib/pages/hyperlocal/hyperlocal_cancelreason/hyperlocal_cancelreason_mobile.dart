@@ -85,8 +85,9 @@ class _HyperlocalCancelreasonMobileState
                     padding: const EdgeInsets.only(left: 5.0),
                     child: InkWell(
                       onTap: () {
-                        ge.Get.back();
-                        ge.Get.back(result: 'Cancelled');
+                        _onBack();
+                        // ge.Get.back();
+                        // ge.Get.back(result: 'Cancelled');
                       },
                       child: CircleAvatar(
                         backgroundColor: AppColors().brandDark,
@@ -125,7 +126,8 @@ class _HyperlocalCancelreasonMobileState
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                  'Your cancellation request is received, Refund will be initiated in next 48 hours',
+                  'Your cancellation request is received,'
+                      ' Refund will be initiated in next 72 hours',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: AppColors().grey100, fontSize: 15),
                 ),
@@ -141,8 +143,9 @@ class _HyperlocalCancelreasonMobileState
                 color: AppColors().brandDark,
                 elevation: 2,
                 onPressed: () {
-                  ge.Get.back();
-                  ge.Get.back(result: 'Cancelled');
+                  _onBack();
+                  // ge.Get.back();
+                  // ge.Get.back(result: 'Cancelled');
                 },
                 height: 40,
                 shape: RoundedRectangleBorder(
@@ -161,5 +164,16 @@ class _HyperlocalCancelreasonMobileState
         ),
       ),
     );
+  }
+
+  _onBack(){
+    context.read<HyperlocalCheckoutBloc>().add(
+      GetOrderInfoEvent(
+        orderId: RepositoryProvider.of<HyperLocalCheckoutRepository>(context)
+          .shopOrderId,
+      ),
+    );
+    ge.Get.close(1);
+    ge.Get.back(result: 'Cancelled');
   }
 }

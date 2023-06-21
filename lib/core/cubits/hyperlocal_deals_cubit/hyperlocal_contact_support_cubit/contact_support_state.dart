@@ -7,5 +7,11 @@ class ContactSupportInitial extends ContactSupportState {}
 
 class ContactSupportLoading extends ContactSupportState {}
 
+class ContactSupportDetailsLoaded extends ContactSupportState {
+  final OrderInfoSupport support;
+  ContactSupportDetailsLoaded({required this.support});
+
+}
+
 class ContactSupportErrorState extends ContactSupportState {}
 

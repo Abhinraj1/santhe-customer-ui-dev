@@ -27,6 +27,10 @@ class CustomerContactCubit extends Cubit<CustomerContactState> {
 
   OndcRepository repo = OndcRepository();
 
+  resetCustomerContactState(){
+    emit(CustomerContactInitialState());
+  }
+
   void getAllCategories({required String orderNumber}) async {
     _orderNumber = orderNumber;
 
@@ -102,4 +106,6 @@ class CustomerContactCubit extends Cubit<CustomerContactState> {
           ));
     }
   }
+
+
 }

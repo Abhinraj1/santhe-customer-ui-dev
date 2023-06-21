@@ -5,6 +5,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/hyperlocal_models/hyperlocal_cancel.dart';
+import '../../models/hyperlocal_models/hyperlocal_orders_model.dart';
 import '../../widgets/custom_widgets/custom_snackBar.dart';
 
 
@@ -13,19 +14,19 @@ class HyperlocalContactSupportRepository with LogMixin {
 
 
 
-  Future<dynamic> getSupportDetails({required String supportId}) async {
+  Future<OrderInfoSupport> getSupportDetails({required String supportId}) async {
     final url = Uri.parse(
         'https://ondcstaging.santhe.in/santhe/hyperlocal/support'
             '/get?support_id=$supportId');
     try {
       final response = await http.get(url);
       warningLog('${response.statusCode}');
-      final responseBody = json.decode(response.body)['data'] as List;
+      final responseBody = json.decode(response.body)['data'];
+      OrderInfoSupport support = OrderInfoSupport.fromJson(responseBody);
+      warningLog('Responsebody getSupportDetails $responseBody');
 
-      warningLog('Responsebody Cancel flow$responseBody');
 
-
-      return "cancelModelLoc";
+      return support;
     } catch (e) {
       rethrow;
     }

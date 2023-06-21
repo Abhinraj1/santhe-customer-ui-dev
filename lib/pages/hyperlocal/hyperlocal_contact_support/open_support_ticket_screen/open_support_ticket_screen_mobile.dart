@@ -52,6 +52,7 @@ class OpenSupportTicketScreenMobile extends StatelessWidget {
               labelText: " ",
               readOnly: false,
               maxLines: 10,
+              maxLength: 500,
               validate: (String? val) {
                 if (val == "") {
                   return "Please Enter Description";
@@ -59,7 +60,6 @@ class OpenSupportTicketScreenMobile extends StatelessWidget {
                 return null;
               },
             ),
-
 
             CustomButton(
               verticalPadding: 40,

@@ -63,7 +63,7 @@ class HyperlocalImageReturnRequestCubit
     ///const suffixes = ["b", "kb", "mb", "gb", "tb"];
 
     print(
-        "============= pathStringWithExtension = $pathStringWithExtension   \n");
+        "============= pathStringWithExtension = $pathStringWithExtension \n");
 
     if (bytes >= thresholdSizeInBytes) {
       return await compressFile(File(file.path), pathStringWithExtension);
@@ -78,9 +78,8 @@ class HyperlocalImageReturnRequestCubit
       quality: compressedQuality,
       //rotate: 180,
     );
-    print(
-        "=========bytes==== AFTER COMPRESSION = ${File(result!.path).lengthSync()}   \n");
-
+    // print(
+    //     "=========bytes==== AFTER COMPRESSION = ${File(result!.path).lengthSync()}   \n");
     return result;
   }
 

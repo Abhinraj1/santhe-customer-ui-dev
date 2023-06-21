@@ -272,21 +272,6 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
                 Scaffold(
                   key: _key,
                   drawer: const CustomNavigationDrawer(),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: (){
-                      Get.to(()=>HyperlocalContactSupportDetailsScreenMobile(
-                       // support: Support(
-                       //   orderId: "Order id",
-                       //   id:  "support id",
-                       //   longDescription: "LONG DESCRIPTION",
-                       //   resolutionRemarks: "resolutionRemarks",
-                       //   status: "status",
-                       //   resolution: "resolution",
-                       //
-                       // ),
-                      ));
-                    },
-                  ),
                   backgroundColor: CupertinoColors.systemBackground,
                   appBar: AppBar(
                     leading: IconButton(

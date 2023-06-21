@@ -92,7 +92,7 @@ class HyperlocalOrderhistoryBloc
 
     on<CustomDaysFilterHyperLocalOrderEvent>((event, emit) async {
       List<HyperlocalOrderDetailModel> filteredModels = [];
-      emit(ThirtyDaysLoadingState());
+      emit(CustomDaysLoadingState());
       try {
         filteredModels =
             await hyperLocalOrderHistoryRepository.getCustomDaysOrderList(

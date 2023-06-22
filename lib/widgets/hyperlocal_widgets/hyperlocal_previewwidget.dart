@@ -16,6 +16,8 @@ import 'package:santhe/manager/imageManager.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_previewmodel.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_returnreason/hyperlocal_returnreason_view.dart';
 
+import 'hyperlocal_text_expanded_dialog.dart';
+
 class HyperlocalPreviewWidget extends StatefulWidget {
   final HyperLocalPreviewModel hyperLocalPreviewModel;
   const HyperlocalPreviewWidget({
@@ -149,15 +151,27 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                             ),
                           ),
                     widget.hyperLocalPreviewModel.reason != null
-                        ? Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.50,
-                              child: AutoSizeText(
-                                'Reason: ${widget.hyperLocalPreviewModel.reason}',
-                                style: TextStyle(color: AppColors().grey100),
+                        ? InkWell(
+                      onTap: (){
+                        showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return textExpandFunction(text:widget.hyperLocalPreviewModel.reason);
+                          },
+                        );
+                      },
+                          child: Expanded(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.50,
+                                child: AutoSizeText(
+                                  'Reason: ${widget.hyperLocalPreviewModel.reason}',
+                                  style: TextStyle(color: AppColors().grey100,),
+                                  maxLines: 2,
+                                ),
                               ),
                             ),
-                          )
+                        )
                         : const SizedBox(),
                     widget.hyperLocalPreviewModel.status
                                 .toString()

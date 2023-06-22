@@ -40,6 +40,8 @@ class _HyperlocalReturnreasonMobileState
     context
         .read<HyperlocalCancelReturnBloc>()
         .add(GetHyperlocalReturnReasonsEvent());
+
+    BlocProvider.of<HyperlocalImageReturnRequestCubit>(context).resetCubit();
   }
 
   @override

@@ -30,6 +30,7 @@ class HyperlocalImageReturnRequestCubit
   final ImagePicker _picker = ImagePicker();
   List<XFile?> imagesList = [];
   List<String> imageUrl = [];
+  List<File> imageFiles = [];
   bool? returnedLoc;
 
   int thresholdSizeInBytes = 300000;
@@ -44,6 +45,14 @@ class HyperlocalImageReturnRequestCubit
     _orderId = orderId;
     _orderNumber = orderNumber;
     _returnProduct = returnProduct;
+  }
+
+  resetCubit(){
+    imagesList.clear();
+    imageUrl.clear();
+    imageFiles.clear();
+
+    emit(HyperlocalImageReturnRequestInitial());
   }
 
   Future<XFile?> checkImageSize({required XFile? file}) async {
@@ -114,7 +123,7 @@ class HyperlocalImageReturnRequestCubit
   }
 
   showImages({bool? hideAddImgButton}) {
-    List<File> imageFiles = [File("do not remove")];
+     imageFiles = [File("do not remove")];
     for (var data in imagesList) {
       if (data != null) {
         imageFiles.add(File(data.path));
@@ -180,6 +189,8 @@ class HyperlocalImageReturnRequestCubit
     };
     emit(HyperlocalReturnRequestLoadingState());
     try {
+      print("##############3 IMAGES AT THE POINT OF POST RETURN REASONS"
+          " == $images");
       final response = await http.post(
         url,
         headers: header,

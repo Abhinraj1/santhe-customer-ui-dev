@@ -155,7 +155,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                       onTap: (){
                         showDialog(
                           context: context,
-                          barrierDismissible: false,
+                          barrierDismissible: true,
                           builder: (BuildContext context) {
                             return textExpandFunction(text:widget.hyperLocalPreviewModel.reason);
                           },
@@ -167,6 +167,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                                 child: AutoSizeText(
                                   'Reason: ${widget.hyperLocalPreviewModel.reason}',
                                   style: TextStyle(color: AppColors().grey100,),
+                                  maxLines: 2,
                                 ),
                               ),
                             ),

@@ -11,13 +11,17 @@ import '../../manager/font_manager.dart';
 
 AlertDialog textExpandFunction({required String text}){
 
+
+
+
+
   return AlertDialog(
+
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(
         15)),
     actionsOverflowAlignment: OverflowBarAlignment.center,
     content: TextExpandContent(text: text),
     scrollable: true,
-
   );
 }
 
@@ -27,16 +31,18 @@ class TextExpandContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return
-      SizedBox(
-        width: 320,
-        height: 350,
-        child:Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40.0,horizontal: 10),
-          child: Text(text,
-              style: FontStyleManager().s14fw700Grey,
-              textAlign: TextAlign.center),
+      Padding(
+        padding: const EdgeInsets.all(10),
+        child: SizedBox(
+          // width: 320,
+          // height: 350,
+          child:Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40.0,horizontal: 10),
+            child: Text(text,
+                style: FontStyleManager().s14fw700Grey,
+                textAlign: TextAlign.center),
+          ),
         ),
       );
   }

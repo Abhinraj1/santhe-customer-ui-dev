@@ -31,6 +31,10 @@ class User {
   final String custStatus;
   @HiveField(13)
   final int pincode;
+  @HiveField(14)
+  final String lastName;
+  @HiveField(15)
+  final String fiiid;
 
   final bool opStats;
 
@@ -49,6 +53,8 @@ class User {
     required this.custLoginTime,
     required this.custPlan,
     required this.pincode,
+    required this.lastName,
+    required this.fiiid,
     this.opStats = false,
   });
 
@@ -76,7 +82,9 @@ class User {
       custLoginTime: DateTime.parse(json['custLoginTime']['timestampValue']),
       howToReach: json['contact']['mapValue']['fields']['howToReach']
           ['stringValue'],
-      opStats: json['opStats']['booleanValue']
+      opStats: json['opStats']['booleanValue'],
+      lastName: json['last_name'],
+      fiiid: json['fbiid']
     );
   }
 }

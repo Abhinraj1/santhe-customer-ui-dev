@@ -592,6 +592,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                             Get.off(() => const LoginScreen());
                                           }
 
+                                          final token =
+                                              await AppHelpers().getToken;
+
                                           //todo add how to reach howToReach
                                           User updatedUser = User(
                                               address: registrationController
@@ -616,7 +619,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               howToReach: registrationController
                                                   .howToReach.value,
                                               custLoginTime: DateTime.now(),
-                                              custPlan: 'default');
+                                              custPlan: 'default',
+                                              lastName:
+                                                  _userNameController.text,
+                                              fiiid: token);
                                           int userUpdated = await apiController
                                               .updateCustomerInfo(
                                                   userPhone, updatedUser);

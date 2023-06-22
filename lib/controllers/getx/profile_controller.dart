@@ -43,7 +43,7 @@ class ProfileController extends GetxController with LogMixin {
     await generateUrlToken(override: startApp);
     await getCustomerDetailsInit();
     await cacheRefresh();
-    if (!customerDetails!.opStats) await getOperationalStatus();
+    await getOperationalStatus();
   }
 
   Future<bool> getCustomerDetailsInit() async {
@@ -68,15 +68,15 @@ class ProfileController extends GetxController with LogMixin {
     final apiController = Get.find<APIs>();
     final formattedPhoneNumber = AppHelpers()
         .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
-    await apiController.getCheckRadius(
-      int.parse(
-        // AppHelpers().getPhoneNumberWithoutCountryCode,
-        formattedPhoneNumber,
-      ),
-      customerDetails!.lat.toString(),
-      customerDetails!.lng.toString(),
-      customerDetails!.pinCode,
-    );
+    // await apiController.getCheckRadius(
+    //   int.parse(
+    //     // AppHelpers().getPhoneNumberWithoutCountryCode,
+    //     formattedPhoneNumber,
+    //   ),
+    //   customerDetails!.lat.toString(),
+    //   customerDetails!.lng.toString(),
+    //   customerDetails!.pinCode,
+    // );
     log("Is Operational: $isOperational");
   }
 

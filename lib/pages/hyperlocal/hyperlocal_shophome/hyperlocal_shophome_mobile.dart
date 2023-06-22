@@ -52,6 +52,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.dark,
     ));
+    final token = await AppHelpers().getToken;
     await _profileController.initialise();
     await _profileController.getOperationalStatus();
     _allListController.getAllList();
@@ -63,6 +64,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
           .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber),
     );
     apiController.searchedItemResult('potato');
+    apiController.updatFCMONstart(fcmToken: token);
     _notificationController.fromNotification = false;
   }
 

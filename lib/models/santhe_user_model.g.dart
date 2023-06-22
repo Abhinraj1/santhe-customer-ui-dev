@@ -31,6 +31,8 @@ class UserAdapter extends TypeAdapter<User> {
       custLoginTime: fields[7] as DateTime,
       custPlan: fields[9] as String,
       pincode: fields[13] as int,
+      lastName: fields[14] as dynamic,
+      fiiid: fields[15] as dynamic,
     );
   }
 
@@ -65,7 +67,11 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(12)
       ..write(obj.custStatus)
       ..writeByte(13)
-      ..write(obj.pincode);
+      ..write(obj.pincode)
+      ..writeByte(14)
+      ..write(obj.lastName)
+      ..writeByte(15)
+      ..write(obj.fiiid);
   }
 
   @override

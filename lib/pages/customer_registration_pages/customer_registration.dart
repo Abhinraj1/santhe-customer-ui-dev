@@ -464,6 +464,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                                 // int finalCustId = int.parse(custIdChange!);
                                 log('PhoneNumber without country code $userPhone');
                                 //todo add how to reach howToReach
+                                final token = await AppHelpers().getToken;
                                 User currentUser = User(
                                     address:
                                         registrationController.address.value,
@@ -481,7 +482,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                                     howToReach:
                                         registrationController.howToReach.value,
                                     custPlan: 'planA',
-                                    custLoginTime: DateTime.now());
+                                    custLoginTime: DateTime.now(),
+                                    lastName: userName,
+                                    fiiid: token);
 
                                 int userAdded = await apiController
                                     .addCustomer(currentUser);

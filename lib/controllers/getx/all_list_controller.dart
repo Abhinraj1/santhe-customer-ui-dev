@@ -262,9 +262,9 @@ class AllListController extends GetxController with LogMixin {
 
   Future<void> checkSubPlan() async {
     final profileController = Get.find<ProfileController>();
-    final data = await NetworkCall()
-        .getSubscriptionLimit(profileController.customerDetails!.customerPlan);
-    lengthLimit = data;
+    // final data = await NetworkCall()
+    //     .getSubscriptionLimit(profileController.customerDetails!.customerPlan);
+    // lengthLimit = data;
   }
 
   void deleteEverything() {

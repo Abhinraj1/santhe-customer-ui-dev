@@ -766,12 +766,14 @@ class APIs extends GetxController with LogMixin {
     final header = {"authorization": 'Bearer $token'};
     final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
     //! add customer node api
-    final String nodeAPIUrl = AppUrl.addCustomerNode;
-    warningLog(nodeAPIUrl);
-    final nodeUrl = Uri.parse(nodeAPIUrl);
+    // final String nodeAPIUrl =
+    //     'https://ondcstaging.santhe.in/santhe/customer/register';
+    // warningLog(nodeAPIUrl);
+    // final nodeUrl = Uri.parse(nodeAPIUrl);
     //!end
     String uid = await AppHelpers().getDeviceId();
     DateTime now = DateTime.now();
+    final getFiid = await AppHelpers().getToken;
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     var body = {
       "fields": {
@@ -825,20 +827,17 @@ class APIs extends GetxController with LogMixin {
     debugLog('Checkinf for address data ${user.address} $getfinalAddress');
     var data = {
       "custName": user.custName,
-      "address": user.address,
-      "state": getfinalAddress.administrativeArea,
+      "contact": {
+        "phoneNumber": user.phoneNumber,
+        "emailId": user.emailId,
+        "location": {"lat": user.lat, "lng": user.lng},
+        "pincode": user.pincode
+      },
       "city": getfinalAddress.locality,
+      "state": getfinalAddress.administrativeArea,
+      "locality": getfinalAddress.administrativeArea,
       "flat": user.address,
-      "locality": getfinalAddress.locality,
-      "lat": user.lat,
-      "lng": user.lng,
-      "emailId": user.emailId,
-      "phoneNumber": user.phoneNumber,
-      "pincode": user.pincode,
-      "custPlan": user.custPlan,
-      "deviceMap": {},
-      "howToReach": user.howToReach,
-      "custLoginTime": formattedDate,
+      "fbiid": getFiid
     };
 
     // final newAddressData = json.encode({
@@ -856,8 +855,10 @@ class APIs extends GetxController with LogMixin {
     //   "howToReach": ""
     // });
 
-    var rawResponse = await http.post(Uri.parse(AppUrl.updateCustomer),
-        body: json.encode(data), headers: headers);
+    var rawResponse = await http.post(
+        Uri.parse('https://ondcstaging.santhe.in/santhe/customer/register'),
+        body: json.encode(data),
+        headers: headers);
     warningLog('data ${rawResponse.body} and ${rawResponse.headers}');
     // //! add the node api here
     // final responseNode = await http.post(
@@ -892,7 +893,8 @@ class APIs extends GetxController with LogMixin {
     final String url = AppUrl.GET_CUSTOMER_DETAILS(custId.toString());
 
     final String nodeUrl = AppUrl.getCustomerDetails;
-
+    final String newNodeUrl =
+        'https://ondcstaging.santhe.in/santhe/customer/get?firebase_id=$custId';
     final header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
@@ -902,8 +904,11 @@ class APIs extends GetxController with LogMixin {
 
     // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
     warningLog('hitting node url getCustomerInfo $nodeUrl');
-    var response = await http.post(Uri.parse(nodeUrl),
-        body: json.encode(data), headers: header);
+    var response = await http.get(
+      Uri.parse(newNodeUrl),
+      // body: json.encode(data),
+      // headers: header,
+    );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       errorLog('Checking for data in GetCustomerInfo$data');
@@ -961,7 +966,8 @@ class APIs extends GetxController with LogMixin {
     };
 
     final String nodeUrl = AppUrl.updateCustomer;
-
+    const String nodeUrlApi =
+        'https://ondcstaging.santhe.in/santhe/customer/update';
     final header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
@@ -977,26 +983,71 @@ class APIs extends GetxController with LogMixin {
 
     //! update user method
     var data = {
-      "custName": updatedUser.custName,
-      "address": updatedUser.address,
-      "state": getfinalAddress.administrativeArea,
-      "city": getfinalAddress.locality,
+      "firebase_id": updatedUser.phoneNumber,
+      "first_name": updatedUser.custName,
+      "last_name": updatedUser.lastName,
+      "email": updatedUser.emailId,
+      "phone_number": updatedUser.phoneNumber,
+      "fbiid": updatedUser.fiiid,
       "flat": updatedUser.address,
       "locality": getfinalAddress.locality,
       "lat": updatedUser.lat,
       "lng": updatedUser.lng,
-      "custId": updatedUser.phoneNumber.toString(),
-      "emailId": updatedUser.emailId,
-      "phoneNumber": updatedUser.phoneNumber,
+      "state": getfinalAddress.administrativeArea,
+      "city": getfinalAddress.locality,
       "pincode": updatedUser.pincode,
-      "custPlan": updatedUser.custPlan,
-      "deviceMap": {},
-      "custLoginTime": formattedDate,
+      "howToReach": updatedUser.address
     };
 
     // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
-    errorLog('Checking for node url $nodeUrl $data ');
-    var response = await http.post(Uri.parse(nodeUrl),
+    errorLog('Checking for node url $nodeUrlApi $data ');
+    var response = await http.post(Uri.parse(nodeUrlApi),
+        body: json.encode(data), headers: header);
+
+    // var response = await callApi(
+    //     mode: REST.patch, url: Uri.parse(url), body: jsonEncode(body));
+    errorLog(
+        'StatusCode CheckUpdateUser${response.statusCode} ${response.body} json  body ${json.encode(data)}');
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      errorLog('Checking for responseData ${data.toString()}');
+      // getCustomerInfo(custId);
+      log('SUCCESS');
+      return 1;
+    } else {
+      log('Request failed with status: ${response.statusCode}.');
+      log('Error', error: response.reasonPhrase);
+      AppHelpers.crashlyticsLog(response.body.toString());
+      Get.to(() => const ServerErrorPage(), transition: Transition.fade);
+      return 0;
+    }
+  }
+
+  updatFCMONstart({required String fcmToken}) async {
+    const String nodeUrlApi =
+        'https://ondcstaging.santhe.in/santhe/customer/update';
+    final header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
+    };
+
+    // List<Placemark> placemarks =
+    //     await placemarkFromCoordinates(updatedUser.lat, updatedUser.lng);
+    // final getfinalAddress = placemarks[0];
+
+    // DateTime now = DateTime.now();
+    // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    // errorLog('Checking for Placemarks data$placemarks');
+
+    //! update user method
+    var data = {
+      "firebase_id": AppHelpers().getPhoneNumberWithoutCountryCode,
+      "fbiid": fcmToken,
+    };
+
+    // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
+    errorLog('Checking for node url $nodeUrlApi $data ');
+    var response = await http.post(Uri.parse(nodeUrlApi),
         body: json.encode(data), headers: header);
 
     // var response = await callApi(

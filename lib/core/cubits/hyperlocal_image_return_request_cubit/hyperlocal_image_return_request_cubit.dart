@@ -138,9 +138,7 @@ class HyperlocalImageReturnRequestCubit
       try {
         warningLog('single image file $imgFile and path ${imgFile!.path}');
         String imgUrl = await repository.uploadImage(imgPath: imgFile!.path);
-
         imageUrl.add(imgUrl);
-
         errorLog("####################################################"
             "IMAGE URL ADDED = $imgUrl");
         emit(HyperlocalUploadImagesSuccessState(imageUrls: imageUrl));

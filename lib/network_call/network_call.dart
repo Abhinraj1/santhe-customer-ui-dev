@@ -203,17 +203,22 @@ class NetworkCall with LogMixin {
     final formattedPhoneNumber = AppHelpers()
         .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     final String nodeUrl = AppUrl.getCustomerDetails;
+    final String newNodeUrl =
+        'https://ondcstaging.santhe.in/santhe/customer/get?firebase_id=$formattedPhoneNumber';
 
-    final header = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
-    };
+    // final header = {
+    //   'Content-Type': 'application/json',
+    //   'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
+    // };
 
-    var data = {'id': AppHelpers().getPhoneNumberWithoutCountryCode};
+    // var data = {'id': AppHelpers().getPhoneNumberWithoutCountryCode};
 
     // var response = await callApi(mode: REST.get, url: Uri.parse(nodeUrl), );
-    var response = await http.post(Uri.parse(nodeUrl),
-        body: json.encode(data), headers: header);
+    var response = await http.get(
+      Uri.parse(newNodeUrl),
+      // body: json.encode(data),
+      // headers: header,
+    );
     //  await callApi(
     //   mode: REST.get,
     //   url: Uri.parse(

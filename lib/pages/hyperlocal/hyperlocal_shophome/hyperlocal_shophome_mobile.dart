@@ -306,29 +306,29 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
                           color: Colors.white,
                           fontSize: 24),
                     ),
-                    actions: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4.5),
-                        child: IconButton(
-                          onPressed: () {
-                            Get.to(OndcCheckOutScreenMobile());
-                          },
-                          splashRadius: 25.0,
-                          icon: InkWell(
-                            onTap: () {
-                              // Get.to(
-                              //   () => OndcIntroView(),
-                              // );
-                            },
-                            child: const Icon(
-                              Icons.home,
-                              color: Colors.white,
-                              size: 27.0,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+                    // actions: [
+                    //   Padding(
+                    //     padding: const EdgeInsets.only(right: 4.5),
+                    //     child: IconButton(
+                    //       onPressed: () {
+                    //         Get.to(OndcCheckOutScreenMobile());
+                    //       },
+                    //       splashRadius: 25.0,
+                    //       icon: InkWell(
+                    //         onTap: () {
+                    //           // Get.to(
+                    //           //   () => OndcIntroView(),
+                    //           // );
+                    //         },
+                    //         child: const Icon(
+                    //           Icons.home,
+                    //           color: Colors.white,
+                    //           size: 27.0,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   )
+                    // ],
                   ),
                   body: state is HyperLocalGetLoadingState
                       ? Center(

@@ -96,7 +96,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                     ),
                   ),
             SizedBox(
-              height: 110,
+              height: 100,
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Column(
@@ -163,7 +163,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                       },
                           child: Expanded(
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.50,
+                                width: MediaQuery.of(context).size.width * 0.48,
                                 child: AutoSizeText(
                                   'Reason: ${widget.hyperLocalPreviewModel.reason}',
                                   style: TextStyle(color: AppColors().grey100,),

@@ -161,14 +161,14 @@ class CustomNavigationDrawer extends StatelessWidget {
               );
             },
           ),
-          NavigationDrawerTile(
-            icon: CupertinoIcons.question,
-            tileText: 'FAQ',
-            onPress: () {
-              // Navigator.pop(context);
-              Get.to(() => const FAQPage());
-            },
-          ),
+          // NavigationDrawerTile(
+          //   icon: CupertinoIcons.question,
+          //   tileText: 'FAQ',
+          //   onPress: () {
+          //     // Navigator.pop(context);
+          //     Get.to(() => const FAQPage());
+          //   },
+          // ),
           NavigationDrawerTile(
             icon: CupertinoIcons.phone_fill,
             tileText: 'Contact Us/Feedback',
@@ -229,7 +229,8 @@ class CustomNavigationDrawer extends StatelessWidget {
             tileText: 'Log Out',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const LoginScreen());
+
+              Get.offAll(() => const LoginScreen());
             },
           ),
         ],

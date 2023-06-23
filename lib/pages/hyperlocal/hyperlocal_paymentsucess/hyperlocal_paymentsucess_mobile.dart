@@ -131,6 +131,7 @@ class _HyperlocalPaymentsucessMobileState
                     //         Get.close(5);
                     //       },
                     //     ));
+                    Get.close(3);
                     Get.to(
                       () => HyperlocalOrderdetailView(
                         storeDescriptionId: widget.storeDescriptionId,

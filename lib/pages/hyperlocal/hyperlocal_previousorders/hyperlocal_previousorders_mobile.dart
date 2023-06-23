@@ -113,7 +113,7 @@ class _HyperlocalPreviousordersMobileState
   Widget build(BuildContext context) {
     warningLog(
         'length of order model regardless of filter ${orderModels.length}');
-    final ProfileController profileController = Get.find<ProfileController>();
+    final ProfileController profileController = ge.Get.find<ProfileController>();
 
     TextEditingController datePickedController = TextEditingController();
 
@@ -310,7 +310,11 @@ class _HyperlocalPreviousordersMobileState
                 AutoSizeText("Santhe", style: FontStyleManager().kAppNameStyle),
             leading: IconButton(
               onPressed: () async {
-                _key.currentState!.openDrawer();
+               ge.Get.to(()=>HyperlocalShophomeView(
+                    lat: profileController.customerDetails!.lat,
+                    lng: profileController.customerDetails!.lng),
+                transition: ge.Transition.leftToRight);
+               // _key.currentState!.openDrawer();
               },
               splashRadius: 25.0,
               icon: const Icon(Icons.arrow_back),
@@ -343,7 +347,7 @@ class _HyperlocalPreviousordersMobileState
                 // onTap: () => Get.off(
                 //   const OndcIntroView(),
                 // ),
-                onTap: () => Get.off(HyperlocalShophomeView(
+                onTap: () => ge.Get.off(HyperlocalShophomeView(
                     lat: profileController.customerDetails!.lat,
                     lng: profileController.customerDetails!.lng)),
                 child: const Padding(
@@ -761,63 +765,67 @@ class _HyperlocalPreviousordersMobileState
                     const SizedBox(
                       height: 10,
                     ),
-                    state is ThirtyDaysLoadingState
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              Text(
-                                "Loading",
-                                style: TextStyle(color: AppColors().brandDark),
-                              )
-                            ],
-                          )
-                        : state is CustomDaysLoadingState
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  Text(
-                                    "Loading",
-                                    style:
-                                        TextStyle(color: AppColors().brandDark),
-                                  )
-                                ],
-                              )
-                            : state is SevenDaysLoadingState
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                      Text(
-                                        "Loading",
-                                        style: TextStyle(
-                                            color: AppColors().brandDark),
-                                      )
-                                    ],
-                                  )
+                    state is ThirtyDaysLoadingState ||
+                        state is CustomDaysLoadingState ||
+                        state is SevenDaysLoadingState
+                        ?
+                    const SizedBox()
+                    // Column(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Center(
+                    //             child: CircularProgressIndicator(),
+                    //           ),
+                    //           Text(
+                    //             "Loading",
+                    //             style: TextStyle(color: AppColors().brandDark),
+                    //           )
+                    //         ],
+                    //       )
+                        // : state is CustomDaysLoadingState
+                        //     ? Column(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: [
+                        //           const Center(
+                        //             child: CircularProgressIndicator(),
+                        //           ),
+                        //           Text(
+                        //             "Loading",
+                        //             style:
+                        //                 TextStyle(color: AppColors().brandDark),
+                        //           )
+                        //         ],
+                        //       )
+                        //     : state is SevenDaysLoadingState
+                        //         ? Column(
+                        //             mainAxisAlignment: MainAxisAlignment.center,
+                        //             children: [
+                        //               const Center(
+                        //                 child: CircularProgressIndicator(),
+                        //               ),
+                        //               Text(
+                        //                 "Loading",
+                        //                 style: TextStyle(
+                        //                     color: AppColors().brandDark),
+                        //               )
+                        //             ],
+                        //           )
                                 : Column(
                                     children: orderList,
                                   ),
-                    state is SevenDaysFilterHyperlocalLoadingSrollState
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : state is ThirtyDaysFilterHyperlocalOrderScrollLoadingState
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : state is CustomScrollFilterHyperlocalLoadingState
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : const SizedBox(),
+                    // state is SevenDaysFilterHyperlocalLoadingSrollState
+                    //     ? const Center(
+                    //         child: CircularProgressIndicator(),
+                    //       )
+                    //     : state is ThirtyDaysFilterHyperlocalOrderScrollLoadingState
+                    //         ? const Center(
+                    //             child: CircularProgressIndicator(),
+                    //           )
+                    //         : state is CustomScrollFilterHyperlocalLoadingState
+                    //             ? const Center(
+                    //                 child: CircularProgressIndicator(),
+                    //               )
+                    //             : const SizedBox(),
                   ],
                 ),
               ),

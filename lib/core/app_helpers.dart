@@ -70,6 +70,7 @@ class AppHelpers with LogMixin {
     } catch (e) {
       dev.log(
         e.toString(),
+
       );
       return '';
     }

@@ -31,8 +31,8 @@ class HyperlocalCancelReturnRepository with LogMixin {
   }
 
   Future<List<HyperlocalCancelModel>> getCancelReason() async {
-    final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/cancel/reasons');
+    final url =
+        Uri.parse('https://api.santhe.in/santhe/hyperlocal/cancel/reasons');
     try {
       final response = await http.get(url);
       warningLog('${response.statusCode}');
@@ -54,8 +54,8 @@ class HyperlocalCancelReturnRepository with LogMixin {
   }
 
   Future<List<HyperlocalCancelModel>> getReturnReasons() async {
-    final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/return/reasons');
+    final url =
+        Uri.parse('https://api.santhe.in/santhe/hyperlocal/return/reasons');
     try {
       final response = await http.get(url);
       warningLog('Status code ${response.statusCode}');
@@ -79,7 +79,7 @@ class HyperlocalCancelReturnRepository with LogMixin {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
-    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/upload');
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/upload');
     debugLog('Image Path $imgPath');
     try {
       var request = http.MultipartRequest("POST", url);
@@ -115,8 +115,7 @@ class HyperlocalCancelReturnRepository with LogMixin {
   }
 
   postcancelReason({required String reason, required String orderId}) async {
-    final url =
-        Uri.parse('https://ondcstaging.santhe.in/santhe/hyperlocal/cancel');
+    final url = Uri.parse('https://api.santhe.in/santhe/hyperlocal/cancel');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

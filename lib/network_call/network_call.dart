@@ -204,7 +204,7 @@ class NetworkCall with LogMixin {
         .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
     final String nodeUrl = AppUrl.getCustomerDetails;
     final String newNodeUrl =
-        'https://ondcstaging.santhe.in/santhe/customer/get?firebase_id=$formattedPhoneNumber';
+        'https://api.santhe.in/santhe/customer/get?firebase_id=$formattedPhoneNumber';
 
     // final header = {
     //   'Content-Type': 'application/json',

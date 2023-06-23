@@ -58,8 +58,7 @@ class OndcCheckoutRepository with LogMixin {
 
   Future<dynamic> proceedToCheckoutMethodPost(
       {required final String storeLocation_id}) async {
-    final url =
-        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/price/request');
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/price/request');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -111,7 +110,7 @@ class OndcCheckoutRepository with LogMixin {
       {required final String transactionId,
       required final String messageId}) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/price/request?order_id=$messageId');
+        'https://api.santhe.in/santhe/ondc/price/request?order_id=$messageId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -163,7 +162,7 @@ class OndcCheckoutRepository with LogMixin {
     warningLog("finalcart$messageId $firebaseId and also $storeLocation_id");
 
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/cart/items?firebase_id=$firebaseId&order_id=$messageId&storeLocation_id=$storeLocation_id');
+        'https://api.santhe.in/santhe/ondc/cart/items?firebase_id=$firebaseId&order_id=$messageId&storeLocation_id=$storeLocation_id');
     warningLog("finalcart  $url");
     final header = {
       'Content-Type': 'application/json',
@@ -230,7 +229,7 @@ class OndcCheckoutRepository with LogMixin {
   }
 
   Future<dynamic> initPost({required String order_id}) async {
-    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/init');
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/init');
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     warningLog("also orderId $order_id firebase id $firebaseId and url $url");
     final header = {
@@ -278,7 +277,7 @@ class OndcCheckoutRepository with LogMixin {
 
   Future<String> initGet({required String order_Id}) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/init/response?order_id=$order_Id');
+        'https://api.santhe.in/santhe/ondc/init/response?order_id=$order_Id');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -328,8 +327,7 @@ class OndcCheckoutRepository with LogMixin {
       {required String razorpayOrderIDLocal,
       required String razorpayPaymentId,
       required String razorpaySignature}) async {
-    final url =
-        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/payment/verify');
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/payment/verify');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -362,8 +360,7 @@ class OndcCheckoutRepository with LogMixin {
   }
 
   confirmOrder({required String messageId}) async {
-    final url =
-        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/confirm/order');
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/confirm/order');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -399,8 +396,7 @@ class OndcCheckoutRepository with LogMixin {
     required String firebaseId,
     required String messageId,
   }) async {
-    final url =
-        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/payment/checkout');
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/payment/checkout');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

@@ -89,6 +89,8 @@ class AppHelpers with LogMixin {
 
   String get playStoreLink => appStoreLink;
   String get appStoreLink => '''Hi,
+
+
   
 
 Santhe is an app built for getting best deals for your groceries from your local Kirana stores and retailers. Use the Free Santhe App and support local economy. 

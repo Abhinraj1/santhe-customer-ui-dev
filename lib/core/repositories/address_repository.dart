@@ -43,8 +43,7 @@ class AddressRepository with LogMixin {
     required String deliveryName,
     String? howtoReach,
   }) async {
-    final url =
-        Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/address/update');
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/address/update');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -109,7 +108,7 @@ class AddressRepository with LogMixin {
 
     warningLog('Firebase Id being sent IN GET ADDRESS LIST $firebaseId');
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/address/list?firebase_id=$firebaseId');
+        'https://api.santhe.in/santhe/ondc/address/list?firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

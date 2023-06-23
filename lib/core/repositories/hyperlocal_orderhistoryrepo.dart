@@ -32,7 +32,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
   Future<List<HyperlocalOrderDetailModel>> getOrderList() async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=5&offset=0');
+        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=5&offset=0');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);
@@ -61,7 +61,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
     dynamic formattedStartingDate =
         DateFormat('yyyy-MM-dd').format(startingDate);
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nSeven&startDate=$formattedStartingDate&endDate=$formattedToday');
+        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nSeven&startDate=$formattedStartingDate&endDate=$formattedToday');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);
@@ -90,7 +90,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
     dynamic formattedStartingDate =
         DateFormat('yyyy-MM-dd').format(startingDate);
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nThirty&startDate=$formattedStartingDate&endDate=$formattedToday');
+        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nThirty&startDate=$formattedStartingDate&endDate=$formattedToday');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);
@@ -119,7 +119,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
     errorLog(
         'custom dates$formattedToday last end date $formattedStartingDate');
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nCustom&startDate=$formattedToday&endDate=$formattedStartingDate');
+        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nCustom&startDate=$formattedToday&endDate=$formattedStartingDate');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);

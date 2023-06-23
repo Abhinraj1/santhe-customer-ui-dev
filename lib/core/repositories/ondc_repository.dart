@@ -105,7 +105,7 @@ class OndcRepository with LogMixin {
     warningLog('Firebase Id being sent$firebaseId');
     //! Firebase id needs to be updated
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/store/nearby?limit=20&offset=0&firebase_id=$firebaseId');
+        'https://api.santhe.in/santhe/ondc/store/nearby?limit=20&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -133,7 +133,7 @@ class OndcRepository with LogMixin {
   getProductsOfShop({required String shopId}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=12&offset=0&firebase_id=$firebaseId');
+        'https://api.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=12&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -164,7 +164,7 @@ class OndcRepository with LogMixin {
   }) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?&storeLocation_id=$shopId&search=%$productName%&limit=12&offset=0&firebase_id=$firebaseId');
+        'https://api.santhe.in/santhe/ondc/store/item/nearby?&storeLocation_id=$shopId&search=%$productName%&limit=12&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -218,7 +218,7 @@ class OndcRepository with LogMixin {
   Future<List<ProductOndcModel>> searchProductsOnGlobal(
       {required String transactionIdLocal, required String productName}) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/item/nearby?transaction_id=$transactionIdLocal&search=%$productName%&limit=10&offset=0');
+        'https://api.santhe.in/santhe/ondc/item/nearby?transaction_id=$transactionIdLocal&search=%$productName%&limit=10&offset=0');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -260,7 +260,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/cart/count?firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
+        'https://api.santhe.in/santhe/ondc/cart/count?firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
     try {
       warningLog('logging count url $url');
       final response = await http.get(url, headers: header);
@@ -279,7 +279,7 @@ class OndcRepository with LogMixin {
       {required String productName}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/item/nearby?search=$productName&limit=10&offset=0&firebase_id=$firebaseId');
+        'https://api.santhe.in/santhe/ondc/item/nearby?search=$productName&limit=10&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -307,13 +307,12 @@ class OndcRepository with LogMixin {
     }
   }
 
-
   Future<Data> getSingleOrder({required String OrderId}) async {
     // "89088251-33a2-4e2b-9602-e83f5fb57f7d";
     //  "e80574c6-32f2-45ce-8b67-d97a89490523";
 
-    final url = Uri.parse(
-        "https://ondcstaging.santhe.in/santhe/ondc/customer/order/$OrderId");
+    final url =
+        Uri.parse("https://api.santhe.in/santhe/ondc/customer/order/$OrderId");
 
     final header = {
       'Content-Type': 'application/json',
@@ -349,9 +348,8 @@ class OndcRepository with LogMixin {
     final firebaseId = //"8808435978";
         AppHelpers().getPhoneNumberWithoutCountryCode;
 
-    final url = Uri.parse(
-        "https://ondcstaging.santhe.in/santhe/ondc/customer/"
-            "order/list?limit=10&offset=$offset&"
+    final url = Uri.parse("https://api.santhe.in/santhe/ondc/customer/"
+        "order/list?limit=10&offset=$offset&"
         "firebase_id=$firebaseId");
 
     final header = {
@@ -360,7 +358,6 @@ class OndcRepository with LogMixin {
     };
 
     try {
-
       warningLog('GET Past ODER DETAILS $url');
 
       final response = await http.get(url, headers: header);
@@ -376,7 +373,6 @@ class OndcRepository with LogMixin {
       //warningLog('${data.first.quotes!.first.status}');
 
       return data;
-
     } catch (e) {
       warningLog(e.toString());
 
@@ -385,9 +381,7 @@ class OndcRepository with LogMixin {
   }
 
   Future<List<CategoryModel>> getCategoryForContactSupport() async {
-
-
-    final url = Uri.parse('https://ondcstaging.santhe.in/santhe'
+    final url = Uri.parse('https://api.santhe.in/santhe'
         '/ondc/issue/category');
 
     final header = {
@@ -406,7 +400,7 @@ class OndcRepository with LogMixin {
 
       final responseBody = await json.decode(response.body)["data"]["rows"];
 
-     List<CategoryModel> list =  CategoryModel.fromList(responseBody);
+      List<CategoryModel> list = CategoryModel.fromList(responseBody);
 
       warningLog('$responseBody');
 
@@ -417,11 +411,8 @@ class OndcRepository with LogMixin {
     }
   }
 
-
   Future<List<CategoryModel>> getSubCategoryForContactSupport() async {
-
-
-    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/'
+    final url = Uri.parse('https://api.santhe.in/santhe/'
         'ondc/issue/subcategory?category=ORDER');
 
     final header = {
@@ -440,7 +431,7 @@ class OndcRepository with LogMixin {
 
       final responseBody = await json.decode(response.body)["data"]["rows"];
 
-      List<CategoryModel> list =  CategoryModel.fromList(responseBody);
+      List<CategoryModel> list = CategoryModel.fromList(responseBody);
 
       warningLog('$responseBody');
 
@@ -451,16 +442,15 @@ class OndcRepository with LogMixin {
     }
   }
 
-
-
   Future<String> raiseIssue(
-      {required String orderId, required String longDescription,
-        required List<String> cartItemPricesId, required List<String> images,
-         String? shortDescription, required String categoryCode,
-        required String subCategoryCode}) async {
-
-
-    final url = Uri.parse('https://ondcstaging.santhe.in/santhe/ondc/issue/raise');
+      {required String orderId,
+      required String longDescription,
+      required List<String> cartItemPricesId,
+      required List<String> images,
+      String? shortDescription,
+      required String categoryCode,
+      required String subCategoryCode}) async {
+    final url = Uri.parse('https://api.santhe.in/santhe/ondc/issue/raise');
 
     final header = {
       'Content-Type': 'application/json',
@@ -472,17 +462,15 @@ class OndcRepository with LogMixin {
       final response = await http.post(
         url,
         headers: header,
-        body: json.encode(
-            {
-              "order_id": orderId,
-              "long_description": longDescription,
-              "category_code": categoryCode,
-              "sub_category_code": subCategoryCode,
-              "short_description":" ",
-              "imagesArr":images,
-              "cartItemIds":cartItemPricesId
-            }
-        ),
+        body: json.encode({
+          "order_id": orderId,
+          "long_description": longDescription,
+          "category_code": categoryCode,
+          "sub_category_code": subCategoryCode,
+          "short_description": " ",
+          "imagesArr": images,
+          "cartItemIds": cartItemPricesId
+        }),
       );
 
       warningLog('${response.statusCode}');
@@ -496,7 +484,6 @@ class OndcRepository with LogMixin {
       warningLog('RESPONSE type IS $responseMessage');
 
       return responseMessage;
-
     } catch (e) {
       warningLog(e.toString());
       rethrow;

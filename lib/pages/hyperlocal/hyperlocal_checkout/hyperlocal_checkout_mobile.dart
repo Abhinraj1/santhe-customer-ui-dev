@@ -107,16 +107,26 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
     setState(() {
       _isInitBuffer = true;
     });
-    Future.delayed(
-      const Duration(seconds: 5),
-      () => context.read<HyperlocalCheckoutBloc>().add(
-            VerifyPaymentEventHyperlocal(
-              razorPayOrderId: response.orderId,
-              razorPayPaymentId: response.paymentId,
-              razorPaySignature: response.signature,
-            ),
-          ),
-    );
+
+    //TODO: FIND PAYMENT DELAY HERE
+    // Future.delayed(
+    //   const Duration(seconds: 5),
+    //   () => context.read<HyperlocalCheckoutBloc>().add(
+    //         VerifyPaymentEventHyperlocal(
+    //           razorPayOrderId: response.orderId,
+    //           razorPayPaymentId: response.paymentId,
+    //           razorPaySignature: response.signature,
+    //         ),
+    //       ),
+    // );
+
+    context.read<HyperlocalCheckoutBloc>().add(
+                VerifyPaymentEventHyperlocal(
+                  razorPayOrderId: response.orderId,
+                  razorPayPaymentId: response.paymentId,
+                  razorPaySignature: response.signature,
+                ),
+              );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {

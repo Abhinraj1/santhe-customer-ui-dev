@@ -10,6 +10,8 @@ import 'package:santhe/models/hyperlocal_models/hyperlocal_orderdetail.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_orderdetail/hyperlocal_orderdetail_view.dart';
 import 'package:santhe/widgets/ondc_order_details_widgets/order_details_table.dart';
 
+import 'hyperlocal_orders_list_table.dart';
+
 class HyperlocalOrderDetailWidget extends StatefulWidget {
   final HyperlocalOrderDetailModel hyperlocalOrderDetailModel;
   const HyperlocalOrderDetailWidget({
@@ -58,16 +60,17 @@ class _HyperlocalOrderDetailWidgetState
             ),
           );
         },
-        child: OrderDetailsTable(
+        child:
+        OrderListTable(
             date: formattedDate,
-            firstTitle: "Shop",
-            firstData: widget.hyperlocalOrderDetailModel.customerNamel,
-            secondTitle: "Order ID",
-            secondData: widget.hyperlocalOrderDetailModel.order_id,
-            thirdTitle: "Order status",
-            thirdData: widget.hyperlocalOrderDetailModel.statesTitle,
-            fourthTitle: "Order Date",
-            fourthData: formattedDate,
+            // firstTitle: "Shop",
+            // firstData: widget.hyperlocalOrderDetailModel.customerNamel,
+            firstTitle: "Order ID",
+            firstData: widget.hyperlocalOrderDetailModel.order_id,
+            secondTitle: "Order status",
+            secondData: widget.hyperlocalOrderDetailModel.statesTitle,
+            thirdTitle: "Order Date",
+            thirdData: formattedDate,
             redTextButtonTitle: "Details",
             horizontalPadding: 15,
             verticalPadding: 10.0),

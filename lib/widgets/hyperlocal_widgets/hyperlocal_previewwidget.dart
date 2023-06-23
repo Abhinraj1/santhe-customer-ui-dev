@@ -96,7 +96,7 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                     ),
                   ),
             SizedBox(
-              height: 100,
+              height: 110,
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Column(

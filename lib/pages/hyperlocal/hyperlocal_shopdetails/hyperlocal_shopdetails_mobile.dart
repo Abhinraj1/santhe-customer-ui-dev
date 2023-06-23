@@ -294,7 +294,15 @@ class _HyperlocalShopdetailsMobileState
                     },
                     splashRadius: 25.0,
                     icon: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        ge.Get.off(
+                                () => HyperlocalShophomeView(
+                              lat: profileController.customerDetails!.lat,
+                              lng: profileController.customerDetails!.lng,
+                            ),
+                            //!previous const MapMerchant(),
+                            transition: ge.Transition.fadeIn);
+                      },
                       child: const Icon(
                         Icons.home,
                         color: Colors.white,

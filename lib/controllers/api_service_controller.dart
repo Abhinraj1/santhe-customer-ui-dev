@@ -950,7 +950,7 @@ class APIs extends GetxController with LogMixin {
                   }
                 }
               },
-              "phoneNumber": {"integerValue": "${updatedUser.phoneNumber}"},
+              "phoneNumber": {"integerValue": updatedUser.phoneNumber.toString()},
               "pincode": {"integerValue": "${updatedUser.pincode}"},
               "address": {"stringValue": updatedUser.address},
               "emailId": {"stringValue": updatedUser.emailId},
@@ -983,11 +983,11 @@ class APIs extends GetxController with LogMixin {
 
     //! update user method
     var data = {
-      "firebase_id": updatedUser.phoneNumber,
+      "firebase_id": updatedUser.phoneNumber.toString(),
       "first_name": updatedUser.custName,
       "last_name": updatedUser.lastName,
       "email": updatedUser.emailId,
-      "phone_number": updatedUser.phoneNumber,
+      "phone_number": updatedUser.phoneNumber.toString(),
       "fbiid": updatedUser.fiiid,
       "flat": updatedUser.address,
       "locality": getfinalAddress.locality,

@@ -196,7 +196,14 @@ class _HyperlocalProductdescriptionMobileState
             padding: const EdgeInsets.only(right: 4.5),
             child: IconButton(
               onPressed: () {
-                Get.back();
+                ge.Get.off(
+                        () => const HyperlocalShophomeView(
+                      // lat: profileController.customerDetails!.lat,
+                      // lng: profileController.customerDetails!.lng,
+                    ),
+                    //!previous const MapMerchant(),
+                    transition: ge.Transition.fadeIn);
+               // Get.back();
                 // if (Platform.isIOS) {
                 //   Share.share(
                 //     AppHelpers().appStoreLink,
@@ -275,7 +282,7 @@ class _HyperlocalProductdescriptionMobileState
                             ),
                             child: GestureDetector(
                               onTap: () async {
-                                await Get.to(
+                                await ge.Get.to(
                                   HyperlocalCartView(
                                     storeDescriptionId: widget
                                         .hyperLocalProductModel
@@ -467,7 +474,7 @@ class _HyperlocalProductdescriptionMobileState
                     widget.hyperLocalProductModel.isAddedToCart == true
                         ? GestureDetector(
                             onTap: () async {
-                              await Get.to(
+                              await ge.Get.to(
                                 HyperlocalCartView(
                                   storeDescriptionId: widget
                                       .hyperLocalProductModel

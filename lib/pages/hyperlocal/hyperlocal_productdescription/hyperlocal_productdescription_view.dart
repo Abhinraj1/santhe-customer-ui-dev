@@ -6,7 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'as ge;
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:santhe/constants.dart';
 import 'package:badges/badges.dart' as badges;
@@ -22,6 +22,8 @@ import 'package:santhe/widgets/custom_widgets/custom_title_with_back_button.dart
 import 'package:santhe/widgets/ondc_widgets/expandable_text.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_carousel.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
+
+import '../hyperlocal_shophome/hyperlocal_shophome_view.dart';
 
 part 'hyperlocal_productdescription_desktop.dart';
 part 'hyperlocal_productdescription_mobile.dart';

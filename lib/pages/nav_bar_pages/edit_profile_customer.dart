@@ -46,6 +46,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
           AppHelpers().getPhoneNumber));
   late final CustomerModel? currentUser;
   late final TextEditingController _userNameController;
+   final TextEditingController _phoneNumberController = TextEditingController();
   late final TextEditingController _userEmailController;
   bool addressUpdateFlag = false;
   bool donePressed = false;
@@ -70,7 +71,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
     _userEmailController = TextEditingController(
         text: currentUser?.emailId ?? 'johndoe@gmail.com');
-
+    _phoneNumberController.text = userPhoneNumber.toString();
     if (registrationController.address.value.trim().isEmpty) {
       registrationController.address.value = currentUser?.address ?? '';
     }
@@ -196,6 +197,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   child: TextFormField(
                                     keyboardType: TextInputType.phone,
                                     enabled: false,
+                                    controller: _phoneNumberController,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: 1.0,
@@ -612,8 +614,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               custId: userPhone,
                                               custName:
                                                   _userNameController.text,
-                                              custRatings: double.parse(
-                                                  currentUser.customerRatings),
+                                              custRatings: 5,
+                                              // custRatings: double.parse(
+                                              //     currentUser.customerRatings),
                                               custReferal: 0000,
                                               custStatus: 'active',
                                               howToReach: registrationController

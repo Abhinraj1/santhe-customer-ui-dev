@@ -44,6 +44,7 @@ import 'core/cubits/upload_image_and_return_request_cubit/upload_image_and_retur
 import 'core/cubits/webview_cubit/webview_cubit.dart';
 import 'core/repositories/hyperlocal_contact_support.dart';
 import 'core/repositories/ondc_order_cancel_and_return_repository.dart';
+import 'firebase/firebase_messaging.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -57,6 +58,7 @@ void main() async {
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await FCM().firebaseMessageInit();
 
   runZonedGuarded<Future<void>>(
     () async {

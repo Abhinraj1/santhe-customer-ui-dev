@@ -54,7 +54,7 @@ class HyperLocalRepository with LogMixin {
       debugLog('HyperLocal Url for Shops $url');
       final response = await http.get(url);
       warningLog(
-          'Response Structure ${response.statusCode} and body ${response.body}');
+          'Response Structure ${response.statusCode} HyperLocal Url for Shops $url and body ${response.body} ');
       final responseBody = json.decode(response.body)['data'] as List;
       warningLog('Response Body Structure $responseBody');
       localHyperLocalShopModel = [];

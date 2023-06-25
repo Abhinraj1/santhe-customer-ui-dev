@@ -18,6 +18,9 @@ class AppUrl {
   static const String envType = _dev ? _environmentDev : _environmentProd;
 
   static const String SEARCH_API_KEY = 'ba0045efa2818ec596b013d1b5dbe461';
+  String get endPointUrlDev => 'https://ondcstaging.santhe.in';
+
+  String get endPointUrlProd => 'https://api.santhe.in';
 
   static const String SEARCH_APP_ID = '7565UIF34Z';
 

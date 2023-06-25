@@ -47,7 +47,7 @@ class HyperlocalImageReturnRequestCubit
     _returnProduct = returnProduct;
   }
 
-  resetCubit(){
+  resetCubit() {
     imagesList.clear();
     imageUrl.clear();
     imageFiles.clear();
@@ -123,7 +123,7 @@ class HyperlocalImageReturnRequestCubit
   }
 
   showImages({bool? hideAddImgButton}) {
-     imageFiles = [File("do not remove")];
+    imageFiles = [File("do not remove")];
     for (var data in imagesList) {
       if (data != null) {
         imageFiles.add(File(data.path));
@@ -179,8 +179,7 @@ class HyperlocalImageReturnRequestCubit
       {required String reason,
       required List<String> images,
       required String orderItemId}) async {
-    final url =
-        Uri.parse('https://ondcstaging.santhe.in/santhe/hyperlocal/return');
+    final url = Uri.parse('https://api.santhe.in/santhe/hyperlocal/return');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

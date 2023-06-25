@@ -29,8 +29,8 @@ class HyperLocalCartRepository with LogMixin {
       "product_id": "${hyperLocalProductModel.id}",
       "storeDescription_id": "${hyperLocalProductModel.storeDescriptionId}"
     });
-    final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/cart/add/item');
+    final url =
+        Uri.parse('https://api.santhe.in/santhe/hyperlocal/cart/add/item');
     try {
       warningLog('body being sent $body to url $url');
       final response = await http.post(url, headers: header, body: body);
@@ -52,7 +52,7 @@ class HyperLocalCartRepository with LogMixin {
       {required String storeDescriptionId}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/cart/list?firebase_id=$firebaseId&storeDescription_id=$storeDescriptionId');
+        'https://api.santhe.in/santhe/hyperlocal/cart/list?firebase_id=$firebaseId&storeDescription_id=$storeDescriptionId');
     try {
       warningLog('url for getting cart $url');
       final response = await http.get(url);
@@ -76,8 +76,8 @@ class HyperLocalCartRepository with LogMixin {
   }
 
   deleteCartItem({required HyperLocalCartModel hyperLocalCartModel}) async {
-    final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/cart/delete/item');
+    final url =
+        Uri.parse('https://api.santhe.in/santhe/hyperlocal/cart/delete/item');
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final header = {
       'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ class HyperLocalCartRepository with LogMixin {
       {required HyperLocalCartModel hyperLocalCartModel}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/cart/update/quantity');
+        'https://api.santhe.in/santhe/hyperlocal/cart/update/quantity');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

@@ -8,16 +8,11 @@ import '../../models/hyperlocal_models/hyperlocal_cancel.dart';
 import '../../models/hyperlocal_models/hyperlocal_orders_model.dart';
 import '../../widgets/custom_widgets/custom_snackBar.dart';
 
-
-
 class HyperlocalContactSupportRepository with LogMixin {
-
-
-
-  Future<OrderInfoSupport> getSupportDetails({required String supportId}) async {
-    final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/support'
-            '/get?support_id=$supportId');
+  Future<OrderInfoSupport> getSupportDetails(
+      {required String supportId}) async {
+    final url = Uri.parse('https://api.santhe.in/santhe/hyperlocal/support'
+        '/get?support_id=$supportId');
     try {
       final response = await http.get(url);
       warningLog('${response.statusCode}');
@@ -25,21 +20,24 @@ class HyperlocalContactSupportRepository with LogMixin {
       OrderInfoSupport support = OrderInfoSupport.fromJson(responseBody);
       warningLog('Responsebody getSupportDetails $responseBody');
 
-
       return support;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<String> postRaiseTicket({required String reason,
-    required String orderId}) async {
+  Future<String> postRaiseTicket(
+      {required String reason, required String orderId}) async {
     final url =
-    Uri.parse('https://ondcstaging.santhe.in/santhe/hyperlocal/support/raise');
+        Uri.parse('https://api.santhe.in/santhe/hyperlocal/support/raise');
     String firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
 
-    print("BODY ===${json.encode({"order_id":orderId,"firebase_id":firebaseId,"message": reason,
-        "imagesArr":[]
+    print("BODY ===${json.encode(
+      {
+        "order_id": orderId,
+        "firebase_id": firebaseId,
+        "message": reason,
+        "imagesArr": []
       },
     )}");
 
@@ -53,10 +51,10 @@ class HyperlocalContactSupportRepository with LogMixin {
         headers: header,
         body: json.encode(
           {
-            "order_id":orderId,
-            "firebase_id":firebaseId,
+            "order_id": orderId,
+            "firebase_id": firebaseId,
             "message": reason,
-            "imagesArr":[]
+            "imagesArr": []
           },
         ),
       );
@@ -65,7 +63,7 @@ class HyperlocalContactSupportRepository with LogMixin {
       final type = responseBody["type"];
       warningLog('Response Body $responseBody and TYPE == $type');
 
-      if(response.statusCode == 500){
+      if (response.statusCode == 500) {
         customSnackBar(
             isErrorMessage: true,
             message: "Something Went Wrong. Please Try Later.");

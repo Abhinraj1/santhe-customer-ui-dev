@@ -76,7 +76,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       required List<OndcProductWidget> searchProductLocal}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=$productName&limit=10&offset=$nsearch&firebase_id=$firebaseId');
+        'https://api.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=$productName&limit=10&offset=$nsearch&firebase_id=$firebaseId');
     setState(() {
       _searchLoading = true;
     });
@@ -123,7 +123,7 @@ class _OndcShopDetailsMobileState extends State<_OndcShopDetailsMobile>
       required List<OndcProductWidget> productWidgetsLocal}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final Uri url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=10&offset=$n&firebase_id=$firebaseId');
+        'https://api.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=10&offset=$n&firebase_id=$firebaseId');
     setState(() {
       _loading = true;
     });

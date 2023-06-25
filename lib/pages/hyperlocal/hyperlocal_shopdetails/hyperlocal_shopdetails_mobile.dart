@@ -44,7 +44,7 @@ class _HyperlocalShopdetailsMobileState
     required String shopId,
   }) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/product/list?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+        'https://api.santhe.in/santhe/hyperlocal/product/list?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
     setState(() {
       _isLoading = true;
     });
@@ -89,7 +89,7 @@ class _HyperlocalShopdetailsMobileState
       required String shopId,
       required String productName}) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/product/search?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&item_name=$productName&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+        'https://api.santhe.in/santhe/hyperlocal/product/search?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&item_name=$productName&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
     setState(() {
       _isSearchLoading = true;
     });
@@ -296,10 +296,10 @@ class _HyperlocalShopdetailsMobileState
                     icon: InkWell(
                       onTap: () {
                         ge.Get.off(
-                                () => HyperlocalShophomeView(
-                              lat: profileController.customerDetails!.lat,
-                              lng: profileController.customerDetails!.lng,
-                            ),
+                            () => HyperlocalShophomeView(
+                                  lat: profileController.customerDetails!.lat,
+                                  lng: profileController.customerDetails!.lng,
+                                ),
                             //!previous const MapMerchant(),
                             transition: ge.Transition.fadeIn);
                       },

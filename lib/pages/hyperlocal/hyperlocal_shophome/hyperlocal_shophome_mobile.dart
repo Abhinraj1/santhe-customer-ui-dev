@@ -71,7 +71,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
   getNewShops(
       {required List<HyperLocalShopWidget> shops, required int limit}) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/merchant/list?lat=${customerModel?.lat}&lang=${customerModel?.lng}&limit=10&offset=$limit');
+        'https://api.santhe.in/santhe/hyperlocal/merchant/list?lat=${customerModel?.lat}&lang=${customerModel?.lng}&limit=10&offset=$limit');
     setState(() {
       _isLoading = true;
     });
@@ -108,7 +108,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
   getSearchNewShop(
       {required List<HyperLocalShopWidget> shops, required int limit}) async {
     final url = Uri.parse(
-        'https://ondcstaging.santhe.in/santhe/hyperlocal/product/search?limit=10&offset=$nSearch&item_name=${_textEditingController.text}&lat=${customerModel?.lat}&lang=${customerModel?.lng}}');
+        'https://api.santhe.in/santhe/hyperlocal/product/search?limit=10&offset=$nSearch&item_name=${_textEditingController.text}&lat=${customerModel?.lat}&lang=${customerModel?.lng}}');
     setState(() {
       _isSearchLoading = true;
     });

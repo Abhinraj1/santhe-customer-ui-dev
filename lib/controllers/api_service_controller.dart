@@ -767,7 +767,7 @@ class APIs extends GetxController with LogMixin {
     // final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
     //! add customer node api
     // final String nodeAPIUrl =
-    //     'https://ondcstaging.santhe.in/santhe/customer/register';
+    //     'https://api.santhe.in/santhe/customer/register';
     // warningLog(nodeAPIUrl);
     // final nodeUrl = Uri.parse(nodeAPIUrl);
     //!end
@@ -856,7 +856,7 @@ class APIs extends GetxController with LogMixin {
     // });
 
     var rawResponse = await http.post(
-        Uri.parse('https://ondcstaging.santhe.in/santhe/customer/register'),
+        Uri.parse('https://api.santhe.in/santhe/customer/register'),
         body: json.encode(data),
         headers: headers);
     warningLog('data ${rawResponse.body} and ${rawResponse.headers}');
@@ -894,7 +894,7 @@ class APIs extends GetxController with LogMixin {
 
     final String nodeUrl = AppUrl.getCustomerDetails;
     final String newNodeUrl =
-        'https://ondcstaging.santhe.in/santhe/customer/get?firebase_id=$custId';
+        'https://api.santhe.in/santhe/customer/get?firebase_id=$custId';
     final header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
@@ -967,7 +967,7 @@ class APIs extends GetxController with LogMixin {
 
     final String nodeUrl = AppUrl.updateCustomer;
     const String nodeUrlApi =
-        'https://ondcstaging.santhe.in/santhe/customer/update';
+        'https://api.santhe.in/santhe/customer/update';
     final header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
@@ -1025,7 +1025,7 @@ class APIs extends GetxController with LogMixin {
 
   updatFCMONstart({required String fcmToken}) async {
     const String nodeUrlApi =
-        'https://ondcstaging.santhe.in/santhe/customer/update';
+        'https://api.santhe.in/santhe/customer/update';
     final header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'

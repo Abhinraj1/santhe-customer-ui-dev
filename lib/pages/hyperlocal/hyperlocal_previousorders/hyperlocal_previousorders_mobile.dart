@@ -184,6 +184,13 @@ class _HyperlocalPreviousordersMobileState
         HyperlocalOrderhistoryState>(
       listener: (context, state) {
         debugLog('$state');
+        if( state is ThirtyDaysLoadingState ||
+            state is CustomDaysLoadingState ||
+            state is SevenDaysLoadingState){
+        _isLoading = true;
+        Future.delayed(const Duration(seconds: 2)).then((value) =>       setState(() {_isLoading = false;}));
+
+        }
         if (state is SevenDaysFilterHyperlocalOrderState) {
           List<HyperlocalOrderDetailWidget> locWidgets = [];
           orderModels = [];
@@ -293,6 +300,9 @@ class _HyperlocalPreviousordersMobileState
           setState(() {
             orderModels.addAll(state.orderDetailsModels);
             orderList.addAll(locWidgets);
+            if(orderList.isEmpty){
+              _isEmpty = true;
+            }
           });
           context
               .read<HyperlocalOrderhistoryBloc>()
@@ -769,7 +779,8 @@ class _HyperlocalPreviousordersMobileState
                         state is CustomDaysLoadingState ||
                         state is SevenDaysLoadingState
                         ?
-                    const SizedBox()
+
+                    const SizedBox() :
                     // Column(
                     //         mainAxisAlignment: MainAxisAlignment.center,
                     //         children: [
@@ -810,6 +821,14 @@ class _HyperlocalPreviousordersMobileState
                         //               )
                         //             ],
                         //           )
+                    orderList.isEmpty ?
+                    Text(
+                      'No Orders found',
+                      style: TextStyle(
+                        color: AppColors().brandDark,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
                                 : Column(
                                     children: orderList,
                                   ),

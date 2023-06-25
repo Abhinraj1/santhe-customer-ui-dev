@@ -224,15 +224,15 @@ class CustomNavigationDrawer extends StatelessWidget {
               Get.to(() => const PrivacyPolicyPage());
             },
           ),
-          NavigationDrawerTile(
-            icon: CupertinoIcons.lock_shield_fill,
-            tileText: 'Log Out',
-            onPress: () {
-              // Navigator.pop(context);
-
-              Get.offAll(() => const LoginScreen());
-            },
-          ),
+          // NavigationDrawerTile(
+          //   icon: CupertinoIcons.lock_shield_fill,
+          //   tileText: 'Log Out',
+          //   onPress: () {
+          //     // Navigator.pop(context);
+          //
+          //     Get.offAll(() => const LoginScreen());
+          //   },
+          // ),
         ],
       ),
     );

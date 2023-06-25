@@ -63,7 +63,9 @@ class _ONDCWebviewScreenMobileState extends State<ONDCWebviewScreenMobile> {
         if(state is WebviewLoadedState){
           return CustomScaffold(
             resizeToAvoidBottomInset: false,
-            trailingButton: homeIconButton(),
+            trailingButton: homeIconButton(
+              toHyperLocalHome: true
+            ),
             body: WebViewWidget(
               controller: controller,
             ),
@@ -71,7 +73,9 @@ class _ONDCWebviewScreenMobileState extends State<ONDCWebviewScreenMobile> {
         }else{
           return  CustomScaffold(
             resizeToAvoidBottomInset: false,
-              trailingButton: homeIconButton(),
+              trailingButton: homeIconButton(
+                toHyperLocalHome: true
+              ),
               body: const Center(child: CircularProgressIndicator()));
         }
 

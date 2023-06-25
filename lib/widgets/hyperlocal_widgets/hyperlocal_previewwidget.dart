@@ -161,16 +161,15 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                           },
                         );
                       },
-                          child: Expanded(
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.48,
-                                child: AutoSizeText(
-                                  'Reason: ${widget.hyperLocalPreviewModel.reason}',
-                                  style: TextStyle(color: AppColors().grey100,),
-                                  maxLines: 2,
-                                ),
-                              ),
+                          child: SizedBox(
+                            width: 150,
+                            child: AutoSizeText(
+                              'Reason: ${widget.hyperLocalPreviewModel.reason}',
+                              style: TextStyle(color: AppColors().grey100,),
+                              maxLines: 2,
+                              minFontSize: 10,
                             ),
+                          ),
                         )
                         : const SizedBox(),
                     widget.hyperLocalPreviewModel.status

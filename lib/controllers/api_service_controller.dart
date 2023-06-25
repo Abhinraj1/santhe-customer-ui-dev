@@ -763,8 +763,8 @@ class APIs extends GetxController with LogMixin {
     final tokenHandler = Get.find<ProfileController>();
     await tokenHandler.generateUrlToken();
     final token = tokenHandler.urlToken;
-    final header = {"authorization": 'Bearer $token'};
-    final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
+    // final header = {"authorization": 'Bearer $token'};
+    // final String url = AppUrl.ADD_CUSTOMER(user.custId.toString());
     //! add customer node api
     // final String nodeAPIUrl =
     //     'https://ondcstaging.santhe.in/santhe/customer/register';
@@ -774,47 +774,47 @@ class APIs extends GetxController with LogMixin {
     String uid = await AppHelpers().getDeviceId();
     DateTime now = DateTime.now();
     final getFiid = await AppHelpers().getToken;
-    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
-    var body = {
-      "fields": {
-        "custName": {"stringValue": user.custName},
-        "custLoginTime": {
-          "timestampValue":
-              DateTime.now().toUtc().toString().replaceAll(' ', 'T')
-        },
-        "custReferal": {"integerValue": "0"},
-        "contact": {
-          "mapValue": {
-            "fields": {
-              "phoneNumber": {"integerValue": "${user.phoneNumber}"},
-              "pincode": {"integerValue": "${user.pincode}"},
-              "address": {"stringValue": user.address},
-              "emailId": {"stringValue": user.emailId},
-              "location": {
-                "mapValue": {
-                  "fields": {
-                    "lng": {"doubleValue": user.lng},
-                    "lat": {"doubleValue": user.lat}
-                  }
-                }
-              },
-              "howToReach": {"stringValue": user.howToReach}
-            }
-          }
-        },
-        "custId": {"integerValue": "${user.custId}"},
-        "custStatus": {"stringValue": "active"},
-        "custRatings": {"doubleValue": "5.0"},
-        "custPlan": {"stringValue": user.custPlan},
-        "deviceMap": {
-          "mapValue": {
-            "fields": {
-              uid: {"stringValue": token}
-            }
-          }
-        }
-      }
-    };
+   // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    // var body = {
+    //   "fields": {
+    //     "custName": {"stringValue": user.custName},
+    //     "custLoginTime": {
+    //       "timestampValue":
+    //           DateTime.now().toUtc().toString().replaceAll(' ', 'T')
+    //     },
+    //     "custReferal": {"integerValue": "0"},
+    //     "contact": {
+    //       "mapValue": {
+    //         "fields": {
+    //           "phoneNumber": {"integerValue": "${user.phoneNumber}"},
+    //           "pincode": {"integerValue": "${user.pincode}"},
+    //           "address": {"stringValue": user.address},
+    //           "emailId": {"stringValue": user.emailId},
+    //           "location": {
+    //             "mapValue": {
+    //               "fields": {
+    //                 "lng": {"doubleValue": user.lng},
+    //                 "lat": {"doubleValue": user.lat}
+    //               }
+    //             }
+    //           },
+    //           "howToReach": {"stringValue": user.howToReach}
+    //         }
+    //       }
+    //     },
+    //     "custId": {"integerValue": "${user.custId}"},
+    //     "custStatus": {"stringValue": "active"},
+    //     "custRatings": {"doubleValue": "5.0"},
+    //     "custPlan": {"stringValue": user.custPlan},
+    //     "deviceMap": {
+    //       "mapValue": {
+    //         "fields": {
+    //           uid: {"stringValue": token}
+    //         }
+    //       }
+    //     }
+    //   }
+    // };
 
     //! new way
     final headers = {

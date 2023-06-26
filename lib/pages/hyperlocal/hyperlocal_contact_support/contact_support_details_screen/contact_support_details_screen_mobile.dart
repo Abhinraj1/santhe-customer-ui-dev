@@ -46,7 +46,7 @@ class _HyperlocalContactSupportDetailsScreenMobileState extends State<Hyperlocal
 
 
     return CustomScaffold(
-        trailingButton: homeIconButton(),
+        trailingButton: homeIconButton(toHyperLocalHome: true),
         body: BlocBuilder<ContactSupportCubit, ContactSupportState>(
   builder: (context, state) {
     if(state is ContactSupportDetailsLoaded){
@@ -79,26 +79,27 @@ class _HyperlocalContactSupportDetailsScreenMobileState extends State<Hyperlocal
             ),
           )
               : const SizedBox(),
-          support.resolutionRemarks!= null ?
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-            child: Text(
-              "Request update notes:",
-              style: FontStyleManager().s14fw600Grey,
-            ),
-          ) :
-          SizedBox(),
-          support.resolutionRemarks!= null ?
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-            child: Text(
-              support.resolutionRemarks.toString(),
-              style: FontStyleManager().s14fw600Grey,
-            ),
-          ) :
-          const SizedBox(),
+
+          // support.resolutionRemarks!= null ?
+          // Padding(
+          //   padding:
+          //   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+          //   child: Text(
+          //     "Request update notes:",
+          //     style: FontStyleManager().s14fw600Grey,
+          //   ),
+          // ) :
+          // SizedBox(),
+          // support.resolutionRemarks!= null ?
+          // Padding(
+          //   padding:
+          //   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+          //   child: Text(
+          //     support.resolutionRemarks.toString(),
+          //     style: FontStyleManager().s14fw600Grey,
+          //   ),
+          // ) :
+          // const SizedBox(),
 
           TableGenerator(
             horizontalPadding: 10,
@@ -178,7 +179,7 @@ class _HyperlocalContactSupportDetailsScreenMobileState extends State<Hyperlocal
     DateTime createdAt = DateTime.parse(support.createdAt.toString());
     DateTime today = DateTime.now();
 
-    if(today.isAfter(createdAt.add(Duration(days: 2))) &&
+    if(today.isAfter(createdAt.add(const Duration(days: 2))) &&
         support.status.toString() != "Resolved"){
       return true;
 

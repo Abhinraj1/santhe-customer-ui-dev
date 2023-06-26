@@ -89,11 +89,11 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
       'description': 'Payment',
       'remember_customer': true,
       //! change upi to true once razorpay resolves their issue
-      "method": {"netbanking": true, "card": true, "upi": false, "wallet": true}
-      // 'prefill': {
-      //   'contact': '+91${profileCon.customerDetails?.phoneNumber}',
-      //   'email': '${profileCon.customerDetails?.emailId}'
-      // },
+      "method": {"netbanking": true, "card": true, "upi": false, "wallet": true},
+      'prefill': {
+        'contact': '+91${profileCon.customerDetails?.phoneNumber}',
+        'email': '${profileCon.customerDetails?.emailId}'
+      },
       // 'external': {
       //   'wallets': ['paytm']
       // }

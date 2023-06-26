@@ -75,6 +75,8 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
     // String newTotal = priceFormatter(value: '133.333333333');
     // errorLog('new total formatted${double.parse(newTotal)}');
     // double totalAmount = double.parse(newTotal);
+    final newNumber = '+91' + profileCon.customerDetails!.phoneNumber;
+    warningLog('checking for data ${newNumber}');
     // double subTotal = totalAmount * 100;
     // int finalTotal = int.parse(subtotal.toString());
     // errorLog('Checking for total $totalAmount and total $subTotal');
@@ -85,13 +87,16 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
       'order_id': paymentInfoModel.id,
       "currency": "INR",
       'description': 'Payment',
-      'prefill': {
-        'contact': '${profileCon.customerDetails?.phoneNumber}',
-        'email': '${profileCon.customerDetails?.emailId}'
-      },
-      'external': {
-        'wallets': ['paytm']
-      }
+      'remember_customer': true,
+      //! change upi to true once razorpay resolves their issue
+      "method": {"netbanking": true, "card": true, "upi": false, "wallet": true}
+      // 'prefill': {
+      //   'contact': '+91${profileCon.customerDetails?.phoneNumber}',
+      //   'email': '${profileCon.customerDetails?.emailId}'
+      // },
+      // 'external': {
+      //   'wallets': ['paytm']
+      // }
     };
 
     try {
@@ -121,12 +126,12 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
     // );
 
     context.read<HyperlocalCheckoutBloc>().add(
-                VerifyPaymentEventHyperlocal(
-                  razorPayOrderId: response.orderId,
-                  razorPayPaymentId: response.paymentId,
-                  razorPaySignature: response.signature,
-                ),
-              );
+          VerifyPaymentEventHyperlocal(
+            razorPayOrderId: response.orderId,
+            razorPayPaymentId: response.paymentId,
+            razorPaySignature: response.signature,
+          ),
+        );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -193,6 +198,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.printInfo();
     context.read<HyperlocalCheckoutBloc>().add(
         GetOrderInfoPostEvent(storeDescription_id: widget.storeDescription_id));
     _controller = GroupedItemScrollController();

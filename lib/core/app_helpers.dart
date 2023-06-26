@@ -84,6 +84,8 @@ class AppHelpers with LogMixin {
 
   String get razorPayApi => "rzp_live_9DK3oQI6MoU7BH";
 
+  String get razorPayApiSecret => 'Zadb8qdfWj31rFHV5tDN9WIa';
+
   Future<String> get authToken async =>
       await FirebaseAuth.instance.currentUser!.getIdToken();
 

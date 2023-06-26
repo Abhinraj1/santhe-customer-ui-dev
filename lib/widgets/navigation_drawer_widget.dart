@@ -161,14 +161,14 @@ class CustomNavigationDrawer extends StatelessWidget {
               );
             },
           ),
-          NavigationDrawerTile(
-            icon: CupertinoIcons.question,
-            tileText: 'FAQ',
-            onPress: () {
-              // Navigator.pop(context);
-              Get.to(() => const FAQPage());
-            },
-          ),
+          // NavigationDrawerTile(
+          //   icon: CupertinoIcons.question,
+          //   tileText: 'FAQ',
+          //   onPress: () {
+          //     // Navigator.pop(context);
+          //     Get.to(() => const FAQPage());
+          //   },
+          // ),
           NavigationDrawerTile(
             icon: CupertinoIcons.phone_fill,
             tileText: 'Contact Us/Feedback',
@@ -224,14 +224,15 @@ class CustomNavigationDrawer extends StatelessWidget {
               Get.to(() => const PrivacyPolicyPage());
             },
           ),
-          NavigationDrawerTile(
-            icon: CupertinoIcons.lock_shield_fill,
-            tileText: 'Log Out',
-            onPress: () {
-              // Navigator.pop(context);
-              Get.to(() => const LoginScreen());
-            },
-          ),
+          // NavigationDrawerTile(
+          //   icon: CupertinoIcons.lock_shield_fill,
+          //   tileText: 'Log Out',
+          //   onPress: () {
+          //     // Navigator.pop(context);
+          //
+          //     Get.offAll(() => const LoginScreen());
+          //   },
+          // ),
         ],
       ),
     );

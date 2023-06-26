@@ -237,7 +237,8 @@ class NetworkCall with LogMixin {
       );
     } else {
       AppHelpers.crashlyticsLog(response.body.toString());
-      throw ServerError();
+      //throw ServerError();
+      throw "";
     }
   }
 

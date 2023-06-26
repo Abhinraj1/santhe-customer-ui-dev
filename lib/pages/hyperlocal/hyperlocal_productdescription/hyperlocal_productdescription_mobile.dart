@@ -595,10 +595,8 @@ class _HyperlocalProductdescriptionMobileState
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: SizedBox(
-                                child: ExpandableText(
+                                child: Text(
                                     '${widget.hyperLocalProductModel.description}',
-                                    trimLines: 5,
-                                    callback: () {}
                                     // Get.to(
                                     //   () => ProductLongDescriptionView(
                                     //       hyperLocalProductModel:
@@ -640,7 +638,7 @@ class _HyperlocalProductdescriptionMobileState
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
-                      'Delivery By: ${widget.hyperLocalProductModel.window}',
+                      'Delivery By: ${widget.hyperLocalProductModel.window} day/s',
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),
@@ -697,7 +695,7 @@ class _HyperlocalProductdescriptionMobileState
                                 ),
                                 widget.hyperLocalProductModel.window != null
                                     ? Text(
-                                        'Return Window : ${widget.hyperLocalProductModel.window}')
+                                        'Return Window : ${widget.hyperLocalProductModel.window} day/s')
                                     : const SizedBox(),
                                 const SizedBox(
                                   height: 10,

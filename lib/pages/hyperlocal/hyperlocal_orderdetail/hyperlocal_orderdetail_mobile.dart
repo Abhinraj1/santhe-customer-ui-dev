@@ -189,12 +189,12 @@ class _HyperlocalOrderdetailMobileState
                                 padding: const EdgeInsets.only(left: 5.0),
                                 child: InkWell(
                                   onTap: () {
-                                    // ge.Get.back();
-                                    Get.off(
-                                      () =>
-                                          const HyperlocalPreviousordersView(),
-                                      transition:ge.Transition.leftToRight,
-                                    );
+                                    ge.Get.back();
+                                    // Get.off(
+                                    //   () =>
+                                    //       const HyperlocalPreviousordersView(),
+                                    //   transition:ge.Transition.leftToRight,
+                                    // );
                                   },
                                   child: CircleAvatar(
                                     backgroundColor: AppColors().brandDark,

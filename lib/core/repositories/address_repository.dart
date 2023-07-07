@@ -10,6 +10,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/models/ondc/address_ondc_model.dart';
 
+import '../app_url.dart';
+
 class AddressRepository with LogMixin {
   List<AddressOndcModel> addressOndcModels = [];
 
@@ -43,12 +45,13 @@ class AddressRepository with LogMixin {
     required String deliveryName,
     String? howtoReach,
   }) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/ondc/address/update');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/address/update');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
 
+    var response;
     errorLog('$flat, and also id $address_id also the keyWord $deliveryName');
 
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
@@ -71,7 +74,7 @@ class AddressRepository with LogMixin {
         "howToReach": "$howtoReach"
       });
       warningLog('$url $body');
-      final response = await http.post(
+       response = await http.post(
         url,
         headers: header,
         //! how to reach api update
@@ -99,6 +102,7 @@ class AddressRepository with LogMixin {
 
       return responseBody['message'];
     } catch (e) {
+      AppHelpers.crashlyticsLog(response.body.toString());
       throw OndcUpdateAddressErrorState(message: e.toString());
     }
   }
@@ -108,13 +112,14 @@ class AddressRepository with LogMixin {
 
     warningLog('Firebase Id being sent IN GET ADDRESS LIST $firebaseId');
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/address/list?firebase_id=$firebaseId');
+        '${AppUrl().baseUrl}/santhe/ondc/address/list?firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
+   var response;
     try {
-      final response = await http.get(
+       response = await http.get(
         url,
         headers: header,
       );
@@ -146,6 +151,7 @@ class AddressRepository with LogMixin {
       warningLog('$deliveryAddressId');
       return addressOndcModels;
     } catch (e) {
+      AppHelpers.crashlyticsLog(response.body.toString());
       throw ErrorGettingAddressState(message: e.toString());
     }
   }

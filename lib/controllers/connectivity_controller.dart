@@ -85,33 +85,33 @@ class ConnectivityController extends GetxController with LogMixin {
       errorLog('Called For checkLogin');
       return const LoginScreen();
     }
-    final NotificationController notificationController = Get.find();
-    if (notificationController.fromNotification) {
-      //_notificationController.fromNotification = false;
-      if (notificationController.landingScreen == 'new') {
-        // return const OndcIntroView();
-        warningLog(
-            'Checking for profile controller in connectivity controller${customerModel.lat}');
-        return const HyperlocalShophomeView();
-        //!previous
-        //return const MapMerchant();
-      } else if (notificationController.landingScreen == 'answered') {
-        return HomePage(
-          pageIndex: 1,
-          showMap: false,
-        );
-      } else {
-        return ChatScreen(
-          chatId: notificationController.notificationData.value.data['chatId'],
-          customerTitle: notificationController
-              .notificationData.value.data['customerTitle'],
-          merchantTitle: notificationController
-              .notificationData.value.data['merchantTitle'],
-          listEventId:
-              notificationController.notificationData.value.data['listEventId'],
-        );
-      }
-    }
+   // final NotificationController notificationController = Get.find();
+    // if (notificationController.fromNotification) {
+    //   //_notificationController.fromNotification = false;
+    //   if (notificationController.landingScreen == 'new') {
+    //     // return const OndcIntroView();
+    //     warningLog(
+    //         'Checking for profile controller in connectivity controller${customerModel.lat}');
+    //     return const HyperlocalShophomeView();
+    //     //!previous
+    //     //return const MapMerchant();
+    //   } else if (notificationController.landingScreen == 'answered') {
+    //     return HomePage(
+    //       pageIndex: 1,
+    //       showMap: false,
+    //     );
+    //   } else {
+    //     return ChatScreen(
+    //       chatId: notificationController.notificationData.value.data['chatId'],
+    //       customerTitle: notificationController
+    //           .notificationData.value.data['customerTitle'],
+    //       merchantTitle: notificationController
+    //           .notificationData.value.data['merchantTitle'],
+    //       listEventId:
+    //           notificationController.notificationData.value.data['listEventId'],
+    //     );
+    //   }
+    // }
     // return const OndcIntroView();
     return const HyperlocalShophomeView();
     //!previous

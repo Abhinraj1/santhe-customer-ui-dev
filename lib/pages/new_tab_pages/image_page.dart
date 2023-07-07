@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
@@ -36,11 +37,10 @@ class ImageViewerPage extends StatelessWidget {
               imgFile != null ?
               Image.file(imgFile!,
                 width: MediaQuery.of(context).size.width,)  :
-                  ProtectedCachedNetworkImage(
+               CachedNetworkImage(
                 width: MediaQuery.of(context).size.width,
-                imageUrl: showCustomImage
-                    ? itemImageUrl
-                    : 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/$itemImageUrl',
+                imageUrl:
+                     itemImageUrl
               ),
             ),
           ),

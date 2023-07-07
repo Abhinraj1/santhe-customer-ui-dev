@@ -62,7 +62,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
       {required List<OndcShopWidget> shops, required int limit}) async {
     final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/item/nearby?search=$productName&limit=10&offset=$nSearch&firebase_id=$firebaseID');
+        '${AppUrl().baseUrl}/santhe/ondc/item/nearby?search=$productName&limit=10&offset=$nSearch&firebase_id=$firebaseID');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -97,15 +97,16 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
         });
       });
     } catch (e) {
+      AppHelpers.crashlyticsLog(e.toString());
       rethrow;
     }
   }
 
   getNewShops({required List<OndcShopWidget> shops, required int limit}) async {
     final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
-
+    var response;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/store/nearby?limit=10&offset=$n&firebase_id=$firebaseID');
+        '${AppUrl().baseUrl}/santhe/ondc/store/nearby?limit=10&offset=$n&firebase_id=$firebaseID');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -115,7 +116,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
     });
     try {
       Future.delayed(Duration(seconds: 2), () async {
-        final response = await http.get(url, headers: header);
+         response = await http.get(url, headers: header);
         warningLog(
             ' url $url checking for shop model via transcationid $response checking for existing shops length${shops.length}');
         final responseBody =
@@ -149,6 +150,7 @@ class _OndcShopListMobileState extends State<_OndcShopListMobile>
         warningLog('new exisiting models length ${existingShopModels.length}');
       });
     } catch (e) {
+      AppHelpers.crashlyticsLog(response.body.toString());
       rethrow;
     }
   }

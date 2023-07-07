@@ -315,7 +315,7 @@ class _OtpScreenState extends State<OtpScreen> with LogMixin {
           transition: Transition.fadeIn);
     } else {
       AppSharedPreference().setLogin(true);
-      apiController.updateDeviceToken(widget.phoneNumber.toString());
+     // apiController.updateDeviceToken(widget.phoneNumber.toString());
       await profileController.initialise();
       // Get.offAll(() => const OndcIntroView(),
       //     //!previous const MapMerchant(),

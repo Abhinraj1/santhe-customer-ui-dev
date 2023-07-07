@@ -44,7 +44,7 @@ class _HyperlocalShopdetailsMobileState
     required String shopId,
   }) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/product/list?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/list?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
     setState(() {
       _isLoading = true;
     });
@@ -89,7 +89,7 @@ class _HyperlocalShopdetailsMobileState
       required String shopId,
       required String productName}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/product/search?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&item_name=$productName&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&item_name=$productName&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
     setState(() {
       _isSearchLoading = true;
     });
@@ -176,8 +176,8 @@ class _HyperlocalShopdetailsMobileState
   Widget build(BuildContext context) {
     final ProfileController profileController =
         ge.Get.find<ProfileController>();
-    warningLog(
-        'checking for customer info${profileController.customerDetails!.lat} ${profileController.customerDetails!.lng}');
+    // warningLog(
+    //     'checking for customer info${profileController.customerDetails!.lat} ${profileController.customerDetails!.lng}');
     return BlocConsumer<HyperlocalShopBloc, HyperlocalShopState>(
       listener: (context, state) {
         errorLog('$state');

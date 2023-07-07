@@ -12,10 +12,10 @@ class _OndcIntroMobile extends StatefulWidget {
 class _OndcIntroMobileState extends State<_OndcIntroMobile>
     with TickerProviderStateMixin, LogMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  final AllListController _allListController = Get.find();
+  //final AllListController _allListController = Get.find();
   final ProfileController _profileController = Get.find();
   final HomeController _homeController = Get.find();
-  final NotificationController _notificationController = Get.find();
+ // final NotificationController _notificationController = Get.find();
   final APIs apiController = Get.find();
 
   _launchUrl() async {
@@ -42,16 +42,16 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
     ));
     await _profileController.initialise();
     await _profileController.getOperationalStatus();
-    _allListController.getAllList();
-    _allListController.checkSubPlan();
+    // _allListController.getAllList();
+    // _allListController.checkSubPlan();
     /*Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
         _connectivityController.listenConnectivity(result));*/
-    APIs().updateDeviceToken(
-      AppHelpers()
-          .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber),
-    );
-    apiController.searchedItemResult('potato');
-    _notificationController.fromNotification = false;
+    // APIs().updateDeviceToken(
+    //   AppHelpers()
+    //       .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber),
+    // );
+    // apiController.searchedItemResult('potato');
+    // _notificationController.fromNotification = false;
   }
 
   @override
@@ -119,7 +119,8 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           id: 'navDrawer',
           builder: (context) {
             CustomerModel currentUser =
-                profileController.customerDetails ?? fallback_error_customer;
+                profileController.customerDetails!;
+                    //?? fallback_error_customer;
             customerModel = currentUser;
             return SingleChildScrollView(
               child: RefreshIndicator(
@@ -149,10 +150,10 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Get.to(
-                                const MapMerchant(),
-                                transition: Transition.leftToRight,
-                              );
+                              // Get.to(
+                              //   const MapMerchant(),
+                              //   transition: Transition.leftToRight,
+                              // );
                             },
                             child: Column(
                               children: [

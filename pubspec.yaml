@@ -84,6 +84,7 @@ dependencies:
   google_fonts: ^4.0.3
   calendar_date_picker2: ^0.3.7
   http_interceptor: ^1.0.2
+  firebase_app_check: ^0.1.5
 
 
 

@@ -22,7 +22,7 @@ class FCM{
   // getFirebaseMessagingToken() async{
   //
   //   final fcmToken = await FirebaseMessaging.instance.getToken();
-  //
+
   //   // if(merchantModel.customer != null) {
   //   //   merchantModel.customer!.fbiid = fcmToken.toString();
   //   // }

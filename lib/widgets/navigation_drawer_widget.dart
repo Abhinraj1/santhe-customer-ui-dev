@@ -101,8 +101,8 @@ class CustomNavigationDrawer extends StatelessWidget {
                     id: 'navDrawer',
                     builder: (builder) {
                       CustomerModel currentUser =
-                          profileController.customerDetails ??
-                              fallback_error_customer;
+                          profileController.customerDetails!;
+                             // ?? fallback_error_customer;
                       return Expanded(
                         child: AutoSizeText(
                           currentUser.customerName,

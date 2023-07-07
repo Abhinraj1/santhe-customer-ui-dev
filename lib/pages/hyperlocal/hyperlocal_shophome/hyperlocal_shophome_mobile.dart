@@ -25,10 +25,10 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _controller = ScrollController();
   final ScrollController _shopScroll = ScrollController();
-  final AllListController _allListController = Get.find();
+  // final AllListController _allListController = Get.find();
   final ProfileController _profileController = Get.find();
   final HomeController _homeController = Get.find();
-  final NotificationController _notificationController = Get.find();
+  // final NotificationController _notificationController = Get.find();
   final APIs apiController = Get.find();
   List<HyperLocalShopWidget> shopWidgets = [];
   List<HyperLocalShopWidget> searchWidgets = [];
@@ -55,23 +55,23 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
     final token = await AppHelpers().getToken;
     await _profileController.initialise();
     await _profileController.getOperationalStatus();
-    _allListController.getAllList();
-    _allListController.checkSubPlan();
+    // _allListController.getAllList();
+    // _allListController.checkSubPlan();
     /*Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
         _connectivityController.listenConnectivity(result));*/
-    APIs().updateDeviceToken(
-      AppHelpers()
-          .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber),
-    );
-    apiController.searchedItemResult('potato');
+    // APIs().updateDeviceToken(
+    //   AppHelpers()
+    //       .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber),
+    // );
+    //apiController.searchedItemResult('potato');
     apiController.updatFCMONstart(fcmToken: token);
-    _notificationController.fromNotification = false;
+    // _notificationController.fromNotification = false;
   }
 
   getNewShops(
       {required List<HyperLocalShopWidget> shops, required int limit}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/merchant/list?lat=${customerModel?.lat}&lang=${customerModel?.lng}&limit=10&offset=$limit');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=${customerModel?.lat}&lang=${customerModel?.lng}&limit=10&offset=$limit');
     setState(() {
       _isLoading = true;
     });
@@ -108,7 +108,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
   getSearchNewShop(
       {required List<HyperLocalShopWidget> shops, required int limit}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/product/search?limit=10&offset=$nSearch&item_name=${_textEditingController.text}&lat=${customerModel?.lat}&lang=${customerModel?.lng}}');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?limit=10&offset=$nSearch&item_name=${_textEditingController.text}&lat=${customerModel?.lat}&lang=${customerModel?.lng}}');
     setState(() {
       _isSearchLoading = true;
     });
@@ -152,18 +152,21 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
     initFunction();
     getCustomerInfo();
 
-    _shopScroll.addListener(() {
-      if (_shopScroll.position.pixels == _shopScroll.position.maxScrollExtent) {
-        warningLog('called');
-        setState(() {
-          n = n + 10;
-        });
-        getNewShops(
-          shops: shopWidgets,
-          limit: n,
-        );
-      }
-    });
+   if(!_isLoading) {
+      _shopScroll.addListener(() {
+        if (_shopScroll.position.pixels ==
+            _shopScroll.position.maxScrollExtent) {
+          warningLog('called');
+          setState(() {
+            n = n + 10;
+          });
+          getNewShops(
+            shops: shopWidgets,
+            limit: n,
+          );
+        }
+      });
+    }
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
         warningLog('Search Scroll Called');
@@ -190,7 +193,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find<ProfileController>();
+  //  final ProfileController profileController = Get.find<ProfileController>();
     debugLog(
         '${RepositoryProvider.of<AddressRepository>(context).deliveryModel?.flat}');
     return BlocConsumer<AddressBloc, AddressState>(
@@ -198,6 +201,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
         warningLog('Listening $state');
         if (state is GotAddressListAndIdState) {
           context.read<AddressBloc>().add(ResetAddressEvent());
+          
           context.read<HyperlocalShopBloc>().add(
                 HyperLocalGetShopEvent(
                     lat: RepositoryProvider.of<AddressRepository>(context)

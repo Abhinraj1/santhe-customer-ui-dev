@@ -6,6 +6,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/hyperlocal_models/hyperlocal_cancel.dart';
+import '../app_url.dart';
 import '../blocs/hyperlocal/hyperlocal_cancelReturn/hyperlocal_cancel_return_bloc.dart';
 
 class HyperlocalCancelReturnRepository with LogMixin {
@@ -32,9 +33,10 @@ class HyperlocalCancelReturnRepository with LogMixin {
 
   Future<List<HyperlocalCancelModel>> getCancelReason() async {
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/cancel/reasons');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/cancel/reasons');
+    var response;
     try {
-      final response = await http.get(url);
+       response = await http.get(url);
       warningLog('${response.statusCode}');
       final responseBody = json.decode(response.body)['data'] as List;
       cancelModelLoc = [];
@@ -47,6 +49,7 @@ class HyperlocalCancelReturnRepository with LogMixin {
       warningLog('Cancel Models $cancelModelLoc');
       return cancelModelLoc;
     } catch (e) {
+      AppHelpers.crashlyticsLog(response.body.toString());
       throw GetHyperlocalCancelReasonsErrorState(
         message: e.toString(),
       );
@@ -55,9 +58,10 @@ class HyperlocalCancelReturnRepository with LogMixin {
 
   Future<List<HyperlocalCancelModel>> getReturnReasons() async {
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/return/reasons');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/return/reasons');
+    var response;
     try {
-      final response = await http.get(url);
+       response = await http.get(url);
       warningLog('Status code ${response.statusCode}');
       final responseBody = json.decode(response.body)['data'] as List;
       returnModelLoc = [];
@@ -68,6 +72,7 @@ class HyperlocalCancelReturnRepository with LogMixin {
       warningLog('Cancel Models $returnModelLoc');
       return returnModelLoc;
     } catch (e) {
+      AppHelpers.crashlyticsLog(response.body.toString());
       throw GetHyperlocalReturnReasonsErrorState(
         message: e.toString(),
       );
@@ -79,8 +84,9 @@ class HyperlocalCancelReturnRepository with LogMixin {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
-    final url = Uri.parse('https://api.santhe.in/santhe/ondc/upload');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/upload');
     debugLog('Image Path $imgPath');
+    var response;
     try {
       var request = http.MultipartRequest("POST", url);
 
@@ -96,7 +102,7 @@ class HyperlocalCancelReturnRepository with LogMixin {
       errorLog(
           'Streamed response ${streamedResponse.stream} ${streamedResponse.statusCode}');
 
-      var response = await http.Response.fromStream(streamedResponse);
+       response = await http.Response.fromStream(streamedResponse);
       warningLog(
           'final response ${response.statusCode} and body ${response.body}');
 
@@ -108,6 +114,7 @@ class HyperlocalCancelReturnRepository with LogMixin {
 
       return imgUrl;
     } catch (e) {
+      AppHelpers.crashlyticsLog(response.body.toString());
       throw HyperlocalUploadImagesAndReturnErrorState(
         message: "Upload Image :${e.toString()}",
       );
@@ -115,13 +122,14 @@ class HyperlocalCancelReturnRepository with LogMixin {
   }
 
   postcancelReason({required String reason, required String orderId}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/hyperlocal/cancel');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/cancel');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
+    var response;
     try {
-      final response = await http.post(
+       response = await http.post(
         url,
         headers: header,
         body: json.encode(
@@ -138,6 +146,7 @@ class HyperlocalCancelReturnRepository with LogMixin {
       }
       return true;
     } catch (e) {
+      AppHelpers.crashlyticsLog(response.body.toString());
       throw PostHyperlocalCancelReasonErrorState(
         message: e.toString(),
       );

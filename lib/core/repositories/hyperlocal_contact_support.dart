@@ -7,11 +7,12 @@ import 'package:http/http.dart' as http;
 import '../../models/hyperlocal_models/hyperlocal_cancel.dart';
 import '../../models/hyperlocal_models/hyperlocal_orders_model.dart';
 import '../../widgets/custom_widgets/custom_snackBar.dart';
+import '../app_url.dart';
 
 class HyperlocalContactSupportRepository with LogMixin {
   Future<OrderInfoSupport> getSupportDetails(
       {required String supportId}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/hyperlocal/support'
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/support'
         '/get?support_id=$supportId');
     try {
       final response = await http.get(url);
@@ -29,7 +30,7 @@ class HyperlocalContactSupportRepository with LogMixin {
   Future<String> postRaiseTicket(
       {required String reason, required String orderId}) async {
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/support/raise');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/support/raise');
     String firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
 
     print("BODY ===${json.encode(

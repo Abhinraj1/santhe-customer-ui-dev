@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:santhe/models/hyperlocal_models/hyperlocal_productmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_shopmodel.dart';
 
+import '../app_url.dart';
 import '../blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_bloc.dart';
 
 class HyperLocalRepository with LogMixin {
@@ -49,7 +50,7 @@ class HyperLocalRepository with LogMixin {
   Future<List<HyperLocalShopModel>> getHyperLocalShops(
       {String? lat, String? lng}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/merchant/list?lat=$lat&lang=$lng&limit=10&offset=0');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=$lat&lang=$lng&limit=10&offset=0');
     try {
       debugLog('HyperLocal Url for Shops $url');
       final response = await http.get(url);
@@ -74,7 +75,7 @@ class HyperLocalRepository with LogMixin {
       required String lat,
       required String lng}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/product/search?limit=10&offset=0&item_name=$nameOfProduct&lat=$lat&lang=$lng');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?limit=10&offset=0&item_name=$nameOfProduct&lat=$lat&lang=$lng');
     try {
       final response = await http.get(url);
       infoLog(
@@ -104,7 +105,7 @@ class HyperLocalRepository with LogMixin {
       required String lat,
       required String lng}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/product/list?store_description_id=$storeId&limit=10&offset=0&lat=$lat&lang=$lng');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/list?store_description_id=$storeId&limit=10&offset=0&lat=$lat&lang=$lng');
     try {
       final response = await http.get(url);
       warningLog('statusCode of Get ${response.statusCode} and url $url');
@@ -135,7 +136,7 @@ class HyperLocalRepository with LogMixin {
       required final String lat,
       required final String lng}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/product/search?store_description_id=$storeId&limit=10&offset=0&item_name=$itemName&lat=$lat&lang=$lng');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?store_description_id=$storeId&limit=10&offset=0&item_name=$itemName&lat=$lat&lang=$lng');
     try {
       final response = await http.get(url);
       warningLog(
@@ -162,7 +163,7 @@ class HyperLocalRepository with LogMixin {
   Future<dynamic> getCartCount({required String storeDescriptionId}) async {
     final firebaseID = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/cart/count?firebase_id=$firebaseID&storeDescription_id=$storeDescriptionId');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/cart/count?firebase_id=$firebaseID&storeDescription_id=$storeDescriptionId');
     try {
       final response = await http.get(url);
       warningLog(

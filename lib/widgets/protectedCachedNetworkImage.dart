@@ -27,12 +27,15 @@ class ProtectedCachedNetworkImage extends StatelessWidget {
       useOldImageOnUrlChange: true,
       fadeInDuration: const Duration(milliseconds: 100),
       fadeOutDuration: const Duration(milliseconds: 50),
-      errorWidget: (c, s, d) => ProtectedCachedNetworkImage(
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/image%20placeholder.png?alt=media',
-        width: width,
-        height: height,
-      ),
+      errorWidget: (c, s, d) => Container(
+        color: Colors.redAccent,
+      )
+      //     ProtectedCachedNetworkImage(
+      //   imageUrl:
+      //       // 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/image%20placeholder.png?alt=media',
+      //   width: width,
+      //   height: height,
+      // ),
     );
   }
 }

@@ -106,7 +106,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
     // int finalTotal = int.parse(subtotal.toString());
     errorLog('Checking for total $totalAmount and total $subTotal');
     var options = {
-      'key': AppHelpers().razorPayApi,
+      'key': AppHelpers().razorPayKey,
       'amount': subTotal,
       'name': profileCon.customerDetails?.customerName,
       'order_id': orderId,
@@ -219,7 +219,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find<ProfileController>();
-    warningLog(AppHelpers().razorPayApi);
+    warningLog(AppHelpers().razorPayKey);
     return BlocConsumer<CheckoutBloc, CheckoutState>(
       listener: (context, state) {
         debugLog('$state');
@@ -503,9 +503,9 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
                 init: profileController,
                 id: 'navDrawer',
                 builder: (_) {
-                  CustomerModel currentUser =
-                      profileController.customerDetails ??
-                          fallback_error_customer;
+                  // CustomerModel currentUser =
+                  //     profileController.customerDetails ??
+                  //         fallback_error_customer;
                   return SingleChildScrollView(
                     physics: BouncingScrollPhysics(),
                     child: Column(

@@ -38,8 +38,8 @@ class AppInitialisations {
 
   Future<void> _initialiseHive() async {
     await Hive.initFlutter();
-    Hive.registerAdapter(ListItemAdapter());
-    Hive.registerAdapter(UserListAdapter());
+    // Hive.registerAdapter(ListItemAdapter());
+    // Hive.registerAdapter(UserListAdapter());
     Hive.registerAdapter(UserCredentialAdapter());
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(CategoryAdapter());
@@ -56,8 +56,8 @@ class AppInitialisations {
 
   void _initialiseControllers() {
     Get.put(ConnectivityController());
-    Get.put(NotificationController());
-    Get.put(AllListController());
+    // Get.put(NotificationController());
+    // Get.put(AllListController());
     Get.put(APIs());
     Get.put(LocationController());
     Get.put(RegistrationController());

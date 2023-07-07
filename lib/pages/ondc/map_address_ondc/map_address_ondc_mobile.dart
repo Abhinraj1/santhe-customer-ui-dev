@@ -44,7 +44,8 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
       target: LatLng(lat, lng),
       zoom: 18,
     );
-    currentUser = profileController.customerDetails ?? fallback_error_customer;
+    currentUser = profileController.customerDetails;
+        //?? fallback_error_customer;
     /*if (widget.lat != null && widget.lng != null) {
       lat = widget.lat!;
       lng = widget.lng!;
@@ -88,7 +89,8 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
     final ProfileController profileController =
         ge.Get.find<ProfileController>();
     CustomerModel currentUser =
-        profileController.customerDetails ?? fallback_error_customer;
+        profileController.customerDetails as CustomerModel;
+            //?? fallback_error_customer;
     Size size = MediaQuery.of(context).size;
     return BlocConsumer<AddressBloc, AddressState>(
       listener: (context, state) {

@@ -15,6 +15,7 @@ import 'package:santhe/core/loggers.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import '../../../models/hyperlocal_models/hyperlocal_previewmodel.dart';
+import '../../app_url.dart';
 import '../../repositories/hyperlocal_cancel_return_repo.dart';
 
 part 'hyperlocal_image_return_request_state.dart';
@@ -137,27 +138,48 @@ class HyperlocalImageReturnRequestCubit
     }
   }
 
+
+
   uploadImages(
       {required BuildContext context,
       required String reason,
       required String orderItemId}) async {
     emit(HyperlocalImageLoadingState());
     errorLog('Image list $imagesList');
-    for (var imgFile in imagesList) {
+
+    imagesList.forEach((imgFile) async{
       try {
         warningLog('single image file $imgFile and path ${imgFile!.path}');
         String imgUrl = await repository.uploadImage(imgPath: imgFile!.path);
         imageUrl.add(imgUrl);
         errorLog("####################################################"
             "IMAGE URL ADDED = $imgUrl");
+        if(imagesList.length == imageUrl.length ){
+          postReturnReasons(
+              reason: reason, images: imageUrl, orderItemId: orderItemId);
+
+        }
         emit(HyperlocalUploadImagesSuccessState(imageUrls: imageUrl));
       } catch (e) {
         emit(HyperlocalUploadImagesAndReturnErrorState(message: e.toString()));
       }
-    }
-    postReturnReasons(
-        reason: reason, images: imageUrl, orderItemId: orderItemId);
-    imagesList.clear();
+    });
+
+    // for (var imgFile in imagesList) {
+    //   try {
+    //     warningLog('single image file $imgFile and path ${imgFile!.path}');
+    //     String imgUrl = await repository.uploadImage(imgPath: imgFile!.path);
+    //     imageUrl.add(imgUrl);
+    //     errorLog("####################################################"
+    //         "IMAGE URL ADDED = $imgUrl");
+    //     emit(HyperlocalUploadImagesSuccessState(imageUrls: imageUrl));
+    //   } catch (e) {
+    //     emit(HyperlocalUploadImagesAndReturnErrorState(message: e.toString()));
+    //   }
+    // }
+    // postReturnReasons(
+    //     reason: reason, images: imageUrl, orderItemId: orderItemId);
+
     // sendReturnRequest();
     // Get.to(() => ONDCAcknowledgementView(
     //       title: "Return Request",
@@ -179,12 +201,15 @@ class HyperlocalImageReturnRequestCubit
       {required String reason,
       required List<String> images,
       required String orderItemId}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/hyperlocal/return');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/return');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
-    emit(HyperlocalReturnRequestLoadingState());
+
+
+   emit(HyperlocalReturnRequestLoadingState());
+
     try {
       print("##############3 IMAGES AT THE POINT OF POST RETURN REASONS"
           " == $images");
@@ -198,6 +223,7 @@ class HyperlocalImageReturnRequestCubit
       warningLog('Post Return reason ${response.statusCode}');
       final responseBody = json.decode(response.body);
       warningLog('POst return Reason $responseBody');
+       imagesList.clear();
       emit(HyperlocalReturnRequestSuccessState());
     } catch (e) {
       emit(

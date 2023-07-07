@@ -7,6 +7,8 @@ import 'package:santhe/models/hyperlocal_models/hyperlocal_cartmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_productmodel.dart';
 import 'package:http/http.dart' as http;
 
+import '../app_url.dart';
+
 class HyperLocalCartRepository with LogMixin {
   List<HyperLocalCartModel> cartModels = [];
 
@@ -23,6 +25,7 @@ class HyperLocalCartRepository with LogMixin {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
+
     final body = json.encode({
       "firebase_id": firebaseId,
       "quantity": "${hyperLocalProductModel.quantity}",
@@ -30,7 +33,7 @@ class HyperLocalCartRepository with LogMixin {
       "storeDescription_id": "${hyperLocalProductModel.storeDescriptionId}"
     });
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/cart/add/item');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/cart/add/item');
     try {
       warningLog('body being sent $body to url $url');
       final response = await http.post(url, headers: header, body: body);
@@ -42,6 +45,7 @@ class HyperLocalCartRepository with LogMixin {
         throw const AddToCartHyperLocalErrorState(message: 'Error');
       }
     } catch (e) {
+      //AppHelpers.crashlyticsLog(response.body.toString());
       throw AddToCartHyperLocalErrorState(
         message: e.toString(),
       );
@@ -52,7 +56,7 @@ class HyperLocalCartRepository with LogMixin {
       {required String storeDescriptionId}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/cart/list?firebase_id=$firebaseId&storeDescription_id=$storeDescriptionId');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/cart/list?firebase_id=$firebaseId&storeDescription_id=$storeDescriptionId');
     try {
       warningLog('url for getting cart $url');
       final response = await http.get(url);
@@ -77,7 +81,7 @@ class HyperLocalCartRepository with LogMixin {
 
   deleteCartItem({required HyperLocalCartModel hyperLocalCartModel}) async {
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/cart/delete/item');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/cart/delete/item');
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final header = {
       'Content-Type': 'application/json',
@@ -108,8 +112,8 @@ class HyperLocalCartRepository with LogMixin {
   updateCartItemQuantity(
       {required HyperLocalCartModel hyperLocalCartModel}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
-    final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/cart/update/quantity');
+    final url =
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/cart/update/quantity');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

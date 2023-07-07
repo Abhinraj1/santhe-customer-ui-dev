@@ -36,7 +36,7 @@ class _SplashToHomeState extends State<SplashToHome>
   // final APIs apiController = Get.find();
   Future<void> bootHome() async {
     await AppInitialisations().initialiseApplication();
-    await Notifications().fcmInit();
+   // await Notifications().fcmInit();
     final ConnectivityController connectivityController = Get.find();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       connectivityController.listenConnectivity(result);
@@ -46,35 +46,35 @@ class _SplashToHomeState extends State<SplashToHome>
     });
   }
 
-  Widget getLandingScreen() {
-    _intialiseToken();
-    AppHelpers().generateToken();
-    final NotificationController notificationController = Get.find();
-    if (notificationController.fromNotification) {
-      //_notificationController.fromNotification = false;
-      if (notificationController.landingScreen == 'new') {
-        return const MapMerchant();
-      } else if (notificationController.landingScreen == 'answered') {
-        return HomePage(
-          pageIndex: 1,
-          showMap: false,
-        );
-      } else {
-        return ChatScreen(
-          chatId: notificationController.notificationData.value.data['chatId'],
-          customerTitle: notificationController
-              .notificationData.value.data['customerTitle'],
-          merchantTitle: notificationController
-              .notificationData.value.data['merchantTitle'],
-          listEventId:
-              notificationController.notificationData.value.data['listEventId'],
-        );
-      }
-    }
-    // warningLog(
-    //     'device token on start up being generated ${AppHelpers.newBearerToken}');
-    return const MapMerchant();
-  }
+  // Widget getLandingScreen() {
+  //   _intialiseToken();
+  //   AppHelpers().generateToken();
+  // //  final NotificationController notificationController = Get.find();
+  // //   if (notificationController.fromNotification) {
+  // //     //_notificationController.fromNotification = false;
+  // //     if (notificationController.landingScreen == 'new') {
+  // //       return const MapMerchant();
+  // //     } else if (notificationController.landingScreen == 'answered') {
+  // //       return HomePage(
+  // //         pageIndex: 1,
+  // //         showMap: false,
+  // //       );
+  // //     } else {
+  // //       return ChatScreen(
+  // //         chatId: notificationController.notificationData.value.data['chatId'],
+  // //         customerTitle: notificationController
+  // //             .notificationData.value.data['customerTitle'],
+  // //         merchantTitle: notificationController
+  // //             .notificationData.value.data['merchantTitle'],
+  // //         listEventId:
+  // //             notificationController.notificationData.value.data['listEventId'],
+  // //       );
+  // //     }
+  // //   }
+  //   // warningLog(
+  //   //     'device token on start up being generated ${AppHelpers.newBearerToken}');
+  //  // return const MapMerchant();
+  // }
 
   _intialiseToken() async {
     await AppHelpers.bearerToken;

@@ -66,7 +66,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       statusBarBrightness: Brightness.light,
     ));
 
-    currentUser = profileController.customerDetails ?? fallback_error_customer;
+    currentUser = profileController.customerDetails;
+        //?? fallback_error_customer;
     _userNameController =
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
     _userEmailController = TextEditingController(
@@ -578,10 +579,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         if (_formKey.currentState!.validate() &&
                                             registrationController
                                                 .address.isNotEmpty) {
-                                          CustomerModel? currentUser =
-                                              profileController
-                                                      .customerDetails ??
-                                                  fallback_error_customer;
+                                          // CustomerModel? currentUser =
+                                          //     profileController
+                                          //             .customerDetails ??
+                                          //         fallback_error_customer;
 
                                           int userPhone = int.parse(
                                             AppHelpers()
@@ -710,11 +711,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: const DeleteAccountPage(),
-                                type: PageTransitionType.rightToLeft));
+                        // Navigator.push(
+                        //     context,
+                        //     PageTransition(
+                        //         child: const DeleteAccountPage(),
+                        //         type: PageTransitionType.rightToLeft));
                       },
                       child: Text(
                         'Delete Account',

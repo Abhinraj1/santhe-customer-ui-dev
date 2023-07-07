@@ -47,11 +47,11 @@ class _HyperlocalReturnscreenMobileState
       listener: (context, state) {
         warningLog('listening$state');
         if (state is HyperlocalUploadImagesSuccessState) {
-          BlocProvider.of<HyperlocalImageReturnRequestCubit>(context)
-              .postReturnReasons(
-                  reason: widget.reason,
-                  orderItemId: widget.hyperlocalPreviewModel.id,
-                  images: state.imageUrls);
+          // BlocProvider.of<HyperlocalImageReturnRequestCubit>(context)
+          //     .postReturnReasons(
+          //         reason: widget.reason,
+          //         orderItemId: widget.hyperlocalPreviewModel.id,
+          //         images: state.imageUrls);
         }
         if (state is HyperlocalReturnRequestSuccessState) {
           ge.Get.to(

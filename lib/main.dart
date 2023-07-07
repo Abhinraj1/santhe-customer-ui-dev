@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -35,6 +36,7 @@ import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/pages/splash_to_home.dart';
+import 'core/app_url.dart';
 import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import 'core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import 'core/cubits/hyperlocal_deals_cubit/hyperlocal_contact_support_cubit/contact_support_cubit.dart';
@@ -54,17 +56,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeGetIt();
   await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate(
+      androidProvider: AppUrl().isDev ?
+      AndroidProvider.debug :
+      AndroidProvider.playIntegrity
+  );
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FCM().firebaseMessageInit();
-
   runZonedGuarded<Future<void>>(
     () async {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
-      runApp(const MyApp());
+     // runApp(const MyApp());
     },
     (error, stack) =>
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),

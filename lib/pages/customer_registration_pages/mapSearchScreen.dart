@@ -229,7 +229,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                     setState(() {
                       _isFetchingLocation = true;
                     });
-                    Future.delayed(const Duration(seconds: 0), () async {
+
                       final locationController = Get.find<LocationController>();
                       final permission =
                           await locationController.checkPermission();
@@ -240,13 +240,15 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                 lat: value!.latitude,
                                 lng: value.longitude,
                               ));
-                          _isFetchingLocation = false;
+                          setState(() {
+                            _isFetchingLocation = false;
+                          });
                         });
                       }
-                      setState(() {
-                        _isFetchingLocation = false;
-                      });
-                    });
+                      // setState(() {
+                      //   _isFetchingLocation = false;
+                      // });
+
                   },
                   child: Center(
                     child: Container(

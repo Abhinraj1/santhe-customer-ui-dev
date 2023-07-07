@@ -226,17 +226,17 @@ class _LoginScreenState extends State<LoginScreen> with LogMixin {
               onTap: () async {
                 if (key.currentState!.validate() && !isLoading) {
                   setState(() => isLoading = true);
-                  bool status = await APIs().getLoginStatus(number!);
-                  if (status) {
-                    setState(() => isLoading = false);
+                  // bool status = await APIs().getLoginStatus(number!);
+                  // if (status) {
+                  //   setState(() => isLoading = false);
                     Get.to(
                       OtpScreen(phoneNumber: number!),
                     );
-                  } else {
-                    setState(() => isLoading = false);
-                    errorMsg(
-                        'Account Deleted', 'Please use different phone number');
-                  }
+                  // } else {
+                  //   setState(() => isLoading = false);
+                  //   errorMsg(
+                  //       'Account Deleted', 'Please use different phone number');
+                  // }
                 }
               },
               child: Container(

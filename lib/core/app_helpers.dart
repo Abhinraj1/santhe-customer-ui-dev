@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/countrymodel.dart';
 
@@ -83,9 +84,14 @@ class AppHelpers with LogMixin {
     // warningLog(newBearerToken);
   }
 
-  String get razorPayApi => "rzp_live_9DK3oQI6MoU7BH";
 
   String get razorPayApiSecret => 'Zadb8qdfWj31rFHV5tDN9WIa';
+
+  static const String _devRazor = "rzp_test_QXg3iPJDrauAuX";
+
+  static const String _prodRazor = "rzp_live_9DK3oQI6MoU7BH";
+
+  String get razorPayKey => AppUrl().isDev ? _devRazor : _prodRazor;
 
   Future<String> get authToken async =>
       await FirebaseAuth.instance.currentUser!.getIdToken();

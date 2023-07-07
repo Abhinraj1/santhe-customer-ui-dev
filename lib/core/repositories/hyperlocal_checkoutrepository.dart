@@ -8,6 +8,7 @@ import 'package:santhe/models/hyperlocal_models/hyperlocal_paymentmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_previewmodel.dart';
 
 import '../../models/hyperlocal_models/hyperlocal_orders_model.dart';
+import '../app_url.dart';
 
 class HyperLocalCheckoutRepository with LogMixin {
   dynamic deliveryChargeLoc;
@@ -135,7 +136,7 @@ class HyperLocalCheckoutRepository with LogMixin {
   Future<String> postOrderInfo({required String storeDescriptionId}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/order/cartcheckout');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/order/cartcheckout');
     final body = json.encode({
       "firebase_id": firebaseId,
       "storeDescription_id": storeDescriptionId,
@@ -161,7 +162,7 @@ class HyperLocalCheckoutRepository with LogMixin {
   Future<List<HyperLocalPreviewModel>> getOrderdetails(
       {required String orderId}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/order/get?id=$orderId');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/order/get?id=$orderId');
     try {
       final response = await http.get(url);
       warningLog('Get order ${response.statusCode} and url $url');
@@ -232,7 +233,7 @@ class HyperLocalCheckoutRepository with LogMixin {
   Future<HyperlocalPaymentInfoModel> postPaymentCheckout(
       {required String orderIdRec}) async {
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/payment/checkout');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/payment/checkout');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -267,7 +268,7 @@ class HyperLocalCheckoutRepository with LogMixin {
       required String? razorPayPaymentId,
       required String? razorPaySignature}) async {
     final url =
-        Uri.parse('https://api.santhe.in/santhe/hyperlocal/payment/verify');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/payment/verify');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

@@ -81,7 +81,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
     // int finalTotal = int.parse(subtotal.toString());
     // errorLog('Checking for total $totalAmount and total $subTotal');
     var options = {
-      'key': AppHelpers().razorPayApi,
+      'key': AppHelpers().razorPayKey,
       'amount': total,
       'name': profileCon.customerDetails?.customerName,
       'order_id': paymentInfoModel.id,
@@ -338,9 +338,9 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
                 init: profileController,
                 id: 'navDrawer',
                 builder: (_) {
-                  CustomerModel currentUser =
-                      profileController.customerDetails ??
-                          fallback_error_customer;
+                  // CustomerModel currentUser =
+                  //     profileController.customerDetails ??
+                  //         fallback_error_customer;
                   return SingleChildScrollView(
                     child: Column(
                       children: [

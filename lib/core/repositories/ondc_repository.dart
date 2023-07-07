@@ -105,7 +105,7 @@ class OndcRepository with LogMixin {
     warningLog('Firebase Id being sent$firebaseId');
     //! Firebase id needs to be updated
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/store/nearby?limit=20&offset=0&firebase_id=$firebaseId');
+        '${AppUrl().baseUrl}/santhe/ondc/store/nearby?limit=20&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -133,7 +133,7 @@ class OndcRepository with LogMixin {
   getProductsOfShop({required String shopId}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=12&offset=0&firebase_id=$firebaseId');
+        '${AppUrl().baseUrl}/santhe/ondc/store/item/nearby?storeLocation_id=$shopId&search=&limit=12&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -164,7 +164,7 @@ class OndcRepository with LogMixin {
   }) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/store/item/nearby?&storeLocation_id=$shopId&search=%$productName%&limit=12&offset=0&firebase_id=$firebaseId');
+        '${AppUrl().baseUrl}/santhe/ondc/store/item/nearby?&storeLocation_id=$shopId&search=%$productName%&limit=12&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -218,7 +218,7 @@ class OndcRepository with LogMixin {
   Future<List<ProductOndcModel>> searchProductsOnGlobal(
       {required String transactionIdLocal, required String productName}) async {
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/item/nearby?transaction_id=$transactionIdLocal&search=%$productName%&limit=10&offset=0');
+        '${AppUrl().baseUrl}/santhe/ondc/item/nearby?transaction_id=$transactionIdLocal&search=%$productName%&limit=10&offset=0');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -260,7 +260,7 @@ class OndcRepository with LogMixin {
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/cart/count?firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
+        '${AppUrl().baseUrl}/santhe/ondc/cart/count?firebase_id=$firebaseId&storeLocation_id=$storeLocation_id');
     try {
       warningLog('logging count url $url');
       final response = await http.get(url, headers: header);
@@ -279,7 +279,7 @@ class OndcRepository with LogMixin {
       {required String productName}) async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/ondc/item/nearby?search=$productName&limit=10&offset=0&firebase_id=$firebaseId');
+        '${AppUrl().baseUrl}/santhe/ondc/item/nearby?search=$productName&limit=10&offset=0&firebase_id=$firebaseId');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -312,7 +312,7 @@ class OndcRepository with LogMixin {
     //  "e80574c6-32f2-45ce-8b67-d97a89490523";
 
     final url =
-        Uri.parse("https://api.santhe.in/santhe/ondc/customer/order/$OrderId");
+        Uri.parse("${AppUrl().baseUrl}/santhe/ondc/customer/order/$OrderId");
 
     final header = {
       'Content-Type': 'application/json',
@@ -348,7 +348,7 @@ class OndcRepository with LogMixin {
     final firebaseId = //"8808435978";
         AppHelpers().getPhoneNumberWithoutCountryCode;
 
-    final url = Uri.parse("https://api.santhe.in/santhe/ondc/customer/"
+    final url = Uri.parse("${AppUrl().baseUrl}/santhe/ondc/customer/"
         "order/list?limit=10&offset=$offset&"
         "firebase_id=$firebaseId");
 
@@ -381,7 +381,7 @@ class OndcRepository with LogMixin {
   }
 
   Future<List<CategoryModel>> getCategoryForContactSupport() async {
-    final url = Uri.parse('https://api.santhe.in/santhe'
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe'
         '/ondc/issue/category');
 
     final header = {
@@ -412,7 +412,7 @@ class OndcRepository with LogMixin {
   }
 
   Future<List<CategoryModel>> getSubCategoryForContactSupport() async {
-    final url = Uri.parse('https://api.santhe.in/santhe/'
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/'
         'ondc/issue/subcategory?category=ORDER');
 
     final header = {
@@ -450,7 +450,7 @@ class OndcRepository with LogMixin {
       String? shortDescription,
       required String categoryCode,
       required String subCategoryCode}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/ondc/issue/raise');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/issue/raise');
 
     final header = {
       'Content-Type': 'application/json',

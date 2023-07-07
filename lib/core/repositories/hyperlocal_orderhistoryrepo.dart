@@ -7,6 +7,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/models/hyperlocal_models/hyperlocal_orderdetail.dart';
 
+import '../app_url.dart';
+
 class HyperLocalOrderHistoryRepository with LogMixin {
   List<HyperlocalOrderDetailModel> orderDetailsLoc = [];
   List<HyperlocalOrderDetailModel> sevenOrderDetailsLoc = [];
@@ -32,7 +34,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
   Future<List<HyperlocalOrderDetailModel>> getOrderList() async {
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=5&offset=0');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=5&offset=0');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);
@@ -61,7 +63,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
     dynamic formattedStartingDate =
         DateFormat('yyyy-MM-dd').format(startingDate);
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nSeven&startDate=$formattedStartingDate&endDate=$formattedToday');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nSeven&startDate=$formattedStartingDate&endDate=$formattedToday');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);
@@ -90,7 +92,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
     dynamic formattedStartingDate =
         DateFormat('yyyy-MM-dd').format(startingDate);
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nThirty&startDate=$formattedStartingDate&endDate=$formattedToday');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nThirty&startDate=$formattedStartingDate&endDate=$formattedToday');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);
@@ -119,7 +121,7 @@ class HyperLocalOrderHistoryRepository with LogMixin {
     errorLog(
         'custom dates$formattedToday last end date $formattedStartingDate');
     final url = Uri.parse(
-        'https://api.santhe.in/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nCustom&startDate=$formattedToday&endDate=$formattedStartingDate');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/order/list?firebase_id=$firebaseId&limit=10&offset=$nCustom&startDate=$formattedToday&endDate=$formattedStartingDate');
     try {
       errorLog('order history url $url');
       final response = await http.get(url);

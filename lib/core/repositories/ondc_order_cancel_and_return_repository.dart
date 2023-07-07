@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:santhe/models/ondc/order_cancel_reasons_model.dart';
 import '../app_helpers.dart';
+import '../app_url.dart';
 import '../blocs/checkout/checkout_bloc.dart';
 import '../blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import '../cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_state.dart';
@@ -14,8 +15,8 @@ import '../loggers.dart';
 class ONDCOrderCancelAndReturnRepository with LogMixin {
   Future<List<ReasonsModel>> getReasons({bool? isReturn}) async {
     final url = isReturn ?? false
-        ? Uri.parse('https://api.santhe.in/santhe/ondc/return/reasons')
-        : Uri.parse('https://api.santhe.in/santhe/ondc/cancel/reasons');
+        ? Uri.parse('${AppUrl().baseUrl}/santhe/ondc/return/reasons')
+        : Uri.parse('${AppUrl().baseUrl}/santhe/ondc/cancel/reasons');
 
     final header = {
       'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
 
   Future<String> fullOrderCancelPost(
       {required String code, required String orderId}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/ondc/cancel?orderId='
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/cancel?orderId='
         '$orderId&code=$code');
 
     warningLog("Reason Code $code also orderId $orderId and url $url");
@@ -104,7 +105,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
     };
 
     try {
-      final url = Uri.parse('https://api.santhe.in/santhe/ondc/upload');
+      final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/upload');
 
       var request = http.MultipartRequest("POST", url);
 
@@ -140,7 +141,7 @@ class ONDCOrderCancelAndReturnRepository with LogMixin {
       required List<String> images,
       required String quantity,
       required bool isReturn}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/ondc/update');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/update');
 
     final header = {
       'Content-Type': 'application/json',

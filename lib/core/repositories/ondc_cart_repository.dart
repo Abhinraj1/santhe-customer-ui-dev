@@ -9,6 +9,8 @@ import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_cart_item.dart';
 import 'package:http/http.dart' as http;
 
+import '../app_url.dart';
+
 class OndcCartRepository with LogMixin {
   List<ProductOndcModel> productModels = [];
   List<OndcCartItem> ondcCartItem = [];
@@ -40,7 +42,7 @@ class OndcCartRepository with LogMixin {
   }
 
   deleteCartItem({required CartitemModel productOndcModelLocal}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/ondc/cart/delete/item');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/cart/delete/item');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -76,7 +78,7 @@ class OndcCartRepository with LogMixin {
   Future<List<ProductOndcModel>> addToCart(
       {required ProductOndcModel productOndcModel,
       List<ProductOndcModel>? productList}) async {
-    final url = Uri.parse('https://api.santhe.in/santhe/ondc/cart/add/item');
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/ondc/cart/add/item');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
@@ -177,7 +179,7 @@ class OndcCartRepository with LogMixin {
 
   updateQuantityOfItems({required CartitemModel productOndcModel}) async {
     final url =
-        Uri.parse('https://api.santhe.in/santhe/ondc/cart/update/quantity');
+        Uri.parse('${AppUrl().baseUrl}/santhe/ondc/cart/update/quantity');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'

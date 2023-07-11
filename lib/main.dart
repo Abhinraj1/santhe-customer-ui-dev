@@ -57,9 +57,10 @@ void main() async {
   initializeGetIt();
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate(
-      androidProvider: AppUrl().isDev ?
-      AndroidProvider.debug :
-      AndroidProvider.playIntegrity
+      androidProvider:
+      AppUrl().isDev ?
+      AndroidProvider.debug
+          : AndroidProvider.playIntegrity
   );
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),

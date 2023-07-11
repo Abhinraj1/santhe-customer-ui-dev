@@ -638,7 +638,8 @@ class _HyperlocalProductdescriptionMobileState
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
-                      'Delivery By: ${widget.hyperLocalProductModel.window} day/s',
+                      'Delivery By: ${dateFormat(
+                          value: widget.hyperLocalProductModel.delivery_time.toString())} day/s',
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),
@@ -676,6 +677,17 @@ class _HyperlocalProductdescriptionMobileState
                 //   height: 10,
                 // ),
 
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Text(
+                      'Returnable:   ${returnable.toString().capitalizeFirst}',
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+
                 widget.hyperLocalProductModel.returnable == true
                     ? Align(
                         alignment: Alignment.centerLeft,
@@ -686,23 +698,22 @@ class _HyperlocalProductdescriptionMobileState
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Returnable:   ${returnable.toString().capitalizeFirst}',
-                                  style: const TextStyle(fontSize: 15),
-                                ),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 widget.hyperLocalProductModel.window != null
                                     ? Text(
-                                        'Return Window : ${widget.hyperLocalProductModel.window} day/s')
+                                        'Return Window : ${dateFormat(
+                                            value: widget.hyperLocalProductModel.
+                                            window.toString())} day/s')
+
                                     : const SizedBox(),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
-                                  'Return picked up by seller : '
-                                  '$sellerPickupReturn',
+                                  'Return picked up by seller :  '
+                                      '$sellerPickupReturn',
                                   style: const TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -710,12 +721,20 @@ class _HyperlocalProductdescriptionMobileState
                           ),
                         ),
                       )
-                    : const Text(''),
+                    : const SizedBox(),
               ],
             ),
           );
         },
       ),
     );
+  }
+
+  String dateFormat({required String value}){
+    if(value == "0"){
+      return "Same";
+    }else{
+      return value;
+    }
   }
 }

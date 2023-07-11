@@ -18,7 +18,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
   // final dynamic self_pickup;
   // final dynamic santhe_delivery;
   // final dynamic self_delivery;
-  // final dynamic delivery_time;
+  final dynamic delivery_time;
   final dynamic lat;
   final dynamic lang;
   final dynamic radius;
@@ -48,7 +48,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
     // required this.self_pickup,
     // required this.santhe_delivery,
     // required this.self_delivery,
-    // required this.delivery_time,
+    required this.delivery_time,
     required this.lat,
     required this.lang,
     required this.radius,
@@ -109,7 +109,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       // self_pickup: self_pickup ?? this.self_pickup,
       // santhe_delivery: santhe_delivery ?? this.santhe_delivery,
       // self_delivery: self_delivery ?? this.self_delivery,
-      // delivery_time: delivery_time ?? this.delivery_time,
+      delivery_time: delivery_time ?? this.delivery_time,
       lat: lat ?? this.lat,
       lang: lang ?? this.lang,
       radius: radius ?? this.radius,
@@ -142,7 +142,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       // 'self_pickup': self_pickup,
       // 'santhe_delivery': santhe_delivery,
       // 'self_delivery': self_delivery,
-      // 'delivery_time': delivery_time,
+       'delivery_time': delivery_time,
       'lat': lat,
       'lang': lang,
       'radius': radius,
@@ -208,11 +208,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       //             : null
       //         : null
       //     : null,
-      // delivery_time: map['fulfillment_type'] != null
-      //     ? map['fulfillment_type']['delivery_time'] != null
-      //         ? map['fulfillment_type']['delivery_time'] as dynamic
-      //         : null
-      //     : null,
+      delivery_time: map['delivery_time'] as dynamic,
       lat: map['lat'] != null ? map['lat'] as dynamic : null,
       lang: map['lang'] != null ? map['lang'] as dynamic : null,
       radius: map['radius'] != null ? map['radius'] as dynamic : null,
@@ -302,7 +298,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       // self_pickup,
       // santhe_delivery,
       // self_delivery,
-      // delivery_time,
+      delivery_time,
       lat,
       lang,
       radius,
@@ -335,7 +331,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       // 'self_pickup': self_pickup,
       // 'santhe_delivery': santhe_delivery,
       // 'self_delivery': self_delivery,
-      // 'delivery_time': delivery_time,
+      'delivery_time': delivery_time,
       'lat': lat,
       'lang': lang,
       'radius': radius,
@@ -383,9 +379,7 @@ class HyperLocalProductModel extends Equatable with LogMixin {
       //             : null
       //         : null
       //     : null,
-      // delivery_time: map['fulfillment_type']['delivery_time'] != null
-      //     ? map['fulfillment_type']['delivery_time'] as dynamic
-      //     : null,
+      delivery_time: map['delivery_time'] as dynamic ,
       lat: map['lat'] as dynamic,
       lang: map['lang'] as dynamic,
       radius: map['radius'] as dynamic,

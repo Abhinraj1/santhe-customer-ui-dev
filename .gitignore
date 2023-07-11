@@ -46,4 +46,4 @@ app.*.map.json
 /android/app/release
 
 GoogleService-Info.plist
-/android/app/prod_google-services.json
+/android/app/google-services.json

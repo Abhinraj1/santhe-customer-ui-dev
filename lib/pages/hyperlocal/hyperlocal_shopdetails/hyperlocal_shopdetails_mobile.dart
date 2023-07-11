@@ -186,9 +186,12 @@ class _HyperlocalShopdetailsMobileState
           productModels = [];
           productModels = state.hyperLocalProductModels;
           for (var element in productModels) {
+
             hyperLocalProductWidgets.add(
               HyperLocalProductWidget(hyperLocalProductModel: element),
             );
+            print("HyperLocalProductWidget############################# "
+                "============= ${hyperLocalProductWidgets.toString()}");
           }
           setState(() {
             productWidgets = hyperLocalProductWidgets;

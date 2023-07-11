@@ -5,7 +5,7 @@ class AppUrl {
   //
   // static const String _environmentDev = 'santhe-425a8';
 
-  static const bool _dev = true;
+  static const bool _dev = false;
 
   bool get isDev => _dev;
 

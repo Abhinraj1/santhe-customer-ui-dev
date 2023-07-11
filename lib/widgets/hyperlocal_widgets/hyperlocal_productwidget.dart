@@ -192,6 +192,7 @@ class _HyperLocalProductWidgetState extends State<HyperLocalProductWidget>
                           ),
                         ),
                       )
+
                     : Expanded(
                         child: Center(
                           child: Row(

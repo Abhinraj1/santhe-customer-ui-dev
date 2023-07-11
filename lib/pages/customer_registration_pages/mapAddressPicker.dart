@@ -49,7 +49,7 @@ class _MapAddressPickerState extends State<MapAddressPicker> {
       target: LatLng(lat, lng),
       zoom: 18,
     );
-    currentUser = profileController.customerDetails!;
+    currentUser = profileController.customerDetails;
         //?? fallback_error_customer;
 
     /*if (widget.lat != null && widget.lng != null) {

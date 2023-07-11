@@ -51,16 +51,20 @@ class HyperlocalShopBloc
         emit(HyperLocalGetShopSearchClearErrorState(message: e.toString()));
       }
     });
+
     on<HyperLocalGetProductOfShopEvent>((event, emit) async {
       emit(HyperLocalGetProductsOfShopLoadingState());
       try {
         List<HyperLocalProductModel> hyperLocalProductModels =
             await hyperLocalRepository.getProductsOfShop(
                 storeId: event.shopId, lat: event.lat, lng: event.lng);
+
         dynamic cartCount = await hyperLocalRepository.getCartCount(
             storeDescriptionId: event.shopId);
+
         log('get products of shop bloc $cartCount',
             name: 'Hyperlocal_shop_bloc.dart');
+
         emit(HyperLocalGetProductsOfShopState(
             hyperLocalProductModels: hyperLocalProductModels));
       } on HyperLocalGetProductsOfShopErrorState catch (e) {

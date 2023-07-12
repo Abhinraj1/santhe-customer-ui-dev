@@ -18,12 +18,12 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
  // final NotificationController _notificationController = Get.find();
   final APIs apiController = Get.find();
 
-  _launchUrl() async {
-    final url = Uri.parse('https://www.youtube.com/watch?v=BkvCsbmzkU8');
-    if (!await launchUrl(url)) {
-      throw 'Could not launch $url';
-    }
-  }
+  // _launchUrl() async {
+  //   final url = Uri.parse('https://www.youtube.com/watch?v=BkvCsbmzkU8');
+  //   if (!await launchUrl(url)) {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
   @override
   void initState() {
@@ -119,9 +119,8 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           id: 'navDrawer',
           builder: (context) {
             CustomerModel? currentUser =
-                profileController.customerDetails;
-                    //?? fallback_error_customer;
-            customerModel =  currentUser!;
+                profileController.customerDetails ?? fallback_error_customer;
+            customerModel =  currentUser;
             return SingleChildScrollView(
               child: RefreshIndicator(
                 onRefresh: () => initFunction(),

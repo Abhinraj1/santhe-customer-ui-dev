@@ -406,7 +406,9 @@ class _HyperlocalProductdescriptionMobileState
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '${widget.hyperLocalProductModel.name}',
+                      '${widget.hyperLocalProductModel.name}, '
+                          '${widget.hyperLocalProductModel.quantityValue}'
+                          '${widget.hyperLocalProductModel.quantityUnit}',
                       style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -632,7 +634,17 @@ class _HyperlocalProductdescriptionMobileState
                         ],
                       )
                     : const SizedBox(),
-
+                Padding(
+                  padding: const EdgeInsets.only(left: 15, bottom: 10),
+                  child:  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Quantity: ${widget.hyperLocalProductModel.quantityValue}'
+                          '${widget.hyperLocalProductModel.quantityUnit}',
+                      style: const TextStyle( fontSize: 15),
+                    ),
+                  )
+                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(

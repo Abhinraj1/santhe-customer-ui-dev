@@ -42,16 +42,16 @@ class AppInitialisations {
     // Hive.registerAdapter(UserListAdapter());
     Hive.registerAdapter(UserCredentialAdapter());
     Hive.registerAdapter(UserAdapter());
-    Hive.registerAdapter(CategoryAdapter());
+   // Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(CacheRefreshAdapter());
     Hive.registerAdapter(FAQAdapter());
-    Hive.registerAdapter(ItemAdapter());
+    //Hive.registerAdapter(ItemAdapter());
 
-    await Hive.openBox<Category>('categoryDB');
-    await Hive.openBox<Item>('itemDB');
+    //await Hive.openBox<Category>('categoryDB');
+   // await Hive.openBox<Item>('itemDB');
     await Hive.openBox<CacheRefresh>('cacheRefreshDB');
     await Hive.openBox<FAQ>('faqDB');
-    await Hive.openBox<String>('contentDB');
+    //await Hive.openBox<String>('contentDB');
   }
 
   void _initialiseControllers() {

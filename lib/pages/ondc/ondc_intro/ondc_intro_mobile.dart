@@ -118,10 +118,10 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
           init: profileController,
           id: 'navDrawer',
           builder: (context) {
-            CustomerModel currentUser =
-                profileController.customerDetails!;
+            CustomerModel? currentUser =
+                profileController.customerDetails;
                     //?? fallback_error_customer;
-            customerModel = currentUser;
+            customerModel =  currentUser!;
             return SingleChildScrollView(
               child: RefreshIndicator(
                 onRefresh: () => initFunction(),

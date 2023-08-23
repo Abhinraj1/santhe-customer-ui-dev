@@ -28,7 +28,6 @@ class ImageGrid extends StatelessWidget {
         builder: (context,state) {
 
            if(state is ShowImages){
-
             return
               Body(
               hasImages: true,

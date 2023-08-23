@@ -5,7 +5,7 @@ class AppUrl {
   //
   // static const String _environmentDev = 'santhe-425a8';
 
-  static const bool _dev = true;
+  static const bool _dev = false;
 
   bool get isDev => _dev;
 
@@ -28,6 +28,19 @@ class AppUrl {
   String get baseUrl => _dev ? _baseUrlDev : _baseUrlProd;
 
   static const String SEARCH_APP_ID = '7565UIF34Z';
+
+  static const String _prodPhonePeMerchantId = "ECOCONSUMERONLINE";
+
+  static const String _prodPhonePeSaltKeys = "67dfff0b-b5d1-4041-bb92-1c86eda3fc6a";
+
+  static const String _devPhonePeMerchantId = "ECOUAT";
+
+  static const String _devPhonePeSaltKeys = "6ba73094-6242-46a8-bd5a-374fd861a9f7";
+
+  String get  phonePeMerchantId => _dev ? _devPhonePeMerchantId : _prodPhonePeMerchantId;
+
+  String get  phonePeSaltKeys => _dev ? _devPhonePeSaltKeys : _prodPhonePeSaltKeys;
+
 
   // static const String _baseUrl =
   //     'https://firestore.googleapis.com/v1/projects/$envType/databases/(default)/documents';

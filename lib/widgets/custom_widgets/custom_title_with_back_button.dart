@@ -58,18 +58,20 @@ class CustomBackButton extends StatelessWidget {
             Get.back();
           }
         },
-        child: CircleAvatar(
-          backgroundColor: invertColors ?? false
-              ? AppColors().white100
-              : AppColors().brandDark,
-          radius: 13,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 7.0),
-            child: Icon(Icons.arrow_back_ios,
-                size: 17,
-                color: invertColors ?? false
-                    ? AppColors().brandDark
-                    : AppColors().white100),
+        child: SizedBox(
+          child: CircleAvatar(
+            backgroundColor: invertColors ?? false
+                ? AppColors().white100
+                : AppColors().brandDark,
+            radius: 13,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 7.0),
+              child: Icon(Icons.arrow_back_ios,
+                  size: 17,
+                  color: invertColors ?? false
+                      ? AppColors().brandDark
+                      : AppColors().white100),
+            ),
           ),
         ),
       ),

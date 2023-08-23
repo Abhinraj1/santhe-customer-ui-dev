@@ -54,7 +54,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
     ));
     final token = await AppHelpers().getToken;
     await _profileController.initialise();
-    await _profileController.getOperationalStatus();
+   // await _profileController.getOperationalStatus();
     // _allListController.getAllList();
     // _allListController.checkSubPlan();
     /*Connectivity().onConnectivityChanged.listen((ConnectivityResult result) =>
@@ -71,7 +71,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
   getNewShops(
       {required List<HyperLocalShopWidget> shops, required int limit}) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=${customerModel?.lat}&lang=${customerModel?.lng}&limit=10&offset=$limit');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=${customerModel?.lat}&lang=${customerModel?.lng}&limit=20&offset=$limit');
     setState(() {
       _isLoading = true;
     });
@@ -79,30 +79,40 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
       debugLog('HyperLocal Url for Shops $url');
       final response = await http.get(url);
       warningLog(
-          'Response Structure ${response.statusCode} and body ${response.body} also url $url');
-      final responseBody = json.decode(response.body)['data'] as List;
-      warningLog('Response Body Structure $responseBody');
+          'Response Structure ${response.statusCode} and body ${response.body}'
+              ' also url $url');
+
+      final responseBody = json.decode(response.body)['data']["rows"] as List;
+     // warningLog('Response Body Structure $responseBody');
       List<HyperLocalShopModel> localHyperLocalShopModel = [];
 
-      for (var element in responseBody) {
+      localHyperLocalShopModel =  responseBody.map((map) =>
+          HyperLocalShopModel.fromMap(map)).toList();
+
+     // for (var element in responseBody) {
         // errorLog('Checking for data in getHyperlocalShops $element');
-        localHyperLocalShopModel.add(HyperLocalShopModel.fromMap(element));
-      }
-      infoLog('New models $localHyperLocalShopModel');
+     //   localHyperLocalShopModel.add(HyperLocalShopModel.fromMap(element));
+     // }
+
       List<HyperLocalShopWidget> newShops = [];
+
       for (var element in localHyperLocalShopModel) {
+
         newShops.add(HyperLocalShopWidget(hyperLocalShopModel: element));
       }
       infoLog('New Shops $newShops');
       shops.addAll(newShops);
       setState(() {
         shopWidgets = shops;
-        _isLoading = false;
+       // _isLoading = false;
         existingShopModels.addAll(localHyperLocalShopModel);
       });
     } catch (e) {
       throw HyperLocalGetShopErrorState(message: e.toString());
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   getSearchNewShop(
@@ -158,7 +168,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
             _shopScroll.position.maxScrollExtent) {
           warningLog('called');
           setState(() {
-            n = n + 10;
+            n = n + 20;
           });
           getNewShops(
             shops: shopWidgets,
@@ -541,6 +551,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
                                                             _textEditingController
                                                                 .text),
                                                   );
+                                              _isLoading = false;
                                             },
                                             decoration: InputDecoration(
                                               labelText: 'Search Products here',

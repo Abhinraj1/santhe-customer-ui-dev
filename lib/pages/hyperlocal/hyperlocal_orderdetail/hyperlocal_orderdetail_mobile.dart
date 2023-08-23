@@ -3,11 +3,11 @@
 part of hyperlocal_orderdetail_view;
 
 class _HyperlocalOrderdetailMobile extends StatefulWidget {
-  final String shopDescriptionId;
+ // final String shopDescriptionId;
   final String orderId;
   const _HyperlocalOrderdetailMobile({
     Key? key,
-    required this.shopDescriptionId,
+   // required this.shopDescriptionId,
     required this.orderId,
   }) : super(key: key);
 

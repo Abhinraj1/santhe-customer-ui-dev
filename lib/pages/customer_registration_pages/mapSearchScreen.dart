@@ -312,7 +312,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                             )),
                       ),
                       Obx(() => Text(
-                          '${userInfoController.address.obs.string}\n${userInfoController.howToReach.value}'))
+                          '${userInfoController.address.obs.string}\n'
+                              '${userInfoController.howToReach.value}'))
                     ],
                   ),
                 ),

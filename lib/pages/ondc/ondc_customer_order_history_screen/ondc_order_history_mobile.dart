@@ -22,42 +22,18 @@ class ONDCOrderHistoryMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return  CustomScaffold(
+    return  Scaffold(
       backgroundColor: AppColors().grey10,
-        trailingButton:  homeIconButton(),
         body: Column(
           children: [
-        Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 20),
-             child: Row(
-        children: [
-          InkWell(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: CircleAvatar(
-              backgroundColor: AppColors().brandDark,
-              radius: 13,
-              child: const Padding(
-                padding: EdgeInsets.only(left: 7.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 17,
-                  color: Colors.white,
-                ),
-              ),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-          const Spacer(),
-
-          SizedBox(
-            width: 270,
-            child: Text("Below are the orders your have placed on Santhe",
-              style: FontStyleManager().s14fw700Orange,),
-          ),
-          const Spacer(),
-        ],
-      ),
+        Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
+             child:
+             Text("Below are the orders your have placed on ONDC Shops",
+               style: FontStyleManager().s14fw700Orange,),
     ),
 
             Divider(
@@ -65,9 +41,8 @@ class ONDCOrderHistoryMobile extends StatelessWidget {
               color: AppColors().grey40,
             ),
 
-
             const SelectDateFilter(),
-            const OrderHistoryList(),
+             OrderHistoryList(),
 
             Obx( () {
               if(myOrdersLoading.value){
@@ -76,7 +51,7 @@ class ONDCOrderHistoryMobile extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }else{
-                return SizedBox();
+                return const SizedBox();
               }
 
               }

@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/blocs/address/address_bloc.dart';
@@ -344,13 +345,18 @@ class OndcRepository with LogMixin {
     }
   }
 
-  Future<List<SingleOrderModel>> getPastOrder({required String offset}) async {
+  Future<List<SingleOrderModel>> getPastOrder({required String offset,
+    required DateTime? startDate,required DateTime? endDate}) async {
     final firebaseId = //"8808435978";
         AppHelpers().getPhoneNumberWithoutCountryCode;
 
+    dynamic formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate!);
+    dynamic formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate!);
+
     final url = Uri.parse("${AppUrl().baseUrl}/santhe/ondc/customer/"
         "order/list?limit=10&offset=$offset&"
-        "firebase_id=$firebaseId");
+        "firebase_id=$firebaseId&"
+        "startDate=$formattedStartDate&endDate=$formattedEndDate");
 
     final header = {
       'Content-Type': 'application/json',

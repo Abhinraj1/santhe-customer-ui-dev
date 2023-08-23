@@ -44,7 +44,7 @@ class _OndcCheckoutScreenMobileOldState extends State<_OndcCheckoutScreenMobile>
   String? discount;
   String? packing;
   String? miscellaneous;
-  Razorpay _razorpay = Razorpay();
+  final Razorpay _razorpay = Razorpay();
   bool _showErrorNoResponseFromSeller = false;
   bool _showOneOrMoreItemsAreNotAvailable = false;
   String? billingAddress;

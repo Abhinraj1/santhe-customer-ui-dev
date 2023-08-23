@@ -214,7 +214,6 @@ class _HyperlocalReturnconfirmMobileState
     ge.Get.to(()=> HyperlocalOrderdetailView(
       orderId:RepositoryProvider.of<HyperLocalCheckoutRepository>(context)
           .shopOrderId,
-      storeDescriptionId: "",
     ));
   }
 }

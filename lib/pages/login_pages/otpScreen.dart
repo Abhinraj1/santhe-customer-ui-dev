@@ -317,16 +317,17 @@ class _OtpScreenState extends State<OtpScreen> with LogMixin {
       AppSharedPreference().setLogin(true);
      // apiController.updateDeviceToken(widget.phoneNumber.toString());
       await profileController.initialise();
-      // Get.offAll(() => const OndcIntroView(),
-      //     //!previous const MapMerchant(),
-      //     transition: Transition.fadeIn);
-      Get.offAll(
-          () => HyperlocalShophomeView(
-                lat: profileController.customerDetails!.lat,
-                lng: profileController.customerDetails!.lng,
-              ),
+      Get.offAll(() => const OndcIntroView(),
           //!previous const MapMerchant(),
           transition: Transition.fadeIn);
+      ///HYPERLOCAL DEALS HOME
+      // Get.offAll(
+      //     () => HyperlocalShophomeView(
+      //           lat: profileController.customerDetails!.lat,
+      //           lng: profileController.customerDetails!.lng,
+      //         ),
+      //     //!previous const MapMerchant(),
+      //     transition: Transition.fadeIn);
     }
   }
 

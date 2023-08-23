@@ -8,6 +8,7 @@ import 'package:santhe/models/hyperlocal_models/hyperlocal_paymentmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_previewmodel.dart';
 
 import '../../models/hyperlocal_models/hyperlocal_orders_model.dart';
+import '../../models/hyperlocal_models/hyperlocal_payment_model.dart';
 import '../app_url.dart';
 
 class HyperLocalCheckoutRepository with LogMixin {
@@ -198,7 +199,7 @@ class HyperLocalCheckoutRepository with LogMixin {
       homeDeliveryLoc = responseBody['storeDescription']['fulfillment_type'];
       phoneNumberLoc = '';
       phoneNumberLoc =
-          responseBody['storeDescription']['customer']['phone_number'];
+          responseBody['storeDescription']['phone_number'];
       shopOrderIdloc = '';
       shopOrderIdloc = responseBody['id'];
       userReadableOrderIdLoc = '';
@@ -230,74 +231,107 @@ class HyperLocalCheckoutRepository with LogMixin {
     }
   }
 
-  Future<HyperlocalPaymentInfoModel> postPaymentCheckout(
-      {required String orderIdRec}) async {
+  Future<String> postPaymentCheckout(
+      {required String orderIdRec,
+      required String targetApp,
+        required bool isUpi
+      }) async {
+    print("ORDER ID ==================== ${orderIdRec}");
     final url =
-        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/payment/checkout');
+       // Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/payment/checkout');
+    Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/payment/phonepay/checkout');
+
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
     final body = json.encode(
-      {"order_id": orderIdRec},
+      {"order_id": orderIdRec,
+        "target_app":targetApp,
+        "isUpi":isUpi
+      },
     );
     try {
       final response = await http.post(url, headers: header, body: body);
       warningLog(
           'Post payment ${response.statusCode} ${response.body} $url and body $body');
       final responseBody = json.decode(response.body);
-      warningLog('post payment body $responseBody');
-      if (responseBody['message']
-          .toString()
-          .contains('Unable to create order')) {
+      warningLog('post payment Response body $responseBody');
+
+      if(responseBody["data"] != null){
+        if(isUpi){
+          String intentUrl = responseBody["data"]["instrumentResponse"]["intentUrl"].toString();
+
+          return intentUrl;
+        }else{
+          String intentUrl = responseBody["data"]["instrumentResponse"]
+          ["redirectInfo"]["url"].toString();
+
+          return intentUrl;
+        }
+
+      }else{
         throw const PostPaymentHyperlocalErrorState(
-            message: 'Cant Create order');
+                 message: 'Cant Create order');
+        return "error";
       }
-      paymentModelLoc = HyperlocalPaymentInfoModel.fromMap(responseBody);
-      warningLog('Payment info model$paymentModelLoc');
-      return paymentModelLoc;
+      // if (responseBody['message']
+      //     .toString()
+      //     .contains('Unable to create order')) {
+      //   throw const PostPaymentHyperlocalErrorState(
+      //       message: 'Cant Create order');
+      //  // return false;
+      // }
+      // if(responseBody["type"].toString().contains("SUCCESS")){
+      //   return true;
+      // }else{
+      //   throw const PostPaymentHyperlocalErrorState(
+      //       message: 'Cant Create order');
+      // }
+      HyperLocalPaymentModel paymentModel = HyperLocalPaymentModel.fromJson(responseBody);
+     // warningLog('Payment info model$paymentModel');
+
     } catch (e) {
       throw PostPaymentHyperlocalErrorState(
         message: e.toString(),
       );
     }
   }
+  ///74120298-15aa-4a8f-8f96-3790125ab012
 
-  Future<String> verifyPayment(
-      {required String? razorPayOrderID,
-      required String? razorPayPaymentId,
-      required String? razorPaySignature}) async {
+  Future<bool> verifyPayment(
+      {required String orderID}) async {
     final url =
-        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/payment/verify');
+        Uri.parse('${AppUrl().baseUrl}/santhe/hyperlocal/payment/phonepe/verify?order_id=$orderID');
     final header = {
       'Content-Type': 'application/json',
       "authorization": 'Bearer ${await AppHelpers().authToken}'
     };
-    final body = json.encode(
-      {
-        "razorpay_order_id": razorPayOrderID,
-        "razorpay_payment_id": razorPayPaymentId,
-        "razorpay_signature": razorPaySignature
-      },
-    );
+    // final body = json.encode(
+    //   {
+    //     "razorpay_order_id": razorPayOrderID,
+    //     "razorpay_payment_id": razorPayPaymentId,
+    //     "razorpay_signature": razorPaySignature
+    //   },
+    // );
     try {
-      final response = await http.post(url, headers: header, body: body);
+      final response = await http.get(url, headers: header);
       warningLog(
-          'Verify payment id${response.statusCode} ${response.body} url $url and body $body');
+          'Verify payment id${response.statusCode} ${response.body} url $url ');
       final responseBody = json.decode(response.body);
       warningLog('$responseBody');
       if (responseBody['message']
           .toString()
           .contains('Please send all the details')) {
         throw const VerifyPaymentHyperlocalErrorState(
-            message: 'Unable to verify razorpayment');
+            message: 'Unable to verify Phonepe Payment');
       }
       // if (responseBody['message'].toString().contains('Razorpay Issue')) {
       //   throw VerifyPaymentHyperlocalErrorState(
       //       message: responseBody['message']);
       // }
-      String message = responseBody['message'];
-      return message;
+      bool paymentStatus = responseBody['data']["payment_status"];
+      return paymentStatus;
     } catch (e) {
       throw VerifyPaymentHyperlocalErrorState(
         message: e.toString(),

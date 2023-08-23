@@ -43,7 +43,7 @@ class ProfileController extends GetxController with LogMixin {
     await generateUrlToken(override: startApp);
     await getCustomerDetailsInit();
    // await cacheRefresh();
-    await getOperationalStatus();
+   // await getOperationalStatus();
   }
 
   Future<bool> getCustomerDetailsInit() async {

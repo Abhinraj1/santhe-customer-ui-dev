@@ -231,7 +231,8 @@ class NetworkCall with LogMixin {
     warningLog(' the phone number without country code $formattedPhoneNumber');
     var jsonResponse = jsonDecode(response.body);
     warningLog(' response $jsonResponse');
-    if (jsonResponse != null && response.statusCode == 200) {
+    if (jsonResponse["data"] != null && response.statusCode == 200) {
+
       return CustomerModel.fromJson(
         jsonResponse['data'],
       );

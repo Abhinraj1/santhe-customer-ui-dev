@@ -37,11 +37,9 @@ part 'hyperlocal_orderdetail_mobile.dart';
 part 'hyperlocal_orderdetail_tablet.dart';
 
 class HyperlocalOrderdetailView extends StatelessWidget {
-  final String storeDescriptionId;
   final String orderId;
   const HyperlocalOrderdetailView({
     Key? key,
-    required this.storeDescriptionId,
     required this.orderId,
   }) : super(key: key);
 
@@ -50,7 +48,7 @@ class HyperlocalOrderdetailView extends StatelessWidget {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
         mobile: _HyperlocalOrderdetailMobile(
-          shopDescriptionId: storeDescriptionId,
+        //  shopDescriptionId: storeDescriptionId,
           orderId: orderId,
         ),
         desktop: const _HyperlocalOrderdetailDesktop(),

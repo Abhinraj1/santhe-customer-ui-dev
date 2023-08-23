@@ -25,6 +25,7 @@ import 'package:santhe/core/blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_blo
 import 'package:santhe/core/blocs/ondc/ondc_bloc.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
+import 'package:santhe/core/cubits/tutorial_cubit/tutorial_cubit.dart';
 import 'package:santhe/core/getapp.dart';
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/core/repositories/hyperlocal_cancel_return_repo.dart';
@@ -36,6 +37,7 @@ import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/pages/splash_to_home.dart';
+import 'package:upgrader/upgrader.dart';
 import 'core/app_url.dart';
 import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import 'core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
@@ -58,9 +60,9 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate(
       androidProvider:
-      AppUrl().isDev ?
+     // AppUrl().isDev ?
       AndroidProvider.debug
-          : AndroidProvider.playIntegrity
+        //  : AndroidProvider.playIntegrity
   );
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
@@ -212,6 +214,12 @@ class MyApp extends StatelessWidget {
                 repository: context.read<HyperlocalCancelReturnRepository>(),
               ),
             ),
+
+            BlocProvider<TutorialCubit>(
+              create: (context) => TutorialCubit(
+                repo: context.read<HyperLocalRepository>(),
+              ),
+            ),
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,
@@ -227,7 +235,11 @@ class MyApp extends StatelessWidget {
                     selectionHandleColor: Colors.transparent,
                   ),
                 ),
-            home: const SplashToHome(),
+            home:
+            UpgradeAlert(
+                child:
+            const SplashToHome()
+            ),
 
             ///  ONDCContactSupportView(orderModel: SingleOrderModel(),)
             ///  ONDCContactSupportTicketScreenMobile()

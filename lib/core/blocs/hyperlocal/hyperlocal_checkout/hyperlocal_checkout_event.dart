@@ -28,23 +28,34 @@ class GetOrderInfoPostEvent extends HyperlocalCheckoutEvent {
 
 class PostPaymentCheckoutEvent extends HyperlocalCheckoutEvent {
   final String orderId;
+  final String targetApp;
+  final bool isUpiPayment;
   const PostPaymentCheckoutEvent({
     required this.orderId,
+    required this.targetApp,
+    required this.isUpiPayment
   });
   @override
   List<Object> get props => [orderId];
 }
 
+// class PostUPIPaymentCheckoutEvent extends HyperlocalCheckoutEvent {
+//   final String orderId;
+//   const PostUPIPaymentCheckoutEvent({
+//     required this.orderId,
+//   });
+//   @override
+//   List<Object> get props => [orderId];
+// }
+
 class VerifyPaymentEventHyperlocal extends HyperlocalCheckoutEvent {
-  final String? razorPayOrderId;
-  final String? razorPayPaymentId;
-  final String? razorPaySignature;
+  final String orderId;
+  final bool isUpiPayment;
   const VerifyPaymentEventHyperlocal({
-    required this.razorPayOrderId,
-    required this.razorPayPaymentId,
-    required this.razorPaySignature,
+    required this.orderId,
+    required this.isUpiPayment
   });
   @override
   List<Object?> get props =>
-      [razorPayOrderId, razorPayPaymentId, razorPaySignature];
+      [orderId];
 }

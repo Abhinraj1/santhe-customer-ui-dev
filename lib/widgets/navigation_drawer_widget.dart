@@ -1,10 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_previousorders/hyperlocal_previousorders_view.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
 import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 
 import '../constants.dart';
+import '../pages/my_orders_common_page/my_orders_common_page_view.dart';
 import '../pages/ondc/ondc_webview_screen/ondc_webview_screen_view.dart';
+import '../pages/tutorial_screens/tutorial_screen_mobile.dart';
 import 'navigation_drawer_tile.dart';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -155,8 +158,10 @@ class CustomNavigationDrawer extends StatelessWidget {
               // BlocProvider.of<SingleOrderDetailsBloc>(context).add
               //   (const LoadPastOrderDataEvent());
 
-              Get.off(
-                () => const HyperlocalPreviousordersView(),
+              Get.to(
+                () =>
+                const MyOrdersCommonPageView()
+                //const HyperlocalPreviousordersView(),
               );
             },
           ),
@@ -168,6 +173,17 @@ class CustomNavigationDrawer extends StatelessWidget {
           //     Get.to(() => const FAQPage());
           //   },
           // ),
+          NavigationDrawerTile(
+            icon: Icons.help,
+            tileText: 'Tutorials',
+            onPress: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: const TutorialScreen(),
+                      type: PageTransitionType.rightToLeft));
+            },
+          ),
           NavigationDrawerTile(
             icon: CupertinoIcons.phone_fill,
             tileText: 'Contact Us/Feedback',

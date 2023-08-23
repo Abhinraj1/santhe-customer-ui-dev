@@ -32,7 +32,7 @@ class HyperlocalPreviousordersView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
-        mobile: _HyperlocalPreviousordersMobile(),
+        mobile: const _HyperlocalPreviousordersMobile(),
         desktop: _HyperlocalPreviousordersDesktop(),
         tablet: _HyperlocalPreviousordersTablet(),
       );

@@ -4,10 +4,7 @@
 part of hyperlocal_paymentsucess_view;
 
 class _HyperlocalPaymentsucessMobile extends StatefulWidget {
-  final String storeDescriptionId;
-  _HyperlocalPaymentsucessMobile({
-    required this.storeDescriptionId,
-  });
+  _HyperlocalPaymentsucessMobile();
 
   @override
   State<_HyperlocalPaymentsucessMobile> createState() =>
@@ -134,7 +131,7 @@ class _HyperlocalPaymentsucessMobileState
                     Get.close(3);
                     Get.to(
                       () => HyperlocalOrderdetailView(
-                        storeDescriptionId: widget.storeDescriptionId,
+                      //  storeDescriptionId: widget.storeDescriptionId,
                         orderId:
                             RepositoryProvider.of<HyperLocalCheckoutRepository>(
                                     context)

@@ -102,7 +102,7 @@ class AddressRepository with LogMixin {
 
       return responseBody['message'];
     } catch (e) {
-      AppHelpers.crashlyticsLog(response.body.toString());
+     // AppHelpers.crashlyticsLog(response.body.toString());
       throw OndcUpdateAddressErrorState(message: e.toString());
     }
   }

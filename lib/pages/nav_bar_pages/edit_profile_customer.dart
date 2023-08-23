@@ -523,7 +523,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                                     .trim() ==
                                                                 ''
                                                             ? 'Select Address'
-                                                            : '${registrationController.address.value} ${registrationController.howToReach.value}',
+                                                            : '${registrationController.address.value} '
+                                                            '${registrationController.howToReach.value.contains("null") ? "":
+                                                        registrationController.howToReach.value}',
                                                         style: registrationController
                                                                     .address
                                                                     .value

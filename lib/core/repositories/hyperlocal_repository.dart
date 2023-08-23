@@ -6,8 +6,10 @@ import 'package:http/http.dart' as http;
 import 'package:santhe/models/hyperlocal_models/hyperlocal_productmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_shopmodel.dart';
 
+import '../../models/tutorial_link_model.dart';
 import '../app_url.dart';
 import '../blocs/hyperlocal/hyperlocal_shop/hyperlocal_shop_bloc.dart';
+import '../cubits/tutorial_cubit/tutorial_cubit.dart';
 
 class HyperLocalRepository with LogMixin {
   List<HyperLocalShopModel> localHyperLocalShopModel = [];
@@ -50,13 +52,13 @@ class HyperLocalRepository with LogMixin {
   Future<List<HyperLocalShopModel>> getHyperLocalShops(
       {String? lat, String? lng}) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=$lat&lang=$lng&limit=10&offset=0');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=$lat&lang=$lng&limit=20&offset=0');
     try {
       debugLog('HyperLocal Url for Shops $url');
       final response = await http.get(url);
       warningLog(
           'Response Structure ${response.statusCode} HyperLocal Url for Shops $url and body ${response.body} ');
-      final responseBody = json.decode(response.body)['data'] as List;
+      final responseBody = json.decode(response.body)['data']["rows"] as List;
       warningLog('Response Body Structure $responseBody');
       localHyperLocalShopModel = [];
       for (var element in responseBody) {
@@ -75,7 +77,8 @@ class HyperLocalRepository with LogMixin {
       required String lat,
       required String lng}) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?limit=10&offset=0&item_name=$nameOfProduct&lat=$lat&lang=$lng');
+    //    '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?limit=10&offset=0&item_name=$nameOfProduct&lat=$lat&lang=$lng');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?&item_name=$nameOfProduct&lat=$lat&lang=$lng&limit=10&offset=0');
     try {
       final response = await http.get(url);
       infoLog(
@@ -87,7 +90,8 @@ class HyperLocalRepository with LogMixin {
       for (var element in responsebody) {
         searchHyperLocalShopModels.add(
           HyperLocalShopModel.fromMap(
-            element['storeDescription'],
+           // element['storeDescription'],
+            element
           ),
         );
       }
@@ -136,7 +140,9 @@ class HyperLocalRepository with LogMixin {
       required final String lat,
       required final String lng}) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?store_description_id=$storeId&limit=10&offset=0&item_name=$itemName&lat=$lat&lang=$lng');
+      //  '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?store_description_id=$storeId&limit=10&offset=0&item_name=$itemName&lat=$lat&lang=$lng');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/list?store_description_id=$storeId&limit=10&offset=0&item_name=$itemName&&lat=$lat&lang=$lng');
+
     try {
       final response = await http.get(url);
       warningLog(
@@ -175,4 +181,38 @@ class HyperLocalRepository with LogMixin {
       rethrow;
     }
   }
+
+  Future<List<TutorialLinkModel>> getTutorialLinks() async {
+
+    final url = Uri.parse('${AppUrl().baseUrl}/santhe/link?type=customer');
+
+    final header = {
+      'Content-Type': 'application/json',
+      "authorization": 'Bearer ${await AppHelpers().authToken}'
+    };
+
+    warningLog('url sent to get the getTutorialLinks  $url');
+
+    try {
+      final response = await http.get(url, headers: header);
+      warningLog('${response.statusCode} and ${response.body}');
+      final responseBody = await json.decode(response.body)['data']["rows"];
+
+      warningLog('RESPONSE DATA =$responseBody');
+
+      if (responseBody != null) {
+        List<TutorialLinkModel> model = TutorialLinkModel.fromList(responseBody);
+        model.removeWhere((element) => element.type.toString().contains("merchant"));
+        return model;
+      }
+
+      return [];
+
+    } catch (e) {
+      warningLog(e.toString());
+      throw TutorialErrorState(
+          message: "Error in getTutorialLinks ${e.toString()}");
+    }
+  }
+
 }

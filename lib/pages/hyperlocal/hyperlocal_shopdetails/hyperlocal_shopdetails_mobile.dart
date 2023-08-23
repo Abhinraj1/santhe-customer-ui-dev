@@ -948,7 +948,7 @@ class _HyperlocalShopdetailsMobileState
                                         color: Colors.transparent,
                                         child: Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 20.0, top: 20),
+                                              left: 20.0, top: 20,),
                                           child: Align(
                                             alignment: Alignment.topCenter,
                                             child: GridView.count(
@@ -960,6 +960,8 @@ class _HyperlocalShopdetailsMobileState
                                               mainAxisSpacing: 13,
                                               controller: _scrollController,
                                               childAspectRatio: 1.0,
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 10),
                                               children: [
                                                 ...productWidgets,
                                                 _isLoading
@@ -969,15 +971,15 @@ class _HyperlocalShopdetailsMobileState
                                                         child:
                                                             CircularProgressIndicator(),
                                                       )
-                                                    : const SizedBox(height: 60)
+                                                    : const SizedBox(height: 40)
                                               ],
                                             ),
                                           ),
                                         ),
                                       ),
                             _isLoading
-                                ? Column(
-                                    children: const [
+                                ? const Column(
+                                    children: [
                                       Center(
                                         // heightFactor: 0.8,
                                         child: CircularProgressIndicator(),
@@ -985,10 +987,10 @@ class _HyperlocalShopdetailsMobileState
                                     ],
                                   )
                                 : const SizedBox(
-                                    height: 60,
+                                    height: 20,
                                   ),
                             const SizedBox(
-                              height: 50,
+                              height: 20,
                             ),
                           ],
                         ),

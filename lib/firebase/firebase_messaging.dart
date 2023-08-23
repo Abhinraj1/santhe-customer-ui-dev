@@ -93,7 +93,8 @@ class FCM{
         orderId: message.data["orderId"].toString() != "null" &&
             message.data["orderId"] != "" ?
         message.data["orderId"].toString() : "",
-        storeDescriptionId: '',));
+       // storeDescriptionId: '',
+      ));
 
     }
   }

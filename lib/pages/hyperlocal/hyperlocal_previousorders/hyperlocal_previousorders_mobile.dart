@@ -188,7 +188,7 @@ class _HyperlocalPreviousordersMobileState
             state is CustomDaysLoadingState ||
             state is SevenDaysLoadingState){
         _isLoading = true;
-        Future.delayed(const Duration(seconds: 2)).then((value) =>       setState(() {_isLoading = false;}));
+        Future.delayed(const Duration(seconds: 2)).then((value) => setState(() {_isLoading = false;}));
 
         }
         if (state is SevenDaysFilterHyperlocalOrderState) {
@@ -313,60 +313,19 @@ class _HyperlocalPreviousordersMobileState
       builder: (context, state) {
         return Scaffold(
           key: _key,
-          drawer: const CustomNavigationDrawer(),
-          appBar: AppBar(
-            backgroundColor: AppColors().brandDark,
-            title:
-                AutoSizeText("Santhe", style: FontStyleManager().kAppNameStyle),
-            leading: IconButton(
-              onPressed: () async {
-               ge.Get.to(()=>HyperlocalShophomeView(
-                    lat: profileController.customerDetails!.lat,
-                    lng: profileController.customerDetails!.lng),
-                transition: ge.Transition.leftToRight);
-               // _key.currentState!.openDrawer();
-              },
-              splashRadius: 25.0,
-              icon: const Icon(Icons.arrow_back),
-            ),
-            shadowColor: AppColors().appBarShadow,
-            actions: [
-              // Padding(
-              //   padding: const EdgeInsets.only(right: 4.5),
-              //   child: IconButton(
-              //     onPressed: () {
-              //       if (Platform.isIOS) {
-              //         Share.share(
-              //           AppHelpers().appStoreLink,
-              //         );
-              //       } else {
-              //         Share.share(
-              //           AppHelpers().playStoreLink,
-              //         );
-              //       }
-              //     },
-              //     splashRadius: 25.0,
-              //     icon: const Icon(
-              //       Icons.share,
-              //       color: Colors.white,
-              //       size: 27.0,
-              //     ),
-              //   ),
-              // ),
-              GestureDetector(
-                // onTap: () => Get.off(
-                //   const OndcIntroView(),
-                // ),
-                onTap: () => ge.Get.off(HyperlocalShophomeView(
-                    lat: profileController.customerDetails!.lat,
-                    lng: profileController.customerDetails!.lng)),
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 4.5),
-                  child: Icon(Icons.home),
-                ),
-              )
-            ],
-          ),
+          // appBar: AppBar(
+          //   title: AutoSizeText(
+          //       "Santhe",
+          //       style: FontStyleManager().kAppNameStyle
+          //   ),
+          //   leading: IconButton(
+          //     icon: const Icon(Icons.arrow_back_ios),
+          //     onPressed: (){
+          //       ge.Get.back();
+          //     },
+          //   ),
+          // ),
+          backgroundColor: AppColors().grey10,
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -382,15 +341,18 @@ class _HyperlocalPreviousordersMobileState
                     ),
                     Center(
                       child: Text(
-                        'Below are the orders you have placed on Santhe',
+                        'Below are the orders you have placed on HyperLocal Deals.',
                         style: TextStyle(
                             color: AppColors().brandDark,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const Divider(
-                      thickness: 0.8,
-                      color: Colors.grey,
+                    const SizedBox(
+                      height: 10,
+                    ),
+                     Divider(
+                      thickness: 1,
+                      color: AppColors().grey40,
                     ),
                     //! data selector
                     Container(

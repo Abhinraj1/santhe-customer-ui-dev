@@ -25,7 +25,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
   double taxessgst = 0;
   String? orderId;
   int countNumber = 0;
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool isLoadingInit = false;
   bool isLoadingInitGet = false;
   dynamic subTotal;
@@ -40,6 +40,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
   List<HyperlocalPreviewWidget> hyperlocalPreviewWidgets = [];
   late GroupedItemScrollController _controller;
   Razorpay _razorpay = Razorpay();
+
   bool _showErrorNoResponseFromSeller = false;
   bool _showOneOrMoreItemsAreNotAvailable = false;
   String? billingAddress;
@@ -89,7 +90,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
       'description': 'Payment',
       'remember_customer': true,
       //! change upi to true once razorpay resolves their issue
-      "method": {"netbanking": true, "card": true, "upi": false, "wallet": true},
+      "method": {"netbanking": true, "card": true, "upi": true, "wallet": true},
       'prefill': {
         'contact': '+91${profileCon.customerDetails?.phoneNumber}',
         'email': '${profileCon.customerDetails?.emailId}'
@@ -125,13 +126,13 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
     //       ),
     // );
 
-    context.read<HyperlocalCheckoutBloc>().add(
-          VerifyPaymentEventHyperlocal(
-            razorPayOrderId: response.orderId,
-            razorPayPaymentId: response.paymentId,
-            razorPaySignature: response.signature,
-          ),
-        );
+    // context.read<HyperlocalCheckoutBloc>().add(
+    //       VerifyPaymentEventHyperlocal(
+    //         razorPayOrderId: response.orderId,
+    //         razorPayPaymentId: response.paymentId,
+    //         razorPaySignature: response.signature,
+    //       ),
+    //     );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -219,8 +220,8 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
         if (state is VerifyPaymentHyperlocalSuccessState) {
           errorLog('Success With payment');
           Get.off(
-            () => HyperlocalPaymentsucessView(
-              storeDescriptionId: widget.storeDescription_id,
+            () => const HyperlocalPaymentsucessView(
+              // storeDescriptionId: widget.storeDescription_id,
             ),
           );
         }
@@ -882,6 +883,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
                         //         ),
                         //       )
                         //     : const SizedBox(),
+
                         subTotal != null
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -993,63 +995,85 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
                       ],
                     ),
                   ),
+
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // setState(() {
-                          //   isLoadingInit = true;
-                          //   _isInitBuffer = true;
-                          // });
-                          // //! messageId is actually orderId please keep that in mind
-                          // Future.delayed(Duration(seconds: 5), () {
-                          //   context.read<CheckoutBloc>().add(
-                          //         InitializePostEvent(
-                          //             order_id: messageID),
-                          //       );
-                          // });
-                          setState(() {
-                            isLoadingInit = true;
-                          });
-                          context.read<HyperlocalCheckoutBloc>().add(
-                                PostPaymentCheckoutEvent(
-                                  orderId: order_id,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+
+                              BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                                  PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
+                                  isUpiPayment: true));
+
+                              // Future.delayed(const Duration(seconds: 15)).then((value) {
+                              //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
+                                BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                                    VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
+                              // }
+                              //
+                              // }
+                              // );
+
+                              // Get.to(()=> UpiScreen(
+                              //   orderId:order_id.toString(),
+                              //   amount: double.parse(total.toString()),
+                              // ));
+
+                              // setState(() {
+                              //   isLoadingInitUPI = true;
+                              // });
+                              //
+                              //   Future.delayed(const Duration(seconds:2 )).then(
+                              //           (value) =>
+                              //       setState(() {
+                              //         isLoadingInitUPI = false;
+                              // }));
+
+                                print("++++++++++++++++++++++++++++++++++++ "
+                                    "++++++++++ ${order_id}");
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                              );
-                        },
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              ),
+                              backgroundColor:
+                              MaterialStateProperty.all(AppColors().green100),
                             ),
+                            child: const Text('PAY VIA UPI'),
                           ),
-                          backgroundColor:
+
+
+                          ElevatedButton(
+                            onPressed: () {
+
+                              BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                                  PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
+                                    isUpiPayment: false
+                                  ));
+
+                              BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                                  VerifyPaymentEventHyperlocal(orderId: order_id,isUpiPayment: false));
+
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              backgroundColor:
                               MaterialStateProperty.all(AppColors().brandDark),
-                        ),
-                        child:
-                            // state is FinalizePaymentLoading
-                            //     ? Center(
-                            //         child: CircularProgressIndicator(
-                            //           color: Colors.white,
-                            //         ),
-                            //       )
-                            isLoadingInit
-                                ? const Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                //         : isLoadingInitGet
-                                //             ? Center(
-                                //                 child:
-                                //                     CircularProgressIndicator(
-                                //                   color: Colors.grey,
-                                //                 ),
-                                //               )
-                                //             :
-                                : const Text('PROCEED TO PAY'),
+                            ),
+                            child: const Text('PAYMENT OPTIONS'),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -1144,4 +1168,5 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
       },
     );
   }
+
 }

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/models/ondc/address_ondc_model.dart';
+import 'package:santhe/widgets/custom_widgets/custom_snackBar.dart';
 
 part 'address_event.dart';
 part 'address_state.dart';
@@ -27,6 +28,10 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         );
         emit(OndcAddressUpdatedState(message: message));
       } on OndcUpdateAddressErrorState catch (e) {
+        customSnackBar(
+            message: "Something Went Wrong Please Try Again After Some Time.",
+            showOnTop: true,
+        isErrorMessage: true);
         emit(
           OndcUpdateAddressErrorState(message: e.message),
         );

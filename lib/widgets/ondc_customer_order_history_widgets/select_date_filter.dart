@@ -24,7 +24,8 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<OrderHistoryBloc>(context).add(SevenDaysFilterEvent());
+    BlocProvider.of<OrderHistoryBloc>(context).add(
+        const SevenDaysFilterEvent(offset: "0",alreadyFetchedList: []));
     setState(() {
       hint = "";
       selectedValue = "7days";
@@ -120,8 +121,15 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                 children: [
                   InkWell(
                     onTap: () {
+                      ONDCMyOrdersOffset.value = 0;
+                      sevenDaysFilter.value = true;
+                      thirtyDaysFilter.value = false;
+                      customDaysFilter.value=false;
+
                       BlocProvider.of<OrderHistoryBloc>(context)
-                          .add(SevenDaysFilterEvent());
+                          .add(const SevenDaysFilterEvent(offset: "0",
+                          alreadyFetchedList: []));
+
                       setState(() {
                         hint = "";
                         selectedValue = "7days";
@@ -169,9 +177,16 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                   ///30 Days
                   InkWell(
                     onTap: () {
+                      ONDCMyOrdersOffset.value = 0;
+
+                      sevenDaysFilter.value = false;
+                      thirtyDaysFilter.value = true;
+                      customDaysFilter.value=false;
+
                       setState(() {
+
                         BlocProvider.of<OrderHistoryBloc>(context)
-                            .add(ThirtyDaysFilterEvent());
+                            .add(const ThirtyDaysFilterEvent(offset: "0", alreadyFetchedList: []));
                         selectedValue = "30days";
                         hint = "";
                       });
@@ -228,6 +243,11 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
                 padding: const EdgeInsets.only(left: 20.0, top: 10),
                 child: InkWell(
                   onTap: () async {
+                    ONDCMyOrdersOffset.value = 0;
+                    sevenDaysFilter.value = false;
+                    thirtyDaysFilter.value = false;
+                    customDaysFilter.value=true;
+
                     setState(() {
                       selectedValue = "custom";
                     });
@@ -241,7 +261,8 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
 
                     if (values != null) {
                       BlocProvider.of<OrderHistoryBloc>(context)
-                          .add(CustomDaysFilterEvent(selectedDates: values));
+                          .add(CustomDaysFilterEvent(selectedDates: values,offset: "0",
+                          alreadyFetchedList: []));
 
                       datePickedController.text = _getValueText(
                         config.calendarType,
@@ -323,7 +344,10 @@ class _SelectDateFilterState extends State<SelectDateFilter> {
 
                   if (values != null) {
                     BlocProvider.of<OrderHistoryBloc>(context)
-                        .add(CustomDaysFilterEvent(selectedDates: values));
+                        .add(CustomDaysFilterEvent(
+                        selectedDates: values,
+                        offset: "0",
+                        alreadyFetchedList: []));
 
                     setState(() {
                       selectedValue = "custom";

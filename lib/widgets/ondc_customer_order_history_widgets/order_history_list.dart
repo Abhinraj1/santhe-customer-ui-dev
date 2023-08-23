@@ -18,29 +18,10 @@ import '../../utils/order_details_screen_routing_logic.dart';
 
 
 
-class OrderHistoryList extends StatefulWidget {
-  const OrderHistoryList({Key? key}) : super(key: key);
+class OrderHistoryList extends StatelessWidget {
+   OrderHistoryList({Key? key}) : super(key: key);
 
-  @override
-  State<OrderHistoryList> createState() => _OrderHistoryListState();
-}
-
-class _OrderHistoryListState extends State<OrderHistoryList> {
-  ScrollController scrollController = ScrollController();
   List<SingleOrderModel> orderDetails = [];
-
-  int offset = 0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    scrollController.addListener(listener);
-    BlocProvider.of<OrderHistoryBloc>(context)
-        .add(LoadPastOrderDataEvent(offset: "0",
-        alreadyFetchedList: []));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,19 +39,26 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
         builder: (context, state) {
           if (state is SingleOrderErrorState) {
             return Center(child: Text(state.message));
-          } else if (state is PastOrderDataLoadedState) {
-            orderDetails = state.orderDetails;
+          }
+          // else if (state is PastOrderDataLoadedState) {
+          //   orderDetails = state.orderDetails;
+          //
+          //   return listBody(
+          //       orderDetails: state.orderDetails, );
+          // }
+          else if (state is SevenDaysFilterState) {
 
-            return listBody(
-                orderDetails: state.orderDetails, );
-          } else if (state is SevenDaysFilterState) {
-            return listBody(
+            orderDetails = state.orderDetails;
+            return ListBody(
                 orderDetails: state.orderDetails, );
           } else if (state is ThirtyDaysFilterState) {
-            return listBody(
+
+            orderDetails = state.orderDetails;
+            return ListBody(
                 orderDetails: state.orderDetails, );
           } else if (state is CustomDaysFilterState) {
-            return listBody(
+            orderDetails = state.orderDetails;
+            return ListBody(
                 orderDetails: state.orderDetails, );
           } else {
             return const Center(child: CircularProgressIndicator());
@@ -79,27 +67,30 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
       ),
     );
   }
+}
 
-  Widget listBody(
-      {required List<SingleOrderModel> orderDetails,
-       }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: SizedBox(
-        child: ListView.builder(
-            controller: scrollController,
-            itemCount: orderDetails.length,
-            itemBuilder: (context, index) {
-              if (index < orderDetails.length) {
-                return OrderHistoryCell(
-                  orderDetails: orderDetails[index],
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            }),
-      ),
-    );
+class ListBody extends StatefulWidget {
+  final List<SingleOrderModel> orderDetails;
+  const ListBody({Key? key, required this.orderDetails}) : super(key: key);
+
+  @override
+  State<ListBody> createState() => _ListBodyState();
+}
+
+
+class _ListBodyState extends State<ListBody> {
+  ScrollController scrollController = ScrollController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+
+    scrollController.addListener(listener);
+
+    BlocProvider.of<OrderHistoryBloc>(context)
+        .add(const SevenDaysFilterEvent(offset: "0",
+        alreadyFetchedList: []));
   }
 
   listener() {
@@ -107,26 +98,75 @@ class _OrderHistoryListState extends State<OrderHistoryList> {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
 
-        myOrdersLoading.value = true;
+      myOrdersLoading.value = true;
 
-        print("LOADING VALUE IS ================================ "
-            " AFTER TRUE IS ${myOrdersLoading.value}");
+      print("LOADING VALUE IS ================================ "
+          " AFTER TRUE IS ${myOrdersLoading.value}");
 
-      offset = offset + 10;
-      BlocProvider.of<OrderHistoryBloc>(context).add(
-          LoadPastOrderDataEvent(
-          offset: offset.toString(),
-              alreadyFetchedList: orderDetails));
+      ONDCMyOrdersOffset.value = ONDCMyOrdersOffset.value + 10;
+
+      if(sevenDaysFilter.value){
+
+        BlocProvider.of<OrderHistoryBloc>(context).add(
+            SevenDaysFilterEvent(
+                offset: ONDCMyOrdersOffset.value.toString(),
+                alreadyFetchedList: widget.orderDetails));
+
+      }else if(thirtyDaysFilter.value){
+
+        BlocProvider.of<OrderHistoryBloc>(context).add(
+            ThirtyDaysFilterEvent(
+                offset: ONDCMyOrdersOffset.value.toString(),
+                alreadyFetchedList:  widget.orderDetails));
+
+      }else{
+        BlocProvider.of<OrderHistoryBloc>(context).add(
+            CustomDaysFilterEvent(
+                offset: ONDCMyOrdersOffset.value.toString(),
+                alreadyFetchedList:  widget.orderDetails,
+                selectedDates: []));
+      }
+
 
       Future.delayed(const Duration(seconds: 1)).then((value) {
         myOrdersLoading.value = false;
       });
 
-        setState(() {
+      setState(() {
 
-        });
+      });
 
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: widget.orderDetails.isEmpty ?
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text("No Orders Found.",
+            style: FontStyleManager().s14fw700Orange,),
+          ) :
+      SizedBox(
+        child: ListView.builder(
+            controller: scrollController,
+            itemCount: widget.orderDetails.length,
+            itemBuilder: (context, index) {
+              if (index < widget.orderDetails.length) {
+                return OrderHistoryCell(
+                  orderDetails: widget.orderDetails[index],
+                );
+              } else {
+                return const Center(
+                    child: CircularProgressIndicator()
+                );
+              }
+            }),
+      ),
+    );
+
   }
 }
 

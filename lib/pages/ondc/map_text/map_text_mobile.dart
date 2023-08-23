@@ -17,15 +17,15 @@ class _MapTextMobile extends StatefulWidget {
 final userInfoController = Get.put(RegistrationController());
 
 class _MapTextMobileState extends State<_MapTextMobile> {
-  final _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   String query = "";
   PlaceApiProvider apiClient = PlaceApiProvider();
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 
   bool _isFetchingLocation = false;
   @override

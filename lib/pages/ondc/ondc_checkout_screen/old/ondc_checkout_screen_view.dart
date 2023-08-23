@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
 import 'package:santhe/constants.dart';
 import 'package:santhe/controllers/error_user_fallback.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';

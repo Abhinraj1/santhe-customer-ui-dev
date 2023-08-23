@@ -252,7 +252,7 @@ class _ONDCOrderDetailsScreenState extends State<ONDCOrderDetailsScreen> {
     isSingleCancellable({required PreviewWidgetModel element}) {
 
       print("####################################################"
-          "STATUS IN ISSINGLE CANCELLALE = ${element.status}");
+          "STATUS IN ISINGLE CANCELLALE = ${element.status}");
 
       if (element.cancellable != null &&
           element.cancellable == true &&

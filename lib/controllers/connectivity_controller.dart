@@ -112,9 +112,9 @@ class ConnectivityController extends GetxController with LogMixin {
     //     );
     //   }
     // }
-    // return const OndcIntroView();
+     return const OndcIntroView();
     ///! For HyperLocal Deals Home
-    return const HyperlocalShophomeView();
+     return const HyperlocalShophomeView();
     //!previous
     // return MapMerchant();
   }

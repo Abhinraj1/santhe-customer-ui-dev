@@ -21,10 +21,10 @@ part 'hyperlocal_paymentsucess_mobile.dart';
 part 'hyperlocal_paymentsucess_tablet.dart';
 
 class HyperlocalPaymentsucessView extends StatelessWidget {
-  final String storeDescriptionId;
+
   const HyperlocalPaymentsucessView({
     Key? key,
-    required this.storeDescriptionId,
+
   }) : super(key: key);
 
   @override
@@ -32,7 +32,6 @@ class HyperlocalPaymentsucessView extends StatelessWidget {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
         mobile: _HyperlocalPaymentsucessMobile(
-          storeDescriptionId: storeDescriptionId,
         ),
         desktop: _HyperlocalPaymentsucessDesktop(),
         tablet: _HyperlocalPaymentsucessTablet(),

@@ -54,8 +54,8 @@ class _HyperlocalOrderDetailWidgetState
         onTap: () {
           Get.to(
             () => HyperlocalOrderdetailView(
-              storeDescriptionId:
-                  widget.hyperlocalOrderDetailModel.storeDescriptionId,
+              // storeDescriptionId:
+              //     widget.hyperlocalOrderDetailModel.storeDescriptionId,
               orderId: widget.hyperlocalOrderDetailModel.id,
             ),
           );

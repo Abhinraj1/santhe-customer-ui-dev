@@ -43,10 +43,10 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
 
   getDistance() {
     if (widget.shopModel.distance != null) {
-      double d = widget.shopModel.distance;
+      dynamic d = widget.shopModel.distance;
       String? distance = d.toStringAsFixed(1);
       setState(() {
-        distanceD = double.parse(distance);
+        distanceD = double.parse(distance!);
       });
     } else {
       setState(() {

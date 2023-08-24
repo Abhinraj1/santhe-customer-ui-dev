@@ -87,7 +87,7 @@ class HyperlocalCheckoutBloc
     on<VerifyPaymentEventHyperlocal>((event, emit) async {
       emit(VerifyPaymentHyperlocalLoadingState());
 
-      Future.delayed(Duration(seconds: event.isUpiPayment ? 15 : 20)).then((value) async{
+      Future.delayed(Duration(seconds: event.isUpiPayment ? 15 : 30)).then((value) async{
      //   if(Get.currentRoute.contains("AnimatedLoadingScreen") || Get.currentRoute.contains("ONDCWebviewView")){
           late bool status ;
           try {

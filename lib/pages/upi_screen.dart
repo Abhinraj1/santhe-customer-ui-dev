@@ -8,7 +8,7 @@ import '../widgets/custom_widgets/customScaffold.dart';
 
 class PaymentWebviewScreen extends StatelessWidget {
   final String url;
-  const PaymentWebviewScreen({super.key, required this.url});
+  const PaymentWebviewScreen({Key? key, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,7 @@ class PaymentWebviewScreen extends StatelessWidget {
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
-
-            Get.to(()=>const AnimatedLoadingScreen());
+            // Get.to(()=>const AnimatedLoadingScreen());
             return NavigationDecision.prevent;
           }
         ),

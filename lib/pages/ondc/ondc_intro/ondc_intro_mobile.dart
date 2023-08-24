@@ -133,6 +133,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                       child: currentUser.customerName != "X"
                           ? AutoSizeText(
                               'Welcome ${currentUser.customerName}!',
+                              textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.black54,
                                 fontSize: 30,
@@ -173,7 +174,7 @@ class _OndcIntroMobileState extends State<_OndcIntroMobile>
                                     elevation: MaterialStateProperty.all(0),
                                   ),
                                   onPressed: () {
-                                    Get.to(
+                                    Get.to(()=>
                                       HyperlocalShophomeView(
                                         lat: currentUser.lat,
                                         lng: currentUser.lng,

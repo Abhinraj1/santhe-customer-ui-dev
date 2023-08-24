@@ -61,8 +61,8 @@ class HyperlocalShophomeView extends StatelessWidget {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
         mobile: _HyperlocalShophomeMobile(
-          lat: lat,
-          lng: lng,
+          // lat: lat,
+          // lng: lng,
         ),
         desktop: _HyperlocalShophomeDesktop(),
         tablet: _HyperlocalShophomeTablet(),

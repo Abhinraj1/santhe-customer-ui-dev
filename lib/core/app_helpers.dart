@@ -65,9 +65,11 @@ class AppHelpers with LogMixin {
 
   static Future<String> get bearerToken async {
     try {
-      newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+
+      // newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+
       dev.log('token $newBearerToken', name: 'AppHelper.dart');
-      return newBearerToken;
+      return newBearerToken.toString();
     } catch (e) {
       dev.log(
         e.toString(),
@@ -80,8 +82,15 @@ class AppHelpers with LogMixin {
   static late String newBearerToken;
 
   Future<void> generateToken() async {
-    newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+
+   await FirebaseAuth.instance.currentUser!.getIdToken().then((value) {
+      // print("++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      //     "+++++++++++++++++++++++++++++++++++++++++++++++++ getIdToken"
+      //     "==${value}");
+      newBearerToken = value.toString();
+    });
     // warningLog(newBearerToken);
+
   }
 
 
@@ -93,8 +102,12 @@ class AppHelpers with LogMixin {
 
   String get razorPayKey => AppUrl().isDev ? _devRazor : _prodRazor;
 
-  Future<String> get authToken async =>
-      await FirebaseAuth.instance.currentUser!.getIdToken();
+  Future<String> get authToken async {
+    // await FirebaseAuth.instance.currentUser!.getIdToken();
+   await generateToken();
+   return newBearerToken;
+  }
+
 
   String get playStoreLink => appStoreLink;
   String get appStoreLink => '''Hi,

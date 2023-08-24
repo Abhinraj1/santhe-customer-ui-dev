@@ -2,12 +2,8 @@
 part of hyperlocal_shophome_view;
 
 class _HyperlocalShophomeMobile extends StatefulWidget {
-  final String? lat;
-  final String? lng;
-  const _HyperlocalShophomeMobile({
-    required this.lat,
-    required this.lng,
-  });
+
+  const _HyperlocalShophomeMobile();
 
   @override
   State<_HyperlocalShophomeMobile> createState() =>
@@ -70,8 +66,12 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
 
   getNewShops(
       {required List<HyperLocalShopWidget> shops, required int limit}) async {
+    String lat = RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat;
+    String lng = RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng;
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=${customerModel?.lat}&lang=${customerModel?.lng}&limit=20&offset=$limit');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?'
+            'lat=${lat}&'
+            'lang=${lng}&limit=5&offset=$limit');
     setState(() {
       _isLoading = true;
     });
@@ -101,6 +101,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
         newShops.add(HyperLocalShopWidget(hyperLocalShopModel: element));
       }
       infoLog('New Shops $newShops');
+
       shops.addAll(newShops);
       setState(() {
         shopWidgets = shops;
@@ -160,20 +161,25 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
       _initializing = true;
     });
     initFunction();
-    getCustomerInfo();
+    if(mounted){
+      getCustomerInfo();
+    }
 
    if(!_isLoading) {
       _shopScroll.addListener(() {
         if (_shopScroll.position.pixels ==
             _shopScroll.position.maxScrollExtent) {
           warningLog('called');
+
+        if(mounted){
           setState(() {
-            n = n + 20;
+            n = n + 5;
           });
           getNewShops(
             shops: shopWidgets,
             limit: n,
           );
+        }
         }
       });
     }
@@ -211,7 +217,7 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
         warningLog('Listening $state');
         if (state is GotAddressListAndIdState) {
           context.read<AddressBloc>().add(ResetAddressEvent());
-          
+
           context.read<HyperlocalShopBloc>().add(
                 HyperLocalGetShopEvent(
                     lat: RepositoryProvider.of<AddressRepository>(context)

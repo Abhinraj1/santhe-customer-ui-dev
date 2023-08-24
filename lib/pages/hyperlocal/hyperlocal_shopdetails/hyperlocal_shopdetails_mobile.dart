@@ -44,13 +44,17 @@ class _HyperlocalShopdetailsMobileState
     required String shopId,
   }) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/product/list?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/list?'
+            'store_description_id=${widget.hyperLocalShopModel.id}&'
+            'limit=10&offset=$n&'
+            'lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&'
+            'lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
     setState(() {
       _isLoading = true;
     });
     try {
       final response = await http.get(url);
-      warningLog('statusCode of Get ${response.statusCode} and url $url');
+      warningLog('statusCode of Get from screen ${response.statusCode} and url $url');
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
       dynamic _itemCount = json.decode(response.body)['data']['count'];
@@ -89,13 +93,17 @@ class _HyperlocalShopdetailsMobileState
       required String shopId,
       required String productName}) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?store_description_id=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&item_name=$productName&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?store_description_id'
+            '=${widget.hyperLocalShopModel.id}&limit=10&offset=$n&item_'
+            'name=$productName&lat=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat}&'
+            'lang=${RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng}');
     setState(() {
+
       _isSearchLoading = true;
     });
     try {
       final response = await http.get(url);
-      warningLog('statusCode of Get ${response.statusCode} and url $url');
+      warningLog('statusCode of Get from screen ${response.statusCode} and url $url');
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
       int _itemCount = json.decode(response.body)['data']['count'];
@@ -133,29 +141,36 @@ class _HyperlocalShopdetailsMobileState
   void initState() {
     super.initState();
     getHomeDelivery();
-    context.read<HyperlocalShopBloc>().add(
-          HyperLocalGetProductOfShopEvent(
-              shopId: widget.hyperLocalShopModel.id,
-              lat: RepositoryProvider.of<AddressRepository>(context)
-                  .deliveryModel!
-                  .lat,
-              lng: RepositoryProvider.of<AddressRepository>(context)
-                  .deliveryModel!
-                  .lng),
-        );
+if(mounted){
+  context.read<HyperlocalShopBloc>().add(
+      HyperLocalGetProductOfShopEvent(
+        shopId: widget.hyperLocalShopModel.id,
+        lat: RepositoryProvider.of<AddressRepository>(context)
+            .deliveryModel!
+            .lat,
+        lng: RepositoryProvider
+            .of<AddressRepository>(
+            context)
+            .deliveryModel!
+            .lng,)
+  );
+}
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         setState(() {
           n = n + 10;
         });
-        warningLog('new search items and limit $n');
+      if(mounted){
         fetchData(
           productWidgetsLocal: productWidgets,
           shopId: widget.hyperLocalShopModel.id,
         );
       }
+
+      }
     });
+
     _searchScrollController.addListener(() {
       if (_searchScrollController.position.pixels ==
           _searchScrollController.position.maxScrollExtent) {
@@ -244,7 +259,11 @@ class _HyperlocalShopdetailsMobileState
       },
       builder: (context, state) {
         return WillPopScope(
-          onWillPop: () async => false,
+          onWillPop: () async {
+            globalSearchtextEditingController
+                .clear();
+           return true;
+          },
           child: Scaffold(
             key: _key,
             drawer: const CustomNavigationDrawer(),
@@ -395,17 +414,19 @@ class _HyperlocalShopdetailsMobileState
                                                   globalSearchtextEditingController
                                                       .clear();
 
-                                                  ge.Get.off(
-                                                    () => HyperlocalShophomeView(
-                                                        lat: profileController
-                                                            .customerDetails!
-                                                            .lat,
-                                                        lng: profileController
-                                                            .customerDetails!
-                                                            .lng),
-                                                    transition: ge
-                                                        .Transition.leftToRight,
-                                                  );
+                                                  ge.Get.back();
+
+                                                  // ge.Get.off(
+                                                  //   () => HyperlocalShophomeView(
+                                                  //       lat: profileController
+                                                  //           .customerDetails!
+                                                  //           .lat,
+                                                  //       lng: profileController
+                                                  //           .customerDetails!
+                                                  //           .lng),
+                                                  //   transition: ge
+                                                  //       .Transition.leftToRight,
+                                                  // );
                                                 },
                                                 child: Icon(
                                                   Icons.arrow_back,

@@ -106,11 +106,10 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-messaging:23.1.2'
+    implementation 'com.google.firebase:firebase-messaging:23.2.1'
     implementation 'com.google.android.play:integrity:1.2.0'
     implementation 'com.google.firebase:firebase-appcheck-playintegrity'
     implementation("com.google.firebase:firebase-appcheck-ktx")
-    implementation "dev.shreyaspatil.EasyUpiPayment:EasyUpiPayment:3.0.3"
 
 
 }

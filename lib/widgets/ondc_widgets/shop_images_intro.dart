@@ -20,7 +20,8 @@ class ShopImageIntro extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.26,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
-            child: CachedNetworkImage(
+            child:
+            CachedNetworkImage(
               imageUrl: image,
               fit: BoxFit.cover,
               errorWidget: (context, url, error) => Image.asset(

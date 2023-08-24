@@ -68,7 +68,7 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
   Widget build(BuildContext context) {
     errorLog('Images of hyper local ${widget.hyperLocalShopModel.images}');
     return GestureDetector(
-      onTap: () => Get.to(
+      onTap: () => Get.to(()=>
         HyperlocalShopdetailsView(
             hyperLocalShopModel: widget.hyperLocalShopModel),
       ),

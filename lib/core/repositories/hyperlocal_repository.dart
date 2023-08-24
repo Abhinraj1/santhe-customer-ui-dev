@@ -50,11 +50,11 @@ class HyperLocalRepository with LogMixin {
   }
 
   Future<List<HyperLocalShopModel>> getHyperLocalShops(
-      {String? lat, String? lng}) async {
+      {required String lat,required String lng}) async {
     final url = Uri.parse(
         '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=$lat&lang=$lng&limit=20&offset=0');
     try {
-      debugLog('HyperLocal Url for Shops $url');
+      debugLog('HyperLocal Url for Shops FROM REPO $url');
       final response = await http.get(url);
       warningLog(
           'Response Structure ${response.statusCode} HyperLocal Url for Shops $url and body ${response.body} ');
@@ -109,10 +109,11 @@ class HyperLocalRepository with LogMixin {
       required String lat,
       required String lng}) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/product/list?store_description_id=$storeId&limit=10&offset=0&lat=$lat&lang=$lng');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/list?store_description_id=$storeId&'
+            'limit=10&offset=0&lat=$lat&lang=$lng');
     try {
       final response = await http.get(url);
-      warningLog('statusCode of Get ${response.statusCode} and url $url');
+      warningLog('statusCode of Get FROM REPO ${response.statusCode} and url $url');
       final responseBody =
           json.decode(response.body)['data']['rows'] as List<dynamic>;
       _itemCount = json.decode(response.body)['data']['count'];

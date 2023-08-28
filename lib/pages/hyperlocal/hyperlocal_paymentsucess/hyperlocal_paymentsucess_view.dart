@@ -33,7 +33,7 @@ class HyperlocalPaymentsucessView extends StatelessWidget {
       return ScreenTypeLayout(
         mobile: _HyperlocalPaymentsucessMobile(
         ),
-        desktop: _HyperlocalPaymentsucessDesktop(),
+        desktop: const _HyperlocalPaymentsucessDesktop(),
         tablet: _HyperlocalPaymentsucessTablet(),
       );
     });

@@ -998,83 +998,130 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
+                    child:
+                    SizedBox(
+                      width: 200,//double.infinity,
+                      child:
+                      ElevatedButton(
+                        onPressed: () {
 
-                              BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                                  PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
+                          BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                              PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
                                   isUpiPayment: true));
 
-                              // Future.delayed(const Duration(seconds: 15)).then((value) {
-                              //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
-                                BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                                    VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
-                              // }
-                              //
-                              // }
-                              // );
+                          // Future.delayed(const Duration(seconds: 15)).then((value) {
+                          //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
+                          // BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                          //     VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
+                          //  }
+                          //
+                          // }
+                          // );
 
-                              // Get.to(()=> UpiScreen(
-                              //   orderId:order_id.toString(),
-                              //   amount: double.parse(total.toString()),
-                              // ));
+                          // Get.to(()=> UpiScreen(
+                          //   orderId:order_id.toString(),
+                          //   amount: double.parse(total.toString()),
+                          // ));
 
-                              // setState(() {
-                              //   isLoadingInitUPI = true;
-                              // });
-                              //
-                              //   Future.delayed(const Duration(seconds:2 )).then(
-                              //           (value) =>
-                              //       setState(() {
-                              //         isLoadingInitUPI = false;
-                              // }));
+                          // setState(() {
+                          //   isLoadingInitUPI = true;
+                          // });
+                          //
+                          //   Future.delayed(const Duration(seconds:2 )).then(
+                          //           (value) =>
+                          //       setState(() {
+                          //         isLoadingInitUPI = false;
+                          // }));
 
-                                print("++++++++++++++++++++++++++++++++++++ "
-                                    "++++++++++ ${order_id}");
-                            },
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              backgroundColor:
-                              MaterialStateProperty.all(AppColors().green100),
+                          print("++++++++++++++++++++++++++++++++++++ "
+                              "++++++++++ ${order_id}");
+                        },
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Text('PAY VIA UPI'),
                           ),
-
-
-                          ElevatedButton(
-                            onPressed: () {
-
-                              BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                                  PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
-                                    isUpiPayment: false
-                                  ));
-
-                              BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                                  VerifyPaymentEventHyperlocal(orderId: order_id,isUpiPayment: false));
-
-                            },
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              backgroundColor:
-                              MaterialStateProperty.all(AppColors().brandDark),
-                            ),
-                            child: const Text('PAYMENT OPTIONS'),
-                          )
-                        ],
-                      ),
+                          backgroundColor:
+                          MaterialStateProperty.all(AppColors().green100),
+                        ),
+                        child: const Text('PAY'),
+                      )
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     ElevatedButton(
+                      //       onPressed: () {
+                      //
+                      //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                      //             PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
+                      //             isUpiPayment: true));
+                      //
+                      //         // Future.delayed(const Duration(seconds: 15)).then((value) {
+                      //         //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
+                      //           BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                      //               VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
+                      //         // }
+                      //         //
+                      //         // }
+                      //         // );
+                      //
+                      //         // Get.to(()=> UpiScreen(
+                      //         //   orderId:order_id.toString(),
+                      //         //   amount: double.parse(total.toString()),
+                      //         // ));
+                      //
+                      //         // setState(() {
+                      //         //   isLoadingInitUPI = true;
+                      //         // });
+                      //         //
+                      //         //   Future.delayed(const Duration(seconds:2 )).then(
+                      //         //           (value) =>
+                      //         //       setState(() {
+                      //         //         isLoadingInitUPI = false;
+                      //         // }));
+                      //
+                      //           print("++++++++++++++++++++++++++++++++++++ "
+                      //               "++++++++++ ${order_id}");
+                      //       },
+                      //       style: ButtonStyle(
+                      //         shape: MaterialStateProperty.all(
+                      //           RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(8),
+                      //           ),
+                      //         ),
+                      //         backgroundColor:
+                      //         MaterialStateProperty.all(AppColors().green100),
+                      //       ),
+                      //       child: const Text('PAY VIA UPI'),
+                      //     ),
+                      //
+                      //
+                      //     ElevatedButton(
+                      //       onPressed: () {
+                      //
+                      //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                      //             PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
+                      //               isUpiPayment: false
+                      //             ));
+                      //
+                      //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                      //             VerifyPaymentEventHyperlocal(orderId: order_id,isUpiPayment: false));
+                      //
+                      //       },
+                      //       style: ButtonStyle(
+                      //         shape: MaterialStateProperty.all(
+                      //           RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(8),
+                      //           ),
+                      //         ),
+                      //         backgroundColor:
+                      //         MaterialStateProperty.all(AppColors().brandDark),
+                      //       ),
+                      //       child: const Text('PAYMENT OPTIONS'),
+                      //     )
+                      //   ],
+                      // ),
                     ),
                   ),
                 ]),

@@ -52,7 +52,7 @@ class HyperLocalRepository with LogMixin {
   Future<List<HyperLocalShopModel>> getHyperLocalShops(
       {required String lat,required String lng}) async {
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=$lat&lang=$lng&limit=20&offset=0');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/merchant/list?lat=$lat&lang=$lng&limit=5&offset=0');
     try {
       debugLog('HyperLocal Url for Shops FROM REPO $url');
       final response = await http.get(url);

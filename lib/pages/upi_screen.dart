@@ -25,7 +25,7 @@ class PaymentWebviewScreen extends StatelessWidget {
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
             // Get.to(()=>const AnimatedLoadingScreen());
-            return NavigationDecision.prevent;
+            return NavigationDecision.navigate;
           }
         ),
       )

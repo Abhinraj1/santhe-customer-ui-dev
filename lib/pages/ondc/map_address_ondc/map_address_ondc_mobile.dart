@@ -104,7 +104,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
           customerModel = currentUser;
           errorLog('Which Screen? ${widget.whichScreen}');
           widget.whichScreen == 'Hyperlocal'
-              ? ge.Get.off(
+              ? ge.Get.offAll(
                   () => HyperlocalShophomeView(
                         lat: currentUser.lat,
                         lng: currentUser.lng,

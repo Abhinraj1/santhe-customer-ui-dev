@@ -313,18 +313,18 @@ class _HyperlocalPreviousordersMobileState
       builder: (context, state) {
         return Scaffold(
           key: _key,
-          // appBar: AppBar(
-          //   title: AutoSizeText(
-          //       "Santhe",
-          //       style: FontStyleManager().kAppNameStyle
-          //   ),
-          //   leading: IconButton(
-          //     icon: const Icon(Icons.arrow_back_ios),
-          //     onPressed: (){
-          //       ge.Get.back();
-          //     },
-          //   ),
-          // ),
+          appBar: AppBar(
+            title: AutoSizeText(
+                "Santhe",
+                style: FontStyleManager().kAppNameStyle
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: (){
+                ge.Get.back();
+              },
+            ),
+          ),
           backgroundColor: AppColors().grey10,
           body: Stack(
             children: [

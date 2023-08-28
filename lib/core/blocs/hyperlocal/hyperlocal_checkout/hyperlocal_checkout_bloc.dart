@@ -54,46 +54,20 @@ class HyperlocalCheckoutBloc
       }
     });
 
-    on<PostPaymentCheckoutEvent>((event, emit) async {
-      emit(PostPaymentHyperlocalLoadingState());
-      try {
-      //  final HyperLocalPaymentModel paymentInfoModel =
-          final String intentUrl =  await hyperLocalCheckoutRepository.postPaymentCheckout(
-                orderIdRec: event.orderId, targetApp: event.targetApp,isUpi: event.isUpiPayment);
-          if(!intentUrl.contains("error")){
-            Get.back();
-            if(event.isUpiPayment){
-              launchUrl(Uri.parse(intentUrl));
-              Get.to(()=> const AnimatedLoadingScreen());
-            }else{
-              Get.to(()=>PaymentWebviewScreen(url: intentUrl));
-            }
-
-          }else{
-            customSnackBar(message: "Sorry Can't Create The Order Now Please Try After Some Time",
-              showOnTop: true,
-              isErrorMessage: true
-            );
-          }
-
-        // emit(PostPaymentHyperlocalSuccessState(
-        //     hyperlocalPaymentInfo: paymentInfoModel));
 
 
-      } on PostPaymentHyperlocalErrorState catch (e) {
-        emit(PostPaymentHyperlocalErrorState(message: e.message));
-      }
-    });
-    on<VerifyPaymentEventHyperlocal>((event, emit) async {
-      emit(VerifyPaymentHyperlocalLoadingState());
+   // on<VerifyPaymentEventHyperlocal>((event, emit)
 
-      Future.delayed(Duration(seconds: event.isUpiPayment ? 15 : 30)).then((value) async{
+    verifyPaymentEventHyperlocal({required bool isUpiPayment,required String orderId }) async {
+     // emit(VerifyPaymentHyperlocalLoadingState());
+
+      Future.delayed(Duration(seconds: isUpiPayment ? 25 : 600)).then((value) async{
      //   if(Get.currentRoute.contains("AnimatedLoadingScreen") || Get.currentRoute.contains("ONDCWebviewView")){
           late bool status ;
           try {
-            for(var i =0 ; i <=30; i++){
+            for(var i =0 ; i <=60; i++){
               final bool verified = await hyperLocalCheckoutRepository.verifyPayment(
-                  orderID: event.orderId);
+                  orderID: orderId);
               if(verified){
                 status = true;
                 break;
@@ -103,7 +77,7 @@ class HyperlocalCheckoutBloc
               // }
               else{
                 status = false;
-                await Future.delayed(const Duration(seconds: 1));
+                await Future.delayed(const Duration(seconds: 2));
               }
             }
 
@@ -111,10 +85,9 @@ class HyperlocalCheckoutBloc
             //   VerifyPaymentHyperlocalSuccessState(message: message),
             // );
           } on VerifyPaymentHyperlocalErrorState catch (e) {
-            emit(VerifyPaymentHyperlocalErrorState(message: e.message));
+          //  emit(VerifyPaymentHyperlocalErrorState(message: e.message));
           }finally{
             if(status){
-              Get.close(2);
               Get.to(()=> const HyperlocalPaymentsucessView());
             }else{
              if(Get.currentRoute.contains("AnimatedLoadingScreen")){
@@ -128,8 +101,59 @@ class HyperlocalCheckoutBloc
       //  }
 
       });
-    });
+    }
+    //);
 
+    on<PostPaymentCheckoutEvent>((event, emit) async {
+      emit(PostPaymentHyperlocalLoadingState());
+      bool hasError = false;
+      try {
+        //  final HyperLocalPaymentModel paymentInfoModel =
+        final String intentUrl =  await hyperLocalCheckoutRepository.postPaymentCheckout(
+            orderIdRec: event.orderId, targetApp: event.targetApp,isUpi: event.isUpiPayment);
+        if(!intentUrl.contains("error")){
+          Get.back();
+          if(event.isUpiPayment){
+
+            try{
+
+              launchUrl(Uri.parse(intentUrl)).onError((error, stackTrace) {
+                Get.back();
+                hasError = true;
+                customSnackBar(message: "Couldn't Find Payment Apps", isErrorMessage: true,showOnTop: true);
+                return false;
+              });
+            }catch(e){
+              print("ERRROR LAUNCHING INTENT ==$e");
+
+            }
+            if(!hasError){
+              Get.to(()=> const AnimatedLoadingScreen());
+              verifyPaymentEventHyperlocal(
+                  orderId: event.orderId,
+                  isUpiPayment: true);
+
+            }
+          }else{
+            Get.to(()=>PaymentWebviewScreen(url: intentUrl));
+          }
+
+        }else{
+          customSnackBar(message: "Sorry Can't Create "
+              "The Order Now Please Try After Some Time",
+              showOnTop: true,
+              isErrorMessage: true
+          );
+        }
+
+        // emit(PostPaymentHyperlocalSuccessState(
+        //     hyperlocalPaymentInfo: paymentInfoModel));
+
+
+      } on PostPaymentHyperlocalErrorState catch (e) {
+        emit(PostPaymentHyperlocalErrorState(message: e.message));
+      }
+    });
     // on<PostUPIPaymentCheckoutEvent>((event,emit) async {
     //
     //   final res;

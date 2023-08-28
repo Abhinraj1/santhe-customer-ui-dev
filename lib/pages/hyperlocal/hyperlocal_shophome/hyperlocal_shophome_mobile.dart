@@ -118,13 +118,17 @@ class _HyperlocalShophomeMobileState extends State<_HyperlocalShophomeMobile>
 
   getSearchNewShop(
       {required List<HyperLocalShopWidget> shops, required int limit}) async {
+    String lat = RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lat;
+    String lng = RepositoryProvider.of<AddressRepository>(context).deliveryModel!.lng;
     final url = Uri.parse(
-        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?limit=10&offset=$nSearch&item_name=${_textEditingController.text}&lat=${customerModel?.lat}&lang=${customerModel?.lng}}');
+        '${AppUrl().baseUrl}/santhe/hyperlocal/product/search?limit=10&'
+            'offset=$nSearch&item_name=${_textEditingController.text}&'
+            'lat=${lat}&lang=${lng}}');
     setState(() {
       _isSearchLoading = true;
     });
     try {
-      debugLog('HyperLocal Url for Shops $url');
+      debugLog('HyperLocal Url From screen for Shops $url');
       final response = await http.get(url);
       warningLog(
           'Response Structure ${response.statusCode} and body ${response.body} also url $url');

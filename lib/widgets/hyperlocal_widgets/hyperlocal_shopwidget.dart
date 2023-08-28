@@ -8,6 +8,8 @@ import 'package:santhe/models/hyperlocal_models/hyperlocal_shopmodel.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_shopdetails/hyperlocal_shopdetails_view.dart';
 import 'package:santhe/widgets/ondc_widgets/shop_images_intro.dart';
 
+import '../../utils/get_screen_dimensions.dart';
+
 class HyperLocalShopWidget extends StatefulWidget {
   final HyperLocalShopModel hyperLocalShopModel;
   const HyperLocalShopWidget({
@@ -68,14 +70,14 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
   Widget build(BuildContext context) {
     errorLog('Images of hyper local ${widget.hyperLocalShopModel.images}');
     return GestureDetector(
-      onTap: () => Get.to(()=>
+      onTap: () => Get.offAll(()=>
         HyperlocalShopdetailsView(
             hyperLocalShopModel: widget.hyperLocalShopModel),
       ),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Container(
-          height: 180,
+          height: 195,
           width: MediaQuery.of(context).size.width * 0.9,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -90,6 +92,7 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
             ],
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,7 +100,8 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
-                      width: 200,
+                      width: getScreenDimensions(
+                          context: context,horizontalPadding: 60).width,
                       child: Text(
                         widget.hyperLocalShopModel.name.toString(),
                         maxLines: 2,
@@ -114,15 +118,16 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
                 ],
               ),
               widget.hyperLocalShopModel.images.isEmpty
-                  ? Expanded(
-                      child: Text(
-                        "${widget.hyperLocalShopModel.name}",
-                        style: TextStyle(
-                            color: AppColors().brandDark,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  : Expanded(
+                  ? Text(
+                    "${widget.hyperLocalShopModel.name}",
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: AppColors().brandDark,
+                        fontWeight: FontWeight.bold),
+                  )
+                  : SizedBox(
+                width: getScreenDimensions(
+                    context: context,horizontalPadding: 34).width,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -133,25 +138,30 @@ class _HyperLocalShopWidgetState extends State<HyperLocalShopWidget>
                     ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
+                child: SizedBox(
+                  height: 35,
+                  width: getScreenDimensions(
+                      context: context,horizontalPadding: 34).width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         '${distanceD} kms',
                         style: TextStyle(
                           color: AppColors().grey80,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${widget.hyperLocalShopModel.itemCount} items',
-                        style: TextStyle(
-                            color: AppColors().brandDark, fontSize: 16),
-                      ),
-                    )
-                  ],
+
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${widget.hyperLocalShopModel.itemCount} items',
+                          style: TextStyle(
+                              color: AppColors().brandDark, fontSize: 16),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

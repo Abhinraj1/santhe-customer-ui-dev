@@ -260,9 +260,8 @@ if(mounted){
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            globalSearchtextEditingController
-                .clear();
-           return true;
+            _handleBack();
+           return false;
           },
           child: Scaffold(
             key: _key,
@@ -308,16 +307,16 @@ if(mounted){
                       //   () => const OndcIntroView(),
                       //   transition: ge.Transition.rightToLeft,
                       // );
-                      ge.Get.off(
+                      ge.Get.offAll(
                           HyperlocalShophomeView(
                               lat: profileController.customerDetails!.lat,
                               lng: profileController.customerDetails!.lng),
-                          transition: ge.Transition.rightToLeft);
+                          transition: ge.Transition.fadeIn);
                     },
                     splashRadius: 25.0,
                     icon: InkWell(
                       onTap: () {
-                        ge.Get.off(
+                        ge.Get.offAll(
                             () => HyperlocalShophomeView(
                                   lat: profileController.customerDetails!.lat,
                                   lng: profileController.customerDetails!.lng,
@@ -372,6 +371,18 @@ if(mounted){
                           children: [
                             Stack(
                               children: [
+                                // SvgPicture.asset(
+                                //   "assets/banner.svg",
+                                //     height: widget.hyperLocalShopModel.address
+                                //                 .toString()
+                                //                 .length >
+                                //             75
+                                //         ? 215
+                                //         : 195,
+                                //     fit: BoxFit.fill,
+                                //
+                                //     width:MediaQuery.of(context).size.width,
+                                // ),
                                 Image.asset(
                                   'assets/bannerondc.png',
                                   height: widget.hyperLocalShopModel.address
@@ -411,22 +422,7 @@ if(mounted){
                                                 onTap: () {
                                                   warningLog(
                                                       'Checking for search term before exiting${globalSearchtextEditingController.text}');
-                                                  globalSearchtextEditingController
-                                                      .clear();
-
-                                                  ge.Get.back();
-
-                                                  // ge.Get.off(
-                                                  //   () => HyperlocalShophomeView(
-                                                  //       lat: profileController
-                                                  //           .customerDetails!
-                                                  //           .lat,
-                                                  //       lng: profileController
-                                                  //           .customerDetails!
-                                                  //           .lng),
-                                                  //   transition: ge
-                                                  //       .Transition.leftToRight,
-                                                  // );
+                                                  _handleBack();
                                                 },
                                                 child: Icon(
                                                   Icons.arrow_back,
@@ -712,12 +708,18 @@ if(mounted){
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: Image.asset(
-                                                  'assets/newshoppingcart.png',
+                                                child: SvgPicture.asset(
+                                                    "assets/cartIcon.svg",
                                                   fit: BoxFit.fill,
-                                                  height: 55,
-                                                  width: 55,
-                                                ),
+                                                    height: 55,
+                                                    width: 55,
+                                                )
+                                                // Image.asset(
+                                                //   'assets/newshoppingcart.png',
+                                                //   fit: BoxFit.fill,
+                                                //   height: 55,
+                                                //   width: 55,
+                                                // ),
                                               ),
                                             ),
                                           ),
@@ -1019,6 +1021,21 @@ if(mounted){
           ),
         );
       },
+    );
+  }
+  _handleBack(){
+    globalSearchtextEditingController
+        .clear();
+    ge.Get.offAll(
+          () => HyperlocalShophomeView(
+          lat: profileController
+              .customerDetails!
+              .lat,
+          lng: profileController
+              .customerDetails!
+              .lng),
+      transition: ge
+          .Transition.leftToRight,
     );
   }
 }

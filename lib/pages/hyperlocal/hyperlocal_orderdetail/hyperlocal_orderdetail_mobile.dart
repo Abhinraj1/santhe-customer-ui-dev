@@ -126,6 +126,7 @@ class _HyperlocalOrderdetailMobileState
             children: [
               WillPopScope(
                 onWillPop: () async {
+                  Get.back();
                   return false;
                 },
                 child: Scaffold(

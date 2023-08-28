@@ -18,10 +18,8 @@ class _HyperlocalPaymentsucessMobileState
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Get.back();
-        Get.back();
-        Get.back();
-        return true;
+        Get.close(3);
+        return false;
       },
       child: Scaffold(
         key: _key,
@@ -128,7 +126,7 @@ class _HyperlocalPaymentsucessMobileState
                     //         Get.close(5);
                     //       },
                     //     ));
-                    Get.close(3);
+                    Get.close(4);
                     Get.to(
                       () => HyperlocalOrderdetailView(
                       //  storeDescriptionId: widget.storeDescriptionId,

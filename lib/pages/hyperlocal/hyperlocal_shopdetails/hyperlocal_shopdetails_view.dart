@@ -29,25 +29,29 @@ import 'package:santhe/widgets/hyperlocal_widgets/hyperlocal_productwidget.dart'
 
 import '../../../controllers/getx/profile_controller.dart';
 import '../../../core/app_url.dart';
+import '../../../core/cubits/hyperlocal_shopDetails_cubit/hyperlocal_shop_details_cubit.dart';
+import '../../../widgets/hyperlocal_widgets/hyperlocal_shop_home_body.dart';
 import '../../../widgets/navigation_drawer_widget.dart';
 import '../../ondc/ondc_checkout_screen/new/ondc_checkout_screen_mobile.dart';
 import 'package:badges/badges.dart' as badges;
 part 'hyperlocal_shopdetails_desktop.dart';
-part 'hyperlocal_shopdetails_mobile.dart';
+// part 'hyperlocal_shopdetails_mobile.dart';
 part 'hyperlocal_shopdetails_tablet.dart';
 
 class HyperlocalShopdetailsView extends StatelessWidget {
   final HyperLocalShopModel hyperLocalShopModel;
+  final String? searchItem;
   const HyperlocalShopdetailsView({
     Key? key,
-    required this.hyperLocalShopModel,
+    required this.hyperLocalShopModel, this.searchItem,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
-        mobile: _HyperlocalShopdetailsMobile(
+        mobile: HyperLocalShopDetailsScreen(
+          searchItem: searchItem,
           hyperLocalShopModel: hyperLocalShopModel,
         ),
         desktop: _HyperlocalShopdetailsDesktop(),

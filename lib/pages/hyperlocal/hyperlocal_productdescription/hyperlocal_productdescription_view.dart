@@ -23,6 +23,7 @@ import 'package:santhe/widgets/ondc_widgets/expandable_text.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_carousel.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 
+import '../../../utils/firebase_analytics_custom_events.dart';
 import '../hyperlocal_shophome/hyperlocal_shophome_view.dart';
 
 part 'hyperlocal_productdescription_desktop.dart';

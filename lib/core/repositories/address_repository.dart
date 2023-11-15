@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:geocoding/geocoding.dart';
+import 'package:get/get.dart';
 import 'package:santhe/constants.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/blocs/address/address_bloc.dart';
@@ -10,10 +11,19 @@ import 'package:santhe/core/loggers.dart';
 import 'package:http/http.dart' as http;
 import 'package:santhe/models/ondc/address_ondc_model.dart';
 
+import '../../controllers/registrationController.dart';
 import '../app_url.dart';
+
+
+var homeAddress = "".obs;
+var howToReachHome = "".obs;
+final registrationController = Get.find<RegistrationController>();
 
 class AddressRepository with LogMixin {
   List<AddressOndcModel> addressOndcModels = [];
+
+  AddressOndcModel? _homeAddress;
+
 
   AddressOndcModel? deliveryAddressModel;
   String? deliveryAddressId;
@@ -108,6 +118,8 @@ class AddressRepository with LogMixin {
   }
 
   Future<List<AddressOndcModel>> getAddressList() async {
+    addressLoaded.value = false;
+
     final firebaseId = AppHelpers().getPhoneNumberWithoutCountryCode;
 
     warningLog('Firebase Id being sent IN GET ADDRESS LIST $firebaseId');
@@ -131,7 +143,7 @@ class AddressRepository with LogMixin {
       errorLog('################ RAW DATA  HEREE also url $url $responseBody');
       addressOndcModels =
           responseBody.map((e) => AddressOndcModel.fromMap(e)).toList();
-      errorLog('Fetching address ${addressOndcModels}');
+      errorLog('Fetching address $addressOndcModels');
 
       ///
       warningLog("################################# body ${addressOndcModels}");
@@ -142,9 +154,19 @@ class AddressRepository with LogMixin {
       billingAddressModel = addressOndcModels.firstWhere(
         (element) => element.address_name.toString().contains('Billing'),
       );
+
+       _homeAddress = addressOndcModels.firstWhere(
+             (element) => element.address_name.toString().contains('Home'),
+       );
+
       errorLog('Delivery ${deliveryAddressModel?.flat}');
 
       deliveryAddressId = deliveryAddressModel?.id;
+       deliveryAddress = deliveryAddressModel;
+       registrationController.address.value = _homeAddress!.flat;
+       //registrationController.howToReach.value = _homeAddress!.howToReach;
+      // customerModel.lat = deliveryAddressModel!.lat;
+      // customerModel.lng = deliveryAddressModel!.lng;
 
       billingAddressId = billingAddressModel?.id;
 
@@ -153,6 +175,8 @@ class AddressRepository with LogMixin {
     } catch (e) {
       AppHelpers.crashlyticsLog(response.body.toString());
       throw ErrorGettingAddressState(message: e.toString());
+    }finally{
+      addressLoaded.value = true;
     }
   }
 }

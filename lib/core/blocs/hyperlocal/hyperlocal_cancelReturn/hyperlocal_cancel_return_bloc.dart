@@ -4,6 +4,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/hyperlocal_cancel_return_repo.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_cancel.dart';
 
+import '../../../../utils/firebase_analytics_custom_events.dart';
+
 part 'hyperlocal_cancel_return_event.dart';
 part 'hyperlocal_cancel_return_state.dart';
 
@@ -48,6 +50,12 @@ class HyperlocalCancelReturnBloc
       try {
         await hyperlocalCancelReturnRepository.postcancelReason(
             reason: event.reason, orderId: event.orderID);
+
+        ///
+        AnalyticsCustomEvents().userOrderCancelEvent(
+            orderId: event.orderID,
+            reason: event.reason);
+
         emit(PostHyperlocalCancelReasonSuccessState(cancelled: true));
       } on PostHyperlocalCancelReasonErrorState catch (e) {
         emit(GetHyperlocalCancelReasonsErrorState(message: e.message));

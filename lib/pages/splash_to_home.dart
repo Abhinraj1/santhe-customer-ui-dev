@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/api_service_controller.dart';
 import 'package:santhe/controllers/getx/all_list_controller.dart';
@@ -11,10 +12,13 @@ import 'package:santhe/controllers/home_controller.dart';
 import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/pages/map_merch.dart';
+import '../constants.dart';
 import '../controllers/connectivity_controller.dart';
 import '../controllers/notification_controller.dart';
 import 'package:flutter/services.dart' as sv;
 import '../core/app_initialisations.dart';
+import '../core/blocs/address/address_bloc.dart';
+import '../network_call/network_call.dart';
 import 'chat/chat_screen.dart';
 import 'home_page.dart';
 import 'login_pages/phone_number_login_page.dart';
@@ -34,6 +38,7 @@ class _SplashToHomeState extends State<SplashToHome>
   // final HomeController _homeController = Get.find();
   // final NotificationController _notificationController = Get.find();
   // final APIs apiController = Get.find();
+  NetworkCall networkCall = NetworkCall();
   Future<void> bootHome() async {
     await AppInitialisations().initialiseApplication();
    // await Notifications().fcmInit();
@@ -44,6 +49,7 @@ class _SplashToHomeState extends State<SplashToHome>
     Future.delayed(const Duration(milliseconds: 4000), () {
       connectivityController.checkConnectivityAndMoveInitialPage();
     });
+
   }
 
   // Widget getLandingScreen() {
@@ -105,14 +111,18 @@ class _SplashToHomeState extends State<SplashToHome>
 
   @override
   void initState() {
+   // _getUserData();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.orange,
       systemNavigationBarIconBrightness: Brightness.light,
       statusBarColor: Colors.orange,
       statusBarBrightness: Brightness.dark,
     ));
+    _intialiseToken();
     bootHome();
+
     super.initState();
   }
 
@@ -129,4 +139,11 @@ class _SplashToHomeState extends State<SplashToHome>
       ),
     );
   }
+
+  // _getUserData() async{
+  //   context.read<AddressBloc>().add(
+  //     GetAddressListEvent(),
+  //   );
+  //   customerModel = await networkCall.getCustomerDetails();
+  // }
 }

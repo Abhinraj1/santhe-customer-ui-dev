@@ -49,10 +49,12 @@ class ProfileController extends GetxController with LogMixin {
   Future<bool> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
     final formattedPhoneNumber = AppHelpers()
-        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
+        .getPhoneNumberWithoutFoundedCountryCode(
+        AppHelpers().getPhoneNumber);
     final intPhoneNumber = int.parse(formattedPhoneNumber);
     warningLog(
-        'Formatted PhoneNumber $formattedPhoneNumber and formatted int phone number $intPhoneNumber');
+        'Formatted PhoneNumber $formattedPhoneNumber'
+            ' and formatted int phone number $intPhoneNumber');
     final result = await apiController.getCustomerInfo(
       //!previous function
       int.parse(
@@ -83,7 +85,7 @@ class ProfileController extends GetxController with LogMixin {
   set getCustomerDetails(CustomerModel customer) {
     customerDetails = customer;
     RegistrationController registrationController = Get.find();
-    registrationController.address.value = customerDetails!.address;
+   registrationController.address.value = customerDetails!.address;
     registrationController.howToReach.value = customerDetails!.howToReach;
     registrationController.lat.value = double.parse(customerDetails!.lat);
     registrationController.lng.value = double.parse(customerDetails!.lng);

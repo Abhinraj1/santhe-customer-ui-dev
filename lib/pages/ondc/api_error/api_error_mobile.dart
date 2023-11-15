@@ -53,8 +53,9 @@ class _ApiErrorMobileState extends State<_ApiErrorMobile> {
                 // Get.off(() => const OndcIntroView());
                 Get.off(
                   HyperlocalShophomeView(
-                      lat: profileController.customerDetails!.lat,
-                      lng: profileController.customerDetails!.lng),
+                      // lat: profileController.customerDetails!.lat,
+                      // lng: profileController.customerDetails!.lng
+                  ),
                 );
               },
               splashRadius: 25.0,

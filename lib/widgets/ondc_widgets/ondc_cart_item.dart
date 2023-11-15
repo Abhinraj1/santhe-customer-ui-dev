@@ -1,15 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gits_cached_network_image/gits_cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/models/ondc/cart_item_model.dart';
+
+import '../../manager/imageManager.dart';
 
 class OndcCartItem extends StatefulWidget {
   final CartitemModel productOndcModel;
@@ -152,13 +155,15 @@ class _OndcCartItemState extends State<OndcCartItem> with LogMixin {
                                 width: width * 0.194444,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
+                                  child: GitsCachedNetworkImage(
                                     imageUrl: widget.productOndcModel.symbol,
                                     fit: BoxFit.contain,
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset(
-                                      'assets/cart.png',
-                                      fit: BoxFit.fill,
+                                    loadingBuilder: (context) => Lottie.asset(ImgManager().imageLoader),
+                                    errorBuilder: (context, url, error) => Image.asset(
+                                      ImgManager().santheIcon,
+                                      width: 70,
+                                      height: 70,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),

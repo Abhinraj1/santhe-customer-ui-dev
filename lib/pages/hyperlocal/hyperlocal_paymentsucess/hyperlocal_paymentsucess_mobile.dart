@@ -14,6 +14,20 @@ class _HyperlocalPaymentsucessMobile extends StatefulWidget {
 class _HyperlocalPaymentsucessMobileState
     extends State<_HyperlocalPaymentsucessMobile> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AnalyticsCustomEvents().userViewedScreen(
+        screen: "order_details_screen"
+    );
+    AnalyticsCustomEvents().userOrderSuccessEvent(
+      orderId: RepositoryProvider.of<HyperLocalCheckoutRepository>(
+          context)
+          .shopOrderId,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -126,6 +140,10 @@ class _HyperlocalPaymentsucessMobileState
                     //         Get.close(5);
                     //       },
                     //     ));
+
+                    ///
+                    ///
+
                     Get.close(4);
                     Get.to(
                       () => HyperlocalOrderdetailView(

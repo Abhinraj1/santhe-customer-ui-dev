@@ -5,9 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:resize/resize.dart';
 
-import 'package:get/get.dart';
+import 'package:get/get.dart' as gt;
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/controllers/registrationController.dart';
 import 'package:santhe/core/app_helpers.dart';
@@ -25,6 +26,8 @@ import '../../controllers/api_service_controller.dart';
 import '../../controllers/location_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
+import '../../core/blocs/address/address_bloc.dart';
+import '../../utils/firebase_analytics_custom_events.dart';
 import '../hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'mapSearchScreen.dart';
 
@@ -42,7 +45,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
     with LogMixin {
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-  final apiController = Get.find<APIs>();
+  final apiController = gt.Get.find<APIs>();
   final _formKey = GlobalKey<FormState>();
   String userName = '', userEmail = '', userRefferal = '';
   bool mapSelected = false;
@@ -59,16 +62,18 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
     ));
 
     checkNet();
-
+    context.read<AddressBloc>().add(
+      GetAddressListEvent(),
+    );
     super.initState();
   }
 
   void checkNet() async {
     final hasNet = await AppHelpers.checkConnection();
     if (!hasNet) {
-      Get.to(
+      gt.Get.to(
         () => const NoInternetPage(),
-        transition: Transition.fade,
+        transition: gt.Transition.fade,
       );
     }
   }
@@ -76,8 +81,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
   @override
   Widget build(BuildContext context) {
     int userPhoneNumber = widget.userPhoneNumber;
-    final registrationController = Get.find<RegistrationController>();
-    final profileController = Get.find<ProfileController>();
+    final registrationController = gt.Get.find<RegistrationController>();
+    final profileController = gt.Get.find<ProfileController>();
     final TextStyle kHintStyle = TextStyle(
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
@@ -86,7 +91,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: Colors.grey.shade600);
-    final locationController = Get.find<LocationController>();
+    final locationController = gt.Get.find<LocationController>();
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -345,7 +350,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                             mapSelected = true;
                           });
                         }
-                        var res = await Get.to(() => const MapSearchScreen());
+                        var res = await gt.Get.to(() => const MapSearchScreen());
                         if (res == 1) {
                           setState(() {
                             _formKey.currentState?.validate();
@@ -398,7 +403,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                             ),
                             //text
                             Expanded(
-                              child: Obx(() => Text(
+                              child: gt.Obx(() => Text(
                                     registrationController.address.value
                                                 .trim() ==
                                             ''
@@ -492,28 +497,34 @@ class _UserRegistrationPageState extends State<UserRegistrationPage>
                                 if (userAdded == 1) {
                                   //add to Hive
                                   AppSharedPreference().setLogin(true);
-                                  analytics
-                                      .logSignUp(
-                                          signUpMethod: registrationController
-                                              .utmMedium.value)
-                                      .then((value) => log(
-                                          'analytics send: ${registrationController.utmMedium.value}'));
+
+                                  AnalyticsCustomEvents().userSignUpEvent(
+                                      number: userPhone.toString(),
+                                      name: userName);
+                                  // analytics
+                                  //     .logSignUp(
+                                  //         signUpMethod: registrationController
+                                  //             .utmMedium.value)
+                                  //     .then((value) => log(
+                                  //         'analytics send: ${registrationController.utmMedium.value}'));
                                   await profileController.initialise();
                                   // Get.offAll(() => const OndcIntroView(),
                                   //     //! previous const MapMerchant(),
                                   //     transition: Transition.fadeIn);
-                                  Get.offAll(
-                                      () => HyperlocalShophomeView(
-                                            lat: profileController
-                                                .customerDetails!.lat,
-                                            lng: profileController
-                                                .customerDetails!.lng,
+                                  gt.Get.offAll(
+                                      () => const HyperlocalShophomeView(
+                                        // lat:deliveryAddress!.lat,
+                                        //     lng:deliveryAddress!.lng,
+                                            // lat: profileController
+                                            //     .customerDetails!.lat,
+                                            // lng: profileController
+                                            //     .customerDetails!.lng,
                                           ),
                                       //!previous const MapMerchant(),
-                                      transition: Transition.fadeIn);
+                                      transition: gt.Transition.fadeIn);
                                 } else {
                                   log('error occurred');
-                                  Get.offAll(() => const LoginScreen());
+                                  gt.Get.offAll(() => const LoginScreen());
                                 }
                               }
                               setState(() {

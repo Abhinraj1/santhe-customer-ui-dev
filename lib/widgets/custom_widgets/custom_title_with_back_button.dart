@@ -41,8 +41,9 @@ class CustomBackButton extends StatelessWidget {
   final bool? invertColors;
   final double? leftPadding;
   final Function()? onTap;
+  final double? radius;
   const CustomBackButton(
-      {Key? key, this.invertColors, this.leftPadding, this.onTap})
+      {Key? key, this.invertColors, this.leftPadding, this.onTap, this.radius})
       : super(key: key);
 
   @override
@@ -63,7 +64,7 @@ class CustomBackButton extends StatelessWidget {
             backgroundColor: invertColors ?? false
                 ? AppColors().white100
                 : AppColors().brandDark,
-            radius: 13,
+            radius: radius ?? 13,
             child: Padding(
               padding: const EdgeInsets.only(left: 7.0),
               child: Icon(Icons.arrow_back_ios,

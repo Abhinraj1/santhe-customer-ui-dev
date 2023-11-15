@@ -3,6 +3,9 @@ import 'package:equatable/equatable.dart';
 import 'package:santhe/core/repositories/hyperlocal_cartrepo.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_cartmodel.dart';
 import 'package:santhe/models/hyperlocal_models/hyperlocal_productmodel.dart';
+import 'package:santhe/widgets/custom_widgets/custom_snackBar.dart';
+
+import '../../../../utils/firebase_analytics_custom_events.dart';
 
 part 'hyperlocal_cart_event.dart';
 part 'hyperlocal_cart_state.dart';
@@ -19,10 +22,21 @@ class HyperlocalCartBloc
       try {
         bool canAdd = event.hyperLocalProductModel.addToCart();
 
-        canAdd
-            ? await hyperLocalCartRepository.addToCart(
-                hyperLocalProductModel: event.hyperLocalProductModel)
-            : null;
+        if(canAdd){
+          await hyperLocalCartRepository.addToCart(
+              hyperLocalProductModel: event.hyperLocalProductModel);
+          ///
+          AnalyticsCustomEvents().userCart(
+            product: event.hyperLocalProductModel.name,
+            quantity:  event.hyperLocalProductModel.quantity.toString()
+          );
+
+        }else{
+          // customSnackBar(
+          //     message: "Something is wrong please try again later",
+          // isErrorMessage: true,showOnTop: true);
+        }
+        
         emit(AddToCartHyperLocalState());
       } on AddToCartHyperLocalErrorState catch (e) {
         emit(

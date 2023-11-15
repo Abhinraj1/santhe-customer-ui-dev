@@ -24,6 +24,7 @@ import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import 'package:santhe/pages/ondc/ondc_shop_list/ondc_shop_list_view.dart';
 
+import '../../../core/cubits/hyperlocal_shoplist_cubit/hyperlocal_shoplist_cubit.dart';
 import '../../../widgets/registration_widgets/textFieldRegistration.dart';
 
 part 'map_address_ondc_desktop.dart';

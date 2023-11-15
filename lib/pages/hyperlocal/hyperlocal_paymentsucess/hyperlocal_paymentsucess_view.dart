@@ -16,6 +16,8 @@ import 'package:santhe/pages/hyperlocal/hyperlocal_orderdetail/hyperlocal_orderd
 import 'package:santhe/widgets/custom_widgets/custom_button.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 
+import '../../../utils/firebase_analytics_custom_events.dart';
+
 part 'hyperlocal_paymentsucess_desktop.dart';
 part 'hyperlocal_paymentsucess_mobile.dart';
 part 'hyperlocal_paymentsucess_tablet.dart';

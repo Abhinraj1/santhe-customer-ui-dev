@@ -20,7 +20,7 @@ import 'package:http/http.dart' as http;
 enum REST { get, post, put, delete, patch }
 
 class NetworkCall with LogMixin {
-  final profileController = Get.find<ProfileController>();
+  final profileController = Get.put(ProfileController());
 
   // Future<List<NewListResponseModel>> getAllCustomerLists() async {
   //   final formattedPhoneNumber = AppHelpers()
@@ -201,11 +201,14 @@ class NetworkCall with LogMixin {
 
   Future<CustomerModel> getCustomerDetails() async {
     final formattedPhoneNumber = AppHelpers()
-        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
+        .getPhoneNumberWithoutFoundedCountryCode(
+        AppHelpers().getPhoneNumber);
     // final String nodeUrl = AppUrl.getCustomerDetails;
     final String newNodeUrl =
         '${AppUrl().baseUrl}/santhe/customer/get?firebase_id=$formattedPhoneNumber';
-
+    warningLog('+++++++++++++++++++++++++'
+        '++++++++++++++++++++++++++++++++='
+        '++++++++++++++++++++++++++++ getCustomerDetails URL= $newNodeUrl');
     // final header = {
     //   'Content-Type': 'application/json',
     //   'Authorization': 'Bearer ${await AppHelpers().getAuthToken}'
@@ -227,6 +230,8 @@ class NetworkCall with LogMixin {
     //         ),
     //   ),
     // );
+    warningLog('######################################'
+        '##########getCustomerDetails####### $response');
 
     warningLog(' the phone number without country code $formattedPhoneNumber');
     var jsonResponse = jsonDecode(response.body);

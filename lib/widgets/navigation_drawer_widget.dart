@@ -6,6 +6,7 @@ import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_
 
 import '../constants.dart';
 import '../pages/my_orders_common_page/my_orders_common_page_view.dart';
+import '../pages/ondc/ondc_webview_screen/ondc_webview_screen_mobile.dart';
 import '../pages/ondc/ondc_webview_screen/ondc_webview_screen_view.dart';
 import '../pages/tutorial_screens/tutorial_screen_mobile.dart';
 import 'navigation_drawer_tile.dart';
@@ -103,11 +104,11 @@ class CustomNavigationDrawer extends StatelessWidget {
                     init: profileController,
                     id: 'navDrawer',
                     builder: (builder) {
-                      CustomerModel currentUser =
-                          profileController.customerDetails ?? fallback_error_customer;
+                      // CustomerModel currentUser =
+                      //     profileController.customerDetails ?? fallback_error_customer;
                       return Expanded(
                         child: AutoSizeText(
-                          currentUser.customerName,
+                          customerModel.customerName,
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
@@ -134,7 +135,8 @@ class CustomNavigationDrawer extends StatelessWidget {
               Text(
                 ' ${
                 // AppHelpers().getPhoneNumberWithoutCountryCode
-                AppHelpers().getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber)}',
+                AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+                    AppHelpers().getPhoneNumber)}',
                 style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.orange,
@@ -220,7 +222,9 @@ class CustomNavigationDrawer extends StatelessWidget {
             tileText: 'About Us',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const AboutUsPage());
+              Get.to(() =>const ONDCWebviewScreenMobile(title: "About Us",
+                url: "https://santhe.in/aboutus/app"));
+                  // const AboutUsPage());
             },
           ),
           NavigationDrawerTile(
@@ -228,7 +232,9 @@ class CustomNavigationDrawer extends StatelessWidget {
             tileText: 'Terms & Conditions',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const TermsAndConditionsPage());
+              Get.to(() => const ONDCWebviewScreenMobile(title: "Terms And Conditions",
+                  url: "https://santhe.in/terms-and-condition/app"));
+             // const TermsAndConditionsPage());
             },
           ),
           NavigationDrawerTile(
@@ -236,7 +242,10 @@ class CustomNavigationDrawer extends StatelessWidget {
             tileText: 'Privacy Policy',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const PrivacyPolicyPage());
+              Get.to(() =>
+              const ONDCWebviewScreenMobile(title: "Privacy Policy",
+                  url: "https://santhe.in/privacy-policy/app"));
+              //const PrivacyPolicyPage());
             },
           ),
           // NavigationDrawerTile(

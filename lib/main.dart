@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -36,13 +37,18 @@ import 'package:santhe/core/repositories/hyperlocal_repository.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/repositories/ondc_checkout_repository.dart';
 import 'package:santhe/core/repositories/ondc_repository.dart';
+import 'package:santhe/pages/ondc/ondc_webview_screen/ondc_webview_screen_mobile.dart';
 import 'package:santhe/pages/splash_to_home.dart';
+import 'package:santhe/utils/update_app.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'core/app_url.dart';
 import 'core/blocs/ondc/ondc_order_cancel_and_return_bloc/ondc_order_cancel_and_return_bloc.dart';
 import 'core/blocs/ondc/ondc_order_history_bloc/ondc_order_history_bloc.dart';
 import 'core/cubits/hyperlocal_deals_cubit/hyperlocal_contact_support_cubit/contact_support_cubit.dart';
 import 'core/cubits/hyperlocal_image_return_request_cubit/hyperlocal_image_return_request_cubit.dart';
+import 'core/cubits/hyperlocal_shopDetails_cubit/hyperlocal_shop_details_cubit.dart';
+import 'core/cubits/hyperlocal_shoplist_cubit/hyperlocal_shoplist_cubit.dart';
 import 'core/cubits/ondc_order_details_screen_cubit/ondc_order_details_screen_cubit.dart';
 import 'core/cubits/upload_image_and_return_request_cubit/upload_image_and_return_request_cubit.dart';
 import 'core/cubits/webview_cubit/webview_cubit.dart';
@@ -55,12 +61,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  updateApp();
   WidgetsFlutterBinding.ensureInitialized();
   initializeGetIt();
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate(
       androidProvider:
-      AppUrl().isDev ?
+     AppUrl().isDev ?
       AndroidProvider.debug
           : AndroidProvider.playIntegrity
   );
@@ -96,8 +103,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
+
+
     return Resize(
       builder: () => MultiRepositoryProvider(
         providers: [
@@ -182,11 +194,7 @@ class MyApp extends StatelessWidget {
               create: (context) => OrderHistoryBloc(
                   ondcRepository: context.read<OndcRepository>()),
             ),
-            BlocProvider<HyperlocalShopBloc>(
-              create: (context) => HyperlocalShopBloc(
-                hyperLocalRepository: context.read<HyperLocalRepository>(),
-              ),
-            ),
+
             BlocProvider<HyperlocalCartBloc>(
               create: (context) => HyperlocalCartBloc(
                   hyperLocalCartRepository:
@@ -221,12 +229,24 @@ class MyApp extends StatelessWidget {
                 repo: context.read<HyperLocalRepository>(),
               ),
             ),
+
+            BlocProvider<HyperlocalShopsCubit>(
+              create: (context) => HyperlocalShopsCubit(
+                repo: context.read<HyperLocalRepository>(),
+              ),
+            ),
+            BlocProvider<HyperlocalShopDetailsCubit>(
+              create: (context) => HyperlocalShopDetailsCubit(
+                repo: context.read<HyperLocalRepository>(),
+              ),
+            ),
           ],
           child: gets.GetMaterialApp(
             defaultTransition: gets.Transition.rightToLeft,
             transitionDuration: const Duration(milliseconds: 500),
             debugShowCheckedModeBanner: false,
             title: kAppName,
+            navigatorObservers: <NavigatorObserver>[observer],
             theme: AppTheme().themeData.copyWith(
                   colorScheme: ColorScheme.fromSeed(
                     seedColor: AppColors().brandDark,
@@ -237,10 +257,25 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
             home:
-            UpgradeAlert(
-                child:
-            const SplashToHome()
-            ),
+            // UpgradeAlert(
+            //   upgrader: Upgrader(
+            //   debugDisplayAlways: true,
+            //     durationUntilAlertAgain: const Duration(seconds: 2),
+            //     canDismissDialog: false,
+            //     showIgnore: false,
+            //     showLater: false,
+            //     shouldPopScope: () => false,
+            //     onUpdate: (){
+            //       launchUrl(
+            //           Uri.parse(
+            //               "https://play.google.com/store/apps/details?id=com.santhe.customer"),
+            //           mode: LaunchMode.externalApplication);
+            //       return false;
+            //     }
+            //   ),
+            //     child:
+           const SplashToHome()
+           // ),
 
             ///  ONDCContactSupportView(orderModel: SingleOrderModel(),)
             ///  ONDCContactSupportTicketScreenMobile()

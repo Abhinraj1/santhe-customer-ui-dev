@@ -1,13 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gits_cached_network_image/gits_cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/loggers.dart';
 
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/pages/ondc/product_description_ondc/product_description_ondc_view.dart';
+
+import '../../manager/imageManager.dart';
 
 class OndcProductWidget extends StatefulWidget {
   final ProductOndcModel productOndcModel;
@@ -62,8 +65,7 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return
-      GestureDetector(
+    return GestureDetector(
       onTap: () async {
         dynamic result = await Get.to(
           () => ProductDescriptionOndcView(
@@ -125,12 +127,15 @@ class _OndcProductWidgetState extends State<OndcProductWidget> with LogMixin {
                           width: width * 0.25,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
+                            child: GitsCachedNetworkImage(
                               imageUrl: widget.productOndcModel.symbol,
                               fit: BoxFit.contain,
-                              errorWidget: (context, url, error) => Image.asset(
-                                'assets/cart.png',
-                                fit: BoxFit.fill,
+                              loadingBuilder: (context) => Lottie.asset(ImgManager().imageLoader),
+                              errorBuilder: (context, url, error) => Image.asset(
+                                ImgManager().santheIcon,
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),

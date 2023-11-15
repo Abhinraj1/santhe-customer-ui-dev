@@ -2,11 +2,12 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:gits_cached_network_image/gits_cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/hyperlocal_checkoutrepository.dart';
@@ -73,12 +74,13 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                     widget.hyperLocalPreviewModel.symbol != ""
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: CachedNetworkImage(
+                    child: GitsCachedNetworkImage(
                       imageUrl: widget.hyperLocalPreviewModel.symbol,
                       width: 70,
                       height: 70,
                       fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Image.asset(
+                      loadingBuilder: (context) => Lottie.asset("assets/imageLoading.json"),
+                      errorBuilder: (context, url, error) => Image.asset(
                         ImgManager().santheIcon,
                         width: 70,
                         height: 70,
@@ -152,25 +154,29 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                           ),
                     widget.hyperLocalPreviewModel.reason != null
                         ? InkWell(
-                      onTap: (){
-                        showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (BuildContext context) {
-                            return textExpandFunction(text:widget.hyperLocalPreviewModel.reason);
-                          },
-                        );
-                      },
-                          child: SizedBox(
-                            width: 150,
-                            child: AutoSizeText(
-                              'Reason: ${widget.hyperLocalPreviewModel.reason}',
-                              style: TextStyle(color: AppColors().grey100,),
-                              maxLines: 2,
-                              minFontSize: 10,
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return textExpandFunction(
+                                      text:
+                                          widget.hyperLocalPreviewModel.reason);
+                                },
+                              );
+                            },
+                            child: SizedBox(
+                              width: 150,
+                              child: AutoSizeText(
+                                'Reason: ${widget.hyperLocalPreviewModel.reason}',
+                                style: TextStyle(
+                                  color: AppColors().grey100,
+                                ),
+                                maxLines: 2,
+                                minFontSize: 10,
+                              ),
                             ),
-                          ),
-                        )
+                          )
                         : const SizedBox(),
                     widget.hyperLocalPreviewModel.status
                                 .toString()
@@ -194,8 +200,6 @@ class _HyperlocalPreviewWidgetState extends State<HyperlocalPreviewWidget>
                           )
                         : const SizedBox()
                   ],
-
-
                 ),
               ),
             ),

@@ -50,6 +50,7 @@ class CustomerModel {
   dynamic uniqueCustomerId;
 
   dynamic fbiid;
+
   dynamic lastName;
 
   bool opStats;

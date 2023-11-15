@@ -36,6 +36,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Scaffold(
+
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0.0,

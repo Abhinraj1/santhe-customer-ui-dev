@@ -16,7 +16,7 @@
 // import 'package:santhe/network_call/network_call.dart';
 // import 'package:santhe/pages/new_tab_pages/image_page.dart';
 // import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 //
 // import '../../constants.dart';
 // import '../../controllers/api_service_controller.dart';
@@ -259,7 +259,7 @@
 //                                   child: Obx(
 //                                     () => Stack(
 //                                       children: [
-//                                         ProtectedCachedNetworkImage(
+//                                         ProtectedGitsCachedNetworkImage(
 //                                           imageUrl: imageController
 //                                                   .addItemCustomImageUrl.isEmpty
 //                                               ? 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/image%20placeholder.png?alt=media'

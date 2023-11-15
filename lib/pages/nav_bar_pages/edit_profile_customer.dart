@@ -25,6 +25,7 @@ import '../../controllers/registrationController.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
 import '../../models/santhe_user_model.dart';
+import '../../utils/firebase_analytics_custom_events.dart';
 import '../customer_registration_pages/mapSearchScreen.dart';
 import '../hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import '../login_pages/phone_number_login_page.dart';
@@ -39,7 +40,7 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  final profileController = Get.find<ProfileController>();
+  //final profileController = Get.find<ProfileController>();
   int userPhoneNumber = int.parse(
       // AppHelpers().getPhoneNumberWithoutCountryCode,
       AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
@@ -66,7 +67,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       statusBarBrightness: Brightness.light,
     ));
 
-    currentUser = profileController.customerDetails;
+    currentUser = customerModel;//profileController.customerDetails;
         //?? fallback_error_customer;
     _userNameController =
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
@@ -74,10 +75,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         text: currentUser?.emailId ?? 'johndoe@gmail.com');
     _phoneNumberController.text = userPhoneNumber.toString();
     if (registrationController.address.value.trim().isEmpty) {
-      registrationController.address.value = currentUser?.address ?? '';
+
+      // registrationController.address.value = currentUser?.address ?? '';
     }
     if (registrationController.howToReach.value.trim().isEmpty) {
-      registrationController.howToReach.value = currentUser?.howToReach ?? '';
+     // registrationController.howToReach.value = currentUser?.howToReach ?? '';
     }
     if (registrationController.lat.value == 0.0 ||
         registrationController.lng.value == 0.0) {
@@ -90,7 +92,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       registrationController.pinCode.value =
           currentUser?.pinCode.toString() ?? '';
     }
-    profileController.getOperationalStatus();
+   // profileController.getOperationalStatus();
     super.initState();
   }
 
@@ -633,24 +635,22 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               .updateCustomerInfo(
                                                   userPhone, updatedUser);
                                           if (userUpdated == 1) {
-                                            await profileController
-                                                .getCustomerDetailsInit();
+                                            // await profileController
+                                            //     .getCustomerDetailsInit();
                                             successMsg('Profile Updated',
                                                 'Your profile information was updated successfully.');
 
-                                            await profileController
-                                                .getOperationalStatus();
+                                           ///
+                                            AnalyticsCustomEvents().userEditProfileEvent();
+
+                                            // await profileController
+                                            //     .getOperationalStatus();
                                             // Get.offAll(
                                             //     () => const OndcIntroView(),
                                             //     transition:
                                             //         Transition.leftToRight);
                                             Get.offAll(
-                                              () => HyperlocalShophomeView(
-                                                lat: profileController
-                                                    .customerDetails!.lat,
-                                                lng: profileController
-                                                    .customerDetails!.lng,
-                                              ),
+                                              () => const HyperlocalShophomeView(),
                                             );
                                             // Navigator.push(
                                             //   context,

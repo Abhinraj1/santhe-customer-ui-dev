@@ -1,14 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get/get.dart';
 
 import 'package:santhe/core/repositories/address_repository.dart';
 import 'package:santhe/models/ondc/address_ondc_model.dart';
 import 'package:santhe/widgets/custom_widgets/custom_snackBar.dart';
 
+import '../../../utils/firebase_analytics_custom_events.dart';
+
 part 'address_event.dart';
 part 'address_state.dart';
 
+
+var addressLoaded = false.obs;
 class AddressBloc extends Bloc<AddressEvent, AddressState> {
   final AddressRepository addressRepository;
 
@@ -26,6 +31,10 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
           deliveryName: event.deliveryName.toString(),
           address_id: event.address_id,
         );
+        if(event.deliveryName.toString() =="Delivery"){
+          ///
+          AnalyticsCustomEvents().userEditDeliveryAddressEvent();
+        }
         emit(OndcAddressUpdatedState(message: message));
       } on OndcUpdateAddressErrorState catch (e) {
         customSnackBar(
@@ -57,9 +66,11 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     });
 
     on<GetAddressListEvent>((event, emit) async {
+
       try {
         await addressRepository.getAddressList();
         emit(GotAddressListAndIdState());
+
       } on ErrorGettingAddressState catch (e) {
         emit(
           ErrorGettingAddressState(message: e.message),

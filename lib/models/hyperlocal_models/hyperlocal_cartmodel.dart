@@ -13,6 +13,7 @@ class HyperLocalCartModel extends Equatable {
   final dynamic offer_price;
   final dynamic returnable;
   final dynamic cancellable;
+  final dynamic inventory;
   final dynamic mrp;
   final dynamic description;
   final dynamic display_image;
@@ -32,6 +33,7 @@ class HyperLocalCartModel extends Equatable {
     required this.returnable,
     required this.cancellable,
     required this.mrp,
+    required this.inventory,
     required this.description,
     required this.display_image,
     required this.store_name,
@@ -53,6 +55,7 @@ class HyperLocalCartModel extends Equatable {
     dynamic? cancellable,
     dynamic? mrp,
     dynamic? description,
+    dynamic? inventory,
     dynamic? display_image,
     dynamic? store_name,
     dynamic? value,
@@ -71,6 +74,7 @@ class HyperLocalCartModel extends Equatable {
       returnable: returnable ?? this.returnable,
       cancellable: cancellable ?? this.cancellable,
       mrp: mrp ?? this.mrp,
+      inventory: inventory ?? this.inventory,
       description: description ?? this.description,
       display_image: display_image ?? this.display_image,
       store_name: store_name ?? this.store_name,
@@ -93,6 +97,7 @@ class HyperLocalCartModel extends Equatable {
       'returnable': returnable,
       'cancellable': cancellable,
       'mrp': mrp,
+      "inventory":inventory,
       'description': description,
       'display_image': display_image,
       'store_name': store_name,
@@ -147,6 +152,7 @@ class HyperLocalCartModel extends Equatable {
           ? int.parse(map['quantity']) as dynamic
           : null,
       productId: map['productId'] != null ? map['productId'] as dynamic : null,
+      inventory: map["inventory"] != null ? map["inventory"] as dynamic : null,
       product_name:
           map['product_name'] != null ? map['product_name'] as dynamic : null,
       offer_price:
@@ -185,6 +191,7 @@ class HyperLocalCartModel extends Equatable {
       returnable,
       cancellable,
       mrp,
+      inventory,
       description,
       display_image,
       store_name,

@@ -4,7 +4,6 @@ library hyperlocal_checkout_view;
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +36,8 @@ import 'package:santhe/widgets/custom_widgets/custom_title_with_back_button.dart
 import 'package:santhe/widgets/hyperlocal_widgets/hyperlocal_previewwidget.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_checkout_widgets/address_column.dart';
+
+import '../../../utils/firebase_analytics_custom_events.dart';
 
 part 'hyperlocal_checkout_desktop.dart';
 part 'hyperlocal_checkout_mobile.dart';

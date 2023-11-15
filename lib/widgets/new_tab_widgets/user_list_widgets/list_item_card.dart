@@ -11,7 +11,7 @@
 // import 'package:santhe/models/new_list/list_item_model.dart';
 //
 // import 'package:santhe/models/santhe_item_model.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 // import '../../../controllers/getx/all_list_controller.dart';
 //
 // import '../../pop_up_widgets/new_item_popup_widget.dart';
@@ -61,7 +61,7 @@
 //                 children: [
 //                   ClipRRect(
 //                     borderRadius: BorderRadius.circular(12),
-//                     child: ProtectedCachedNetworkImage(
+//                     child: ProtectedGitsCachedNetworkImage(
 //                       imageUrl:
 //                           'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/$img',
 //                       width: 50.h,

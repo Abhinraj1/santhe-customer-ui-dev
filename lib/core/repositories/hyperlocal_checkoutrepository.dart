@@ -150,6 +150,10 @@ class HyperLocalCheckoutRepository with LogMixin {
       warningLog('Url Send to get Checkout items $url body sent $body');
       final response = await http.post(url, body: body, headers: header);
       warningLog('POst Order Info Api${response.statusCode}');
+      print("#############################################"
+          "################");
+      print(" responseBody['order_id'] =${response.body.toString()}");
+
       final responseBody = json.decode(response.body)['order_id'] as String;
       warningLog('Post order info body $responseBody');
       return responseBody;
@@ -172,6 +176,7 @@ class HyperLocalCheckoutRepository with LogMixin {
       returnMessageLoc = json.decode(response.body)['message'];
       warningLog('OrderInfo Response Body $responseBody');
       _orderInfo = OrderInfo.fromJson(json.decode(response.body));
+
       previewModels = [];
       deliveryChargeLoc = '';
       deliveryChargeLoc = responseBody['delivery_charge'];
@@ -214,7 +219,7 @@ class HyperLocalCheckoutRepository with LogMixin {
       shopOrderStatusLoc = states.first['title'];
 
       errorLog(
-          'order info values $shopPaymentStatusLoc, $shopOrderStatusLoc, $shopAddressOrderLoc order id find $orderId, $shopOrderIdloc and support $support userOrderId $userReadableOrderIdLoc');
+          'order info values54 $shopPaymentStatusLoc, $shopOrderStatusLoc, $shopAddressOrderLoc order id find $orderId, $shopOrderIdloc and support $support userOrderId $userReadableOrderIdLoc');
       final orderItems = responseBody['orderItems'] as List;
       warningLog('Checking for order Items $orderItems');
       for (var element in orderItems) {

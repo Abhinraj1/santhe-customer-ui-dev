@@ -31,6 +31,7 @@ class CustomScaffold extends StatelessWidget {
 
   final PreferredSizeWidget? appBar;
 
+
   final Function()? onBackButtonTap;
 
    CustomScaffold({Key? key,

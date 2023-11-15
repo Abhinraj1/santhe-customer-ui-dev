@@ -155,6 +155,12 @@ class _HyperlocalProductdescriptionMobileState
     getDiscount();
     yesNoCancellable();
     yesNoReturnable();
+    ///
+    AnalyticsCustomEvents().userViewedScreen(screen: "product_details_screen");
+    AnalyticsCustomEvents().userViewedProduct(
+      product: widget.hyperLocalProductModel.name.toString(),
+
+    );
   }
 
   @override
@@ -321,6 +327,18 @@ class _HyperlocalProductdescriptionMobileState
                     ],
                   ),
                 ),
+                images.isEmpty ?
+                SizedBox(
+                  height: 200,
+                  width: 150,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
+                    child: Image.asset(
+                      'assets/cart.png',
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ) :
                 CarouselSlider(
                   items: images,
                   options: CarouselOptions(
@@ -502,7 +520,7 @@ class _HyperlocalProductdescriptionMobileState
                                 boxShadow: [
                                   BoxShadow(
                                     color: AppColors().brandDark,
-                                    offset: Offset(0, 1),
+                                    offset: const Offset(0, 1),
                                     spreadRadius: 1,
                                     blurRadius: 10,
                                   ),

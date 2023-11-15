@@ -3,8 +3,10 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:resize/resize.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart' as gt;
 import 'package:pinput/pinput.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
 import 'package:santhe/core/app_colors.dart';
@@ -13,6 +15,8 @@ import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 import '../../constants.dart';
 import '../../controllers/api_service_controller.dart';
 import '../../core/app_shared_preference.dart';
+import '../../core/blocs/address/address_bloc.dart';
+import '../../utils/firebase_analytics_custom_events.dart';
 import '../../widgets/confirmation_widgets/error_snackbar_widget.dart';
 import '../../widgets/confirmation_widgets/success_snackbar_widget.dart';
 import '../customer_registration_pages/customer_registration.dart';
@@ -43,6 +47,9 @@ class _OtpScreenState extends State<OtpScreen> with LogMixin {
     super.initState();
     verifyPhoneNumber(widget.phoneNumber, setData);
     startTimer();
+    context.read<AddressBloc>().add(
+      GetAddressListEvent(),
+    );
   }
 
   @override
@@ -312,8 +319,11 @@ class _OtpScreenState extends State<OtpScreen> with LogMixin {
         'Checking for phone Number being passed in the next steps $userPhone');
     if (await profileController.getCustomerDetailsInit()) {
       Get.off(() => UserRegistrationPage(userPhoneNumber: userPhone),
-          transition: Transition.fadeIn);
+          transition: gt.Transition.fadeIn);
     } else {
+      ///
+      AnalyticsCustomEvents().userLoginEvent();
+
       AppSharedPreference().setLogin(true);
      // apiController.updateDeviceToken(widget.phoneNumber.toString());
       await profileController.initialise();
@@ -322,12 +332,12 @@ class _OtpScreenState extends State<OtpScreen> with LogMixin {
       //     transition: Transition.fadeIn);
       ///HYPERLOCAL DEALS HOME
       Get.offAll(
-          () => HyperlocalShophomeView(
-                lat: profileController.customerDetails!.lat,
-                lng: profileController.customerDetails!.lng,
-              ),
+          () =>  const HyperlocalShophomeView(
+            // lat:deliveryAddress?.lat,
+            // lng:deliveryAddress?.lng
+          ),
           //!previous const MapMerchant(),
-          transition: Transition.fadeIn);
+          transition: gt.Transition.fadeIn);
     }
   }
 

@@ -1,15 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gits_cached_network_image/gits_cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/blocs/hyperlocal/hyperlocal_cart/hyperlocal_cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
-
 import 'package:santhe/models/hyperlocal_models/hyperlocal_cartmodel.dart';
+import 'package:santhe/widgets/custom_widgets/custom_snackBar.dart';
+
 
 class HyperLocalCartWidget extends StatefulWidget {
   final HyperLocalCartModel hyperLocalCartModel;
@@ -37,12 +38,18 @@ class _HyperLocalCartWidgetState extends State<HyperLocalCartWidget>
   }
 
   add() {
-    setState(() {
-      widget.hyperLocalCartModel.add();
-    });
-    context.read<HyperlocalCartBloc>().add(
-          UpdateCartItemQuantityEvent(cartModel: widget.hyperLocalCartModel),
-        );
+
+    if(widget.hyperLocalCartModel.quantity +1 <= widget.hyperLocalCartModel.inventory){
+      setState(() {
+        widget.hyperLocalCartModel.add();
+      });
+      context.read<HyperlocalCartBloc>().add(
+        UpdateCartItemQuantityEvent(cartModel: widget.hyperLocalCartModel),
+      );
+    }else{
+      customSnackBar(message: "Oops! That's all in stocks",
+          showOnTop: true,isErrorMessage: true);
+    }
   }
 
   minus() {
@@ -158,11 +165,11 @@ class _HyperLocalCartWidgetState extends State<HyperLocalCartWidget>
                                 width: width * 0.194444,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
+                                  child: GitsCachedNetworkImage(
                                     imageUrl: widget.hyperLocalCartModel.symbol,
                                     fit: BoxFit.cover,
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset(
+                                    loadingBuilder: (context) => Lottie.asset("assets/imageLoading.json"),
+                                    errorBuilder: (context, error, stackTrace) => Image.asset(
                                       'assets/cart.png',
                                       fit: BoxFit.cover,
                                     ),

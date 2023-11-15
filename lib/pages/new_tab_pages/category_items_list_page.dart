@@ -7,7 +7,7 @@
 // import 'package:santhe/core/app_url.dart';
 // import 'package:santhe/models/hive_models/item.dart';
 // import 'package:santhe/models/new_list/user_list_model.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 // import '../../controllers/api_service_controller.dart';
 // import '../../controllers/boxes_controller.dart';
 // import '../../models/santhe_item_model.dart';
@@ -100,7 +100,7 @@
 //                           //main show
 //                           ClipRRect(
 //                             borderRadius: BorderRadius.circular(16),
-//                             child: ProtectedCachedNetworkImage(
+//                             child: ProtectedGitsCachedNetworkImage(
 //                               imageUrl:
 //                               'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
 //                               width: 20.vw,

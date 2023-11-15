@@ -56,6 +56,8 @@ class _HyperlocalCartMobileState extends State<_HyperlocalCartMobile>
           total = 0;
           for (var element in cartModels) {
             localCart.add(
+
+
               HyperLocalCartWidget(hyperLocalCartModel: element),
             );
             warningLog(
@@ -146,8 +148,8 @@ class _HyperlocalCartMobileState extends State<_HyperlocalCartMobile>
                         // );
                         ge.Get.off(
                             () => HyperlocalShophomeView(
-                                  lat: profileController.customerDetails!.lat,
-                                  lng: profileController.customerDetails!.lng,
+                                  // lat: profileController.customerDetails!.lat,
+                                  // lng: profileController.customerDetails!.lng,
                                 ),
                             //!previous const MapMerchant(),
                             transition: ge.Transition.fadeIn);

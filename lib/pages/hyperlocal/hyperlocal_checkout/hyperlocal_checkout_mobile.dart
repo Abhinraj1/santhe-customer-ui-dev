@@ -203,6 +203,11 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
     context.read<HyperlocalCheckoutBloc>().add(
         GetOrderInfoPostEvent(storeDescription_id: widget.storeDescription_id));
     _controller = GroupedItemScrollController();
+
+    ///
+    AnalyticsCustomEvents().userCheckOutEvent(
+      storeDescriptionId: widget.storeDescription_id
+    );
   }
 
   @override
@@ -221,8 +226,8 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
           errorLog('Success With payment');
           Get.off(
             () => const HyperlocalPaymentsucessView(
-              // storeDescriptionId: widget.storeDescription_id,
-            ),
+                // storeDescriptionId: widget.storeDescription_id,
+                ),
           );
         }
         if (state is VerifyPaymentHyperlocalErrorState) {
@@ -726,7 +731,7 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
                         //                   ? ClipRRect(
                         //                       borderRadius:
                         //                           BorderRadius.circular(10.0),
-                        //                       child: CachedNetworkImage(
+                        //                       child: GitsCachedNetworkImage(
                         //                         imageUrl: previewWidgetModel
                         //                             .hyperLocalPreviewModel
                         //                             .symbol,
@@ -995,134 +1000,132 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
                       ],
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child:
-                    SizedBox(
-                      width: 200,//double.infinity,
-                      child:
-                      ElevatedButton(
-                        onPressed: () {
+                    child: SizedBox(
+                        width: 200, //double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            BlocProvider.of<HyperlocalCheckoutBloc>(context)
+                                .add(PostPaymentCheckoutEvent(
+                                    orderId: order_id,
+                                    targetApp: "com.phonepe",
+                                    isUpiPayment: true));
 
-                          BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                              PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
-                                  isUpiPayment: true));
+                            // Future.delayed(const Duration(seconds: 15)).then((value) {
+                            //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
+                            // BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                            //     VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
+                            //  }
+                            //
+                            // }
+                            // );
 
-                          // Future.delayed(const Duration(seconds: 15)).then((value) {
-                          //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
-                          // BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                          //     VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
-                          //  }
-                          //
-                          // }
-                          // );
+                            // Get.to(()=> UpiScreen(
+                            //   orderId:order_id.toString(),
+                            //   amount: double.parse(total.toString()),
+                            // ));
 
-                          // Get.to(()=> UpiScreen(
-                          //   orderId:order_id.toString(),
-                          //   amount: double.parse(total.toString()),
-                          // ));
+                            // setState(() {
+                            //   isLoadingInitUPI = true;
+                            // });
+                            //
+                            //   Future.delayed(const Duration(seconds:2 )).then(
+                            //           (value) =>
+                            //       setState(() {
+                            //         isLoadingInitUPI = false;
+                            // }));
 
-                          // setState(() {
-                          //   isLoadingInitUPI = true;
-                          // });
-                          //
-                          //   Future.delayed(const Duration(seconds:2 )).then(
-                          //           (value) =>
-                          //       setState(() {
-                          //         isLoadingInitUPI = false;
-                          // }));
-
-                          print("++++++++++++++++++++++++++++++++++++ "
-                              "++++++++++ ${order_id}");
-                        },
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                            print("++++++++++++++++++++++++++++++++++++ "
+                                "++++++++++ ${order_id}");
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
+                            backgroundColor:
+                                MaterialStateProperty.all(AppColors().green100),
                           ),
-                          backgroundColor:
-                          MaterialStateProperty.all(AppColors().green100),
+                          child: const Text('PAY'),
+                        )
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     ElevatedButton(
+                        //       onPressed: () {
+                        //
+                        //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                        //             PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
+                        //             isUpiPayment: true));
+                        //
+                        //         // Future.delayed(const Duration(seconds: 15)).then((value) {
+                        //         //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
+                        //           BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                        //               VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
+                        //         // }
+                        //         //
+                        //         // }
+                        //         // );
+                        //
+                        //         // Get.to(()=> UpiScreen(
+                        //         //   orderId:order_id.toString(),
+                        //         //   amount: double.parse(total.toString()),
+                        //         // ));
+                        //
+                        //         // setState(() {
+                        //         //   isLoadingInitUPI = true;
+                        //         // });
+                        //         //
+                        //         //   Future.delayed(const Duration(seconds:2 )).then(
+                        //         //           (value) =>
+                        //         //       setState(() {
+                        //         //         isLoadingInitUPI = false;
+                        //         // }));
+                        //
+                        //           print("++++++++++++++++++++++++++++++++++++ "
+                        //               "++++++++++ ${order_id}");
+                        //       },
+                        //       style: ButtonStyle(
+                        //         shape: MaterialStateProperty.all(
+                        //           RoundedRectangleBorder(
+                        //             borderRadius: BorderRadius.circular(8),
+                        //           ),
+                        //         ),
+                        //         backgroundColor:
+                        //         MaterialStateProperty.all(AppColors().green100),
+                        //       ),
+                        //       child: const Text('PAY VIA UPI'),
+                        //     ),
+                        //
+                        //
+                        //     ElevatedButton(
+                        //       onPressed: () {
+                        //
+                        //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                        //             PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
+                        //               isUpiPayment: false
+                        //             ));
+                        //
+                        //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
+                        //             VerifyPaymentEventHyperlocal(orderId: order_id,isUpiPayment: false));
+                        //
+                        //       },
+                        //       style: ButtonStyle(
+                        //         shape: MaterialStateProperty.all(
+                        //           RoundedRectangleBorder(
+                        //             borderRadius: BorderRadius.circular(8),
+                        //           ),
+                        //         ),
+                        //         backgroundColor:
+                        //         MaterialStateProperty.all(AppColors().brandDark),
+                        //       ),
+                        //       child: const Text('PAYMENT OPTIONS'),
+                        //     )
+                        //   ],
+                        // ),
                         ),
-                        child: const Text('PAY'),
-                      )
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     ElevatedButton(
-                      //       onPressed: () {
-                      //
-                      //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                      //             PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
-                      //             isUpiPayment: true));
-                      //
-                      //         // Future.delayed(const Duration(seconds: 15)).then((value) {
-                      //         //    if(Get.currentRoute.contains("AnimatedLoadingScreen")){
-                      //           BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                      //               VerifyPaymentEventHyperlocal(orderId: order_id, isUpiPayment: true));
-                      //         // }
-                      //         //
-                      //         // }
-                      //         // );
-                      //
-                      //         // Get.to(()=> UpiScreen(
-                      //         //   orderId:order_id.toString(),
-                      //         //   amount: double.parse(total.toString()),
-                      //         // ));
-                      //
-                      //         // setState(() {
-                      //         //   isLoadingInitUPI = true;
-                      //         // });
-                      //         //
-                      //         //   Future.delayed(const Duration(seconds:2 )).then(
-                      //         //           (value) =>
-                      //         //       setState(() {
-                      //         //         isLoadingInitUPI = false;
-                      //         // }));
-                      //
-                      //           print("++++++++++++++++++++++++++++++++++++ "
-                      //               "++++++++++ ${order_id}");
-                      //       },
-                      //       style: ButtonStyle(
-                      //         shape: MaterialStateProperty.all(
-                      //           RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(8),
-                      //           ),
-                      //         ),
-                      //         backgroundColor:
-                      //         MaterialStateProperty.all(AppColors().green100),
-                      //       ),
-                      //       child: const Text('PAY VIA UPI'),
-                      //     ),
-                      //
-                      //
-                      //     ElevatedButton(
-                      //       onPressed: () {
-                      //
-                      //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                      //             PostPaymentCheckoutEvent(orderId: order_id, targetApp: "com.phonepe",
-                      //               isUpiPayment: false
-                      //             ));
-                      //
-                      //         BlocProvider.of<HyperlocalCheckoutBloc>(context).add(
-                      //             VerifyPaymentEventHyperlocal(orderId: order_id,isUpiPayment: false));
-                      //
-                      //       },
-                      //       style: ButtonStyle(
-                      //         shape: MaterialStateProperty.all(
-                      //           RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(8),
-                      //           ),
-                      //         ),
-                      //         backgroundColor:
-                      //         MaterialStateProperty.all(AppColors().brandDark),
-                      //       ),
-                      //       child: const Text('PAYMENT OPTIONS'),
-                      //     )
-                      //   ],
-                      // ),
-                    ),
                   ),
                 ]),
               ),
@@ -1215,5 +1218,4 @@ class _HyperlocalCheckoutMobileState extends State<_HyperlocalCheckoutMobile>
       },
     );
   }
-
 }

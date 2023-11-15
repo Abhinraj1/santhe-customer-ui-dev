@@ -17,7 +17,7 @@
 // import 'package:santhe/pages/home_page.dart';
 // import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 // import 'package:santhe/widgets/pop_up_widgets/custom_item_popup_widget.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 //
 // import '../../constants.dart';
 // import '../../controllers/boxes_controller.dart';
@@ -439,7 +439,7 @@
 //                           color: Colors.orange,
 //                           size: 40.0.sp,
 //                         )
-//                       : ProtectedCachedNetworkImage(
+//                       : ProtectedGitsCachedNetworkImage(
 //                           imageUrl:
 //                               'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${item!.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
 //                           width: 40.w,

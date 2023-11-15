@@ -5,7 +5,7 @@
 // import 'package:santhe/controllers/getx/all_list_controller.dart';
 // import 'package:santhe/core/app_url.dart';
 // import 'package:santhe/models/new_list/user_list_model.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 // import '../../controllers/boxes_controller.dart';
 // import '../../models/santhe_category_model.dart';
 // import 'package:get/get.dart';
@@ -159,7 +159,7 @@
 //         children: [
 //           ClipRRect(
 //             borderRadius: BorderRadius.circular(16),
-//             child: CachedNetworkImage(
+//             child: GitsCachedNetworkImage(
 //               imageUrl:
 //               category.catImageId,
 //               width: 20.vw,

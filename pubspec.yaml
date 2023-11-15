@@ -2,31 +2,32 @@ name: santhe
 description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.5.1+1
+version: 1.8.1+0
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
-  algolia: ^1.1.1
-  android_play_install_referrer: ^0.2.1
+  #algolia: ^1.1.1
+  android_play_install_referrer: ^0.3.0
   auto_size_text: ^3.0.0
-  syncfusion_flutter_pdfviewer: ^20.4.50
-  bloc: ^8.0.3
+  syncfusion_flutter_pdfviewer: ^23.1.43
+  bloc: ^8.1.2
   badges: ^3.0.2
-  cached_network_image: ^3.2.3
+  #cached_network_image: ^3.2.3
+  gits_cached_network_image: ^1.0.1
   flutter_pdfview: ^1.2.7
   carousel_slider: ^4.2.1
   sticky_grouped_list: ^3.1.0
   cloud_firestore: ^4.3.1
-  connectivity_plus: ^2.2.1
+  connectivity_plus: ^5.0.1
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
   #device_info_plus: ^4.0.0
-  dropdown_button2: ^1.2.2
+  dropdown_button2: ^2.3.9
   easy_debounce: ^2.0.2+1
   equatable: ^2.0.3
-  firebase_analytics: ^10.4.5
+  firebase_analytics: ^10.5.1
   firebase_auth: ^4.8.0
   firebase_core: ^2.15.1
   firebase_crashlytics: ^3.3.5
@@ -35,32 +36,31 @@ dependencies:
   firebase_storage: ^11.2.6
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.0.1
-  flutter_cache_manager: ^3.3.0
+  flutter_bloc: ^8.1.3
+  flutter_cache_manager: ^3.3.1
   #flutter_html: ^2.2.1
   flutter_image_compress: ^2.0.3
-  flutter_local_notifications: ^12.0.4
-  flutter_slidable: ^2.0.0
-  flutter_svg: ^2.0.7
-  geolocator: ^9.0.2
+  flutter_local_notifications: ^16.1.0
+  flutter_slidable: ^3.0.1
+  geolocator: ^10.0.0
   get: ^4.6.5
   get_it: ^7.2.0
   #dio: ^4.0.6
-  google_maps_flutter: ^2.1.2
+  google_maps_flutter: ^2.5.0
   group_button: ^5.2.2
   grouped_list: ^5.1.2
   hive: ^2.0.6
   hive_flutter: ^1.1.0
-  http: ^0.13.4
-  hydrated_bloc: ^9.1.0
-  bloc_concurrency: ^0.2.1
-  image_picker: ^0.8.4+11
+  http: ^1.1.0
+  hydrated_bloc: ^9.1.2
+  bloc_concurrency: ^0.2.2
+  image_picker: ^1.0.4
   internet_connection_checker: ^1.0.0+1
   bloc_event_transformers: ^1.0.1
-  intl: ^0.17.0
+  intl: ^0.18.1
   intl_phone_field: ^3.1.0
-  location: ^5.0.0
-  logger: ^1.1.0
+  location: ^5.0.3
+  logger: ^2.0.2+1
   lottie: ^2.3.0
   rxdart: ^0.27.7
   map_picker: ^0.0.3
@@ -70,24 +70,25 @@ dependencies:
   pinput: null
   readmore: ^2.2.0
   resize: ^1.0.0
-  responsive_builder: ^0.5.0+1
-  share_plus: ^4.0.4
+  responsive_builder: ^0.7.0
+  share_plus: ^7.2.1
   shared_preferences: ^2.0.13
   smooth_page_indicator: ^1.0.0+2
   timer_count_down: ^2.2.1
   url_launcher: ^6.1.7
   geocoding: ^2.1.0
-  uuid: ^3.0.7
-  webview_flutter: ^4.2.3
+  uuid: ^4.1.0
+  webview_flutter: ^4.2.4
   youtube_player_flutter: ^8.1.1
   razorpay_flutter: ^1.3.4
-  google_fonts: ^4.0.3
-  calendar_date_picker2: ^0.3.7
-  http_interceptor: ^1.0.2
-  firebase_app_check: ^0.1.5
-  upgrader: ^8.0.0
-  #phone_pe_pg: ^0.0.2
+  google_fonts: ^6.1.0
+  calendar_date_picker2: ^0.5.3
+  firebase_app_check: ^0.2.1+3
+  upgrader: ^8.2.0
   dio: ^5.3.2
+  in_app_update: ^4.2.2
+  firebase_in_app_messaging: ^0.7.4+3
+  flutter_svg: ^2.0.9
 
 
 
@@ -98,7 +99,7 @@ dev_dependencies:
   build_runner: ^2.1.7
   change_app_package_name: ^1.1.0
 
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
   hive_generator: ^2.0.0

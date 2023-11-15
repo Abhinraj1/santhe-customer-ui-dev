@@ -2,6 +2,7 @@
 library hyperlocal_shophome_view;
 
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,19 +39,23 @@ import 'package:santhe/widgets/hyperlocal_widgets/hyperlocal_shopwidget.dart';
 import '../../../core/app_url.dart';
 import '../../../core/blocs/hyperlocal/hyperlocal_orderhistory/hyperlocal_orderhistory_bloc.dart';
 import '../../../models/hyperlocal_models/text_formatter.dart';
+import '../../../utils/get_screen_dimensions.dart';
+import '../../../widgets/hyperlocal_widgets/hyperlocal_shop_home_body.dart';
 import '../../../widgets/navigation_drawer_widget.dart';
 import '../hyperlocal_contact_support/contact_confirmation_screen/contact_confirmation_screen_mobile.dart';
 import '../hyperlocal_contact_support/contact_support_details_screen/contact_support_details_screen_mobile.dart';
 import '../hyperlocal_contact_support/open_support_ticket_screen/open_support_ticket_screen_mobile.dart';
+import 'hyperlocal_shophome_mobile.dart';
 
 part 'hyperlocal_shophome_desktop.dart';
-part 'hyperlocal_shophome_mobile.dart';
+//part 'hyperlocal_shophome_mobile.dart';
 part 'hyperlocal_shophome_tablet.dart';
 
 class HyperlocalShophomeView extends StatelessWidget {
   final String? lat;
   final String? lng;
-  const HyperlocalShophomeView({
+  const
+  HyperlocalShophomeView({
     Key? key,
     this.lat,
     this.lng,
@@ -60,9 +65,9 @@ class HyperlocalShophomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return ScreenTypeLayout(
-        mobile: _HyperlocalShophomeMobile(
-          // lat: lat,
-          // lng: lng,
+        mobile:  HyperlocalShophomeMobile(
+          lat: lat,
+          lng: lng,
         ),
         desktop: _HyperlocalShophomeDesktop(),
         tablet: _HyperlocalShophomeTablet(),

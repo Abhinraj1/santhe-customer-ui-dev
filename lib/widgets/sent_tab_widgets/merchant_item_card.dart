@@ -5,7 +5,7 @@
 // import 'package:santhe/core/app_helpers.dart';
 // import 'package:santhe/core/app_url.dart';
 // import 'package:santhe/models/offer/santhe_offer_item_model.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 //
 // class MerchantItemCard extends StatefulWidget {
 //   final OfferItem merchantItem;
@@ -46,7 +46,7 @@
 //         children: [
 //           ClipRRect(
 //             borderRadius: BorderRadius.circular(12),
-//             child: ProtectedCachedNetworkImage(
+//             child: ProtectedGitsCachedNetworkImage(
 //               imageUrl:
 //                   'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${widget.merchantItem.itemImageId.replaceAll('https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/', '')}',
 //               height: 50.h,

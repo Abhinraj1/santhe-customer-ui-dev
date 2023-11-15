@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'models/ondc/address_ondc_model.dart';
 import 'models/user_profile/customer_model.dart';
 
 const String kAppName = "Santhe";
@@ -11,6 +12,7 @@ const double customButtonBorderRadius = 10;
 const double imageCellBorderRadius = 8;
 const double queryTextFieldBorderRadius = 20;
 
+///remove in future
 final TextEditingController globalSearchtextEditingController =
     TextEditingController();
 
@@ -19,6 +21,9 @@ bool isBillingAddress = false;
 
 ///
 late CustomerModel customerModel;
+
+///
+late AddressOndcModel? deliveryAddress;
 
 ///
 bool? isUserFromMyOrders;

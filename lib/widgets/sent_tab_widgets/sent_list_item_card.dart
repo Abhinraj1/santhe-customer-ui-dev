@@ -3,7 +3,7 @@
 // import 'package:santhe/core/app_colors.dart';
 // import 'package:santhe/core/app_url.dart';
 // import 'package:santhe/models/new_list/list_item_model.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 // import 'package:resize/resize.dart';
 //
 // class SentListItemCard extends StatelessWidget {
@@ -33,7 +33,7 @@
 //               children: [
 //                 ClipRRect(
 //                   borderRadius: BorderRadius.circular(12),
-//                   child: ProtectedCachedNetworkImage(
+//                   child: ProtectedGitsCachedNetworkImage(
 //                     imageUrl: 'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/${listItem.itemImageId.replaceAll(
 //                       'https://firebasestorage.googleapis.com/v0/b/${AppUrl.envType}.appspot.com/o/',
 //                       '',

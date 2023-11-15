@@ -89,8 +89,7 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
     final ProfileController profileController =
         ge.Get.find<ProfileController>();
     CustomerModel currentUser =
-        profileController.customerDetails as CustomerModel;
-            //?? fallback_error_customer;
+        profileController.customerDetails ?? fallback_error_customer;
     Size size = MediaQuery.of(context).size;
     return BlocConsumer<AddressBloc, AddressState>(
       listener: (context, state) {
@@ -103,14 +102,29 @@ class _MapAddressOndcMobileState extends State<_MapAddressOndcMobile>
           );
           customerModel = currentUser;
           errorLog('Which Screen? ${widget.whichScreen}');
+
+          context.read<AddressBloc>().add(
+            GetAddressListEvent(),
+          );
+          shopListWidgets = [];
+          searchedShopListWidgets = [];
+          shopListOffset.value = 0;
+          searchShopListOffset.value = 0;
+          BlocProvider.of<HyperlocalShopsCubit>(context).getShops(
+              load: true,
+              offset: shopListOffset.value,
+              shopsList: shopListWidgets,
+              lat: widget.lat.toString(),
+              lng: widget.lng.toString()
+          );
           widget.whichScreen == 'Hyperlocal'
               ? ge.Get.offAll(
                   () => HyperlocalShophomeView(
-                        lat: currentUser.lat,
-                        lng: currentUser.lng,
-                      ),
+                      lat: widget.lat.toString(),
+                      lng: widget.lng.toString()
+                  ),
                   transition: ge.Transition.leftToRight)
-              : ge.Get.off(() => OndcShopListView(customerModel: currentUser),
+              : ge.Get.off(() => OndcShopListView(customerModel: customerModel),
                   transition: ge.Transition.leftToRight);
         }
         if (state is OndcUpdateAddressErrorState) {

@@ -15,7 +15,7 @@
 // import 'package:santhe/models/new_list/user_list_model.dart';
 // import 'package:santhe/network_call/network_call.dart';
 // import 'package:santhe/widgets/pop_up_widgets/quantity_widget.dart';
-// import 'package:santhe/widgets/protectedCachedNetworkImage.dart';
+// import 'package:santhe/widgets/protectedGitsCachedNetworkImage.dart';
 //
 // import '../../constants.dart';
 // import '../../controllers/api_service_controller.dart';
@@ -357,7 +357,7 @@
 //                                           );
 //                                           return Stack(
 //                                             children: [
-//                                               ProtectedCachedNetworkImage(
+//                                               ProtectedGitsCachedNetworkImage(
 //                                                 imageUrl: imageController
 //                                                         .editItemCustomImageUrl
 //                                                         .isEmpty
@@ -1139,7 +1139,7 @@
 //                       //todo fix error due to builder logic issue move logic elsewhere
 //                       () => Stack(
 //                         children: [
-//                           ProtectedCachedNetworkImage(
+//                           ProtectedGitsCachedNetworkImage(
 //                             imageUrl: imageController.editItemCustomImageUrl
 //                                         .value.isNotEmpty &&
 //                                     imageController

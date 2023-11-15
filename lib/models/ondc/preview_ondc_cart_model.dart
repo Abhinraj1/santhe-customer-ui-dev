@@ -1,5 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_question_mark, must_be_immutable
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 
@@ -10,21 +11,51 @@ class PreviewWidgetModel extends Equatable {
   final dynamic type;
   final dynamic quantity;
   final dynamic ondc_item_id;
+  final dynamic status;
+  final dynamic cancellable;
+  final dynamic symbol;
   final dynamic createdAt;
   final dynamic deletedAt;
   final dynamic updatedAt;
   final dynamic quoteId;
-  const PreviewWidgetModel({
+  final dynamic deliveryFulfillmentId;
+  final dynamic fulfillment_id;
+  final dynamic provider_name;
+  final dynamic category;
+  final dynamic tat;
+  final dynamic serviceable;
+  final dynamic message_id;
+  final dynamic returnable;
+  final dynamic isCancelled;
+  final dynamic isReturned;
+  dynamic net_quantity;
+  final dynamic cartPriceItemStatus;
+  PreviewWidgetModel({
     required this.id,
     required this.price,
     required this.title,
     required this.type,
     required this.quantity,
     required this.ondc_item_id,
+    required this.status,
+    required this.cancellable,
+    required this.symbol,
     required this.createdAt,
     required this.deletedAt,
     required this.updatedAt,
     required this.quoteId,
+    required this.deliveryFulfillmentId,
+    required this.fulfillment_id,
+    required this.provider_name,
+    required this.category,
+    required this.tat,
+    required this.serviceable,
+    required this.message_id,
+    this.returnable,
+    required this.isCancelled,
+    required this.isReturned,
+    this.net_quantity,
+    this.cartPriceItemStatus,
   });
 
   PreviewWidgetModel copyWith({
@@ -34,10 +65,25 @@ class PreviewWidgetModel extends Equatable {
     dynamic? type,
     dynamic? quantity,
     dynamic? ondc_item_id,
+    dynamic? status,
+    dynamic? cancellable,
+    dynamic? symbol,
     dynamic? createdAt,
     dynamic? deletedAt,
     dynamic? updatedAt,
     dynamic? quoteId,
+    dynamic? deliveryFulfillmentId,
+    dynamic? fulfillment_id,
+    dynamic? provider_name,
+    dynamic? category,
+    dynamic? tat,
+    dynamic? serviceable,
+    dynamic? message_id,
+    dynamic? returnable,
+    dynamic? isCancelled,
+    dynamic? isReturned,
+    dynamic? net_quantity,
+    dynamic? cartPriceItemStatus,
   }) {
     return PreviewWidgetModel(
       id: id ?? this.id,
@@ -46,10 +92,26 @@ class PreviewWidgetModel extends Equatable {
       type: type ?? this.type,
       quantity: quantity ?? this.quantity,
       ondc_item_id: ondc_item_id ?? this.ondc_item_id,
+      status: status ?? this.status,
+      cancellable: cancellable ?? this.cancellable,
+      symbol: symbol ?? this.symbol,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt ?? this.deletedAt,
       updatedAt: updatedAt ?? this.updatedAt,
       quoteId: quoteId ?? this.quoteId,
+      deliveryFulfillmentId:
+          deliveryFulfillmentId ?? this.deliveryFulfillmentId,
+      fulfillment_id: fulfillment_id ?? this.fulfillment_id,
+      provider_name: provider_name ?? this.provider_name,
+      category: category ?? this.category,
+      tat: tat ?? this.tat,
+      serviceable: serviceable ?? this.serviceable,
+      message_id: message_id ?? this.message_id,
+      returnable: returnable ?? this.returnable,
+      isCancelled: isCancelled ?? this.isCancelled,
+      isReturned: isReturned ?? this.isReturned,
+      net_quantity: net_quantity ?? this.net_quantity,
+      cartPriceItemStatus: cartPriceItemStatus ?? this.cartPriceItemStatus,
     );
   }
 
@@ -65,15 +127,33 @@ class PreviewWidgetModel extends Equatable {
       'deletedAt': deletedAt,
       'updatedAt': updatedAt,
       'quoteId': quoteId,
+      'status': status,
+      'cancellable': cancellable,
+      'symbol': symbol,
+      'deliveryFulfillmentId': deliveryFulfillmentId,
+      'fulfillment_id': fulfillment_id,
+      'provider_name': provider_name,
+      'category': category,
+      'tat': tat,
+      'serviceable': serviceable,
+      'message_id': message_id,
+      "returnable": returnable,
+      "cartPriceItemStatus": cartPriceItemStatus,
+      'net_quantity': net_quantity
     };
   }
 
   factory PreviewWidgetModel.fromMap(Map<String, dynamic> map) {
+    log('$map', name: 'PreviewWidgetModel.fromMap');
     return PreviewWidgetModel(
       id: map['id'] != null ? map['id'] as dynamic : null,
+      symbol: map['symbol'] != null ? map['symbol'] as dynamic : null,
+      status: map['status'] != null ? map['status'] as dynamic : null,
+      cancellable:
+          map['cancellable'] != null ? map['cancellable'] as dynamic : null,
       price: map['price'] != null ? map['price'] as dynamic : null,
       title: map['title'] != null ? map['title'] as dynamic : null,
-      type: map['type'] != null ? map['id'] as dynamic : null,
+      type: map['type'] != null ? map['type'] as dynamic : null,
       quantity: map['quantity'] != null ? map['quantity'] as dynamic : null,
       ondc_item_id:
           map['ondc_item_id'] != null ? map['ondc_item_id'] as dynamic : null,
@@ -81,6 +161,50 @@ class PreviewWidgetModel extends Equatable {
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] as dynamic : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as dynamic : null,
       quoteId: map['quoteId'] != null ? map['quoteId'] as dynamic : null,
+      returnable:
+          map['returnable'] != null ? map['returnable'] as dynamic : null,
+      isCancelled:
+          map['isCancelled'] != null ? map['isCancelled'] as dynamic : null,
+      isReturned:
+          map['isReturned'] != null ? map['isReturned'] as dynamic : null,
+      cartPriceItemStatus: map['cartPriceItemStatus'] != null
+          ? map['cartPriceItemStatus'] as dynamic
+          : null,
+      deliveryFulfillmentId: map['deliveryFulfillmentId'] != null
+          ? map['deliveryFulfillmentId'] as dynamic
+          : null,
+      net_quantity:
+          map['net_quantity'] != null ? map['net_quantity'] as dynamic : null,
+      fulfillment_id: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['fulfillment_id'] != null
+              ? map['deliveryFulfillment']['fulfillment_id'] as dynamic
+              : null
+          : null,
+      provider_name: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['provider_name'] != null
+              ? map['deliveryFulfillment']['provider_name'] as dynamic
+              : null
+          : null,
+      category: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['category'] != null
+              ? map['deliveryFulfillment']['category'] as dynamic
+              : null
+          : null,
+      tat: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['tat'] != null
+              ? map['deliveryFulfillment']['tat'] as dynamic
+              : null
+          : null,
+      serviceable: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['serviceable'] != null
+              ? map['deliveryFulfillment']['serviceable'] as dynamic
+              : null
+          : null,
+      message_id: map['deliveryFulfillment'] != null
+          ? map['deliveryFulfillment']['message_id'] != null
+              ? map['deliveryFulfillment']['message_id'] as dynamic
+              : null
+          : null,
     );
   }
 
@@ -101,10 +225,25 @@ class PreviewWidgetModel extends Equatable {
       type,
       quantity,
       ondc_item_id,
+      status,
+      cancellable,
+      symbol,
       createdAt,
       deletedAt,
       updatedAt,
       quoteId,
+      deliveryFulfillmentId,
+      fulfillment_id,
+      provider_name,
+      category,
+      tat,
+      serviceable,
+      message_id,
+      returnable,
+      isCancelled,
+      isReturned,
+      net_quantity,
+      cartPriceItemStatus,
     ];
   }
 }

@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:santhe/controllers/getx/profile_controller.dart';
+import 'package:santhe/core/app_url.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/countrymodel.dart';
 
@@ -59,14 +60,20 @@ class AppHelpers with LogMixin {
   Future<String> get getToken async =>
       await FirebaseMessaging.instance.getToken() ?? '';
 
+  Future<String> get getAuthToken async =>
+      await FirebaseAuth.instance.currentUser?.getIdToken() ?? '';
+
   static Future<String> get bearerToken async {
     try {
-      newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+
+      // newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+
       dev.log('token $newBearerToken', name: 'AppHelper.dart');
-      return newBearerToken;
+      return newBearerToken.toString();
     } catch (e) {
       dev.log(
         e.toString(),
+
       );
       return '';
     }
@@ -75,17 +82,37 @@ class AppHelpers with LogMixin {
   static late String newBearerToken;
 
   Future<void> generateToken() async {
-    newBearerToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+
+   await FirebaseAuth.instance.currentUser!.getIdToken().then((value) {
+      // print("++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      //     "+++++++++++++++++++++++++++++++++++++++++++++++++ getIdToken"
+      //     "==${value}");
+      newBearerToken = value.toString();
+    });
     // warningLog(newBearerToken);
+
   }
 
-  String get razorPayApi => "rzp_test_QXg3iPJDrauAuX";
 
-  Future<String> get authToken async =>
-      await FirebaseAuth.instance.currentUser!.getIdToken();
+  String get razorPayApiSecret => 'Zadb8qdfWj31rFHV5tDN9WIa';
+
+  static const String _devRazor = "rzp_test_QXg3iPJDrauAuX";
+
+  static const String _prodRazor = "rzp_live_9DK3oQI6MoU7BH";
+
+  String get razorPayKey => AppUrl().isDev ? _devRazor : _prodRazor;
+
+  Future<String> get authToken async {
+    // await FirebaseAuth.instance.currentUser!.getIdToken();
+   await generateToken();
+   return newBearerToken;
+  }
+
 
   String get playStoreLink => appStoreLink;
   String get appStoreLink => '''Hi,
+
+
   
 
 Santhe is an app built for getting best deals for your groceries from your local Kirana stores and retailers. Use the Free Santhe App and support local economy. 

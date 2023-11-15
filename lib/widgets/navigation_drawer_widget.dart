@@ -1,8 +1,16 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:santhe/pages/hyperlocal/hyperlocal_previousorders/hyperlocal_previousorders_view.dart';
 import 'package:santhe/pages/login_pages/phone_number_login_page.dart';
+import 'package:santhe/pages/ondc/ondc_customer_order_history_screen/ondc_order_history_view.dart';
 
+import '../constants.dart';
+import '../pages/my_orders_common_page/my_orders_common_page_view.dart';
+import '../pages/ondc/ondc_webview_screen/ondc_webview_screen_mobile.dart';
+import '../pages/ondc/ondc_webview_screen/ondc_webview_screen_view.dart';
+import '../pages/tutorial_screens/tutorial_screen_mobile.dart';
 import 'navigation_drawer_tile.dart';
 import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +29,8 @@ import '../pages/nav_bar_pages/contact_us_page.dart';
 import '../pages/nav_bar_pages/faq_page.dart';
 import '../pages/nav_bar_pages/terms_condition_page.dart';
 
-class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({Key? key}) : super(key: key);
+class CustomNavigationDrawer extends StatelessWidget {
+  const CustomNavigationDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,12 +104,11 @@ class NavigationDrawer extends StatelessWidget {
                     init: profileController,
                     id: 'navDrawer',
                     builder: (builder) {
-                      CustomerModel currentUser =
-                          profileController.customerDetails ??
-                              fallback_error_customer;
+                      // CustomerModel currentUser =
+                      //     profileController.customerDetails ?? fallback_error_customer;
                       return Expanded(
                         child: AutoSizeText(
-                          currentUser.customerName,
+                          customerModel.customerName,
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
@@ -128,7 +135,8 @@ class NavigationDrawer extends StatelessWidget {
               Text(
                 ' ${
                 // AppHelpers().getPhoneNumberWithoutCountryCode
-                AppHelpers().getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber)}',
+                AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
+                    AppHelpers().getPhoneNumber)}',
                 style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.orange,
@@ -144,11 +152,38 @@ class NavigationDrawer extends StatelessWidget {
           ),
           SizedBox(height: screenHeight * 3),
           NavigationDrawerTile(
-            icon: CupertinoIcons.question,
-            tileText: 'FAQ',
+            icon: CupertinoIcons.list_bullet,
+            tileText: 'My Orders',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const FAQPage());
+
+              // BlocProvider.of<SingleOrderDetailsBloc>(context).add
+              //   (const LoadPastOrderDataEvent());
+
+              Get.to(
+                () =>
+               // const MyOrdersCommonPageView()
+                const HyperlocalPreviousordersView(),
+              );
+            },
+          ),
+          // NavigationDrawerTile(
+          //   icon: CupertinoIcons.question,
+          //   tileText: 'FAQ',
+          //   onPress: () {
+          //     // Navigator.pop(context);
+          //     Get.to(() => const FAQPage());
+          //   },
+          // ),
+          NavigationDrawerTile(
+            icon: Icons.help,
+            tileText: 'Tutorials',
+            onPress: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: const TutorialScreen(),
+                      type: PageTransitionType.rightToLeft));
             },
           ),
           NavigationDrawerTile(
@@ -156,7 +191,11 @@ class NavigationDrawer extends StatelessWidget {
             tileText: 'Contact Us/Feedback',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const ContactUsPage());
+              Get.to(() => const ONDCWebviewView(
+                title: "Contact Us/FeedBack",
+              url: "https://santhe.in/contact/",)
+             // const ContactUsPage()
+              );
             },
           ),
           NavigationDrawerTile(
@@ -183,7 +222,9 @@ class NavigationDrawer extends StatelessWidget {
             tileText: 'About Us',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const AboutUsPage());
+              Get.to(() =>const ONDCWebviewScreenMobile(title: "About Us",
+                url: "https://santhe.in/aboutus/app"));
+                  // const AboutUsPage());
             },
           ),
           NavigationDrawerTile(
@@ -191,7 +232,9 @@ class NavigationDrawer extends StatelessWidget {
             tileText: 'Terms & Conditions',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const TermsAndConditionsPage());
+              Get.to(() => const ONDCWebviewScreenMobile(title: "Terms And Conditions",
+                  url: "https://santhe.in/terms-and-condition/app"));
+             // const TermsAndConditionsPage());
             },
           ),
           NavigationDrawerTile(
@@ -199,17 +242,21 @@ class NavigationDrawer extends StatelessWidget {
             tileText: 'Privacy Policy',
             onPress: () {
               // Navigator.pop(context);
-              Get.to(() => const PrivacyPolicyPage());
+              Get.to(() =>
+              const ONDCWebviewScreenMobile(title: "Privacy Policy",
+                  url: "https://santhe.in/privacy-policy/app"));
+              //const PrivacyPolicyPage());
             },
           ),
-          NavigationDrawerTile(
-            icon: CupertinoIcons.lock_shield_fill,
-            tileText: 'Log Out',
-            onPress: () {
-              // Navigator.pop(context);
-              Get.to(() => const LoginScreen());
-            },
-          ),
+          // NavigationDrawerTile(
+          //   icon: CupertinoIcons.lock_shield_fill,
+          //   tileText: 'Log Out',
+          //   onPress: () {
+          //     // Navigator.pop(context);
+          //
+          //     Get.offAll(() => const LoginScreen());
+          //   },
+          // ),
         ],
       ),
     );

@@ -42,17 +42,19 @@ class ProfileController extends GetxController with LogMixin {
   Future<void> initialise({bool startApp = false}) async {
     await generateUrlToken(override: startApp);
     await getCustomerDetailsInit();
-    await cacheRefresh();
-    if (!customerDetails!.opStats) await getOperationalStatus();
+   // await cacheRefresh();
+   // await getOperationalStatus();
   }
 
   Future<bool> getCustomerDetailsInit() async {
     final apiController = Get.find<APIs>();
     final formattedPhoneNumber = AppHelpers()
-        .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
+        .getPhoneNumberWithoutFoundedCountryCode(
+        AppHelpers().getPhoneNumber);
     final intPhoneNumber = int.parse(formattedPhoneNumber);
     warningLog(
-        'Formatted PhoneNumber $formattedPhoneNumber and formatted int phone number $intPhoneNumber');
+        'Formatted PhoneNumber $formattedPhoneNumber'
+            ' and formatted int phone number $intPhoneNumber');
     final result = await apiController.getCustomerInfo(
       //!previous function
       int.parse(
@@ -68,120 +70,120 @@ class ProfileController extends GetxController with LogMixin {
     final apiController = Get.find<APIs>();
     final formattedPhoneNumber = AppHelpers()
         .getPhoneNumberWithoutFoundedCountryCode(AppHelpers().getPhoneNumber);
-    await apiController.getCheckRadius(
-      int.parse(
-        // AppHelpers().getPhoneNumberWithoutCountryCode,
-        formattedPhoneNumber,
-      ),
-      customerDetails!.lat.toString(),
-      customerDetails!.lng.toString(),
-      customerDetails!.pinCode,
-    );
+    // await apiController.getCheckRadius(
+    //   int.parse(
+    //     // AppHelpers().getPhoneNumberWithoutCountryCode,
+    //     formattedPhoneNumber,
+    //   ),
+    //   customerDetails!.lat.toString(),
+    //   customerDetails!.lng.toString(),
+    //   customerDetails!.pinCode,
+    // );
     log("Is Operational: $isOperational");
   }
 
   set getCustomerDetails(CustomerModel customer) {
     customerDetails = customer;
     RegistrationController registrationController = Get.find();
-    registrationController.address.value = customerDetails!.address;
+   registrationController.address.value = customerDetails!.address;
     registrationController.howToReach.value = customerDetails!.howToReach;
     registrationController.lat.value = double.parse(customerDetails!.lat);
     registrationController.lng.value = double.parse(customerDetails!.lng);
     update(['navDrawer']);
   }
 
-  Future<void> cacheRefresh() async {
-    final apiController = Get.find<APIs>();
-
-    bool didUpdateItems = true;
-
-    CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
-    var box = Boxes.getCacheRefreshInfo();
-    final itemBox = Boxes.getItemsDB();
-
-    await Hive.openBox<Category>('categoryDB');
-    await Hive.openBox<Item>('itemDB');
-    await Hive.openBox<CacheRefresh>('cacheRefreshDB');
-    await Hive.openBox<FAQ>('faqDB');
-    await Hive.openBox<String>('contentDB');
-
-    //getting all content that's to be cached if not already done
-    if (!box.containsKey('cacheRefresh') || box.isEmpty || itemBox.isEmpty) {
-      //cat data
-      await apiController.getAllCategories();
-      apiController.getAllItems();
-      box.put('cacheRefresh', newCacheRefresh);
-
-      //faq data
-      await apiController.getAllFAQs();
-
-      //aboutUs & terms n condition data
-      await apiController.getCommonContent();
-
-      //items data for search
-      // await apiController.getAllItems();
-
-      log('first cache load');
-    }
-
-    //catUpdate checking
-    if (box
-            .get('cacheRefresh')
-            ?.catUpdate
-            .isBefore(newCacheRefresh.catUpdate) ??
-        true) {
-      log('========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
-//calling api and saving to db (api code has db write code integrated)
-      await apiController.getAllCategories();
-      log('>>>>>>>>>>>>>>fetching cat');
-    }
-    // apiController.initCategoriesDB();
-
-    //faq cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.custFaqUpdate
-            .isBefore(newCacheRefresh.custFaqUpdate) ??
-        true) {
-      //get & store faq data
-      log('-----------------Updating FAQ------------------');
-      await apiController.getAllFAQs();
-    }
-
-    // aboutUs cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.aboutUsUpdate
-            .isBefore(newCacheRefresh.aboutUsUpdate) ??
-        true) {
-      log('-----------------Updating About Us------------------');
-      await apiController.getCommonContent();
-    } else if (box
-            .get('cacheRefresh')
-            ?.termsUpdate
-            .isBefore(newCacheRefresh.termsUpdate) ??
-        true) {
-      log('-----------------Updating Terms & Condition------------------');
-      await apiController.getCommonContent();
-    }
-
-    //item cache check and storing
-    if (box
-            .get('cacheRefresh')
-            ?.itemUpdate
-            .isBefore(newCacheRefresh.itemUpdate) ??
-        true) {
-      log('-----------------Refreshing Item Image------------------');
-      log('-----------------Updating Items in cache------------------');
-
-      didUpdateItems = await apiController.getAllItems();
-
-      //clearing image cache
-      DefaultCacheManager manager = DefaultCacheManager();
-      manager.emptyCache();
-    }
-    if (didUpdateItems) box.put('cacheRefresh', newCacheRefresh);
-  }
+//   Future<void> cacheRefresh() async {
+//     final apiController = Get.find<APIs>();
+//
+//     bool didUpdateItems = true;
+//
+//    // CacheRefresh newCacheRefresh = await apiController.cacheRefreshInfo();
+//     var box = Boxes.getCacheRefreshInfo();
+//     final itemBox = Boxes.getItemsDB();
+//
+//     await Hive.openBox<Category>('categoryDB');
+//     await Hive.openBox<Item>('itemDB');
+//     await Hive.openBox<CacheRefresh>('cacheRefreshDB');
+//     await Hive.openBox<FAQ>('faqDB');
+//     await Hive.openBox<String>('contentDB');
+//
+//     //getting all content that's to be cached if not already done
+//     if (!box.containsKey('cacheRefresh') || box.isEmpty || itemBox.isEmpty) {
+//       //cat data
+//       // await apiController.getAllCategories();
+//       // apiController.getAllItems();
+//       // box.put('cacheRefresh', newCacheRefresh);
+//       //
+//       // //faq data
+//       // await apiController.getAllFAQs();
+//       //
+//       // //aboutUs & terms n condition data
+//       // await apiController.getCommonContent();
+//
+//       //items data for search
+//       // await apiController.getAllItems();
+//
+//       log('first cache load');
+//     }
+//
+//     //catUpdate checking
+//     if (box
+//             .get('cacheRefresh')
+//             ?.catUpdate
+//             .isBefore(newCacheRefresh.catUpdate) ??
+//         true) {
+//       log('========${box.get('cacheRefresh')?.catUpdate} vs ${newCacheRefresh.catUpdate}');
+// //calling api and saving to db (api code has db write code integrated)
+//       await apiController.getAllCategories();
+//       log('>>>>>>>>>>>>>>fetching cat');
+//     }
+//     // apiController.initCategoriesDB();
+//
+//     //faq cache check and storing
+//     if (box
+//             .get('cacheRefresh')
+//             ?.custFaqUpdate
+//             .isBefore(newCacheRefresh.custFaqUpdate) ??
+//         true) {
+//       //get & store faq data
+//       log('-----------------Updating FAQ------------------');
+//       await apiController.getAllFAQs();
+//     }
+//
+//     // aboutUs cache check and storing
+//     if (box
+//             .get('cacheRefresh')
+//             ?.aboutUsUpdate
+//             .isBefore(newCacheRefresh.aboutUsUpdate) ??
+//         true) {
+//       log('-----------------Updating About Us------------------');
+//       await apiController.getCommonContent();
+//     } else if (box
+//             .get('cacheRefresh')
+//             ?.termsUpdate
+//             .isBefore(newCacheRefresh.termsUpdate) ??
+//         true) {
+//       log('-----------------Updating Terms & Condition------------------');
+//       await apiController.getCommonContent();
+//     }
+//
+//     //item cache check and storing
+//     if (box
+//             .get('cacheRefresh')
+//             ?.itemUpdate
+//             .isBefore(newCacheRefresh.itemUpdate) ??
+//         true) {
+//       log('-----------------Refreshing Item Image------------------');
+//       log('-----------------Updating Items in cache------------------');
+//
+//       didUpdateItems = await apiController.getAllItems();
+//
+//       //clearing image cache
+//       DefaultCacheManager manager = DefaultCacheManager();
+//       manager.emptyCache();
+//     }
+//     if (didUpdateItems) box.put('cacheRefresh', newCacheRefresh);
+//   }
 
   void deleteEverything() async {
     isOperational.value = false;

@@ -6,6 +6,8 @@ class AppColors{
 
   Color get brandDark => const Color(0xFFF89522);
 
+  Color get backgroundGrey => const Color(0xffE5E5E5);
+
   Color get white100 => Colors.white;
 
   Color get black100 => Colors.black;
@@ -33,5 +35,11 @@ class AppColors{
   Color get yellow90 => const Color(0xFFFFC903);
 
   Color get green100 => const Color(0xFF38B000);
+
+  Color get appBarShadow => const Color(0xffFFBE74);
+
+
+  Color get primaryOrange => const Color(0xffFF9800);
+
 
 }

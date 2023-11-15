@@ -18,7 +18,7 @@ class AddToCartEvent extends CartEvent {
 }
 
 class UpdateQuantityEvent extends CartEvent {
-  final ProductOndcModel cartModel;
+  final CartitemModel cartModel;
   const UpdateQuantityEvent({
     required this.cartModel,
   });
@@ -54,19 +54,37 @@ class ErrorAddingQuantityEvent extends CartEvent {
 }
 
 class UpdateCartEvent extends CartEvent {
-  final List<ProductOndcModel> productOndcModels;
+  final List<CartitemModel> productOndcModels;
   const UpdateCartEvent({required this.productOndcModels});
   @override
   List<Object> get props => [productOndcModels];
 }
 
-class OnAppRefreshEvent extends CartEvent {}
+class OnAppRefreshEvent extends CartEvent {
+  final String storeLocationId;
+  const OnAppRefreshEvent({
+    required this.storeLocationId,
+  });
+  @override
+  List<Object> get props => [storeLocationId];
+}
 
 class DeleteCartItemEvent extends CartEvent {
-  final ProductOndcModel productOndcModel;
+  final CartitemModel productOndcModel;
   const DeleteCartItemEvent({
     required this.productOndcModel,
   });
   @override
   List<Object> get props => [productOndcModel];
+}
+
+class ResetCartEvent extends CartEvent {}
+
+class GetCartItemsEvents extends CartEvent {
+  final ShopModel shopModel;
+  const GetCartItemsEvents({
+    required this.shopModel,
+  });
+  @override
+  List<Object> get props => [shopModel];
 }

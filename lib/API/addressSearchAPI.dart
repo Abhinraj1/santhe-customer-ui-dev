@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:santhe/SECRETKEY.dart';
+import 'package:santhe/pages/ondc/map_address_ondc/map_address_ondc_view.dart';
 
 import '../pages/customer_registration_pages/mapAddressPicker.dart';
 
@@ -52,6 +53,27 @@ class PlaceApiProvider {
         var lat = result['results'][0]['geometry']['location']['lat'];
         var lng = result['results'][0]['geometry']['location']['lng'];
         Get.to(() => MapAddressPicker(lat: lat, lng: lng));
+      }
+      //throw Exception(result['error_message']);
+    } else {
+      //throw Exception('Failed to fetch suggestion');
+    }
+  }
+
+  void getPlaceDetailFromIdv2(String placeId, String? whichScreen) async {
+    final request =
+        'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=$apiKey';
+    final response = await client.get(Uri.parse(request));
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      if (result['status'] == 'OK') {
+        var lat = result['results'][0]['geometry']['location']['lat'];
+        var lng = result['results'][0]['geometry']['location']['lng'];
+        Get.to(() => MapAddressOndcView(
+              lat: lat,
+              lng: lng,
+              whichScreen: whichScreen,
+            ));
       }
       //throw Exception(result['error_message']);
     } else {

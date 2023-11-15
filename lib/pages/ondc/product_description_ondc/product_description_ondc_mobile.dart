@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, use_build_context_synchronously
 part of product_description_ondc_view;
 
 class _ProductDescriptionOndcMobile extends StatefulWidget {
@@ -17,7 +17,7 @@ class _ProductDescriptionOndcMobile extends StatefulWidget {
 
 class _ProductDescriptionOndcMobileState
     extends State<_ProductDescriptionOndcMobile> with LogMixin {
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   int currentPage = 0;
   List<OndcProductCarouselImage> images = [];
   Map<String, ProductOndcModel> productModels = {};
@@ -25,6 +25,8 @@ class _ProductDescriptionOndcMobileState
   List<OndcCartItem> cartWidget = [];
   String cancellable = 'No';
   String returnable = 'No';
+  String sellerPickupReturn = "No";
+  int cartCount = 0;
 
   bool isSameValue = false;
   buildPageIndicator() {
@@ -64,6 +66,7 @@ class _ProductDescriptionOndcMobileState
   getImages() {
     for (var i = 0; i < widget.productOndcModel.images!.length; i++) {
       final string = widget.productOndcModel.images![i]['image_url'];
+      errorLog('$string');
       images.add(
         OndcProductCarouselImage(imageUrl: string),
       );
@@ -95,7 +98,7 @@ class _ProductDescriptionOndcMobileState
     }
   }
 
-  yesNoCancellable() {
+  yesNoReturnable() {
     if (widget.productOndcModel.returnable == true) {
       setState(() {
         returnable = 'Yes';
@@ -107,8 +110,20 @@ class _ProductDescriptionOndcMobileState
     }
   }
 
-  yesNoReturnable() {
-    if (widget.productOndcModel.return_window == true) {
+  yesNoSellerPickUpReturn() {
+    if (widget.productOndcModel.seller_pickup_return == true) {
+      setState(() {
+        sellerPickupReturn = 'Yes';
+      });
+    } else {
+      setState(() {
+        sellerPickupReturn = 'No';
+      });
+    }
+  }
+
+  yesNoCancellable() {
+    if (widget.productOndcModel.cancellable == true) {
       setState(() {
         cancellable = 'Yes';
       });
@@ -124,6 +139,8 @@ class _ProductDescriptionOndcMobileState
     super.initState();
     widget.value = 1;
     widget.productOndcModel.quantity = 1;
+    cartCount =
+        RepositoryProvider.of<OndcRepository>(context).totalCartItemCount;
     getImages();
     checkValue();
     yesNoCancellable();
@@ -132,11 +149,12 @@ class _ProductDescriptionOndcMobileState
 
   @override
   Widget build(BuildContext context) {
-    // warningLog('${widget.productOndcModel.maximum}');
+    warningLog('${widget.productOndcModel.cancellable}');
     final cart = RepositoryProvider.of<OndcCartRepository>(context);
+    debugLog('cartCount ${widget.productOndcModel}');
     return Scaffold(
       key: _key,
-      drawer: const NavigationDrawer(),
+      drawer: const nv.CustomNavigationDrawer(),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () async {
@@ -193,12 +211,36 @@ class _ProductDescriptionOndcMobileState
         ],
       ),
       body: BlocConsumer<CartBloc, CartState>(
-        listener: (context, state) {
-          // warningLog('$state');
+        listener: (context, state) async {
+          warningLog('$state');
           if (state is AddedToCartList) {
-            context.read<CartBloc>().add(
-                  UpdateCartEvent(productOndcModels: state.productOndcModels),
-                );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Added to Cart'),
+              ),
+            );
+            await RepositoryProvider.of<OndcRepository>(context)
+                .getCartCountMethod(
+              storeLocation_id: widget.productOndcModel.storeLocationId,
+            );
+            setState(() {
+              cartCount =
+                  RepositoryProvider.of<OndcRepository>(context).cartCount;
+            });
+            context.read<CartBloc>().add(ResetCartEvent());
+            // context.read<CartBloc>().add(
+            //       UpdateCartEvent(productOndcModels: state.productOndcModels),
+            //     );
+          }
+          if (state is ResetCartState) {
+            await RepositoryProvider.of<OndcRepository>(context)
+                .getCartCountMethod(
+              storeLocation_id: widget.productOndcModel.storeLocationId,
+            );
+            setState(() {
+              cartCount =
+                  RepositoryProvider.of<OndcRepository>(context).cartCount;
+            });
           }
         },
         builder: (context, state) {
@@ -211,31 +253,53 @@ class _ProductDescriptionOndcMobileState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back(result: widget.value);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_sharp,
-                          color: AppColors().brandDark,
-                          size: 30,
-                        ),
-                      ),
+                      const CustomBackButton(leftPadding: 5),
+
+                      //! Navigation not allowed for now due to shopmodel trouble
                       Stack(
                         children: [
-                          GestureDetector(
-                            onTap: () async {
-                              await Get.to(
-                                const OndcCartView(),
-                              );
-                              setState(() {
-                                widget.productOndcModel.quantity;
-                              });
-                            },
-                            child: Image.asset(
-                              'assets/newshoppingcartorange.png',
-                              height: 35,
-                              width: 35,
+                          badges.Badge(
+                            position:
+                                badges.BadgePosition.topEnd(top: 0, end: 2),
+                            badgeAnimation: const badges.BadgeAnimation.slide(),
+                            badgeStyle: badges.BadgeStyle(
+                              badgeColor: AppColors().white100,
+                            ),
+                            showBadge: true,
+                            badgeContent: Text(
+                              '$cartCount',
+                              style: TextStyle(color: AppColors().brandDark),
+                            ),
+                            child: GestureDetector(
+                              onTap: () async {
+                                await Get.to(
+                                  OndcCartView(
+                                    storeLocation_id:
+                                        widget.productOndcModel.storeLocationId,
+                                  ),
+                                )?.then((_) {
+                                  setState(() {
+                                    widget.productOndcModel.quantity;
+                                    widget.productOndcModel.removeFromCart();
+                                  });
+                                });
+
+                                warningLog(
+                                    'Added to Cart ${widget.productOndcModel.isAddedToCart}');
+                              },
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: AppColors().brandDark,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    'assets/newshoppingcart.png',
+                                    fit: BoxFit.fill,
+                                    height: 55,
+                                    width: 55,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -288,7 +352,7 @@ class _ProductDescriptionOndcMobileState
                               Text(
                                 '₹ ${widget.productOndcModel.maximum_value}',
                                 style: TextStyle(
-                                    color: AppColors().brandDark,
+                                    color: AppColors().grey100,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     decoration: TextDecoration.lineThrough),
@@ -323,103 +387,126 @@ class _ProductDescriptionOndcMobileState
                 const SizedBox(
                   height: 10,
                 ),
+                //! copied
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 10),
-                      child: Container(
-                        width: 160,
-                        height: 45,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15.0),
-                            bottomRight: Radius.circular(15.0),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: add,
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                  size: 17,
+                    widget.productOndcModel.isAddedToCart!
+                        ? const Text('                          ')
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 8.0, left: 10),
+                            child: Container(
+                              width: 160,
+                              height: 45,
+                              decoration: const BoxDecoration(
+                                color: Colors.white12,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15.0),
+                                  bottomRight: Radius.circular(15.0),
                                 ),
                               ),
-                              Text(
-                                ' ${widget.productOndcModel.quantity}',
-                                style: TextStyle(
-                                    color: AppColors().brandDark,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              GestureDetector(
-                                onTap: minus,
-                                child: const Icon(
-                                  Icons.remove,
-                                  color: Colors.black,
-                                  size: 17,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 35.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: add,
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.black,
+                                        size: 17,
+                                      ),
+                                    ),
+                                    Text(
+                                      ' ${widget.productOndcModel.quantity}',
+                                      style: TextStyle(
+                                          color: AppColors().brandDark,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    GestureDetector(
+                                      onTap: minus,
+                                      child: const Icon(
+                                        Icons.remove,
+                                        color: Colors.black,
+                                        size: 17,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                     const SizedBox(
                       width: 20,
                     ),
                     widget.productOndcModel.isAddedToCart == true
-                        ? Container(
-                            width: 160,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              color: AppColors().white100,
-                              borderRadius: BorderRadius.circular(10.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors().brandDark,
-                                  offset: Offset(0, 1),
-                                  spreadRadius: 1,
-                                  blurRadius: 10,
-                                ),
-                              ],
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Go to cart',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          )
-                        : GestureDetector(
+                        ? GestureDetector(
                             onTap: () async {
-                              // if (widget.productOndcModel.available >= 1) {
-                              context.read<CartBloc>().add(
-                                    AddToCartEvent(
-                                      productOndcModel: widget.productOndcModel,
-                                    ),
-                                  );
-                              setState(() {
-                                _addedToCart = true;
+                              await Get.to(
+                                OndcCartView(
+                                  storeLocation_id:
+                                      widget.productOndcModel.storeLocationId,
+                                ),
+                              )?.then((_) {
+                                setState(() {
+                                  widget.productOndcModel.quantity;
+                                  widget.productOndcModel.removeFromCart();
+                                });
                               });
-                              // }
+
+                              warningLog(
+                                  'Checking for addedtoCart ${widget.productOndcModel.isAddedToCart}');
                             },
                             child: Container(
                               width: 160,
                               height: 45,
                               decoration: BoxDecoration(
-                                color:
-                                    // widget.productOndcModel.available > 0
-                                    // ?
-                                    AppColors().brandDark,
-                                // : AppColors().grey40,
+                                color: AppColors().white100,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors().brandDark,
+                                    offset: Offset(0, 1),
+                                    spreadRadius: 1,
+                                    blurRadius: 10,
+                                  ),
+                                ],
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'GO TO CART',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () async {
+                              if (widget.productOndcModel.available >= 1) {
+                                context.read<CartBloc>().add(
+                                      AddToCartEvent(
+                                        productOndcModel:
+                                            widget.productOndcModel,
+                                      ),
+                                    );
+                                setState(() {
+                                  _addedToCart = true;
+                                });
+                                debugLog('Count$cartCount');
+                              }
+                            },
+                            child: Container(
+                              width: 160,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                color: widget.productOndcModel.available > 0
+                                    ? AppColors().brandDark
+                                    : AppColors().grey40,
                                 borderRadius: BorderRadius.circular(10.0),
                                 boxShadow: const [
                                   BoxShadow(
@@ -432,7 +519,7 @@ class _ProductDescriptionOndcMobileState
                               ),
                               child: const Center(
                                 child: Text(
-                                  'Add To Cart',
+                                  'ADD TO CART',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -461,50 +548,59 @@ class _ProductDescriptionOndcMobileState
                           ),
                         ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15, top: 15),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Description : ')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: ExpandableText(
-                      '${widget.productOndcModel.long_description}',
-                      trimLines: 5,
+                widget.productOndcModel.long_description.toString() != "null"
+                    ? Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 15, top: 15),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Description : ')),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: SizedBox(
+                                child: ExpandableText(
+                                  '${widget.productOndcModel.long_description}',
+                                  trimLines: 5,
+                                  callback: () => Get.to(
+                                    () => ProductLongDescriptionView(
+                                        productOndcModel:
+                                            widget.productOndcModel),
+                                  ),
+                                  // callback: (val) {
+                                  //   Get.to(
+                                  //     () => ProductLongDescriptionView(
+                                  //       productOndcModel: widget.productOndcModel,
+                                  //     ),
+                                  //   );
+                                  // },
+                                  // style: const TextStyle(fontSize: 15),
+                                  // colorClickableText: Colors.pink,
+                                  // trimMode: TrimMode.Line,
+                                  // trimCollapsedText: 'Show more',
+                                  // trimExpandedText: 'Show less',
+                                  // lessStyle: const TextStyle(
+                                  //   fontSize: 14,
+                                  //   fontWeight: FontWeight.bold,
+                                  // ),
+                                  // moreStyle: const TextStyle(
+                                  //   fontSize: 14,
+                                  //   fontWeight: FontWeight.bold,
+                                  // ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
 
-                      callback: () => Get.to(
-                        () => ProductLongDescriptionView(
-                            productOndcModel: widget.productOndcModel),
-                      ),
-                      // callback: (val) {
-                      //   Get.to(
-                      //     () => ProductLongDescriptionView(
-                      //       productOndcModel: widget.productOndcModel,
-                      //     ),
-                      //   );
-                      // },
-                      // style: const TextStyle(fontSize: 15),
-                      // colorClickableText: Colors.pink,
-                      // trimMode: TrimMode.Line,
-                      // trimCollapsedText: 'Show more',
-                      // trimExpandedText: 'Show less',
-                      // lessStyle: const TextStyle(
-                      //   fontSize: 14,
-                      //   fontWeight: FontWeight.bold,
-                      // ),
-                      // moreStyle: const TextStyle(
-                      //   fontSize: 14,
-                      //   fontWeight: FontWeight.bold,
-                      // ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
@@ -524,7 +620,7 @@ class _ProductDescriptionOndcMobileState
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
-                      'Cancellable:  ${cancellable.toString().toUpperCase()}',
+                      'Cancellable:  ${cancellable.toString().capitalizeFirst}',
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),
@@ -532,40 +628,45 @@ class _ProductDescriptionOndcMobileState
                 const SizedBox(
                   height: 10,
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: Text(
-                      'Returnable:   ${cancellable.toString().toUpperCase()}',
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+
+                ///@Abhi
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(left: 15.0),
+                //     child: Text(
+                //       'Returnable:   ${returnable.toString().toUpperCase()}',
+                //       style: const TextStyle(fontSize: 15),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
                 widget.productOndcModel.returnable
                     ? Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Returnable:   ${returnable.toString().toUpperCase()}',
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Return picked up by seller : ${widget.productOndcModel.seller_pickup_return}',
+                          child: SizedBox(
+                            width: 300,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Returnable:   ${returnable.toString().capitalizeFirst}',
                                   style: const TextStyle(fontSize: 15),
                                 ),
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Return picked up by seller : '
+                                  '$sellerPickupReturn',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       )

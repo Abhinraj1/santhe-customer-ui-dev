@@ -38,26 +38,26 @@ class AppInitialisations {
 
   Future<void> _initialiseHive() async {
     await Hive.initFlutter();
-    Hive.registerAdapter(ListItemAdapter());
-    Hive.registerAdapter(UserListAdapter());
+    // Hive.registerAdapter(ListItemAdapter());
+    // Hive.registerAdapter(UserListAdapter());
     Hive.registerAdapter(UserCredentialAdapter());
     Hive.registerAdapter(UserAdapter());
-    Hive.registerAdapter(CategoryAdapter());
+   // Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(CacheRefreshAdapter());
     Hive.registerAdapter(FAQAdapter());
-    Hive.registerAdapter(ItemAdapter());
+    //Hive.registerAdapter(ItemAdapter());
 
-    await Hive.openBox<Category>('categoryDB');
-    await Hive.openBox<Item>('itemDB');
+    //await Hive.openBox<Category>('categoryDB');
+   // await Hive.openBox<Item>('itemDB');
     await Hive.openBox<CacheRefresh>('cacheRefreshDB');
     await Hive.openBox<FAQ>('faqDB');
-    await Hive.openBox<String>('contentDB');
+    //await Hive.openBox<String>('contentDB');
   }
 
   void _initialiseControllers() {
     Get.put(ConnectivityController());
-    Get.put(NotificationController());
-    Get.put(AllListController());
+    // Get.put(NotificationController());
+    // Get.put(AllListController());
     Get.put(APIs());
     Get.put(LocationController());
     Get.put(RegistrationController());

@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 part of 'ondc_bloc.dart';
 
 abstract class OndcState extends Equatable {
@@ -19,6 +19,35 @@ class OndcFetchProductLoading extends OndcState {}
 class OndcFetchProductsLocalLoading extends OndcState {}
 
 class OndcFetchProductsGlobalLoading extends OndcState {}
+
+class ResetOndcState extends OndcState {
+  final int cartCount;
+  const ResetOndcState({
+    required this.cartCount,
+  });
+  @override
+  List<Object?> get props => [cartCount];
+}
+
+class ClearSearchState extends OndcState {
+  List<ShopModel>? ondcShopModels;
+  ClearSearchState({
+    this.ondcShopModels,
+  });
+  @override
+  List<Object?> get props => [ondcShopModels];
+}
+
+class ClearStateLoading extends OndcState {}
+
+class ClearStateErrorState extends OndcState {
+  final String message;
+  const ClearStateErrorState({
+    required this.message,
+  });
+  @override
+  List<Object?> get props => [message];
+}
 
 class ErrorFetchingGlobalProducts extends OndcState {
   final String message;
@@ -90,4 +119,25 @@ class OndcProductsOfShopsLoaded extends OndcState {
   });
   @override
   List<Object> get props => [productModels];
+}
+
+class SearchItem extends OndcState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class NoItemsFoundState extends OndcState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SearchItemLoaded extends OndcState {
+  final List<ShopModel> shopsList;
+
+  const SearchItemLoaded({required this.shopsList});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [shopsList];
 }

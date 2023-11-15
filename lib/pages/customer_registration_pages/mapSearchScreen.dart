@@ -36,6 +36,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Scaffold(
+
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0.0,
@@ -229,7 +230,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                     setState(() {
                       _isFetchingLocation = true;
                     });
-                    Future.delayed(const Duration(seconds: 0), () async {
+
                       final locationController = Get.find<LocationController>();
                       final permission =
                           await locationController.checkPermission();
@@ -240,13 +241,15 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                                 lat: value!.latitude,
                                 lng: value.longitude,
                               ));
-                          _isFetchingLocation = false;
+                          setState(() {
+                            _isFetchingLocation = false;
+                          });
                         });
                       }
-                      setState(() {
-                        _isFetchingLocation = false;
-                      });
-                    });
+                      // setState(() {
+                      //   _isFetchingLocation = false;
+                      // });
+
                   },
                   child: Center(
                     child: Container(
@@ -310,7 +313,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                             )),
                       ),
                       Obx(() => Text(
-                          '${userInfoController.address.obs.string}\n${userInfoController.howToReach.value}'))
+                          '${userInfoController.address.obs.string}\n'
+                              '${userInfoController.howToReach.value}'))
                     ],
                   ),
                 ),

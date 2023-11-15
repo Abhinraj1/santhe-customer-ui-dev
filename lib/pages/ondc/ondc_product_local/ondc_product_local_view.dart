@@ -20,7 +20,9 @@ import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 import 'package:santhe/widgets/navigation_drawer_widget.dart';
-import 'package:santhe/widgets/ondc_widgets/ondc_product_widget.dart';
+import 'package:santhe/widgets/ondc_widgets/ondc_shop_widget.dart';
+
+import '../../../widgets/ondc_widgets/ondc_product_widget.dart';
 
 part 'ondc_product_local_desktop.dart';
 part 'ondc_product_local_mobile.dart';

@@ -62,7 +62,7 @@ class _OndcProductLocalMobileState extends State<_OndcProductLocalMobile>
           await json.decode(response.body)['data']['rows'] as List<dynamic>;
       warningLog('$responseBody');
       List<ProductOndcModel> newSearchedProduct =
-          responseBody.map((e) => ProductOndcModel.fromMap(e)).toList();
+          responseBody.map((e) => ProductOndcModel.fromNewMap(e)).toList();
       warningLog('new search products${newSearchedProduct.length}');
       infoLog('${widget.productOndcModel.length}');
       List<ProductOndcModel> differenceModels = newSearchedProduct
@@ -133,7 +133,6 @@ class _OndcProductLocalMobileState extends State<_OndcProductLocalMobile>
                         );
                         context.read<OndcBloc>().add(
                               SearchOndcItemInLocalShop(
-                                transactionId: widget.shopModel.transaction_id,
                                 storeId: widget.shopModel.id,
                                 productName: _textEditingController.text,
                               ),
@@ -191,7 +190,7 @@ class _OndcProductLocalMobileState extends State<_OndcProductLocalMobile>
       }
     }, builder: (context, state) {
       return Scaffold(
-          drawer: const NavigationDrawer(),
+          drawer: const CustomNavigationDrawer(),
           key: _key,
           appBar: AppBar(
             leading: IconButton(

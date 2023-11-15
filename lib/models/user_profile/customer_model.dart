@@ -1,21 +1,23 @@
 class CustomerModel {
-
-  CustomerModel({required this.lng,
-    required this.lat,
-    required this.address,
-    required this.customerId,
-    required this.customerLoginTime,
-    required this.customerName,
-    required this.customerPlan,
-    required this.customerRatings,
-    required this.customerReferral,
-    required this.customerStatus,
-    required this.emailId,
-    required this.howToReach,
-    required this.phoneNumber,
-    required this.pinCode,
-    this.opStats = false,
-  });
+  CustomerModel(
+      {required this.lng,
+      required this.lat,
+      required this.address,
+      required this.customerId,
+      required this.customerLoginTime,
+      required this.customerName,
+      required this.customerPlan,
+      required this.customerRatings,
+      required this.customerReferral,
+      required this.customerStatus,
+      required this.emailId,
+      required this.howToReach,
+      required this.phoneNumber,
+      required this.pinCode,
+      required this.fbiid,
+      required this.uniqueCustomerId,
+      this.opStats = false,
+      required this.lastName});
 
   String address;
 
@@ -33,7 +35,7 @@ class CustomerModel {
 
   String customerId;
 
-  DateTime customerLoginTime;
+  dynamic customerLoginTime;
 
   String customerName;
 
@@ -45,32 +47,34 @@ class CustomerModel {
 
   String customerStatus;
 
+  dynamic uniqueCustomerId;
+
+  dynamic fbiid;
+
+  dynamic lastName;
+
   bool opStats;
 
-  factory CustomerModel.fromJson(Map json){
+  factory CustomerModel.fromJson(Map json) {
+    final addresses = json['addresses'] as List;
     return CustomerModel(
-        address: json['contact']['mapValue']['fields']['address']['stringValue'],
-        emailId: json['contact']['mapValue']['fields']['emailId']['stringValue'],
-        lat: json['contact']['mapValue']['fields']['location']
-        ['mapValue']['fields']['lat']['doubleValue']
-            .toString(),
-        lng: json['contact']['mapValue']['fields']['location']
-        ['mapValue']['fields']['lng']['doubleValue']
-            .toString(),
-        pinCode: json['contact']['mapValue']['fields']['pincode']['integerValue'],
-        phoneNumber: json['contact']['mapValue']['fields']['phoneNumber']['integerValue'],
-        customerId: json['custId']['integerValue'],
-        customerName: json['custName']['stringValue'],
-        customerRatings: json['custRatings']['integerValue'] ??
-            json['custRatings']['doubleValue'].toString(),
-        customerReferral: json['custReferal']['integerValue'],
-        customerStatus: json['custStatus']['stringValue'],
-        customerPlan: json['custPlan']['stringValue'],
-        customerLoginTime: DateTime.parse(
-            json['custLoginTime']['timestampValue']),
-        howToReach: json['contact']['mapValue']['fields']['howToReach']
-        ['stringValue'],
-        opStats: json['opStats']==null?false:json['opStats']['booleanValue']
-    );
+        address: addresses.first['flat'].toString(),
+        emailId: json['email'].toString(),
+        lat: addresses.first['lat'].toString(),
+        lng: addresses.first['lng'].toString(),
+        pinCode: addresses.first['pincode'].toString(),
+        phoneNumber: json['firebase_id'].toString(),
+        customerId: json['phoneNumber'].toString(),
+        customerName: json['first_name'].toString(),
+        uniqueCustomerId: json['id'].toString(),
+        fbiid: json['fbiid'],
+        customerRatings: json['custRatings'].toString(),
+        customerReferral: json['custReferal'].toString(),
+        customerStatus: json['custStatus'].toString(),
+        customerPlan: json['custPlan'].toString(),
+        customerLoginTime: json['custLoginTime'],
+        howToReach: json['howToReach'].toString(),
+        opStats: json['opStats'].toString().contains('true') ? true : false,
+        lastName: json['last_name'].toString());
   }
 }

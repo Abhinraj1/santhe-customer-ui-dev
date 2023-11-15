@@ -12,6 +12,7 @@ import 'package:santhe/core/app_helpers.dart';
 import 'package:santhe/models/user_profile/customer_model.dart';
 import 'package:santhe/pages/delete_account_page.dart';
 import 'package:santhe/pages/map_merch.dart';
+import 'package:santhe/pages/ondc/ondc_intro/ondc_intro_view.dart';
 
 import 'package:santhe/widgets/confirmation_widgets/error_snackbar_widget.dart';
 import 'package:santhe/widgets/confirmation_widgets/success_snackbar_widget.dart';
@@ -24,7 +25,9 @@ import '../../controllers/registrationController.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_theme.dart';
 import '../../models/santhe_user_model.dart';
+import '../../utils/firebase_analytics_custom_events.dart';
 import '../customer_registration_pages/mapSearchScreen.dart';
+import '../hyperlocal/hyperlocal_shophome/hyperlocal_shophome_view.dart';
 import '../login_pages/phone_number_login_page.dart';
 
 class EditCustomerProfile extends StatefulWidget {
@@ -37,13 +40,14 @@ class EditCustomerProfile extends StatefulWidget {
 class _EditCustomerProfileState extends State<EditCustomerProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  final profileController = Get.find<ProfileController>();
+  //final profileController = Get.find<ProfileController>();
   int userPhoneNumber = int.parse(
       // AppHelpers().getPhoneNumberWithoutCountryCode,
       AppHelpers().getPhoneNumberWithoutFoundedCountryCode(
           AppHelpers().getPhoneNumber));
   late final CustomerModel? currentUser;
   late final TextEditingController _userNameController;
+   final TextEditingController _phoneNumberController = TextEditingController();
   late final TextEditingController _userEmailController;
   bool addressUpdateFlag = false;
   bool donePressed = false;
@@ -63,17 +67,19 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       statusBarBrightness: Brightness.light,
     ));
 
-    currentUser = profileController.customerDetails ?? fallback_error_customer;
+    currentUser = customerModel;//profileController.customerDetails;
+        //?? fallback_error_customer;
     _userNameController =
         TextEditingController(text: currentUser?.customerName ?? 'John Doe');
     _userEmailController = TextEditingController(
         text: currentUser?.emailId ?? 'johndoe@gmail.com');
-
+    _phoneNumberController.text = userPhoneNumber.toString();
     if (registrationController.address.value.trim().isEmpty) {
-      registrationController.address.value = currentUser?.address ?? '';
+
+      // registrationController.address.value = currentUser?.address ?? '';
     }
     if (registrationController.howToReach.value.trim().isEmpty) {
-      registrationController.howToReach.value = currentUser?.howToReach ?? '';
+     // registrationController.howToReach.value = currentUser?.howToReach ?? '';
     }
     if (registrationController.lat.value == 0.0 ||
         registrationController.lng.value == 0.0) {
@@ -86,7 +92,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       registrationController.pinCode.value =
           currentUser?.pinCode.toString() ?? '';
     }
-    profileController.getOperationalStatus();
+   // profileController.getOperationalStatus();
     super.initState();
   }
 
@@ -194,6 +200,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                   child: TextFormField(
                                     keyboardType: TextInputType.phone,
                                     enabled: false,
+                                    controller: _phoneNumberController,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: 1.0,
@@ -518,7 +525,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                                                     .trim() ==
                                                                 ''
                                                             ? 'Select Address'
-                                                            : '${registrationController.address.value} ${registrationController.howToReach.value}',
+                                                            : '${registrationController.address.value} '
+                                                            '${registrationController.howToReach.value.contains("null") ? "":
+                                                        registrationController.howToReach.value}',
                                                         style: registrationController
                                                                     .address
                                                                     .value
@@ -574,10 +583,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                         if (_formKey.currentState!.validate() &&
                                             registrationController
                                                 .address.isNotEmpty) {
-                                          CustomerModel? currentUser =
-                                              profileController
-                                                      .customerDetails ??
-                                                  fallback_error_customer;
+                                          // CustomerModel? currentUser =
+                                          //     profileController
+                                          //             .customerDetails ??
+                                          //         fallback_error_customer;
 
                                           int userPhone = int.parse(
                                             AppHelpers()
@@ -589,6 +598,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                           if (userPhone == 404) {
                                             Get.off(() => const LoginScreen());
                                           }
+
+                                          final token =
+                                              await AppHelpers().getToken;
 
                                           //todo add how to reach howToReach
                                           User updatedUser = User(
@@ -607,29 +619,39 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                               custId: userPhone,
                                               custName:
                                                   _userNameController.text,
-                                              custRatings: double.parse(
-                                                  currentUser.customerRatings),
+                                              custRatings: 5,
+                                              // custRatings: double.parse(
+                                              //     currentUser.customerRatings),
                                               custReferal: 0000,
                                               custStatus: 'active',
                                               howToReach: registrationController
                                                   .howToReach.value,
                                               custLoginTime: DateTime.now(),
-                                              custPlan: 'default');
+                                              custPlan: 'default',
+                                              lastName:
+                                                  _userNameController.text,
+                                              fiiid: token);
                                           int userUpdated = await apiController
                                               .updateCustomerInfo(
                                                   userPhone, updatedUser);
                                           if (userUpdated == 1) {
-                                            await profileController
-                                                .getCustomerDetailsInit();
+                                            // await profileController
+                                            //     .getCustomerDetailsInit();
                                             successMsg('Profile Updated',
                                                 'Your profile information was updated successfully.');
 
-                                            await profileController
-                                                .getOperationalStatus();
+                                           ///
+                                            AnalyticsCustomEvents().userEditProfileEvent();
+
+                                            // await profileController
+                                            //     .getOperationalStatus();
+                                            // Get.offAll(
+                                            //     () => const OndcIntroView(),
+                                            //     transition:
+                                            //         Transition.leftToRight);
                                             Get.offAll(
-                                                () => const MapMerchant(),
-                                                transition:
-                                                    Transition.leftToRight);
+                                              () => const HyperlocalShophomeView(),
+                                            );
                                             // Navigator.push(
                                             //   context,
                                             //   MaterialPageRoute(
@@ -691,11 +713,11 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: const DeleteAccountPage(),
-                                type: PageTransitionType.rightToLeft));
+                        // Navigator.push(
+                        //     context,
+                        //     PageTransition(
+                        //         child: const DeleteAccountPage(),
+                        //         type: PageTransitionType.rightToLeft));
                       },
                       child: Text(
                         'Delete Account',

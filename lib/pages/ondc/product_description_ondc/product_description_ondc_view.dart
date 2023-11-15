@@ -2,14 +2,11 @@
 library product_description_ondc_view;
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:readmore/readmore.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:santhe/constants.dart';
@@ -17,13 +14,16 @@ import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/blocs/ondc_cart/cart_bloc.dart';
 import 'package:santhe/core/loggers.dart';
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
+import 'package:santhe/core/repositories/ondc_repository.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:santhe/pages/ondc/ondc_cart/ondc_cart_view.dart';
-import 'package:santhe/widgets/navigation_drawer_widget.dart';
+import 'package:santhe/widgets/navigation_drawer_widget.dart' as nv;
 import 'package:santhe/widgets/ondc_widgets/expandable_text.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_cart_item.dart';
 import 'package:santhe/widgets/ondc_widgets/ondc_product_carousel.dart';
 
+import '../../../widgets/custom_widgets/custom_title_with_back_button.dart';
 import '../product_long_description/product_long_description_view.dart';
 
 part 'product_description_ondc_desktop.dart';

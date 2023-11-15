@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:santhe/core/app_colors.dart';
 import 'package:santhe/core/loggers.dart';
@@ -10,6 +9,8 @@ import 'package:santhe/core/loggers.dart';
 import 'package:santhe/models/ondc/shop_model.dart';
 import 'package:santhe/pages/ondc/ondc_shop_details/ondc_shop_details_view.dart';
 import 'package:santhe/widgets/ondc_widgets/shop_images_intro.dart';
+
+import '../../core/cubits/customer_contact_cubit/customer_contact_cubit.dart';
 
 class OndcShopWidget extends StatefulWidget {
   final ShopModel shopModel;
@@ -25,6 +26,7 @@ class OndcShopWidget extends StatefulWidget {
 class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
   List<String> images = [];
   List<ShopImageIntro> networkImages = [];
+  double distanceD = 0;
   getImagesOfShops() {
     warningLog('${widget.shopModel.items.length}');
     for (var i = 0; i < widget.shopModel.items.length - 1; i++) {
@@ -38,10 +40,25 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
     }
   }
 
+  getDistance() {
+    if (widget.shopModel.distance != null) {
+      dynamic d = widget.shopModel.distance;
+      String? distance = d.toStringAsFixed(1);
+      setState(() {
+        distanceD = double.parse(distance!);
+      });
+    } else {
+      setState(() {
+        distanceD = 0.0;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getImagesOfShops();
+    getDistance();
   }
 
   @override
@@ -53,12 +70,13 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
         Get.to(
           OndcShopDetailsView(shopModel: widget.shopModel),
         );
+        setState(() {});
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Container(
           height: 180,
-          width: 355,
+          width: MediaQuery.of(context).size.width * 0.9,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -82,6 +100,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
                       width: 200,
                       child: Text(
                         widget.shopModel.name.toString(),
+                        maxLines: 2,
                         style: TextStyle(
                             color: AppColors().brandDark,
                             fontWeight: FontWeight.bold,
@@ -97,7 +116,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
               widget.shopModel.items.isEmpty
                   ? Expanded(
                       child: Text(
-                        widget.shopModel.name,
+                        "${widget.shopModel.name}",
                         style: TextStyle(
                             color: AppColors().brandDark,
                             fontWeight: FontWeight.bold),
@@ -118,7 +137,7 @@ class _OndcShopWidgetState extends State<OndcShopWidget> with LogMixin {
                   children: [
                     Expanded(
                       child: Text(
-                        '${widget.shopModel.distance.toString().substring(0, 4)} kms',
+                        '${distanceD} kms',
                         style: TextStyle(
                           color: AppColors().grey80,
                         ),

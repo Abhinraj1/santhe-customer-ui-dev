@@ -9,20 +9,22 @@ import 'package:santhe/core/loggers.dart';
 
 import 'package:santhe/core/repositories/ondc_cart_repository.dart';
 import 'package:santhe/core/sharedpref.dart';
+import 'package:santhe/models/ondc/cart_item_model.dart';
 import 'package:santhe/models/ondc/product_ondc.dart';
+import 'package:santhe/models/ondc/shop_model.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
 
-class CartBloc extends Bloc<CartEvent, CartState> with LogMixin, HydratedMixin {
+class CartBloc extends Bloc<CartEvent, CartState> with LogMixin {
   final OndcCartRepository ondcCartRepository;
-  List<ProductOndcModel> productModelBloc = [];
+  List<CartitemModel> productModelBloc = [];
   List<ProductOndcModel> productModelBlocLocal = [];
   SharedPref sharedPref = SharedPref();
   Map<dynamic, dynamic> data = {};
   CartBloc({
     required this.ondcCartRepository,
-  }) : super(CartState()) {
+  }) : super(const CartState()) {
     on<CartEvent>((event, emit) {});
 
     on<AddToCartEvent>((event, emit) async {
@@ -31,12 +33,12 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin, HydratedMixin {
 
         // ondcCartRepository.addToCart(productOndcModel: event.productOndcModel);
         canAdd
-            ? productModelBloc = await ondcCartRepository.addToCart(
+            ? await ondcCartRepository.addToCart(
                 productOndcModel: event.productOndcModel)
             : null;
         warningLog('${productModelBloc.length}');
         emit(
-          AddedToCartList(productOndcModels: productModelBloc),
+          AddedToCartList(productOndcModels: productModelBlocLocal),
         );
       } on ErrorAddingItemToCartState catch (e) {
         emit(
@@ -58,14 +60,16 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin, HydratedMixin {
     on<DeleteCartItemEvent>((event, emit) async {
       emit(DeleteCartLoading());
       try {
-        event.productOndcModel.removeFromCart();
+        // event.productOndcModel.removeFromCart();
         await ondcCartRepository.deleteCartItem(
             productOndcModelLocal: event.productOndcModel);
         productModelBloc.removeWhere(
           (element) => element.id == event.productOndcModel.id,
         );
         emit(
-          DeleteCartItemState(productOndcModel: productModelBloc),
+          DeleteCartItemState(
+            productOndcModel: event.productOndcModel,
+          ),
         );
       } on ErrorDeletingItemState catch (e) {
         emit(ErrorDeletingItemState(message: e.message));
@@ -83,43 +87,42 @@ class CartBloc extends Bloc<CartEvent, CartState> with LogMixin, HydratedMixin {
       }
     });
 
+    on<ResetCartEvent>((event, emit) {
+      emit(
+        ResetCartState(),
+      );
+    });
+
     on<OnAppRefreshEvent>((event, emit) async {
       // await clear();
       try {
         // List<ProductOndcModel> products = await ondcCartRepository.getCart();
-        errorLog('checking for storage state $state');
-        ondcCartRepository.getCart();
-        emit(state);
+        List<CartitemModel> productModels1 = await ondcCartRepository.getCart(
+            storeLocationId: event.storeLocationId);
+        warningLog('local cart $productModels1');
+        emit(
+          GetCartItemsOfShopState(products: productModels1),
+        );
       } on ErrorGettingCartListState catch (e) {
-        emit(ErrorGettingCartListState(message: e.message));
+        emit(
+          ErrorGettingCartListState(message: e.message),
+        );
       }
     });
   }
 
-  Future<List<ProductOndcModel>> loadSharedPrefs() async {
-    try {
-      List<ProductOndcModel> cartItems = await sharedPref.read("MyCart");
-      log('$cartItems', name: 'LoadSharedPrefs');
-      productModelBloc = cartItems;
-      return productModelBloc;
-    } catch (Excepetion) {
-      // do something
-      rethrow;
-    }
-  }
+  // @override
+  // CartState? fromJson(Map<String, dynamic> json) {
+  //   // log('checking for hyrdated statefromjson${json['productOndcModel']}',
+  //   //     name: "CartState fromJson()");
+  //   return UpdatedCartItemState.fromMap(json);
+  // }
 
-  @override
-  CartState? fromJson(Map<String, dynamic> json) {
-    // log('checking for hyrdated statefromjson${json['productOndcModel']}',
-    //     name: "CartState fromJson()");
-    return UpdatedCartItemState.fromMap(json);
-  }
-
-  @override
-  Map<String, dynamic>? toJson(CartState state) {
-    if (state is UpdatedCartItemState) {
-      // debugLog('checking for hydrated state$state');
-      return state.toMap();
-    }
-  }
+  // @override
+  // Map<String, dynamic>? toJson(CartState state) {
+  //   if (state is UpdatedCartItemState) {
+  //     // debugLog('checking for hydrated state$state');
+  //     return state.toMap();
+  //   }
+  // }
 }

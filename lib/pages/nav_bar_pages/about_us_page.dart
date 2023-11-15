@@ -12,8 +12,29 @@ class AboutUsPage extends StatefulWidget {
 class _AboutUsPageState extends State<AboutUsPage> {
   bool isLoading = true;
 
+
   @override
   Widget build(BuildContext context) {
+
+    WebViewController controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {
+            setState(() {
+              isLoading = false;
+            });
+          },
+          onWebResourceError: (WebResourceError error) {},
+
+        ),
+      )
+      ..loadRequest(Uri.parse('https://santhe.in/aboutus/app'));
+
     double screenHeight = MediaQuery.of(context).size.height / 100;
     return Scaffold(
       appBar: AppBar(
@@ -44,14 +65,15 @@ class _AboutUsPageState extends State<AboutUsPage> {
           Expanded(
             child: Stack(
               children: [
-                WebView(
-                  initialUrl: 'https://santhe.in/aboutus/app',
-                  javascriptMode: JavascriptMode.unrestricted,
-                  onPageFinished: (finish) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                  },
+                WebViewWidget(
+                  // initialUrl: 'https://santhe.in/aboutus/app',
+                  // javascriptMode: JavascriptMode.unrestricted,
+                  // onPageFinished: (finish) {
+                  //   setState(() {
+                  //     isLoading = false;
+                  //   });
+                  // },
+                  controller: controller,
                 ),
                 Visibility(
                   visible: isLoading,

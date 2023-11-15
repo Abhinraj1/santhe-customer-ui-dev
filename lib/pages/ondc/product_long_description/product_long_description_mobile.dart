@@ -18,7 +18,7 @@ class _ProductLongDescriptionMobileState
   Widget build(BuildContext context) {
     return Scaffold(
         key: _key,
-        drawer: const NavigationDrawer(),
+        drawer: const nv.CustomNavigationDrawer(),
         appBar: AppBar(
           leading: IconButton(
             onPressed: () async {
@@ -38,7 +38,7 @@ class _ProductLongDescriptionMobileState
             splashRadius: 25.0,
             icon: SvgPicture.asset(
               'assets/drawer_icon.svg',
-              color: Colors.white,
+              color: Colors.transparent,
             ),
           ),
           shadowColor: Colors.orange.withOpacity(0.5),
@@ -67,7 +67,7 @@ class _ProductLongDescriptionMobileState
                 splashRadius: 25.0,
                 icon: const Icon(
                   Icons.home,
-                  color: Colors.white,
+                  color: Colors.transparent,
                   size: 27.0,
                 ),
               ),
@@ -76,23 +76,14 @@ class _ProductLongDescriptionMobileState
         ),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 10,
               ),
-              Align(
+              const Align(
                 alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () => Get.back(),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Icon(
-                      Icons.arrow_back_sharp,
-                      color: AppColors().brandDark,
-                      size: 30,
-                    ),
-                  ),
-                ),
+                child: const CustomBackButton(),
               ),
               const SizedBox(
                 height: 10,
@@ -115,8 +106,7 @@ class _ProductLongDescriptionMobileState
                   child: Text(
                     'Description:',
                     style: TextStyle(
-                      fontSize: 16,
-                    ),
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -128,7 +118,202 @@ class _ProductLongDescriptionMobileState
                     fontSize: 15,
                   ),
                 ),
-              )
+              ),
+              widget.productOndcModel.generic_name != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Generic Name : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text: '${widget.productOndcModel.generic_name}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const SizedBox(),
+              widget.productOndcModel.net_quantity != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Net quantity : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text: '${widget.productOndcModel.net_quantity}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.packer_name != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Manufacturer Name: ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text: '${widget.productOndcModel.packer_name}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const SizedBox(),
+              widget.productOndcModel.packer_address != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Manufacturer Address : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${widget.productOndcModel.packer_address}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const SizedBox(),
+              widget.productOndcModel.nutritional_info != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Nutritional Info : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${widget.productOndcModel.nutritional_info}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.additives_info != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Additives Info : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${widget.productOndcModel.additives_info}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.brand_owner_FSSAI_license_no != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Brand Owner FSSAI License Number : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${widget.productOndcModel.brand_owner_FSSAI_license_no}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.other_FSSAI_license_no != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Other FSSAI License Number : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${widget.productOndcModel.other_FSSAI_license_no}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const Text(''),
+              widget.productOndcModel.importer_FSSAI_license_no != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        maxLines: 3,
+                        text: TextSpan(
+                            text: 'Importer FSSAI license Number : ',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${widget.productOndcModel.importer_FSSAI_license_no}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      ),
+                    )
+                  : const Text(''),
             ],
           ),
         ));
